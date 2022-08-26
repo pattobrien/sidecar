@@ -1,6 +1,3 @@
-import 'dart:io' as io;
-import 'package:path/path.dart' as p;
-
 class Logger {
   static void logLine(String line) {
     // final currentDirectory = io.Directory.current;

@@ -261,14 +261,16 @@ packages:
     source: hosted
     version: "1.0.2"
   sidecar:
-    dependency: "direct dev"
+    dependency: transitive
     description:
-      path: "../../packages/sidecar"
-      relative: true
-    source: path
+      path: "packages/sidecar"
+      ref: HEAD
+      resolved-ref: e446c4a5ce5eae9f3b0835f7853d2953a6b5f3ea
+      url: "git@github.com:pattobrien/sidecar.git"
+    source: git
     version: "1.0.0"
   sidecar_analyzer_plugin:
-    dependency: "direct overridden"
+    dependency: "direct dev"
     description:
       path: "/var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin/sidecar_analyzer_plugin"
       relative: false

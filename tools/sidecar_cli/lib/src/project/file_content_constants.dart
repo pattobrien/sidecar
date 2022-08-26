@@ -6,7 +6,7 @@ import 'package:sidecar/sidecar.dart';
 ''';
 
 final bootstrapHeader = '''
-List<LintError> lintInitializer(NodeLintRegistry registry) {
+List<LintError> lintInitializer(NodeLintRegistry registry, ProviderContainer ref) {
   return [
 ''';
 

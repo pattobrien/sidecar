@@ -21,12 +21,12 @@ import 'package:sidecar/sidecar.dart';
 const pluginName = 'sidecar_analyzer_plugin';
 const pluginVersion = '1.0.0';
 
-class WorkspacePlugin extends plugin.ServerPlugin {
-  WorkspacePlugin({
+class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
+  SidecarAnalyzerPlugin({
     required super.resourceProvider,
     required this.ref,
   }) {
-    Logger.logLine('WorkspacePlugin initialized');
+    Logger.logLine('SidecarAnalyzerPlugin initialized');
   }
 
   final ProviderContainer ref;

@@ -123,7 +123,7 @@ class ProjectService {
       returnBuffer
         ..write('\t\t')
         ..write(lint.className)
-        ..write('()..registerNodeProcessors(registry), \n');
+        ..write('(ref)..registerNodeProcessors(registry), \n');
     }
 
     final entireContents = StringBuffer()

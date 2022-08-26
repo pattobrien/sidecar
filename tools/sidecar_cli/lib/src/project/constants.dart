@@ -22,7 +22,7 @@ final kPluginLoaderPath = p.join(
 );
 
 String pluginLoaderYamlContentCreator(String projectPluginPath) => '''
-name: workspace_analyzer_plugin_loader
+name: sidecar_analyzer_plugin_loader
 description: This pubspec determines the version of the analyzer plugin to load.
 version: 0.0.1
 publish_to: none
@@ -30,6 +30,6 @@ publish_to: none
 environment:
   sdk: ">=2.15.0 <3.0.0"
 dependencies:
-  workspace_analyzer_plugin:
-    path: $projectPluginPath # code-generated
+  sidecar_analyzer_plugin:
+    path: $projectPluginPath/sidecar_analyzer_plugin # code-generated
 ''';

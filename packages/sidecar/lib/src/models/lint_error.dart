@@ -30,7 +30,7 @@ abstract class LintError {
 
   void registerNodeProcessors(NodeLintRegistry registry);
 
-  @protected
+  // @protected
   void reportedAstNode(AstNode? node) {
     if (node != null) {
       reporter.reportedLint(node, this);

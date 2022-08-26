@@ -10,7 +10,8 @@ import 'utils/utils.dart';
 void start(List<String> args, SendPort sendPort) async {
   final ref = ProviderContainer();
   final resourceProvider = PhysicalResourceProvider.INSTANCE;
-  final plugin = WorkspacePlugin(resourceProvider: resourceProvider, ref: ref);
+  final plugin =
+      SidecarAnalyzerPlugin(resourceProvider: resourceProvider, ref: ref);
 
   ServerPluginStarter(plugin).start(sendPort);
 

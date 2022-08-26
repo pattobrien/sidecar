@@ -17,7 +17,10 @@ dependencies:
   riverpod: ^2.0.0-dev.9
   source_span: ^1.8.0
   sidecar:
-    path: ../sidecar/
+    git:
+      url: git@github.com:pattobrien/sidecar.git
+      path: packages/sidecar
+
   yaml: ^3.1.1
 
 dev_dependencies:

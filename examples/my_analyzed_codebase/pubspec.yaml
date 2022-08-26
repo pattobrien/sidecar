@@ -12,34 +12,5 @@ dependencies:
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
-  # sidecar_analyzer_plugin:
-  #   path: ../../packages/sidecar_analyzer_plugin
-
-dependency_overrides:
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
   sidecar_analyzer_plugin:
     path: /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin/sidecar_analyzer_plugin
-
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
-  # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
- 
- # /var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin
