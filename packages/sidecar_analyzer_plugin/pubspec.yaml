@@ -20,6 +20,7 @@ dependencies:
     git:
       url: git@github.com:pattobrien/sidecar.git
       path: packages/sidecar
+      ref: master
 
   yaml: ^3.1.1
 
