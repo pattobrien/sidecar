@@ -14,17 +14,22 @@ class ConfigParseUtilities {
         io.File(p.join(projectRootUri.path, analysisOptionsFileName));
     if (configFile.existsSync()) {
       final contents = await configFile.readAsString();
-      final config = checkedYamlDecode(
-        contents,
-        (m) => PluginConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
-        sourceUrl: projectRootUri,
-      );
+      try {
+        final config = checkedYamlDecode(
+          contents,
+          (m) => PluginConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
+          sourceUrl: projectRootUri,
+        );
 
-      final rulesConfig = config.rules ?? [];
-      for (final rule in rulesConfig) {
-        print('registering lint ${rule.id}');
+        final rulesConfig = config.rules ?? [];
+        for (final rule in rulesConfig) {
+          print('registering lint ${rule.id}');
+        }
+        return rulesConfig;
+      } catch (e) {
+        print('no plugin configuration found for sidecar.');
+        rethrow;
       }
-      return rulesConfig;
     } else {
       return [];
     }

@@ -7,12 +7,11 @@ import '../ast/ast.dart';
 
 abstract class IErrorReporter {
   IErrorReporter(
-    this.unit, {
-    this.reportedErrors = const <ReportedLintError>[],
-  });
+    this.unit,
+  );
 
   final ResolvedUnitResult unit;
-  final List<ReportedLintError> reportedErrors;
+  final List<ReportedLintError> reportedErrors = <ReportedLintError>[];
 
   void reportedLint(AstNode? node, LintError lint);
 }

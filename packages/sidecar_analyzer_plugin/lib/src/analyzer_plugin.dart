@@ -143,7 +143,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Iterable<ReportedLintError> _getReportedErrors(
     ResolvedUnitResult unit,
   ) {
-    final allLints = pluginBootstrapper(nodeRegistry);
+    final allLints = pluginBootstrapper(nodeRegistry, ref);
     final errorReporter = ErrorReporter(unit);
 
     for (final linter in allLints) {

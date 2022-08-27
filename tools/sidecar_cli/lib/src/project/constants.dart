@@ -1,8 +1,22 @@
 import 'dart:io' as io;
 import 'package:path/path.dart' as p;
 
+import '../utilities/utilities.dart';
+
+final kHomeDirectory = homeDirectory();
+
+io.Directory getProjectPluginDirectory(String projectName) => io.Directory(
+      p.join(
+        kHomeDirectory.path,
+        '.sidecar',
+        'projects',
+        projectName,
+        'sidecar_analyzer_plugin',
+      ),
+    )..create(recursive: true);
+
 final kPluginPackagesRootPath =
-    '/Users/pattobrien/Development/sidecar/packages';
+    p.join(kHomeDirectory.path, 'Development', 'sidecar', 'packages');
 
 final kAnalyzerPluginPackageRoot =
     io.Directory(p.join(kPluginPackagesRootPath, 'sidecar_analyzer_plugin'));

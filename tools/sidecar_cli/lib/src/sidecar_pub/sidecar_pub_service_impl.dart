@@ -4,7 +4,7 @@ import 'package:sidecar/sidecar.dart';
 
 import 'package:sidecar_cli/sidecar_cli.dart';
 
-final kTempLintCache = p.join(Directory.systemTemp.path, 'pubLintCache');
+final kTempLintCache = p.join(homeDirectory().path, 'cache');
 
 final kFakeLintRepository = p.join(kAnalyzerLintRepositoryRoot.path);
 

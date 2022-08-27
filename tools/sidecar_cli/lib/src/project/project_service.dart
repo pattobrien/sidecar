@@ -7,7 +7,7 @@ import 'package:sidecar_cli/src/project/vscode_task.dart';
 import 'package:sidecar_cli/src/sidecar_pub/sidecar_pub_service.dart';
 
 import 'constants.dart';
-import '../utilities/config_parse_utilities.dart';
+import '../utilities/utilities.dart';
 import 'file_content_constants.dart';
 
 class ProjectService {
@@ -19,13 +19,10 @@ class ProjectService {
   final io.Directory cacheDirectory;
 
   io.Directory get projectPluginDirectory {
-    final tempDir = io.Directory.systemTemp;
     //TODO: make the plugin directory generation more robust
     //(e.g. what happens when conflicting project names?)
-    final projectPluginDirectory = io.Directory(
-        p.join(tempDir.path, projectDirectory.uri.pathSegments.last, 'plugin'))
-      ..create(recursive: true);
-    return projectPluginDirectory;
+    final projectName = projectDirectory.uri.pathSegments.reversed.toList()[1];
+    return getProjectPluginDirectory(projectName);
   }
 
   Future<void> insertPluginIntoProjectPubspec() async {
@@ -97,11 +94,17 @@ class ProjectService {
 
       final lintProjectCacheUri = Uri(
           scheme: 'file',
-          path: p.join(projectPluginDirectory.path, lintId.filePath));
+          path: p.join(
+            projectPluginDirectory.path,
+            'sidecar_analyzer_plugin',
+            'lib',
+            'lints',
+            lintId.filePath,
+          ));
 
       try {
         // await dio.downloadUri(lintUri, lintCacheUri.path);
-        final file = await io.File(lintUri.path).create(recursive: true);
+        final file = io.File(lintUri.path); //.create(recursive: true);
         // await file.copy(lintProjectCacheUri.path);
         final contents = await file.readAsBytes();
         final newFile =
@@ -119,7 +122,7 @@ class ProjectService {
     final returnBuffer = StringBuffer();
 
     for (final lint in lints) {
-      importBuffer.write('import \'../../../${lint.filePath}\'; \n');
+      importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
       returnBuffer
         ..write('\t\t')
         ..write(lint.className)

@@ -36,5 +36,9 @@ final vsCodeSettingsContent = '''
             "analysis_options.yaml",
         ],
     },
+    "dart.analyzerAdditionalArgs": [
+        "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/.logs/analysis_instrumentation.log"
+    ],
+    "dart.analyzerInstrumentationLogFile": "/Users/pattobrien/Development/sidecar/.logs/analysis_instrumentation.txt",
 }
 ''';

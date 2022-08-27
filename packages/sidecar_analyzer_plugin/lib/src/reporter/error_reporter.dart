@@ -5,9 +5,8 @@ import 'package:sidecar/sidecar.dart';
 
 class ErrorReporter extends IErrorReporter {
   ErrorReporter(
-    super.unit, {
-    super.reportedErrors = const <ReportedLintError>[],
-  });
+    super.unit,
+  );
 
   @override
   void reportedLint(AstNode? node, LintError lint) {

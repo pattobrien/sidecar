@@ -264,15 +264,15 @@ packages:
     dependency: transitive
     description:
       path: "packages/sidecar"
-      ref: HEAD
-      resolved-ref: e446c4a5ce5eae9f3b0835f7853d2953a6b5f3ea
+      ref: master
+      resolved-ref: "754f54bc5bc9d5c08e73d2fe6b5dc2acf34af3e8"
       url: "git@github.com:pattobrien/sidecar.git"
     source: git
     version: "1.0.0"
   sidecar_analyzer_plugin:
     dependency: "direct dev"
     description:
-      path: "/var/folders/4g/ypl4dsnn1tzg1z6c6wrc2w4c0000gn/T/plugin/sidecar_analyzer_plugin"
+      path: "/Users/pattobrien/.sidecar/projects/my_analyzed_codebase/sidecar_analyzer_plugin/sidecar_analyzer_plugin/"
       relative: false
     source: path
     version: "1.0.0"

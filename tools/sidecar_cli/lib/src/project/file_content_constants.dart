@@ -3,10 +3,15 @@ final pluginImport = '''
 // DO NOT MANUALLY MODIFY THIS FILE
 
 import 'package:sidecar/sidecar.dart';
+import 'package:riverpod/riverpod.dart';
 ''';
 
 final bootstrapHeader = '''
-List<LintError> lintInitializer(NodeLintRegistry registry, ProviderContainer ref) {
+
+List<LintError> pluginBootstrapper(
+  NodeLintRegistry registry,
+  ProviderContainer ref,
+) {
   return [
 ''';
 
