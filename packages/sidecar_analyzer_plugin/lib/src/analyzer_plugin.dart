@@ -8,6 +8,7 @@ import 'package:analyzer/dart/analysis/results.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
@@ -17,6 +18,8 @@ import 'package:sidecar_analyzer_plugin/src/plugin_bootstrapper.dart';
 import 'reporter/reporter.dart';
 
 import 'package:sidecar/sidecar.dart';
+
+import 'package:path/path.dart' as p;
 
 const pluginName = 'sidecar_analyzer_plugin';
 const pluginVersion = '1.0.0';
@@ -63,9 +66,23 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     //TODO: remove restriction from plugin side, instead allow lints to do so
     if (!path.endsWith('.dart')) return;
     final sidecarOptions = analysisContext.sidecarOptions;
-    final doesMatchGlob =
-        sidecarOptions.includes.map((e) => Glob(e).matches(path)).isNotEmpty;
+    // this is the correct root dir for the project in question (project being analyzed)
+    final rootDirectory = analysisContext.contextRoot.root;
+    // convert path to a relative file path
+    final relativePath = p.relative(path, from: rootDirectory.path);
+    // check if the path is included for analysis via the sidecar options
+    final doesMatchGlob = sidecarOptions.includes
+        .map((e) => Glob(e, context: p.context).matches(relativePath))
+        .where((element) => element == true)
+        .isNotEmpty;
 
+    // channel.sendNotification(
+    //   plugin.PluginErrorParams(
+    //     false,
+    //     'relativePath $relativePath ${doesMatchGlob ? 'matches a glob include' : 'does not match a glob include'}',
+    //     'rootDir: ${rootDirectory.path} context: ${p.context.current}  // globs: ${sidecarOptions.includes.reduce((value, element) => '$value / $element')}',
+    //   ).toNotification(),
+    // );
     if (!doesMatchGlob) return;
 
     final isPluginEnabled =

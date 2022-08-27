@@ -6,3 +6,5 @@ void main() {
     expect(calculate(), 42);
   });
 }
+
+final someString = 'this string shouldnt be analyzed';
