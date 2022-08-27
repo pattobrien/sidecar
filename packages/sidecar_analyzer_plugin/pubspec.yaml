@@ -3,7 +3,6 @@ description: A starting point for Dart libraries or applications.
 version: 1.0.0
 publish_to: none
 # homepage: https://www.example.com
-
 environment:
   sdk: ">=2.17.5 <3.0.0"
 
@@ -12,16 +11,16 @@ dependencies:
   analyzer_plugin: ^0.11.1
   cli_util: ^0.3.5
   collection: ^1.16.0
+  glob: ^2.1.0
   meta: ^1.7.0
   path: ^1.8.1
   riverpod: ^2.0.0-dev.9
-  source_span: ^1.8.0
   sidecar:
     git:
       url: git@github.com:pattobrien/sidecar.git
       path: packages/sidecar
       ref: master
-
+  source_span: ^1.8.0
   yaml: ^3.1.1
 
 dev_dependencies:

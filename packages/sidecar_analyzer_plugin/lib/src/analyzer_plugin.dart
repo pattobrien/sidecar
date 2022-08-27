@@ -9,6 +9,7 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'package:sidecar_analyzer_plugin/src/plugin_bootstrapper.dart';
@@ -61,6 +62,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     //TODO: remove restriction from plugin side, instead allow lints to do so
     if (!path.endsWith('.dart')) return;
+    final sidecarOptions = analysisContext.sidecarOptions;
+    final doesMatchGlob =
+        sidecarOptions.includes.map((e) => Glob(e).matches(path)).isNotEmpty;
+
+    if (!doesMatchGlob) return;
 
     final isPluginEnabled =
         analysisContext.analysisOptions.enabledPluginNames.contains(name);

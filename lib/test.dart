@@ -1,0 +1,1 @@
+const someString = 'sometext';

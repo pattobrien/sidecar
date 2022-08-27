@@ -1,13 +1,18 @@
 // ignore_for_file: implementation_imports
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/src/dart/micro/utils.dart';
+import 'package:checked_yaml/checked_yaml.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'package:path/path.dart' as p;
+
+import '../configuration/plugin_configuration.dart';
+import '../configuration/default_configuration.dart';
 
 import 'logger_utilities.dart';
 import 'ast_utilities.dart';
@@ -55,3 +60,28 @@ class AnalysisContextUtilities {
 final analysisContextUtilitiesProvider = Provider<AnalysisContextUtilities>(
   (ref) => AnalysisContextUtilities(),
 );
+
+extension AnalysisContextX on AnalysisContext {
+  PluginConfiguration get sidecarOptions {
+    final optionsFile = contextRoot.optionsFile;
+    if (optionsFile != null) {
+      final contents = optionsFile.readAsStringSync();
+      try {
+        return checkedYamlDecode(
+          contents,
+          (m) => PluginConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
+          sourceUrl: optionsFile.toUri(),
+        );
+      } catch (e) {
+        rethrow;
+      }
+    } else {
+      return defaultPluginConfiguration;
+    }
+  }
+
+  bool get isSidecarEnabled => analysisOptions.enabledPluginNames
+      .where((pluginName) => pluginName == 'sidecar_analyzer_plugin')
+      .toList()
+      .isNotEmpty;
+}

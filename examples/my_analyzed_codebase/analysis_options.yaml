@@ -9,6 +9,9 @@ analyzer:
     - sidecar_analyzer_plugin
 
 sidecar_analyzer_plugin:
+  includes:
+    - "bin/**"
+    - "lib/**"
   rules:
     - id: avoid_string_literals
     - id: avoid_stateless_widget
