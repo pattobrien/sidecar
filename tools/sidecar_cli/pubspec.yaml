@@ -12,7 +12,10 @@ dependencies:
   recase: ^4.0.0
   riverpod: ^2.0.0-dev.9
   sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
+    git:
+      url: git@github.com:pattobrien/sidecar.git
+      path: packages/sidecar
+      ref: master
 
 dev_dependencies:
   lints: ^2.0.0

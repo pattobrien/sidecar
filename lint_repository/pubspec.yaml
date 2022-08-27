@@ -12,7 +12,10 @@ dependencies:
   collection: ^1.16.0
   path: ^1.8.0
   sidecar:
-    path: ../packages/sidecar
+    git:
+      url: git@github.com:pattobrien/sidecar.git
+      path: packages/sidecar
+      ref: master
 
 dev_dependencies:
   lints: ^2.0.0
