@@ -5,7 +5,6 @@ import 'package:analyzer_plugin/starter.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'analyzer_plugin.dart';
-import 'utils/utils.dart';
 
 void start(List<String> args, SendPort sendPort) async {
   final ref = ProviderContainer();
@@ -14,6 +13,4 @@ void start(List<String> args, SendPort sendPort) async {
       SidecarAnalyzerPlugin(resourceProvider: resourceProvider, ref: ref);
 
   ServerPluginStarter(plugin).start(sendPort);
-
-  // Logger.logLine('START PLUGIN');
 }

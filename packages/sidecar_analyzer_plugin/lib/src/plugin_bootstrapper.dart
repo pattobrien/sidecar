@@ -1,5 +1,5 @@
-// this is the initializer that should be programmatically filled
-// with new lint classes based on the config file
+// this is the initializer that is programmatically created using
+// lint classes based on the project's config file
 
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
@@ -10,8 +10,6 @@ List<LintError> pluginBootstrapper(
 ) {
   // initialize all lints
   return [
-    // AvoidStringLiteralsLintError(ref)..registerNodeProcessors(registry),
-    // AvoidStatelessWidgetLintError(ref)..registerNodeProcessors(registry),
-    // AvoidDeclaredInsetsLintError(ref)..registerNodeProcessors(registry),
+    // AvoidStringLiterals(ref)..registerNodeProcessors(registry),
   ];
 }

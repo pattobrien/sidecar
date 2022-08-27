@@ -52,5 +52,6 @@ class AnalysisContextUtilities {
   }
 }
 
-final analysisContextUtilitiesProvider =
-    Provider<AnalysisContextUtilities>((ref) => AnalysisContextUtilities());
+final analysisContextUtilitiesProvider = Provider<AnalysisContextUtilities>(
+  (ref) => AnalysisContextUtilities(),
+);

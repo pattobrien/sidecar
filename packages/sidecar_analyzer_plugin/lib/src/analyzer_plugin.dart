@@ -14,7 +14,6 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar_analyzer_plugin/src/plugin_bootstrapper.dart';
 
 import 'reporter/reporter.dart';
-import 'utils/utils.dart';
 
 import 'package:sidecar/sidecar.dart';
 
@@ -61,9 +60,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required String path,
   }) async {
     //TODO: remove restriction from plugin side, instead allow lints to do so
-    if (!path.endsWith('.dart')) {
-      return;
-    }
+    if (!path.endsWith('.dart')) return;
+
     final isPluginEnabled =
         analysisContext.analysisOptions.enabledPluginNames.contains(name);
     analysisContext.contextRoot.excludedPaths.forEach(Logger.logLine);
@@ -74,7 +72,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       if (unit is ResolvedUnitResult) {
         try {
-          final errors = _getGenericErrors(unit);
+          final errors = _getAnalysisErrors(unit);
           final response = plugin.AnalysisErrorsParams(
             path,
             errors.toList(),
@@ -82,12 +80,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           Logger.logLine('ANALYZEDFILE = SUCCESS $path');
           channel.sendNotification(response);
         } catch (e, stackTrace) {
-          final unitContentLength = unit.content.length; //
-          final unitSourcePath = unit.path;
           channel.sendNotification(
             plugin.PluginErrorParams(
               false,
-              'error analyzing $path -- unitContentLength: $unitContentLength // -- unitSourcePath: $unitSourcePath ${e.toString()}',
+              'error analyzing $path --${e.toString()}',
               stackTrace.toString(),
             ).toNotification(),
           );
@@ -123,22 +119,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             '# OF ANALYSIS ERRORS TO GET FIXES FOR:  ${reportedErrors.length}');
 
         final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
-            reportedErrors.map((e) => e.toAnalysisErrorFixes(ref)));
+          reportedErrors.map((e) => e.toAnalysisErrorFixes(ref)),
+        );
+
         final response = plugin.EditGetFixesResult(analysisErrorFixes);
 
         Logger.logLine('handleEditGetFixes => ${response.toJson()}');
-        // channel.sendNotification(
-        //   plugin.Notification(
-        //     'window.showMessageRequest',
-        //     // {
-        //     //   'type': 1,
-        //     //   'message': 'Hello world!',
-        //     //   'actions': [
-        //     //     {'message': 'abc'}
-        //     //   ]
-        //     // },
-        //   ),
-        // );
+
         return response;
       } else {
         Logger.logLine('ERROR - handleEditGetFixes - ELSE CLAUSE $parameters');
@@ -154,6 +141,21 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     return plugin.EditGetFixesResult(const <plugin.AnalysisErrorFixes>[]);
   }
 
+  @override
+  Future<plugin.EditGetAssistsResult> handleEditGetAssists(
+    EditGetAssistsParams parameters,
+  ) async {
+    return EditGetAssistsResult(<plugin.PrioritizedSourceChange>[
+      plugin.PrioritizedSourceChange(
+        0,
+        plugin.SourceChange(
+          'TEST ASSIST: NO EDIT',
+          edits: [],
+        ),
+      )
+    ]);
+  }
+
   Iterable<ReportedLintError> _getReportedErrors(
     ResolvedUnitResult unit,
   ) {
@@ -163,18 +165,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       linter.reporter = errorReporter;
     }
     final lintVisitor = LintVisitor(nodeRegistry);
-    final sourcePath = unit.path;
     unit.unit.accept(lintVisitor);
 
-    // get the results of the lint runs
-
     final errors = errorReporter.reportedErrors;
+
     Logger.logLine(
-        '# OF FIXES (RECEIVED) = ${errors.length} for file $sourcePath');
+        '# OF FIXES (RECEIVED) = ${errors.length} for file ${unit.path}');
     return errors;
   }
 
-  Iterable<plugin.AnalysisError> _getGenericErrors(
+  Iterable<plugin.AnalysisError> _getAnalysisErrors(
     ResolvedUnitResult unit,
   ) {
     final reportedErrors = _getReportedErrors(unit);

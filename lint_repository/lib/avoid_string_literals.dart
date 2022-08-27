@@ -3,10 +3,6 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
-import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
-import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-
 import 'package:source_span/source_span.dart';
 
 import 'package:sidecar/sidecar.dart';
@@ -30,7 +26,7 @@ class AvoidStringLiterals extends LintError {
   }
 
   @override
-  Future<List<plugin.PrioritizedSourceChange>> computeFixes(
+  Future<List<PrioritizedSourceChange>> computeFixes(
     ReportedLintError reportedLintError,
   ) async {
     final unit = reportedLintError.sourceUnit;
@@ -90,7 +86,7 @@ class AvoidStringLiterals extends LintError {
     }
 
     final errorFixes = [
-      plugin.PrioritizedSourceChange(
+      PrioritizedSourceChange(
         0,
         changeBuilder.sourceChange..message = 'Replace declarations',
       ),

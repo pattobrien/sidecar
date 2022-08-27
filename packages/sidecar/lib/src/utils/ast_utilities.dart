@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:source_span/source_span.dart';
