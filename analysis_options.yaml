@@ -3,7 +3,7 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-    - lint_repository/**
+    # - lint_repository/**
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false

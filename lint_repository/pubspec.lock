@@ -263,7 +263,7 @@ packages:
   sidecar:
     dependency: "direct main"
     description:
-      path: "../../packages/sidecar"
+      path: "../packages/sidecar"
       relative: true
     source: path
     version: "1.0.0"

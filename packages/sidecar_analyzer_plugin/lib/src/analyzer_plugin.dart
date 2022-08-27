@@ -27,11 +27,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required this.ref,
   }) {
     Logger.logLine('SidecarAnalyzerPlugin initialized');
+
+    allLints = pluginBootstrapper(nodeRegistry, ref);
   }
 
   final ProviderContainer ref;
   late final AnalysisContextCollection _collection;
   final nodeRegistry = NodeLintRegistry();
+  late List<LintError> allLints;
 
   @override
   List<String> get fileGlobsToAnalyze => <String>['**/*.dart', '**/*.arb'];
@@ -61,7 +64,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     if (!path.endsWith('.dart')) {
       return;
     }
-
     final isPluginEnabled =
         analysisContext.analysisOptions.enabledPluginNames.contains(name);
     analysisContext.contextRoot.excludedPaths.forEach(Logger.logLine);
@@ -71,13 +73,25 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       final unit = await analysisContext.currentSession.getResolvedUnit(path);
 
       if (unit is ResolvedUnitResult) {
-        final errors = _getGenericErrors(unit);
-        final response = plugin.AnalysisErrorsParams(
-          path,
-          errors.toList(),
-        ).toNotification();
-        Logger.logLine('ANALYZEDFILE = SUCCESS $path');
-        channel.sendNotification(response);
+        try {
+          final errors = _getGenericErrors(unit);
+          final response = plugin.AnalysisErrorsParams(
+            path,
+            errors.toList(),
+          ).toNotification();
+          Logger.logLine('ANALYZEDFILE = SUCCESS $path');
+          channel.sendNotification(response);
+        } catch (e, stackTrace) {
+          final unitContentLength = unit.content.length; //
+          final unitSourcePath = unit.path;
+          channel.sendNotification(
+            plugin.PluginErrorParams(
+              false,
+              'error analyzing $path -- unitContentLength: $unitContentLength // -- unitSourcePath: $unitSourcePath ${e.toString()}',
+              stackTrace.toString(),
+            ).toNotification(),
+          );
+        }
       } else {
         Logger.logLine('ANALYZEDFILE = FAILURE $path');
       }
@@ -143,7 +157,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Iterable<ReportedLintError> _getReportedErrors(
     ResolvedUnitResult unit,
   ) {
-    final allLints = pluginBootstrapper(nodeRegistry, ref);
     final errorReporter = ErrorReporter(unit);
 
     for (final linter in allLints) {

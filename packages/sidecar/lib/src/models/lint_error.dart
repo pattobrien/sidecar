@@ -1,11 +1,10 @@
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:meta/meta.dart';
+
 import 'package:riverpod/riverpod.dart';
 
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-
 import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
 
 import '../ast/general_visitor.dart';
@@ -30,7 +29,6 @@ abstract class LintError {
 
   void registerNodeProcessors(NodeLintRegistry registry);
 
-  // @protected
   void reportedAstNode(AstNode? node) {
     if (node != null) {
       reporter.reportedLint(node, this);

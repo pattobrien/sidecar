@@ -22,7 +22,7 @@ final kAnalyzerPluginPackageRoot =
     io.Directory(p.join(kPluginPackagesRootPath, 'sidecar_analyzer_plugin'));
 
 final kAnalyzerLintRepositoryRoot = io.Directory(
-    p.join('/Users/pattobrien/Development/sidecar/', 'lint_repository'));
+    p.join('/Users/pattobrien/Development/sidecar/', 'lint_repository', 'lib'));
 
 final lintInitializerRelativePath =
     'sidecar_analyzer_plugin/lib/src/plugin_bootstrapper.dart';

@@ -38,7 +38,9 @@ class AvoidStringLiterals extends LintError {
 
     final arbClassPrefix = 'AppLocalizations.of(context)';
 
-    final stringNode = sourceSpan.toAstNode(unit)!;
+    final stringNode = sourceSpan.toAstNode(unit);
+    if (stringNode == null) return [];
+
     final stringElement = sourceSpan.toElement(unit);
     final references = <SourceSpan>[];
     if (stringNode.parent is VariableDeclaration && stringElement != null) {

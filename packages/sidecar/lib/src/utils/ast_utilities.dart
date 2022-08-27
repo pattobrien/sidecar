@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:source_span/source_span.dart';
 
 /// Used to translate a single AST node into a SourceSpan (i.e. start and end location within source code)
 extension AstNodeX on AstNode {
-  SourceSpan toSourceSpan(ResolvedUnitResult source) {
+  SourceSpan toSourceSpan(ResolvedUnitResult unit) {
     // TODO: integrate endNode functionality here
 
     // final offset = !withCommentOrMetadata && node is AnnotatedNode
@@ -12,28 +14,28 @@ extension AstNodeX on AstNode {
     //     : node.offset;
     // final end = endNode?.end ?? node.end;
 
-    final sourceUrl = Uri.file(source.path);
+    // final sourceUrl = Uri.file(unit.path);
 
     final startOffset = offset;
     final endOffset = end;
 
-    final startLocation = source.lineInfo.getLocation(startOffset);
-    final endLocation = source.lineInfo.getLocation(endOffset);
+    final startLocation = unit.lineInfo.getLocation(startOffset);
+    final endLocation = unit.lineInfo.getLocation(endOffset);
 
     return SourceSpan(
       SourceLocation(
         startOffset,
-        sourceUrl: sourceUrl,
+        sourceUrl: unit.path,
         column: startLocation.columnNumber,
         line: startLocation.lineNumber,
       ),
       SourceLocation(
         endOffset,
-        sourceUrl: sourceUrl,
+        sourceUrl: unit.path,
         column: endLocation.columnNumber,
         line: endLocation.lineNumber,
       ),
-      source.content.substring(startOffset, endOffset),
+      unit.content.substring(startOffset, endOffset),
     );
   }
 }

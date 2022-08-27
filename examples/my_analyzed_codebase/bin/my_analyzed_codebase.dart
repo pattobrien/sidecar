@@ -6,6 +6,6 @@ void main(List<String> arguments) {
 
 final someString = 'this is a string that should produce a lint error';
 
-// class SomeWidget extends StatelessWidget {
-//   //
-// }
+class SomeWidget extends StatelessWidget {
+  //
+}
