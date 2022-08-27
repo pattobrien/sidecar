@@ -28,9 +28,15 @@ class ProjectService {
   Future<void> insertPluginIntoProjectPubspec() async {
     final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
-      final content = await pubspecFile.readAsString();
-      final newContent = '$content \n # ${projectPluginDirectory.path}';
-      await pubspecFile.writeAsString(newContent);
+      // final content = await pubspecFile.readAsString();
+      // final newContent = '$content \n # ${projectPluginDirectory.path}';
+      // await pubspecFile.writeAsString(newContent);
+      final pubspecOverrides =
+          io.File(p.join(projectDirectory.path, 'pubspec_overrides.yaml'))
+            ..create(recursive: true);
+      final contents =
+          pluginLoaderYamlContentCreator(projectPluginDirectory.path);
+      await pubspecOverrides.writeAsString(contents);
     } else {
       throw UnimplementedError('pubspec file is not in root project dir');
     }

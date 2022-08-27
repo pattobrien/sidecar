@@ -272,7 +272,7 @@ packages:
   sidecar_analyzer_plugin:
     dependency: "direct dev"
     description:
-      path: "/Users/pattobrien/.sidecar/projects/my_analyzed_codebase/sidecar_analyzer_plugin/sidecar_analyzer_plugin/"
+      path: "/Users/pattobrien/.sidecar/projects/my_analyzed_codebase/sidecar_analyzer_plugin/sidecar_analyzer_plugin"
       relative: false
     source: path
     version: "1.0.0"
