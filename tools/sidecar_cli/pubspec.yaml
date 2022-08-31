@@ -9,10 +9,10 @@ environment:
 dependencies:
   checked_yaml: ^2.0.1
   path: ^1.8.0
+  pubspec_parse: ^1.2.1
   recase: ^4.0.0
   riverpod: ^2.0.0-dev.9
   sidecar:
-    #   path: ../../packages/sidecar/
     git:
       url: git@github.com:pattobrien/sidecar.git
       path: packages/sidecar

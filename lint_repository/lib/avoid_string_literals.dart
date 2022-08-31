@@ -14,10 +14,10 @@ class AvoidStringLiterals extends LintError {
   String get code => 'avoid_string_literals';
 
   @override
-  LintErrorType get defaultType => LintErrorType.info;
+  String get message => '\${0} should be extracted to an ARB or ENV file.';
 
   @override
-  String get message => '\${0} should be extracted to an ARB or ENV file.';
+  LintErrorType get defaultType => LintErrorType.info;
 
   @override
   void registerNodeProcessors(NodeLintRegistry registry) {

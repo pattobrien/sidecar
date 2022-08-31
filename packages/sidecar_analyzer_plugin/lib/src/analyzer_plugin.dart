@@ -130,8 +130,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     try {
       final filePath = parameters.file;
       final analysisContext = _collection.contextFor(filePath);
-      // analysisContext.changeFile(filePath);
-      // await analysisContext.applyPendingFileChanges();
+
       final unit =
           await analysisContext.currentSession.getResolvedUnit(filePath);
 

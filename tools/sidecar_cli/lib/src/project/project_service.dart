@@ -150,9 +150,10 @@ class ProjectService {
     // simplest way to restart plugin is by calling pub get
     // as analyzer_plugin is already designed to restart on pub get
     // final pubspecFile = p.join(projectDirectory.path, 'pubspec.yaml');
-
+    final isFlutterProject =
+        await PubspecUtilities.isFlutterProject(projectDirectory.path);
     final result = await io.Process.run(
-      'dart',
+      isFlutterProject ? 'flutter' : 'dart',
       ['pub', 'get'],
       workingDirectory: projectDirectory.path,
     );
