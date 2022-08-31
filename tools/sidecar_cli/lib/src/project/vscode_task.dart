@@ -15,9 +15,9 @@ final vsCodeTaskContent = '''
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "sidecar init",
+            "label": "sidecar rebuild",
             "type": "shell",
-            "command": "sidecar",
+            "command": "sidecar rebuild",
             "group": "test",
             "presentation": {
                 "reveal": "always",
@@ -31,7 +31,7 @@ final vsCodeTaskContent = '''
 final vsCodeSettingsContent = '''
 {
     "triggerTaskOnSave.tasks": {
-        "sidecar init": [
+        "sidecar rebuild": [
             "pubspec.yaml",
             "analysis_options.yaml",
         ],

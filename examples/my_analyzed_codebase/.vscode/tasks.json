@@ -6,7 +6,7 @@
         {
             "label": "sidecar init",
             "type": "shell",
-            "command": "sidecar",
+            "command": "sidecar rebuild",
             "group": "test",
             "presentation": {
                 "reveal": "always",

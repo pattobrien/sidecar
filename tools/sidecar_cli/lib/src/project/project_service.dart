@@ -43,6 +43,8 @@ class ProjectService {
   }
 
   Future<void> copyBasePluginFromSource() async {
+    //TODO: is there a way this can live within the project's source ?
+    //(e.g '.sidecar_tool' in root directory)
     if (projectPluginDirectory.existsSync()) {
       // delete any previously copied plugin files
       await projectPluginDirectory.delete(recursive: true);
@@ -152,6 +154,9 @@ class ProjectService {
     // final pubspecFile = p.join(projectDirectory.path, 'pubspec.yaml');
     final isFlutterProject =
         await PubspecUtilities.isFlutterProject(projectDirectory.path);
+    print(isFlutterProject
+        ? 'running flutter pub get...'
+        : 'running dart pub get...');
     final result = await io.Process.run(
       isFlutterProject ? 'flutter' : 'dart',
       ['pub', 'get'],
