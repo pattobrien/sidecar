@@ -1,13 +1,11 @@
-name: workspace_analyzer_plugin_loader
+name: sidecar_analyzer_plugin_loader
 description: This pubspec determines the version of the analyzer plugin to load.
-version: 0.0.1
+version: 0.1.0-dev.1
 publish_to: none
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
 dependencies:
   sidecar_analyzer_plugin:
-    git:
-      url: git@github.com:pattobrien/sidecar.git
-      path: packages/sidecar_analyzer_plugin
-      ref: master
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
+    version: ^0.1.0-dev.1

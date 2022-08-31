@@ -26,7 +26,7 @@ import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
 
 const pluginName = 'sidecar_analyzer_plugin';
-const pluginVersion = '1.0.0';
+const pluginVersion = '0.1.0-dev.1';
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({

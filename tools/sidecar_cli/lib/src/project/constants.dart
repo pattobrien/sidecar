@@ -5,31 +5,23 @@ import '../utilities/utilities.dart';
 
 final kHomeDirectory = homeDirectory();
 
-io.Directory getProjectPluginDirectory(String projectName) => io.Directory(
-      p.join(
-        kHomeDirectory.path,
-        '.sidecar',
-        'projects',
-        projectName,
-        'sidecar_analyzer_plugin',
-      ),
-    )..create(recursive: true);
+final kPluginPackagesRootPath = p.join(
+  kHomeDirectory.path,
+  'Development',
+  'sidecar',
+  'packages',
+  'sidecar_analyzer_plugin',
+);
 
-final kPluginPackagesRootPath =
-    p.join(kHomeDirectory.path, 'Development', 'sidecar', 'packages');
-
-final kAnalyzerPluginPackageRoot =
-    io.Directory(p.join(kPluginPackagesRootPath, 'sidecar_analyzer_plugin'));
+final kAnalyzerPluginPackageRoot = io.Directory(kPluginPackagesRootPath);
 
 final kAnalyzerLintRepositoryRoot = io.Directory(
     p.join('/Users/pattobrien/Development/sidecar/', 'lint_repository', 'lib'));
 
-final lintInitializerRelativePath =
-    'sidecar_analyzer_plugin/lib/src/plugin_bootstrapper.dart';
+final lintInitializerRelativePath = 'lib/src/plugin_bootstrapper.dart';
 
 final kPluginLoaderPath = p.join(
   kPluginPackagesRootPath,
-  'sidecar_analyzer_plugin',
   'tools',
   'analyzer_plugin',
   'pubspec_overrides.yaml',
@@ -40,6 +32,7 @@ dependency_overrides:
   sidecar_analyzer_plugin:
     path: $projectPluginPath/sidecar_analyzer_plugin # code-generated
 ''';
+
 
 // String pluginLoaderYamlContentCreator(String projectPluginPath) => '''
 // name: sidecar_analyzer_plugin_loader

@@ -7,12 +7,12 @@ int calculate() {
   return 6 * 7;
 }
 
-class SomeWidget extends ConsumerWidget {
+class SomeWidget extends StatelessWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return TextFormField(
-      controller: ref.watch(myTextControllerProvider),
-    );
+        // controller: ref.watch(myTextControllerProvider),
+        );
   }
   //
 }

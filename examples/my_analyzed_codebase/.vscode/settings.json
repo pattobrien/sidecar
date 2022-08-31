@@ -1,6 +1,6 @@
 {
     "triggerTaskOnSave.tasks": {
-        "sidecar init": [
+        "sidecar rebuild": [
             "pubspec.yaml",
             "analysis_options.yaml",
         ],

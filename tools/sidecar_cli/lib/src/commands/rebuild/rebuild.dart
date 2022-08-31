@@ -29,7 +29,7 @@ class RebuildCommand extends Command<int> {
 
       final lints =
           await ConfigParseUtilities.parseConfig(currentDirectory.uri);
-
+      await projectService.clearPreviousLints();
       await projectService.importLints(lints);
       await projectService.generateLintBootstrapFunction(lints);
       await projectService.restartAnalyzerPlugin();

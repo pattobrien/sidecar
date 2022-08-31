@@ -1,8 +1,9 @@
 name: sidecar_analyzer_plugin
 description: A starting point for Dart libraries or applications.
-version: 1.0.0
-publish_to: none
-# homepage: https://www.example.com
+version: 0.1.0-dev.1
+publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
+repository: https://github.com/pattobrien/sidecar/
+
 environment:
   sdk: ">=2.17.5 <3.0.0"
 
@@ -15,15 +16,9 @@ dependencies:
   meta: ^1.7.0
   path: ^1.8.1
   riverpod: ^2.0.0-dev.9
-
   sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
-  # sidecar:
-  #   path: ../sidecar/
-  # git:
-  #   url: git@github.com:pattobrien/sidecar.git
-  #   path: packages/sidecar
-  #   ref: master
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
+    version: ^0.1.0-dev.1
   source_span: ^1.8.0
   yaml: ^3.1.1
 

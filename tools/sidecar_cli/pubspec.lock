@@ -270,10 +270,10 @@ packages:
   sidecar:
     dependency: "direct main"
     description:
-      path: "/Users/pattobrien/Development/sidecar/packages/sidecar"
-      relative: false
-    source: path
-    version: "0.1.0"
+      name: sidecar
+      url: "https://dart.cloudsmith.io/fine-designs/sidecar/"
+    source: hosted
+    version: "0.1.0-dev.1"
   source_map_stack_trace:
     dependency: transitive
     description:

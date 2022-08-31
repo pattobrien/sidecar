@@ -6,3 +6,6 @@
 build/
 
 .fvm/
+
+# sidecar generated files
+.sidecar/

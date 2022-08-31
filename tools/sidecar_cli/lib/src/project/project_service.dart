@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:path/path.dart' as p;
+import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_cli/src/project/vscode_task.dart';
@@ -21,22 +22,48 @@ class ProjectService {
   io.Directory get projectPluginDirectory {
     //TODO: make the plugin directory generation more robust
     //(e.g. what happens when conflicting project names?)
-    final projectName = projectDirectory.uri.pathSegments.reversed.toList()[1];
-    return getProjectPluginDirectory(projectName);
+    // final projectName = projectDirectory.uri.pathSegments.reversed.toList()[1];
+    // return getProjectPluginDirectory(projectName);
+    final pluginPath =
+        p.join(projectDirectory.path, '.sidecar', 'sidecar_analyzer_plugin');
+    return io.Directory(pluginPath)..create(recursive: true);
   }
 
   Future<void> insertPluginIntoProjectPubspec() async {
     final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
-      // final content = await pubspecFile.readAsString();
-      // final newContent = '$content \n # ${projectPluginDirectory.path}';
-      // await pubspecFile.writeAsString(newContent);
-      final pubspecOverrides =
-          io.File(p.join(projectDirectory.path, 'pubspec_overrides.yaml'))
-            ..create(recursive: true);
-      final contents =
-          pluginLoaderYamlContentCreator(projectPluginDirectory.path);
-      await pubspecOverrides.writeAsString(contents);
+      final content = await pubspecFile.readAsString();
+      final pubspec = Pubspec.parse(content);
+
+      final hasSidecarDependency =
+          pubspec.dependencies.containsKey('sidecar_analyzer_plugin');
+      final hasSidecarDevDependency =
+          pubspec.devDependencies.containsKey('sidecar_analyzer_plugin');
+      final hasSidecarDependencyOverride =
+          pubspec.dependencyOverrides.containsKey('sidecar_analyzer_plugin');
+
+      if (hasSidecarDependency) {
+        print('sidecar_analyzer_plugin already contained in dependencies');
+        return;
+      }
+      if (hasSidecarDevDependency) {
+        print('sidecar_analyzer_plugin already contained in dev dependencies');
+        return;
+      }
+      if (hasSidecarDependencyOverride) {
+        print(
+            'sidecar_analyzer_plugin already contained in dependency overrides');
+        return;
+      }
+      print('inserting sidecar_analyzer_plugininto project pubspec...');
+      final contentWithInsert = pubspec.insertDevDependency(
+        content,
+        MapEntry(
+          'sidecar_analyzer_plugin',
+          PathDependency('.sidecar/sidecar_analyzer_plugin/'),
+        ),
+      );
+      await pubspecFile.writeAsString(contentWithInsert);
     } else {
       throw UnimplementedError('pubspec file is not in root project dir');
     }
@@ -56,6 +83,7 @@ class ProjectService {
 
     print(
         'copying ${packageSourceFiles.length} plugin source files to project');
+    print('copying from relative path: $kPluginPackagesRootPath');
 
     for (final packageSourceFile in packageSourceFiles) {
       final sourceFileRelativePath =
@@ -95,6 +123,18 @@ class ProjectService {
     if (!link.existsSync()) await link.create(pluginPath);
   }
 
+  Future<void> clearPreviousLints() async {
+    final lintProjectCachePath = p.join(
+      projectPluginDirectory.path,
+      'lib',
+      'lints',
+    );
+    final directory = io.Directory(lintProjectCachePath);
+    print('deleting previous lints...');
+    final doesDirectoryExist = await directory.exists();
+    if (doesDirectoryExist) directory.delete(recursive: true);
+  }
+
   Future<void> importLints(List<LintConfiguration> lints) async {
     for (final lintId in lints) {
       final lintUri = Uri(
@@ -104,7 +144,6 @@ class ProjectService {
           scheme: 'file',
           path: p.join(
             projectPluginDirectory.path,
-            'sidecar_analyzer_plugin',
             'lib',
             'lints',
             lintId.filePath,

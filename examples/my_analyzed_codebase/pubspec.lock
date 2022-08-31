@@ -244,6 +244,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  pubspec_parse:
+    dependency: transitive
+    description:
+      name: pubspec_parse
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
   recase:
     dependency: transitive
     description:
@@ -289,17 +296,17 @@ packages:
   sidecar:
     dependency: transitive
     description:
-      path: "/Users/pattobrien/Development/sidecar/packages/sidecar"
-      relative: false
-    source: path
-    version: "0.1.0"
+      name: sidecar
+      url: "https://dart.cloudsmith.io/fine-designs/sidecar/"
+    source: hosted
+    version: "0.1.0-dev.1"
   sidecar_analyzer_plugin:
-    dependency: "direct overridden"
+    dependency: "direct dev"
     description:
-      path: "/Users/pattobrien/.sidecar/projects/my_analyzed_codebase/sidecar_analyzer_plugin/sidecar_analyzer_plugin"
+      path: "/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/sidecar_analyzer_plugin"
       relative: false
     source: path
-    version: "1.0.0"
+    version: "0.1.0-dev.1"
   sky_engine:
     dependency: transitive
     description: flutter

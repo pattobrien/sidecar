@@ -1,7 +1,7 @@
 name: my_analyzed_codebase
 description: A sample command-line application.
 version: 1.0.0
-# homepage: https://www.example.com
+
 environment:
   sdk: ">=2.17.5 <3.0.0"
 
@@ -12,17 +12,9 @@ dependencies:
   path: ^1.8.0
 
 dev_dependencies:
+  sidecar_analyzer_plugin:
+    path: /Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/sidecar_analyzer_plugin # code-generated
   lints: ^2.0.0
-
-  # dependency_overrides:
-  #   sidecar_analyzer_plugin:
-  #     path: ../../packages/sidecar_analyzer_plugin/
-  #   sidecar:
-  #     path: ../../packages/sidecar/
-  # git:
-  #   url: git@github.com:pattobrien/sidecar.git
-  #   path: packages/sidecar_analyzer_plugin
-  #   ref: master
   test: ^1.16.0
 
 flutter:
