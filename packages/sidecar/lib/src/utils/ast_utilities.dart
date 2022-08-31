@@ -1,6 +1,9 @@
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:source_span/source_span.dart';
+import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/src/dart/ast/utilities.dart';
+import 'package:analyzer/src/dart/ast/element_locator.dart';
 
 /// Used to translate a single AST node into a SourceSpan (i.e. start and end location within source code)
 extension AstNodeX on AstNode {
@@ -35,5 +38,14 @@ extension AstNodeX on AstNode {
       ),
       unit.content.substring(startOffset, endOffset),
     );
+  }
+
+  Element? toElement(ResolvedUnitResult unit) {
+    final node = NodeLocator(
+      offset,
+      end + length,
+    ).searchWithin(unit.unit);
+
+    return ElementLocator.locate(node);
   }
 }

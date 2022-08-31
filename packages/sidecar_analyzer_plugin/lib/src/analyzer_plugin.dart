@@ -174,29 +174,28 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetAssistsResult> handleEditGetAssists(
     EditGetAssistsParams parameters,
   ) async {
-    final path = parameters.file;
-    final context = _collection.contextFor(path);
+    final filePath = parameters.file;
+    final context = _collection.contextFor(filePath);
 
-    // context.changeFile(path);
-    // await context.applyPendingFileChanges();
-    final unit = await context.currentSession.getResolvedUnit(path)
-        as ResolvedUnitResult;
+    final unit = await context.currentSession.getResolvedUnit(filePath);
 
-    final fixes = _getCodeFixes(unit, parameters.offset, parameters.offset);
+    if (unit is! ResolvedUnitResult) return EditGetAssistsResult([]);
+
+    final requests =
+        _getCodeEditRequests(unit, parameters.offset, parameters.offset);
     final changes = await Future.wait<plugin.PrioritizedSourceChange>(
-      fixes.map((e) => e.toPrioritizedSourceChanges(ref)),
+      requests.map((e) => e.toPrioritizedSourceChanges(ref)),
     );
     return EditGetAssistsResult(changes);
   }
 
-  Iterable<RequestedCodeEdit> _getCodeFixes(
+  Iterable<RequestedCodeEdit> _getCodeEditRequests(
     ResolvedUnitResult unit,
     int offset,
     int length,
   ) {
     final codeEditReporter = CodeEditReporter(unit);
-    // final sourceSpan = SourceSpanX.fromRawParameters(unit, offset, length);
-    // final astNode = sourceSpan.toAstNode(unit);
+
     final astNode = NodeLocator(
       offset,
       offset + length,
@@ -206,8 +205,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       codeEdit.reporter = codeEditReporter;
       codeEdit.generateReport(astNode);
     }
-    // final lintVisitor = LintVisitor(nodeRegistry);
-    // unit.unit.accept(lintVisitor);
 
     final codeEdits = codeEditReporter.reportedEdits;
 

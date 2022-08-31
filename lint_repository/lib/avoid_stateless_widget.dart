@@ -29,9 +29,8 @@ class AvoidStatelessWidget extends LintError {
     ReportedLintError reportedLintError,
   ) async {
     final unit = reportedLintError.sourceUnit;
-    final sourceSpan = reportedLintError.sourceSpan;
+    final node = reportedLintError.sourceNode;
 
-    final classAstNode = sourceSpan.toAstNode(unit);
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
       final flutterRiverpodUri = Uri(
@@ -39,8 +38,8 @@ class AvoidStatelessWidget extends LintError {
         path: 'flutter_riverpod/flutter_riverpod.dart',
       );
       fileBuilder.importLibraryElement(flutterRiverpodUri);
-      if (classAstNode is ClassDeclaration) {
-        final superClass = classAstNode.extendsClause!.superclass;
+      if (node is ClassDeclaration) {
+        final superClass = node.extendsClause!.superclass;
         final superClassSource = superClass.toSourceSpan(unit);
 
         fileBuilder.addReplacement(
@@ -48,8 +47,7 @@ class AvoidStatelessWidget extends LintError {
           (builder) => builder.write('ConsumerWidget'),
         );
 
-        final methodMembers =
-            classAstNode.members.whereType<MethodDeclaration>();
+        final methodMembers = node.members.whereType<MethodDeclaration>();
         // Logger.logLine('# O BUILD METHODS: ${methodMembers.length}');
         final buildFunction = methodMembers
             .firstWhereOrNull((element) => element.name.name == 'build');

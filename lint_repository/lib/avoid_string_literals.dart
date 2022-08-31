@@ -30,14 +30,11 @@ class AvoidStringLiterals extends LintError {
     ReportedLintError reportedLintError,
   ) async {
     final unit = reportedLintError.sourceUnit;
-    final sourceSpan = reportedLintError.sourceSpan;
+    final stringNode = reportedLintError.sourceNode;
 
     final arbClassPrefix = 'AppLocalizations.of(context)';
 
-    final stringNode = sourceSpan.toAstNode(unit);
-    if (stringNode == null) return [];
-
-    final stringElement = sourceSpan.toElement(unit);
+    final stringElement = stringNode.toElement(unit);
     final references = <SourceSpan>[];
     if (stringNode.parent is VariableDeclaration && stringElement != null) {
       final analysisUtils = ref.read(analysisContextUtilitiesProvider);
@@ -47,6 +44,7 @@ class AvoidStringLiterals extends LintError {
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
+      final sourceSpan = stringNode.toSourceSpan(unit);
       final flutterRiverpodUri = Uri(
         scheme: 'package',
         path: 'localizations/localizations.dart',

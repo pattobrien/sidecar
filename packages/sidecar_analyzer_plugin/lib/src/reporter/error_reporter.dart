@@ -11,9 +11,8 @@ class ErrorReporter extends IErrorReporter {
   @override
   void reportedLint(AstNode? node, LintError lint) {
     if (node != null) {
-      final sourceSpan = node.toSourceSpan(unit);
-      final reportedLintError = ReportedLintError(
-          sourceUnit: unit, sourceSpan: sourceSpan, lint: lint);
+      final reportedLintError =
+          ReportedLintError(sourceUnit: unit, sourceNode: node, lint: lint);
       reportedErrors.add(reportedLintError);
     }
   }

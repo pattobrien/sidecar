@@ -26,44 +26,18 @@ extension SourceSpanX on SourceSpan {
   AstNode? toAstNode(ResolvedUnitResult unit) {
     return NodeLocator(
       start.offset,
-      end.offset + length,
+      end.offset +
+          length, //TODO: is this correct?  or should it just be end.offset
     ).searchWithin(unit.unit);
   }
 
   Element? toElement(ResolvedUnitResult unit) {
     final node = NodeLocator(
       start.offset,
-      end.offset + length,
+      end.offset +
+          length, //TODO: is this correct?  or should it just be end.offset
     ).searchWithin(unit.unit);
 
     return ElementLocator.locate(node);
-  }
-
-  static SourceSpan fromRawParameters(
-    ResolvedUnitResult unit,
-    int offset,
-    int length,
-  ) {
-    final startOffset = offset;
-    final endOffset = offset + length;
-
-    final startLocation = unit.lineInfo.getLocation(startOffset);
-    final endLocation = unit.lineInfo.getLocation(endOffset);
-    return SourceSpan(
-      SourceLocation(
-        startOffset,
-        sourceUrl: unit.path,
-        column: startLocation.columnNumber,
-        line: startLocation.lineNumber,
-      ),
-      SourceLocation(
-        endOffset,
-        sourceUrl: unit.path,
-        column: endLocation.columnNumber,
-        line: endLocation.lineNumber,
-      ),
-      // unit.content.substring(startOffset, endOffset),
-      '',
-    );
   }
 }
