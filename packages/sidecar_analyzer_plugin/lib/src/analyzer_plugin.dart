@@ -26,7 +26,9 @@ import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
 
 const pluginName = 'sidecar_analyzer_plugin';
-const pluginVersion = '0.1.0-dev.1';
+const pluginVersion = '1.0.0-alpha.0';
+
+// this cannot be any random number for some reason ("Plugin is not compatible."" error is thrown)
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({

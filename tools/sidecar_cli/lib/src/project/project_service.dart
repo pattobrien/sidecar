@@ -77,23 +77,24 @@ class ProjectService {
       await projectPluginDirectory.delete(recursive: true);
     }
     // get all source files from the plugin package
-    final packageSourceFiles = kAnalyzerPluginPackageRoot
-        .listSync(recursive: true)
-        .whereType<io.File>();
+    final packageSourceFiles =
+        kPluginMasterRoot.listSync(recursive: true).whereType<io.File>();
 
     print(
         'copying ${packageSourceFiles.length} plugin source files to project');
-    print('copying from relative path: $kPluginPackagesRootPath');
+    print('copying from relative path: $kPluginMasterRootPath');
 
+    bool hasOverrides = false;
     for (final packageSourceFile in packageSourceFiles) {
       final sourceFileRelativePath =
-          p.relative(packageSourceFile.path, from: kPluginPackagesRootPath);
+          p.relative(packageSourceFile.path, from: kPluginMasterRootPath);
       final pluginProjectPath =
           p.join(projectPluginDirectory.path, sourceFileRelativePath);
       final file = await io.File(pluginProjectPath).create(recursive: true);
       if (packageSourceFile.path == kPluginLoaderPath) {
         // replace the plugin loader pubspec file with one that
         // utilizes the newly copied plugin package's path
+        hasOverrides = true;
         await file.writeAsString(
             pluginLoaderYamlContentCreator(projectPluginDirectory.path));
         print('found loader pubspec @ $pluginProjectPath');
@@ -103,6 +104,16 @@ class ProjectService {
         final contents = await packageSourceFile.readAsBytes();
         await file.writeAsBytes(contents);
       }
+    }
+    if (hasOverrides == false) {
+      print('hasOverrides = false!!');
+      final pluginProjectPath =
+          p.join(projectPluginDirectory.path, kPluginLoaderPath);
+      final file = await io.File(pluginProjectPath).create(recursive: true);
+      await file.writeAsString(
+          pluginLoaderYamlContentCreator(projectPluginDirectory.path));
+    } else {
+      print('hasOverrides = true :/');
     }
   }
 

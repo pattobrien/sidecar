@@ -218,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  pubspec_parse:
+    dependency: transitive
+    description:
+      name: pubspec_parse
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
   recase:
     dependency: transitive
     description:
@@ -263,10 +270,10 @@ packages:
   sidecar:
     dependency: "direct main"
     description:
-      path: "../packages/sidecar"
-      relative: true
+      path: "/Users/pattobrien/Development/sidecar/packages/sidecar"
+      relative: false
     source: path
-    version: "1.0.0"
+    version: "0.1.0-dev.1"
   source_map_stack_trace:
     dependency: transitive
     description:

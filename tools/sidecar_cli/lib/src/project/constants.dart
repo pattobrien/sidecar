@@ -5,23 +5,31 @@ import '../utilities/utilities.dart';
 
 final kHomeDirectory = homeDirectory();
 
-final kPluginPackagesRootPath = p.join(
+// final kPluginPackagesRootPath = p.join(
+//   kHomeDirectory.path,
+//   'Development',
+//   'sidecar',
+//   'packages',
+//   'sidecar_analyzer_plugin',
+// );
+final kPluginMasterRootPath = p.join(
   kHomeDirectory.path,
-  'Development',
-  'sidecar',
-  'packages',
-  'sidecar_analyzer_plugin',
+  '.pub-cache',
+  'hosted',
+  'dart.cloudsmith.io%47fine-designs%47sidecar_analyzer_plugin%47',
+  'sidecar_analyzer_plugin-0.1.0-dev.1',
 );
 
-final kAnalyzerPluginPackageRoot = io.Directory(kPluginPackagesRootPath);
+final kPluginMasterRoot = io.Directory(kPluginMasterRootPath);
 
 final kAnalyzerLintRepositoryRoot = io.Directory(
-    p.join('/Users/pattobrien/Development/sidecar/', 'lint_repository', 'lib'));
+  p.join('/Users/pattobrien/Development/sidecar/', 'lint_repository', 'lib'),
+);
 
 final lintInitializerRelativePath = 'lib/src/plugin_bootstrapper.dart';
 
 final kPluginLoaderPath = p.join(
-  kPluginPackagesRootPath,
+  kPluginMasterRootPath,
   'tools',
   'analyzer_plugin',
   'pubspec_overrides.yaml',
@@ -30,7 +38,7 @@ final kPluginLoaderPath = p.join(
 String pluginLoaderYamlContentCreator(String projectPluginPath) => '''
 dependency_overrides:
   sidecar_analyzer_plugin:
-    path: $projectPluginPath/sidecar_analyzer_plugin # code-generated
+    path: $projectPluginPath # code-generated
 ''';
 
 

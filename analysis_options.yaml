@@ -21,6 +21,7 @@ analyzer:
 sidecar_analyzer_plugin:
   includes:
     - "nothing.yaml"
+    - "examples/**"
 
 linter:
   rules:

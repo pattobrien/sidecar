@@ -303,10 +303,10 @@ packages:
   sidecar_analyzer_plugin:
     dependency: "direct dev"
     description:
-      path: "/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/sidecar_analyzer_plugin"
-      relative: false
+      path: ".sidecar/sidecar_analyzer_plugin"
+      relative: true
     source: path
-    version: "0.1.0-dev.1"
+    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -430,7 +430,7 @@ packages:
       name: webkit_inspection_protocol
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   yaml:
     dependency: transitive
     description:
