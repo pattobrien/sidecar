@@ -15,11 +15,15 @@ dependencies:
   meta: ^1.7.0
   path: ^1.8.1
   riverpod: ^2.0.0-dev.9
+
   sidecar:
-    git:
-      url: git@github.com:pattobrien/sidecar.git
-      path: packages/sidecar
-      ref: master
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar
+  # sidecar:
+  #   path: ../sidecar/
+  # git:
+  #   url: git@github.com:pattobrien/sidecar.git
+  #   path: packages/sidecar
+  #   ref: master
   source_span: ^1.8.0
   yaml: ^3.1.1
 

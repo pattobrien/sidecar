@@ -43,6 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  characters:
+    dependency: transitive
+    description:
+      name: characters
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0"
   checked_yaml:
     dependency: transitive
     description:
@@ -99,6 +106,18 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.4"
+  flutter:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_riverpod:
+    dependency: "direct main"
+    description:
+      name: flutter_riverpod
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0-dev.9"
   frontend_server_client:
     dependency: transitive
     description:
@@ -169,13 +188,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.12"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   meta:
     dependency: transitive
     description:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.7.0"
   mime:
     dependency: transitive
     description:
@@ -263,19 +289,22 @@ packages:
   sidecar:
     dependency: transitive
     description:
-      path: "packages/sidecar"
-      ref: master
-      resolved-ref: "754f54bc5bc9d5c08e73d2fe6b5dc2acf34af3e8"
-      url: "git@github.com:pattobrien/sidecar.git"
-    source: git
-    version: "1.0.0"
+      path: "/Users/pattobrien/Development/sidecar/packages/sidecar"
+      relative: false
+    source: path
+    version: "0.1.0"
   sidecar_analyzer_plugin:
-    dependency: "direct dev"
+    dependency: "direct overridden"
     description:
       path: "/Users/pattobrien/.sidecar/projects/my_analyzed_codebase/sidecar_analyzer_plugin/sidecar_analyzer_plugin"
       relative: false
     source: path
     version: "1.0.0"
+  sky_engine:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.99"
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -360,6 +389,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
+  vector_math:
+    dependency: transitive
+    description:
+      name: vector_math
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.2"
   vm_service:
     dependency: transitive
     description:
@@ -397,3 +433,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.17.5 <3.0.0"
+  flutter: ">=3.0.0"

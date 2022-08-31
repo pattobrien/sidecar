@@ -14,6 +14,10 @@ import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'package:sidecar_analyzer_plugin/src/plugin_bootstrapper.dart';
+import 'package:sidecar_analyzer_plugin/src/plugin_code_fix_bootstrapper.dart';
+import 'package:sidecar_analyzer_plugin/src/reporter/code_edit_reporter.dart';
+import 'package:source_span/source_span.dart';
+import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'reporter/reporter.dart';
 
@@ -32,12 +36,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     Logger.logLine('SidecarAnalyzerPlugin initialized');
 
     allLints = pluginBootstrapper(nodeRegistry, ref);
+    allCodeEdits = pluginCodeFixBootstrapper(ref);
   }
 
   final ProviderContainer ref;
   late final AnalysisContextCollection _collection;
   final nodeRegistry = NodeLintRegistry();
   late List<LintError> allLints;
+  late List<CodeEdit> allCodeEdits;
 
   @override
   List<String> get fileGlobsToAnalyze => <String>['**/*.dart', '**/*.arb'];
@@ -168,15 +174,46 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetAssistsResult> handleEditGetAssists(
     EditGetAssistsParams parameters,
   ) async {
-    return EditGetAssistsResult(<plugin.PrioritizedSourceChange>[
-      plugin.PrioritizedSourceChange(
-        0,
-        plugin.SourceChange(
-          'TEST ASSIST: NO EDIT',
-          edits: [],
-        ),
-      )
-    ]);
+    final path = parameters.file;
+    final context = _collection.contextFor(path);
+
+    // context.changeFile(path);
+    // await context.applyPendingFileChanges();
+    final unit = await context.currentSession.getResolvedUnit(path)
+        as ResolvedUnitResult;
+
+    final fixes = _getCodeFixes(unit, parameters.offset, parameters.offset);
+    final changes = await Future.wait<plugin.PrioritizedSourceChange>(
+      fixes.map((e) => e.toPrioritizedSourceChanges(ref)),
+    );
+    return EditGetAssistsResult(changes);
+  }
+
+  Iterable<RequestedCodeEdit> _getCodeFixes(
+    ResolvedUnitResult unit,
+    int offset,
+    int length,
+  ) {
+    final codeEditReporter = CodeEditReporter(unit);
+    // final sourceSpan = SourceSpanX.fromRawParameters(unit, offset, length);
+    // final astNode = sourceSpan.toAstNode(unit);
+    final astNode = NodeLocator(
+      offset,
+      offset + length,
+    ).searchWithin(unit.unit);
+
+    for (final codeEdit in allCodeEdits) {
+      codeEdit.reporter = codeEditReporter;
+      codeEdit.generateReport(astNode);
+    }
+    // final lintVisitor = LintVisitor(nodeRegistry);
+    // unit.unit.accept(lintVisitor);
+
+    final codeEdits = codeEditReporter.reportedEdits;
+
+    Logger.logLine(
+        '# OF CODE EDITS = ${codeEdits.length} for file ${unit.path}');
+    return codeEdits;
   }
 
   Iterable<ReportedLintError> _getReportedErrors(

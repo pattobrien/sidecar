@@ -1,7 +1,9 @@
 name: sidecar
 description: Core package for sidecar ecosystem to be built from.
-version: 1.0.0
-# homepage: https://www.example.com
+version: 0.1.0
+# publish_to: http://localhost:8080
+repository: https://github.com/pattobrien/sidecar
+
 environment:
   sdk: ">=2.17.5 <3.0.0"
 

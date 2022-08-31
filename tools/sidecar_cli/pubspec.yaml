@@ -12,6 +12,7 @@ dependencies:
   recase: ^4.0.0
   riverpod: ^2.0.0-dev.9
   sidecar:
+    #   path: ../../packages/sidecar/
     git:
       url: git@github.com:pattobrien/sidecar.git
       path: packages/sidecar
