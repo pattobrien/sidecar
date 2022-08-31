@@ -5,13 +5,6 @@ import '../utilities/utilities.dart';
 
 final kHomeDirectory = homeDirectory();
 
-// final kPluginPackagesRootPath = p.join(
-//   kHomeDirectory.path,
-//   'Development',
-//   'sidecar',
-//   'packages',
-//   'sidecar_analyzer_plugin',
-// );
 final kPluginMasterRootPath = p.join(
   kHomeDirectory.path,
   '.pub-cache',
@@ -19,6 +12,11 @@ final kPluginMasterRootPath = p.join(
   'dart.cloudsmith.io%47fine-designs%47sidecar_analyzer_plugin%47',
   'sidecar_analyzer_plugin-0.1.0-dev.2',
 );
+
+final kCloudsmithSidecarUrl =
+    'https://dart.cloudsmith.io/fine-designs/sidecar/';
+final kCloudsmithPluginUrl =
+    'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/';
 
 final kPluginMasterRoot = io.Directory(kPluginMasterRootPath);
 

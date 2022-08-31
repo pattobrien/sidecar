@@ -20,13 +20,14 @@ class ProjectService {
   final io.Directory cacheDirectory;
 
   io.Directory get projectPluginDirectory {
-    //TODO: make the plugin directory generation more robust
-    //(e.g. what happens when conflicting project names?)
-    // final projectName = projectDirectory.uri.pathSegments.reversed.toList()[1];
-    // return getProjectPluginDirectory(projectName);
     final pluginPath =
         p.join(projectDirectory.path, '.sidecar', 'sidecar_analyzer_plugin');
     return io.Directory(pluginPath)..create(recursive: true);
+  }
+
+  io.Directory get projectRepositoryDirectory {
+    final toolPath = io.Directory(p.join(projectDirectory.path, 'tool'));
+    return io.Directory(p.join(toolPath.path, 'sidecar_overrides'));
   }
 
   Future<void> insertPluginIntoProjectPubspec() async {
@@ -70,8 +71,6 @@ class ProjectService {
   }
 
   Future<void> copyBasePluginFromSource() async {
-    //TODO: is there a way this can live within the project's source ?
-    //(e.g '.sidecar_tool' in root directory)
     if (projectPluginDirectory.existsSync()) {
       // delete any previously copied plugin files
       await projectPluginDirectory.delete(recursive: true);
@@ -106,14 +105,11 @@ class ProjectService {
       }
     }
     if (hasOverrides == false) {
-      print('hasOverrides = false!!');
       final pluginProjectPath =
           p.join(projectPluginDirectory.path, kPluginLoaderPath);
       final file = await io.File(pluginProjectPath).create(recursive: true);
       await file.writeAsString(
           pluginLoaderYamlContentCreator(projectPluginDirectory.path));
-    } else {
-      print('hasOverrides = true :/');
     }
   }
 
@@ -196,6 +192,38 @@ class ProjectService {
     await io.File(
             p.join(projectPluginDirectory.path, lintInitializerRelativePath))
         .writeAsString(entireContents.toString());
+  }
+
+  Future<void> createProjectRepository() async {
+    final projectRepoDirectory = projectRepositoryDirectory;
+    // if (projectRepositoryDirectory.existsSync()) {
+    //   // directory already exists, so no need to overwrite files
+    //   print('project repository already exists');
+    //   return;
+    // }
+    final toolDirectory = io.Directory(p.join(projectDirectory.path, 'tool'));
+    await toolDirectory.create(recursive: true);
+    print('creating project repository');
+    await io.Process.run(
+      'dart',
+      ['create', '--template=package', 'sidecar_overrides'],
+      workingDirectory: toolDirectory.path,
+    );
+    await io.Process.run(
+      'dart',
+      ['pub', 'add', '--hosted-url', kCloudsmithSidecarUrl, 'sidecar'],
+      workingDirectory: projectRepoDirectory.path,
+    );
+    await io.Process.run(
+      'dart',
+      ['pub', 'add', 'analyzer'],
+      workingDirectory: projectRepoDirectory.path,
+    );
+    await io.Process.run(
+      'dart',
+      ['pub', 'get'],
+      workingDirectory: projectRepoDirectory.path,
+    );
   }
 
   Future<void> restartAnalyzerPlugin() async {

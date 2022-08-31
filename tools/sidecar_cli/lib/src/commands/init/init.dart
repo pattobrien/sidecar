@@ -29,6 +29,7 @@ class InitCommand extends Command<int> {
 
       await projectService.copyBasePluginFromSource();
       await projectService.insertPluginIntoProjectPubspec();
+      // await projectService.createProjectRepository();
       await projectService.insertVscodeTask();
       return ExitCode.success;
     } catch (e) {
