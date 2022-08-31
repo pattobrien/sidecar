@@ -17,7 +17,7 @@ final kPluginMasterRootPath = p.join(
   '.pub-cache',
   'hosted',
   'dart.cloudsmith.io%47fine-designs%47sidecar_analyzer_plugin%47',
-  'sidecar_analyzer_plugin-0.1.0-dev.1',
+  'sidecar_analyzer_plugin-0.1.0-dev.2',
 );
 
 final kPluginMasterRoot = io.Directory(kPluginMasterRootPath);

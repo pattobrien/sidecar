@@ -273,7 +273,7 @@ packages:
       name: sidecar
       url: "https://dart.cloudsmith.io/fine-designs/sidecar/"
     source: hosted
-    version: "0.1.0-dev.1"
+    version: "0.1.0-dev.2"
   source_map_stack_trace:
     dependency: transitive
     description:

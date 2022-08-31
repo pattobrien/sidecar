@@ -12,7 +12,7 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.0-dev.1
+    version: 0.1.0-dev.2
 
 dev_dependencies:
   lints: ^2.0.0
