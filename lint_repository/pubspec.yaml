@@ -12,10 +12,8 @@ dependencies:
   collection: ^1.16.0
   path: ^1.8.0
   sidecar:
-    git:
-      url: git@github.com:pattobrien/sidecar.git
-      path: packages/sidecar
-      ref: master
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
+    version: ^0.1.0-dev.1
 
 dev_dependencies:
   lints: ^2.0.0
