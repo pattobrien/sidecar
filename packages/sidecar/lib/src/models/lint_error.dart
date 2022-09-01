@@ -43,3 +43,16 @@ abstract class LintError {
 
 typedef GetFixes = List<plugin.PrioritizedSourceChange> Function(
     ResolvedUnitResult unit);
+
+extension LintErrorTypeX on LintErrorType {
+  plugin.AnalysisErrorSeverity get analysisError {
+    switch (this) {
+      case LintErrorType.info:
+        return plugin.AnalysisErrorSeverity.INFO;
+      case LintErrorType.warning:
+        return plugin.AnalysisErrorSeverity.WARNING;
+      case LintErrorType.error:
+        return plugin.AnalysisErrorSeverity.ERROR;
+    }
+  }
+}

@@ -139,7 +139,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       if (unit is ResolvedUnitResult) {
         final reportedErrors = _getReportedErrors(unit).where((reportedError) {
-          final errorLocation = reportedError.analysisError.location;
+          final errorLocation = reportedError.toAnalysisError().location;
 
           return errorLocation.file == parameters.file &&
               errorLocation.offset <= parameters.offset &&
@@ -237,7 +237,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     ResolvedUnitResult unit,
   ) {
     final reportedErrors = _getReportedErrors(unit);
-    final analysisErrors = reportedErrors.map((e) => e.analysisError);
+    final analysisErrors = reportedErrors.map((e) => e.toAnalysisError());
     return analysisErrors;
   }
 }
