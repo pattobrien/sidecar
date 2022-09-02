@@ -21,7 +21,7 @@ final kCloudsmithPluginUrl =
 final kPluginMasterRoot = io.Directory(kPluginMasterRootPath);
 
 final kAnalyzerLintRepositoryRoot = io.Directory(
-  p.join('/Users/pattobrien/Development/sidecar/', 'lint_repository', 'lib'),
+  p.join('/Users/pattobrien/Development/sidecar/', 'repositories', 'lints'),
 );
 
 final lintInitializerRelativePath = 'lib/src/plugin_bootstrapper.dart';
@@ -32,6 +32,11 @@ final kPluginLoaderPath = p.join(
   'analyzer_plugin',
   'pubspec_overrides.yaml',
 );
+
+String lintDependency(String lintName) => '''
+  $lintName:
+    hosted: http://0.0.0.0:8080
+''';
 
 String pluginLoaderYamlContentCreator(String projectPluginPath) => '''
 dependency_overrides:

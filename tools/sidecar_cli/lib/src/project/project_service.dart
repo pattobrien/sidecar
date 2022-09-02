@@ -57,13 +57,26 @@ class ProjectService {
         return;
       }
       print('inserting sidecar_analyzer_plugininto project pubspec...');
-      final contentWithInsert = pubspec.insertDevDependency(
-        content,
-        MapEntry(
-          'sidecar_analyzer_plugin',
-          PathDependency('.sidecar/sidecar_analyzer_plugin/'),
-        ),
-      );
+      final contentWithInsert = content
+          .insertDevDependency(
+            MapEntry(
+              'sidecar_analyzer_plugin',
+              HostedDependency(
+                hosted: HostedDetails(
+                  null,
+                  Uri.parse(
+                    'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/',
+                  ),
+                ),
+              ),
+            ),
+          )
+          .insertDependencyOverride(
+            MapEntry(
+              'sidecar_analyzer_plugin',
+              PathDependency('.sidecar/sidecar_analyzer_plugin/'),
+            ),
+          );
       await pubspecFile.writeAsString(contentWithInsert);
     } else {
       throw UnimplementedError('pubspec file is not in root project dir');
@@ -143,30 +156,44 @@ class ProjectService {
   }
 
   Future<void> importLints(List<LintConfiguration> lints) async {
+    final pluginPubspecFile =
+        io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
+
+    if (!pluginPubspecFile.existsSync()) {
+      throw UnimplementedError('plugin pubspec not found');
+    }
+    String newPubspecContent = '';
     for (final lintId in lints) {
-      final lintUri = Uri(
-          scheme: 'file', path: p.join(cacheDirectory.path, lintId.filePath));
+      // final lintUri = Uri(
+      //     scheme: 'file', path: p.join(cacheDirectory.path, lintId.filePath));
 
-      final lintProjectCacheUri = Uri(
-          scheme: 'file',
-          path: p.join(
-            projectPluginDirectory.path,
-            'lib',
-            'lints',
-            lintId.filePath,
-          ));
+      // final lintProjectCacheUri = Uri(
+      //     scheme: 'file',
+      //     path: p.join(
+      //       projectPluginDirectory.path,
+      //       'lib',
+      //       'lints',
+      //       lintId.filePath,
+      //     ));
 
-      try {
-        // await dio.downloadUri(lintUri, lintCacheUri.path);
-        final file = io.File(lintUri.path); //.create(recursive: true);
-        // await file.copy(lintProjectCacheUri.path);
-        final contents = await file.readAsBytes();
-        final newFile =
-            await io.File(lintProjectCacheUri.path).create(recursive: true);
-        await newFile.writeAsBytes(contents);
-      } catch (e) {
-        print('error: $e');
-      }
+      final pubspecContent = await pluginPubspecFile.readAsString();
+
+      newPubspecContent = pubspecContent.insertDependency(
+        MapEntry(
+          lintId.id,
+          HostedDependency(
+            hosted: HostedDetails(
+              null,
+              Uri.parse('http://0.0.0.0:8080'),
+            ),
+          ),
+        ),
+      );
+    }
+    try {
+      await pluginPubspecFile.writeAsString(newPubspecContent);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -176,7 +203,8 @@ class ProjectService {
     final returnBuffer = StringBuffer();
 
     for (final lint in lints) {
-      importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
+      // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
+      importBuffer.write('import \'package:${lint.id}/${lint.filePath}\'; \n');
       returnBuffer
         ..write('\t\t')
         ..write(lint.className)

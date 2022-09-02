@@ -1,5 +1,5 @@
 name: my_analyzed_codebase
-description: A sample command-line application.
+description: An example of a project analyzed by Sidecar.
 version: 1.0.0
 
 environment:
@@ -13,9 +13,14 @@ dependencies:
 
 dev_dependencies:
   sidecar_analyzer_plugin:
-    path: .sidecar/sidecar_analyzer_plugin # code-generated
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
+    version: 0.1.0-dev.3 # version constraint can be explicitly specified
   lints: ^2.0.0
   test: ^1.16.0
 
 flutter:
   uses-material-design: true
+
+dependency_overrides:
+  sidecar_analyzer_plugin:
+    path: .sidecar/sidecar_analyzer_plugin/

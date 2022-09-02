@@ -3,6 +3,7 @@
 
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
+import 'package:riverpod_prefer_consumer_widget/riverpod_prefer_consumer_widget.dart';
 
 List<LintError> pluginBootstrapper(
   NodeLintRegistry registry,
@@ -11,5 +12,6 @@ List<LintError> pluginBootstrapper(
   // initialize all lints
   return [
     // AvoidStringLiterals(ref)..registerNodeProcessors(registry),
+    RiverpodPreferConsumerWidget(ref)..registerNodeProcessors(registry),
   ];
 }

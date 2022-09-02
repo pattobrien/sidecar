@@ -4,8 +4,8 @@ import 'package:collection/collection.dart';
 
 import 'package:sidecar/sidecar.dart';
 
-class AvoidStatelessWidget extends LintError {
-  AvoidStatelessWidget(super.ref);
+class RiverpodPreferConsumerWidget extends LintError {
+  RiverpodPreferConsumerWidget(super.ref);
 
   @override
   String get code => 'avoid_stateless_widgets';
@@ -18,6 +18,7 @@ class AvoidStatelessWidget extends LintError {
 
   @override
   Map get yamlConfig => {};
+
   @override
   void registerNodeProcessors(NodeLintRegistry registry) {
     final visitor = _Visitor(this);

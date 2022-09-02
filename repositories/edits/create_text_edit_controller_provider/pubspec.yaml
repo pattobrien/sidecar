@@ -1,7 +1,8 @@
-name: lint_repository
-description: A sample command-line application.
+name: create_text_edit_controller_provider
+description: A starting point for Dart libraries or applications.
 version: 1.0.0
-publish_to: none
+publish_to: http://0.0.0.0:8080
+# homepage: https://www.example.com
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
@@ -17,3 +18,9 @@ dependencies:
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
+
+micropub: sidecar
+
+sidecar:
+  namespace: riverpod_widgets
+  type: edit

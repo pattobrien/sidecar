@@ -16,6 +16,9 @@ dependencies:
   meta: ^1.7.0
   path: ^1.8.1
   riverpod: ^2.0.0-dev.9
+  riverpod_prefer_consumer_widget:
+    hosted: http://0.0.0.0:8080
+    version: 0.1.1
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
     version: 0.1.0-dev.3
