@@ -12,14 +12,14 @@ sidecar_analyzer_plugin:
   includes:
     - "bin/**"
     - "lib/**"
-    # - ".sidecar/**"
+    - ".sidecar/**"
   rules:
     - id: riverpod_prefer_consumer_widget
-
-proposed_rule_format:
-  - riverpod:avoid_string_literals
-  - riverpod:avoid_stateless_widget
-or:
-  - dart/avoid_stateless_widget
-  - flutter/use_full_hex_values_for_flutter_colors
-  - riverpod/avoid_stateless_widget
+#
+# proposed_rule_format:
+#   - riverpod:avoid_string_literals
+#   - riverpod:avoid_stateless_widget
+# or:
+#   - dart/avoid_stateless_widget
+#   - flutter/use_full_hex_values_for_flutter_colors
+#   - riverpod/avoid_stateless_widget
