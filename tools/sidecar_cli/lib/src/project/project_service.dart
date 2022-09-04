@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:path/path.dart' as p;
+import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
@@ -20,8 +21,11 @@ class ProjectService {
   final io.Directory cacheDirectory;
 
   io.Directory get projectPluginDirectory {
-    final pluginPath =
-        p.join(projectDirectory.path, '.sidecar', 'sidecar_analyzer_plugin');
+    final pluginPath = p.join(
+      projectDirectory.path,
+      '.sidecar',
+      'sidecar_analyzer_plugin_starter',
+    );
     return io.Directory(pluginPath)..create(recursive: true);
   }
 
@@ -37,35 +41,38 @@ class ProjectService {
       final pubspec = Pubspec.parse(content);
 
       final hasSidecarDependency =
-          pubspec.dependencies.containsKey('sidecar_analyzer_plugin');
-      final hasSidecarDevDependency =
-          pubspec.devDependencies.containsKey('sidecar_analyzer_plugin');
-      final hasSidecarDependencyOverride =
-          pubspec.dependencyOverrides.containsKey('sidecar_analyzer_plugin');
+          pubspec.dependencies.containsKey('sidecar_analyzer_plugin_starter');
+      final hasSidecarDevDependency = pubspec.devDependencies
+          .containsKey('sidecar_analyzer_plugin_starter');
+      final hasSidecarDependencyOverride = pubspec.dependencyOverrides
+          .containsKey('sidecar_analyzer_plugin_starter');
 
       if (hasSidecarDependency) {
-        print('sidecar_analyzer_plugin already contained in dependencies');
+        print(
+            'sidecar_analyzer_plugin_starter already contained in dependencies');
         return;
       }
       if (hasSidecarDevDependency) {
-        print('sidecar_analyzer_plugin already contained in dev dependencies');
+        print(
+            'sidecar_analyzer_plugin_starter already contained in dev dependencies');
         return;
       }
       if (hasSidecarDependencyOverride) {
         print(
-            'sidecar_analyzer_plugin already contained in dependency overrides');
+            'sidecar_analyzer_plugin_starter already contained in dependency overrides');
         return;
       }
-      print('inserting sidecar_analyzer_plugininto project pubspec...');
+      print(
+          'inserting sidecar_analyzer_plugin_starter into project pubspec...');
       final contentWithInsert = content
           .insertDevDependency(
             MapEntry(
-              'sidecar_analyzer_plugin',
+              'sidecar_analyzer_plugin_starter',
               HostedDependency(
                 hosted: HostedDetails(
                   null,
                   Uri.parse(
-                    'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/',
+                    'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_starter/',
                   ),
                 ),
               ),
@@ -73,8 +80,8 @@ class ProjectService {
           )
           .insertDependencyOverride(
             MapEntry(
-              'sidecar_analyzer_plugin',
-              PathDependency('.sidecar/sidecar_analyzer_plugin/'),
+              'sidecar_analyzer_plugin_starter',
+              PathDependency('.sidecar/sidecar_analyzer_plugin_starter/'),
             ),
           );
       await pubspecFile.writeAsString(contentWithInsert);
@@ -88,22 +95,36 @@ class ProjectService {
       // delete any previously copied plugin files
       await projectPluginDirectory.delete(recursive: true);
     }
+    //TODO: get plugin version from project's package.json
+    final pluginVersion = Version(0, 1, 0, pre: 'dev.6');
+
     // get all source files from the plugin package
-    final packageSourceFiles =
-        kPluginMasterRoot.listSync(recursive: true).whereType<io.File>();
+    final packageSourceFiles = kPluginMasterRoot(pluginVersion)
+        .listSync(recursive: true)
+        .whereType<io.File>();
 
     print(
         'copying ${packageSourceFiles.length} plugin source files to project');
-    print('copying from relative path: $kPluginMasterRootPath');
+    print(
+        'copying from relative path: ${getPluginPackagePathForVersion(pluginVersion)}');
 
     bool hasOverrides = false;
     for (final packageSourceFile in packageSourceFiles) {
-      final sourceFileRelativePath =
-          p.relative(packageSourceFile.path, from: kPluginMasterRootPath);
+      final sourceFileRelativePath = p.relative(
+        packageSourceFile.path,
+        from: getPluginPackagePathForVersion(pluginVersion),
+      );
+
+      print('relative source path: $sourceFileRelativePath');
+
       final pluginProjectPath =
           p.join(projectPluginDirectory.path, sourceFileRelativePath);
+
+      print('copied source path: $pluginProjectPath');
+
       final file = await io.File(pluginProjectPath).create(recursive: true);
-      if (packageSourceFile.path == kPluginLoaderPath) {
+      if (packageSourceFile.path ==
+          kPluginLoaderAbsolutePath(pluginProjectPath)) {
         // replace the plugin loader pubspec file with one that
         // utilizes the newly copied plugin package's path
         hasOverrides = true;
@@ -118,8 +139,10 @@ class ProjectService {
       }
     }
     if (hasOverrides == false) {
-      final pluginProjectPath =
-          p.join(projectPluginDirectory.path, kPluginLoaderPath);
+      final pluginProjectPath = p.join(
+        projectPluginDirectory.path,
+        kPluginLoaderRelativePath,
+      );
       final file = await io.File(pluginProjectPath).create(recursive: true);
       await file.writeAsString(
           pluginLoaderYamlContentCreator(projectPluginDirectory.path));

@@ -182,6 +182,16 @@ class NodeLintRegistry {
   final List<VisitorSubscription<WithClause>> _forWithClause = [];
   final List<VisitorSubscription<YieldStatement>> _forYieldStatement = [];
 
+  final List<VisitorSubscription<RecordLiteral>> _forRecordLiteral = [];
+  final List<VisitorSubscription<RecordTypeAnnotation>>
+      _forRecordTypeAnnotation = [];
+  final List<VisitorSubscription<RecordTypeAnnotationNamedField>>
+      _forRecordTypeAnnotationNamedField = [];
+  final List<VisitorSubscription<RecordTypeAnnotationNamedFields>>
+      _forRecordTypeAnnotationNamedFields = [];
+  final List<VisitorSubscription<RecordTypeAnnotationPositionalField>>
+      _forRecordTypeAnnotationPositionalField = [];
+
   NodeLintRegistry();
 
   void addAdjacentStrings(LintError linter, AstVisitor visitor) {

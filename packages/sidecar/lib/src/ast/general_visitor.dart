@@ -1,5 +1,4 @@
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/dart/ast/visitor.dart';
 
 import '../models/lint_error.dart';
 import 'visitor_subscription.dart';
@@ -838,5 +837,38 @@ class LintVisitor extends AstVisitor<void> {
       }
       timer?.stop();
     }
+  }
+
+  @override
+  void visitRecordLiteral(RecordLiteral node) {
+    _runSubscriptions(node, registry._forRecordLiteral);
+    node.visitChildren(this);
+  }
+
+  @override
+  void visitRecordTypeAnnotation(RecordTypeAnnotation node) {
+    _runSubscriptions(node, registry._forRecordTypeAnnotation);
+    node.visitChildren(this);
+  }
+
+  @override
+  void visitRecordTypeAnnotationNamedField(
+      RecordTypeAnnotationNamedField node) {
+    _runSubscriptions(node, registry._forRecordTypeAnnotationNamedField);
+    node.visitChildren(this);
+  }
+
+  @override
+  void visitRecordTypeAnnotationNamedFields(
+      RecordTypeAnnotationNamedFields node) {
+    _runSubscriptions(node, registry._forRecordTypeAnnotationNamedFields);
+    node.visitChildren(this);
+  }
+
+  @override
+  void visitRecordTypeAnnotationPositionalField(
+      RecordTypeAnnotationPositionalField node) {
+    _runSubscriptions(node, registry._forRecordTypeAnnotationPositionalField);
+    node.visitChildren(this);
   }
 }
