@@ -44,26 +44,21 @@ class L10nAvoidStringLiterals extends LintError {
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
-      final sourceSpan = stringNode.toSourceSpan(unit);
-      final flutterRiverpodUri = Uri(
+      final l10nUri = Uri(
         scheme: 'package',
         path: 'localizations/localizations.dart',
       );
 
-      fileBuilder.importLibraryElement(flutterRiverpodUri);
+      fileBuilder.importLibraryElement(l10nUri);
 
-      Logger.logLine(
-          'STRING LIT: ${stringNode.runtimeType} & PARENT: ${stringNode.parent.runtimeType}');
       if (stringNode.parent is VariableDeclaration) {
-        Logger.logLine('VARIABLE DECL');
         fileBuilder.addDeletion(
           stringNode.parent!.toSourceSpan(unit).toSourceRange(),
         );
       } else {
-        Logger.logLine('NOT VARIABLE DECL');
         if (stringNode.isInsideBuildMethod()) {
           fileBuilder.addReplacement(
-            sourceSpan.toSourceRange(),
+            stringNode.toSourceRange(unit),
             (editBuilder) => editBuilder.write(arbClassPrefix),
           );
         }
@@ -103,10 +98,10 @@ class _LiteralAstVisitor<R> extends GeneralizingAstVisitor<R> {
     if (node.parent is ImportDirective ||
         node is PartDirective ||
         node is PartOfDirective) {
-      // node is part of import directive; skip
+      // node is part of import directive = skip
     } else {
       final parent = node.parent;
-      final element = node.staticParameterElement;
+      // final element = node.staticParameterElement;
       if (parent is VariableDeclaration) {
         // if the value is declared with a variable
         // then we need to handle it differently

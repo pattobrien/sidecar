@@ -32,7 +32,7 @@ class RiverpodPreferConsumerWidget extends LintError {
     ReportedLintError reportedLintError,
   ) async {
     final unit = reportedLintError.sourceUnit;
-    final node = reportedLintError.sourceNode;
+    final lintedNode = reportedLintError.sourceNode;
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
@@ -41,19 +41,18 @@ class RiverpodPreferConsumerWidget extends LintError {
         path: 'flutter_riverpod/flutter_riverpod.dart',
       );
       fileBuilder.importLibraryElement(flutterRiverpodUri);
-      if (node is ClassDeclaration) {
-        final superClass = node.extendsClause!.superclass;
-        final superClassSource = superClass.toSourceSpan(unit);
+      if (lintedNode is ClassDeclaration) {
+        final superClass = lintedNode.extendsClause!.superclass;
 
         fileBuilder.addReplacement(
-          superClassSource.toSourceRange(),
+          superClass.toSourceRange(unit),
           (builder) => builder.write('ConsumerWidget'),
         );
 
-        final methodMembers = node.members.whereType<MethodDeclaration>();
-        // Logger.logLine('# O BUILD METHODS: ${methodMembers.length}');
-        final buildFunction = methodMembers
-            .firstWhereOrNull((element) => element.name.name == 'build');
+        final buildFunction = lintedNode.members
+            .whereType<MethodDeclaration>()
+            .firstWhereOrNull((method) => method.name.name == 'build');
+
         final paramOffset = buildFunction?.parameters?.rightParenthesis.offset;
         if (paramOffset != null) {
           fileBuilder.addInsertion(
