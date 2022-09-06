@@ -3,7 +3,6 @@ import 'dart:io' as io;
 
 import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
-import 'package:pubspec_lock_parse/pubspec_lock_parse.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
@@ -34,6 +33,16 @@ class ProjectService {
   io.Directory get projectRepositoryDirectory {
     final toolPath = io.Directory(p.join(projectDirectory.path, 'tool'));
     return io.Directory(p.join(toolPath.path, 'sidecar_overrides'));
+  }
+
+  Future<void> setupAnalysisOptionsFile() async {
+    final analysisOptionsFile =
+        io.File(p.join(projectDirectory.path, 'analysis_options.yaml'));
+    if (!analysisOptionsFile.existsSync()) {
+      await analysisOptionsFile.writeAsString(analysisDefaultContents);
+    } else {
+      //
+    }
   }
 
   Future<void> insertProjectPluginIntoPubspec() async {

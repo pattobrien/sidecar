@@ -33,6 +33,7 @@ class InitCommand extends Command<int> {
       final pluginVersion = await projectService.getPluginVersion();
       await projectService.copyBasePluginFromSource(pluginVersion);
       await projectService.insertProjectPluginIntoPubspec();
+      await projectService.setupAnalysisOptionsFile();
       // await projectService.createProjectRepository();
       await projectService.insertVscodeTask();
       return ExitCode.success;

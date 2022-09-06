@@ -54,3 +54,23 @@ dependency_overrides:
 ''';
 
 final sidecarMicropubUri = Uri.parse('http://localhost:8080');
+
+final analysisDefaultContents = '''
+# include: package:lints/recommended.yaml
+
+# linter:
+#   rules:
+#    - camel_case_types
+
+analyzer:
+  plugins:
+    - sidecar_analyzer_plugin
+
+sidecar_analyzer_plugin:
+  includes:
+    - "bin/**"
+    - "lib/**"
+  rules:
+    - id: riverpod_prefer_consumer_widget
+    # - id: l10n_avoid_string_literals
+    ''';
