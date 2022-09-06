@@ -6,12 +6,13 @@ linter:
 
 analyzer:
   plugins:
-    - sidecar_analyzer_plugin_starter
+    - sidecar_analyzer_plugin
 
 sidecar_analyzer_plugin:
   includes:
     - "bin/**"
     - "lib/**"
-    - ".sidecar/**"
+    # - ".sidecar/**"
   rules:
     - id: riverpod_prefer_consumer_widget
+    # - id: l10n_avoid_string_literals

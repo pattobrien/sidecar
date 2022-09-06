@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:collection/collection.dart';
@@ -8,7 +10,7 @@ class RiverpodPreferConsumerWidget extends LintError {
   RiverpodPreferConsumerWidget(super.ref);
 
   @override
-  String get code => 'avoid_stateless_widgets';
+  String get code => 'riverpod_prefer_consumer_widget';
 
   @override
   LintErrorType get defaultType => LintErrorType.info;
@@ -17,11 +19,11 @@ class RiverpodPreferConsumerWidget extends LintError {
   String get message => 'Prefer to use ConsumerWidget.';
 
   @override
-  Map get yamlConfig => {};
+  Map get yamlConfig => <dynamic, dynamic>{};
 
   @override
   void registerNodeProcessors(NodeLintRegistry registry) {
-    final visitor = _Visitor(this);
+    final visitor = _Visitor<dynamic>(this);
     registry.addClassDeclaration(this, visitor);
   }
 
@@ -83,7 +85,7 @@ class _Visitor<R> extends GeneralizingAstVisitor<R> {
 
     if (superclass?.name == 'StatelessWidget') {
       // lintRule.reportedAstNode(node.extendsClause?.superclass);
-      lintRule.reportedAstNode(node.name);
+      lintRule.reportedAstNode(node);
     }
 
     return super.visitClassDeclaration(node);

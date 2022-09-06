@@ -10,19 +10,19 @@ final kPluginMasterRootPath = p.join(
   kHomeDirectory.path,
   '.pub-cache',
   'hosted',
-  'dart.cloudsmith.io%47fine-designs%47sidecar_analyzer_plugin_starter%47',
+  'dart.cloudsmith.io%47fine-designs%47sidecar_analyzer_plugin%47',
 );
 
 String getPluginPackagePathForVersion(Version version) => p.join(
       kPluginMasterRootPath,
-      'sidecar_analyzer_plugin_starter-${version.canonicalizedVersion}',
+      'sidecar_analyzer_plugin-${version.canonicalizedVersion}',
     );
 
 final kCloudsmithSidecarUrl =
     'https://dart.cloudsmith.io/fine-designs/sidecar/';
 
 // final kCloudsmithPluginUrl =
-//     'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_starter/';
+//     'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/';
 
 io.Directory kPluginMasterRoot(Version version) =>
     io.Directory(getPluginPackagePathForVersion(version));
@@ -49,6 +49,8 @@ String lintDependency(String lintName) => '''
 
 String pluginLoaderYamlContentCreator(String projectPluginPath) => '''
 dependency_overrides:
-  sidecar_analyzer_plugin_starter:
+  sidecar_analyzer_plugin:
     path: $projectPluginPath # code-generated
 ''';
+
+final sidecarMicropubUri = Uri.parse('http://localhost:8080');

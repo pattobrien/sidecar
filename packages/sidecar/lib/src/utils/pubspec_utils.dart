@@ -1,6 +1,14 @@
+import 'dart:convert';
+
+import 'package:pubspec/pubspec.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
+import 'package:yaml/yaml.dart';
+import 'package:yaml_modify/yaml_modify.dart';
 
 extension PubspecUtilitiesX on String {
+  // String removeDependency(String name) {
+  //   //
+  // }
   String insertDependency(MapEntry<String, Dependency> dependency) {
     return _insertDependency(dependency, 'dependencies');
   }
@@ -12,6 +20,37 @@ extension PubspecUtilitiesX on String {
   String insertDevDependency(MapEntry<String, Dependency> dependency) {
     return _insertDependency(dependency, 'dev_dependencies');
   }
+
+  // String _removeDependency(String name, String dependencyType) {
+
+  // }
+
+  // String _removeDependencyOverride(
+  //   String name,
+  //   // String dependencyType,
+  // ) {
+  //   // sudo code
+  //   // find expected dependency type start
+  //   //
+  //   // final splitContent = split('\n$dependencyType:');
+
+  //   final pubspec = Pubspec.parse(this);
+  //   final yaml = loadYaml(this);
+  //   final pubSpec = PubSpec.fromYamlString(yaml);
+  //   pubSpec.copy();
+  //   final splitter = LineSplitter();
+  //   splitter.convert(this);
+
+  //   final dep = pubspec.dependencyOverrides[name];
+  //   if (dep != null) {
+  //     if (dep is HostedDependency) {
+  //       final x = dep.version;
+  //     }
+  //   } else {
+  //     throw UnimplementedError('Could not remove dependency $name');
+  //   }
+  //   //
+  // }
 
   String _insertDependency(
     MapEntry<String, Dependency> dependency,

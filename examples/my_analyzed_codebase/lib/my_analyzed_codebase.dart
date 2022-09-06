@@ -10,6 +10,7 @@ int calculate() {
 class SomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final someString = 'translation';
     return TextFormField(
         // controller: ref.watch(myTextControllerProvider),
         );

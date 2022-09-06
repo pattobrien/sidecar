@@ -12,16 +12,10 @@ dependencies:
   path: ^1.8.0
 
 dev_dependencies:
-  sidecar_analyzer_plugin_starter:
-    hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_starter/
-    version: ^0.1.0-dev.7 # version constraint can be explicitly specified
-
   lints: ^2.0.0
+  sidecar_analyzer_plugin:
+    path: .sidecar/sidecar_analyzer_plugin
   test: ^1.16.0
 
 flutter:
   uses-material-design: true
-
-dependency_overrides:
-  sidecar_analyzer_plugin_starter:
-    path: .sidecar/sidecar_analyzer_plugin_starter/

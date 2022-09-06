@@ -7,14 +7,14 @@ import 'package:source_span/source_span.dart';
 
 import 'package:sidecar/sidecar.dart';
 
-class AvoidStringLiterals extends LintError {
-  AvoidStringLiterals(super.ref);
+class L10nAvoidStringLiterals extends LintError {
+  L10nAvoidStringLiterals(super.ref);
 
   @override
-  String get code => 'avoid_string_literals';
+  String get code => 'l10n_avoid_string_literals';
 
   @override
-  String get message => '\${0} should be extracted to an ARB or ENV file.';
+  String get message => '\${STRING} should be extracted to an ARB or ENV file.';
 
   @override
   LintErrorType get defaultType => LintErrorType.info;
@@ -57,7 +57,7 @@ class AvoidStringLiterals extends LintError {
       if (stringNode.parent is VariableDeclaration) {
         Logger.logLine('VARIABLE DECL');
         fileBuilder.addDeletion(
-          sourceSpan.toSourceRange(),
+          stringNode.parent!.toSourceSpan(unit).toSourceRange(),
         );
       } else {
         Logger.logLine('NOT VARIABLE DECL');
