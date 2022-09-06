@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:pubspec/pubspec.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
-import 'package:yaml/yaml.dart';
-import 'package:yaml_modify/yaml_modify.dart';
 
 extension PubspecUtilitiesX on String {
   // String removeDependency(String name) {
