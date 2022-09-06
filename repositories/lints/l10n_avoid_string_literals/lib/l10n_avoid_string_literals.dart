@@ -1,6 +1,7 @@
 // ignore_for_file: implementation_imports
 
 import 'package:sidecar/sidecar.dart';
+import 'package:flutter_utilities/flutter_utilities.dart';
 
 class L10nAvoidStringLiterals extends LintError {
   L10nAvoidStringLiterals(super.ref);

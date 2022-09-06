@@ -1,9 +1,6 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/dart/ast/ast.dart';
-
-import 'utils.dart';
 
 class FlutterUtils {
   static const _nameBuildContext = 'BuildContext';
@@ -19,12 +16,13 @@ class FlutterUtils {
   final Uri _uriFramework;
   final Uri _uriFoundation;
 
-  FlutterUtils(String uriPrefix)
-      : widgetsUri = '$uriPrefix/widgets.dart',
-        _uriBasic = Uri.parse('$uriPrefix/src/widgets/basic.dart'),
-        _uriContainer = Uri.parse('$uriPrefix/src/widgets/container.dart'),
-        _uriFramework = Uri.parse('$uriPrefix/src/widgets/framework.dart'),
-        _uriFoundation = Uri.parse('$uriPrefix/src/foundation/constants.dart');
+  FlutterUtils()
+      : widgetsUri = 'package:flutter/widgets.dart',
+        _uriBasic = Uri.parse('package:flutter/src/widgets/basic.dart'),
+        _uriContainer = Uri.parse('package:flutter/src/widgets/container.dart'),
+        _uriFramework = Uri.parse('package:flutter/src/widgets/framework.dart'),
+        _uriFoundation =
+            Uri.parse('package:flutter/src/foundation/constants.dart');
 
   bool hasWidgetAsAscendant(InterfaceElement? element,
       [Set<InterfaceElement>? alreadySeen]) {
@@ -96,43 +94,4 @@ class FlutterUtils {
 
   bool _isExactWidget(InterfaceElement element, String type, Uri uri) =>
       element.name == type && element.source.uri == uri;
-}
-
-extension AstNodeXX on AstNode {
-  bool isInsideBuildMethod() {
-    final node = thisOrAncestorMatching((node) {
-      Logger.logLine(
-          'ANCESTOR: ${node.runtimeType} w/ SOURCE ${node.toSource()}');
-      if (node is MethodDeclaration) {
-        Logger.logLine('FOUND METHOD: ${node.toSource()}');
-        final parent = node.parent;
-        final isBuildMethod = node.name.name == 'build';
-        final isParentClassDeclaration = parent is ClassDeclaration;
-        Logger.logLine(
-            'isBuildMethod: $isBuildMethod / isParentClassDeclaration: $isParentClassDeclaration');
-        if (isBuildMethod && isParentClassDeclaration) {
-          final flutter = FlutterUtils('package:flutter');
-          final isWidget = flutter.isWidget(parent.declaredElement2!);
-          // final supertypes = parent.declaredElement2?. ?? [];
-
-          // for (final element in supertypes) {
-          //   print(element.getDisplayString(withNullability: false));
-          // }
-
-          // final isWidget = supertypes.firstWhereOrNull((element) =>
-          //         element.getDisplayString(withNullability: false) ==
-          //         'Widget') !=
-          //     null;
-
-          Logger.logLine('isWidget: $isWidget ');
-          return isWidget;
-          // return true;
-        }
-        return false;
-      } else {
-        return false;
-      }
-    });
-    return node != null;
-  }
 }

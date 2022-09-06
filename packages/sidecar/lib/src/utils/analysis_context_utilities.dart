@@ -13,7 +13,7 @@ import 'package:source_span/source_span.dart';
 
 import 'package:path/path.dart' as p;
 
-import '../configuration/plugin_configuration.dart';
+import '../configuration/project_configuration.dart';
 import '../configuration/default_configuration.dart';
 
 import 'logger_utilities.dart';
@@ -64,14 +64,14 @@ final analysisContextUtilitiesProvider = Provider<AnalysisContextUtilities>(
 );
 
 extension AnalysisContextX on AnalysisContext {
-  PluginConfiguration get sidecarOptions {
+  ProjectConfiguration get sidecarOptions {
     final optionsFile = contextRoot.optionsFile;
     if (optionsFile != null) {
       final contents = optionsFile.readAsStringSync();
       try {
         return checkedYamlDecode(
           contents,
-          (m) => PluginConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
+          (m) => ProjectConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
           sourceUrl: optionsFile.toUri(),
         );
       } catch (e) {

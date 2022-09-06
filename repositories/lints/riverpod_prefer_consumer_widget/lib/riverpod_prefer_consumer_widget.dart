@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:collection/collection.dart';
-
+import 'package:riverpod_utilities/riverpod_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 class RiverpodPreferConsumerWidget extends LintError {
@@ -34,11 +34,7 @@ class RiverpodPreferConsumerWidget extends LintError {
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
-      final flutterRiverpodUri = Uri(
-        scheme: 'package',
-        path: 'flutter_riverpod/flutter_riverpod.dart',
-      );
-      fileBuilder.importLibraryElement(flutterRiverpodUri);
+      fileBuilder.importLibraryElement(uriFlutterRiverpod);
       if (lintedNode is ClassDeclaration) {
         final superClass = lintedNode.extendsClause!.superclass;
 
@@ -59,7 +55,6 @@ class RiverpodPreferConsumerWidget extends LintError {
           );
         }
       }
-      //
     });
 
     return [
