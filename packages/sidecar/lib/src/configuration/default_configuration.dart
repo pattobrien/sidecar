@@ -1,6 +1,6 @@
 import 'package:sidecar/sidecar.dart';
 
-final defaultPluginConfiguration = PluginConfiguration(
+final defaultPluginConfiguration = ProjectConfiguration(
   rules: [],
   includes: [
     'lib/**',

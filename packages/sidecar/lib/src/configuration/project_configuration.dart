@@ -2,8 +2,9 @@ import 'package:glob/glob.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar/src/configuration/default_configuration.dart';
+import 'package:sidecar/src/configuration/edit_configuration.dart';
 
-part 'plugin_configuration.g.dart';
+part 'project_configuration.g.dart';
 
 @JsonSerializable(
   anyMap: true,
@@ -11,22 +12,23 @@ part 'plugin_configuration.g.dart';
   disallowUnrecognizedKeys: true,
   explicitToJson: true,
 )
-class PluginConfiguration {
-  const PluginConfiguration({
-    required this.rules,
-    // required this.excludes,
+class ProjectConfiguration {
+  const ProjectConfiguration({
+    this.rules,
+    this.edits,
     required this.includes,
   });
   final List<LintConfiguration>? rules;
+  final List<EditConfiguration>? edits;
   // @JsonKey(fromJson: patternsToGlobs, toJson: globsToPatterns)
   final List<String> includes;
   // @JsonKey(fromJson: patternsToGlobs, toJson: globsToPatterns)
   // final List<Glob> excludes;
 
-  factory PluginConfiguration.fromJson(Map json) =>
-      _$PluginConfigurationFromJson(json);
+  factory ProjectConfiguration.fromJson(Map json) =>
+      _$ProjectConfigurationFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PluginConfigurationToJson(this);
+  Map<String, dynamic> toJson() => _$ProjectConfigurationToJson(this);
 }
 
 // List<Glob> patternsToGlobs(List<String> patterns) =>

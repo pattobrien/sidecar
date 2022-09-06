@@ -15,6 +15,7 @@ class LintConfiguration {
 
   factory LintConfiguration.fromJson(Map json) =>
       _$LintConfigurationFromJson(json);
+
   Map<String, dynamic> toJson() => _$LintConfigurationToJson(this);
 
   final String id;
