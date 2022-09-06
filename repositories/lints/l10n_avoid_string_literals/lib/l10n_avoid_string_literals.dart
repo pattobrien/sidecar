@@ -7,14 +7,14 @@ import 'package:source_span/source_span.dart';
 
 import 'package:sidecar/sidecar.dart';
 
-class AvoidStringLiterals extends LintError {
-  AvoidStringLiterals(super.ref);
+class L10nAvoidStringLiterals extends LintError {
+  L10nAvoidStringLiterals(super.ref);
 
   @override
-  String get code => 'avoid_string_literals';
+  String get code => 'l10n_avoid_string_literals';
 
   @override
-  String get message => '\${0} should be extracted to an ARB or ENV file.';
+  String get message => '\${STRING} should be extracted to an ARB or ENV file.';
 
   @override
   LintErrorType get defaultType => LintErrorType.info;
@@ -44,26 +44,21 @@ class AvoidStringLiterals extends LintError {
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
-      final sourceSpan = stringNode.toSourceSpan(unit);
-      final flutterRiverpodUri = Uri(
+      final l10nUri = Uri(
         scheme: 'package',
         path: 'localizations/localizations.dart',
       );
 
-      fileBuilder.importLibraryElement(flutterRiverpodUri);
+      fileBuilder.importLibraryElement(l10nUri);
 
-      Logger.logLine(
-          'STRING LIT: ${stringNode.runtimeType} & PARENT: ${stringNode.parent.runtimeType}');
       if (stringNode.parent is VariableDeclaration) {
-        Logger.logLine('VARIABLE DECL');
         fileBuilder.addDeletion(
-          sourceSpan.toSourceRange(),
+          stringNode.parent!.toSourceSpan(unit).toSourceRange(),
         );
       } else {
-        Logger.logLine('NOT VARIABLE DECL');
         if (stringNode.isInsideBuildMethod()) {
           fileBuilder.addReplacement(
-            sourceSpan.toSourceRange(),
+            stringNode.toSourceRange(unit),
             (editBuilder) => editBuilder.write(arbClassPrefix),
           );
         }
@@ -103,10 +98,10 @@ class _LiteralAstVisitor<R> extends GeneralizingAstVisitor<R> {
     if (node.parent is ImportDirective ||
         node is PartDirective ||
         node is PartOfDirective) {
-      // node is part of import directive; skip
+      // node is part of import directive = skip
     } else {
       final parent = node.parent;
-      final element = node.staticParameterElement;
+      // final element = node.staticParameterElement;
       if (parent is VariableDeclaration) {
         // if the value is declared with a variable
         // then we need to handle it differently

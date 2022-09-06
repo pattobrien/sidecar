@@ -1,5 +1,5 @@
 name: my_analyzed_codebase
-description: A sample command-line application.
+description: An example of a project analyzed by Sidecar.
 version: 1.0.0
 
 environment:
@@ -12,9 +12,9 @@ dependencies:
   path: ^1.8.0
 
 dev_dependencies:
-  sidecar_analyzer_plugin:
-    path: .sidecar/sidecar_analyzer_plugin # code-generated
   lints: ^2.0.0
+  sidecar_analyzer_plugin:
+    path: .sidecar/sidecar_analyzer_plugin
   test: ^1.16.0
 
 flutter:

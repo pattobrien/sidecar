@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:path/path.dart' as p;
+import 'package:pub_semver/pub_semver.dart';
+import 'package:pubspec_lock_parse/pubspec_lock_parse.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
@@ -20,8 +23,11 @@ class ProjectService {
   final io.Directory cacheDirectory;
 
   io.Directory get projectPluginDirectory {
-    final pluginPath =
-        p.join(projectDirectory.path, '.sidecar', 'sidecar_analyzer_plugin');
+    final pluginPath = p.join(
+      projectDirectory.path,
+      '.sidecar',
+      'sidecar_analyzer_plugin',
+    );
     return io.Directory(pluginPath)..create(recursive: true);
   }
 
@@ -30,67 +36,154 @@ class ProjectService {
     return io.Directory(p.join(toolPath.path, 'sidecar_overrides'));
   }
 
-  Future<void> insertPluginIntoProjectPubspec() async {
+  Future<void> insertProjectPluginIntoPubspec() async {
     final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
-      final content = await pubspecFile.readAsString();
-      final pubspec = Pubspec.parse(content);
+      final isFlutterProject =
+          await PubspecUtilities.isFlutterProject(projectDirectory.path);
 
-      final hasSidecarDependency =
-          pubspec.dependencies.containsKey('sidecar_analyzer_plugin');
-      final hasSidecarDevDependency =
-          pubspec.devDependencies.containsKey('sidecar_analyzer_plugin');
-      final hasSidecarDependencyOverride =
-          pubspec.dependencyOverrides.containsKey('sidecar_analyzer_plugin');
-
-      if (hasSidecarDependency) {
-        print('sidecar_analyzer_plugin already contained in dependencies');
-        return;
-      }
-      if (hasSidecarDevDependency) {
-        print('sidecar_analyzer_plugin already contained in dev dependencies');
-        return;
-      }
-      if (hasSidecarDependencyOverride) {
-        print(
-            'sidecar_analyzer_plugin already contained in dependency overrides');
-        return;
-      }
-      print('inserting sidecar_analyzer_plugininto project pubspec...');
-      final contentWithInsert = pubspec.insertDevDependency(
-        content,
-        MapEntry(
+      final process = await io.Process.start(
+        isFlutterProject ? 'flutter' : 'dart',
+        [
+          'pub',
+          'add',
+          '--dev',
+          '--hosted-url',
+          'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/',
           'sidecar_analyzer_plugin',
-          PathDependency('.sidecar/sidecar_analyzer_plugin/'),
-        ),
+        ],
+        workingDirectory: projectDirectory.path,
       );
-      await pubspecFile.writeAsString(contentWithInsert);
+      process.stdout.listen((event) => print(utf8.decode(event)));
+      process.stderr.listen((event) => print(utf8.decode(event)));
+      await process.exitCode;
     } else {
       throw UnimplementedError('pubspec file is not in root project dir');
     }
   }
 
-  Future<void> copyBasePluginFromSource() async {
-    if (projectPluginDirectory.existsSync()) {
+  Future<void> insertPluginIntoProjectPubspec() async {
+    final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
+    if (pubspecFile.existsSync()) {
+      // final content = await pubspecFile.readAsString();
+      // final pubspec = Pubspec.parse(content);
+
+      // final hasSidecarDependency =
+      //     pubspec.dependencies.containsKey('sidecar_analyzer_plugin');
+      // final hasSidecarDevDependency =
+      //     pubspec.devDependencies.containsKey('sidecar_analyzer_plugin');
+      // final hasSidecarDependencyOverride =
+      //     pubspec.dependencyOverrides.containsKey('sidecar_analyzer_plugin');
+
+      // if (hasSidecarDependency) {
+      //   print('sidecar_analyzer_plugin already contained in dependencies');
+      //   return;
+      // }
+      // if (hasSidecarDevDependency) {
+      //   print('sidecar_analyzer_plugin already contained in dev dependencies');
+      //   return;
+      // }
+      // if (hasSidecarDependencyOverride) {
+      //   print(
+      //       'sidecar_analyzer_plugin already contained in dependency overrides');
+      //   return;
+      // }
+      // print('inserting sidecar_analyzer_plugin into project pubspec...');
+      // final contentWithInsert = content.insertDependencyOverride(
+      //   MapEntry(
+      //     'sidecar_analyzer_plugin',
+      //     PathDependency('.sidecar/sidecar_analyzer_plugin/'),
+      //   ),
+      // );
+      // await pubspecFile.writeAsString(contentWithInsert);
+
+      final isFlutterProject =
+          await PubspecUtilities.isFlutterProject(projectDirectory.path);
+
+      final process = await io.Process.start(
+        isFlutterProject ? 'flutter' : 'dart',
+        [
+          'pub',
+          'remove',
+          'sidecar_analyzer_plugin',
+        ],
+        workingDirectory: projectDirectory.path,
+      );
+      process.stdout.listen((event) => print(utf8.decode(event)));
+      process.stderr.listen((event) => print(utf8.decode(event)));
+
+      await process.exitCode;
+      final addProcess = await io.Process.start(
+        isFlutterProject ? 'flutter' : 'dart',
+        [
+          'pub',
+          'add',
+          '--dev',
+          '--path',
+          '.sidecar/sidecar_analyzer_plugin/',
+          'sidecar_analyzer_plugin',
+        ],
+        workingDirectory: projectDirectory.path,
+      );
+      addProcess.stdout.listen((event) => print(utf8.decode(event)));
+      addProcess.stderr.listen((event) => print(utf8.decode(event)));
+    } else {
+      throw UnimplementedError('pubspec file is not in root project dir');
+    }
+  }
+
+  Future<Version> getPluginVersion() async {
+    // final pubspecLockFile = io.File(
+    //   p.join(projectDirectory.path, 'pubspec.lock'),
+    // );
+    // final lockFileContents = await pubspecLockFile.readAsString();
+    // final lockFile = PubspecLock.parse(lockFileContents);
+    // final packageDetails = lockFile.packages['sidecar_analyzer_plugin'];
+    // if (packageDetails != null) {
+    //   return packageDetails.version;
+    // } else {
+    //   throw UnimplementedError(
+    //     'sidecar_analyzer_plugin should be set as dependency',
+    //   );
+    // }
+    return Version.parse('0.1.0-dev.9');
+  }
+
+  Future<void> copyBasePluginFromSource(Version version) async {
+    try {
       // delete any previously copied plugin files
       await projectPluginDirectory.delete(recursive: true);
+    } catch (e) {
+      print(e.toString());
     }
+    final rootPluginPath = getPluginPackagePathForVersion(version);
     // get all source files from the plugin package
-    final packageSourceFiles =
-        kPluginMasterRoot.listSync(recursive: true).whereType<io.File>();
+    final packageSourceFiles = io.Directory(rootPluginPath)
+        .listSync(recursive: true)
+        .whereType<io.File>();
 
-    print(
-        'copying ${packageSourceFiles.length} plugin source files to project');
-    print('copying from relative path: $kPluginMasterRootPath');
+    // print(
+    //     'copying ${packageSourceFiles.length} plugin source files to project');
+    // print(
+    //     'copying from relative path: ${getPluginPackagePathForVersion(pluginVersion)}');
 
     bool hasOverrides = false;
     for (final packageSourceFile in packageSourceFiles) {
-      final sourceFileRelativePath =
-          p.relative(packageSourceFile.path, from: kPluginMasterRootPath);
+      final sourceFileRelativePath = p.relative(
+        packageSourceFile.path,
+        from: rootPluginPath,
+      );
+
+      // print('relative source path: $sourceFileRelativePath');
+
       final pluginProjectPath =
           p.join(projectPluginDirectory.path, sourceFileRelativePath);
+
+      // print('copied source path: $pluginProjectPath');
+
       final file = await io.File(pluginProjectPath).create(recursive: true);
-      if (packageSourceFile.path == kPluginLoaderPath) {
+      if (packageSourceFile.path ==
+          kPluginLoaderAbsolutePath(pluginProjectPath)) {
         // replace the plugin loader pubspec file with one that
         // utilizes the newly copied plugin package's path
         hasOverrides = true;
@@ -105,8 +198,10 @@ class ProjectService {
       }
     }
     if (hasOverrides == false) {
-      final pluginProjectPath =
-          p.join(projectPluginDirectory.path, kPluginLoaderPath);
+      final pluginProjectPath = p.join(
+        projectPluginDirectory.path,
+        kPluginLoaderRelativePath,
+      );
       final file = await io.File(pluginProjectPath).create(recursive: true);
       await file.writeAsString(
           pluginLoaderYamlContentCreator(projectPluginDirectory.path));
@@ -143,30 +238,34 @@ class ProjectService {
   }
 
   Future<void> importLints(List<LintConfiguration> lints) async {
+    final pluginPubspecFile =
+        io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
+
+    if (!pluginPubspecFile.existsSync()) {
+      throw UnimplementedError('plugin pubspec not found');
+    }
+
+    String pubspecContent = await pluginPubspecFile.readAsString();
+    final pubspec = Pubspec.parse(pubspecContent);
     for (final lintId in lints) {
-      final lintUri = Uri(
-          scheme: 'file', path: p.join(cacheDirectory.path, lintId.filePath));
-
-      final lintProjectCacheUri = Uri(
-          scheme: 'file',
-          path: p.join(
-            projectPluginDirectory.path,
-            'lib',
-            'lints',
-            lintId.filePath,
-          ));
-
-      try {
-        // await dio.downloadUri(lintUri, lintCacheUri.path);
-        final file = io.File(lintUri.path); //.create(recursive: true);
-        // await file.copy(lintProjectCacheUri.path);
-        final contents = await file.readAsBytes();
-        final newFile =
-            await io.File(lintProjectCacheUri.path).create(recursive: true);
-        await newFile.writeAsBytes(contents);
-      } catch (e) {
-        print('error: $e');
+      if (!pubspec.dependencies.containsKey(lintId.id)) {
+        pubspecContent = pubspecContent.insertDependency(
+          MapEntry(
+            lintId.id,
+            HostedDependency(
+              hosted: HostedDetails(
+                lintId.id,
+                sidecarMicropubUri,
+              ),
+            ),
+          ),
+        );
       }
+    }
+    try {
+      await pluginPubspecFile.writeAsString(pubspecContent);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -176,7 +275,8 @@ class ProjectService {
     final returnBuffer = StringBuffer();
 
     for (final lint in lints) {
-      importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
+      // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
+      importBuffer.write('import \'package:${lint.id}/${lint.filePath}\'; \n');
       returnBuffer
         ..write('\t\t')
         ..write(lint.className)

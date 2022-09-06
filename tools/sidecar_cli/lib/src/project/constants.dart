@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 import 'package:path/path.dart' as p;
+import 'package:pub_semver/pub_semver.dart';
 
 import '../utilities/utilities.dart';
 
@@ -10,28 +11,41 @@ final kPluginMasterRootPath = p.join(
   '.pub-cache',
   'hosted',
   'dart.cloudsmith.io%47fine-designs%47sidecar_analyzer_plugin%47',
-  'sidecar_analyzer_plugin-0.1.0-dev.3',
 );
+
+String getPluginPackagePathForVersion(Version version) => p.join(
+      kPluginMasterRootPath,
+      'sidecar_analyzer_plugin-${version.canonicalizedVersion}',
+    );
 
 final kCloudsmithSidecarUrl =
     'https://dart.cloudsmith.io/fine-designs/sidecar/';
-final kCloudsmithPluginUrl =
-    'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/';
 
-final kPluginMasterRoot = io.Directory(kPluginMasterRootPath);
+// final kCloudsmithPluginUrl =
+//     'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/';
+
+io.Directory kPluginMasterRoot(Version version) =>
+    io.Directory(getPluginPackagePathForVersion(version));
 
 final kAnalyzerLintRepositoryRoot = io.Directory(
-  p.join('/Users/pattobrien/Development/sidecar/', 'lint_repository', 'lib'),
+  p.join('/Users/pattobrien/Development/sidecar/', 'repositories', 'lints'),
 );
 
 final lintInitializerRelativePath = 'lib/src/plugin_bootstrapper.dart';
 
-final kPluginLoaderPath = p.join(
-  kPluginMasterRootPath,
+String kPluginLoaderAbsolutePath(String packagePath) =>
+    p.join(packagePath, kPluginLoaderRelativePath);
+
+final kPluginLoaderRelativePath = p.join(
   'tools',
   'analyzer_plugin',
   'pubspec_overrides.yaml',
 );
+
+String lintDependency(String lintName) => '''
+  $lintName:
+    hosted: http://0.0.0.0:8080
+''';
 
 String pluginLoaderYamlContentCreator(String projectPluginPath) => '''
 dependency_overrides:
@@ -39,16 +53,4 @@ dependency_overrides:
     path: $projectPluginPath # code-generated
 ''';
 
-
-// String pluginLoaderYamlContentCreator(String projectPluginPath) => '''
-// name: sidecar_analyzer_plugin_loader
-// description: This pubspec determines the version of the analyzer plugin to load.
-// version: 0.0.1
-// publish_to: none
-
-// environment:
-//   sdk: ">=2.15.0 <3.0.0"
-// dependencies:
-//   sidecar_analyzer_plugin:
-//     path: $projectPluginPath/sidecar_analyzer_plugin # code-generated
-// ''';
+final sidecarMicropubUri = Uri.parse('http://localhost:8080');

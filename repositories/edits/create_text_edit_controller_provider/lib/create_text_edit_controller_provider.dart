@@ -4,7 +4,7 @@ class DeclareTecProvider extends CodeEdit {
   DeclareTecProvider(super.ref);
 
   @override
-  String get id => 'declare_tec_provider';
+  String get id => 'declare_text_editing_controller_provider';
 
   @override
   String get message => 'Declare a TextEditingController provider';

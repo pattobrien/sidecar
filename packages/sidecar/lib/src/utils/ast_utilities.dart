@@ -1,12 +1,21 @@
+// ignore_for_file: implementation_imports
+
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/source/source_range.dart';
 import 'package:source_span/source_span.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 import 'package:analyzer/src/dart/ast/element_locator.dart';
 
+import 'source_span_utilities.dart';
+
 /// Used to translate a single AST node into a SourceSpan (i.e. start and end location within source code)
 extension AstNodeX on AstNode {
+  SourceRange toSourceRange(ResolvedUnitResult unit) {
+    return toSourceSpan(unit).toSourceRange();
+  }
+
   SourceSpan toSourceSpan(ResolvedUnitResult unit) {
     // TODO: integrate endNode functionality here
 

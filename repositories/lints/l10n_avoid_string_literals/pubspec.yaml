@@ -1,0 +1,27 @@
+name: l10n_avoid_string_literals
+description: A starting point for Dart libraries or applications.
+version: 1.0.6
+publish_to: http://0.0.0.0:8080
+homepage: https://www.example.com
+
+environment:
+  sdk: ">=2.17.5 <3.0.0"
+
+dependencies:
+  analyzer: ^4.7.0
+  collection: ^1.16.0
+  path: ^1.8.0
+  sidecar:
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
+    version: ^0.1.0-dev.9
+  source_span: ^1.9.1
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0
+
+micropub: sidecar
+
+sidecar:
+  namespace: l10n
+  type: lint

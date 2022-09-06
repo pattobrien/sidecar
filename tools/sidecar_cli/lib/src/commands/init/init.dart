@@ -24,11 +24,15 @@ class InitCommand extends Command<int> {
 
       print('project directory: ${currentDirectory.path}');
 
-      final projectService =
-          ProjectService(currentDirectory, cacheDirectory: cacheDirectory);
+      final projectService = ProjectService(
+        currentDirectory,
+        cacheDirectory: cacheDirectory,
+      );
 
-      await projectService.copyBasePluginFromSource();
       await projectService.insertPluginIntoProjectPubspec();
+      final pluginVersion = await projectService.getPluginVersion();
+      await projectService.copyBasePluginFromSource(pluginVersion);
+      await projectService.insertProjectPluginIntoPubspec();
       // await projectService.createProjectRepository();
       await projectService.insertVscodeTask();
       return ExitCode.success;

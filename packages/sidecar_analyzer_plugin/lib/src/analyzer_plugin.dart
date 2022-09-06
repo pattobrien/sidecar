@@ -16,7 +16,6 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar_analyzer_plugin/src/plugin_bootstrapper.dart';
 import 'package:sidecar_analyzer_plugin/src/plugin_code_fix_bootstrapper.dart';
 import 'package:sidecar_analyzer_plugin/src/reporter/code_edit_reporter.dart';
-import 'package:source_span/source_span.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'reporter/reporter.dart';
@@ -35,18 +34,18 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({
     required super.resourceProvider,
     required this.ref,
+    required this.allLints,
+    required this.allCodeEdits,
+    required this.nodeRegistry,
   }) {
     Logger.logLine('SidecarAnalyzerPlugin initialized');
-
-    allLints = pluginBootstrapper(nodeRegistry, ref);
-    allCodeEdits = pluginCodeFixBootstrapper(ref);
   }
 
   final ProviderContainer ref;
   late final AnalysisContextCollection _collection;
-  final nodeRegistry = NodeLintRegistry();
-  late List<LintError> allLints;
-  late List<CodeEdit> allCodeEdits;
+  final List<LintError> allLints;
+  final NodeLintRegistry nodeRegistry;
+  final List<CodeEdit> allCodeEdits;
 
   @override
   List<String> get fileGlobsToAnalyze => <String>['**/*.dart', '**/*.arb'];
