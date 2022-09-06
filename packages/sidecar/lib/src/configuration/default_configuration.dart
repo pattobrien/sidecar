@@ -1,4 +1,3 @@
-import 'package:glob/glob.dart';
 import 'package:sidecar/sidecar.dart';
 
 final defaultPluginConfiguration = PluginConfiguration(

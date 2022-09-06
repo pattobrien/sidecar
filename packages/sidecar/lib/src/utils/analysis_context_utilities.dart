@@ -3,11 +3,13 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
+
 import 'package:analyzer/src/dart/micro/utils.dart';
+import 'package:analyzer/src/dart/ast/utilities.dart';
+
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
-import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'package:path/path.dart' as p;
 

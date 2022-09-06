@@ -1,9 +1,10 @@
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/src/models/code_edit.dart';
 
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+
+import 'code_edit.dart';
 
 class RequestedCodeEdit {
   RequestedCodeEdit({
