@@ -38,7 +38,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }
 
   final ProviderContainer ref;
-  late final AnalysisContextCollection _collection;
+  late AnalysisContextCollection _collection;
   final List<LintError> allLints;
   final NodeLintRegistry nodeRegistry;
   final List<CodeEdit> allCodeEdits;
@@ -163,10 +163,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     final unit = await context.currentSession.getResolvedUnit(filePath);
 
-    if (unit is! ResolvedUnitResult) return EditGetAssistsResult([]);
+    if (unit is! ResolvedUnitResult) {
+      return EditGetAssistsResult([]);
+    }
 
     final codeEditRequests =
-        _getCodeEditRequests(unit, parameters.offset, parameters.offset);
+        _getCodeEditRequests(unit, parameters.offset, parameters.length);
 
     final changes = await Future.wait<plugin.PrioritizedSourceChange>(
       codeEditRequests
