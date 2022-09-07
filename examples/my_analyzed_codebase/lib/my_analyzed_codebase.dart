@@ -12,12 +12,11 @@ class SomeWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
     return TextFormField(
-        // controller: ref.watch(myTextControllerProvider),
-        );
+      controller: ref.watch(myTextControllerProvider),
+    );
   }
-  //
 }
 
-// final myTextControllerProvider = ChangeNotifierProvider((ref) {
-//   return TextEditingController();
-// });
+final myTextControllerProvider = ChangeNotifierProvider((ref) {
+  return TextEditingController();
+});

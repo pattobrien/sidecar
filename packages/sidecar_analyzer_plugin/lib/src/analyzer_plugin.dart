@@ -133,7 +133,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         }).toList();
 
         final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
-          reportedErrors.map((e) => e.toAnalysisErrorFixes(ref)),
+          reportedErrors.map((e) async => await e.toAnalysisErrorFixes(ref)),
         );
 
         final response = plugin.EditGetFixesResult(analysisErrorFixes);

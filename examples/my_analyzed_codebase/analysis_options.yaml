@@ -8,11 +8,21 @@ analyzer:
   plugins:
     - sidecar_analyzer_plugin
 
+example_plugin:
+  lints:
+    riverpod:
+      - prefer_consumer_widget
+    l10n:
+      - avoid_string_literals
+  edits:
+    riverpod:
+      - create_text_edit_controller_provider
+
 sidecar_analyzer_plugin:
   includes:
     - "bin/**"
     - "lib/**"
-    - ".sidecar/**"
+    # - ".sidecar/**"
   rules:
     - id: riverpod_prefer_consumer_widget
     - id: l10n_avoid_string_literals
