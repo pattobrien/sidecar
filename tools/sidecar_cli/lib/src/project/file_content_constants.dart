@@ -6,10 +6,17 @@ import 'package:sidecar/sidecar.dart';
 import 'package:riverpod/riverpod.dart';
 ''';
 
-final bootstrapHeader = '''
+final lintBootstrapHeader = '''
 
 List<LintError> pluginBootstrapper(
   NodeLintRegistry registry,
+  ProviderContainer ref,
+) {
+  return [
+''';
+final editBootstrapHeader = '''
+
+List<CodeEdit> pluginCodeFixBootstrapper(
   ProviderContainer ref,
 ) {
   return [

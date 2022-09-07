@@ -10,6 +10,5 @@ List<CodeEdit> pluginCodeFixBootstrapper(
   // initialize all lints
   return [
     // DeclareTecProvider(ref),
-    // AvoidStringLiterals(ref)..registerNodeProcessors(registry),
   ];
 }

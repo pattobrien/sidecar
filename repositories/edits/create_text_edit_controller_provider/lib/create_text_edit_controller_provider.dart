@@ -1,8 +1,8 @@
 import 'package:sidecar/sidecar.dart';
 import 'package:riverpod_utilities/riverpod_utilities.dart';
 
-class DeclareTecProvider extends CodeEdit {
-  DeclareTecProvider(super.ref);
+class CreateTextEditControllerProvider extends CodeEdit {
+  CreateTextEditControllerProvider(super.ref);
 
   @override
   String get message => 'Declare a TextEditingController provider';

@@ -7,7 +7,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'plugin_bootstrapper.dart';
-import 'plugin_code_fix_bootstrapper.dart';
+import 'plugin_code_edit_bootstrapper.dart';
 import 'analyzer_plugin.dart';
 
 void start(

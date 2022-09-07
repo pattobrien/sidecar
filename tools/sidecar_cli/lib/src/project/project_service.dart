@@ -153,7 +153,7 @@ class ProjectService {
     //     'sidecar_analyzer_plugin should be set as dependency',
     //   );
     // }
-    return Version.parse('0.1.0-dev.13');
+    return Version.parse('0.1.0-dev.14');
   }
 
   Future<void> copyBasePluginFromSource(Version version) async {
@@ -232,17 +232,17 @@ class ProjectService {
     if (!link.existsSync()) await link.create(pluginPath);
   }
 
-  Future<void> clearPreviousLints() async {
-    final lintProjectCachePath = p.join(
-      projectPluginDirectory.path,
-      'lib',
-      'lints',
-    );
-    final directory = io.Directory(lintProjectCachePath);
-    print('deleting previous lints...');
-    final doesDirectoryExist = await directory.exists();
-    if (doesDirectoryExist) directory.delete(recursive: true);
-  }
+  // Future<void> clearPreviousLints() async {
+  //   final lintProjectCachePath = p.join(
+  //     projectPluginDirectory.path,
+  //     'lib',
+  //     'lints',
+  //   );
+  //   final directory = io.Directory(lintProjectCachePath);
+  //   print('deleting previous lints...');
+  //   final doesDirectoryExist = await directory.exists();
+  //   if (doesDirectoryExist) directory.delete(recursive: true);
+  // }
 
   Future<void> importLints(List<LintConfiguration> lints) async {
     final pluginPubspecFile =
@@ -292,12 +292,38 @@ class ProjectService {
 
     final entireContents = StringBuffer()
       ..write(importBuffer.toString())
-      ..write(bootstrapHeader)
+      ..write(lintBootstrapHeader)
       ..write(returnBuffer.toString())
       ..write(bootstrapFooter);
 
     await io.File(
             p.join(projectPluginDirectory.path, lintInitializerRelativePath))
+        .writeAsString(entireContents.toString());
+  }
+
+  Future<void> generateCodeEditBootstrapFunction(
+    List<EditConfiguration> edits,
+  ) async {
+    final importBuffer = StringBuffer()..writeln(pluginImport);
+    final returnBuffer = StringBuffer();
+
+    for (final edit in edits) {
+      // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
+      importBuffer.write('import \'package:${edit.id}/${edit.filePath}\'; \n');
+      returnBuffer
+        ..write('\t\t')
+        ..write(edit.className)
+        ..write('(ref), \n');
+    }
+
+    final entireContents = StringBuffer()
+      ..write(importBuffer.toString())
+      ..write(editBootstrapHeader)
+      ..write(returnBuffer.toString())
+      ..write(bootstrapFooter);
+
+    await io.File(
+            p.join(projectPluginDirectory.path, editInitializerRelativePath))
         .writeAsString(entireContents.toString());
   }
 

@@ -16,3 +16,5 @@ sidecar_analyzer_plugin:
   rules:
     - id: riverpod_prefer_consumer_widget
     - id: l10n_avoid_string_literals
+  edits:
+    - id: create_text_edit_controller_provider

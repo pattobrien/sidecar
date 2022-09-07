@@ -24,10 +24,13 @@ class RebuildCommand extends Command<int> {
       print('project directory: ${Directory.current}');
 
       final lints =
-          await ConfigParseUtilities.parseConfig(Directory.current.uri);
-      await projectService.clearPreviousLints();
+          await ConfigParseUtilities.parseLintConfig(Directory.current.uri);
+      final edits =
+          await ConfigParseUtilities.parseEditConfig(Directory.current.uri);
+      // await projectService.clearPreviousLints();
       await projectService.importLints(lints);
       await projectService.generateLintBootstrapFunction(lints);
+      await projectService.generateCodeEditBootstrapFunction(edits);
       await projectService.restartAnalyzerPlugin();
 
       return ExitCode.success;

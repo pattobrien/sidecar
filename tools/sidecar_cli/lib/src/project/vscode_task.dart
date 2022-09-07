@@ -37,8 +37,8 @@ final vsCodeSettingsContent = '''
         ],
     },
     "dart.analyzerAdditionalArgs": [
-        "--instrumentation-log-file=\${workspaceFolder}/.logs/analysis_instrumentation.log"
+        "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/.logs/analysis_instrumentation.log"
     ],
-    // "dart.analyzerInstrumentationLogFile": "\${workspaceFolder}/.logs/analysis_instrumentation.txt",
+    // "dart.analyzerInstrumentationLogFile": "/Users/pattobrien/Development/sidecar/.logs/analysis_instrumentation.txt",
 }
 ''';

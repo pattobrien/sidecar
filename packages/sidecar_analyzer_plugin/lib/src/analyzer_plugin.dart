@@ -169,7 +169,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         _getCodeEditRequests(unit, parameters.offset, parameters.offset);
 
     final changes = await Future.wait<plugin.PrioritizedSourceChange>(
-      codeEditRequests.map((e) => e.toPrioritizedSourceChanges(ref)),
+      codeEditRequests
+          .map((e) async => await e.toPrioritizedSourceChanges(ref)),
     );
     return EditGetAssistsResult(changes);
   }

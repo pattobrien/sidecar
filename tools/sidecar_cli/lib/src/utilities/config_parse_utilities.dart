@@ -7,7 +7,7 @@ import 'package:sidecar/sidecar.dart';
 const analysisOptionsFileName = 'analysis_options.yaml';
 
 class ConfigParseUtilities {
-  static Future<List<LintConfiguration>> parseConfig(
+  static Future<List<LintConfiguration>> parseLintConfig(
     Uri projectRootUri,
   ) async {
     final configFile =
@@ -34,6 +34,34 @@ class ConfigParseUtilities {
       return [];
     }
   }
+
+  static Future<List<EditConfiguration>> parseEditConfig(
+    Uri projectRootUri,
+  ) async {
+    final configFile =
+        io.File(p.join(projectRootUri.path, analysisOptionsFileName));
+    if (configFile.existsSync()) {
+      final contents = await configFile.readAsString();
+      try {
+        final config = checkedYamlDecode(
+          contents,
+          (m) => ProjectConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
+          sourceUrl: projectRootUri,
+        );
+
+        final editConfig = config.edits ?? [];
+        for (final edit in editConfig) {
+          print('registering code edit ${edit.id}');
+        }
+        return editConfig;
+      } catch (e) {
+        print('no plugin configuration found for sidecar.');
+        rethrow;
+      }
+    } else {
+      return [];
+    }
+  }
 }
 
 extension LintConfigurationX on LintConfiguration {
@@ -42,4 +70,9 @@ extension LintConfigurationX on LintConfiguration {
 
   // Uri get cacheUri =>
   //     Uri(scheme: 'file', path: p.join(userCachePath, filePath));
+}
+
+extension EditConfigurationX on EditConfiguration {
+  String get filePath => '$id.dart';
+  String get className => ReCase(id).pascalCase;
 }

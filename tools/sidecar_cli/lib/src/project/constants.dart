@@ -32,6 +32,8 @@ io.Directory kPluginMasterRoot(Version version) =>
 // );
 
 final lintInitializerRelativePath = 'lib/src/plugin_bootstrapper.dart';
+final editInitializerRelativePath =
+    'lib/src/plugin_code_edit_bootstrapper.dart';
 
 String kPluginLoaderAbsolutePath(String packagePath) =>
     p.join(packagePath, kPluginLoaderRelativePath);
@@ -53,7 +55,8 @@ dependency_overrides:
     path: $projectPluginPath # code-generated
 ''';
 
-final sidecarMicropubUri = Uri.parse('https://micropub-3qduh.ondigitalocean.app/');
+final sidecarMicropubUri =
+    Uri.parse('https://micropub-3qduh.ondigitalocean.app/');
 
 final analysisDefaultContents = '''
 # include: package:lints/recommended.yaml
