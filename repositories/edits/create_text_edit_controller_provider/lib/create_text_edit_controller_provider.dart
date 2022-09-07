@@ -1,4 +1,5 @@
 import 'package:sidecar/sidecar.dart';
+import 'package:riverpod_utilities/riverpod_utilities.dart';
 
 class DeclareTecProvider extends CodeEdit {
   DeclareTecProvider(super.ref);

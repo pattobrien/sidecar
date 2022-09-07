@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
@@ -12,11 +13,6 @@ import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
-
-import 'package:sidecar_analyzer_plugin/src/plugin_bootstrapper.dart';
-import 'package:sidecar_analyzer_plugin/src/plugin_code_fix_bootstrapper.dart';
-import 'package:sidecar_analyzer_plugin/src/reporter/code_edit_reporter.dart';
-import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'reporter/reporter.dart';
 
@@ -27,7 +23,7 @@ import 'package:path/path.dart' as p;
 const pluginName = 'sidecar_analyzer_plugin';
 
 // this cannot be any random number for some reason
-// ("Plugin is not compatible."" error is thrown)
+// ("Plugin is not compatible." error is thrown)
 const pluginVersion = '1.0.0-alpha.0';
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
@@ -74,9 +70,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     //TODO: remove restriction from plugin side, instead allow lints to do so
     if (!path.endsWith('.dart')) return;
     final sidecarOptions = analysisContext.sidecarOptions;
-    // this is the correct root dir for the project in question (project being analyzed)
     final rootDirectory = analysisContext.contextRoot.root;
-    // convert path to a relative file path
     final relativePath = p.relative(path, from: rootDirectory.path);
     // check if the path is included for analysis via the sidecar options
     final doesMatchGlob = sidecarOptions.includes
@@ -84,20 +78,15 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         .where((element) => element == true)
         .isNotEmpty;
 
-    // channel.sendNotification(
-    //   plugin.PluginErrorParams(
-    //     false,
-    //     'relativePath $relativePath ${doesMatchGlob ? 'matches a glob include' : 'does not match a glob include'}',
-    //     'rootDir: ${rootDirectory.path} context: ${p.context.current}  // globs: ${sidecarOptions.includes.reduce((value, element) => '$value / $element')}',
-    //   ).toNotification(),
-    // );
     if (!doesMatchGlob) return;
 
     final isPluginEnabled =
         analysisContext.analysisOptions.enabledPluginNames.contains(name);
-    analysisContext.contextRoot.excludedPaths.forEach(Logger.logLine);
+
     final isPathExcluded =
         analysisContext.contextRoot.excludedPaths.contains(path);
+
+    // check if we should analyze this file or not
     if (!isPathExcluded && isPluginEnabled) {
       final unit = await analysisContext.currentSession.getResolvedUnit(path);
 
@@ -119,8 +108,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             ).toNotification(),
           );
         }
-      } else {
-        Logger.logLine('ANALYZEDFILE = FAILURE $path');
       }
     }
   }
@@ -145,26 +132,22 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
               parameters.offset <= errorLocation.offset + errorLocation.length;
         }).toList();
 
-        Logger.logLine(
-            '# OF ANALYSIS ERRORS TO GET FIXES FOR:  ${reportedErrors.length}');
-
         final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
           reportedErrors.map((e) => e.toAnalysisErrorFixes(ref)),
         );
 
         final response = plugin.EditGetFixesResult(analysisErrorFixes);
 
-        Logger.logLine('handleEditGetFixes => ${response.toJson()}');
-
         return response;
-      } else {
-        Logger.logLine('ERROR - handleEditGetFixes - ELSE CLAUSE $parameters');
       }
     } on Exception catch (e, stackTrace) {
       Logger.logLine('ERROR - handleEditGetFixes - $e $parameters');
       channel.sendNotification(
-        plugin.PluginErrorParams(false, e.toString(), stackTrace.toString())
-            .toNotification(),
+        plugin.PluginErrorParams(
+          false,
+          e.toString(),
+          stackTrace.toString(),
+        ).toNotification(),
       );
     }
 
@@ -182,10 +165,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     if (unit is! ResolvedUnitResult) return EditGetAssistsResult([]);
 
-    final requests =
+    final codeEditRequests =
         _getCodeEditRequests(unit, parameters.offset, parameters.offset);
+
     final changes = await Future.wait<plugin.PrioritizedSourceChange>(
-      requests.map((e) => e.toPrioritizedSourceChanges(ref)),
+      codeEditRequests.map((e) => e.toPrioritizedSourceChanges(ref)),
     );
     return EditGetAssistsResult(changes);
   }

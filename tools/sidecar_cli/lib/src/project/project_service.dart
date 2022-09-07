@@ -7,19 +7,17 @@ import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_cli/src/project/vscode_task.dart';
-import 'package:sidecar_cli/src/sidecar_pub/sidecar_pub_service.dart';
+
+import 'package:pubspec_utilities/pubspec_utilities.dart';
 
 import 'constants.dart';
 import '../utilities/utilities.dart';
 import 'file_content_constants.dart';
 
 class ProjectService {
-  ProjectService(
-    this.projectDirectory, {
-    required this.cacheDirectory,
-  });
+  const ProjectService(this.projectDirectory);
+
   final io.Directory projectDirectory;
-  final io.Directory cacheDirectory;
 
   io.Directory get projectPluginDirectory {
     final pluginPath = p.join(
@@ -155,7 +153,7 @@ class ProjectService {
     //     'sidecar_analyzer_plugin should be set as dependency',
     //   );
     // }
-    return Version.parse('0.1.0-dev.9');
+    return Version.parse('0.1.0-dev.12');
   }
 
   Future<void> copyBasePluginFromSource(Version version) async {
@@ -357,10 +355,10 @@ class ProjectService {
 final projectServiceProvider =
     Provider.family.autoDispose<ProjectService, io.Directory>(
   (ref, projectDirectory) {
-    final sidecarPubService = ref.watch(sidecarPubServiceProvider);
+    // final sidecarPubService = ref.watch(sidecarPubServiceProvider);
     return ProjectService(
       projectDirectory,
-      cacheDirectory: sidecarPubService.cacheDirectory,
+      // cacheDirectory: sidecarPubService.cacheDirectory,
     );
   },
 );

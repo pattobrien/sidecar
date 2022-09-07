@@ -18,23 +18,15 @@ class InitCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     try {
-      //
-      final cacheDirectory = SidecarPubServiceImpl().cacheDirectory;
       final currentDirectory = Directory.current;
-
       print('project directory: ${currentDirectory.path}');
-
-      final projectService = ProjectService(
-        currentDirectory,
-        cacheDirectory: cacheDirectory,
-      );
+      final projectService = ProjectService(currentDirectory);
 
       await projectService.insertPluginIntoProjectPubspec();
       final pluginVersion = await projectService.getPluginVersion();
       await projectService.copyBasePluginFromSource(pluginVersion);
       await projectService.insertProjectPluginIntoPubspec();
       await projectService.setupAnalysisOptionsFile();
-      // await projectService.createProjectRepository();
       await projectService.insertVscodeTask();
       return ExitCode.success;
     } catch (e) {

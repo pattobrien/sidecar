@@ -26,6 +26,18 @@ class RiverpodPreferConsumerWidget extends LintError {
   }
 
   @override
+  ReportedLintError computeLintHighlight(
+    ReportedLintError reportedLintError,
+  ) {
+    final node = reportedLintError.sourceNode;
+    if (node is ClassDeclaration) {
+      final superclass = node.extendsClause?.superclass;
+      return reportedLintError.copyWith(sourceNode: superclass);
+    }
+    return reportedLintError;
+  }
+
+  @override
   Future<List<PrioritizedSourceChange>> computeFixes(
     ReportedLintError reportedLintError,
   ) async {

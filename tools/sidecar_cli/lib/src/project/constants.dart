@@ -27,9 +27,9 @@ final kCloudsmithSidecarUrl =
 io.Directory kPluginMasterRoot(Version version) =>
     io.Directory(getPluginPackagePathForVersion(version));
 
-final kAnalyzerLintRepositoryRoot = io.Directory(
-  p.join('/Users/pattobrien/Development/sidecar/', 'repositories', 'lints'),
-);
+// final kAnalyzerLintRepositoryRoot = io.Directory(
+//   p.join('/Users/pattobrien/Development/sidecar/', 'repositories', 'lints'),
+// );
 
 final lintInitializerRelativePath = 'lib/src/plugin_bootstrapper.dart';
 
@@ -44,7 +44,7 @@ final kPluginLoaderRelativePath = p.join(
 
 String lintDependency(String lintName) => '''
   $lintName:
-    hosted: http://0.0.0.0:8080
+    hosted: https://micropub-3qduh.ondigitalocean.app/
 ''';
 
 String pluginLoaderYamlContentCreator(String projectPluginPath) => '''
@@ -53,7 +53,7 @@ dependency_overrides:
     path: $projectPluginPath # code-generated
 ''';
 
-final sidecarMicropubUri = Uri.parse('http://localhost:8080');
+final sidecarMicropubUri = Uri.parse('https://micropub-3qduh.ondigitalocean.app/');
 
 final analysisDefaultContents = '''
 # include: package:lints/recommended.yaml

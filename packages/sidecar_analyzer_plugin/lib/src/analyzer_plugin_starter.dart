@@ -2,10 +2,12 @@ import 'dart:isolate';
 
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer_plugin/starter.dart';
+
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_analyzer_plugin/sidecar_analyzer_plugin.dart';
 
+import 'plugin_bootstrapper.dart';
+import 'plugin_code_fix_bootstrapper.dart';
 import 'analyzer_plugin.dart';
 
 void start(

@@ -36,6 +36,11 @@ abstract class LintError {
     }
   }
 
+  ReportedLintError computeLintHighlight(
+    ReportedLintError reportedLintError,
+  ) =>
+      reportedLintError;
+
   Future<List<plugin.PrioritizedSourceChange>> computeFixes(
     ReportedLintError reportedLintError,
   ) =>

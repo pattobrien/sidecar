@@ -21,6 +21,15 @@ class ReportedLintError {
   final ResolvedUnitResult sourceUnit;
   final AstNode sourceNode;
 
+  ReportedLintError copyWith({
+    AstNode? sourceNode,
+  }) =>
+      ReportedLintError(
+        lint: lint,
+        sourceUnit: sourceUnit,
+        sourceNode: sourceNode ?? this.sourceNode,
+      );
+
   Future<plugin.AnalysisErrorFixes> toAnalysisErrorFixes(
     ProviderContainer ref,
   ) async {

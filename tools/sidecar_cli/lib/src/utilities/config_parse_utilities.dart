@@ -17,7 +17,7 @@ class ConfigParseUtilities {
       try {
         final config = checkedYamlDecode(
           contents,
-          (m) => PluginConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
+          (m) => ProjectConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
           sourceUrl: projectRootUri,
         );
 

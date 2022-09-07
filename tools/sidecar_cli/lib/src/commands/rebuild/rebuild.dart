@@ -19,16 +19,12 @@ class RebuildCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     try {
-      //
-      final cacheDirectory = SidecarPubServiceImpl().cacheDirectory;
-      final currentDirectory = Directory.current;
-      final projectService =
-          ProjectService(currentDirectory, cacheDirectory: cacheDirectory);
+      final projectService = ProjectService(Directory.current);
 
-      print('project directory: ${currentDirectory.path}');
+      print('project directory: ${Directory.current}');
 
       final lints =
-          await ConfigParseUtilities.parseConfig(currentDirectory.uri);
+          await ConfigParseUtilities.parseConfig(Directory.current.uri);
       await projectService.clearPreviousLints();
       await projectService.importLints(lints);
       await projectService.generateLintBootstrapFunction(lints);

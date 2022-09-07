@@ -1,5 +1,3 @@
-import 'package:analyzer/dart/ast/ast.dart';
-
 import 'package:sidecar/sidecar.dart';
 
 class ErrorReporter extends IErrorReporter {
@@ -12,7 +10,8 @@ class ErrorReporter extends IErrorReporter {
     if (node != null) {
       final reportedLintError =
           ReportedLintError(sourceUnit: unit, sourceNode: node, lint: lint);
-      reportedErrors.add(reportedLintError);
+      final highlightedError = lint.computeLintHighlight(reportedLintError);
+      reportedErrors.add(highlightedError);
     }
   }
 }
