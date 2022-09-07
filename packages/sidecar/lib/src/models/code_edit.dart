@@ -10,7 +10,6 @@ import 'requested_code_edit.dart';
 abstract class CodeEdit {
   CodeEdit(this.ref);
 
-  String get id;
   String get message;
   Map<dynamic, dynamic> get yamlConfig => {};
 
@@ -18,16 +17,10 @@ abstract class CodeEdit {
 
   late ICodeEditReporter reporter;
 
-  //TODO: lets try an architecture without a node registry
-  // void registerNodeProcessors(NodeLintRegistry registry);
+  Future<plugin.PrioritizedSourceChange> computeSourceChange(
+      RequestedCodeEdit requestedCodeEdit);
 
   void generateReport(AstNode? node) {
-    if (node != null) {
-      reporter.reportEdit(node, this);
-    }
+    if (node != null) reporter.reportEdit(node, this);
   }
-
-  Future<plugin.PrioritizedSourceChange> computeSourceChange(
-    RequestedCodeEdit requestedCodeEdit,
-  );
 }
