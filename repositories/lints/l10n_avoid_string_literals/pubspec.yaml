@@ -1,6 +1,6 @@
 name: l10n_avoid_string_literals
 description: A starting point for Dart libraries or applications.
-version: 0.1.1
+version: 0.1.2
 publish_to: https://micropub-3qduh.ondigitalocean.app/
 homepage: https://www.example.com
 
@@ -13,7 +13,7 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.0-dev.12
+    version: ^0.1.0-dev.13
   source_span: ^1.9.1
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/

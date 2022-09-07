@@ -10,12 +10,12 @@ class RequestedCodeEdit {
   RequestedCodeEdit({
     required this.codeEdit,
     required this.sourceUnit,
-    required this.selectedNode,
+    required this.sourceNode,
   });
 
   final CodeEdit codeEdit;
   final ResolvedUnitResult sourceUnit;
-  final AstNode selectedNode;
+  final AstNode sourceNode;
 
   Future<plugin.PrioritizedSourceChange> toPrioritizedSourceChanges(
     ProviderContainer ref,

@@ -14,20 +14,23 @@ class ReportedLintError {
   ReportedLintError({
     required this.lint,
     required this.sourceUnit,
-    required this.sourceNode,
-  });
+    required this.reportedNode,
+    AstNode? highlightedNode,
+  }) : highlightedNode = highlightedNode ?? reportedNode;
 
   final LintError lint;
   final ResolvedUnitResult sourceUnit;
-  final AstNode sourceNode;
+  final AstNode reportedNode;
+  final AstNode highlightedNode;
 
   ReportedLintError copyWith({
-    AstNode? sourceNode,
+    AstNode? highlightedNode,
   }) =>
       ReportedLintError(
         lint: lint,
         sourceUnit: sourceUnit,
-        sourceNode: sourceNode ?? this.sourceNode,
+        reportedNode: reportedNode,
+        highlightedNode: highlightedNode ?? this.highlightedNode,
       );
 
   Future<plugin.AnalysisErrorFixes> toAnalysisErrorFixes(
@@ -43,7 +46,7 @@ class ReportedLintError {
     return plugin.AnalysisError(
       lint.defaultType.analysisError,
       plugin.AnalysisErrorType.HINT,
-      sourceNode.toSourceSpan(sourceUnit).location,
+      highlightedNode.toSourceSpan(sourceUnit).location,
       lint.message,
       lint.code,
     );

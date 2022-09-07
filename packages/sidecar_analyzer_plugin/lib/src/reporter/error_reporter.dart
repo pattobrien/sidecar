@@ -9,7 +9,7 @@ class ErrorReporter extends IErrorReporter {
   void reportedLint(AstNode? node, LintError lint) {
     if (node != null) {
       final reportedLintError =
-          ReportedLintError(sourceUnit: unit, sourceNode: node, lint: lint);
+          ReportedLintError(sourceUnit: unit, reportedNode: node, lint: lint);
       final highlightedError = lint.computeLintHighlight(reportedLintError);
       reportedErrors.add(highlightedError);
     }

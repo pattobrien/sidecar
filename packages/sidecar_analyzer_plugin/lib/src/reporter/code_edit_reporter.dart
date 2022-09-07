@@ -7,8 +7,8 @@ class CodeEditReporter extends ICodeEditReporter {
   @override
   void reportEdit(AstNode? node, CodeEdit edit) {
     if (node != null) {
-      final reportedLintError = RequestedCodeEdit(
-          sourceUnit: unit, selectedNode: node, codeEdit: edit);
+      final reportedLintError =
+          RequestedCodeEdit(sourceUnit: unit, sourceNode: node, codeEdit: edit);
       reportedEdits.add(reportedLintError);
     }
   }

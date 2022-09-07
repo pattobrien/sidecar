@@ -1,6 +1,6 @@
 name: riverpod_prefer_consumer_widget
 description: A starting point for Dart libraries or applications.
-version: 0.1.0
+version: 0.1.2
 publish_to: https://micropub-3qduh.ondigitalocean.app/
 homepage: https://www.example.com
 
@@ -18,7 +18,7 @@ dependencies:
     hosted:
       url: https://dart.cloudsmith.io/fine-designs/sidecar/
       name: sidecar
-    version: ^0.1.0-dev.12
+    version: ^0.1.0-dev.13
 
 dev_dependencies:
   lints: ^2.0.0

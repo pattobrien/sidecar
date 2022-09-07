@@ -7,9 +7,9 @@ int calculate() {
   return 6 * 7;
 }
 
-class SomeWidget extends StatelessWidget {
+class SomeWidget extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
     return TextFormField(
         // controller: ref.watch(myTextControllerProvider),
@@ -18,6 +18,6 @@ class SomeWidget extends StatelessWidget {
   //
 }
 
-final myTextControllerProvider = ChangeNotifierProvider((ref) {
-  return TextEditingController();
-});
+// final myTextControllerProvider = ChangeNotifierProvider((ref) {
+//   return TextEditingController();
+// });

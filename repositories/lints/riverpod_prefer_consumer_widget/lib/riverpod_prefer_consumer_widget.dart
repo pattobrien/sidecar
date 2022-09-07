@@ -29,10 +29,10 @@ class RiverpodPreferConsumerWidget extends LintError {
   ReportedLintError computeLintHighlight(
     ReportedLintError reportedLintError,
   ) {
-    final node = reportedLintError.sourceNode;
+    final node = reportedLintError.reportedNode;
     if (node is ClassDeclaration) {
       final superclass = node.extendsClause?.superclass;
-      return reportedLintError.copyWith(sourceNode: superclass);
+      return reportedLintError.copyWith(highlightedNode: superclass);
     }
     return reportedLintError;
   }
@@ -42,7 +42,7 @@ class RiverpodPreferConsumerWidget extends LintError {
     ReportedLintError reportedLintError,
   ) async {
     final unit = reportedLintError.sourceUnit;
-    final lintedNode = reportedLintError.sourceNode;
+    final lintedNode = reportedLintError.reportedNode;
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {

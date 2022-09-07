@@ -26,7 +26,7 @@ class L10nAvoidStringLiterals extends LintError {
     ReportedLintError reportedLintError,
   ) async {
     final unit = reportedLintError.sourceUnit;
-    final stringNode = reportedLintError.sourceNode;
+    final stringNode = reportedLintError.reportedNode;
 
     final arbClassPrefix = 'AppLocalizations.of(context)';
 
