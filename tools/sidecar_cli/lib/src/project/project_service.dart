@@ -72,38 +72,6 @@ class ProjectService {
   Future<void> insertPluginIntoProjectPubspec() async {
     final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
-      // final content = await pubspecFile.readAsString();
-      // final pubspec = Pubspec.parse(content);
-
-      // final hasSidecarDependency =
-      //     pubspec.dependencies.containsKey('sidecar_analyzer_plugin');
-      // final hasSidecarDevDependency =
-      //     pubspec.devDependencies.containsKey('sidecar_analyzer_plugin');
-      // final hasSidecarDependencyOverride =
-      //     pubspec.dependencyOverrides.containsKey('sidecar_analyzer_plugin');
-
-      // if (hasSidecarDependency) {
-      //   print('sidecar_analyzer_plugin already contained in dependencies');
-      //   return;
-      // }
-      // if (hasSidecarDevDependency) {
-      //   print('sidecar_analyzer_plugin already contained in dev dependencies');
-      //   return;
-      // }
-      // if (hasSidecarDependencyOverride) {
-      //   print(
-      //       'sidecar_analyzer_plugin already contained in dependency overrides');
-      //   return;
-      // }
-      // print('inserting sidecar_analyzer_plugin into project pubspec...');
-      // final contentWithInsert = content.insertDependencyOverride(
-      //   MapEntry(
-      //     'sidecar_analyzer_plugin',
-      //     PathDependency('.sidecar/sidecar_analyzer_plugin/'),
-      //   ),
-      // );
-      // await pubspecFile.writeAsString(contentWithInsert);
-
       final isFlutterProject =
           await PubspecUtilities.isFlutterProject(projectDirectory.path);
 
@@ -210,6 +178,7 @@ class ProjectService {
         kPluginLoaderRelativePath,
       );
       final file = await io.File(pluginProjectPath).create(recursive: true);
+
       await file.writeAsString(
           pluginLoaderYamlContentCreator(projectPluginDirectory.path));
     }

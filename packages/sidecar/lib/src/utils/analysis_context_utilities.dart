@@ -69,7 +69,7 @@ extension AnalysisContextX on AnalysisContext {
       try {
         return ProjectConfiguration.parse(contents);
       } catch (e) {
-        rethrow;
+        throw UnimplementedError('cannot parse sidecar options: $e');
       }
     } else {
       return const ProjectConfiguration();
