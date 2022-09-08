@@ -2,6 +2,7 @@
 .DS_STORE
 
 .logs/**
+.sidecar/**
 
 
 **/pubspec_overrides.yaml

@@ -28,3 +28,12 @@ include: package:lints/recommended.yaml
 
 # For additional information about configuring this file, see
 # https://dart.dev/guides/language/analysis-options
+
+sidecar:
+  includes:
+    - "bin/**"
+    - "lib/**"
+    # - ".sidecar/**"
+  lints:
+    riverpod_prefer_consumer_widget:
+    l10n_avoid_string_literals:

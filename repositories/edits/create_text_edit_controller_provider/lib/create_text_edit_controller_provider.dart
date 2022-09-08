@@ -1,5 +1,6 @@
 import 'package:sidecar/sidecar.dart';
 import 'package:riverpod_utilities/riverpod_utilities.dart';
+import 'package:analyzer_plugin/protocol/protocol_common.dart';
 
 class CreateTextEditControllerProvider extends CodeEdit {
   CreateTextEditControllerProvider(super.ref);
@@ -14,6 +15,9 @@ class CreateTextEditControllerProvider extends CodeEdit {
     final session = requestedCodeEdit.sourceUnit.session;
     final unit = requestedCodeEdit.sourceUnit;
     final changeBuilder = ChangeBuilder(session: session);
+    final myConfig = session.analysisContext.sidecarOptions
+        .edits?['create_text_edit_controller_provider'];
+
     final node = requestedCodeEdit.sourceNode;
     if (node.parent?.parent is NamedExpression) {
       final expression = node.parent?.parent as NamedExpression;
@@ -23,16 +27,27 @@ class CreateTextEditControllerProvider extends CodeEdit {
       await changeBuilder.addDartFileEdit(
         requestedCodeEdit.sourceUnit.path,
         (builder) {
-          builder.addInsertion(argumentOffset, (builder) {
-            builder.write('ref.watch(myTextControllerProvider),');
-          });
+          final linkGroup = 'myTextControllerProvider';
+
           builder.addInsertion(unit.unit.length, (builder) {
             builder.write('\n// ${expression.name.label.staticElement}');
             builder.write('\n// ${expression.name.label.name}');
-            builder.writeChangeNotifierProvider(
-              changeNotifier: 'TextEditingController()',
-              variableName: 'myTextControllerProvider',
-            );
+            // builder.writeChangeNotifierProvider(
+            //   changeNotifier: 'TextEditingController()',
+            //   variableName: 'myTextControllerProvider',
+            // );
+            return;
+          });
+          builder.addInsertion(argumentOffset, (builder) {
+            builder.write('ref.watch(');
+
+            builder.addLinkedEdit(linkGroup, (builder) {
+              builder.write(linkGroup);
+              // builder.addSuggestion(
+              //     LinkedEditSuggestionKind.PARAMETER, linkGroup);
+            });
+            builder.write('), ');
+            return;
           });
         },
       );
@@ -42,7 +57,10 @@ class CreateTextEditControllerProvider extends CodeEdit {
         (builder) {
           builder.addInsertion(unit.unit.length, (builder) {
             builder.write(
-                '\n// node: ${node.runtimeType} || parent: ${node.parent.runtimeType} || parent.parent: ${node.parent?.parent.runtimeType}');
+                '\n// node => parents: ${node.runtimeType} => ${node.parent.runtimeType} => ${node.parent?.parent.runtimeType} => ${node.parent?.parent?.parent.runtimeType}');
+          });
+          builder.addInsertion(unit.unit.length, (builder) {
+            builder.write('// my map: ${myConfig?.configuration}');
           });
         },
       );

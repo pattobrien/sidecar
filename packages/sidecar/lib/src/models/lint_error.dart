@@ -22,7 +22,7 @@ abstract class LintError {
   String get message;
   LintErrorType get defaultType;
   // GetFixes? get getFixes;
-  Map<dynamic, dynamic> get yamlConfig => {};
+  Map<dynamic, dynamic> get yamlConfig => <dynamic, dynamic>{};
 
   final ProviderContainer ref;
 
