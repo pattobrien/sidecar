@@ -6,22 +6,17 @@ part of 'lint_configuration.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-LintConfiguration _$LintConfigurationFromJson(Map json) => $checkedCreate(
-      'LintConfiguration',
-      json,
-      ($checkedConvert) {
-        $checkKeys(
-          json,
-          allowedKeys: const ['id'],
-        );
-        final val = LintConfiguration(
-          id: $checkedConvert('id', (v) => v as String),
-        );
-        return val;
-      },
+_$_LintConfiguration _$$_LintConfigurationFromJson(Map<String, dynamic> json) =>
+    _$_LintConfiguration(
+      id: json['id'] as String,
+      enabled: json['enabled'] as bool,
+      configuration: json['configuration'] as Map<String, dynamic>?,
     );
 
-Map<String, dynamic> _$LintConfigurationToJson(LintConfiguration instance) =>
+Map<String, dynamic> _$$_LintConfigurationToJson(
+        _$_LintConfiguration instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'enabled': instance.enabled,
+      'configuration': instance.configuration,
     };

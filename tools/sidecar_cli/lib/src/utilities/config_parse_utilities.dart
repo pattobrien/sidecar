@@ -17,15 +17,15 @@ class ConfigParseUtilities {
       try {
         final config = checkedYamlDecode(
           contents,
-          (m) => ProjectConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
+          (m) => ProjectConfiguration.fromJson(m!['sidecar']),
           sourceUrl: projectRootUri,
         );
 
-        final rulesConfig = config.rules ?? [];
+        final rulesConfig = config.lints?.values ?? [];
         for (final rule in rulesConfig) {
           print('registering lint ${rule.id}');
         }
-        return rulesConfig;
+        return rulesConfig.toList();
       } catch (e) {
         print('no plugin configuration found for sidecar.');
         rethrow;
@@ -45,15 +45,15 @@ class ConfigParseUtilities {
       try {
         final config = checkedYamlDecode(
           contents,
-          (m) => ProjectConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
+          (m) => ProjectConfiguration.fromJson(m!['sidecar']),
           sourceUrl: projectRootUri,
         );
 
-        final editConfig = config.edits ?? [];
+        final editConfig = config.edits?.values ?? [];
         for (final edit in editConfig) {
           print('registering code edit ${edit.id}');
         }
-        return editConfig;
+        return editConfig.toList();
       } catch (e) {
         print('no plugin configuration found for sidecar.');
         rethrow;

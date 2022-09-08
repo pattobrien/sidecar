@@ -15,6 +15,9 @@ class CreateTextEditControllerProvider extends CodeEdit {
     final session = requestedCodeEdit.sourceUnit.session;
     final unit = requestedCodeEdit.sourceUnit;
     final changeBuilder = ChangeBuilder(session: session);
+    final myConfig = session.analysisContext.sidecarOptions
+        .edits?['create_text_edit_controller_provider'];
+
     final node = requestedCodeEdit.sourceNode;
     if (node.parent?.parent is NamedExpression) {
       final expression = node.parent?.parent as NamedExpression;
@@ -55,6 +58,9 @@ class CreateTextEditControllerProvider extends CodeEdit {
           builder.addInsertion(unit.unit.length, (builder) {
             builder.write(
                 '\n// node => parents: ${node.runtimeType} => ${node.parent.runtimeType} => ${node.parent?.parent.runtimeType} => ${node.parent?.parent?.parent.runtimeType}');
+          });
+          builder.addInsertion(unit.unit.length, (builder) {
+            builder.write('// my map: ${myConfig?.configuration}');
           });
         },
       );

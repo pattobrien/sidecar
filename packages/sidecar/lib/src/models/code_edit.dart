@@ -11,7 +11,7 @@ abstract class CodeEdit {
   CodeEdit(this.ref);
 
   String get message;
-  Map<dynamic, dynamic> get yamlConfig => {};
+  Map<dynamic, dynamic> get yamlConfig => <dynamic, dynamic>{};
 
   final ProviderContainer ref;
 

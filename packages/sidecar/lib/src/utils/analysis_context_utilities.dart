@@ -60,7 +60,7 @@ class AnalysisContextUtilities {
 }
 
 final analysisContextUtilitiesProvider = Provider<AnalysisContextUtilities>(
-  (ref) => AnalysisContextUtilities(),
+  (ref) => const AnalysisContextUtilities(),
 );
 
 extension AnalysisContextX on AnalysisContext {
@@ -71,7 +71,7 @@ extension AnalysisContextX on AnalysisContext {
       try {
         return checkedYamlDecode(
           contents,
-          (m) => ProjectConfiguration.fromJson(m!['sidecar_analyzer_plugin']),
+          (m) => ProjectConfiguration.fromJson(m!['sidecar'] as Map),
           sourceUrl: optionsFile.toUri(),
         );
       } catch (e) {

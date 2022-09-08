@@ -93,14 +93,17 @@ class L10nAvoidStringLiterals extends LintError {
         }
       });
     }
-
-    final errorFixes = [
-      PrioritizedSourceChange(
-        0,
-        changeBuilder.sourceChange..message = 'Replace declarations',
-      ),
-    ];
-    return errorFixes;
+    if (changeBuilder.sourceChange.edits.isNotEmpty) {
+      final errorFixes = [
+        PrioritizedSourceChange(
+          0,
+          changeBuilder.sourceChange..message = 'Extract string declaration',
+        ),
+      ];
+      return errorFixes;
+    } else {
+      return [];
+    }
   }
 }
 
@@ -111,23 +114,12 @@ class _LiteralAstVisitor<R> extends GeneralizingAstVisitor<R> {
 
   @override
   R? visitStringLiteral(StringLiteral node) {
-    if (node.parent is ImportDirective ||
-        node is PartDirective ||
-        node is PartOfDirective) {
-      // node is part of import directive = skip
-    } else {
-      final parent = node.parent;
-      // final element = node.staticParameterElement;
-      if (parent is VariableDeclaration) {
-        // if the value is declared with a variable
-        // then we need to handle it differently
-        // (i.e. replace all references to variable)
-        // lintRule.reportedAstNode(parent.name);
-        lintRule.reportedAstNode(node);
-      } else {
-        lintRule.reportedAstNode(node);
-      }
+    if (node.parent is! ImportDirective &&
+        node is! PartDirective &&
+        node is! PartOfDirective) {
+      lintRule.reportedAstNode(node);
     }
+
     return super.visitStringLiteral(node);
   }
 }

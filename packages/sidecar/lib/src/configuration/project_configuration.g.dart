@@ -6,36 +6,20 @@ part of 'project_configuration.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ProjectConfiguration _$ProjectConfigurationFromJson(Map json) => $checkedCreate(
-      'ProjectConfiguration',
-      json,
-      ($checkedConvert) {
-        $checkKeys(
-          json,
-          allowedKeys: const ['rules', 'edits', 'includes'],
-        );
-        final val = ProjectConfiguration(
-          rules: $checkedConvert(
-              'rules',
-              (v) => (v as List<dynamic>?)
-                  ?.map((e) => LintConfiguration.fromJson(e as Map))
-                  .toList()),
-          edits: $checkedConvert(
-              'edits',
-              (v) => (v as List<dynamic>?)
-                  ?.map((e) => EditConfiguration.fromJson(e as Map))
-                  .toList()),
-          includes: $checkedConvert('includes',
-              (v) => (v as List<dynamic>).map((e) => e as String).toList()),
-        );
-        return val;
-      },
+ProjectConfiguration _$ProjectConfigurationFromJson(Map json) =>
+    ProjectConfiguration(
+      lints: lintConfigFromJson(json['lints'] as Map?),
+      edits: editConfigFromJson(json['edits'] as Map?),
+      includes: (json['includes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const ['lib/**', 'test/**', 'bin/**'],
     );
 
 Map<String, dynamic> _$ProjectConfigurationToJson(
         ProjectConfiguration instance) =>
     <String, dynamic>{
-      'rules': instance.rules?.map((e) => e.toJson()).toList(),
-      'edits': instance.edits?.map((e) => e.toJson()).toList(),
+      'lints': instance.lints,
+      'edits': instance.edits,
       'includes': instance.includes,
     };

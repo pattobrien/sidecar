@@ -828,7 +828,7 @@ class LintVisitor extends AstVisitor<void> {
       var timer = subscription.timer;
       timer?.start();
       try {
-        node.accept(subscription.visitor);
+        node.accept<dynamic>(subscription.visitor);
       } catch (exception, stackTrace) {
         // if (!exceptionHandler(
         //     node, subscription.linter, exception, stackTrace)) {

@@ -1,22 +1,17 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'edit_configuration.freezed.dart';
 part 'edit_configuration.g.dart';
 
-@JsonSerializable(
-  anyMap: true,
-  checked: true,
-  disallowUnrecognizedKeys: true,
-  explicitToJson: true,
-)
-class EditConfiguration {
-  const EditConfiguration({
-    required this.id,
-  });
+@freezed
+class EditConfiguration with _$EditConfiguration {
+  const EditConfiguration._();
+  const factory EditConfiguration({
+    required String id,
+    required bool enabled,
+    required Map<dynamic, dynamic>? configuration,
+  }) = _EditConfiguration;
 
-  factory EditConfiguration.fromJson(Map json) =>
+  factory EditConfiguration.fromJson(Map<String, dynamic> json) =>
       _$EditConfigurationFromJson(json);
-
-  Map<String, dynamic> toJson() => _$EditConfigurationToJson(this);
-
-  final String id;
 }

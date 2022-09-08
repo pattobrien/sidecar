@@ -11,20 +11,26 @@ analyzer:
 example_plugin:
   lints:
     riverpod:
-      - prefer_consumer_widget
+      prefer_consumer_widget:
     l10n:
       - avoid_string_literals
   edits:
     riverpod:
-      - create_text_edit_controller_provider
+      create_text_edit_controller_provider: null
+      prefer_consumer_widget: true
 
-sidecar_analyzer_plugin:
+sidecar:
   includes:
     - "bin/**"
     - "lib/**"
     # - ".sidecar/**"
-  rules:
-    - id: riverpod_prefer_consumer_widget
-    - id: l10n_avoid_string_literals
+  lints:
+    riverpod_prefer_consumer_widget:
+    l10n_avoid_string_literals:
+      abc: hi
   edits:
-    - id: create_text_edit_controller_provider
+    create_text_edit_controller_provider:
+      enabled: true
+      another: abc123
+      nested:
+        - 123

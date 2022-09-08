@@ -153,7 +153,7 @@ class ProjectService {
     //     'sidecar_analyzer_plugin should be set as dependency',
     //   );
     // }
-    return Version.parse('0.1.0-dev.14');
+    return Version.parse('0.1.0-dev.16');
   }
 
   Future<void> copyBasePluginFromSource(Version version) async {
@@ -253,9 +253,9 @@ class ProjectService {
     }
 
     String pubspecContent = await pluginPubspecFile.readAsString();
-    final pubspec = Pubspec.parse(pubspecContent);
+    final pubspec = Pubspec.parse(pubspecContent); //TODO: set lenient = true
     await Future.wait(lints.map((lintId) async {
-      if (!pubspec.dependencies.containsKey(lintId.id)) {
+      if (!pubspec.dependencies.containsKey(lintId.className)) {
         final isFlutterProject =
             await PubspecUtilities.isFlutterProject(projectDirectory.path);
         final process = await io.Process.start(
@@ -327,7 +327,8 @@ class ProjectService {
   }
 
   Future<void> generateLintBootstrapFunction(
-      List<LintConfiguration> lints) async {
+    List<LintConfiguration> lints,
+  ) async {
     final importBuffer = StringBuffer()..writeln(pluginImport);
     final returnBuffer = StringBuffer();
 

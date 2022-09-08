@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 int calculate() {
   final aStringThatShouldBeLinted = 'some string that should be linted';
-
+  final x = aStringThatShouldBeLinted;
   return 6 * 7;
 }
 
@@ -24,8 +24,14 @@ class SomeWidget extends ConsumerWidget {
     );
   }
 }
-// node: ArgumentListImpl || parent: InstanceCreationExpressionImpl || parent.parent: ReturnStatementImpl || parent.parent.parent: BlockImpl
-// node: LabelImpl || parent: NamedExpressionImpl || parent.parent: ArgumentListImpl || parent.parent.parent: InstanceCreationExpressionImpl
-// node => parents: VariableDeclarationListImpl => VariableDeclarationStatementImpl => BlockImpl => BlockFunctionBodyImpl
-// node => parents: SimpleStringLiteralImpl => ArgumentListImpl => InstanceCreationExpressionImpl => ListLiteralImpl
-// node => parents: SimpleStringLiteralImpl => VariableDeclarationImpl => VariableDeclarationListImpl => VariableDeclarationStatementImpl
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('');
+  }
+}
+// my map: {enabled: true, another: abc123, nested: [123]}
+// node => parents: CompilationUnitImpl => Null => null => null
