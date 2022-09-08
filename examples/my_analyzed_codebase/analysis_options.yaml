@@ -25,9 +25,13 @@ sidecar:
     - "lib/**"
     # - ".sidecar/**"
   lints:
-    riverpod_prefer_consumer_widget:
-    l10n_avoid_string_literals:
-      abc: hi
+    riverpod:
+      prefer_consumer_widget:
+    l10n:
+      avoid_string_literals:
+        enabled: true
+        configuration:
+          abc: 123
   edits:
     create_text_edit_controller_provider:
       enabled: true

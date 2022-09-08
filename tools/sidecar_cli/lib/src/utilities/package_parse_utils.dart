@@ -1,34 +1,34 @@
 import 'dart:io' as io;
 import 'package:path/path.dart' as p;
 import 'package:checked_yaml/checked_yaml.dart';
+import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:recase/recase.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_cli/src/configurations/plugin/lint_declaration.dart';
-import 'package:sidecar_cli/src/configurations/plugin/plugin_configuration.dart';
+import 'package:sidecar_cli/src/configurations/plugin/package_configuration.dart';
 
 const analysisOptionsFileName = 'analysis_options.yaml';
 
-class PluginPubspecParseUtils {
-  static Future<List<LintDeclaration>> getLintDeclarations(
+class PackageParseUtils {
+  static Future<PackageConfiguration> getPackageConfiguration(
     Uri projectRootUri,
   ) async {
     final pubspecFile = io.File(p.join(projectRootUri.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
       final contents = await pubspecFile.readAsString();
+      final pubspec = Pubspec.parse(contents, lenient: true);
       try {
-        final config = PluginConfiguration.fromYaml(contents);
-
-        final lintDeclarations = config.lints?.values ?? [];
-        for (final declaration in lintDeclarations) {
-          print('registering lint ${declaration.id}');
-        }
-        return lintDeclarations.toList();
+        return PackageConfiguration.parse(
+          contents,
+          packageName: pubspec.name,
+        );
       } catch (e) {
         print('no plugin configuration found for sidecar.');
         rethrow;
       }
     } else {
-      return [];
+      throw UnimplementedError(
+          'no pubspec file found; please make sure this is a dart directory.');
     }
   }
 

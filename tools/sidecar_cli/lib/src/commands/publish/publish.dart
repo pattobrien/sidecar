@@ -3,7 +3,8 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:sidecar_cli/sidecar_cli.dart';
-import 'package:sidecar_cli/src/utilities/plugin_pubspec_parse_utils.dart';
+import 'package:sidecar_cli/src/configurations/plugin/lint_declaration.dart';
+import 'package:sidecar_cli/src/utilities/package_parse_utils.dart';
 
 import '../exit_codes.dart';
 
@@ -23,14 +24,16 @@ class PublishCommand extends Command<int> {
 
       print('project directory: ${Directory.current}');
 
-      final lintDeclarations =
-          await PluginPubspecParseUtils.getLintDeclarations(
+      final declarations = await PackageParseUtils.getPackageConfiguration(
         Directory.current.uri,
       );
+      final lintDeclarations =
+          declarations.lints?.values ?? <LintDeclaration>[];
       print('number of lint declarations: ${lintDeclarations.length}');
-      lintDeclarations.forEach((element) {
-        print('${element.id} || ${element.className} || ${element.import}');
-      });
+      for (var lintDeclaration in lintDeclarations) {
+        print(
+            '${lintDeclaration.id} || ${lintDeclaration.className} || ${lintDeclaration.import}');
+      }
       // final edits =
       //     await ConfigParseUtilities.parseEditConfig(Directory.current.uri);
       // await projectService.clearPreviousLints();

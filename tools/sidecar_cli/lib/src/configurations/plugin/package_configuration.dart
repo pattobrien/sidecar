@@ -1,31 +1,43 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:recase/recase.dart';
 
 import 'lint_declaration.dart';
 
-part 'plugin_configuration.g.dart';
+part 'package_configuration.g.dart';
 
 @JsonSerializable(
   anyMap: true,
 )
-class PluginConfiguration {
-  const PluginConfiguration({
+class PackageConfiguration {
+  const PackageConfiguration({
     this.lints,
+    required this.packageName,
     // this.edits,
   });
-  @JsonKey(fromJson: lintConfigFromJson)
+
   final Map<LintName, LintDeclaration>? lints;
+
+  // final Map<EditName, EditDeclaration>? edits;
+
+  final String packageName;
 
   // @JsonKey(fromJson: editConfigFromJson)
   // final Map<EditName, EditConfiguration>? edits;
 
-  factory PluginConfiguration.fromJson(Map<dynamic, dynamic> json) =>
-      _$PluginConfigurationFromJson(json);
-
-  factory PluginConfiguration.fromYaml(String contents) {
+  factory PackageConfiguration.parse(
+    String contents, {
+    required String packageName,
+  }) {
     return checkedYamlDecode(
       contents,
-      (m) => PluginConfiguration.fromJson(m!['sidecar']),
+      (m) {
+        final contentMap = m!['sidecar'] as Map;
+        return PackageConfiguration(
+          lints: lintConfigFromJson(contentMap['lints'] as Map?, packageName),
+          packageName: packageName,
+        );
+      },
     );
   }
 }
@@ -33,7 +45,10 @@ class PluginConfiguration {
 typedef LintName = dynamic;
 typedef EditName = dynamic;
 
-Map<LintName, LintDeclaration>? lintConfigFromJson(Map? json) {
+Map<LintName, LintDeclaration>? lintConfigFromJson(
+  Map? json,
+  String packageName,
+) {
   final map = json?.map<String, dynamic>((dynamic key, dynamic value) {
     if (key is String) {
       return MapEntry<String, dynamic>(key, value);
@@ -42,14 +57,17 @@ Map<LintName, LintDeclaration>? lintConfigFromJson(Map? json) {
     }
   });
   return map?.map<LintName, LintDeclaration>((key, dynamic value) {
+    final defaultImportUri =
+        Uri(scheme: 'package', path: '$packageName/$packageName.dart');
+    final defaultClassName = ReCase(key).pascalCase;
     if (value == null) {
       return MapEntry<LintName, LintDeclaration>(
         key,
         LintDeclaration(
           id: key,
-          import: null,
-          className: null,
-          package: null,
+          package: packageName,
+          import: defaultImportUri,
+          className: defaultClassName,
         ),
       );
     }
@@ -60,9 +78,10 @@ Map<LintName, LintDeclaration>? lintConfigFromJson(Map? json) {
           id: key,
           import: value.containsKey('import')
               ? Uri(scheme: 'package', path: value['import'])
-              : null,
-          className: value.containsKey('class') ? value['class'] : null,
-          package: null,
+              : defaultImportUri,
+          className:
+              value.containsKey('class') ? value['class'] : defaultClassName,
+          package: packageName,
         ),
       );
     }

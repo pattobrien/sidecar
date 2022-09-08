@@ -9,10 +9,9 @@ part of 'lint_declaration.dart';
 LintDeclaration _$LintDeclarationFromJson(Map<String, dynamic> json) =>
     LintDeclaration(
       id: json['id'] as String,
-      package: json['package'] as String?,
-      className: json['className'] as String?,
-      import:
-          json['import'] == null ? null : Uri.parse(json['import'] as String),
+      package: json['package'] as String,
+      className: json['className'] as String,
+      import: Uri.parse(json['import'] as String),
     );
 
 Map<String, dynamic> _$LintDeclarationToJson(LintDeclaration instance) =>
@@ -20,5 +19,5 @@ Map<String, dynamic> _$LintDeclarationToJson(LintDeclaration instance) =>
       'id': instance.id,
       'package': instance.package,
       'className': instance.className,
-      'import': instance.import?.toString(),
+      'import': instance.import.toString(),
     };
