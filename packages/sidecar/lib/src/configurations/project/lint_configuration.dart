@@ -22,6 +22,6 @@ class LintConfiguration {
 }
 
 extension LintConfigurationX on LintConfiguration {
-  String get filePath => '$lintId.dart';
+  String get filePath => '$packageName/$packageName.dart';
   String get className => ReCase(lintId).pascalCase;
 }

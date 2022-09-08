@@ -8,43 +8,28 @@ analyzer:
   plugins:
     - sidecar_analyzer_plugin
 
-example_plugin:
-  lints:
-    riverpod:
-      prefer_consumer_widget:
-    l10n:
-      - avoid_string_literals
-  edits:
-    riverpod:
-      create_text_edit_controller_provider: null
-      prefer_consumer_widget: true
-
 sidecar:
   includes:
     - "bin/**"
     - "lib/**"
     # - ".sidecar/**"
   lints:
-    riverpod:
+    riverpod_lints:
       prefer_consumer_widget:
         enabled: true
         configuration:
           aaaaa: 11111
-      some_other_riverpod_lint:
-        enabled: true
-        configuration:
-          aaaaa: 11111
-    l10n:
-      avoid_string_literals:
-        enabled: true
-        configuration:
-          abc: 123
-  edits:
-    riverpod:
-      create_text_edit_controller_provider:
-        enabled: true
-        configuration:
-          nested_value:
-            - 123
-          something:
-            abc: 123
+    # l10n:
+    #   avoid_string_literals:
+    #     enabled: true
+    #     configuration:
+    #       abc: 123
+  # edits:
+  #   riverpod:
+  #     create_text_edit_controller_provider:
+  #       enabled: true
+  #       configuration:
+  #         nested_value:
+  #           - 123
+  #         something:
+  #           abc: 123

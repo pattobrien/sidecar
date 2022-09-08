@@ -244,7 +244,7 @@ class ProjectService {
   //   if (doesDirectoryExist) directory.delete(recursive: true);
   // }
 
-  Future<void> importLints(List<LintConfiguration> lints) async {
+  Future<void> importLints(List<LintPackageConfiguration> lints) async {
     final pluginPubspecFile =
         io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
 
@@ -255,7 +255,7 @@ class ProjectService {
     String pubspecContent = await pluginPubspecFile.readAsString();
     final pubspec = Pubspec.parse(pubspecContent); //TODO: set lenient = true
     await Future.wait(lints.map((lintConfiguration) async {
-      if (!pubspec.dependencies.containsKey(lintConfiguration.className)) {
+      if (!pubspec.dependencies.containsKey(lintConfiguration.packageName)) {
         final isFlutterProject =
             await PubspecUtilities.isFlutterProject(projectDirectory.path);
         final process = await io.Process.start(
@@ -265,7 +265,7 @@ class ProjectService {
             'add',
             '--hosted-url',
             'https://micropub-3qduh.ondigitalocean.app/',
-            lintConfiguration.lintId,
+            lintConfiguration.packageName,
           ],
           workingDirectory: pluginPubspecFile.parent.path,
         );
@@ -273,27 +273,11 @@ class ProjectService {
         process.stdout.listen((event) => print(utf8.decode(event)));
         process.stderr.listen((event) => print(utf8.decode(event)));
         await process.exitCode;
-        // pubspecContent = pubspecContent.insertDependency(
-        //   MapEntry(
-        //     lintId.id,
-        //     HostedDependency(
-        //       hosted: HostedDetails(
-        //         lintId.id,
-        //         sidecarMicropubUri,
-        //       ),
-        //     ),
-        //   ),
-        // );
       }
     }));
-    // try {
-    //   await pluginPubspecFile.writeAsString(pubspecContent);
-    // } catch (e) {
-    //   print(e);
-    // }
   }
 
-  Future<void> importEdits(List<EditConfiguration> edits) async {
+  Future<void> importEdits(List<EditPackageConfiguration> editPackages) async {
     final pluginPubspecFile =
         io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
 
@@ -303,8 +287,8 @@ class ProjectService {
 
     String pubspecContent = await pluginPubspecFile.readAsString();
     final pubspec = Pubspec.parse(pubspecContent);
-    await Future.wait(edits.map((editConfiguration) async {
-      if (!pubspec.dependencies.containsKey(editConfiguration.editId)) {
+    await Future.wait(editPackages.map((editConfiguration) async {
+      if (!pubspec.dependencies.containsKey(editConfiguration.packageName)) {
         final isFlutterProject =
             await PubspecUtilities.isFlutterProject(projectDirectory.path);
         final process = await io.Process.start(
@@ -314,7 +298,7 @@ class ProjectService {
             'add',
             '--hosted-url',
             'https://micropub-3qduh.ondigitalocean.app/',
-            editConfiguration.editId,
+            editConfiguration.packageName,
           ],
           workingDirectory: pluginPubspecFile.parent.path,
         );
@@ -327,57 +311,59 @@ class ProjectService {
   }
 
   Future<void> generateLintBootstrapFunction(
-    List<LintConfiguration> lints,
+    List<LintPackageConfiguration> lintPackages,
   ) async {
     final importBuffer = StringBuffer()..writeln(pluginImport);
     final returnBuffer = StringBuffer();
 
-    for (final lint in lints) {
-      // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
-      importBuffer
-          .write('import \'package:${lint.lintId}/${lint.filePath}\'; \n');
-      returnBuffer
-        ..write('\t\t')
-        ..write(lint.className)
-        ..write('(ref)..registerNodeProcessors(registry), \n');
+    for (final lintPackage in lintPackages) {
+      for (final lint in lintPackage.lints.values) {
+        // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
+        importBuffer.write('import \'package:${lint.filePath}\'; \n');
+        returnBuffer
+          ..write('\t\t')
+          ..write(lint.className)
+          ..write('(ref)..registerNodeProcessors(registry), \n');
+      }
+
+      final entireContents = StringBuffer()
+        ..write(importBuffer.toString())
+        ..write(lintBootstrapHeader)
+        ..write(returnBuffer.toString())
+        ..write(bootstrapFooter);
+
+      await io.File(
+              p.join(projectPluginDirectory.path, lintInitializerRelativePath))
+          .writeAsString(entireContents.toString());
     }
-
-    final entireContents = StringBuffer()
-      ..write(importBuffer.toString())
-      ..write(lintBootstrapHeader)
-      ..write(returnBuffer.toString())
-      ..write(bootstrapFooter);
-
-    await io.File(
-            p.join(projectPluginDirectory.path, lintInitializerRelativePath))
-        .writeAsString(entireContents.toString());
   }
 
   Future<void> generateCodeEditBootstrapFunction(
-    List<EditConfiguration> edits,
+    List<EditPackageConfiguration> editPackages,
   ) async {
     final importBuffer = StringBuffer()..writeln(pluginImport);
     final returnBuffer = StringBuffer();
 
-    for (final edit in edits) {
-      // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
-      importBuffer
-          .write('import \'package:${edit.editId}/${edit.filePath}\'; \n');
-      returnBuffer
-        ..write('\t\t')
-        ..write(edit.className)
-        ..write('(ref), \n');
+    for (final editPackage in editPackages) {
+      for (final edit in editPackage.edits.values) {
+        // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
+        importBuffer.write('import \'package:${edit.filePath}\'; \n');
+        returnBuffer
+          ..write('\t\t')
+          ..write(edit.className)
+          ..write('(ref), \n');
+      }
+
+      final entireContents = StringBuffer()
+        ..write(importBuffer.toString())
+        ..write(editBootstrapHeader)
+        ..write(returnBuffer.toString())
+        ..write(bootstrapFooter);
+
+      await io.File(
+              p.join(projectPluginDirectory.path, editInitializerRelativePath))
+          .writeAsString(entireContents.toString());
     }
-
-    final entireContents = StringBuffer()
-      ..write(importBuffer.toString())
-      ..write(editBootstrapHeader)
-      ..write(returnBuffer.toString())
-      ..write(bootstrapFooter);
-
-    await io.File(
-            p.join(projectPluginDirectory.path, editInitializerRelativePath))
-        .writeAsString(entireContents.toString());
   }
 
   Future<void> createProjectRepository() async {

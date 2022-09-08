@@ -22,6 +22,6 @@ class EditConfiguration {
 }
 
 extension EditConfigurationX on EditConfiguration {
-  String get filePath => '$editId.dart';
+  String get filePath => '$packageName/$packageName.dart';
   String get className => ReCase(editId).pascalCase;
 }

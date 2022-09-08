@@ -35,7 +35,7 @@ class ParseCommand extends Command<int> {
       print('number of edit configurations: ${editDeclarations.length}');
       for (var editDeclaration in editDeclarations.values) {
         print(
-            'edit package: ${editDeclaration.packageName} || # of package edits: ${editDeclaration.lints.length} || first edit: ${editDeclaration.lints.entries.first.value.editId}');
+            'edit package: ${editDeclaration.packageName} || # of package edits: ${editDeclaration.edits.length} || first edit: ${editDeclaration.edits.entries.first.value.editId}');
       }
       return ExitCode.success;
     } catch (e) {

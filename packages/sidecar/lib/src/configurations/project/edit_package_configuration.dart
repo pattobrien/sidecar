@@ -4,10 +4,10 @@ import 'lint_configuration.dart';
 class EditPackageConfiguration {
   const EditPackageConfiguration({
     required this.packageName,
-    required this.lints,
+    required this.edits,
   });
   final String packageName;
-  final Map<String, EditConfiguration> lints;
+  final Map<String, EditConfiguration> edits;
 
   factory EditPackageConfiguration.fromJson(
     Map json, {
@@ -15,7 +15,7 @@ class EditPackageConfiguration {
   }) {
     return EditPackageConfiguration(
       packageName: packageName,
-      lints: json.map<String, EditConfiguration>((dynamic key, dynamic value) {
+      edits: json.map<String, EditConfiguration>((dynamic key, dynamic value) {
         if (value is Map) {
           return MapEntry(
               key as String,

@@ -22,19 +22,20 @@ dependencies:
 dev_dependencies:
   lints: ^2.0.0
 
-dependency_overrides:
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+# dependency_overrides:
+#   sidecar:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+micropub: sidecar
 
 sidecar:
   lints:
     prefer_consumer_widget:
       class: PreferConsumerWidget
       import: riverpod_lints/riverpod_lints.dart
-    avoid_read_in_build_methods:
-      class: AvoidReadInBuildMethods
-      import: riverpod_lints/riverpod_lints.dart
-  edits:
-    some_edit:
-      class: PreferConsumerWidget
-      import: riverpod_lints/riverpod_lints.dart
+  #   avoid_read_in_build_methods:
+  #     class: AvoidReadInBuildMethods
+  #     import: riverpod_lints/riverpod_lints.dart
+  # edits:
+  #   some_edit:
+  #     class: PreferConsumerWidget
+  #     import: riverpod_lints/riverpod_lints.dart
