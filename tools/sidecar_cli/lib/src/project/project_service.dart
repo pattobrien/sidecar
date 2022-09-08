@@ -222,7 +222,8 @@ class ProjectService {
 
     final settingsFile = io.File(vsCodeSettingsPath(projectDirectory.path));
     await settingsFile.create(recursive: true);
-    await settingsFile.writeAsString(vsCodeSettingsContent);
+    await settingsFile
+        .writeAsString(vsCodeSettingsContent(projectDirectory.path));
   }
 
   Future<void> createProjectPluginSymlink() async {

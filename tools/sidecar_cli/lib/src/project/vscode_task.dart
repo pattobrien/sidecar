@@ -28,7 +28,7 @@ final vsCodeTaskContent = '''
 }
 ''';
 
-final vsCodeSettingsContent = '''
+String vsCodeSettingsContent(String workspacePath) => '''
 {
     "triggerTaskOnSave.tasks": {
         "sidecar rebuild": [
@@ -37,8 +37,8 @@ final vsCodeSettingsContent = '''
         ],
     },
     "dart.analyzerAdditionalArgs": [
-        "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/.logs/analysis_instrumentation.log"
+        "--instrumentation-log-file=$workspacePath/.sidecar/logs/analysis_instrumentation.log"
     ],
-    // "dart.analyzerInstrumentationLogFile": "/Users/pattobrien/Development/sidecar/.logs/analysis_instrumentation.txt",
+    // "dart.analyzerInstrumentationLogFile": "$workspacePath/.sidecar/logs/analysis_instrumentation.txt",
 }
 ''';
