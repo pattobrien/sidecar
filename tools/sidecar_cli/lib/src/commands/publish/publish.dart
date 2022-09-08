@@ -32,12 +32,14 @@ class PublishCommand extends Command<int> {
           declarations.lints?.values ?? <LintDeclaration>[];
       final editDeclarations =
           declarations.edits?.values ?? <EditDeclaration>[];
+
       print('number of lint declarations: ${lintDeclarations.length}');
+      print('number of edit declarations: ${editDeclarations.length}');
+
       for (var lintDeclaration in lintDeclarations) {
         print(
             '${lintDeclaration.id} || ${lintDeclaration.className} || ${lintDeclaration.import}');
       }
-      print('number of edit declarations: ${editDeclarations.length}');
       for (var editDeclaration in editDeclarations) {
         print(
             '${editDeclaration.id} || ${editDeclaration.className} || ${editDeclaration.import}');

@@ -23,10 +23,11 @@ class RebuildCommand extends Command<int> {
 
       print('project directory: ${Directory.current}');
 
-      final lints =
-          await ConfigParseUtilities.parseLintConfig(Directory.current.uri);
-      final edits =
-          await ConfigParseUtilities.parseEditConfig(Directory.current.uri);
+      final projectConfiguration =
+          await ProjectUtilities.getSidecarConfiguration(Directory.current.uri);
+
+      final lints = projectConfiguration.lints?.values.toList() ?? [];
+      final edits = projectConfiguration.edits?.values.toList() ?? [];
       // await projectService.clearPreviousLints();
       await projectService.importLints(lints);
       await projectService.importEdits(edits);

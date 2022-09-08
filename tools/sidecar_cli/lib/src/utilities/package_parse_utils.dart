@@ -31,34 +31,6 @@ class PackageParseUtils {
           'no pubspec file found; please make sure this is a dart directory.');
     }
   }
-
-  // static Future<List<EditConfiguration>> parseEditConfig(
-  //   Uri projectRootUri,
-  // ) async {
-  //   final configFile =
-  //       io.File(p.join(projectRootUri.path, analysisOptionsFileName));
-  //   if (configFile.existsSync()) {
-  //     final contents = await configFile.readAsString();
-  //     try {
-  //       final config = checkedYamlDecode(
-  //         contents,
-  //         (m) => ProjectConfiguration.fromJson(m!['sidecar']),
-  //         sourceUrl: projectRootUri,
-  //       );
-
-  //       final editConfig = config.edits?.values ?? [];
-  //       for (final edit in editConfig) {
-  //         print('registering code edit ${edit.id}');
-  //       }
-  //       return editConfig.toList();
-  //     } catch (e) {
-  //       print('no plugin configuration found for sidecar.');
-  //       rethrow;
-  //     }
-  //   } else {
-  //     return [];
-  //   }
-  // }
 }
 
 extension LintDeclarationX on LintDeclaration {

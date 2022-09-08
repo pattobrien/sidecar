@@ -23,12 +23,12 @@ class ParseCommand extends Command<int> {
     try {
       print('project directory: ${Directory.current}');
 
-      final declarations = await ConfigParseUtilities.parseLintConfig(
+      final declarations = await ProjectUtilities.getSidecarConfiguration(
         Directory.current.uri,
       );
-      final lintDeclarations = declarations;
+      final lintDeclarations = declarations.lints ?? {};
       print('number of lint configurations: ${lintDeclarations.length}');
-      for (var lintDeclaration in lintDeclarations) {
+      for (var lintDeclaration in lintDeclarations.values) {
         print(
             'lint id: ${lintDeclaration.id} || lint className (from ext.): ${lintDeclaration.className} || lint config: ${lintDeclaration.configuration}');
       }
