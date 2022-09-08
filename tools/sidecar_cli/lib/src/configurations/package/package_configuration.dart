@@ -1,6 +1,6 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:recase/recase.dart';
-import 'package:sidecar_cli/src/configurations/plugin/edit_declaration.dart';
+import 'package:sidecar_cli/src/configurations/package/edit_declaration.dart';
 
 import 'lint_declaration.dart';
 

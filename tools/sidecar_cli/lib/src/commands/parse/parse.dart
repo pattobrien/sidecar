@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_cli/sidecar_cli.dart';
-import 'package:sidecar_cli/src/configurations/plugin/lint_declaration.dart';
+import 'package:sidecar_cli/src/configurations/package/lint_declaration.dart';
 import 'package:sidecar_cli/src/utilities/package_parse_utils.dart';
 
 import '../exit_codes.dart';
@@ -23,14 +23,15 @@ class ParseCommand extends Command<int> {
     try {
       print('project directory: ${Directory.current}');
 
-      final declarations = await ProjectUtilities.getSidecarConfiguration(
+      final projectConfiguration =
+          await ProjectUtilities.getSidecarConfiguration(
         Directory.current.uri,
       );
-      final lintDeclarations = declarations.lints ?? {};
+      final lintDeclarations = projectConfiguration.lintPackages ?? {};
       print('number of lint configurations: ${lintDeclarations.length}');
       for (var lintDeclaration in lintDeclarations.values) {
         print(
-            'lint id: ${lintDeclaration.id} || lint className (from ext.): ${lintDeclaration.className} || lint config: ${lintDeclaration.configuration}');
+            'lint package: ${lintDeclaration.packageName} || # of package lints: ${lintDeclaration.lints.length} || first lint: ${lintDeclaration.lints.entries.first.value.lintId}');
       }
       return ExitCode.success;
     } catch (e) {

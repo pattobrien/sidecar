@@ -4,8 +4,8 @@ import 'package:checked_yaml/checked_yaml.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:recase/recase.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_cli/src/configurations/plugin/lint_declaration.dart';
-import 'package:sidecar_cli/src/configurations/plugin/package_configuration.dart';
+import 'package:sidecar_cli/src/configurations/package/lint_declaration.dart';
+import 'package:sidecar_cli/src/configurations/package/package_configuration.dart';
 
 const analysisOptionsFileName = 'analysis_options.yaml';
 
