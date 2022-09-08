@@ -11,12 +11,21 @@ class SomeWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
-    return TextFormField(
-      controller: ref.watch(myTextControllerProvider),
+    final someString2 = someString;
+    return Column(
+      children: [
+        TextFormField(
+          controller: TextEditingController(),
+        ),
+        Text('some declaration'),
+        Text(someString),
+        Text(someString2),
+      ],
     );
   }
 }
-
-final myTextControllerProvider = ChangeNotifierProvider((ref) {
-  return TextEditingController();
-});
+// node: ArgumentListImpl || parent: InstanceCreationExpressionImpl || parent.parent: ReturnStatementImpl || parent.parent.parent: BlockImpl
+// node: LabelImpl || parent: NamedExpressionImpl || parent.parent: ArgumentListImpl || parent.parent.parent: InstanceCreationExpressionImpl
+// node => parents: VariableDeclarationListImpl => VariableDeclarationStatementImpl => BlockImpl => BlockFunctionBodyImpl
+// node => parents: SimpleStringLiteralImpl => ArgumentListImpl => InstanceCreationExpressionImpl => ListLiteralImpl
+// node => parents: SimpleStringLiteralImpl => VariableDeclarationImpl => VariableDeclarationListImpl => VariableDeclarationStatementImpl

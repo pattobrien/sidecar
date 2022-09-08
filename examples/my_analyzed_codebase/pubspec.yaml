@@ -8,12 +8,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_riverpod: ^2.0.0-dev.9
   path: ^1.8.0
 
 dev_dependencies:
+  intl: ^0.17.0
   lints: ^2.0.0
-  sidecar_analyzer_plugin: 
+  sidecar_analyzer_plugin:
     hosted:
       url: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
       name: sidecar_analyzer_plugin
@@ -26,3 +29,4 @@ dependency_overrides:
 
 flutter:
   uses-material-design: true
+  generate: true

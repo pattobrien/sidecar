@@ -39,7 +39,7 @@ class ProjectService {
     if (!analysisOptionsFile.existsSync()) {
       await analysisOptionsFile.writeAsString(analysisDefaultContents);
     } else {
-      //
+      //TODO: check if sidecar is setup under analyzer.plugins, and if not add it in
     }
   }
 

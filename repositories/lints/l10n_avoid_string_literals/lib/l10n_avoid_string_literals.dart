@@ -28,50 +28,70 @@ class L10nAvoidStringLiterals extends LintError {
     final unit = reportedLintError.sourceUnit;
     final stringNode = reportedLintError.reportedNode;
 
-    final arbClassPrefix = 'AppLocalizations.of(context)';
+    final changeBuilder = ChangeBuilder(session: unit.session);
 
-    final stringElement = stringNode.toElement(unit);
+    final flutterLocalizationsGenUri = Uri(
+      scheme: 'package',
+      path: 'flutter_gen/gen_l10n/app_localizations.dart',
+    );
+
+    final computedStringId = 'string123';
+
+    final arbClassPrefix = 'AppLocalizations.of(context).$computedStringId';
+
     final references = <SourceSpan>[];
-    if (stringNode.parent is VariableDeclaration && stringElement != null) {
-      final analysisUtils = ref.read(analysisContextUtilitiesProvider);
-      final refs = await analysisUtils.getReferences(unit, stringElement);
-      references.addAll(refs);
+    final parentNode = stringNode.parent;
+    if (parentNode is VariableDeclaration) {
+      final element = parentNode.declaredElement2;
+      if (element != null) {
+        final analysisUtils = ref.read(analysisContextUtilitiesProvider);
+        final refs = await analysisUtils.getReferences(unit, element);
+        references.addAll(refs);
+      }
     }
 
-    final changeBuilder = ChangeBuilder(session: unit.session);
-    await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
-      final l10nUri = Uri(
-        scheme: 'package',
-        path: 'localizations/localizations.dart',
-      );
+    // we dont want to replace a string if not every variable reference
+    // will have access to it
+    final areAllReferencesWithinBuildMethods = references.every((reference) {
+      final node = reference.toAstNode(unit);
+      return node!.isInsideBuildMethod();
+    });
 
-      fileBuilder.importLibraryElement(l10nUri);
-
-      if (stringNode.parent is VariableDeclaration) {
-        fileBuilder.addDeletion(
-          stringNode.parent!.toSourceSpan(unit).toSourceRange(),
+    if (areAllReferencesWithinBuildMethods && references.isNotEmpty) {
+      final expression = stringNode.parent?.parent?.parent;
+      await changeBuilder.addDartFileEdit(unit.path, (builder) {
+        builder.importLibraryElement(flutterLocalizationsGenUri);
+        builder.addDeletion(
+          expression!.toSourceSpan(unit).toSourceRange(),
         );
-      } else {
+      });
+
+      await Future.wait(references.map((reference) async {
+        final node = reference.toAstNode(unit);
+        if (node!.isInsideBuildMethod()) {
+          await changeBuilder.addDartFileEdit(
+            reference.sourceUrl!.path,
+            (fileBuilder) => fileBuilder.addReplacement(
+              reference.toSourceRange(),
+              (editBuilder) => editBuilder.write(arbClassPrefix),
+            ),
+          );
+        }
+      }));
+    }
+
+    if (parentNode is ArgumentList) {
+      await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
         if (stringNode.isInsideBuildMethod()) {
+          fileBuilder.importLibraryElement(flutterLocalizationsGenUri);
           fileBuilder.addReplacement(
             stringNode.toSourceRange(unit),
             (editBuilder) => editBuilder.write(arbClassPrefix),
           );
+        } else {
+          // offer no quick fix
         }
-      }
-    });
-
-    for (final reference in references) {
-      final node = reference.toAstNode(unit);
-      if (node!.isInsideBuildMethod()) {
-        await changeBuilder.addDartFileEdit(
-          reference.sourceUrl!.path,
-          (fileBuilder) => fileBuilder.addReplacement(
-            reference.toSourceRange(),
-            (editBuilder) => editBuilder.write(arbClassPrefix),
-          ),
-        );
-      }
+      });
     }
 
     final errorFixes = [
