@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:sidecar_cli/sidecar_cli.dart';
+import 'package:sidecar_cli/src/configurations/plugin/edit_declaration.dart';
 import 'package:sidecar_cli/src/configurations/plugin/lint_declaration.dart';
 import 'package:sidecar_cli/src/utilities/package_parse_utils.dart';
 
@@ -29,10 +30,17 @@ class PublishCommand extends Command<int> {
       );
       final lintDeclarations =
           declarations.lints?.values ?? <LintDeclaration>[];
+      final editDeclarations =
+          declarations.edits?.values ?? <EditDeclaration>[];
       print('number of lint declarations: ${lintDeclarations.length}');
       for (var lintDeclaration in lintDeclarations) {
         print(
             '${lintDeclaration.id} || ${lintDeclaration.className} || ${lintDeclaration.import}');
+      }
+      print('number of edit declarations: ${editDeclarations.length}');
+      for (var editDeclaration in editDeclarations) {
+        print(
+            '${editDeclaration.id} || ${editDeclaration.className} || ${editDeclaration.import}');
       }
       // final edits =
       //     await ConfigParseUtilities.parseEditConfig(Directory.current.uri);

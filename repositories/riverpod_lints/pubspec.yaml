@@ -34,3 +34,7 @@ sidecar:
     avoid_read_in_build_methods:
       class: AvoidReadInBuildMethods
       import: riverpod_lints/riverpod_lints.dart
+  edits:
+    some_edit:
+      class: PreferConsumerWidget
+      import: riverpod_lints/riverpod_lints.dart
