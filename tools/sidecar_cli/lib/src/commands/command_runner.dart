@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 import 'package:sidecar_cli/src/commands/init/init.dart';
+import 'package:sidecar_cli/src/commands/publish/publish.dart';
 import 'package:sidecar_cli/src/commands/rebuild/rebuild.dart';
 
 import 'exit_codes.dart';
@@ -12,6 +13,7 @@ class PlatformCommandRunner extends CommandRunner<int> {
     // All CLI commands are listed below
     addCommand(InitCommand());
     addCommand(RebuildCommand());
+    addCommand(PublishCommand());
   }
   @override
   Future<int> run(Iterable<String> args) async {

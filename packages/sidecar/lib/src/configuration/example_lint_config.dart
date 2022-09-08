@@ -9,11 +9,11 @@ class ExampleLintConfig {
     this.property2,
   });
 
-  final String? property1;
-  final String? property2;
-
   factory ExampleLintConfig.fromJson(Map<String, dynamic> json) =>
       _$ExampleLintConfigFromJson(json);
+
+  final String? property1;
+  final String? property2;
 
   Map<String, dynamic> toJson() => _$ExampleLintConfigToJson(this);
 }

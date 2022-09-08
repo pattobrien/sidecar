@@ -11,13 +11,7 @@ part 'project_configuration.g.dart';
 
 typedef PackageName = dynamic;
 
-@JsonSerializable(
-  anyMap: true,
-  // checked: true,
-  // disallowUnrecognizedKeys: true,
-  // explicitToJson: true,
-  // createToJson: false,
-)
+@JsonSerializable(anyMap: true)
 class ProjectConfiguration {
   const ProjectConfiguration({
     this.lints,
@@ -28,17 +22,6 @@ class ProjectConfiguration {
       'bin/**',
     ],
   });
-
-  @JsonKey(fromJson: lintConfigFromJson)
-  final Map<PackageName, LintConfiguration>? lints;
-
-  @JsonKey(fromJson: editConfigFromJson)
-  final Map<PackageName, EditConfiguration>? edits;
-
-  final List<String> includes;
-  // @JsonKey(fromJson: patternsToGlobs, toJson: globsToPatterns)
-  // final List<Glob> excludes;
-
   factory ProjectConfiguration.fromJson(Map json) =>
       _$ProjectConfigurationFromJson(json);
 
@@ -49,6 +32,17 @@ class ProjectConfiguration {
           ProjectConfiguration.fromJson(m!['sidecar'] as Map<dynamic, dynamic>),
     );
   }
+
+  @JsonKey(fromJson: lintConfigFromJson)
+  final Map<PackageName, LintConfiguration>? lints;
+
+  @JsonKey(fromJson: editConfigFromJson)
+  final Map<PackageName, EditConfiguration>? edits;
+
+  final List<String> includes;
+
+  // @JsonKey(fromJson: patternsToGlobs, toJson: globsToPatterns)
+  // final List<Glob> excludes;
 
   // Map<String, dynamic> toJson() => _$ProjectConfigurationToJson(this);
 }
