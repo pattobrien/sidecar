@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:recase/recase.dart';
 
 part 'edit_configuration.g.dart';
 
@@ -18,4 +19,9 @@ class EditConfiguration {
 
   factory EditConfiguration.fromJson(Map<String, dynamic> json) =>
       _$EditConfigurationFromJson(json);
+}
+
+extension EditConfigurationX on EditConfiguration {
+  String get filePath => '$editId.dart';
+  String get className => ReCase(editId).pascalCase;
 }

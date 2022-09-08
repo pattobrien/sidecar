@@ -254,8 +254,8 @@ class ProjectService {
 
     String pubspecContent = await pluginPubspecFile.readAsString();
     final pubspec = Pubspec.parse(pubspecContent); //TODO: set lenient = true
-    await Future.wait(lints.map((lintId) async {
-      if (!pubspec.dependencies.containsKey(lintId.className)) {
+    await Future.wait(lints.map((lintConfiguration) async {
+      if (!pubspec.dependencies.containsKey(lintConfiguration.className)) {
         final isFlutterProject =
             await PubspecUtilities.isFlutterProject(projectDirectory.path);
         final process = await io.Process.start(
@@ -265,7 +265,7 @@ class ProjectService {
             'add',
             '--hosted-url',
             'https://micropub-3qduh.ondigitalocean.app/',
-            lintId.id,
+            lintConfiguration.lintId,
           ],
           workingDirectory: pluginPubspecFile.parent.path,
         );
@@ -303,8 +303,8 @@ class ProjectService {
 
     String pubspecContent = await pluginPubspecFile.readAsString();
     final pubspec = Pubspec.parse(pubspecContent);
-    await Future.wait(edits.map((edit) async {
-      if (!pubspec.dependencies.containsKey(edit.id)) {
+    await Future.wait(edits.map((editConfiguration) async {
+      if (!pubspec.dependencies.containsKey(editConfiguration.editId)) {
         final isFlutterProject =
             await PubspecUtilities.isFlutterProject(projectDirectory.path);
         final process = await io.Process.start(
@@ -314,7 +314,7 @@ class ProjectService {
             'add',
             '--hosted-url',
             'https://micropub-3qduh.ondigitalocean.app/',
-            edit.id,
+            editConfiguration.editId,
           ],
           workingDirectory: pluginPubspecFile.parent.path,
         );
@@ -334,7 +334,8 @@ class ProjectService {
 
     for (final lint in lints) {
       // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
-      importBuffer.write('import \'package:${lint.id}/${lint.filePath}\'; \n');
+      importBuffer
+          .write('import \'package:${lint.lintId}/${lint.filePath}\'; \n');
       returnBuffer
         ..write('\t\t')
         ..write(lint.className)
@@ -360,7 +361,8 @@ class ProjectService {
 
     for (final edit in edits) {
       // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
-      importBuffer.write('import \'package:${edit.id}/${edit.filePath}\'; \n');
+      importBuffer
+          .write('import \'package:${edit.editId}/${edit.filePath}\'; \n');
       returnBuffer
         ..write('\t\t')
         ..write(edit.className)

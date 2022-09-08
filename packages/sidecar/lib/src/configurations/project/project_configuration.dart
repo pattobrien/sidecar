@@ -1,8 +1,8 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:sidecar_cli/src/configurations/package/package_configuration.dart';
-import 'package:sidecar_cli/src/configurations/project/edit_package_configuration.dart';
-import 'package:sidecar_cli/src/configurations/project/lint_package_configuration.dart';
+import '../package/package_configuration.dart';
+import 'edit_package_configuration.dart';
+import 'lint_package_configuration.dart';
 
 // final myLintConfig = projectConfig.lintPackages['riverpod_lints'].lints['prefer_consumer_widget'];
 
@@ -10,7 +10,6 @@ class ProjectConfiguration {
   const ProjectConfiguration({
     this.lintPackages,
     this.editPackages,
-    // required this.packageName,
   });
 
   factory ProjectConfiguration.parse(
@@ -39,9 +38,10 @@ typedef PackageName = String;
 Map<PackageName, LintPackageConfiguration>? parseLintPackageConfigurations(
   Map? map,
 ) {
-  return map?.map((key, value) {
+  return map?.map((dynamic key, dynamic value) {
     if (value is Map) {
-      final config = LintPackageConfiguration.fromJson(value, packageName: key);
+      final config =
+          LintPackageConfiguration.fromJson(value, packageName: key as String);
       return MapEntry(key, config);
     } else {
       // we want to throw an error if the package doesnt have a single lint declared
@@ -54,9 +54,10 @@ Map<PackageName, LintPackageConfiguration>? parseLintPackageConfigurations(
 Map<PackageName, EditPackageConfiguration>? parseEditPackageConfigurations(
   Map? map,
 ) {
-  return map?.map((key, value) {
+  return map?.map((dynamic key, dynamic value) {
     if (value is Map) {
-      final config = EditPackageConfiguration.fromJson(value, packageName: key);
+      final config =
+          EditPackageConfiguration.fromJson(value, packageName: key as String);
       return MapEntry(key, config);
     } else {
       // we want to throw an error if the package doesnt have a single lint declared

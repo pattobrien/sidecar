@@ -1,7 +1,7 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:recase/recase.dart';
-import 'package:sidecar_cli/src/configurations/package/edit_declaration.dart';
 
+import 'edit_declaration.dart';
 import 'lint_declaration.dart';
 
 class PackageConfiguration {
@@ -68,10 +68,11 @@ Map<LintName, LintDeclaration>? lintConfigFromJson(
         LintDeclaration(
           id: key,
           import: value.containsKey('import')
-              ? Uri(scheme: 'package', path: value['import'])
+              ? Uri(scheme: 'package', path: value['import'] as String)
               : defaultImportUri,
-          className:
-              value.containsKey('class') ? value['class'] : defaultClassName,
+          className: value.containsKey('class')
+              ? value['class'] as String
+              : defaultClassName,
           package: packageName,
         ),
       );
@@ -113,10 +114,11 @@ Map<EditName, EditDeclaration>? editConfigFromJson(
         EditDeclaration(
           id: key,
           import: value.containsKey('import')
-              ? Uri(scheme: 'package', path: value['import'])
+              ? Uri(scheme: 'package', path: value['import'] as String)
               : defaultImportUri,
-          className:
-              value.containsKey('class') ? value['class'] : defaultClassName,
+          className: value.containsKey('class')
+              ? value['class'] as String
+              : defaultClassName,
           package: packageName,
         ),
       );

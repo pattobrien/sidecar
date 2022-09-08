@@ -13,9 +13,7 @@ import 'package:source_span/source_span.dart';
 
 import 'package:path/path.dart' as p;
 
-import '../configuration/project_configuration.dart';
-import '../configuration/default_configuration.dart';
-
+import '../configurations/project/project_configuration.dart';
 import 'logger_utilities.dart';
 import 'ast_utilities.dart';
 
@@ -69,16 +67,12 @@ extension AnalysisContextX on AnalysisContext {
     if (optionsFile != null) {
       final contents = optionsFile.readAsStringSync();
       try {
-        return checkedYamlDecode(
-          contents,
-          (m) => ProjectConfiguration.fromJson(m!['sidecar'] as Map),
-          sourceUrl: optionsFile.toUri(),
-        );
+        return ProjectConfiguration.parse(contents);
       } catch (e) {
         rethrow;
       }
     } else {
-      return defaultPluginConfiguration;
+      return const ProjectConfiguration();
     }
   }
 

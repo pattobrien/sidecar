@@ -4,8 +4,7 @@ import 'package:checked_yaml/checked_yaml.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:recase/recase.dart';
 
-import '../configurations/project/project_configuration.dart';
-import 'package:sidecar/sidecar.dart' hide ProjectConfiguration;
+import 'package:sidecar/sidecar.dart';
 
 const analysisOptionsFileName = 'analysis_options.yaml';
 
@@ -36,14 +35,4 @@ class ProjectUtilities {
       );
     }
   }
-}
-
-extension LintConfigurationX on LintConfiguration {
-  String get filePath => '$id.dart';
-  String get className => ReCase(id).pascalCase;
-}
-
-extension EditConfigurationX on EditConfiguration {
-  String get filePath => '$id.dart';
-  String get className => ReCase(id).pascalCase;
 }

@@ -4,8 +4,6 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_cli/sidecar_cli.dart';
-import 'package:sidecar_cli/src/configurations/package/lint_declaration.dart';
-import 'package:sidecar_cli/src/utilities/package_parse_utils.dart';
 
 import '../exit_codes.dart';
 

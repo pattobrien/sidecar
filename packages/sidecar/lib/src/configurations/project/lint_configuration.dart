@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:recase/recase.dart';
 
 part 'lint_configuration.g.dart';
 
@@ -18,4 +19,9 @@ class LintConfiguration {
 
   factory LintConfiguration.fromJson(Map<String, dynamic> json) =>
       _$LintConfigurationFromJson(json);
+}
+
+extension LintConfigurationX on LintConfiguration {
+  String get filePath => '$lintId.dart';
+  String get className => ReCase(lintId).pascalCase;
 }
