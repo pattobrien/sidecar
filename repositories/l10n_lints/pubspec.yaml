@@ -1,8 +1,7 @@
-name: l10n_avoid_string_literals
+name: l10n_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.2
+version: 0.1.0-dev.1
 publish_to: https://micropub-3qduh.ondigitalocean.app/
-homepage: https://www.example.com
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
@@ -26,5 +25,7 @@ dev_dependencies:
 micropub: sidecar
 
 sidecar:
-  namespace: l10n
-  type: lint
+  lints:
+    avoid_string_literals:
+      class: AvoidStringLiterals
+      import: l10n_lints/l10n_lints.dart

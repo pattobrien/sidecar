@@ -3,11 +3,11 @@
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 
-class L10nAvoidStringLiterals extends LintError {
-  L10nAvoidStringLiterals(super.ref);
+class AvoidStringLiterals extends LintError {
+  AvoidStringLiterals(super.ref);
 
   @override
-  String get code => 'l10n_avoid_string_literals';
+  String get code => 'avoid_string_literals';
 
   @override
   String get message => '\${STRING} should be extracted to an ARB or ENV file.';

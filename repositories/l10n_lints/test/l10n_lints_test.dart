@@ -1,4 +1,4 @@
-// import 'package:l10n_avoid_string_literals/l10n_avoid_string_literals.dart';
+// import 'package:l10n_lints/l10n_lints.dart';
 // import 'package:test/test.dart';
 
 // void main() {

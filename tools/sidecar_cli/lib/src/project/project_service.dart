@@ -346,7 +346,6 @@ class ProjectService {
 
     for (final editPackage in editPackages) {
       for (final edit in editPackage.edits.values) {
-        // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
         importBuffer.write('import \'package:${edit.filePath}\'; \n');
         returnBuffer
           ..write('\t\t')

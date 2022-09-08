@@ -19,11 +19,11 @@ sidecar:
         enabled: true
         configuration:
           aaaaa: 11111
-    # l10n:
-    #   avoid_string_literals:
-    #     enabled: true
-    #     configuration:
-    #       abc: 123
+    l10n_lints:
+      avoid_string_literals:
+        enabled: true
+        configuration:
+          prefix: AppLocalizations.of(context)
   # edits:
   #   riverpod:
   #     create_text_edit_controller_provider:
