@@ -44,6 +44,9 @@ class PreferConsumerWidget extends LintError {
     final unit = reportedLintError.sourceUnit;
     final lintedNode = reportedLintError.reportedNode;
 
+    final context = unit.session.analysisContext;
+    final config = context.sidecarOptions.lints?[code]?.configuration;
+
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
       fileBuilder.importLibraryElement(uriFlutterRiverpod);
@@ -66,6 +69,10 @@ class PreferConsumerWidget extends LintError {
             (builder) => builder.write(', WidgetRef ref'),
           );
         }
+        fileBuilder.addInsertion(
+          0,
+          (builder) => builder.write('// config: $config'),
+        );
       }
     });
 

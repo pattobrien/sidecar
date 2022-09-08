@@ -1,3 +1,4 @@
+//
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,6 +34,3 @@ class MyWidget extends StatelessWidget {
     return Text('');
   }
 }
-// my map: {enabled: true, another: abc123, nested: [123]}
-// node => parents: CompilationUnitImpl => Null => null => null// my map: {enabled: true, another: abc123, nested: [123]}
-// node => parents: CompilationUnitImpl => Null => null => null
