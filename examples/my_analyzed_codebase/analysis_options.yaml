@@ -39,9 +39,12 @@ sidecar:
         enabled: true
         configuration:
           abc: 123
-  # edits:
-  #   create_text_edit_controller_provider:
-  #     enabled: true
-  #     another: abc123
-  #     nested:
-  #       - 123
+  edits:
+    riverpod:
+      create_text_edit_controller_provider:
+        enabled: true
+        configuration:
+          nested_value:
+            - 123
+          something:
+            abc: 123

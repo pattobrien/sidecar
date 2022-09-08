@@ -33,6 +33,12 @@ class ParseCommand extends Command<int> {
         print(
             'lint package: ${lintDeclaration.packageName} || # of package lints: ${lintDeclaration.lints.length} || first lint: ${lintDeclaration.lints.entries.first.value.lintId}');
       }
+      final editDeclarations = projectConfiguration.editPackages ?? {};
+      print('number of edit configurations: ${editDeclarations.length}');
+      for (var editDeclaration in editDeclarations.values) {
+        print(
+            'edit package: ${editDeclaration.packageName} || # of package edits: ${editDeclaration.lints.length} || first edit: ${editDeclaration.lints.entries.first.value.editId}');
+      }
       return ExitCode.success;
     } catch (e) {
       print('COMMAND RUNNER ERROR: $e');
