@@ -1,6 +1,6 @@
 name: sidecar_analyzer_plugin
 description: Analyzer plugin for the sidecar ecocsystem.
-version: 0.1.0-dev.16
+version: 0.1.0-dev.18
 publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
 # publish_to: none
 repository: https://github.com/pattobrien/sidecar/
@@ -19,7 +19,7 @@ dependencies:
   riverpod: ^2.0.0-dev.9
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.0-dev.16
+    version: ^0.1.0-dev.18
   source_span: ^1.8.0
   yaml: ^3.1.1
 

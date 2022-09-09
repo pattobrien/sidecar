@@ -4,10 +4,13 @@ import 'dart:io';
 
 import 'package:sidecar/sidecar.dart';
 import 'package:auto_route_utilities/auto_route_utilities.dart';
-import 'package:analyzer_plugin/src/utilities/change_builder/change_builder_core.dart';
+import 'package:path/path.dart' as p;
 
 class CreateNewPageWidget extends CodeEdit {
   CreateNewPageWidget(super.ref);
+
+  @override
+  String get code => 'create_new_page_widget';
 
   @override
   String get message => 'TODO: insert a message here';
@@ -16,21 +19,33 @@ class CreateNewPageWidget extends CodeEdit {
   Future<PrioritizedSourceChange> computeSourceChange(
     RequestedCodeEdit requestedCodeEdit,
   ) async {
-    // inputs
-    final file = File(
-        '/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/lib/routes/routes.dart');
-    final pageClass = 'MyNewPage';
-
     // prepare change builder
-    final session = requestedCodeEdit.sourceUnit.session;
-    final changeBuilder = AutoRouteChangeBuilder(session: session);
-    // compute changes
-    await changeBuilder.addAutoRouteFileEdit(file.path, (builder) {
-      builder.addRouteInsertion(null, (builder) {
-        builder.writeAdaptiveRoute(pageClass);
-      });
-    });
+    final unit = requestedCodeEdit.sourceUnit;
+    final changeBuilder = AutoRouteChangeBuilder(session: unit.session);
 
+    final configuration = unit.session.analysisContext.sidecarOptions
+        .editPackages?['auto_route_lints']?.edits[code]?.configuration;
+
+    final path = configuration?['route_path'];
+
+    if (path != null) {
+      final node =
+          requestedCodeEdit.sourceNode.thisOrAncestorOfType<ClassDeclaration>();
+
+      final pageClass = node?.name2.value().toString();
+
+      if (node != null && pageClass != null) {
+        final workspacePath = unit.session.analysisContext.contextRoot.root
+            .canonicalizePath(path);
+        // compute changes
+        await changeBuilder.addAutoRouteFileEdit(workspacePath, (builder) {
+          builder.importLibrary(unit.uri);
+          builder.addRouteInsertion(null, (builder) {
+            builder.writeAdaptiveRoute(pageClass);
+          });
+        });
+      }
+    }
     return PrioritizedSourceChange(
       0,
       changeBuilder.sourceChange..message = 'Add new AdaptiveRoute',

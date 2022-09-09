@@ -45,7 +45,8 @@ class PreferConsumerWidget extends LintError {
     final lintedNode = reportedLintError.reportedNode;
 
     final context = unit.session.analysisContext;
-    final config = context.sidecarOptions.lints?[code]?.configuration;
+    final config = context.sidecarOptions.lintPackages?['riverpod_lints']
+        ?.lints[code]?.configuration;
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {

@@ -1,13 +1,10 @@
 import 'edit_configuration.dart';
-import 'lint_configuration.dart';
 
 class EditPackageConfiguration {
   const EditPackageConfiguration({
     required this.packageName,
     required this.edits,
   });
-  final String packageName;
-  final Map<String, EditConfiguration> edits;
 
   factory EditPackageConfiguration.fromJson(
     Map json, {
@@ -31,6 +28,6 @@ class EditPackageConfiguration {
       }),
     );
   }
+  final String packageName;
+  final Map<String, EditConfiguration> edits;
 }
-
-// typedef EditName = String;

@@ -10,6 +10,7 @@ import 'requested_code_edit.dart';
 abstract class CodeEdit {
   CodeEdit(this.ref);
 
+  String get code;
   String get message;
   Map<dynamic, dynamic> get yamlConfig => <dynamic, dynamic>{};
 

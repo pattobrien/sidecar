@@ -26,8 +26,8 @@ class SomePage extends ConsumerWidget {
   }
 }
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({Key? key}) : super(key: key);
+class MyNewPage extends StatelessWidget {
+  const MyNewPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

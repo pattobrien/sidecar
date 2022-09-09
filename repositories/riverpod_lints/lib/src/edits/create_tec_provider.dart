@@ -6,6 +6,9 @@ class CreateTextEditControllerProvider extends CodeEdit {
   CreateTextEditControllerProvider(super.ref);
 
   @override
+  String get code => 'create_text_edit_controller_provider';
+
+  @override
   String get message => 'Declare a TextEditingController provider';
 
   @override
@@ -15,8 +18,11 @@ class CreateTextEditControllerProvider extends CodeEdit {
     final session = requestedCodeEdit.sourceUnit.session;
     final unit = requestedCodeEdit.sourceUnit;
     final changeBuilder = ChangeBuilder(session: session);
-    final myConfig = session.analysisContext.sidecarOptions
-        .edits?['create_text_edit_controller_provider'];
+    final myConfig = session
+        .analysisContext
+        .sidecarOptions
+        .editPackages?['riverpod_lints']
+        ?.edits['create_text_edit_controller_provider'];
 
     final node = requestedCodeEdit.sourceNode;
     if (node.parent?.parent is NamedExpression) {

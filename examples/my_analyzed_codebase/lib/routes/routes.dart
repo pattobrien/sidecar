@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 
-import 'package:my_analyzed_codebase/my_analyzed_codebase.dart';
+import '../my_analyzed_codebase.dart';
 
 @AdaptiveAutoRouter(
   routes: [

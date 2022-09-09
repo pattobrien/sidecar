@@ -10,6 +10,7 @@ class ProjectConfiguration {
   const ProjectConfiguration({
     this.lintPackages,
     this.editPackages,
+    this.includes = const ['lib/**', 'bin/**'],
   });
 
   factory ProjectConfiguration.parse(
@@ -31,6 +32,7 @@ class ProjectConfiguration {
 
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
   final Map<PackageName, EditPackageConfiguration>? editPackages;
+  final List<String> includes;
 }
 
 typedef PackageName = String;

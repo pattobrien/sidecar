@@ -3,6 +3,7 @@ include: package:lints/recommended.yaml
 linter:
   rules:
     - camel_case_types
+    - prefer_relative_imports
 
 analyzer:
   plugins:
@@ -30,7 +31,7 @@ sidecar:
       create_new_page_widget:
         enabled: true
         configuration:
-          some_value: 123
+          route_path: lib/routes/routes.dart
     riverpod_lints:
       create_text_edit_controller_provider:
         enabled: true

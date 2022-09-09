@@ -5,8 +5,6 @@ class LintPackageConfiguration {
     required this.packageName,
     required this.lints,
   });
-  final String packageName;
-  final Map<String, LintConfiguration> lints;
 
   factory LintPackageConfiguration.fromJson(
     Map json, {
@@ -30,4 +28,6 @@ class LintPackageConfiguration {
       }),
     );
   }
+  final String packageName;
+  final Map<String, LintConfiguration> lints;
 }
