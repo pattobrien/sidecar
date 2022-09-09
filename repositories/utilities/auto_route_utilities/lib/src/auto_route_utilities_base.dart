@@ -2,7 +2,9 @@
 
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/session.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/exception/exception.dart';
+import 'package:analyzer/source/source_range.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/src/utilities/change_builder/change_builder_core.dart';
 import 'package:analyzer_plugin/src/utilities/change_builder/change_builder_dart.dart';
@@ -105,17 +107,31 @@ class AutoRouteFileEditBuilder extends DartFileEditBuilderImpl {
     void Function(AutoRouteEditBuilder builder) buildEdit, {
     bool insertBeforeExisting = false,
   }) {
-    //TODO:
-    // a) calculate the offset based on the given parent, or if parent = null then offset = last line within
+    final annotationName = 'AdaptiveAutoRouter';
+    final routeParameter = 'routes';
+    // calculate the offset based on the given parent, or if parent = null then offset = last line within
     // the @AdaptiveAutoRouter route array: routes: <AutoRoute>[]
-    // b) execute builder() and make the change
+    final offset = resolvedUnit.unit.declarations
+        .whereType<ClassDeclaration>()
+        .firstWhere((classDeclaration) => classDeclaration.metadata
+            .any((annotation) => annotation.name.name == annotationName))
+        .metadata
+        .firstWhere((annotation) => annotation.name.name == annotationName)
+        .arguments
+        ?.arguments
+        .whereType<NamedExpression>()
+        .firstWhere((exp) => exp.name.label.name == routeParameter)
+        .expression
+        .thisOrAncestorOfType<ListLiteral>()
+        ?.rightBracket
+        .offset;
 
-    // a) calculate offset
-    final someOffset = 0;
-
-    super.addInsertion(
-        someOffset, (builder) => buildEdit(builder as AutoRouteEditBuilder),
-        insertBeforeExisting: insertBeforeExisting);
+    if (offset != null) {
+      super.addInsertion(
+        offset,
+        (builder) => buildEdit(builder as AutoRouteEditBuilder),
+      );
+    }
   }
 
   AutoRouteEditBuilder createAutoRouteEditBuilder(int offset, int length) {

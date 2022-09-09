@@ -8,7 +8,7 @@ int calculate() {
   return 6 * 7;
 }
 
-class SomeWidget extends ConsumerWidget {
+class SomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
