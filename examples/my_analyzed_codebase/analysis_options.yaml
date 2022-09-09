@@ -24,12 +24,18 @@ sidecar:
         enabled: true
         configuration:
           prefix: AppLocalizations.of(context)
-  # edits:
-  #   riverpod:
-  #     create_text_edit_controller_provider:
-  #       enabled: true
-  #       configuration:
-  #         nested_value:
-  #           - 123
+
+  edits:
+    auto_route_lints:
+      create_new_page_widget:
+        enabled: true
+        configuration:
+          some_value: 123
+    riverpod_lints:
+      create_text_edit_controller_provider:
+        enabled: true
+        configuration:
+          nested_value:
+            - 123
   #         something:
   #           abc: 123
