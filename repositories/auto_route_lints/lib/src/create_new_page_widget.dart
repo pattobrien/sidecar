@@ -19,32 +19,21 @@ class CreateNewPageWidget extends CodeEdit {
     // inputs
     final file = File(
         '/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/lib/routes/routes.dart');
-    final exists = await file.exists();
     final pageClass = 'MyNewPage';
 
     // prepare change builder
     final session = requestedCodeEdit.sourceUnit.session;
     final changeBuilder = AutoRouteChangeBuilder(session: session);
-    // final changeBuilder = ChangeBuilder(session: session);
     // compute changes
-    // await changeBuilder.addDartFileEdit(file.path, (builder) {
-    //   builder.addInsertion(0, (builder) {
-    //     builder.writeln('// do something else');
-    //   });
-    // });
     await changeBuilder.addAutoRouteFileEdit(file.path, (builder) {
-      builder.addInsertion(0, (builder) {
-        builder.writeln('// auto route: do something else');
-      });
       builder.addRouteInsertion(null, (builder) {
-        builder.writeln('// auto route: do something else else');
-        builder.writeNewAdaptiveRoute(pageClass);
+        builder.writeAdaptiveRoute(pageClass);
       });
     });
 
     return PrioritizedSourceChange(
       0,
-      changeBuilder.sourceChange..message = 'Add new route',
+      changeBuilder.sourceChange..message = 'Add new AdaptiveRoute',
     );
   }
 }

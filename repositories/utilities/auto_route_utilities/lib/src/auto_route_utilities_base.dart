@@ -11,7 +11,7 @@ import 'package:analyzer_plugin/utilities/change_builder/change_builder_dart.dar
 class AutoRouteChangeBuilder extends ChangeBuilderImpl {
   AutoRouteChangeBuilder({AnalysisSession? session}) : super(session: session);
 
-  /// A map of absolute normalized path to generic file edit builders.
+  /// A map of absolute normalized path to auto route file edit builders.
   final Map<String, AutoRouteFileEditBuilder> _autoRouteFileEditBuilders = {};
 
   @override
@@ -92,21 +92,13 @@ class AutoRouteFileEditBuilder extends DartFileEditBuilderImpl {
     super.libraryChangeBuilder,
   );
 
-  @override
-  bool get hasEdits => super.hasEdits || librariesToImport.isNotEmpty;
+  // @override
+  // bool get hasEdits => super.hasEdits || librariesToImport.isNotEmpty;
 
   @override
   AutoRouteEditBuilder createEditBuilder(int offset, int length) {
     return AutoRouteEditBuilder(this, offset, length);
   }
-
-  @override
-  void addInsertion(
-          int offset, void Function(AutoRouteEditBuilder builder) buildEdit,
-          {bool insertBeforeExisting = false}) =>
-      super.addInsertion(
-          offset, (builder) => buildEdit(builder as AutoRouteEditBuilder),
-          insertBeforeExisting: insertBeforeExisting);
 
   void addRouteInsertion(
     String? parent,
@@ -120,25 +112,15 @@ class AutoRouteFileEditBuilder extends DartFileEditBuilderImpl {
 
     // a) calculate offset
     final someOffset = 0;
-    // b) execute change
-    // final editBuilder = createAutoRouteEditBuilder(someOffset, 0);
-    // buildFileEdit(editBuilder);
-    addInsertion(someOffset, (builder) => buildEdit(builder),
+
+    super.addInsertion(
+        someOffset, (builder) => buildEdit(builder as AutoRouteEditBuilder),
         insertBeforeExisting: insertBeforeExisting);
   }
 
   AutoRouteEditBuilder createAutoRouteEditBuilder(int offset, int length) {
     return AutoRouteEditBuilder(this, offset, length);
   }
-
-  /// Add the edit from the given [edit] to the edits associated with the
-  /// current file.
-  // void _addEdit(SourceEdit edit, {bool insertBeforeExisting = false}) {
-  //   fileEdit.add(edit, insertBeforeExisting: insertBeforeExisting);
-  //   var delta = _editDelta(edit);
-  //   changeBuilder._updatePositions(edit.offset, delta);
-  //   changeBuilder._lockedPositions.clear();
-  // }
 }
 
 class AutoRouteEditBuilder extends DartEditBuilderImpl {
@@ -146,30 +128,28 @@ class AutoRouteEditBuilder extends DartEditBuilderImpl {
       AutoRouteFileEditBuilder fileEditBuilder, int offset, int length)
       : super(fileEditBuilder, offset, length);
 
-  /// The buffer in which the content of the edit is being composed.
-  // final StringBuffer _buffer = StringBuffer();
-
   AutoRouteEditBuilder get autoRouteFileEditBuilder =>
       fileEditBuilder as AutoRouteEditBuilder;
 
-  /// Create and return an edit representing the replacement of a region of the
-  /// file with the accumulated text.
-  // @override
-  // SourceEdit get sourceEdit => SourceEdit(offset, length, _buffer.toString());
-
-  // /// If not `null`, [write] will copy everything into this buffer.
-  // StringBuffer? _carbonCopyBuffer;
-
-  void writeNewAdaptiveRoute(
+  void writeAdaptiveRoute(
     String pageClass, {
     bool initial = false,
   }) {
     writeln('AdaptiveRoute(page: $pageClass, initial: ${initial.toString()}),');
   }
 
-  // @override
-  // void write(String string) {
-  //   super.write(string);
-  //   _carbonCopyBuffer?.write(string);
-  // }
+  void writeCupertinoRoute(
+    String pageClass, {
+    bool initial = false,
+  }) {
+    writeln(
+        'CupertinoRoute(page: $pageClass, initial: ${initial.toString()}),');
+  }
+
+  void writeMaterialRoute(
+    String pageClass, {
+    bool initial = false,
+  }) {
+    writeln('MaterialRoute(page: $pageClass, initial: ${initial.toString()}),');
+  }
 }
