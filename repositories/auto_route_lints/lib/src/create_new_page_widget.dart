@@ -1,10 +1,5 @@
-// ignore_for_file: implementation_imports
-
-import 'dart:io';
-
 import 'package:sidecar/sidecar.dart';
 import 'package:auto_route_utilities/auto_route_utilities.dart';
-import 'package:path/path.dart' as p;
 
 class CreateNewPageWidget extends CodeEdit {
   CreateNewPageWidget(super.ref);
@@ -37,7 +32,7 @@ class CreateNewPageWidget extends CodeEdit {
       if (node != null && pageClass != null) {
         final workspacePath = unit.session.analysisContext.contextRoot.root
             .canonicalizePath(path);
-        // compute changes
+
         await changeBuilder.addAutoRouteFileEdit(workspacePath, (builder) {
           builder.importLibrary(unit.uri);
           builder.addRouteInsertion(null, (builder) {
