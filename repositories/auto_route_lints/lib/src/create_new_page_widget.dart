@@ -8,42 +8,57 @@ class CreateNewPageWidget extends CodeEdit {
   String get code => 'create_new_page_widget';
 
   @override
+  String get packageName => 'auto_route_lints';
+
+  @override
   String get message => 'TODO: insert a message here';
 
   @override
-  Future<PrioritizedSourceChange> computeSourceChange(
+  CreateNewPageWidgetConfiguration get configuration =>
+      super.configuration as CreateNewPageWidgetConfiguration;
+
+  @override
+  CreateNewPageWidgetConfiguration Function(Map json) get jsonDecoder =>
+      CreateNewPageWidgetConfiguration.fromJson;
+
+  @override
+  Future<PrioritizedSourceChange?> computeSourceChange(
     RequestedCodeEdit requestedCodeEdit,
   ) async {
     // prepare change builder
     final unit = requestedCodeEdit.sourceUnit;
     final changeBuilder = AutoRouteChangeBuilder(session: unit.session);
 
-    final configuration = unit.session.analysisContext.sidecarOptions
-        .editPackages?['auto_route_lints']?.edits[code]?.configuration;
+    final node =
+        requestedCodeEdit.sourceNode.thisOrAncestorOfType<ClassDeclaration>();
 
-    final path = configuration?['route_path'];
+    final pageClass = node?.name2.value().toString();
 
-    if (path != null) {
-      final node =
-          requestedCodeEdit.sourceNode.thisOrAncestorOfType<ClassDeclaration>();
+    if (node == null || pageClass == null) return null;
 
-      final pageClass = node?.name2.value().toString();
+    final workspacePath = unit.session.analysisContext.contextRoot.root
+        .canonicalizePath(configuration.routePath);
 
-      if (node != null && pageClass != null) {
-        final workspacePath = unit.session.analysisContext.contextRoot.root
-            .canonicalizePath(path);
+    await changeBuilder.addAutoRouteFileEdit(workspacePath, (builder) {
+      builder.importLibrary(unit.uri);
+      builder.addRouteInsertion(null, (builder) {
+        builder.writeAdaptiveRoute(pageClass);
+      });
+    });
 
-        await changeBuilder.addAutoRouteFileEdit(workspacePath, (builder) {
-          builder.importLibrary(unit.uri);
-          builder.addRouteInsertion(null, (builder) {
-            builder.writeAdaptiveRoute(pageClass);
-          });
-        });
-      }
-    }
     return PrioritizedSourceChange(
       0,
       changeBuilder.sourceChange..message = 'Add new AdaptiveRoute',
     );
+  }
+}
+
+class CreateNewPageWidgetConfiguration {
+  const CreateNewPageWidgetConfiguration({required this.routePath});
+
+  final String routePath;
+
+  factory CreateNewPageWidgetConfiguration.fromJson(Map json) {
+    return CreateNewPageWidgetConfiguration(routePath: json['route_path']);
   }
 }

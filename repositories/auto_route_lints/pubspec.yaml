@@ -13,7 +13,7 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.0-dev.18
+    version: ^0.1.0-dev.19
   source_span: ^1.9.1
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
@@ -31,6 +31,3 @@ sidecar:
     create_new_page_widget:
       class: CreateNewPageWidget
       import: auto_route_lints/auto_route_lints.dart
-# dependency_overrides:
-#   sidecar:
-#     path: /Users/pattobrien/Development/sidecar/packages/sidecar

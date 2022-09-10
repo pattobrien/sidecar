@@ -1,6 +1,6 @@
 name: sidecar_analyzer_plugin_loader
 description: This pubspec determines the version of the analyzer plugin to load.
-version: 0.1.0-dev.18
+version: 0.1.0-dev.19
 publish_to: none
 
 environment:
@@ -9,6 +9,6 @@ environment:
 dependencies:
   sidecar_analyzer_plugin:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
-    version: ^0.1.0-dev.18
+    version: ^0.1.0-dev.19
   # sidecar_analyzer_plugin:
   #   path: ../../

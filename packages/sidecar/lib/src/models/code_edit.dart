@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:riverpod/riverpod.dart';
 
@@ -11,17 +14,35 @@ abstract class CodeEdit {
   CodeEdit(this.ref);
 
   String get code;
+  String get packageName;
   String get message;
-  Map<dynamic, dynamic> get yamlConfig => <dynamic, dynamic>{};
 
+  @mustCallSuper
+  Object get configuration => _configuration;
+
+  Object Function(Map json) get jsonDecoder => (json) => <dynamic, dynamic>{};
+
+  @internal
   final ProviderContainer ref;
 
-  late ICodeEditReporter reporter;
+  late ICodeEditReporter _reporter;
+  late Object _configuration;
 
-  Future<plugin.PrioritizedSourceChange> computeSourceChange(
-      RequestedCodeEdit requestedCodeEdit);
+  void initialize({
+    required Map? configurationContent,
+    required ICodeEditReporter reporter,
+  }) {
+    if (configurationContent != null) {
+      _configuration = jsonDecoder(configurationContent);
+    }
+    _reporter = reporter;
+  }
+
+  Future<plugin.PrioritizedSourceChange?> computeSourceChange(
+    RequestedCodeEdit requestedCodeEdit,
+  );
 
   void generateReport(AstNode? node) {
-    if (node != null) reporter.reportEdit(node, this);
+    if (node != null) _reporter.reportEdit(node, this);
   }
 }

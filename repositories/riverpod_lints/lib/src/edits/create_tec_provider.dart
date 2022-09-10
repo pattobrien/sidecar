@@ -9,6 +9,9 @@ class CreateTextEditControllerProvider extends CodeEdit {
   String get code => 'create_text_edit_controller_provider';
 
   @override
+  String get packageName => 'riverpod_lints';
+
+  @override
   String get message => 'Declare a TextEditingController provider';
 
   @override
