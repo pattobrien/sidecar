@@ -1,6 +1,7 @@
 import 'package:sidecar/sidecar.dart';
 
-abstract class FlutterTypeCheckers {
+class WidgetsTypeChecker {
+  const WidgetsTypeChecker();
   static const widget = TypeChecker.fromName('Widget', packageName: 'flutter');
 
   static const statelessWidget =
@@ -12,3 +13,17 @@ abstract class FlutterTypeCheckers {
   static const widgetState =
       TypeChecker.fromName('State', packageName: 'flutter');
 }
+
+class MaterialTypeChecker {
+  const MaterialTypeChecker();
+  static const color = TypeChecker.fromName('Color', packageName: 'flutter');
+}
+
+class FlutterTypeChecker {
+  const FlutterTypeChecker();
+
+  WidgetsTypeChecker get widgets => WidgetsTypeChecker();
+  MaterialTypeChecker get material => MaterialTypeChecker();
+}
+
+const flutterTypeChecker = FlutterTypeChecker();

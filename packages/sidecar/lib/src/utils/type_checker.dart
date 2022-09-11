@@ -39,6 +39,7 @@ abstract class TypeChecker {
   /// Create a new [TypeChecker] backed by a static [type].
   // const factory TypeChecker.fromStatic(DartType type) = _LibraryTypeChecker;
 
+  /// Create a new [TypeChecker]
   const factory TypeChecker.fromName(
     String name, {
     required String packageName,

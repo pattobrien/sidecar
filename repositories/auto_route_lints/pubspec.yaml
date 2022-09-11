@@ -14,11 +14,11 @@ dependencies:
   collection: ^1.16.0
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
-    version: ^0.1.0
+    version: ^0.1.1
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.0-dev.20
+    version: ^0.1.0-dev.21
   source_span: ^1.9.1
 
 dev_dependencies:
