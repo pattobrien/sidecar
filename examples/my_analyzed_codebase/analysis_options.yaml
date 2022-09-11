@@ -3,6 +3,7 @@ include: package:lints/recommended.yaml
 linter:
   rules:
     - camel_case_types
+    - prefer_relative_imports
 
 analyzer:
   plugins:
@@ -24,12 +25,18 @@ sidecar:
         enabled: true
         configuration:
           prefix: AppLocalizations.of(context)
-  # edits:
-  #   riverpod:
-  #     create_text_edit_controller_provider:
-  #       enabled: true
-  #       configuration:
-  #         nested_value:
-  #           - 123
+
+  edits:
+    auto_route_lints:
+      create_new_page_widget:
+        enabled: true
+        configuration:
+          route_path: lib/routes/routes.dart
+    riverpod_lints:
+      create_text_edit_controller_provider:
+        enabled: true
+        configuration:
+          nested_value:
+            - 123
   #         something:
   #           abc: 123

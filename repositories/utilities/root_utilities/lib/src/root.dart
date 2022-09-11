@@ -11,6 +11,8 @@ abstract class Root {
   Directory get root => _root;
   LibDirectory get lib => LibDirectory(p.join(_root.path, 'lib'));
   TestDirectory get test => TestDirectory(p.join(_root.path, 'test'));
+  DartToolDirectory get dartTool =>
+      DartToolDirectory(p.join(_root.path, '.dart_tool'));
 
   File get analysisOptions => File(p.join(_root.path, 'analysis_options.yaml'));
   File get pubspecYaml => File(p.join(_root.path, 'pubspec.yaml'));
@@ -29,6 +31,12 @@ class LibDirectory extends ExtendedDirectory {
   FeatureDirectory get features => FeatureDirectory(p.join(path, 'features'));
 
   File get mainFile => File(p.join(path, 'main.dart'));
+}
+
+class DartToolDirectory extends ExtendedDirectory {
+  DartToolDirectory(super.path);
+
+  File get packageConfigJson => File(p.join(path, 'package_config.json'));
 }
 
 class FeatureDirectory extends ExtendedDirectory {

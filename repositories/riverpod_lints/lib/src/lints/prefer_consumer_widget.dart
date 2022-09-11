@@ -17,7 +17,7 @@ class PreferConsumerWidget extends LintError {
   String get message => 'Prefer to use ConsumerWidget.';
 
   @override
-  Map get yamlConfig => <dynamic, dynamic>{};
+  String get packageName => 'riverpod_lints';
 
   @override
   void registerNodeProcessors(NodeLintRegistry registry) {
@@ -30,26 +30,25 @@ class PreferConsumerWidget extends LintError {
     ReportedLintError reportedLintError,
   ) {
     final node = reportedLintError.reportedNode;
-    if (node is ClassDeclaration) {
+
+    if (node is! ClassDeclaration) {
+      return reportedLintError;
+    } else {
       final superclass = node.extendsClause?.superclass;
       return reportedLintError.copyWith(highlightedNode: superclass);
     }
-    return reportedLintError;
   }
 
   @override
   Future<List<PrioritizedSourceChange>> computeFixes(
-    ReportedLintError reportedLintError,
+    ReportedLintError lint,
   ) async {
-    final unit = reportedLintError.sourceUnit;
-    final lintedNode = reportedLintError.reportedNode;
-
-    final context = unit.session.analysisContext;
-    final config = context.sidecarOptions.lints?[code]?.configuration;
+    final unit = lint.sourceUnit;
+    final lintedNode = lint.reportedNode;
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
-      fileBuilder.importLibraryElement(uriFlutterRiverpod);
+      fileBuilder.importFlutterRiverpod();
       if (lintedNode is ClassDeclaration) {
         final superClass = lintedNode.extendsClause!.superclass;
 
@@ -60,7 +59,8 @@ class PreferConsumerWidget extends LintError {
 
         final buildFunction = lintedNode.members
             .whereType<MethodDeclaration>()
-            .firstWhereOrNull((method) => method.name.name == 'build');
+            .firstWhereOrNull(
+                (method) => method.name2.value().toString() == 'build');
 
         final paramOffset = buildFunction?.parameters?.rightParenthesis.offset;
         if (paramOffset != null) {
@@ -69,10 +69,6 @@ class PreferConsumerWidget extends LintError {
             (builder) => builder.write(', WidgetRef ref'),
           );
         }
-        fileBuilder.addInsertion(
-          0,
-          (builder) => builder.write('// config: $config'),
-        );
       }
     });
 

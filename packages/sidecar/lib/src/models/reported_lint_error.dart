@@ -38,7 +38,7 @@ class ReportedLintError {
   ) async {
     return plugin.AnalysisErrorFixes(
       toAnalysisError(),
-      fixes: (await lint.computeFixes(this)),
+      fixes: await lint.computeFixes(this),
     );
   }
 

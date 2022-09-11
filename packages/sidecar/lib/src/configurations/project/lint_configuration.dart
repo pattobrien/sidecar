@@ -12,13 +12,13 @@ class LintConfiguration {
     required this.configuration,
   });
 
+  factory LintConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$LintConfigurationFromJson(json);
+
   final String packageName;
   final String lintId;
   final bool enabled;
   final Map<dynamic, dynamic> configuration;
-
-  factory LintConfiguration.fromJson(Map<String, dynamic> json) =>
-      _$LintConfigurationFromJson(json);
 }
 
 extension LintConfigurationX on LintConfiguration {

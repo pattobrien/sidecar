@@ -170,11 +170,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final codeEditRequests =
         _getCodeEditRequests(unit, parameters.offset, parameters.length);
 
-    final changes = await Future.wait<plugin.PrioritizedSourceChange>(
-      codeEditRequests
-          .map((e) async => await e.toPrioritizedSourceChanges(ref)),
+    final changes = await Future.wait<plugin.PrioritizedSourceChange?>(
+      codeEditRequests.map((e) async => await e.toPrioritizedSourceChange(ref)),
     );
-    return EditGetAssistsResult(changes);
+    return EditGetAssistsResult(
+        changes.whereType<plugin.PrioritizedSourceChange>().toList());
   }
 
   Iterable<RequestedCodeEdit> _getCodeEditRequests(
@@ -184,13 +184,21 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) {
     final codeEditReporter = CodeEditReporter(unit);
 
+    final sidecarOptions = unit.session.analysisContext.sidecarOptions;
+
     final astNode = NodeLocator(
       offset,
       offset + length,
     ).searchWithin(unit.unit);
 
     for (final codeEdit in allCodeEdits) {
-      codeEdit.reporter = codeEditReporter;
+      final codeEditConfig = sidecarOptions.editPackages?[codeEdit.packageName]
+          ?.edits[codeEdit.code]?.configuration;
+
+      codeEdit.initialize(
+        configurationContent: codeEditConfig,
+        reporter: codeEditReporter,
+      );
       codeEdit.generateReport(astNode);
     }
 
@@ -206,8 +214,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) {
     final errorReporter = ErrorReporter(unit);
 
+    final sidecarOptions = unit.session.analysisContext.sidecarOptions;
+
     for (final linter in allLints) {
-      linter.reporter = errorReporter;
+      final lintErrorConfig = sidecarOptions
+          .editPackages?[linter.packageName]?.edits[linter.code]?.configuration;
+
+      linter.initialize(
+        configurationContent: lintErrorConfig,
+        reporter: errorReporter,
+      );
     }
     final lintVisitor = LintVisitor(nodeRegistry);
     unit.unit.accept(lintVisitor);

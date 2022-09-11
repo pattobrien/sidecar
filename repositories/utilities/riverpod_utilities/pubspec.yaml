@@ -9,6 +9,13 @@ environment:
 dependencies:
   analyzer_plugin: ^0.11.1
   path: ^1.8.0
+  sidecar:
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
+    version: ^0.1.0-dev.20
+
+dependency_overrides:
+  sidecar:
+    path: ../../../packages/sidecar/
 
 dev_dependencies:
   lints: ^2.0.0

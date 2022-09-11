@@ -1,25 +1,27 @@
-import 'dart:io';
+// import 'dart:io';
 
-import 'package:root_utilities/root_utilities.dart';
+// import 'package:root_utilities/root_utilities.dart';
 
-void main() {
-  final myWorkspaceDirectory = Directory.current;
+// /// This is an example app root definition, customized for a specific application
+// /// using Mixins.
+// class MyAppRoot extends FlutterAppRoot with RootAssets {
+//   MyAppRoot(super.root);
+// }
 
-  final myApp = MyAppRoot(myWorkspaceDirectory);
+// void main() {
+//   final myWorkspaceDirectory = Directory.current;
 
-  final assetsDirectory = myApp.assets;
-  final mainFile = myApp.lib.mainFile;
-  final featuresFolder = myApp.lib.features;
+//   final myApp = MyAppRoot(myWorkspaceDirectory);
 
-  print('');
-  print('root directory:    ${myWorkspaceDirectory.path}');
-  print('');
-  print('assets folder:     ${assetsDirectory.path}');
-  print('main() file:       ${mainFile.path}');
-  print('features folder:   ${featuresFolder.path}');
-  print('');
-}
+//   final assetsDirectory = myApp.assets;
+//   final mainFile = myApp.lib.mainFile;
+//   final featuresFolder = myApp.lib.features;
 
-class MyAppRoot extends FlutterAppRoot with RootAssets {
-  MyAppRoot(super.root);
-}
+//   print('');
+//   print('root directory:    ${myWorkspaceDirectory.path}');
+//   print('');
+//   print('assets folder:     ${assetsDirectory.path}');
+//   print('main() file:       ${mainFile.path}');
+//   print('features folder:   ${featuresFolder.path}');
+//   print('');
+// }

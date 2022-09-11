@@ -1,7 +1,7 @@
 import 'package:path/path.dart' as p;
 
-import '../root.dart';
-import '../utils.dart';
+import '../../root.dart';
+import '../../utils.dart';
 
 mixin RootAssets on Root {
   AssetsDirectory get assets => AssetsDirectory(p.join(root.path, 'assets'));

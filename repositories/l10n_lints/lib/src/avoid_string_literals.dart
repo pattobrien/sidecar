@@ -13,6 +13,9 @@ class AvoidStringLiterals extends LintError {
   String get message => '\${STRING} should be extracted to an ARB or ENV file.';
 
   @override
+  String get packageName => 'l10n_lints';
+
+  @override
   LintErrorType get defaultType => LintErrorType.info;
 
   @override

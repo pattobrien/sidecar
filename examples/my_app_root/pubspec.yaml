@@ -1,0 +1,19 @@
+name: my_app_root
+description: A starting point for Dart libraries or applications.
+version: 1.0.0
+publish_to: none
+# homepage: https://www.example.com
+
+environment:
+  sdk: ">=2.17.5 <3.0.0"
+
+dependencies:
+  path: ^1.8.0
+  root_utilities:
+    path: ../../repositories/utilities/root_utilities/
+  design_system_utilities:
+    path: ../../repositories/utilities/design_system_utilities/
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0
