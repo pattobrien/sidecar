@@ -5,6 +5,7 @@ import '../my_analyzed_codebase.dart';
 @AdaptiveAutoRouter(
   routes: [
     AdaptiveRoute(page: SomePage, initial: true),
+    AdaptiveRoute(page: SomePage, initial: false),
   ],
   replaceInRouteName: 'Page,Route',
   preferRelativeImports: false,

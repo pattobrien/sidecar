@@ -2,13 +2,13 @@ import 'dart:isolate';
 
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer_plugin/starter.dart';
-
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
+import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
+
 import 'plugin_bootstrapper.dart';
 import 'plugin_code_edit_bootstrapper.dart';
-import 'analyzer_plugin.dart';
 
 void start(
   List<String> args,

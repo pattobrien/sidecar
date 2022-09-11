@@ -12,6 +12,7 @@ class SomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final someString = 'translation';
     final someString2 = someString;
+    final x = Color(123);
     return Column(
       children: [
         TextFormField(

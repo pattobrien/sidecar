@@ -13,19 +13,17 @@ dependencies:
   path: ^1.8.0
   riverpod_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/riverpod_utilities/
-    version: ^0.1.0
+    version: ^0.1.1
+  # riverpod_utilities:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/utilities/riverpod_utilities/
   sidecar:
     hosted:
       url: https://dart.cloudsmith.io/fine-designs/sidecar/
       name: sidecar
-    version: ^0.1.0-dev.20
+    version: ^0.1.0-dev.21
 
 dev_dependencies:
   lints: ^2.0.0
-
-dependency_overrides:
-  riverpod_utilities:
-    path: /Users/pattobrien/Development/sidecar/repositories/utilities/riverpod_utilities/
 
 micropub: sidecar
 

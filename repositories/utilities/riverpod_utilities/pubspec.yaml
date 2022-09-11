@@ -1,6 +1,6 @@
 name: riverpod_utilities
 description: A starting point for Dart libraries or applications.
-version: 0.1.0
+version: 0.1.1
 publish_to: https://dart.cloudsmith.io/fine-designs/riverpod_utilities/
 
 environment:
@@ -11,11 +11,11 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.0-dev.20
+    version: ^0.1.0-dev.21
 
-dependency_overrides:
-  sidecar:
-    path: ../../../packages/sidecar/
+# dependency_overrides:
+#   sidecar:
+#     path: ../../../packages/sidecar/
 
 dev_dependencies:
   lints: ^2.0.0

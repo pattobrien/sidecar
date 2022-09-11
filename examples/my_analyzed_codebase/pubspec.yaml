@@ -18,11 +18,11 @@ dev_dependencies:
   auto_route_generator: ^5.0.2
   intl: ^0.17.0
   lints: ^2.0.0
-  sidecar_analyzer_plugin: 
+  sidecar_analyzer_plugin:
     hosted:
       url: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
       name: sidecar_analyzer_plugin
-    version: ^0.1.0-dev.20
+    version: ^0.1.0-dev.21
   test: ^1.16.0
 
 dependency_overrides:
