@@ -8,6 +8,7 @@ import 'package:analyzer/source/source_range.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/src/utilities/change_builder/change_builder_core.dart';
 import 'package:analyzer_plugin/src/utilities/change_builder/change_builder_dart.dart';
+
 import 'package:analyzer_plugin/utilities/change_builder/change_builder_dart.dart';
 
 class AutoRouteChangeBuilder extends ChangeBuilderImpl {
@@ -93,9 +94,6 @@ class AutoRouteFileEditBuilder extends DartFileEditBuilderImpl {
     super.timeStamp,
     super.libraryChangeBuilder,
   );
-
-  // @override
-  // bool get hasEdits => super.hasEdits || librariesToImport.isNotEmpty;
 
   @override
   AutoRouteEditBuilder createEditBuilder(int offset, int length) {

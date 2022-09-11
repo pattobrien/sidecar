@@ -1,6 +1,5 @@
 //
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 int calculate() {
   final aStringThatShouldBeLinted = 'some string that should be linted';
@@ -8,9 +7,9 @@ int calculate() {
   return 6 * 7;
 }
 
-class SomePage extends ConsumerWidget {
+class SomePage extends StatelessWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final someString = 'translation';
     final someString2 = someString;
     return Column(
@@ -34,3 +33,5 @@ class MyNewPage extends StatelessWidget {
     return Text('');
   }
 }
+// my map: {nested_value: [123]}
+// node => parents: DeclaredSimpleIdentifier => ClassDeclarationImpl => CompilationUnitImpl => Null

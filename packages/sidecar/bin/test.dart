@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar/src/models/example_edit.dart';
+import 'example_edit.dart';
 
 void main(List<String> args) {
   final ref = ProviderContainer();

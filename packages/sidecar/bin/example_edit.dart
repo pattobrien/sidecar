@@ -1,8 +1,6 @@
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
-
-import '../../sidecar.dart';
+import 'package:sidecar/sidecar.dart';
 import 'example_config.dart';
-// import 'example_config.dart';
 
 class SomeCodeEdit extends CodeEdit {
   SomeCodeEdit(super.ref);
@@ -23,7 +21,7 @@ class SomeCodeEdit extends CodeEdit {
   ExampleConfig Function(Map json) get jsonDecoder => ExampleConfig.fromJson;
 
   @override
-  Future<PrioritizedSourceChange> computeSourceChange(
+  Future<PrioritizedSourceChange?> computeSourceChange(
     RequestedCodeEdit requestedCodeEdit,
   ) async {
     final x = configuration;

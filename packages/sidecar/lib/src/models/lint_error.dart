@@ -2,6 +2,7 @@
 
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:riverpod/riverpod.dart';
 
@@ -21,12 +22,29 @@ abstract class LintError {
   String get code;
   String get message;
   LintErrorType get defaultType;
-  // GetFixes? get getFixes;
-  Map<dynamic, dynamic> get yamlConfig => <dynamic, dynamic>{};
+
+  String get packageName;
+
+  @mustCallSuper
+  Object get configuration => _configuration;
+
+  MapDecoder get jsonDecoder => (_) => <dynamic, dynamic>{};
+
+  late Object _configuration;
 
   final ProviderContainer ref;
 
   late IErrorReporter reporter;
+
+  void initialize({
+    required Map? configurationContent,
+    required IErrorReporter reporter,
+  }) {
+    if (configurationContent != null) {
+      _configuration = jsonDecoder(configurationContent);
+    }
+    this.reporter = reporter;
+  }
 
   void registerNodeProcessors(NodeLintRegistry registry);
 
@@ -42,7 +60,7 @@ abstract class LintError {
       reportedLintError;
 
   Future<List<plugin.PrioritizedSourceChange>> computeFixes(
-    ReportedLintError reportedLintError,
+    ReportedLintError lint,
   ) =>
       Future.value([]);
 }
@@ -62,3 +80,5 @@ extension LintErrorTypeX on LintErrorType {
     }
   }
 }
+
+typedef MapDecoder = Object Function(Map json);
