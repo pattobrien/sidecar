@@ -8,7 +8,7 @@ import 'package:riverpod/riverpod.dart';
 
 final lintBootstrapHeader = '''
 
-List<LintError> pluginBootstrapper(
+List<LintRule> pluginBootstrapper(
   NodeLintRegistry registry,
   ProviderContainer ref,
 ) {

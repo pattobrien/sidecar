@@ -121,17 +121,38 @@ class ProjectService {
     //     'sidecar_analyzer_plugin should be set as dependency',
     //   );
     // }
-    return Version.parse('0.1.6');
+    return Version.parse('0.1.7');
   }
+
+  // Future<void> _downloadSidecarAnalyzerPlugin(Version version) async {
+  //   final process = await io.Process.start(
+  //     'dart',
+  //     [
+  //       'pub',
+  //       'add',
+  //       '--dev',
+  //       '--hosted-url',
+  //       'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/',
+  //       'sidecar_analyzer_plugin',
+  //     ],
+  //     workingDirectory: projectDirectory.path,
+  //   );
+  //   process.stdout.listen((event) => print(utf8.decode(event)));
+  //   process.stderr.listen((event) => print(utf8.decode(event)));
+  //   await process.exitCode;
+  // }
 
   Future<void> copyBasePluginFromSource(Version version) async {
     try {
       // delete any previously copied plugin files
       await projectPluginDirectory.delete(recursive: true);
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
     }
     final rootPluginPath = getPluginPackagePathForVersion(version);
+    if (!io.Directory(rootPluginPath).existsSync()) {
+      // await _downloadSidecarAnalyzerPlugin(version);
+    }
     // get all source files from the plugin package
     final packageSourceFiles = io.Directory(rootPluginPath)
         .listSync(recursive: true)
