@@ -5,6 +5,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../reporter/i_assist_reporter.dart';
 import 'requested_code_edit.dart';
+import 'typedefs.dart';
 
 abstract class CodeEdit {
   CodeEdit(this.ref);
@@ -15,7 +16,7 @@ abstract class CodeEdit {
   @mustCallSuper
   Object get configuration => _configuration;
 
-  Object Function(Map json) get jsonDecoder => (json) => <dynamic, dynamic>{};
+  MapDecoder? get jsonDecoder => null;
 
   @internal
   final ProviderContainer ref;
@@ -27,8 +28,16 @@ abstract class CodeEdit {
     required Map? configurationContent,
     required ICodeEditReporter reporter,
   }) {
-    if (configurationContent != null) {
-      _configuration = jsonDecoder(configurationContent);
+    if (jsonDecoder != null) {
+      if (configurationContent == null) {
+        throw EmptyConfiguration();
+      } else {
+        try {
+          _configuration = jsonDecoder!(configurationContent);
+        } catch (e, stackTrace) {
+          throw IncorrectConfiguration(e, stackTrace);
+        }
+      }
     }
     _reporter = reporter;
   }

@@ -192,11 +192,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     for (final codeEdit in allCodeEdits) {
       final config = sidecarOptions.editPackages?[codeEdit.packageName]
           ?.edits[codeEdit.code]?.configuration;
-
-      codeEdit.initialize(
-        configurationContent: config,
-        reporter: codeEditReporter,
-      );
+      try {
+        codeEdit.initialize(
+          configurationContent: config,
+          reporter: codeEditReporter,
+        );
+      } on EmptyConfiguration {
+        // highlight node
+      } on IncorrectConfiguration {
+        // highlight node and state what missing configuration was
+      }
       codeEdit.generateReport(astNode);
     }
 
@@ -207,24 +212,31 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     return codeEdits;
   }
 
-  Iterable<DetectedLint> _getReportedErrors(
-    ResolvedUnitResult unit,
-  ) {
+  Iterable<DetectedLint> _getReportedErrors(ResolvedUnitResult unit) {
     final errorReporter = ErrorReporter(unit);
-
     final sidecarOptions = unit.session.analysisContext.sidecarOptions;
 
-    for (final linter in allLints) {
-      // linter.reporter = errorReporter;
-
+    for (final rule in allLints) {
       final lintErrorConfig = sidecarOptions
-          .lintPackages?[linter.packageName]?.lints[linter.code]?.configuration;
+          .lintPackages?[rule.packageName]?.lints[rule.code]?.configuration;
 
-      linter.initialize(
+      try {
+        rule.initialize(
+          configurationContent: lintErrorConfig,
+          reporter: errorReporter,
+        );
+      } on EmptyConfiguration {
+        // highlight node
+        // errorReporter.reportYamlNode(node, rule);
+      } on IncorrectConfiguration {
+        // highlight node and state what missing configuration was
+      }
+      rule.initialize(
         configurationContent: lintErrorConfig,
         reporter: errorReporter,
       );
     }
+
     final lintVisitor = LintVisitor(nodeRegistry);
     unit.unit.accept(lintVisitor);
 

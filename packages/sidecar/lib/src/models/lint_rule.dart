@@ -6,9 +6,11 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../sidecar.dart';
 import '../ast/ast.dart';
 import '../reporter/i_error_reporter.dart';
 import 'detected_lint.dart';
+import 'typedefs.dart';
 
 abstract class LintRule {
   LintRule(this.ref);
@@ -23,7 +25,7 @@ abstract class LintRule {
   @mustCallSuper
   Object get configuration => _configuration;
 
-  MapDecoder get jsonDecoder => (_) => <dynamic, dynamic>{};
+  MapDecoder? get jsonDecoder => null;
 
   late Object _configuration;
 
@@ -35,8 +37,16 @@ abstract class LintRule {
     required Map? configurationContent,
     required IErrorReporter reporter,
   }) {
-    if (configurationContent != null) {
-      _configuration = jsonDecoder(configurationContent);
+    if (jsonDecoder != null) {
+      if (configurationContent == null) {
+        throw EmptyConfiguration();
+      } else {
+        try {
+          _configuration = jsonDecoder!(configurationContent);
+        } catch (e, stackTrace) {
+          throw IncorrectConfiguration(e, stackTrace);
+        }
+      }
     }
     this.reporter = reporter;
   }
@@ -49,7 +59,7 @@ abstract class LintRule {
     }
   }
 
-  DetectedLint computeLintHighlight(DetectedLint lint) => lint;
+  SourceSpan computeLintHighlight(DetectedLint lint) => lint.sourceSpan;
 
   Future<List<plugin.PrioritizedSourceChange>> computeCodeEdits(
     DetectedLint lint,
@@ -71,5 +81,3 @@ extension LintErrorTypeX on LintRuleType {
     }
   }
 }
-
-typedef MapDecoder = Object Function(Map json);

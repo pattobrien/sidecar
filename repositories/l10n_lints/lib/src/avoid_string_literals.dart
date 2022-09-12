@@ -1,5 +1,6 @@
 // ignore_for_file: implementation_imports
 
+import 'package:l10n_lints/src/constants.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:intl_utilities/intl_utilities.dart';
@@ -14,11 +15,10 @@ class AvoidStringLiterals extends LintRule {
   String get message => '\${STRING} should be extracted to an ARB or ENV file.';
 
   @override
-  String get packageName => 'l10n_lints';
+  String get packageName => l10nLintsPackageId;
 
   @override
-  String? get url =>
-      'https://github.com/pattobrien/sidecar/tree/master/repositories/l10n_lints';
+  String? get url => l10nLintsUrl;
 
   @override
   AvoidStringLiteralsConfig get configuration =>
@@ -38,7 +38,9 @@ class AvoidStringLiterals extends LintRule {
     DetectedLint lint,
   ) async {
     final unit = lint.unit;
-    final stringNode = lint.node;
+    final stringNode = lint.sourceSpan.toAstNode(unit);
+
+    if (stringNode == null) return [];
 
     final changeBuilder = ChangeBuilder(session: unit.session);
 
