@@ -214,16 +214,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) {
     final errorReporter = ErrorReporter(unit);
 
-    final sidecarOptions = unit.session.analysisContext.sidecarOptions;
+    // final sidecarOptions = unit.session.analysisContext.sidecarOptions;
 
     for (final linter in allLints) {
-      final lintErrorConfig = sidecarOptions
-          .editPackages?[linter.packageName]?.edits[linter.code]?.configuration;
-
-      linter.initialize(
-        configurationContent: lintErrorConfig,
-        reporter: errorReporter,
-      );
+      // final lintErrorConfig = sidecarOptions
+      //     .editPackages?[linter.packageName]?.edits[linter.code]?.configuration;
+      linter.reporter = errorReporter;
+      // linter.initialize(
+      //   configurationContent: lintErrorConfig,
+      //   reporter: errorReporter,
+      // );
     }
     final lintVisitor = LintVisitor(nodeRegistry);
     unit.unit.accept(lintVisitor);

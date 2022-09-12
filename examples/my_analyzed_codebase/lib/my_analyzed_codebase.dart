@@ -1,13 +1,16 @@
 //
 import 'package:flutter/material.dart';
+import '';
 
 int calculate() {
   final aStringThatShouldBeLinted = 'some string that should be linted';
   final x = aStringThatShouldBeLinted;
+
   return 6 * 7;
 }
 
 class SomePage extends StatelessWidget {
+  final color = Color(0x123);
   @override
   Widget build(BuildContext context) {
     final someString = 'translation';

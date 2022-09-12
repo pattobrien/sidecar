@@ -2,17 +2,14 @@
 
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:riverpod/riverpod.dart';
 
-import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
-
-import 'reported_lint_error.dart';
-import '../reporter/i_error_reporter.dart';
 import '../ast/ast.dart';
+import '../reporter/i_error_reporter.dart';
+import 'reported_lint_error.dart';
 
 enum LintErrorType { info, warning, error }
 
@@ -36,15 +33,15 @@ abstract class LintError {
 
   late IErrorReporter reporter;
 
-  void initialize({
-    required Map? configurationContent,
-    required IErrorReporter reporter,
-  }) {
-    if (configurationContent != null) {
-      _configuration = jsonDecoder(configurationContent);
-    }
-    this.reporter = reporter;
-  }
+  // void initialize({
+  //   required Map? configurationContent,
+  //   required IErrorReporter reporter,
+  // }) {
+  //   if (configurationContent != null) {
+  //     _configuration = jsonDecoder(configurationContent);
+  //   }
+  //   this.reporter = reporter;
+  // }
 
   void registerNodeProcessors(NodeLintRegistry registry);
 

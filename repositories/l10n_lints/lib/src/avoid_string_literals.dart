@@ -26,10 +26,10 @@ class AvoidStringLiterals extends LintError {
 
   @override
   Future<List<PrioritizedSourceChange>> computeFixes(
-    ReportedLintError reportedLintError,
+    ReportedLintError lint,
   ) async {
-    final unit = reportedLintError.sourceUnit;
-    final stringNode = reportedLintError.reportedNode;
+    final unit = lint.sourceUnit;
+    final stringNode = lint.reportedNode;
 
     final changeBuilder = ChangeBuilder(session: unit.session);
 
@@ -44,6 +44,7 @@ class AvoidStringLiterals extends LintError {
 
     final references = <SourceSpan>[];
     final parentNode = stringNode.parent;
+
     if (parentNode is VariableDeclaration) {
       final element = parentNode.declaredElement2;
       if (element != null) {

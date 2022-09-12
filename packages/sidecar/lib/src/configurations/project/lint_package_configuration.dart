@@ -14,16 +14,31 @@ class LintPackageConfiguration {
       packageName: packageName,
       lints: json.map<String, LintConfiguration>((dynamic key, dynamic value) {
         if (value is Map) {
+          final hasConfiguration = value.containsKey('configuration');
+          // final config = hasConfiguration ? ;
           return MapEntry(
-              key as String,
-              LintConfiguration(
-                packageName: packageName,
-                lintId: key,
-                configuration: value['configuration'] as Map,
-              ));
+            key as String,
+            LintConfiguration(
+              packageName: packageName,
+              lintId: key,
+              configuration: hasConfiguration
+                  ? value['configuration'] as Map
+                  : <dynamic, dynamic>{},
+            ),
+          );
+        } else if (value == null) {
+          return MapEntry(
+            key as String,
+            LintConfiguration(
+              packageName: packageName,
+              lintId: key,
+              configuration: <dynamic, dynamic>{},
+            ),
+          );
         } else {
           throw UnimplementedError(
-              'could not parse package lints; expected Map was of type ${value.runtimeType}');
+            'could not parse package lints; expected Map was of type ${value.runtimeType}',
+          );
         }
       }),
     );

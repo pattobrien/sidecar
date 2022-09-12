@@ -1,6 +1,6 @@
 name: riverpod_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.0-dev.2
+version: 0.1.0-dev.4
 publish_to: https://micropub-3qduh.ondigitalocean.app/
 
 environment:
@@ -14,13 +14,13 @@ dependencies:
   riverpod_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/riverpod_utilities/
     version: ^0.1.1
-  # riverpod_utilities:
-  #   path: /Users/pattobrien/Development/sidecar/repositories/utilities/riverpod_utilities/
   sidecar:
-    hosted:
-      url: https://dart.cloudsmith.io/fine-designs/sidecar/
-      name: sidecar
-    version: ^0.1.0-dev.21
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
+    version: ^0.1.2
+
+# dependency_overrides:
+#   sidecar:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar
 
 dev_dependencies:
   lints: ^2.0.0

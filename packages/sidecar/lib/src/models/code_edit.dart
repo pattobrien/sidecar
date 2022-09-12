@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'package:riverpod/riverpod.dart';
-
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../reporter/i_assist_reporter.dart';
 import 'requested_code_edit.dart';
@@ -15,7 +11,7 @@ abstract class CodeEdit {
 
   String get code;
   String get packageName;
-  String get message;
+  // String get message;
 
   @mustCallSuper
   Object get configuration => _configuration;
