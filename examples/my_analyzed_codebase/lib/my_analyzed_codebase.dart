@@ -1,5 +1,6 @@
 //
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 int calculate() {
   final aStringThatShouldBeLinted = 'some string that should be linted';
@@ -8,17 +9,17 @@ int calculate() {
   return 6 * 7;
 }
 
-class SomePage extends StatelessWidget {
+class SomePage extends ConsumerWidget {
   final color = Color(0x123);
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
     final someString2 = someString;
     final x = Color(123);
     return Column(
       children: [
         TextFormField(
-          controller: TextEditingController(),
+          controller: ref.watch(myTextControllerProvider),
         ),
         Text('some declaration'),
         Text(someString),
@@ -36,5 +37,7 @@ class MyNewPage extends StatelessWidget {
     return Text('');
   }
 }
-// my map: {nested_value: [123]}
-// node => parents: DeclaredSimpleIdentifier => ClassDeclarationImpl => CompilationUnitImpl => Null
+
+final myTextControllerProvider = ChangeNotifierProvider((ref) {
+  return TextEditingController();
+});
