@@ -1,4 +1,4 @@
-name: auto_route_lints
+name: flutter_lints
 description: A starting point for Dart libraries or applications.
 version: 0.1.0
 publish_to: https://micropub-3qduh.ondigitalocean.app/
@@ -8,9 +8,6 @@ environment:
 
 dependencies:
   analyzer: ^4.7.0
-  auto_route_utilities:
-    hosted: https://dart.cloudsmith.io/fine-designs/auto_route_utilities/
-    version: ^0.1.0
   code_builder: ^4.2.0
   collection: ^1.16.0
   flutter_utilities:
@@ -26,9 +23,16 @@ dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
 
+# dependency_overrides:
+#   sidecar:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar
+
 micropub: sidecar
 sidecar:
   edits:
-    create_new_page_widget:
-      class: CreateNewPageWidget
-      import: auto_route_lints/auto_route_lints.dart
+    use_full_hex_values_for_flutter_colors:
+      class: UseFullHexValuesForFlutterColors
+      import: flutter_lints/flutter_lints.dart
+    use_key_in_widget_constructors:
+      class: UseKeyInWidgetConstructors
+      import: flutter_lints/flutter_lints.dart

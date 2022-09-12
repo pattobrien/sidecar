@@ -15,6 +15,7 @@ class ReportedLintError {
     required this.lint,
     required this.sourceUnit,
     required this.reportedNode,
+    // required this.message,
     AstNode? highlightedNode,
   }) : highlightedNode = highlightedNode ?? reportedNode;
 
@@ -22,6 +23,7 @@ class ReportedLintError {
   final ResolvedUnitResult sourceUnit;
   final AstNode reportedNode;
   final AstNode highlightedNode;
+  // final String message;
 
   ReportedLintError copyWith({
     AstNode? highlightedNode,
@@ -30,6 +32,7 @@ class ReportedLintError {
         lint: lint,
         sourceUnit: sourceUnit,
         reportedNode: reportedNode,
+        // message: message,
         highlightedNode: highlightedNode ?? this.highlightedNode,
       );
 

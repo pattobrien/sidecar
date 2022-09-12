@@ -4,6 +4,7 @@ linter:
   rules:
     - camel_case_types
     - prefer_relative_imports
+    # - use_full_hex_values_for_flutter_colors
 
 analyzer:
   plugins:
@@ -15,28 +16,23 @@ sidecar:
     - "lib/**"
     # - ".sidecar/**"
   lints:
-    riverpod_lints:
-      prefer_consumer_widget:
-        enabled: true
-        configuration:
-          aaaaa: 11111
+    # flutter_lints:
+    #   use_full_hex_values_for_flutter_colors:
+    #   use_key_in_widget_constructors:
+
     l10n_lints:
       avoid_string_literals:
-        enabled: true
         configuration:
-          prefix: AppLocalizations.of(context)
+          prefix: "AppLocalizations.of(context).123"
 
-  edits:
-    auto_route_lints:
-      create_new_page_widget:
-        enabled: true
-        configuration:
-          route_path: lib/routes/routes.dart
-    riverpod_lints:
-      create_text_edit_controller_provider:
-        enabled: true
-        configuration:
-          nested_value:
-            - 123
-  #         something:
-  #           abc: 123
+    # riverpod_lints:
+    #   prefer_consumer_widget:
+
+  # edits:
+  #   riverpod_lints:
+  #     create_text_edit_controller_provider:
+
+  #   auto_route_lints:
+  #     create_new_page_widget:
+  #       configuration:
+  #         route_path: lib/routes/routes.dart

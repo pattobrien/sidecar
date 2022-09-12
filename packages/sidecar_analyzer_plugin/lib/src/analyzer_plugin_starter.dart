@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:isolate';
 
 import 'package:analyzer/file_system/physical_file_system.dart';
@@ -18,6 +19,8 @@ void start(
   final ref = ProviderContainer();
 
   final nodeRegistry = NodeLintRegistry();
+
+  runZonedGuarded(() {}, (error, stack) {});
   final allLints = pluginBootstrapper(nodeRegistry, ref);
   final allCodeEdits = pluginCodeFixBootstrapper(ref);
 

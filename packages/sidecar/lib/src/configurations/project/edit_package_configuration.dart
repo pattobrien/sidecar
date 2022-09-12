@@ -14,13 +14,26 @@ class EditPackageConfiguration {
       packageName: packageName,
       edits: json.map<String, EditConfiguration>((dynamic key, dynamic value) {
         if (value is Map) {
+          final hasConfiguration = value.containsKey('configuration');
           return MapEntry(
-              key as String,
-              EditConfiguration(
-                packageName: packageName,
-                editId: key,
-                configuration: value['configuration'] as Map,
-              ));
+            key as String,
+            EditConfiguration(
+              packageName: packageName,
+              editId: key,
+              configuration: hasConfiguration
+                  ? value['configuration'] as Map
+                  : <dynamic, dynamic>{},
+            ),
+          );
+        } else if (value == null) {
+          return MapEntry(
+            key as String,
+            EditConfiguration(
+              packageName: packageName,
+              editId: key,
+              configuration: <dynamic, dynamic>{},
+            ),
+          );
         } else {
           throw UnimplementedError(
               'could not parse package edits; expected Map was of type ${value.runtimeType}');
