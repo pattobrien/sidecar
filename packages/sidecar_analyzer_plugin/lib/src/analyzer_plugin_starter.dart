@@ -20,7 +20,6 @@ void start(
 
   final nodeRegistry = NodeLintRegistry();
 
-  runZonedGuarded(() {}, (error, stack) {});
   final allLints = pluginBootstrapper(nodeRegistry, ref);
   final allCodeEdits = pluginCodeFixBootstrapper(ref);
 
