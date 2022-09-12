@@ -1,5 +1,6 @@
 // ignore_for_file: implementation_imports
 
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:l10n_lints/src/constants.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
@@ -27,10 +28,17 @@ class AvoidStringLiterals extends LintRule {
   @override
   MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
 
+  // @override
+  // void registerNodeProcessors(NodeLintRegistry registry) {
+  //   final visitor = _LiteralAstVisitor(this);
+  //   registry.addSimpleStringLiteral(this, visitor);
+  // }
+
   @override
-  void registerNodeProcessors(NodeLintRegistry registry) {
-    final visitor = _LiteralAstVisitor(this);
-    registry.addSimpleStringLiteral(this, visitor);
+  List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) {
+    final visitor = _LiteralAstVisitor(unit, this);
+    unit.unit.accept(visitor);
+    return visitor.detectedLints;
   }
 
   @override
@@ -117,16 +125,22 @@ class AvoidStringLiterals extends LintRule {
 }
 
 class _LiteralAstVisitor<R> extends GeneralizingAstVisitor<R> {
-  _LiteralAstVisitor(this.lintRule);
+  _LiteralAstVisitor(this.unit, this.rule);
 
-  final LintRule lintRule;
+  final LintRule rule;
+  final ResolvedUnitResult unit;
+  final List<DetectedLint> detectedLints = [];
 
   @override
   R? visitStringLiteral(StringLiteral node) {
     if (node.parent is! ImportDirective &&
         node is! PartDirective &&
         node is! PartOfDirective) {
-      lintRule.reportAstNode(node);
+      // lintRule.reportAstNode(node);
+      final sourceSpan = node.toSourceSpan(unit);
+      final detectedLint =
+          DetectedLint(rule: rule, unit: unit, sourceSpan: sourceSpan);
+      detectedLints.add(detectedLint);
     }
 
     return super.visitStringLiteral(node);

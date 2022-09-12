@@ -1,5 +1,6 @@
 // ignore_for_file: implementation_imports
 
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
@@ -33,6 +34,7 @@ abstract class LintRule {
 
   late IErrorReporter reporter;
 
+  @protected
   void initialize({
     required Map? configurationContent,
     required IErrorReporter reporter,
@@ -58,6 +60,8 @@ abstract class LintRule {
       reporter.reportAstNode(node, this);
     }
   }
+
+  List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit);
 
   SourceSpan computeLintHighlight(DetectedLint lint) => lint.sourceSpan;
 

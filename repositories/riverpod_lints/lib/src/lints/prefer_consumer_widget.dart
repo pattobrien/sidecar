@@ -17,20 +17,24 @@ class PreferConsumerWidget extends LintRule {
   String get message => 'Prefer to use ConsumerWidget.';
 
   @override
-  void registerNodeProcessors(NodeLintRegistry registry) {
-    final visitor = _Visitor<dynamic>(this);
-    registry.addClassDeclaration(this, visitor);
+  List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) {
+    final visitor = _Visitor<dynamic>(this, unit);
+    unit.unit.accept(visitor);
+    return visitor.detectedLints;
   }
 
   @override
-  DetectedLint computeLintHighlight(DetectedLint lint) {
-    final node = lint.node;
+  SourceSpan computeLintHighlight(DetectedLint lint) {
+    final node = lint.sourceSpan.toAstNode(lint.unit);
 
     if (node is! ClassDeclaration) {
-      return lint;
+      return lint.sourceSpan;
     } else {
       final superclass = node.extendsClause?.superclass;
-      return lint.copyWith(highlightedNode: superclass);
+
+      if (superclass == null) return lint.sourceSpan;
+
+      return superclass.toSourceSpan(lint.unit);
     }
   }
 
@@ -39,7 +43,7 @@ class PreferConsumerWidget extends LintRule {
     DetectedLint lint,
   ) async {
     final unit = lint.unit;
-    final lintedNode = lint.node;
+    final lintedNode = lint.sourceSpan.toAstNode(unit);
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
@@ -77,9 +81,11 @@ class PreferConsumerWidget extends LintRule {
 }
 
 class _Visitor<R> extends GeneralizingAstVisitor<R> {
-  _Visitor(this.lintRule);
+  _Visitor(this.rule, this.unit);
 
-  final LintRule lintRule;
+  final LintRule rule;
+  final ResolvedUnitResult unit;
+  final List<DetectedLint> detectedLints = [];
 
   @override
   R? visitClassDeclaration(ClassDeclaration node) {
@@ -87,7 +93,8 @@ class _Visitor<R> extends GeneralizingAstVisitor<R> {
 
     if (superclass?.name == 'StatelessWidget') {
       // lintRule.reportedAstNode(node.extendsClause?.superclass);
-      lintRule.reportAstNode(node);
+      final lint = DetectedLint.fromAstNode(node, unit, rule);
+      detectedLints.add(lint);
     }
 
     return super.visitClassDeclaration(node);

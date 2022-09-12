@@ -22,16 +22,25 @@ class UseFullHexValuesForFlutterColors extends LintRule {
       'https://dart-lang.github.io/linter/lints/use_full_hex_values_for_flutter_colors.html';
 
   @override
-  void registerNodeProcessors(NodeLintRegistry registry) {
-    final visitor = _Visitor(this);
-    registry.addInstanceCreationExpression(this, visitor);
+  List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) {
+    final visitor = _Visitor(this, unit);
+    unit.unit.accept(visitor);
+    return visitor.detectedLints;
   }
+
+  // @override
+  // void registerNodeProcessors(NodeLintRegistry registry) {
+  //   final visitor = _Visitor(this);
+  //   registry.addInstanceCreationExpression(this, visitor);
+  // }
 }
 
 class _Visitor extends SimpleAstVisitor {
   final LintRule rule;
+  final ResolvedUnitResult unit;
+  final List<DetectedLint> detectedLints = [];
 
-  _Visitor(this.rule);
+  _Visitor(this.rule, this.unit);
 
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
@@ -45,7 +54,9 @@ class _Visitor extends SimpleAstVisitor {
         if (argument is IntegerLiteral) {
           var value = argument.literal.lexeme.toLowerCase();
           if (!value.startsWith('0x') || value.length != 10) {
-            rule.reportAstNode(argument);
+            // rule.reportAstNode(argument);
+            final lint = DetectedLint.fromAstNode(node, unit, rule);
+            detectedLints.add(lint);
           }
         }
       }

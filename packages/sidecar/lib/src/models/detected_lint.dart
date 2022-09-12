@@ -32,6 +32,12 @@ class DetectedLint {
   // final AstNode highlightedNode;
   // final String message;
 
+  factory DetectedLint.fromAstNode(
+      AstNode node, ResolvedUnitResult unit, LintRule rule) {
+    return DetectedLint(
+        rule: rule, unit: unit, sourceSpan: node.toSourceSpan(unit));
+  }
+
   DetectedLint copyWith({
     SourceSpan? sourceSpan,
   }) =>

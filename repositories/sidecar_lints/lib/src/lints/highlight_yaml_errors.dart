@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:collection/collection.dart';
 import 'package:sidecar/sidecar.dart';
 
@@ -23,13 +24,15 @@ class PreferConsumerWidget extends LintRule {
 
   // @override
   // DetectedLint computeLintHighlight(DetectedLint lint) {}
+  @override
+  List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) => [];
 
   @override
   Future<List<PrioritizedSourceChange>> computeCodeEdits(
     DetectedLint lint,
   ) async {
     final unit = lint.unit;
-    final lintedNode = lint.node;
+    final lintedNode = lint.sourceSpan.toAstNode(unit);
 
     final changeBuilder = ChangeBuilder(session: unit.session);
 

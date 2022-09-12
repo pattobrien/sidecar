@@ -52,17 +52,26 @@ class UseKeyInWidgetConstructors extends LintRule {
       'https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html';
 
   @override
-  void registerNodeProcessors(NodeLintRegistry registry) {
-    var visitor = _Visitor(this);
-    registry.addClassDeclaration(this, visitor);
-    registry.addConstructorDeclaration(this, visitor);
+  List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) {
+    final visitor = _Visitor(this, unit);
+    unit.unit.accept(visitor);
+    return visitor.detectedLints;
   }
+
+  // @override
+  // void registerNodeProcessors(NodeLintRegistry registry) {
+  //   var visitor = _Visitor(this);
+  //   registry.addClassDeclaration(this, visitor);
+  //   registry.addConstructorDeclaration(this, visitor);
+  // }
 }
 
 class _Visitor extends SimpleAstVisitor<void> {
   final LintRule rule;
+  final ResolvedUnitResult unit;
+  final List<DetectedLint> detectedLints = [];
 
-  _Visitor(this.rule);
+  _Visitor(this.rule, this.unit);
 
   @override
   void visitClassDeclaration(ClassDeclaration node) {
@@ -71,7 +80,9 @@ class _Visitor extends SimpleAstVisitor<void> {
         classElement.isPublic &&
         FlutterUtils().hasWidgetAsAscendant(classElement) &&
         classElement.constructors.where((e) => !e.isSynthetic).isEmpty) {
-      rule.reportAstNode(node.name);
+      // rule.reportAstNode(node.name);
+      final lint = DetectedLint.fromAstNode(node.name, unit, rule);
+      detectedLints.add(lint);
     }
     super.visitClassDeclaration(node);
   }
@@ -105,7 +116,8 @@ class _Visitor extends SimpleAstVisitor<void> {
           return false;
         })) {
       var errorNode = node.name ?? node.returnType;
-      rule.reportAstNode(errorNode);
+      final lint = DetectedLint.fromAstNode(errorNode, unit, rule);
+      detectedLints.add(lint);
     }
     super.visitConstructorDeclaration(node);
   }
