@@ -48,6 +48,10 @@ class UseKeyInWidgetConstructors extends LintRule {
   String get packageName => 'flutter_lints';
 
   @override
+  String? get url =>
+      'https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html';
+
+  @override
   void registerNodeProcessors(NodeLintRegistry registry) {
     var visitor = _Visitor(this);
     registry.addClassDeclaration(this, visitor);
@@ -67,7 +71,7 @@ class _Visitor extends SimpleAstVisitor<void> {
         classElement.isPublic &&
         FlutterUtils().hasWidgetAsAscendant(classElement) &&
         classElement.constructors.where((e) => !e.isSynthetic).isEmpty) {
-      rule.reportedAstNode(node.name);
+      rule.reportAstNode(node.name);
     }
     super.visitClassDeclaration(node);
   }
@@ -101,7 +105,7 @@ class _Visitor extends SimpleAstVisitor<void> {
           return false;
         })) {
       var errorNode = node.name ?? node.returnType;
-      rule.reportedAstNode(errorNode);
+      rule.reportAstNode(errorNode);
     }
     super.visitConstructorDeclaration(node);
   }

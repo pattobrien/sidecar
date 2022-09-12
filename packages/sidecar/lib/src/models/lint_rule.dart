@@ -43,7 +43,7 @@ abstract class LintRule {
 
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
-  void reportedAstNode(AstNode? node) {
+  void reportAstNode(AstNode? node) {
     if (node != null) {
       reporter.reportAstNode(node, this);
     }

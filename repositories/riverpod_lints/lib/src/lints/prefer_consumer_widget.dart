@@ -87,7 +87,7 @@ class _Visitor<R> extends GeneralizingAstVisitor<R> {
 
     if (superclass?.name == 'StatelessWidget') {
       // lintRule.reportedAstNode(node.extendsClause?.superclass);
-      lintRule.reportedAstNode(node);
+      lintRule.reportAstNode(node);
     }
 
     return super.visitClassDeclaration(node);

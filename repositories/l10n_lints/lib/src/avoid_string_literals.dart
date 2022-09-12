@@ -17,6 +17,10 @@ class AvoidStringLiterals extends LintRule {
   String get packageName => 'l10n_lints';
 
   @override
+  String? get url =>
+      'https://github.com/pattobrien/sidecar/tree/master/repositories/l10n_lints';
+
+  @override
   AvoidStringLiteralsConfig get configuration =>
       super.configuration as AvoidStringLiteralsConfig;
 
@@ -120,7 +124,7 @@ class _LiteralAstVisitor<R> extends GeneralizingAstVisitor<R> {
     if (node.parent is! ImportDirective &&
         node is! PartDirective &&
         node is! PartOfDirective) {
-      lintRule.reportedAstNode(node);
+      lintRule.reportAstNode(node);
     }
 
     return super.visitStringLiteral(node);

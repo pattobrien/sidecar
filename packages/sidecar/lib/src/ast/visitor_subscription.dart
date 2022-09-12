@@ -6,9 +6,9 @@ import '../models/lint_rule.dart';
 /// A single subscription for a node type, by the specified [linter].
 @internal
 class VisitorSubscription<T> {
+  VisitorSubscription(this.linter, this.visitor, this.timer);
+
   final LintRule linter;
   final AstVisitor visitor;
   final Stopwatch? timer;
-
-  VisitorSubscription(this.linter, this.visitor, this.timer);
 }

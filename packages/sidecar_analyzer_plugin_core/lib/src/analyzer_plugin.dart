@@ -55,11 +55,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   @override
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
-  }) {
-    Logger.logLine('afterNewContextCollection started');
+  }) async {
     _collection = contextCollection;
-    return super
-        .afterNewContextCollection(contextCollection: contextCollection);
+    await super.afterNewContextCollection(contextCollection: contextCollection);
   }
 
   @override
@@ -69,6 +67,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     //TODO: remove restriction from plugin side, instead allow lints to do so
     if (!path.endsWith('.dart')) return;
+
     final sidecarOptions = analysisContext.sidecarOptions;
     final rootDirectory = analysisContext.contextRoot.root;
     final relativePath = p.relative(path, from: rootDirectory.path);
@@ -119,10 +118,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) async {
     try {
       final filePath = parameters.file;
-      final analysisContext = _collection.contextFor(filePath);
+      final context = _collection.contextFor(filePath);
 
-      final unit =
-          await analysisContext.currentSession.getResolvedUnit(filePath);
+      final unit = await context.currentSession.getResolvedUnit(filePath);
 
       if (unit is ResolvedUnitResult) {
         final reportedErrors = _getReportedErrors(unit).where((reportedError) {
@@ -186,18 +184,17 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final codeEditReporter = CodeEditReporter(unit);
 
     final sidecarOptions = unit.session.analysisContext.sidecarOptions;
-
     final astNode = NodeLocator(
       offset,
       offset + length,
     ).searchWithin(unit.unit);
 
     for (final codeEdit in allCodeEdits) {
-      final codeEditConfig = sidecarOptions.editPackages?[codeEdit.packageName]
+      final config = sidecarOptions.editPackages?[codeEdit.packageName]
           ?.edits[codeEdit.code]?.configuration;
 
       codeEdit.initialize(
-        configurationContent: codeEditConfig,
+        configurationContent: config,
         reporter: codeEditReporter,
       );
       codeEdit.generateReport(astNode);

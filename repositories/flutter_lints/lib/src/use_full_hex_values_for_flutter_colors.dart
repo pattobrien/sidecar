@@ -18,6 +18,10 @@ class UseFullHexValuesForFlutterColors extends LintRule {
   String get message => _desc;
 
   @override
+  String? get url =>
+      'https://dart-lang.github.io/linter/lints/use_full_hex_values_for_flutter_colors.html';
+
+  @override
   void registerNodeProcessors(NodeLintRegistry registry) {
     final visitor = _Visitor(this);
     registry.addInstanceCreationExpression(this, visitor);
@@ -41,7 +45,7 @@ class _Visitor extends SimpleAstVisitor {
         if (argument is IntegerLiteral) {
           var value = argument.literal.lexeme.toLowerCase();
           if (!value.startsWith('0x') || value.length != 10) {
-            rule.reportedAstNode(argument);
+            rule.reportAstNode(argument);
           }
         }
       }
