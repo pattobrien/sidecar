@@ -5,14 +5,11 @@ import 'utils/utils.dart';
 const _desc =
     r'Prefer an 8-digit hexadecimal integer(0xFFFFFFFF) to instantiate Color.';
 
-class UseFullHexValuesForFlutterColors extends LintError {
+class UseFullHexValuesForFlutterColors extends LintRule {
   UseFullHexValuesForFlutterColors(super.ref);
 
   @override
   String get code => 'use_full_hex_values_for_flutter_colors';
-
-  @override
-  LintErrorType get defaultType => LintErrorType.info;
 
   @override
   String get packageName => 'flutter_lints';
@@ -28,7 +25,7 @@ class UseFullHexValuesForFlutterColors extends LintError {
 }
 
 class _Visitor extends SimpleAstVisitor {
-  final LintError rule;
+  final LintRule rule;
 
   _Visitor(this.rule);
 

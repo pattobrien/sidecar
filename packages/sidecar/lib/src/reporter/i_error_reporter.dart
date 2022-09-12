@@ -1,16 +1,14 @@
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 
-import '../models/reported_lint_error.dart';
-import '../models/lint_error.dart';
+import '../models/detected_lint.dart';
+import '../models/lint_rule.dart';
 
 abstract class IErrorReporter {
-  IErrorReporter(
-    this.unit,
-  );
+  IErrorReporter(this.sourceUnit);
 
-  final ResolvedUnitResult unit;
-  final List<ReportedLintError> reportedErrors = <ReportedLintError>[];
+  final ResolvedUnitResult sourceUnit;
+  final List<DetectedLint> detectedLints = <DetectedLint>[];
 
-  void reportedLint(AstNode? node, LintError lint);
+  void reportAstNode(AstNode? node, LintRule rule);
 }

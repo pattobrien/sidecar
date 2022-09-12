@@ -5,10 +5,10 @@ class CodeEditReporter extends ICodeEditReporter {
   CodeEditReporter(super.unit);
 
   @override
-  void reportEdit(AstNode? node, CodeEdit edit) {
+  void reportAstNode(AstNode? node, CodeEdit edit) {
     if (node != null) {
       final reportedCodeEdit =
-          RequestedCodeEdit(sourceUnit: unit, sourceNode: node, codeEdit: edit);
+          RequestedCodeEdit(unit: unit, node: node, codeEdit: edit);
       edit.computeSourceChange(reportedCodeEdit);
       reportedEdits.add(reportedCodeEdit);
     }

@@ -1,14 +1,14 @@
 import 'package:analyzer/dart/ast/ast.dart';
 
-import '../models/lint_error.dart';
+import '../models/lint_rule.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';
 
 class LintVisitor extends AstVisitor<void> {
-  final NodeLintRegistry registry;
-
   LintVisitor(this.registry);
+
+  final NodeLintRegistry registry;
 
   @override
   void visitAdjacentStrings(AdjacentStrings node) {

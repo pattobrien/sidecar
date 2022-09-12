@@ -2,8 +2,9 @@
 
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
+import 'package:intl_utilities/intl_utilities.dart';
 
-class AvoidStringLiterals extends LintError {
+class AvoidStringLiterals extends LintRule {
   AvoidStringLiterals(super.ref);
 
   @override
@@ -14,9 +15,6 @@ class AvoidStringLiterals extends LintError {
 
   @override
   String get packageName => 'l10n_lints';
-
-  @override
-  LintErrorType get defaultType => LintErrorType.info;
 
   @override
   AvoidStringLiteralsConfig get configuration =>
@@ -32,33 +30,28 @@ class AvoidStringLiterals extends LintError {
   }
 
   @override
-  Future<List<PrioritizedSourceChange>> computeFixes(
-    ReportedLintError lint,
+  Future<List<PrioritizedSourceChange>> computeCodeEdits(
+    DetectedLint lint,
   ) async {
-    final unit = lint.sourceUnit;
-    final stringNode = lint.reportedNode;
+    final unit = lint.unit;
+    final stringNode = lint.node;
 
     final changeBuilder = ChangeBuilder(session: unit.session);
 
-    final flutterLocalizationsGenUri = Uri(
-      scheme: 'package',
-      path: 'flutter_gen/gen_l10n/app_localizations.dart',
-    );
-
+    //TODO: dynamically compute value
     final computedStringId = 'string123';
     final prefix = configuration.prefix;
 
     final arbClassPrefix = '$prefix.$computedStringId';
 
-    final references = <SourceSpan>[];
+    var references = <SourceSpan>[];
     final parentNode = stringNode.parent;
 
     if (parentNode is VariableDeclaration) {
       final element = parentNode.declaredElement2;
       if (element != null) {
         final analysisUtils = ref.read(analysisContextUtilitiesProvider);
-        final refs = await analysisUtils.getReferences(unit, element);
-        references.addAll(refs);
+        references = await analysisUtils.getReferences(unit, element);
       }
     }
 
@@ -72,7 +65,7 @@ class AvoidStringLiterals extends LintError {
     if (areAllReferencesWithinBuildMethods && references.isNotEmpty) {
       final expression = stringNode.parent?.parent?.parent;
       await changeBuilder.addDartFileEdit(unit.path, (builder) {
-        builder.importLibraryElement(flutterLocalizationsGenUri);
+        builder.importFlutterGenAppLocalizations();
         builder.addDeletion(
           expression!.toSourceSpan(unit).toSourceRange(),
         );
@@ -93,15 +86,13 @@ class AvoidStringLiterals extends LintError {
     }
 
     if (parentNode is ArgumentList) {
-      await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
+      await changeBuilder.addDartFileEdit(unit.path, (builder) {
         if (stringNode.isInsideBuildMethod()) {
-          fileBuilder.importLibraryElement(flutterLocalizationsGenUri);
-          fileBuilder.addReplacement(
+          builder.importFlutterGenAppLocalizations();
+          builder.addReplacement(
             stringNode.toSourceRange(unit),
             (editBuilder) => editBuilder.write(arbClassPrefix),
           );
-        } else {
-          // offer no quick fix
         }
       });
     }
@@ -122,7 +113,7 @@ class AvoidStringLiterals extends LintError {
 class _LiteralAstVisitor<R> extends GeneralizingAstVisitor<R> {
   _LiteralAstVisitor(this.lintRule);
 
-  final LintError lintRule;
+  final LintRule lintRule;
 
   @override
   R? visitStringLiteral(StringLiteral node) {

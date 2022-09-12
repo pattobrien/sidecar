@@ -4,7 +4,7 @@
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-List<LintError> pluginBootstrapper(
+List<LintRule> pluginBootstrapper(
   NodeLintRegistry registry,
   ProviderContainer ref,
 ) {

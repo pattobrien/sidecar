@@ -32,14 +32,14 @@ class MyPublicWidget extends StatelessWidget {
 ```
 ''';
 
-class UseKeyInWidgetConstructors extends LintError {
+class UseKeyInWidgetConstructors extends LintRule {
   UseKeyInWidgetConstructors(super.ref);
 
   @override
   String get code => 'use_key_in_widget_constructors';
 
   @override
-  LintErrorType get defaultType => LintErrorType.info;
+  LintRuleType get defaultType => LintRuleType.info;
 
   @override
   String get message => _desc;
@@ -56,7 +56,7 @@ class UseKeyInWidgetConstructors extends LintError {
 }
 
 class _Visitor extends SimpleAstVisitor<void> {
-  final LintError rule;
+  final LintRule rule;
 
   _Visitor(this.rule);
 

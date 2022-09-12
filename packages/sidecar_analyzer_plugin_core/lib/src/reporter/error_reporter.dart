@@ -1,17 +1,15 @@
 import 'package:sidecar/sidecar.dart';
 
 class ErrorReporter extends IErrorReporter {
-  ErrorReporter(
-    super.unit,
-  );
+  ErrorReporter(super.unit);
 
   @override
-  void reportedLint(AstNode? node, LintError lint) {
+  void reportAstNode(AstNode? node, LintRule lint) {
     if (node != null) {
       final reportedLintError =
-          ReportedLintError(sourceUnit: unit, reportedNode: node, lint: lint);
+          DetectedLint(unit: sourceUnit, node: node, rule: lint);
       final highlightedError = lint.computeLintHighlight(reportedLintError);
-      reportedErrors.add(highlightedError);
+      detectedLints.add(highlightedError);
     }
   }
 }

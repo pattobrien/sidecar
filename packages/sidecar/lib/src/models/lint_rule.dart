@@ -1,6 +1,5 @@
 // ignore_for_file: implementation_imports
 
-import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
@@ -9,18 +8,17 @@ import 'package:riverpod/riverpod.dart';
 
 import '../ast/ast.dart';
 import '../reporter/i_error_reporter.dart';
-import 'reported_lint_error.dart';
+import 'detected_lint.dart';
 
-enum LintErrorType { info, warning, error }
-
-abstract class LintError {
-  LintError(this.ref);
+abstract class LintRule {
+  LintRule(this.ref);
 
   String get code;
-  String get message;
-  LintErrorType get defaultType;
-
   String get packageName;
+  String get message;
+
+  LintRuleType get defaultType => LintRuleType.info;
+  String? get url => null;
 
   @mustCallSuper
   Object get configuration => _configuration;
@@ -43,36 +41,32 @@ abstract class LintError {
     this.reporter = reporter;
   }
 
-  void registerNodeProcessors(NodeLintRegistry registry);
+  void registerNodeProcessors(NodeLintRegistry registry) {}
 
   void reportedAstNode(AstNode? node) {
     if (node != null) {
-      reporter.reportedLint(node, this);
+      reporter.reportAstNode(node, this);
     }
   }
 
-  ReportedLintError computeLintHighlight(
-    ReportedLintError reportedLintError,
-  ) =>
-      reportedLintError;
+  DetectedLint computeLintHighlight(DetectedLint lint) => lint;
 
-  Future<List<plugin.PrioritizedSourceChange>> computeFixes(
-    ReportedLintError lint,
+  Future<List<plugin.PrioritizedSourceChange>> computeCodeEdits(
+    DetectedLint lint,
   ) =>
       Future.value([]);
 }
 
-typedef GetFixes = List<plugin.PrioritizedSourceChange> Function(
-    ResolvedUnitResult unit);
+enum LintRuleType { info, warning, error }
 
-extension LintErrorTypeX on LintErrorType {
+extension LintErrorTypeX on LintRuleType {
   plugin.AnalysisErrorSeverity get analysisError {
     switch (this) {
-      case LintErrorType.info:
+      case LintRuleType.info:
         return plugin.AnalysisErrorSeverity.INFO;
-      case LintErrorType.warning:
+      case LintRuleType.warning:
         return plugin.AnalysisErrorSeverity.WARNING;
-      case LintErrorType.error:
+      case LintRuleType.error:
         return plugin.AnalysisErrorSeverity.ERROR;
     }
   }

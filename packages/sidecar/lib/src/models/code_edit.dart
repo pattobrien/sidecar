@@ -11,7 +11,6 @@ abstract class CodeEdit {
 
   String get code;
   String get packageName;
-  // String get message;
 
   @mustCallSuper
   Object get configuration => _configuration;
@@ -39,6 +38,6 @@ abstract class CodeEdit {
   );
 
   void generateReport(AstNode? node) {
-    if (node != null) _reporter.reportEdit(node, this);
+    if (node != null) _reporter.reportAstNode(node, this);
   }
 }

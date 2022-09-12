@@ -1,4 +1,4 @@
 export 'code_edit.dart';
-export 'lint_error.dart';
+export 'detected_lint.dart';
+export 'lint_rule.dart';
 export 'requested_code_edit.dart';
-export 'reported_lint_error.dart';

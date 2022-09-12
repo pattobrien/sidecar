@@ -11,9 +11,6 @@ class CreateNewPageWidget extends CodeEdit {
   String get packageName => 'auto_route_lints';
 
   @override
-  String get message => 'TODO: insert a message here';
-
-  @override
   CreateNewPageWidgetConfiguration get configuration =>
       super.configuration as CreateNewPageWidgetConfiguration;
 
@@ -26,11 +23,11 @@ class CreateNewPageWidget extends CodeEdit {
     RequestedCodeEdit requestedCodeEdit,
   ) async {
     // prepare change builder
-    final unit = requestedCodeEdit.sourceUnit;
+    final unit = requestedCodeEdit.unit;
     final changeBuilder = AutoRouteChangeBuilder(session: unit.session);
 
     final node =
-        requestedCodeEdit.sourceNode.thisOrAncestorOfType<ClassDeclaration>();
+        requestedCodeEdit.node.thisOrAncestorOfType<ClassDeclaration>();
 
     final pageClass = node?.name2.value().toString();
 

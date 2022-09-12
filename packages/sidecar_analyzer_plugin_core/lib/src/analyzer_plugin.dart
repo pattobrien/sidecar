@@ -39,7 +39,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   final ProviderContainer ref;
   late AnalysisContextCollection _collection;
-  final List<LintError> allLints;
+  final List<LintRule> allLints;
   final NodeLintRegistry nodeRegistry;
   final List<CodeEdit> allCodeEdits;
 
@@ -210,7 +210,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     return codeEdits;
   }
 
-  Iterable<ReportedLintError> _getReportedErrors(
+  Iterable<DetectedLint> _getReportedErrors(
     ResolvedUnitResult unit,
   ) {
     final errorReporter = ErrorReporter(unit);
@@ -231,7 +231,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final lintVisitor = LintVisitor(nodeRegistry);
     unit.unit.accept(lintVisitor);
 
-    final errors = errorReporter.reportedErrors;
+    final errors = errorReporter.detectedLints;
 
     Logger.logLine(
         '# OF FIXES (RECEIVED) = ${errors.length} for file ${unit.path}');

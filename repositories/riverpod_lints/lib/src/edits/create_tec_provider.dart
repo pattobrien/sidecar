@@ -16,17 +16,17 @@ class CreateTextEditControllerProvider extends CodeEdit {
   Future<PrioritizedSourceChange?> computeSourceChange(
     RequestedCodeEdit requestedCodeEdit,
   ) async {
-    final session = requestedCodeEdit.sourceUnit.session;
-    final unit = requestedCodeEdit.sourceUnit;
+    final session = requestedCodeEdit.unit.session;
+    final unit = requestedCodeEdit.unit;
     final changeBuilder = ChangeBuilder(session: session);
 
-    final node = requestedCodeEdit.sourceNode;
+    final node = requestedCodeEdit.node;
     final parentNode = node.parent?.parent;
     if (parentNode is NamedExpression) {
       final argumentOffset = parentNode.expression.beginToken.offset - 1;
 
       await changeBuilder.addDartFileEdit(
-        requestedCodeEdit.sourceUnit.path,
+        requestedCodeEdit.unit.path,
         (builder) {
           builder.addInsertion(unit.unit.length, (builder) {
             builder.write('\n// ${parentNode.name.label.staticElement}');
@@ -41,7 +41,7 @@ class CreateTextEditControllerProvider extends CodeEdit {
       );
     } else {
       await changeBuilder.addDartFileEdit(
-        requestedCodeEdit.sourceUnit.path,
+        requestedCodeEdit.unit.path,
         (builder) {
           builder.addInsertion(
             unit.unit.length,

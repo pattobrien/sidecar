@@ -12,5 +12,5 @@ abstract class ICodeEditReporter {
   final ResolvedUnitResult unit;
   final List<RequestedCodeEdit> reportedEdits = <RequestedCodeEdit>[];
 
-  void reportEdit(AstNode? node, CodeEdit edit);
+  void reportAstNode(AstNode? node, CodeEdit edit);
 }

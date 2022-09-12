@@ -4,20 +4,17 @@ import 'package:collection/collection.dart';
 import 'package:riverpod_utilities/riverpod_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
-class PreferConsumerWidget extends LintError {
+class PreferConsumerWidget extends LintRule {
   PreferConsumerWidget(super.ref);
 
   @override
   String get code => 'prefer_consumer_widget';
 
   @override
-  LintErrorType get defaultType => LintErrorType.info;
+  String get packageName => 'riverpod_lints';
 
   @override
   String get message => 'Prefer to use ConsumerWidget.';
-
-  @override
-  String get packageName => 'riverpod_lints';
 
   @override
   void registerNodeProcessors(NodeLintRegistry registry) {
@@ -26,25 +23,23 @@ class PreferConsumerWidget extends LintError {
   }
 
   @override
-  ReportedLintError computeLintHighlight(
-    ReportedLintError reportedLintError,
-  ) {
-    final node = reportedLintError.reportedNode;
+  DetectedLint computeLintHighlight(DetectedLint lint) {
+    final node = lint.node;
 
     if (node is! ClassDeclaration) {
-      return reportedLintError;
+      return lint;
     } else {
       final superclass = node.extendsClause?.superclass;
-      return reportedLintError.copyWith(highlightedNode: superclass);
+      return lint.copyWith(highlightedNode: superclass);
     }
   }
 
   @override
-  Future<List<PrioritizedSourceChange>> computeFixes(
-    ReportedLintError lint,
+  Future<List<PrioritizedSourceChange>> computeCodeEdits(
+    DetectedLint lint,
   ) async {
-    final unit = lint.sourceUnit;
-    final lintedNode = lint.reportedNode;
+    final unit = lint.unit;
+    final lintedNode = lint.node;
 
     final changeBuilder = ChangeBuilder(session: unit.session);
     await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
@@ -84,7 +79,7 @@ class PreferConsumerWidget extends LintError {
 class _Visitor<R> extends GeneralizingAstVisitor<R> {
   _Visitor(this.lintRule);
 
-  final LintError lintRule;
+  final LintRule lintRule;
 
   @override
   R? visitClassDeclaration(ClassDeclaration node) {
