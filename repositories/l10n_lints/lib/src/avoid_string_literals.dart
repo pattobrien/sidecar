@@ -19,6 +19,13 @@ class AvoidStringLiterals extends LintError {
   LintErrorType get defaultType => LintErrorType.info;
 
   @override
+  AvoidStringLiteralsConfig get configuration =>
+      super.configuration as AvoidStringLiteralsConfig;
+
+  @override
+  MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
+
+  @override
   void registerNodeProcessors(NodeLintRegistry registry) {
     final visitor = _LiteralAstVisitor(this);
     registry.addSimpleStringLiteral(this, visitor);
@@ -39,8 +46,9 @@ class AvoidStringLiterals extends LintError {
     );
 
     final computedStringId = 'string123';
+    final prefix = configuration.prefix;
 
-    final arbClassPrefix = 'AppLocalizations.of(context).$computedStringId';
+    final arbClassPrefix = '$prefix.$computedStringId';
 
     final references = <SourceSpan>[];
     final parentNode = stringNode.parent;
@@ -125,5 +133,17 @@ class _LiteralAstVisitor<R> extends GeneralizingAstVisitor<R> {
     }
 
     return super.visitStringLiteral(node);
+  }
+}
+
+class AvoidStringLiteralsConfig {
+  const AvoidStringLiteralsConfig({
+    required this.prefix,
+  });
+
+  final String prefix;
+
+  factory AvoidStringLiteralsConfig.fromJson(Map json) {
+    return AvoidStringLiteralsConfig(prefix: json['prefix']);
   }
 }

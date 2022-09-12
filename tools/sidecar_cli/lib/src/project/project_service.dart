@@ -121,7 +121,7 @@ class ProjectService {
     //     'sidecar_analyzer_plugin should be set as dependency',
     //   );
     // }
-    return Version.parse('0.1.2');
+    return Version.parse('0.1.6');
   }
 
   Future<void> copyBasePluginFromSource(Version version) async {

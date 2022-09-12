@@ -33,15 +33,15 @@ abstract class LintError {
 
   late IErrorReporter reporter;
 
-  // void initialize({
-  //   required Map? configurationContent,
-  //   required IErrorReporter reporter,
-  // }) {
-  //   if (configurationContent != null) {
-  //     _configuration = jsonDecoder(configurationContent);
-  //   }
-  //   this.reporter = reporter;
-  // }
+  void initialize({
+    required Map? configurationContent,
+    required IErrorReporter reporter,
+  }) {
+    if (configurationContent != null) {
+      _configuration = jsonDecoder(configurationContent);
+    }
+    this.reporter = reporter;
+  }
 
   void registerNodeProcessors(NodeLintRegistry registry);
 

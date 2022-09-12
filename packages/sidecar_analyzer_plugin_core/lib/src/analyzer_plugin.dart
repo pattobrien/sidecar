@@ -72,6 +72,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final sidecarOptions = analysisContext.sidecarOptions;
     final rootDirectory = analysisContext.contextRoot.root;
     final relativePath = p.relative(path, from: rootDirectory.path);
+
     // check if the path is included for analysis via the sidecar options
     final doesMatchGlob = sidecarOptions.includes
         .map((e) => Glob(e, context: p.context).matches(relativePath))
@@ -214,16 +215,18 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) {
     final errorReporter = ErrorReporter(unit);
 
-    // final sidecarOptions = unit.session.analysisContext.sidecarOptions;
+    final sidecarOptions = unit.session.analysisContext.sidecarOptions;
 
     for (final linter in allLints) {
-      // final lintErrorConfig = sidecarOptions
-      //     .editPackages?[linter.packageName]?.edits[linter.code]?.configuration;
-      linter.reporter = errorReporter;
-      // linter.initialize(
-      //   configurationContent: lintErrorConfig,
-      //   reporter: errorReporter,
-      // );
+      // linter.reporter = errorReporter;
+
+      final lintErrorConfig = sidecarOptions
+          .lintPackages?[linter.packageName]?.lints[linter.code]?.configuration;
+
+      linter.initialize(
+        configurationContent: lintErrorConfig,
+        reporter: errorReporter,
+      );
     }
     final lintVisitor = LintVisitor(nodeRegistry);
     unit.unit.accept(lintVisitor);
