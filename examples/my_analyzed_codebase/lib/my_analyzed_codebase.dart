@@ -1,6 +1,5 @@
 //
 import 'package:flutter/material.dart';
-import '';
 
 int calculate() {
   final aStringThatShouldBeLinted = 'some string that should be linted';

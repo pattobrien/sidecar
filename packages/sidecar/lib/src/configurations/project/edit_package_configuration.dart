@@ -25,15 +25,15 @@ class EditPackageConfiguration {
                   : <dynamic, dynamic>{},
             ),
           );
-          // } else if (value == null) {
-          //   return MapEntry(
-          //     key as String,
-          //     EditConfiguration(
-          //       packageName: packageName,
-          //       editId: key,
-          //       configuration: <dynamic, dynamic>{},
-          //     ),
-          //   );
+        } else if (value == null) {
+          return MapEntry(
+            key as String,
+            EditConfiguration(
+              packageName: packageName,
+              editId: key,
+              configuration: <dynamic, dynamic>{},
+            ),
+          );
         } else {
           throw UnimplementedError(
               'could not parse package edits; expected Map was of type ${value.runtimeType}');
