@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
@@ -81,7 +80,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       final unit = await context.currentSession.getResolvedUnit(filePath);
 
-      if (unit is ResolvedUnitResult) {
+      if (unit is! ResolvedUnitResult) {
         final reportedErrors = await _getReportedErrors(context, filePath).then(
           (value) => value.where((reportedError) {
             final errorLocation = reportedError.toAnalysisError().location;
@@ -97,9 +96,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           reportedErrors.map((e) async => await e.toAnalysisErrorFixes(ref)),
         );
 
-        final response = plugin.EditGetFixesResult(analysisErrorFixes);
-
-        return response;
+        return plugin.EditGetFixesResult(analysisErrorFixes);
       }
     } on Exception catch (e, stackTrace) {
       channel.sendError(e.toString(), stackTrace);
@@ -137,10 +134,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final codeEditReporter = CodeEditReporter(unit);
 
     final sidecarOptions = unit.session.analysisContext.sidecarOptions;
-    final astNode = NodeLocator(
-      offset,
-      offset + length,
-    ).searchWithin(unit.unit);
+    final astNode = unit.astNodeAt(offset, length: length);
 
     for (final codeEdit in allCodeEdits) {
       final config = sidecarOptions.editPackages?[codeEdit.packageName]
@@ -149,13 +143,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         codeEdit.initialize(configurationContent: config);
         codeEditReporter.reportAstNode(astNode, codeEdit);
       } on EmptyConfiguration catch (e, stackTrace) {
-        channel.sendError(
-            'CodeEdit EmptyConfiguration: ${e.toString()}', stackTrace);
+        channel.sendError('CodeEdit EmptyConfig: $e', stackTrace);
       } on IncorrectConfiguration catch (e, stackTrace) {
-        channel.sendError(
-            'CodeEdit IncorrectConfig: ${e.toString()}', stackTrace);
+        channel.sendError('CodeEdit IncorrectConfig: $e', stackTrace);
       } catch (e, stackTrace) {
-        channel.sendError('CodeEdit Misc error: ${e.toString()}', stackTrace);
+        channel.sendError('CodeEdit Misc error: $e', stackTrace);
       }
     }
 
@@ -192,8 +184,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           ),
         );
       } on IncorrectConfiguration catch (e, stackTrace) {
-        channel.sendError(
-            'LintRule IncorrectConfig: ${e.toString()}', stackTrace);
+        channel.sendError('LintRule IncorrectConfig: $e', stackTrace);
 
         detectedConfigurationErrors.add(
           _calculateAnalysisOptionConfigError(
@@ -225,7 +216,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       List<plugin.AnalysisError> errors, AnalysisContext analysisContext) {
     final path = analysisContext.contextRoot.optionsFile!.path;
     final response = plugin.AnalysisErrorsParams(path, errors).toNotification();
-
     channel.sendNotification(response);
   }
 
