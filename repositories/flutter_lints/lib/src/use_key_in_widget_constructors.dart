@@ -2,8 +2,11 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+
+import 'package:path/path.dart' as p;
 
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
@@ -11,26 +14,6 @@ import 'package:flutter_utilities/flutter_utilities.dart';
 import 'utils/utils.dart';
 
 const _desc = r'Use key in widget constructors.';
-
-const _details = r'''
-**DO** use key in widget constructors.
-
-It's a good practice to expose the ability to provide a key when creating public
-widgets.
-
-**BAD:**
-```dart
-class MyPublicWidget extends StatelessWidget {
-}
-```
-
-**GOOD:**
-```dart
-class MyPublicWidget extends StatelessWidget {
-  MyPublicWidget({super.key});
-}
-```
-''';
 
 class UseKeyInWidgetConstructors extends LintRule {
   UseKeyInWidgetConstructors(super.ref);
@@ -52,17 +35,27 @@ class UseKeyInWidgetConstructors extends LintRule {
       'https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html';
 
   @override
-  void registerNodeProcessors(NodeLintRegistry registry) {
-    var visitor = _Visitor(this);
-    registry.addClassDeclaration(this, visitor);
-    registry.addConstructorDeclaration(this, visitor);
+  Future<List<DetectedLint>> computeAnalysisError(
+    AnalysisContext analysisContext,
+    String path,
+  ) async {
+    final visitor = _Visitor();
+    final rootDirectory = analysisContext.contextRoot.root;
+    final relativePath = p.relative(path, from: rootDirectory.path);
+    final isIncluded = analysisContext.sidecarOptions.includes(relativePath);
+
+    if (!isIncluded) return [];
+    final unit = await analysisContext.currentSession.getResolvedUnit(path);
+    if (unit is! ResolvedUnitResult) return [];
+    unit.unit.accept(visitor);
+    return visitor.nodes.toDetectedLints(unit, this);
   }
 }
 
-class _Visitor extends SimpleAstVisitor<void> {
-  final LintRule rule;
+class _Visitor extends GeneralizingAstVisitor<void> {
+  final List<AstNode> nodes = [];
 
-  _Visitor(this.rule);
+  _Visitor();
 
   @override
   void visitClassDeclaration(ClassDeclaration node) {
@@ -71,7 +64,10 @@ class _Visitor extends SimpleAstVisitor<void> {
         classElement.isPublic &&
         FlutterUtils().hasWidgetAsAscendant(classElement) &&
         classElement.constructors.where((e) => !e.isSynthetic).isEmpty) {
-      rule.reportAstNode(node.name);
+      // rule.reportAstNode(node.name);
+      // final lint = DetectedLint.fromAstNode(node.name, unit, rule);
+
+      nodes.add(node.name);
     }
     super.visitClassDeclaration(node);
   }
@@ -105,7 +101,7 @@ class _Visitor extends SimpleAstVisitor<void> {
           return false;
         })) {
       var errorNode = node.name ?? node.returnType;
-      rule.reportAstNode(errorNode);
+      nodes.add(errorNode);
     }
     super.visitConstructorDeclaration(node);
   }

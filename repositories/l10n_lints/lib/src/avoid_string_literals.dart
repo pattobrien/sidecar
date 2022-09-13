@@ -1,5 +1,8 @@
 // ignore_for_file: implementation_imports
 
+import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/results.dart';
+import 'package:l10n_lints/src/constants.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:intl_utilities/intl_utilities.dart';
@@ -11,14 +14,14 @@ class AvoidStringLiterals extends LintRule {
   String get code => 'avoid_string_literals';
 
   @override
-  String get message => '\${STRING} should be extracted to an ARB or ENV file.';
+  String get message =>
+      '\${STRING_GOES_HERE} should be extracted to an ARB or ENV file.';
 
   @override
-  String get packageName => 'l10n_lints';
+  String get packageName => l10nLintsPackageId;
 
   @override
-  String? get url =>
-      'https://github.com/pattobrien/sidecar/tree/master/repositories/l10n_lints';
+  String? get url => l10nLintsUrl;
 
   @override
   AvoidStringLiteralsConfig get configuration =>
@@ -28,9 +31,15 @@ class AvoidStringLiterals extends LintRule {
   MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
 
   @override
-  void registerNodeProcessors(NodeLintRegistry registry) {
-    final visitor = _LiteralAstVisitor(this);
-    registry.addSimpleStringLiteral(this, visitor);
+  Future<List<DetectedLint>> computeAnalysisError(
+    AnalysisContext analysisContext,
+    String path,
+  ) async {
+    final visitor = _LiteralAstVisitor();
+    final unit = await analysisContext.currentSession.getResolvedUnit(path);
+    if (unit is! ResolvedUnitResult) return [];
+    unit.unit.accept(visitor);
+    return visitor.detectedNodes.toDetectedLints(unit, this);
   }
 
   @override
@@ -38,7 +47,9 @@ class AvoidStringLiterals extends LintRule {
     DetectedLint lint,
   ) async {
     final unit = lint.unit;
-    final stringNode = lint.node;
+    final stringNode = lint.sourceSpan.toAstNode(unit);
+
+    if (stringNode == null) return [];
 
     final changeBuilder = ChangeBuilder(session: unit.session);
 
@@ -70,9 +81,7 @@ class AvoidStringLiterals extends LintRule {
       final expression = stringNode.parent?.parent?.parent;
       await changeBuilder.addDartFileEdit(unit.path, (builder) {
         builder.importFlutterGenAppLocalizations();
-        builder.addDeletion(
-          expression!.toSourceSpan(unit).toSourceRange(),
-        );
+        builder.addDeletion(expression!.toSourceRange(unit));
       });
 
       await Future.wait(references.map((reference) async {
@@ -115,16 +124,16 @@ class AvoidStringLiterals extends LintRule {
 }
 
 class _LiteralAstVisitor<R> extends GeneralizingAstVisitor<R> {
-  _LiteralAstVisitor(this.lintRule);
+  _LiteralAstVisitor();
 
-  final LintRule lintRule;
+  final List<AstNode> detectedNodes = [];
 
   @override
   R? visitStringLiteral(StringLiteral node) {
     if (node.parent is! ImportDirective &&
         node is! PartDirective &&
         node is! PartOfDirective) {
-      lintRule.reportAstNode(node);
+      detectedNodes.add(node);
     }
 
     return super.visitStringLiteral(node);

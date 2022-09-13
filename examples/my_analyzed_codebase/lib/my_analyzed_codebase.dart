@@ -1,4 +1,3 @@
-//
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,7 +9,7 @@ int calculate() {
 }
 
 class SomePage extends ConsumerWidget {
-  final color = Color(0x123);
+  final color = Color(0x1234567);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';

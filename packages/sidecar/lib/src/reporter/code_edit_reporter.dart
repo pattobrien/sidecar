@@ -1,5 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:sidecar/sidecar.dart';
+
+import '../models/models.dart';
+import 'reporter.dart';
 
 class CodeEditReporter extends ICodeEditReporter {
   CodeEditReporter(super.unit);

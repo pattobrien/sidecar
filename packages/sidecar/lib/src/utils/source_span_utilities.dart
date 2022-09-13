@@ -13,7 +13,7 @@ import 'package:source_span/source_span.dart';
 
 extension SourceSpanX on SourceSpan {
   plugin.Location get location => plugin.Location(
-        start.sourceUrl!.path,
+        sourceUrl!.path,
         start.offset,
         length,
         start.line,

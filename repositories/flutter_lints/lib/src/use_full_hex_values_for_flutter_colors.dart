@@ -1,4 +1,6 @@
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:sidecar/sidecar.dart';
+import 'package:path/path.dart' as p;
 
 import 'utils/utils.dart';
 
@@ -22,16 +24,40 @@ class UseFullHexValuesForFlutterColors extends LintRule {
       'https://dart-lang.github.io/linter/lints/use_full_hex_values_for_flutter_colors.html';
 
   @override
-  void registerNodeProcessors(NodeLintRegistry registry) {
-    final visitor = _Visitor(this);
-    registry.addInstanceCreationExpression(this, visitor);
+  Future<List<DetectedLint>> computeAnalysisError(
+    AnalysisContext analysisContext,
+    String path,
+  ) async {
+    final visitor = _Visitor();
+    final rootDirectory = analysisContext.contextRoot.root;
+    final relativePath = p.relative(path, from: rootDirectory.path);
+    final isIncluded = analysisContext.sidecarOptions.includes(relativePath);
+
+    if (!isIncluded) return [];
+
+    final unit = await analysisContext.currentSession.getResolvedUnit(path);
+    if (unit is! ResolvedUnitResult) return [];
+
+    unit.unit.accept(visitor);
+    return visitor.nodes.toDetectedLints(unit, this);
   }
+
+  @override
+  SourceSpan computeLintHighlight(DetectedLint lint) {
+    return lint.sourceSpan;
+  }
+
+  // @override
+  // void registerNodeProcessors(NodeLintRegistry registry) {
+  //   final visitor = _Visitor(this);
+  //   registry.addInstanceCreationExpression(this, visitor);
+  // }
 }
 
-class _Visitor extends SimpleAstVisitor {
-  final LintRule rule;
+class _Visitor extends GeneralizingAstVisitor {
+  final List<AstNode> nodes = [];
 
-  _Visitor(this.rule);
+  _Visitor();
 
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
@@ -45,10 +71,12 @@ class _Visitor extends SimpleAstVisitor {
         if (argument is IntegerLiteral) {
           var value = argument.literal.lexeme.toLowerCase();
           if (!value.startsWith('0x') || value.length != 10) {
-            rule.reportAstNode(argument);
+            // rule.reportAstNode(argument);
+            nodes.add(argument);
           }
         }
       }
     }
+    super.visitInstanceCreationExpression(node);
   }
 }

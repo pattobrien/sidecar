@@ -27,6 +27,8 @@ sidecar:
 
     riverpod_lints:
       prefer_consumer_widget:
+        configuration:
+          some_property: abc
 
   edits:
     riverpod_lints:

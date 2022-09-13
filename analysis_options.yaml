@@ -1,7 +1,7 @@
 include: all_lint_rules.yaml
 analyzer:
-  plugins:
-    - sidecar_analyzer_plugin
+  # plugins:
+  #   - sidecar_analyzer_plugin
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
@@ -18,7 +18,7 @@ analyzer:
     # false positive when using Freezed
     invalid_annotation_target: ignore
 
-sidecar_analyzer_plugin:
+sidecar:
   includes:
     - "nothing.yaml"
     - "examples/**"

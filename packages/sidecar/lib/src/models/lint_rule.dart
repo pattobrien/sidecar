@@ -1,14 +1,12 @@
 // ignore_for_file: implementation_imports
 
-import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../ast/ast.dart';
-import '../reporter/i_error_reporter.dart';
-import 'detected_lint.dart';
+import '../../sidecar.dart';
 
 abstract class LintRule {
   LintRule(this.ref);
@@ -23,38 +21,41 @@ abstract class LintRule {
   @mustCallSuper
   Object get configuration => _configuration;
 
-  MapDecoder get jsonDecoder => (_) => <dynamic, dynamic>{};
-
-  late Object _configuration;
+  MapDecoder? get jsonDecoder => null;
 
   final ProviderContainer ref;
 
-  late IErrorReporter reporter;
+  late Object _configuration;
 
-  void initialize({
-    required Map? configurationContent,
-    required IErrorReporter reporter,
-  }) {
-    if (configurationContent != null) {
-      _configuration = jsonDecoder(configurationContent);
+  void initialize({required Map? configurationContent}) {
+    if (jsonDecoder != null) {
+      if (configurationContent == null) {
+        throw EmptyConfiguration('$code error: empty configuration');
+      } else {
+        try {
+          _configuration = jsonDecoder!(configurationContent);
+        } catch (e, stackTrace) {
+          throw IncorrectConfiguration('$code error: $e', stackTrace);
+        }
+      }
     }
-    this.reporter = reporter;
   }
 
+  @Deprecated(
+      'Moving away from registering node processors. Use computeAnalysisError instead.')
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
-  void reportAstNode(AstNode? node) {
-    if (node != null) {
-      reporter.reportAstNode(node, this);
-    }
-  }
+  Future<List<DetectedLint>> computeAnalysisError(
+    AnalysisContext analysisContext,
+    String path,
+  );
 
-  DetectedLint computeLintHighlight(DetectedLint lint) => lint;
+  SourceSpan computeLintHighlight(DetectedLint lint) => lint.sourceSpan;
 
   Future<List<plugin.PrioritizedSourceChange>> computeCodeEdits(
     DetectedLint lint,
   ) =>
-      Future.value([]);
+      Future.value(<plugin.PrioritizedSourceChange>[]);
 }
 
 enum LintRuleType { info, warning, error }
@@ -71,5 +72,3 @@ extension LintErrorTypeX on LintRuleType {
     }
   }
 }
-
-typedef MapDecoder = Object Function(Map json);

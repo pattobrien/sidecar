@@ -4,21 +4,15 @@ import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
-
-import 'reporter/reporter.dart';
 
 import 'package:sidecar/sidecar.dart';
 
-import 'package:path/path.dart' as p;
+import 'channel_extension.dart';
 
 const pluginName = 'sidecar_analyzer_plugin';
 
@@ -33,9 +27,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required this.allLints,
     required this.allCodeEdits,
     required this.nodeRegistry,
-  }) {
-    Logger.logLine('SidecarAnalyzerPlugin initialized');
-  }
+  });
 
   final ProviderContainer ref;
   late AnalysisContextCollection _collection;
@@ -44,7 +36,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   final List<CodeEdit> allCodeEdits;
 
   @override
-  List<String> get fileGlobsToAnalyze => <String>['**/*.dart', '**/*.arb'];
+  List<String> get fileGlobsToAnalyze =>
+      <String>['**/*.dart', '**/*.arb', '**/*.yaml'];
 
   @override
   String get name => pluginName;
@@ -65,50 +58,15 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required String path,
   }) async {
-    //TODO: remove restriction from plugin side, instead allow lints to do so
-    if (!path.endsWith('.dart')) return;
+    if (!analysisContext.isSidecarEnabled) return;
 
-    final sidecarOptions = analysisContext.sidecarOptions;
-    final rootDirectory = analysisContext.contextRoot.root;
-    final relativePath = p.relative(path, from: rootDirectory.path);
+    try {
+      final errors = await _getAnalysisErrors(analysisContext, path);
+      final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
 
-    // check if the path is included for analysis via the sidecar options
-    final doesMatchGlob = sidecarOptions.includes
-        .map((e) => Glob(e, context: p.context).matches(relativePath))
-        .where((element) => element == true)
-        .isNotEmpty;
-
-    if (!doesMatchGlob) return;
-
-    final isPluginEnabled =
-        analysisContext.analysisOptions.enabledPluginNames.contains(name);
-
-    final isPathExcluded =
-        analysisContext.contextRoot.excludedPaths.contains(path);
-
-    // check if we should analyze this file or not
-    if (!isPathExcluded && isPluginEnabled) {
-      final unit = await analysisContext.currentSession.getResolvedUnit(path);
-
-      if (unit is ResolvedUnitResult) {
-        try {
-          final errors = _getAnalysisErrors(unit);
-          final response = plugin.AnalysisErrorsParams(
-            path,
-            errors.toList(),
-          ).toNotification();
-          Logger.logLine('ANALYZEDFILE = SUCCESS $path');
-          channel.sendNotification(response);
-        } catch (e, stackTrace) {
-          channel.sendNotification(
-            plugin.PluginErrorParams(
-              false,
-              'error analyzing $path --${e.toString()}',
-              stackTrace.toString(),
-            ).toNotification(),
-          );
-        }
-      }
+      channel.sendNotification(notif);
+    } catch (e, stackTrace) {
+      channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
     }
   }
 
@@ -116,40 +74,33 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetFixesResult> handleEditGetFixes(
     plugin.EditGetFixesParams parameters,
   ) async {
+    final filePath = parameters.file;
     try {
-      final filePath = parameters.file;
       final context = _collection.contextFor(filePath);
 
       final unit = await context.currentSession.getResolvedUnit(filePath);
 
-      if (unit is ResolvedUnitResult) {
-        final reportedErrors = _getReportedErrors(unit).where((reportedError) {
-          final errorLocation = reportedError.toAnalysisError().location;
+      if (unit is! ResolvedUnitResult) {
+        final reportedErrors = await _getReportedErrors(context, filePath).then(
+          (value) => value.where((reportedError) {
+            final errorLocation = reportedError.toAnalysisError().location;
 
-          return errorLocation.file == parameters.file &&
-              errorLocation.offset <= parameters.offset &&
-              parameters.offset <= errorLocation.offset + errorLocation.length;
-        }).toList();
+            return errorLocation.file == parameters.file &&
+                errorLocation.offset <= parameters.offset &&
+                parameters.offset <=
+                    errorLocation.offset + errorLocation.length;
+          }).toList(),
+        );
 
         final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
           reportedErrors.map((e) async => await e.toAnalysisErrorFixes(ref)),
         );
 
-        final response = plugin.EditGetFixesResult(analysisErrorFixes);
-
-        return response;
+        return plugin.EditGetFixesResult(analysisErrorFixes);
       }
     } on Exception catch (e, stackTrace) {
-      Logger.logLine('ERROR - handleEditGetFixes - $e $parameters');
-      channel.sendNotification(
-        plugin.PluginErrorParams(
-          false,
-          e.toString(),
-          stackTrace.toString(),
-        ).toNotification(),
-      );
+      channel.sendError(e.toString(), stackTrace);
     }
-
     return plugin.EditGetFixesResult(const <plugin.AnalysisErrorFixes>[]);
   }
 
@@ -159,12 +110,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) async {
     final filePath = parameters.file;
     final context = _collection.contextFor(filePath);
-
     final unit = await context.currentSession.getResolvedUnit(filePath);
 
-    if (unit is! ResolvedUnitResult) {
-      return EditGetAssistsResult([]);
-    }
+    if (unit is! ResolvedUnitResult) return EditGetAssistsResult([]);
 
     final codeEditRequests =
         _getCodeEditRequests(unit, parameters.offset, parameters.length);
@@ -172,8 +120,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final changes = await Future.wait<plugin.PrioritizedSourceChange?>(
       codeEditRequests.map((e) async => await e.toPrioritizedSourceChange(ref)),
     );
+
     return EditGetAssistsResult(
-        changes.whereType<plugin.PrioritizedSourceChange>().toList());
+      changes.whereType<plugin.PrioritizedSourceChange>().toList(),
+    );
   }
 
   Iterable<RequestedCodeEdit> _getCodeEditRequests(
@@ -184,62 +134,112 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final codeEditReporter = CodeEditReporter(unit);
 
     final sidecarOptions = unit.session.analysisContext.sidecarOptions;
-    final astNode = NodeLocator(
-      offset,
-      offset + length,
-    ).searchWithin(unit.unit);
+    final astNode = unit.astNodeAt(offset, length: length);
 
     for (final codeEdit in allCodeEdits) {
       final config = sidecarOptions.editPackages?[codeEdit.packageName]
           ?.edits[codeEdit.code]?.configuration;
-
-      codeEdit.initialize(
-        configurationContent: config,
-        reporter: codeEditReporter,
-      );
-      codeEdit.generateReport(astNode);
+      try {
+        codeEdit.initialize(configurationContent: config);
+        codeEditReporter.reportAstNode(astNode, codeEdit);
+      } on EmptyConfiguration catch (e, stackTrace) {
+        channel.sendError('CodeEdit EmptyConfig: $e', stackTrace);
+      } on IncorrectConfiguration catch (e, stackTrace) {
+        channel.sendError('CodeEdit IncorrectConfig: $e', stackTrace);
+      } catch (e, stackTrace) {
+        channel.sendError('CodeEdit Misc error: $e', stackTrace);
+      }
     }
 
-    final codeEdits = codeEditReporter.reportedEdits;
-
-    Logger.logLine(
-        '# OF CODE EDITS = ${codeEdits.length} for file ${unit.path}');
-    return codeEdits;
+    return codeEditReporter.reportedEdits;
   }
 
-  Iterable<DetectedLint> _getReportedErrors(
-    ResolvedUnitResult unit,
-  ) {
-    final errorReporter = ErrorReporter(unit);
+  Future<Iterable<DetectedLint>> _getReportedErrors(
+    AnalysisContext analysisContext,
+    String sourcePath,
+  ) async {
+    final errorReporter = ErrorReporter(sourcePath);
 
-    final sidecarOptions = unit.session.analysisContext.sidecarOptions;
+    final sidecarOptions = analysisContext.sidecarOptions;
+    final detectedLints = <DetectedLint>[];
+    final detectedConfigurationErrors = <plugin.AnalysisError>[];
 
-    for (final linter in allLints) {
-      // linter.reporter = errorReporter;
+    await Future.wait(allLints.map<Future<void>>((rule) async {
+      final config = sidecarOptions
+          .lintPackages?[rule.packageName]?.lints[rule.code]?.configuration;
 
-      final lintErrorConfig = sidecarOptions
-          .lintPackages?[linter.packageName]?.lints[linter.code]?.configuration;
+      try {
+        rule.initialize(configurationContent: config);
+        final lints = await errorReporter.generateLints(analysisContext, rule);
+        detectedLints.addAll(lints);
+      } on EmptyConfiguration catch (e, stackTrace) {
+        channel.sendError('LintRule EmptyConfig: ${e.toString()}', stackTrace);
 
-      linter.initialize(
-        configurationContent: lintErrorConfig,
-        reporter: errorReporter,
-      );
-    }
-    final lintVisitor = LintVisitor(nodeRegistry);
-    unit.unit.accept(lintVisitor);
+        detectedConfigurationErrors.add(
+          _calculateAnalysisOptionConfigError(
+            analysisContext,
+            rule.packageName,
+            rule.code,
+            'Empty configuration',
+          ),
+        );
+      } on IncorrectConfiguration catch (e, stackTrace) {
+        channel.sendError('LintRule IncorrectConfig: $e', stackTrace);
 
-    final errors = errorReporter.detectedLints;
+        detectedConfigurationErrors.add(
+          _calculateAnalysisOptionConfigError(
+            analysisContext,
+            rule.packageName,
+            rule.code,
+            'Incorrect configuration',
+          ),
+        );
+        // highlight node and state what missing configuration was
+      } catch (e, stackTrace) {
+        channel.sendError('LintRule MiscError: ${e.toString()}', stackTrace);
 
-    Logger.logLine(
-        '# OF FIXES (RECEIVED) = ${errors.length} for file ${unit.path}');
-    return errors;
+        detectedConfigurationErrors.add(
+          _calculateAnalysisOptionConfigError(
+            analysisContext,
+            rule.packageName,
+            rule.code,
+            'Miscellaneous error; please check your lint configuration',
+          ),
+        );
+      }
+    }));
+    _sendConfigErrors(detectedConfigurationErrors, analysisContext);
+    return detectedLints;
   }
 
-  Iterable<plugin.AnalysisError> _getAnalysisErrors(
-    ResolvedUnitResult unit,
+  void _sendConfigErrors(
+      List<plugin.AnalysisError> errors, AnalysisContext analysisContext) {
+    final path = analysisContext.contextRoot.optionsFile!.path;
+    final response = plugin.AnalysisErrorsParams(path, errors).toNotification();
+    channel.sendNotification(response);
+  }
+
+  plugin.AnalysisError _calculateAnalysisOptionConfigError(
+    AnalysisContext analysisContext,
+    String packageId,
+    String lintId,
+    String message,
   ) {
-    final reportedErrors = _getReportedErrors(unit);
-    final analysisErrors = reportedErrors.map((e) => e.toAnalysisError());
-    return analysisErrors;
+    final analysisError = plugin.AnalysisError(
+      plugin.AnalysisErrorSeverity.ERROR,
+      plugin.AnalysisErrorType.LINT,
+      analysisContext.sidecarLintSourceSpan(packageId, lintId).location,
+      message,
+      'lint_misconfiguration',
+    );
+    return analysisError;
+  }
+
+  Future<List<plugin.AnalysisError>> _getAnalysisErrors(
+    AnalysisContext analysisContext,
+    String path,
+  ) async {
+    final reportedErrors = await _getReportedErrors(analysisContext, path);
+    return reportedErrors.map((lint) => lint.toAnalysisError()).toList();
   }
 }
