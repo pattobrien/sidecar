@@ -12,26 +12,6 @@ import 'utils/utils.dart';
 
 const _desc = r'Use key in widget constructors.';
 
-const _details = r'''
-**DO** use key in widget constructors.
-
-It's a good practice to expose the ability to provide a key when creating public
-widgets.
-
-**BAD:**
-```dart
-class MyPublicWidget extends StatelessWidget {
-}
-```
-
-**GOOD:**
-```dart
-class MyPublicWidget extends StatelessWidget {
-  MyPublicWidget({super.key});
-}
-```
-''';
-
 class UseKeyInWidgetConstructors extends LintRule {
   UseKeyInWidgetConstructors(super.ref);
 
@@ -53,9 +33,9 @@ class UseKeyInWidgetConstructors extends LintRule {
 
   @override
   List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) {
-    final visitor = _Visitor(this, unit);
+    final visitor = _Visitor();
     unit.unit.accept(visitor);
-    return visitor.detectedLints;
+    return visitor.nodes.toDetectedLints(unit, this);
   }
 
   // @override
@@ -67,11 +47,9 @@ class UseKeyInWidgetConstructors extends LintRule {
 }
 
 class _Visitor extends SimpleAstVisitor<void> {
-  final LintRule rule;
-  final ResolvedUnitResult unit;
-  final List<DetectedLint> detectedLints = [];
+  final List<AstNode> nodes = [];
 
-  _Visitor(this.rule, this.unit);
+  _Visitor();
 
   @override
   void visitClassDeclaration(ClassDeclaration node) {
@@ -81,8 +59,9 @@ class _Visitor extends SimpleAstVisitor<void> {
         FlutterUtils().hasWidgetAsAscendant(classElement) &&
         classElement.constructors.where((e) => !e.isSynthetic).isEmpty) {
       // rule.reportAstNode(node.name);
-      final lint = DetectedLint.fromAstNode(node.name, unit, rule);
-      detectedLints.add(lint);
+      // final lint = DetectedLint.fromAstNode(node.name, unit, rule);
+
+      nodes.add(node.name);
     }
     super.visitClassDeclaration(node);
   }
@@ -116,8 +95,7 @@ class _Visitor extends SimpleAstVisitor<void> {
           return false;
         })) {
       var errorNode = node.name ?? node.returnType;
-      final lint = DetectedLint.fromAstNode(errorNode, unit, rule);
-      detectedLints.add(lint);
+      nodes.add(errorNode);
     }
     super.visitConstructorDeclaration(node);
   }

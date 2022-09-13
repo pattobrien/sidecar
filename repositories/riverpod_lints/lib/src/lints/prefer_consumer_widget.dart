@@ -18,9 +18,9 @@ class PreferConsumerWidget extends LintRule {
 
   @override
   List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) {
-    final visitor = _Visitor<dynamic>(this, unit);
+    final visitor = _Visitor<dynamic>();
     unit.unit.accept(visitor);
-    return visitor.detectedLints;
+    return visitor.nodes.toDetectedLints(unit, this);
   }
 
   @override
@@ -81,11 +81,9 @@ class PreferConsumerWidget extends LintRule {
 }
 
 class _Visitor<R> extends GeneralizingAstVisitor<R> {
-  _Visitor(this.rule, this.unit);
+  _Visitor();
 
-  final LintRule rule;
-  final ResolvedUnitResult unit;
-  final List<DetectedLint> detectedLints = [];
+  final List<AstNode> nodes = [];
 
   @override
   R? visitClassDeclaration(ClassDeclaration node) {
@@ -93,8 +91,7 @@ class _Visitor<R> extends GeneralizingAstVisitor<R> {
 
     if (superclass?.name == 'StatelessWidget') {
       // lintRule.reportedAstNode(node.extendsClause?.superclass);
-      final lint = DetectedLint.fromAstNode(node, unit, rule);
-      detectedLints.add(lint);
+      nodes.add(node.extendsClause!.superclass);
     }
 
     return super.visitClassDeclaration(node);

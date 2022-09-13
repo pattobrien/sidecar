@@ -1,13 +1,8 @@
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:riverpod/riverpod.dart';
 
 import '../../sidecar.dart';
-import '../utils/ast_utilities.dart';
-import '../utils/source_span_utilities.dart';
-import 'lint_rule.dart';
 
 /// An instance of a detected lint, to be reported to the analyzer server.
 class DetectedLint {
@@ -15,27 +10,30 @@ class DetectedLint {
     required this.rule,
     required this.unit,
     required this.sourceSpan,
-    // required this.node,
-    // required this.message,
-    // AstNode? highlightedNode,
-  }); // : highlightedNode = highlightedNode ?? node;
+    this.message = '',
+  });
 
   final LintRule rule;
+
+  final String message;
 
   /// Source of the source Ast Node
   final ResolvedUnitResult unit;
 
   final SourceSpan sourceSpan;
 
-  /// Main source node of the reported lint
-  // final AstNode node;
-  // final AstNode highlightedNode;
-  // final String message;
-
   factory DetectedLint.fromAstNode(
-      AstNode node, ResolvedUnitResult unit, LintRule rule) {
+    AstNode node,
+    ResolvedUnitResult unit,
+    LintRule rule, {
+    String message = '',
+  }) {
     return DetectedLint(
-        rule: rule, unit: unit, sourceSpan: node.toSourceSpan(unit));
+      rule: rule,
+      unit: unit,
+      message: message,
+      sourceSpan: node.toSourceSpan(unit),
+    );
   }
 
   DetectedLint copyWith({
@@ -43,11 +41,9 @@ class DetectedLint {
   }) =>
       DetectedLint(
         rule: rule,
+        message: message,
         unit: unit,
         sourceSpan: sourceSpan ?? this.sourceSpan,
-        // node: node,
-        // message: message,
-        // highlightedNode: highlightedNode ?? this.highlightedNode,
       );
 
   Future<plugin.AnalysisErrorFixes> toAnalysisErrorFixes(

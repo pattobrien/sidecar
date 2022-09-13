@@ -16,11 +16,11 @@ class PreferConsumerWidget extends LintRule {
   @override
   String get message => 'Prefer to use ConsumerWidget.';
 
-  @override
-  void registerNodeProcessors(NodeLintRegistry registry) {
-    final visitor = _Visitor<dynamic>(this);
-    registry.addClassDeclaration(this, visitor);
-  }
+  // @override
+  // void registerNodeProcessors(NodeLintRegistry registry) {
+  //   final visitor = _Visitor<dynamic>(this);
+  //   registry.addClassDeclaration(this, visitor);
+  // }
 
   // @override
   // DetectedLint computeLintHighlight(DetectedLint lint) {}
@@ -42,23 +42,5 @@ class PreferConsumerWidget extends LintRule {
         changeBuilder.sourceChange..message,
       ),
     ];
-  }
-}
-
-class _Visitor<R> extends GeneralizingAstVisitor<R> {
-  _Visitor(this.lintRule);
-
-  final LintRule lintRule;
-
-  @override
-  R? visitClassDeclaration(ClassDeclaration node) {
-    final superclass = node.extendsClause?.superclass.name;
-
-    if (superclass?.name == 'StatelessWidget') {
-      // lintRule.reportedAstNode(node.extendsClause?.superclass);
-      lintRule.reportAstNode(node);
-    }
-
-    return super.visitClassDeclaration(node);
   }
 }

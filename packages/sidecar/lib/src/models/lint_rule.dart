@@ -6,6 +6,7 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:yaml/yaml.dart';
 
 import '../../sidecar.dart';
 import '../ast/ast.dart';
@@ -28,16 +29,14 @@ abstract class LintRule {
 
   MapDecoder? get jsonDecoder => null;
 
-  late Object _configuration;
-
   final ProviderContainer ref;
 
-  late IErrorReporter reporter;
+  late Object _configuration;
+  // late IErrorReporter _reporter;
 
-  @protected
   void initialize({
     required Map? configurationContent,
-    required IErrorReporter reporter,
+    // required IErrorReporter reporter,
   }) {
     if (jsonDecoder != null) {
       if (configurationContent == null) {
@@ -50,16 +49,10 @@ abstract class LintRule {
         }
       }
     }
-    this.reporter = reporter;
+    // _reporter = reporter;
   }
 
   void registerNodeProcessors(NodeLintRegistry registry) {}
-
-  void reportAstNode(AstNode? node) {
-    if (node != null) {
-      reporter.reportAstNode(node, this);
-    }
-  }
 
   List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit);
 

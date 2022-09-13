@@ -23,9 +23,9 @@ class UseFullHexValuesForFlutterColors extends LintRule {
 
   @override
   List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) {
-    final visitor = _Visitor(this, unit);
+    final visitor = _Visitor();
     unit.unit.accept(visitor);
-    return visitor.detectedLints;
+    return visitor.nodes.toDetectedLints(unit, this);
   }
 
   // @override
@@ -36,11 +36,9 @@ class UseFullHexValuesForFlutterColors extends LintRule {
 }
 
 class _Visitor extends SimpleAstVisitor {
-  final LintRule rule;
-  final ResolvedUnitResult unit;
-  final List<DetectedLint> detectedLints = [];
+  final List<AstNode> nodes = [];
 
-  _Visitor(this.rule, this.unit);
+  _Visitor();
 
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
@@ -55,8 +53,7 @@ class _Visitor extends SimpleAstVisitor {
           var value = argument.literal.lexeme.toLowerCase();
           if (!value.startsWith('0x') || value.length != 10) {
             // rule.reportAstNode(argument);
-            final lint = DetectedLint.fromAstNode(node, unit, rule);
-            detectedLints.add(lint);
+            nodes.add(argument);
           }
         }
       }
