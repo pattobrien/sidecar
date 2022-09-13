@@ -64,7 +64,7 @@ final analysisContextUtilitiesProvider = Provider<AnalysisContextUtilities>(
 );
 
 extension AnalysisContextX on AnalysisContext {
-  SourceSpan sidecarLintSourceSpan(String packageId) {
+  SourceSpan sidecarPackageSourceSpan(String packageId) {
     final optionsFile = contextRoot.optionsFile;
     if (optionsFile != null) {
       final contents = optionsFile.readAsStringSync();
@@ -79,10 +79,7 @@ extension AnalysisContextX on AnalysisContext {
         final myPackage = lints.nodes.entries
             .firstWhere((entry) => entry.key.toString() == packageId)
             .key as YamlScalar;
-        // if (myPackage == null) return null;
 
-        // myPackage as YamlMap;
-        // final packageKeys = myPackage.keys as Iterable<YamlNode>;
         final packageSource = myPackage.span;
         final startOffset = packageSource.start.offset;
         final endOffset = packageSource.end.offset;
@@ -105,12 +102,58 @@ extension AnalysisContextX on AnalysisContext {
           ),
           contents.substring(startOffset, endOffset),
         );
-        // return SourceSpan(SourceLocation(doc.span.start.offset, sourceUrl: uri, line: doc.span.));
-        // return doc.span;
+
         return sourceSpan;
       } catch (e) {
         throw UnimplementedError('cannot parse sidecar options: $e');
-        // return null;
+      }
+    } else {
+      throw UnimplementedError('yaml options file doesnt exist');
+    }
+  }
+
+  SourceSpan sidecarLintSourceSpan(String packageId, String lintId) {
+    final optionsFile = contextRoot.optionsFile;
+    if (optionsFile != null) {
+      final contents = optionsFile.readAsStringSync();
+      try {
+        final uri = optionsFile.toUri();
+        final doc = loadYamlNode(contents, sourceUrl: uri) as YamlMap;
+
+        final sidecar = doc.nodes['sidecar']! as YamlMap;
+
+        final packages = sidecar.nodes['lints']! as YamlMap;
+
+        final lints = packages.nodes[packageId]! as YamlMap;
+
+        final myLintKey = lints.nodes.entries
+            .firstWhere((entry) => entry.key.toString() == lintId)
+            .key as YamlScalar;
+
+        final startOffset = myLintKey.span.start.offset;
+        final endOffset = myLintKey.span.end.offset;
+
+        final lineInfo = LineInfo.fromContent(contents);
+        final startLocation = lineInfo.getLocation(startOffset);
+        final endLocation = lineInfo.getLocation(endOffset);
+        final sourceSpan = SourceSpan(
+          SourceLocation(
+            startOffset,
+            column: startLocation.columnNumber,
+            line: startLocation.lineNumber,
+            sourceUrl: uri,
+          ),
+          SourceLocation(
+            endOffset,
+            column: endLocation.columnNumber,
+            line: endLocation.lineNumber,
+            sourceUrl: uri,
+          ),
+          contents.substring(startOffset, endOffset),
+        );
+        return sourceSpan;
+      } catch (e) {
+        throw UnimplementedError('cannot parse sidecar options: $e');
       }
     } else {
       throw UnimplementedError('yaml options file doesnt exist');

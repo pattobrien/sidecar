@@ -279,6 +279,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           _calculateAnalysisOptionConfigError(
             analysisContext,
             rule.packageName,
+            rule.code,
             'Empty configuration',
           ),
         );
@@ -294,6 +295,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           _calculateAnalysisOptionConfigError(
             analysisContext,
             rule.packageName,
+            rule.code,
             'Incorrect configuration',
           ),
         );
@@ -307,8 +309,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           ).toNotification(),
         );
         detectedConfigurationErrors.add(
-          _calculateAnalysisOptionConfigError(analysisContext, rule.packageName,
-              'Miscellaneous error; please check your lint configuration'),
+          _calculateAnalysisOptionConfigError(
+            analysisContext,
+            rule.packageName,
+            rule.code,
+            'Miscellaneous error; please check your lint configuration',
+          ),
         );
       }
     }));
@@ -327,14 +333,15 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   plugin.AnalysisError _calculateAnalysisOptionConfigError(
     AnalysisContext analysisContext,
     String packageId,
+    String lintId,
     String message,
   ) {
     final analysisError = plugin.AnalysisError(
       plugin.AnalysisErrorSeverity.ERROR,
       plugin.AnalysisErrorType.LINT,
-      analysisContext.sidecarLintSourceSpan(packageId)!.location,
+      analysisContext.sidecarLintSourceSpan(packageId, lintId).location,
       message,
-      'sidecar_misconfiguration',
+      'lint_misconfiguration',
     );
     return analysisError;
   }
