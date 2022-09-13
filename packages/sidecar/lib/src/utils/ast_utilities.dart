@@ -26,37 +26,27 @@ extension AstNodeX on AstNode {
     // final end = endNode?.end ?? node.end;
 
     // final sourceUrl = Uri.file(unit.path);
-    // final unit = thisOrAncestorOfType<CompilationUnit>();
 
     final startOffset = offset;
     final endOffset = end;
-    final source = toSource();
 
-    CharacterLocation? startLocation;
-    CharacterLocation? endLocation;
-    String? sourceFromUnit;
-    String? sourceUrl;
-    if (unit != null) {
-      startLocation = unit.lineInfo.getLocation(startOffset);
-      endLocation = unit.lineInfo.getLocation(endOffset);
-      sourceFromUnit = unit.content.substring(startOffset, endOffset);
-      sourceUrl = unit.path;
-    }
+    final startLocation = unit.lineInfo.getLocation(startOffset);
+    final endLocation = unit.lineInfo.getLocation(endOffset);
 
     return SourceSpan(
       SourceLocation(
         startOffset,
-        sourceUrl: sourceUrl,
-        column: startLocation?.columnNumber,
-        line: startLocation?.lineNumber,
+        sourceUrl: unit.path,
+        column: startLocation.columnNumber,
+        line: startLocation.lineNumber,
       ),
       SourceLocation(
         endOffset,
-        sourceUrl: sourceUrl,
-        column: endLocation?.columnNumber,
-        line: endLocation?.lineNumber,
+        sourceUrl: unit.path,
+        column: endLocation.columnNumber,
+        line: endLocation.lineNumber,
       ),
-      sourceFromUnit ?? source,
+      unit.content.substring(startOffset, endOffset),
     );
   }
 

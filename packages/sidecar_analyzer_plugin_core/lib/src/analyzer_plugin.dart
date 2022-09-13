@@ -26,7 +26,6 @@ const pluginVersion = '1.0.0-alpha.0';
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({
     ResourceProvider? resourceProvider,
-    // required this.ref,
     required this.lintRuleConstructors,
     required this.codeEditConstructors,
   })  : nodeRegistry = NodeLintRegistry(),
@@ -64,17 +63,21 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   String get version => pluginVersion;
 
   @override
+  Future<void> beforeContextCollectionDispose(
+      {required AnalysisContextCollection contextCollection}) {
+    channel.sendError('received: beforeNewContextCollection');
+    return super
+        .beforeContextCollectionDispose(contextCollection: contextCollection);
+  }
+
+  @override
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
     _collection = contextCollection;
-    await super.afterNewContextCollection(contextCollection: contextCollection);
-  }
+    channel.sendError('received: afterNewContextCollection');
 
-  void _initalizeAllEntities() {
-    //
-    // ref.read(lintRuleProvider).map((e) => e.initialize(configurationContent: configurationContent));
-    // ref.read(codeEditProvider);
+    await super.afterNewContextCollection(contextCollection: contextCollection);
   }
 
   @override
@@ -100,28 +103,28 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) async {
     final filePath = parameters.file;
     try {
-      final context = _collection.contextFor(filePath);
+      // final context = _collection.contextFor(filePath);
+      final unit = await getResolvedUnitResult(filePath);
+      final context = unit.session.analysisContext;
+      // final unit = await context.currentSession.getResolvedUnit(filePath);
 
-      final unit = await context.currentSession.getResolvedUnit(filePath);
+      // if (unit is! ResolvedUnitResult) {
+      final reportedErrors = await _getReportedErrors(context, filePath).then(
+        (value) => value.where((reportedError) {
+          final errorLocation = reportedError.toAnalysisError().location;
 
-      if (unit is! ResolvedUnitResult) {
-        final reportedErrors = await _getReportedErrors(context, filePath).then(
-          (value) => value.where((reportedError) {
-            final errorLocation = reportedError.toAnalysisError().location;
+          return errorLocation.file == parameters.file &&
+              errorLocation.offset <= parameters.offset &&
+              parameters.offset <= errorLocation.offset + errorLocation.length;
+        }).toList(),
+      );
 
-            return errorLocation.file == parameters.file &&
-                errorLocation.offset <= parameters.offset &&
-                parameters.offset <=
-                    errorLocation.offset + errorLocation.length;
-          }).toList(),
-        );
+      final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
+        reportedErrors.map((e) async => await e.toAnalysisErrorFixes(ref)),
+      );
 
-        final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
-          reportedErrors.map((e) async => await e.toAnalysisErrorFixes(ref)),
-        );
-
-        return plugin.EditGetFixesResult(analysisErrorFixes);
-      }
+      return plugin.EditGetFixesResult(analysisErrorFixes);
+      // }
     } on Exception catch (e, stackTrace) {
       channel.sendError(e.toString(), stackTrace);
     }
@@ -132,11 +135,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetAssistsResult> handleEditGetAssists(
     EditGetAssistsParams parameters,
   ) async {
-    final filePath = parameters.file;
-    final context = _collection.contextFor(filePath);
-    final unit = await context.currentSession.getResolvedUnit(filePath);
+    // final filePath = parameters.file;
+    // final context = _collection.contextFor(filePath);
+    // final unit = await context.currentSession.getResolvedUnit(filePath);
 
-    if (unit is! ResolvedUnitResult) return EditGetAssistsResult([]);
+    // if (unit is! ResolvedUnitResult) return EditGetAssistsResult([]);
+    final unit = await getResolvedUnitResult(parameters.file);
 
     final codeEditRequests =
         _getCodeEditRequests(unit, parameters.offset, parameters.length);

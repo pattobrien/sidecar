@@ -47,17 +47,17 @@ class AvoidStringLiterals extends LintRule {
     DetectedLint lint,
   ) async {
     final unit = lint.unit;
+
+    final changeBuilder = ChangeBuilder(session: unit.session);
+
     final stringNode = lint.sourceSpan.toAstNode(unit);
 
     if (stringNode == null) return [];
 
-    final changeBuilder = ChangeBuilder(session: unit.session);
-
-    //TODO: dynamically compute value
+    //TODO: dynamically compute stringId value
     final computedStringId = 'string123';
-    final prefix = configuration.prefix;
 
-    final arbClassPrefix = '$prefix.$computedStringId';
+    final arbClassPrefix = '${configuration.prefix}.$computedStringId';
 
     var references = <SourceSpan>[];
     final parentNode = stringNode.parent;
@@ -123,20 +123,20 @@ class AvoidStringLiterals extends LintRule {
   }
 }
 
-class _LiteralAstVisitor<R> extends GeneralizingAstVisitor<R> {
+class _LiteralAstVisitor extends GeneralizingAstVisitor<void> {
   _LiteralAstVisitor();
 
   final List<AstNode> detectedNodes = [];
 
   @override
-  R? visitStringLiteral(StringLiteral node) {
+  void visitStringLiteral(StringLiteral node) {
     if (node.parent is! ImportDirective &&
         node is! PartDirective &&
         node is! PartOfDirective) {
       detectedNodes.add(node);
     }
 
-    return super.visitStringLiteral(node);
+    super.visitStringLiteral(node);
   }
 }
 
