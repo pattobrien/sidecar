@@ -1,4 +1,5 @@
 import 'package:checked_yaml/checked_yaml.dart';
+import 'package:glob/glob.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../package/package_configuration.dart';
 import 'edit_package_configuration.dart';
@@ -10,8 +11,8 @@ class ProjectConfiguration {
   const ProjectConfiguration({
     this.lintPackages,
     this.editPackages,
-    this.includes = const ['lib/**', 'bin/**'],
-  });
+    List<String> includes = const ['lib/**', 'bin/**'],
+  }) : _includes = includes;
 
   factory ProjectConfiguration.parse(
     String contents,
@@ -32,7 +33,12 @@ class ProjectConfiguration {
 
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
   final Map<PackageName, EditPackageConfiguration>? editPackages;
-  final List<String> includes;
+  final List<String> _includes;
+
+  List<Glob> get includeGlobs => _includes.map<Glob>(Glob.new).toList();
+
+  bool includes(String relativePath) =>
+      includeGlobs.any((glob) => glob.matches(relativePath));
 }
 
 typedef PackageName = String;
