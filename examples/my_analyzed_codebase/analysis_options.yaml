@@ -31,10 +31,10 @@ sidecar:
           some_property: abc
 
   edits:
-    riverpod_lints:
-      create_text_edit_controller_provider:
-    sidecar_lints:
-      output_ast_node_tree:
+    # riverpod_lints:
+    #   create_text_edit_controller_provider:
+    # sidecar_lints:
+    #   output_ast_node_tree:
     auto_route_lints:
       create_new_page_widget:
         configuration:

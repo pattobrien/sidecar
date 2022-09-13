@@ -28,7 +28,7 @@ class RebuildCommand extends Command<int> {
 
       final lints = projectConfiguration.lintPackages?.values.toList() ?? [];
       final edits = projectConfiguration.editPackages?.values.toList() ?? [];
-      // await projectService.clearPreviousLints();
+      await projectService.clearPreviousLints(lints, edits);
       await projectService.importLints(lints);
       await projectService.importEdits(edits);
       await projectService.generateLintBootstrapFunction(lints);

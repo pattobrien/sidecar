@@ -223,17 +223,37 @@ class ProjectService {
     if (!link.existsSync()) await link.create(pluginPath);
   }
 
-  // Future<void> clearPreviousLints() async {
-  //   final lintProjectCachePath = p.join(
-  //     projectPluginDirectory.path,
-  //     'lib',
-  //     'lints',
-  //   );
-  //   final directory = io.Directory(lintProjectCachePath);
-  //   print('deleting previous lints...');
-  //   final doesDirectoryExist = await directory.exists();
-  //   if (doesDirectoryExist) directory.delete(recursive: true);
-  // }
+  Future<void> clearPreviousLints(
+    List<LintPackageConfiguration> lints,
+    List<EditPackageConfiguration> edits,
+  ) async {
+    final pubspecFile =
+        io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
+    final pubspec = Pubspec.parse(await pubspecFile.readAsString());
+
+    final dependenciesToRemove = {
+      ...pubspec.dependencies,
+      ...pubspec.devDependencies,
+    }..removeWhere((key, value) {
+        if (value is! HostedDependency) return true;
+        if (key == 'sidecar_analyzer_plugin_core') return true;
+        if (key == 'sidecar') return true;
+        if (lints.any((lint) => lint.packageName == key)) return true;
+        if (edits.any((edit) => edit.packageName == key)) return true;
+        return false;
+      });
+
+    await Future.wait<void>(dependenciesToRemove.entries.map((dep) async {
+      final process = await io.Process.start(
+        'dart',
+        ['pub', 'remove', dep.key],
+        workingDirectory: projectPluginDirectory.path,
+      );
+      process.stdout.listen((event) => print(utf8.decode(event)));
+      process.stderr.listen((event) => print(utf8.decode(event)));
+      await process.exitCode;
+    }));
+  }
 
   Future<void> importLints(List<LintPackageConfiguration> lints) async {
     final pluginPubspecFile =
