@@ -19,6 +19,12 @@ class PreferConsumerWidget extends LintRule {
   String get message => 'Prefer to use ConsumerWidget.';
 
   @override
+  TestConfig get configuration => super.configuration as TestConfig;
+
+  @override
+  MapDecoder? get jsonDecoder => TestConfig.fromJson;
+
+  @override
   Future<List<DetectedLint>> computeAnalysisError(
     AnalysisContext analysisContext,
     String path,
@@ -107,5 +113,15 @@ class _Visitor<R> extends GeneralizingAstVisitor<R> {
     }
 
     return super.visitClassDeclaration(node);
+  }
+}
+
+class TestConfig {
+  const TestConfig({required this.someProperty});
+
+  final String someProperty;
+
+  factory TestConfig.fromJson(Map map) {
+    return TestConfig(someProperty: map['some_property']);
   }
 }

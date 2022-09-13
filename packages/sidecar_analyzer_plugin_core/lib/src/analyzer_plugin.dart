@@ -256,6 +256,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     final sidecarOptions = analysisContext.sidecarOptions;
     final detectedLints = <DetectedLint>[];
+    final detectedConfigurationErrors = <plugin.AnalysisError>[];
 
     await Future.wait(allLints.map<Future<void>>((rule) async {
       final config = sidecarOptions
@@ -274,8 +275,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           ).toNotification(),
         );
 
-        _sendAnalysisOptionConfigError(
-            analysisContext, rule.packageName, 'Empty configuration');
+        detectedConfigurationErrors.add(
+          _calculateAnalysisOptionConfigError(
+            analysisContext,
+            rule.packageName,
+            'Empty configuration',
+          ),
+        );
       } on IncorrectConfiguration catch (e, stackTrace) {
         channel.sendNotification(
           plugin.PluginErrorParams(
@@ -284,8 +290,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             stackTrace.toString(),
           ).toNotification(),
         );
-        _sendAnalysisOptionConfigError(
-            analysisContext, rule.packageName, 'Incorrect configuration');
+        detectedConfigurationErrors.add(
+          _calculateAnalysisOptionConfigError(
+            analysisContext,
+            rule.packageName,
+            'Incorrect configuration',
+          ),
+        );
         // highlight node and state what missing configuration was
       } catch (e, stackTrace) {
         channel.sendNotification(
@@ -295,21 +306,29 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             stackTrace.toString(),
           ).toNotification(),
         );
-
-        _sendAnalysisOptionConfigError(analysisContext, rule.packageName,
-            'Miscellaneous error; please check your lint configuration');
+        detectedConfigurationErrors.add(
+          _calculateAnalysisOptionConfigError(analysisContext, rule.packageName,
+              'Miscellaneous error; please check your lint configuration'),
+        );
       }
     }));
-
+    _sendConfigErrors(detectedConfigurationErrors, analysisContext);
     return detectedLints;
   }
 
-  void _sendAnalysisOptionConfigError(
+  void _sendConfigErrors(
+      List<plugin.AnalysisError> errors, AnalysisContext analysisContext) {
+    final path = analysisContext.contextRoot.optionsFile!.path;
+    final response = plugin.AnalysisErrorsParams(path, errors).toNotification();
+
+    channel.sendNotification(response);
+  }
+
+  plugin.AnalysisError _calculateAnalysisOptionConfigError(
     AnalysisContext analysisContext,
     String packageId,
     String message,
   ) {
-    final path = analysisContext.contextRoot.optionsFile!.path;
     final analysisError = plugin.AnalysisError(
       plugin.AnalysisErrorSeverity.ERROR,
       plugin.AnalysisErrorType.LINT,
@@ -317,11 +336,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       message,
       'sidecar_misconfiguration',
     );
-
-    final response =
-        plugin.AnalysisErrorsParams(path, [analysisError]).toNotification();
-
-    channel.sendNotification(response);
+    return analysisError;
   }
 
   Future<Iterable<plugin.AnalysisError>> _getAnalysisErrors(
