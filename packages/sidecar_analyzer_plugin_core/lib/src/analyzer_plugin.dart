@@ -4,22 +4,16 @@ import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/source/line_info.dart';
-import 'package:analyzer/source/source_range.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'package:sidecar/sidecar.dart';
 
-import 'package:path/path.dart' as p;
-import 'package:yaml/yaml.dart';
+import 'channel_extension.dart';
 
 const pluginName = 'sidecar_analyzer_plugin';
 
@@ -73,7 +67,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       channel.sendNotification(notif);
     } catch (e, stackTrace) {
-      _sendPluginError('error analyzing $path -- ${e.toString()}', stackTrace);
+      channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
     }
   }
 
@@ -108,7 +102,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         return response;
       }
     } on Exception catch (e, stackTrace) {
-      _sendPluginError(e.toString(), stackTrace);
+      channel.sendError(e.toString(), stackTrace);
     }
     return plugin.EditGetFixesResult(const <plugin.AnalysisErrorFixes>[]);
   }
@@ -118,9 +112,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     EditGetAssistsParams parameters,
   ) async {
     final filePath = parameters.file;
-
     final context = _collection.contextFor(filePath);
-
     final unit = await context.currentSession.getResolvedUnit(filePath);
 
     if (unit is! ResolvedUnitResult) return EditGetAssistsResult([]);
@@ -157,20 +149,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         codeEdit.initialize(configurationContent: config);
         codeEditReporter.reportAstNode(astNode, codeEdit);
       } on EmptyConfiguration catch (e, stackTrace) {
-        _sendPluginError(
-          'CodeEdit EmptyConfiguration: ${e.toString()}',
-          stackTrace,
-        );
+        channel.sendError(
+            'CodeEdit EmptyConfiguration: ${e.toString()}', stackTrace);
       } on IncorrectConfiguration catch (e, stackTrace) {
-        _sendPluginError(
-          'CodeEdit IncorrectConfiguration: ${e.toString()}',
-          stackTrace,
-        );
+        channel.sendError(
+            'CodeEdit IncorrectConfig: ${e.toString()}', stackTrace);
       } catch (e, stackTrace) {
-        _sendPluginError(
-          'CodeEdit Misc error: ${e.toString()}',
-          stackTrace,
-        );
+        channel.sendError('CodeEdit Misc error: ${e.toString()}', stackTrace);
       }
     }
 
@@ -196,10 +181,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         final lints = await errorReporter.generateLints(analysisContext, rule);
         detectedLints.addAll(lints);
       } on EmptyConfiguration catch (e, stackTrace) {
-        _sendPluginError(
-          'LintRule EmptyConfiguration: ${e.toString()}',
-          stackTrace,
-        );
+        channel.sendError('LintRule EmptyConfig: ${e.toString()}', stackTrace);
+
         detectedConfigurationErrors.add(
           _calculateAnalysisOptionConfigError(
             analysisContext,
@@ -209,10 +192,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           ),
         );
       } on IncorrectConfiguration catch (e, stackTrace) {
-        _sendPluginError(
-          'LintRule IncorrectConfiguration: ${e.error.toString()}',
-          stackTrace,
-        );
+        channel.sendError(
+            'LintRule IncorrectConfig: ${e.toString()}', stackTrace);
 
         detectedConfigurationErrors.add(
           _calculateAnalysisOptionConfigError(
@@ -224,7 +205,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
         // highlight node and state what missing configuration was
       } catch (e, stackTrace) {
-        _sendPluginError('LintRule MiscError: ${e.toString()}', stackTrace);
+        channel.sendError('LintRule MiscError: ${e.toString()}', stackTrace);
 
         detectedConfigurationErrors.add(
           _calculateAnalysisOptionConfigError(
@@ -246,16 +227,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final response = plugin.AnalysisErrorsParams(path, errors).toNotification();
 
     channel.sendNotification(response);
-  }
-
-  void _sendPluginError(String message, StackTrace stackTrace) {
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        message,
-        stackTrace.toString(),
-      ).toNotification(),
-    );
   }
 
   plugin.AnalysisError _calculateAnalysisOptionConfigError(
