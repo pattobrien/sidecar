@@ -67,8 +67,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required String path,
   }) async {
-    //TODO: remove restriction from plugin side, instead allow lints to do so
-    // if (!path.endsWith('.dart')) return;
+    if (!analysisContext.isSidecarEnabled) return;
 
     try {
       final errors = await _getAnalysisErrors(analysisContext, path);
