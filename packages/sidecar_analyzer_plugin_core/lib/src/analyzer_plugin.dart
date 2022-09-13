@@ -4,6 +4,8 @@ import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
+import 'package:analyzer/file_system/file_system.dart';
+import 'package:analyzer/file_system/physical_file_system.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
@@ -11,6 +13,7 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:riverpod/riverpod.dart';
 
 import 'package:sidecar/sidecar.dart';
+import 'package:sidecar_analyzer_plugin_core/src/providers.dart';
 
 import 'channel_extension.dart';
 
@@ -22,18 +25,33 @@ const pluginVersion = '1.0.0-alpha.0';
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({
-    required super.resourceProvider,
-    required this.ref,
-    required this.allLints,
-    required this.allCodeEdits,
-    required this.nodeRegistry,
-  });
+    ResourceProvider? resourceProvider,
+    // required this.ref,
+    required this.lintRuleConstructors,
+    required this.codeEditConstructors,
+  })  : nodeRegistry = NodeLintRegistry(),
+        ref = ProviderContainer(),
+        super(
+          resourceProvider:
+              resourceProvider ?? PhysicalResourceProvider.INSTANCE,
+        ) {
+    for (var constructor in lintRuleConstructors) {
+      allLintRules.add(constructor(ref));
+    }
+
+    for (var constructor in codeEditConstructors) {
+      allCodeEdits.add(constructor(ref));
+    }
+  }
 
   final ProviderContainer ref;
   late AnalysisContextCollection _collection;
-  final List<LintRule> allLints;
   final NodeLintRegistry nodeRegistry;
-  final List<CodeEdit> allCodeEdits;
+  final List<LintRuleConstructor> lintRuleConstructors;
+  final List<CodeEditConstructor> codeEditConstructors;
+
+  final List<CodeEdit> allCodeEdits = [];
+  final List<LintRule> allLintRules = [];
 
   @override
   List<String> get fileGlobsToAnalyze =>
@@ -51,6 +69,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     _collection = contextCollection;
     await super.afterNewContextCollection(contextCollection: contextCollection);
+  }
+
+  void _initalizeAllEntities() {
+    //
+    // ref.read(lintRuleProvider).map((e) => e.initialize(configurationContent: configurationContent));
+    // ref.read(codeEditProvider);
   }
 
   @override
@@ -164,7 +188,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final detectedLints = <DetectedLint>[];
     final detectedConfigurationErrors = <plugin.AnalysisError>[];
 
-    await Future.wait(allLints.map<Future<void>>((rule) async {
+    await Future.wait(allLintRules.map<Future<void>>((rule) async {
       final config = sidecarOptions
           .lintPackages?[rule.packageName]?.lints[rule.code]?.configuration;
 

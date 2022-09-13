@@ -121,7 +121,7 @@ class ProjectService {
     //     'sidecar_analyzer_plugin should be set as dependency',
     //   );
     // }
-    return Version.parse('0.1.8-dev.1');
+    return Version.parse('0.1.9');
   }
 
   // Future<void> _downloadSidecarAnalyzerPlugin(Version version) async {
@@ -309,12 +309,8 @@ class ProjectService {
 
     for (final lintPackage in lintPackages) {
       for (final lint in lintPackage.lints.values) {
-        // importBuffer.write('import \'../lints/${lint.filePath}\'; \n');
         importBuffer.write('import \'package:${lint.filePath}\'; \n');
-        returnBuffer
-          ..write('\t\t')
-          ..write(lint.className)
-          ..write('(ref)..registerNodeProcessors(registry), \n');
+        returnBuffer.write('\t\t${lint.className}.new, \n');
       }
 
       final entireContents = StringBuffer()
@@ -338,10 +334,7 @@ class ProjectService {
     for (final editPackage in editPackages) {
       for (final edit in editPackage.edits.values) {
         importBuffer.write('import \'package:${edit.filePath}\'; \n');
-        returnBuffer
-          ..write('\t\t')
-          ..write(edit.className)
-          ..write('(ref), \n');
+        returnBuffer.write('\t\t${edit.className}.new,\n');
       }
 
       final entireContents = StringBuffer()

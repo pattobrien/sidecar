@@ -1,35 +1,14 @@
-import 'dart:async';
 import 'dart:isolate';
-
-import 'package:analyzer/file_system/physical_file_system.dart';
-import 'package:analyzer_plugin/starter.dart';
-import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/sidecar.dart';
 
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 
-import 'plugin_bootstrapper.dart';
-import 'plugin_code_edit_bootstrapper.dart';
+import 'code_edit_constructors.dart';
+import 'lint_rule_constructors.dart';
 
-void start(
-  List<String> args,
-  SendPort sendPort,
-) async {
-  final resourceProvider = PhysicalResourceProvider.INSTANCE;
-  final ref = ProviderContainer();
-
-  final nodeRegistry = NodeLintRegistry();
-
-  final allLints = pluginBootstrapper(nodeRegistry, ref);
-  final allCodeEdits = pluginCodeFixBootstrapper(ref);
-
+void start(List<String> args, SendPort sendPort) async {
   final plugin = SidecarAnalyzerPlugin(
-    resourceProvider: resourceProvider,
-    ref: ref,
-    nodeRegistry: nodeRegistry,
-    allLints: allLints,
-    allCodeEdits: allCodeEdits,
+    lintRuleConstructors: lintRuleConstructors,
+    codeEditConstructors: codeEditConstructors,
   );
-
-  ServerPluginStarter(plugin).start(sendPort);
+  startSidecarPlugin(sendPort, plugin);
 }

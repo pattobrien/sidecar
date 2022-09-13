@@ -31,9 +31,8 @@ io.Directory kPluginMasterRoot(Version version) =>
 //   p.join('/Users/pattobrien/Development/sidecar/', 'repositories', 'lints'),
 // );
 
-final lintInitializerRelativePath = 'lib/src/plugin_bootstrapper.dart';
-final editInitializerRelativePath =
-    'lib/src/plugin_code_edit_bootstrapper.dart';
+final lintInitializerRelativePath = 'lib/src/lint_rule_constructors.dart';
+final editInitializerRelativePath = 'lib/src/code_edit_constructors.dart';
 
 String kPluginLoaderAbsolutePath(String packagePath) =>
     p.join(packagePath, kPluginLoaderRelativePath);
