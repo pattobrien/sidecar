@@ -49,9 +49,10 @@ class DetectedLint {
   Future<plugin.AnalysisErrorFixes> toAnalysisErrorFixes(
     ProviderContainer ref,
   ) async {
+    final fixes = await rule.computeCodeEdits(this);
     return plugin.AnalysisErrorFixes(
-      toAnalysisError(),
-      fixes: await rule.computeCodeEdits(this),
+      toAnalysisError()..hasFix = fixes.isNotEmpty,
+      fixes: fixes,
     );
   }
 
