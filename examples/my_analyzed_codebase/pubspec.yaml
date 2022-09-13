@@ -18,27 +18,18 @@ dev_dependencies:
   auto_route_generator: ^5.0.2
   intl: ^0.17.0
   lints: ^2.0.0
-  sidecar_analyzer_plugin: 
+  sidecar_analyzer_plugin:
     hosted:
       url: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
       name: sidecar_analyzer_plugin
-    version: ^0.1.8-dev.1
+    version: ^0.1.8-dev.2
   test: ^1.16.0
 
 dependency_overrides:
   sidecar_analyzer_plugin:
     path: /Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/sidecar_analyzer_plugin/
-  # auto_route_lints:
-  #   path: /Users/pattobrien/Development/sidecar/repositories/auto_route_lints/
   # flutter_lints:
   #   path: /Users/pattobrien/Development/sidecar/repositories/flutter_lints/
-  # l10n_lints:
-  #   path: /Users/pattobrien/Development/sidecar/repositories/l10n_lints/
-  # riverpod_lints:
-  #   path: /Users/pattobrien/Development/sidecar/repositories/riverpod_lints/
-  # sidecar_lints:
-  #   path: /Users/pattobrien/Development/sidecar/repositories/sidecar_lints/
-
 flutter:
   uses-material-design: true
   generate: true

@@ -1,18 +1,11 @@
 // ignore_for_file: implementation_imports
 
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:yaml/yaml.dart';
 
 import '../../sidecar.dart';
-import '../ast/ast.dart';
-import '../reporter/i_error_reporter.dart';
-import 'detected_lint.dart';
-import 'typedefs.dart';
 
 abstract class LintRule {
   LintRule(this.ref);
@@ -58,7 +51,7 @@ abstract class LintRule {
   Future<List<plugin.PrioritizedSourceChange>> computeCodeEdits(
     DetectedLint lint,
   ) =>
-      Future.value([]);
+      Future.value(<plugin.PrioritizedSourceChange>[]);
 }
 
 enum LintRuleType { info, warning, error }

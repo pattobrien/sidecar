@@ -28,6 +28,25 @@ class UseFullHexValuesForFlutterColors extends LintRule {
     return visitor.nodes.toDetectedLints(unit, this);
   }
 
+  @override
+  SourceSpan computeLintHighlight(DetectedLint lint) {
+    return lint.sourceSpan;
+  }
+
+  @override
+  Future<List<PrioritizedSourceChange>> computeCodeEdits(
+      DetectedLint lint) async {
+    // TODO: implement computeCodeEdits
+    final changeBuilder = ChangeBuilder(session: lint.unit.session);
+    await changeBuilder.addDartFileEdit(lint.unit.path, (builder) {
+      builder.addInsertion(lint.unit.unit.length, (builder) {
+        builder.writeln('// test');
+      });
+    });
+    return <PrioritizedSourceChange>[
+      PrioritizedSourceChange(0, changeBuilder.sourceChange..message = 'test'),
+    ];
+  }
   // @override
   // void registerNodeProcessors(NodeLintRegistry registry) {
   //   final visitor = _Visitor(this);
@@ -35,7 +54,7 @@ class UseFullHexValuesForFlutterColors extends LintRule {
   // }
 }
 
-class _Visitor extends SimpleAstVisitor {
+class _Visitor extends GeneralizingAstVisitor {
   final List<AstNode> nodes = [];
 
   _Visitor();
@@ -58,5 +77,6 @@ class _Visitor extends SimpleAstVisitor {
         }
       }
     }
+    super.visitInstanceCreationExpression(node);
   }
 }

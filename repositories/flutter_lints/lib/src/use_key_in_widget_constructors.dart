@@ -37,16 +37,9 @@ class UseKeyInWidgetConstructors extends LintRule {
     unit.unit.accept(visitor);
     return visitor.nodes.toDetectedLints(unit, this);
   }
-
-  // @override
-  // void registerNodeProcessors(NodeLintRegistry registry) {
-  //   var visitor = _Visitor(this);
-  //   registry.addClassDeclaration(this, visitor);
-  //   registry.addConstructorDeclaration(this, visitor);
-  // }
 }
 
-class _Visitor extends SimpleAstVisitor<void> {
+class _Visitor extends GeneralizingAstVisitor<void> {
   final List<AstNode> nodes = [];
 
   _Visitor();
