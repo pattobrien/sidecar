@@ -37,8 +37,11 @@ class ProjectConfiguration {
 
   List<Glob> get includeGlobs => _includes.map<Glob>(Glob.new).toList();
 
-  bool includes(String relativePath) =>
-      includeGlobs.any((glob) => glob.matches(relativePath));
+  bool includes(String relativePath) {
+    // final rootDirectory = analysisContext.contextRoot.root;
+    // final relativePath = p.relative(path, from: rootDirectory.path);
+    return includeGlobs.any((glob) => glob.matches(relativePath));
+  }
 }
 
 typedef PackageName = String;

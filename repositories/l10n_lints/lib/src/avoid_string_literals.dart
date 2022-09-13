@@ -1,5 +1,6 @@
 // ignore_for_file: implementation_imports
 
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:l10n_lints/src/constants.dart';
 import 'package:sidecar/sidecar.dart';
@@ -17,9 +18,6 @@ class AvoidStringLiterals extends LintRule {
       '\${STRING_GOES_HERE} should be extracted to an ARB or ENV file.';
 
   @override
-  LintRuleType get defaultType => LintRuleType.info;
-
-  @override
   String get packageName => l10nLintsPackageId;
 
   @override
@@ -33,8 +31,13 @@ class AvoidStringLiterals extends LintRule {
   MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
 
   @override
-  List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) {
+  Future<List<DetectedLint>> computeAnalysisError(
+    AnalysisContext analysisContext,
+    String path,
+  ) async {
     final visitor = _LiteralAstVisitor();
+    final unit = await analysisContext.currentSession.getResolvedUnit(path);
+    if (unit is! ResolvedUnitResult) return [];
     unit.unit.accept(visitor);
     return visitor.detectedNodes.toDetectedLints(unit, this);
   }

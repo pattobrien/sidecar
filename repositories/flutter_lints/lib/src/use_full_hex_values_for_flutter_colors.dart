@@ -1,4 +1,6 @@
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:sidecar/sidecar.dart';
+import 'package:path/path.dart' as p;
 
 import 'utils/utils.dart';
 
@@ -22,8 +24,20 @@ class UseFullHexValuesForFlutterColors extends LintRule {
       'https://dart-lang.github.io/linter/lints/use_full_hex_values_for_flutter_colors.html';
 
   @override
-  List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit) {
+  Future<List<DetectedLint>> computeAnalysisError(
+    AnalysisContext analysisContext,
+    String path,
+  ) async {
     final visitor = _Visitor();
+    final rootDirectory = analysisContext.contextRoot.root;
+    final relativePath = p.relative(path, from: rootDirectory.path);
+    final isIncluded = analysisContext.sidecarOptions.includes(relativePath);
+
+    if (!isIncluded) return [];
+
+    final unit = await analysisContext.currentSession.getResolvedUnit(path);
+    if (unit is! ResolvedUnitResult) return [];
+
     unit.unit.accept(visitor);
     return visitor.nodes.toDetectedLints(unit, this);
   }

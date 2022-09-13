@@ -15,8 +15,6 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 
-import 'reporter/reporter.dart';
-
 import 'package:sidecar/sidecar.dart';
 
 import 'package:path/path.dart' as p;
@@ -67,49 +65,22 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required String path,
   }) async {
     //TODO: remove restriction from plugin side, instead allow lints to do so
-    if (!path.endsWith('.dart')) return;
+    // if (!path.endsWith('.dart')) return;
 
-    final sidecarOptions = analysisContext.sidecarOptions;
-    final rootDirectory = analysisContext.contextRoot.root;
-    final relativePath = p.relative(path, from: rootDirectory.path);
+    try {
+      final errors = await _getAnalysisErrors(analysisContext, path);
+      final response =
+          plugin.AnalysisErrorsParams(path, errors.toList()).toNotification();
 
-    // check if the path is included for analysis via the sidecar options
-    final doesMatchGlob = sidecarOptions.includes
-        .map((e) => Glob(e, context: p.context).matches(relativePath))
-        .where((element) => element == true)
-        .isNotEmpty;
-
-    if (!doesMatchGlob) return;
-
-    final isPluginEnabled =
-        analysisContext.analysisOptions.enabledPluginNames.contains(name);
-
-    final isPathExcluded =
-        analysisContext.contextRoot.excludedPaths.contains(path);
-
-    // check if we should analyze this file or not
-    if (!isPathExcluded && isPluginEnabled) {
-      final unit = await analysisContext.currentSession.getResolvedUnit(path);
-
-      if (unit is ResolvedUnitResult) {
-        try {
-          final errors = _getAnalysisErrors(unit);
-          final response = plugin.AnalysisErrorsParams(
-            path,
-            errors.toList(),
-          ).toNotification();
-          Logger.logLine('ANALYZEDFILE = SUCCESS $path');
-          channel.sendNotification(response);
-        } catch (e, stackTrace) {
-          channel.sendNotification(
-            plugin.PluginErrorParams(
-              false,
-              'error analyzing $path --${e.toString()}',
-              stackTrace.toString(),
-            ).toNotification(),
-          );
-        }
-      }
+      channel.sendNotification(response);
+    } catch (e, stackTrace) {
+      channel.sendNotification(
+        plugin.PluginErrorParams(
+          false,
+          'error analyzing $path --${e.toString()}',
+          stackTrace.toString(),
+        ).toNotification(),
+      );
     }
   }
 
@@ -124,13 +95,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       final unit = await context.currentSession.getResolvedUnit(filePath);
 
       if (unit is ResolvedUnitResult) {
-        final reportedErrors = _getReportedErrors(unit).where((reportedError) {
-          final errorLocation = reportedError.toAnalysisError().location;
+        final reportedErrors = await _getReportedErrors(context, filePath).then(
+          (value) => value.where((reportedError) {
+            final errorLocation = reportedError.toAnalysisError().location;
 
-          return errorLocation.file == parameters.file &&
-              errorLocation.offset <= parameters.offset &&
-              parameters.offset <= errorLocation.offset + errorLocation.length;
-        }).toList();
+            return errorLocation.file == parameters.file &&
+                errorLocation.offset <= parameters.offset &&
+                parameters.offset <=
+                    errorLocation.offset + errorLocation.length;
+          }).toList(),
+        );
 
         final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
           reportedErrors.map((e) async => await e.toAnalysisErrorFixes(ref)),
@@ -173,8 +147,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final changes = await Future.wait<plugin.PrioritizedSourceChange?>(
       codeEditRequests.map((e) async => await e.toPrioritizedSourceChange(ref)),
     );
+
     return EditGetAssistsResult(
-        changes.whereType<plugin.PrioritizedSourceChange>().toList());
+      changes.whereType<plugin.PrioritizedSourceChange>().toList(),
+    );
   }
 
   Iterable<RequestedCodeEdit> _getCodeEditRequests(
@@ -194,10 +170,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       final config = sidecarOptions.editPackages?[codeEdit.packageName]
           ?.edits[codeEdit.code]?.configuration;
       try {
-        codeEdit.initialize(
-          configurationContent: config,
-          reporter: codeEditReporter,
-        );
+        codeEdit.initialize(configurationContent: config);
+        codeEditReporter.reportAstNode(astNode, codeEdit);
       } on EmptyConfiguration catch (e, stackTrace) {
         channel.sendNotification(
           plugin.PluginErrorParams(
@@ -206,8 +180,19 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             stackTrace.toString(),
           ).toNotification(),
         );
-        // highlight node
-        // errorReporter.reportYamlNode(node, rule);
+        final path = unit.session.analysisContext.contextRoot.optionsFile!.path;
+        final analysisError = plugin.AnalysisError(
+          plugin.AnalysisErrorSeverity.WARNING,
+          plugin.AnalysisErrorType.HINT,
+          plugin.Location(path, 0, 10, 1, 0),
+          'empty configuration',
+          'incorrect_config',
+        );
+
+        final response =
+            plugin.AnalysisErrorsParams(path, [analysisError]).toNotification();
+
+        channel.sendNotification(response);
       } on IncorrectConfiguration catch (e, stackTrace) {
         channel.sendNotification(
           plugin.PluginErrorParams(
@@ -226,37 +211,28 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           ).toNotification(),
         );
       }
-
-      try {
-        codeEdit.generateReport(astNode);
-      } catch (e, stackTrace) {
-        channel.sendNotification(
-          plugin.PluginErrorParams(
-            false,
-            'CodeEdit GenerateReport: ${e.toString()}',
-            stackTrace.toString(),
-          ).toNotification(),
-        );
-      }
     }
 
-    final codeEdits = codeEditReporter.reportedEdits;
-
-    return codeEdits;
+    return codeEditReporter.reportedEdits;
   }
 
-  Iterable<DetectedLint> _getReportedErrors(ResolvedUnitResult unit) {
-    final errorReporter = ErrorReporter(unit);
-    final sidecarOptions = unit.session.analysisContext.sidecarOptions;
+  Future<Iterable<DetectedLint>> _getReportedErrors(
+    AnalysisContext analysisContext,
+    String sourcePath,
+  ) async {
+    final errorReporter = ErrorReporter(sourcePath);
+
+    final sidecarOptions = analysisContext.sidecarOptions;
     final detectedLints = <DetectedLint>[];
 
-    for (final rule in allLints) {
+    await Future.wait(allLints.map<Future<void>>((rule) async {
       final config = sidecarOptions
           .lintPackages?[rule.packageName]?.lints[rule.code]?.configuration;
 
       try {
         rule.initialize(configurationContent: config);
-        detectedLints.addAll(errorReporter.generateLints(rule));
+        final lints = await errorReporter.generateLints(analysisContext, rule);
+        detectedLints.addAll(lints);
       } on EmptyConfiguration catch (e, stackTrace) {
         channel.sendNotification(
           plugin.PluginErrorParams(
@@ -285,16 +261,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           ).toNotification(),
         );
       }
-    }
+    }));
 
     return detectedLints;
   }
 
-  Iterable<plugin.AnalysisError> _getAnalysisErrors(
-    ResolvedUnitResult unit,
-  ) {
-    final reportedErrors = _getReportedErrors(unit);
-    final analysisErrors = reportedErrors.map((e) => e.toAnalysisError());
-    return analysisErrors;
+  Future<Iterable<plugin.AnalysisError>> _getAnalysisErrors(
+    AnalysisContext analysisContext,
+    String path,
+  ) async {
+    final reportedErrors = await _getReportedErrors(analysisContext, path);
+    return reportedErrors.map((lint) => lint.toAnalysisError());
   }
 }

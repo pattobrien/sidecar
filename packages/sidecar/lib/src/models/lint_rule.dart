@@ -1,5 +1,6 @@
 // ignore_for_file: implementation_imports
 
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -29,12 +30,12 @@ abstract class LintRule {
   void initialize({required Map? configurationContent}) {
     if (jsonDecoder != null) {
       if (configurationContent == null) {
-        throw EmptyConfiguration();
+        throw EmptyConfiguration('$code error: empty configuration');
       } else {
         try {
           _configuration = jsonDecoder!(configurationContent);
         } catch (e, stackTrace) {
-          throw IncorrectConfiguration(e, stackTrace);
+          throw IncorrectConfiguration('$code error: $e', stackTrace);
         }
       }
     }
@@ -44,7 +45,10 @@ abstract class LintRule {
       'Moving away from registering node processors. Use computeAnalysisError instead.')
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
-  List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit);
+  Future<List<DetectedLint>> computeAnalysisError(
+    AnalysisContext analysisContext,
+    String path,
+  );
 
   SourceSpan computeLintHighlight(DetectedLint lint) => lint.sourceSpan;
 
