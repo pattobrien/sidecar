@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/source/source_range.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
@@ -65,13 +66,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required String path,
   }) async {
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        'log: start analyzeFile()',
-        'file path: $path',
-      ).toNotification(),
-    );
     //TODO: remove restriction from plugin side, instead allow lints to do so
     if (!path.endsWith('.dart')) return;
 
@@ -117,13 +111,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         }
       }
     }
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        'log: end analyzeFile()',
-        'file path: $path',
-      ).toNotification(),
-    );
   }
 
   @override
@@ -132,13 +119,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) async {
     final filePath = parameters.file;
     try {
-      channel.sendNotification(
-        plugin.PluginErrorParams(
-          false,
-          'log: start handleEditGetFixes()',
-          'file path: $filePath',
-        ).toNotification(),
-      );
       final context = _collection.contextFor(filePath);
 
       final unit = await context.currentSession.getResolvedUnit(filePath);
@@ -170,13 +150,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         ).toNotification(),
       );
     }
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        'log: end handleEditGetFixes()',
-        'file path: $filePath',
-      ).toNotification(),
-    );
     return plugin.EditGetFixesResult(const <plugin.AnalysisErrorFixes>[]);
   }
 
@@ -185,26 +158,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     EditGetAssistsParams parameters,
   ) async {
     final filePath = parameters.file;
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        'log: starthandleEditGetAssists()',
-        'file path: $filePath',
-      ).toNotification(),
-    );
+
     final context = _collection.contextFor(filePath);
 
     final unit = await context.currentSession.getResolvedUnit(filePath);
 
     if (unit is! ResolvedUnitResult) {
-      channel.sendNotification(
-        plugin.PluginErrorParams(
-          false,
-          'log: unit is not resolved',
-          'file path: $filePath',
-        ).toNotification(),
-      );
-      // Lo
       return EditGetAssistsResult([]);
     }
 
@@ -213,13 +172,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     final changes = await Future.wait<plugin.PrioritizedSourceChange?>(
       codeEditRequests.map((e) async => await e.toPrioritizedSourceChange(ref)),
-    );
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        'log: end handleEditGetAssists() with ${changes.length} codeEdits',
-        'file path: $filePath',
-      ).toNotification(),
     );
     return EditGetAssistsResult(
         changes.whereType<plugin.PrioritizedSourceChange>().toList());
@@ -230,13 +182,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     int offset,
     int length,
   ) {
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        'log: starting _getCodeEditRequests',
-        'file path: ${unit.path}',
-      ).toNotification(),
-    );
     final codeEditReporter = CodeEditReporter(unit);
 
     final sidecarOptions = unit.session.analysisContext.sidecarOptions;
@@ -257,7 +202,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         channel.sendNotification(
           plugin.PluginErrorParams(
             false,
-            'CodeEdit Empty Configuration: ${e.toString()}',
+            'CodeEdit EmptyConfiguration: ${e.toString()}',
             stackTrace.toString(),
           ).toNotification(),
         );
@@ -267,7 +212,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         channel.sendNotification(
           plugin.PluginErrorParams(
             false,
-            'CodeEdit Incorrect Configuration: ${e.toString()}',
+            'CodeEdit IncorrectConfiguration: ${e.toString()}',
             stackTrace.toString(),
           ).toNotification(),
         );
@@ -285,11 +230,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       try {
         codeEdit.generateReport(astNode);
       } catch (e, stackTrace) {
-        // UnimplementedError('error generating code edit report: $e');
         channel.sendNotification(
           plugin.PluginErrorParams(
             false,
-            'Empty Configuration: ${e.toString()}',
+            'CodeEdit GenerateReport: ${e.toString()}',
             stackTrace.toString(),
           ).toNotification(),
         );
@@ -298,26 +242,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     final codeEdits = codeEditReporter.reportedEdits;
 
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        'log: ending _getCodeEditRequests() with ${codeEdits.length} detected code edits',
-        'file path: ${unit.path}',
-      ).toNotification(),
-    );
-    // Logger.logLine(
-    //     '# OF CODE EDITS = ${codeEdits.length} for file ${unit.path}');
     return codeEdits;
   }
 
   Iterable<DetectedLint> _getReportedErrors(ResolvedUnitResult unit) {
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        'log: starting _getReportedErrors',
-        'file path: ${unit.path}',
-      ).toNotification(),
-    );
     final errorReporter = ErrorReporter(unit);
     final sidecarOptions = unit.session.analysisContext.sidecarOptions;
     final detectedLints = <DetectedLint>[];
@@ -333,7 +261,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         channel.sendNotification(
           plugin.PluginErrorParams(
             false,
-            'Empty Configuration: ${e.toString()}',
+            'LintRule EmptyConfiguration: ${e.toString()}',
             stackTrace.toString(),
           ).toNotification(),
         );
@@ -343,7 +271,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         channel.sendNotification(
           plugin.PluginErrorParams(
             false,
-            'Incorrect Configuration: ${e.toString()}',
+            'LintRule IncorrectConfiguration: ${e.toString()}',
             stackTrace.toString(),
           ).toNotification(),
         );
@@ -352,26 +280,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         channel.sendNotification(
           plugin.PluginErrorParams(
             false,
-            'Misc error: ${e.toString()}',
+            'LintRule MiscError: ${e.toString()}',
             stackTrace.toString(),
           ).toNotification(),
         );
       }
     }
-    channel.sendNotification(
-      plugin.PluginErrorParams(
-        false,
-        'log: ending _getReportedErrors() with ${detectedLints.length} detected lints',
-        'file path: ${unit.path}',
-      ).toNotification(),
-    );
-    // final lintVisitor = LintVisitor(nodeRegistry);
-    // unit.unit.accept(lintVisitor);
 
-    // final errors = errorReporter.detectedLints;
-
-    // Logger.logLine(
-    //     '# OF FIXES (RECEIVED) = ${errors.length} for file ${unit.path}');
     return detectedLints;
   }
 

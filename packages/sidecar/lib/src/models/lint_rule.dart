@@ -32,12 +32,8 @@ abstract class LintRule {
   final ProviderContainer ref;
 
   late Object _configuration;
-  // late IErrorReporter _reporter;
 
-  void initialize({
-    required Map? configurationContent,
-    // required IErrorReporter reporter,
-  }) {
+  void initialize({required Map? configurationContent}) {
     if (jsonDecoder != null) {
       if (configurationContent == null) {
         throw EmptyConfiguration();
@@ -49,9 +45,10 @@ abstract class LintRule {
         }
       }
     }
-    // _reporter = reporter;
   }
 
+  @Deprecated(
+      'Moving away from registering node processors. Use computeAnalysisError instead.')
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
   List<DetectedLint> computeAnalysisError(ResolvedUnitResult unit);
