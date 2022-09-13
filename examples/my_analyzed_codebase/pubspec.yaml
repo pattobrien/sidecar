@@ -30,6 +30,7 @@ dependency_overrides:
     path: /Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/sidecar_analyzer_plugin/
   # flutter_lints:
   #   path: /Users/pattobrien/Development/sidecar/repositories/flutter_lints/
+
 flutter:
   uses-material-design: true
   generate: true

@@ -3,6 +3,7 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/source/line_info.dart';
 
 import 'package:analyzer/src/dart/micro/utils.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
@@ -12,6 +13,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 
 import 'package:path/path.dart' as p;
+import 'package:yaml/yaml.dart';
 
 import '../configurations/project/project_configuration.dart';
 import 'logger_utilities.dart';
@@ -62,6 +64,39 @@ final analysisContextUtilitiesProvider = Provider<AnalysisContextUtilities>(
 );
 
 extension AnalysisContextX on AnalysisContext {
+  SourceSpan get sidecarSourceSpan {
+    final optionsFile = contextRoot.optionsFile;
+    if (optionsFile != null) {
+      final contents = optionsFile.readAsStringSync();
+      try {
+        final uri = optionsFile.toUri();
+        final doc = loadYamlDocument(contents, sourceUrl: uri);
+
+        final lineInfo = LineInfo.fromContent(contents);
+        final startLocation = lineInfo.getLocation(1);
+        final endLocation = lineInfo.getLocation(6);
+        final sourceSpan = SourceSpan(
+          SourceLocation(1,
+              column: startLocation.columnNumber,
+              line: startLocation.lineNumber,
+              sourceUrl: uri),
+          SourceLocation(6,
+              column: endLocation.columnNumber,
+              line: endLocation.lineNumber,
+              sourceUrl: uri),
+          contents.substring(1, 6),
+        );
+        // return SourceSpan(SourceLocation(doc.span.start.offset, sourceUrl: uri, line: doc.span.));
+        // return doc.span;
+        return sourceSpan;
+      } catch (e) {
+        throw UnimplementedError('cannot parse sidecar options: $e');
+      }
+    } else {
+      throw UnimplementedError('yaml options file doesnt exist');
+    }
+  }
+
   ProjectConfiguration get sidecarOptions {
     final optionsFile = contextRoot.optionsFile;
     if (optionsFile != null) {

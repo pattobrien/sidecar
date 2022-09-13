@@ -47,20 +47,6 @@ class UseFullHexValuesForFlutterColors extends LintRule {
     return lint.sourceSpan;
   }
 
-  @override
-  Future<List<PrioritizedSourceChange>> computeCodeEdits(
-      DetectedLint lint) async {
-    // TODO: implement computeCodeEdits
-    final changeBuilder = ChangeBuilder(session: lint.unit.session);
-    await changeBuilder.addDartFileEdit(lint.unit.path, (builder) {
-      builder.addInsertion(lint.unit.unit.length, (builder) {
-        builder.writeln('// test');
-      });
-    });
-    return <PrioritizedSourceChange>[
-      PrioritizedSourceChange(0, changeBuilder.sourceChange..message = 'test'),
-    ];
-  }
   // @override
   // void registerNodeProcessors(NodeLintRegistry registry) {
   //   final visitor = _Visitor(this);

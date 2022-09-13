@@ -22,8 +22,8 @@ sidecar:
 
     l10n_lints:
       avoid_string_literals:
-        configuration:
-          prefix: "AppLocalizations.of(context)"
+        # configuration:
+        #   prefix: "AppLocalizations.of(context)"
 
     riverpod_lints:
       prefer_consumer_widget:

@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/source/line_info.dart';
 import 'package:analyzer/source/source_range.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 
@@ -18,6 +19,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'package:path/path.dart' as p;
+import 'package:yaml/yaml.dart';
 
 const pluginName = 'sidecar_analyzer_plugin';
 
@@ -43,7 +45,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   final List<CodeEdit> allCodeEdits;
 
   @override
-  List<String> get fileGlobsToAnalyze => <String>['**/*.dart', '**/*.arb'];
+  List<String> get fileGlobsToAnalyze =>
+      <String>['**/*.dart', '**/*.arb', '**/*.yaml'];
 
   @override
   String get name => pluginName;
@@ -180,13 +183,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             stackTrace.toString(),
           ).toNotification(),
         );
+
         final path = unit.session.analysisContext.contextRoot.optionsFile!.path;
         final analysisError = plugin.AnalysisError(
           plugin.AnalysisErrorSeverity.WARNING,
           plugin.AnalysisErrorType.HINT,
-          plugin.Location(path, 0, 10, 1, 0),
+          unit.session.analysisContext.sidecarSourceSpan.location,
           'empty configuration',
-          'incorrect_config',
+          'empty_config',
         );
 
         final response =
@@ -201,6 +205,20 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             stackTrace.toString(),
           ).toNotification(),
         );
+
+        final path = unit.session.analysisContext.contextRoot.optionsFile!.path;
+        final analysisError = plugin.AnalysisError(
+          plugin.AnalysisErrorSeverity.WARNING,
+          plugin.AnalysisErrorType.HINT,
+          unit.session.analysisContext.sidecarSourceSpan.location,
+          'incorrect configuration',
+          'incorrect_config',
+        );
+
+        final response =
+            plugin.AnalysisErrorsParams(path, [analysisError]).toNotification();
+
+        channel.sendNotification(response);
         // highlight node and state what missing configuration was
       } catch (e, stackTrace) {
         channel.sendNotification(
@@ -210,6 +228,20 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             stackTrace.toString(),
           ).toNotification(),
         );
+
+        final path = unit.session.analysisContext.contextRoot.optionsFile!.path;
+        final analysisError = plugin.AnalysisError(
+          plugin.AnalysisErrorSeverity.WARNING,
+          plugin.AnalysisErrorType.HINT,
+          unit.session.analysisContext.sidecarSourceSpan.location,
+          'misc configuration error',
+          'misc_config_error',
+        );
+
+        final response =
+            plugin.AnalysisErrorsParams(path, [analysisError]).toNotification();
+
+        channel.sendNotification(response);
       }
     }
 
@@ -243,14 +275,65 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
         // highlight node
         // errorReporter.reportYamlNode(node, rule);
+
+        final path = analysisContext.contextRoot.optionsFile!.path;
+        final analysisError = plugin.AnalysisError(
+          plugin.AnalysisErrorSeverity.WARNING,
+          plugin.AnalysisErrorType.HINT,
+          analysisContext.sidecarSourceSpan.location,
+          'empty configuration',
+          'empty_config',
+        );
+        final analysisError2 = plugin.AnalysisError(
+          plugin.AnalysisErrorSeverity.WARNING,
+          plugin.AnalysisErrorType.HINT,
+          SourceSpan(SourceLocation(1, sourceUrl: path),
+                  SourceLocation(2, sourceUrl: path), '1')
+              .location,
+          'empty configuration',
+          'empty_config',
+        );
+
+        final response = plugin.AnalysisErrorsParams(path, [analysisError2])
+            .toNotification();
+
+        channel.sendNotification(response);
       } on IncorrectConfiguration catch (e, stackTrace) {
         channel.sendNotification(
           plugin.PluginErrorParams(
             false,
-            'LintRule IncorrectConfiguration: ${e.toString()}',
+            'LintRule IncorrectConfiguration: ${e.error.toString()}',
             stackTrace.toString(),
           ).toNotification(),
         );
+
+        final path = analysisContext.contextRoot.optionsFile!.path;
+        final content =
+            analysisContext.contextRoot.optionsFile!.readAsStringSync();
+        final analysisError = plugin.AnalysisError(
+          plugin.AnalysisErrorSeverity.ERROR,
+          plugin.AnalysisErrorType.LINT,
+          analysisContext.sidecarSourceSpan.location,
+          'incorrect configuration',
+          'incorrect_config',
+        );
+        // final lineInfo = LineInfo.fromContent(content);
+        // final startLocation = lineInfo.getLocation(offset);
+        // final endLocation = lineInfo.getLocation(offset);
+        // final analysisError2 = plugin.AnalysisError(
+        //   plugin.AnalysisErrorSeverity.ERROR,
+        //   plugin.AnalysisErrorType.LINT,
+        //   SourceSpan(SourceLocation(1, sourceUrl: path),
+        //           SourceLocation(2, sourceUrl: path), '1')
+        //       .location,
+        //   'empty configuration',
+        //   'empty_config',
+        // );
+
+        final response =
+            plugin.AnalysisErrorsParams(path, [analysisError]).toNotification();
+
+        channel.sendNotification(response);
         // highlight node and state what missing configuration was
       } catch (e, stackTrace) {
         channel.sendNotification(
@@ -260,6 +343,20 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             stackTrace.toString(),
           ).toNotification(),
         );
+
+        final path = analysisContext.contextRoot.optionsFile!.path;
+        final analysisError = plugin.AnalysisError(
+          plugin.AnalysisErrorSeverity.WARNING,
+          plugin.AnalysisErrorType.HINT,
+          analysisContext.sidecarSourceSpan.location,
+          'misc configuration error',
+          'misc_config_error',
+        );
+
+        final response =
+            plugin.AnalysisErrorsParams(path, [analysisError]).toNotification();
+
+        channel.sendNotification(response);
       }
     }));
 
