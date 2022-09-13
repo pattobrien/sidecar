@@ -34,9 +34,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required this.allLints,
     required this.allCodeEdits,
     required this.nodeRegistry,
-  }) {
-    Logger.logLine('SidecarAnalyzerPlugin initialized');
-  }
+  });
 
   final ProviderContainer ref;
   late AnalysisContextCollection _collection;
@@ -71,18 +69,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     try {
       final errors = await _getAnalysisErrors(analysisContext, path);
-      final response =
-          plugin.AnalysisErrorsParams(path, errors.toList()).toNotification();
+      final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
 
-      channel.sendNotification(response);
+      channel.sendNotification(notif);
     } catch (e, stackTrace) {
-      channel.sendNotification(
-        plugin.PluginErrorParams(
-          false,
-          'error analyzing $path --${e.toString()}',
-          stackTrace.toString(),
-        ).toNotification(),
-      );
+      _sendPluginError('error analyzing $path -- ${e.toString()}', stackTrace);
     }
   }
 
@@ -117,14 +108,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         return response;
       }
     } on Exception catch (e, stackTrace) {
-      Logger.logLine('ERROR - handleEditGetFixes - $e $parameters');
-      channel.sendNotification(
-        plugin.PluginErrorParams(
-          false,
-          e.toString(),
-          stackTrace.toString(),
-        ).toNotification(),
-      );
+      _sendPluginError(e.toString(), stackTrace);
     }
     return plugin.EditGetFixesResult(const <plugin.AnalysisErrorFixes>[]);
   }
@@ -139,9 +123,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     final unit = await context.currentSession.getResolvedUnit(filePath);
 
-    if (unit is! ResolvedUnitResult) {
-      return EditGetAssistsResult([]);
-    }
+    if (unit is! ResolvedUnitResult) return EditGetAssistsResult([]);
 
     final codeEditRequests =
         _getCodeEditRequests(unit, parameters.offset, parameters.length);
@@ -175,72 +157,20 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         codeEdit.initialize(configurationContent: config);
         codeEditReporter.reportAstNode(astNode, codeEdit);
       } on EmptyConfiguration catch (e, stackTrace) {
-        channel.sendNotification(
-          plugin.PluginErrorParams(
-            false,
-            'CodeEdit EmptyConfiguration: ${e.toString()}',
-            stackTrace.toString(),
-          ).toNotification(),
+        _sendPluginError(
+          'CodeEdit EmptyConfiguration: ${e.toString()}',
+          stackTrace,
         );
-
-        // final path = unit.session.analysisContext.contextRoot.optionsFile!.path;
-        // final analysisError = plugin.AnalysisError(
-        //   plugin.AnalysisErrorSeverity.WARNING,
-        //   plugin.AnalysisErrorType.HINT,
-        //   unit.session.analysisContext.sidecarSourceSpan.location,
-        //   'empty configuration',
-        //   'empty_config',
-        // );
-
-        // final response =
-        //     plugin.AnalysisErrorsParams(path, [analysisError]).toNotification();
-
-        // channel.sendNotification(response);
       } on IncorrectConfiguration catch (e, stackTrace) {
-        channel.sendNotification(
-          plugin.PluginErrorParams(
-            false,
-            'CodeEdit IncorrectConfiguration: ${e.toString()}',
-            stackTrace.toString(),
-          ).toNotification(),
+        _sendPluginError(
+          'CodeEdit IncorrectConfiguration: ${e.toString()}',
+          stackTrace,
         );
-
-        // final path = unit.session.analysisContext.contextRoot.optionsFile!.path;
-        // final analysisError = plugin.AnalysisError(
-        //   plugin.AnalysisErrorSeverity.WARNING,
-        //   plugin.AnalysisErrorType.HINT,
-        //   unit.session.analysisContext.sidecarSourceSpan.location,
-        //   'incorrect configuration',
-        //   'incorrect_config',
-        // );
-
-        // final response =
-        //     plugin.AnalysisErrorsParams(path, [analysisError]).toNotification();
-
-        // channel.sendNotification(response);
-        // highlight node and state what missing configuration was
       } catch (e, stackTrace) {
-        channel.sendNotification(
-          plugin.PluginErrorParams(
-            false,
-            'CodeEdit Misc error: ${e.toString()}',
-            stackTrace.toString(),
-          ).toNotification(),
+        _sendPluginError(
+          'CodeEdit Misc error: ${e.toString()}',
+          stackTrace,
         );
-
-        // final path = unit.session.analysisContext.contextRoot.optionsFile!.path;
-        // final analysisError = plugin.AnalysisError(
-        //   plugin.AnalysisErrorSeverity.WARNING,
-        //   plugin.AnalysisErrorType.HINT,
-        //   unit.session.analysisContext.sidecarSourceSpan.location,
-        //   'misc configuration error',
-        //   'misc_config_error',
-        // );
-
-        // final response =
-        //     plugin.AnalysisErrorsParams(path, [analysisError]).toNotification();
-
-        // channel.sendNotification(response);
       }
     }
 
@@ -266,14 +196,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         final lints = await errorReporter.generateLints(analysisContext, rule);
         detectedLints.addAll(lints);
       } on EmptyConfiguration catch (e, stackTrace) {
-        channel.sendNotification(
-          plugin.PluginErrorParams(
-            false,
-            'LintRule EmptyConfiguration: ${e.toString()}',
-            stackTrace.toString(),
-          ).toNotification(),
+        _sendPluginError(
+          'LintRule EmptyConfiguration: ${e.toString()}',
+          stackTrace,
         );
-
         detectedConfigurationErrors.add(
           _calculateAnalysisOptionConfigError(
             analysisContext,
@@ -283,13 +209,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           ),
         );
       } on IncorrectConfiguration catch (e, stackTrace) {
-        channel.sendNotification(
-          plugin.PluginErrorParams(
-            false,
-            'LintRule IncorrectConfiguration: ${e.error.toString()}',
-            stackTrace.toString(),
-          ).toNotification(),
+        _sendPluginError(
+          'LintRule IncorrectConfiguration: ${e.error.toString()}',
+          stackTrace,
         );
+
         detectedConfigurationErrors.add(
           _calculateAnalysisOptionConfigError(
             analysisContext,
@@ -300,13 +224,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
         // highlight node and state what missing configuration was
       } catch (e, stackTrace) {
-        channel.sendNotification(
-          plugin.PluginErrorParams(
-            false,
-            'LintRule MiscError: ${e.toString()}',
-            stackTrace.toString(),
-          ).toNotification(),
-        );
+        _sendPluginError('LintRule MiscError: ${e.toString()}', stackTrace);
+
         detectedConfigurationErrors.add(
           _calculateAnalysisOptionConfigError(
             analysisContext,
@@ -329,6 +248,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     channel.sendNotification(response);
   }
 
+  void _sendPluginError(String message, StackTrace stackTrace) {
+    channel.sendNotification(
+      plugin.PluginErrorParams(
+        false,
+        message,
+        stackTrace.toString(),
+      ).toNotification(),
+    );
+  }
+
   plugin.AnalysisError _calculateAnalysisOptionConfigError(
     AnalysisContext analysisContext,
     String packageId,
@@ -345,11 +274,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     return analysisError;
   }
 
-  Future<Iterable<plugin.AnalysisError>> _getAnalysisErrors(
+  Future<List<plugin.AnalysisError>> _getAnalysisErrors(
     AnalysisContext analysisContext,
     String path,
   ) async {
     final reportedErrors = await _getReportedErrors(analysisContext, path);
-    return reportedErrors.map((lint) => lint.toAnalysisError());
+    return reportedErrors.map((lint) => lint.toAnalysisError()).toList();
   }
 }
