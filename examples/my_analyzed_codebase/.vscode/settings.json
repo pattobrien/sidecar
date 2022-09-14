@@ -6,10 +6,7 @@
         ],
     },
     "dart.analyzerAdditionalArgs": [
-        // "--observe",
-        // "--pause-isolates-on-start",
-        // "--port=10000",
-        // "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.log"
+        "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.log"
     ],
     // "dart.analyzerInstrumentationLogFile": "/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.txt",
 }
