@@ -23,9 +23,9 @@ const pluginVersion = '1.0.0-alpha.0';
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({
-    ResourceProvider? resourceProvider,
     required this.lintRuleConstructors,
     required this.codeEditConstructors,
+    ResourceProvider? resourceProvider,
   })  : ref = ProviderContainer(),
         super(
           resourceProvider:
@@ -38,6 +38,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     for (var constructor in codeEditConstructors) {
       allCodeEdits.add(constructor(ref));
     }
+    initialization();
+  }
+
+  void initialization() {
+    // todo:
+    // read options file for sidecar configuration
   }
 
   final ProviderContainer ref;
@@ -69,7 +75,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> beforeContextCollectionDispose({
     required AnalysisContextCollection contextCollection,
   }) {
-    channel.sendError('received: beforeNewContextCollection');
+    channel.sendError('beforeNewContextCollection');
     return super
         .beforeContextCollectionDispose(contextCollection: contextCollection);
   }
@@ -78,7 +84,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
-    channel.sendError('received: afterNewContextCollection');
+    channel.sendError('afterNewContextCollection');
     await super.afterNewContextCollection(contextCollection: contextCollection);
   }
 

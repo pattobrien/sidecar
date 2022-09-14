@@ -1,8 +1,5 @@
 import 'dart:io' as io;
 import 'package:path/path.dart' as p;
-import 'package:checked_yaml/checked_yaml.dart';
-import 'package:pubspec_parse/pubspec_parse.dart';
-import 'package:recase/recase.dart';
 
 import 'package:sidecar/sidecar.dart';
 
@@ -13,25 +10,22 @@ class ProjectUtilities {
     Uri projectRootUri,
   ) async {
     final analysisOptions =
-        io.File(p.join(projectRootUri.path, 'analysis_options.yaml'));
-    final pubspecFile = io.File(p.join(projectRootUri.path, 'pubspec.yaml'));
+        io.File(p.join(projectRootUri.path, analysisOptionsFileName));
     if (analysisOptions.existsSync()) {
       try {
         final analysisOptionsContents = await analysisOptions.readAsString();
-        // final pubspecContents = await pubspecFile.readAsString();
-        // final pubspec = Pubspec.parse(pubspecContents);
-        return ProjectConfiguration.parse(
-          analysisOptionsContents,
-          // packageName: pubspec.name,
-        );
+        return ProjectConfiguration.parse(analysisOptionsContents);
       } catch (e) {
         print(
-            'error getting sidecar configuration from pubspec/analysis options. $e');
+            'SIDECAR: Sidecar is not configured in analysis_options.yaml file.');
+        print(
+            'SIDECAR: Please ensure the plugin is listed under "analyzer" > "plugins" and');
+        print('SIDECAR: that a top-level sidecar configuration is given.');
         rethrow;
       }
     } else {
       throw UnimplementedError(
-        'no pubspec file found; please make sure this is a dart directory.',
+        'no analysis_options.yaml file found for sidecar configuration to be located.',
       );
     }
   }

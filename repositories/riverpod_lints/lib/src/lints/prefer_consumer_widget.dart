@@ -76,8 +76,7 @@ class PreferConsumerWidget extends LintRule {
 
         final buildFunction = lintedNode.members
             .whereType<MethodDeclaration>()
-            .firstWhereOrNull(
-                (method) => method.name2.value().toString() == 'build');
+            .firstWhereOrNull((method) => method.name2.lexeme == 'build');
 
         final paramOffset = buildFunction?.parameters?.rightParenthesis.offset;
         if (paramOffset != null) {
@@ -122,6 +121,10 @@ class TestConfig {
   final String someProperty;
 
   factory TestConfig.fromJson(Map map) {
+    // try {
     return TestConfig(someProperty: map['some_property']);
+    // } catch(e) {
+    //  throw StateError('invalid configuration');
+    // }
   }
 }

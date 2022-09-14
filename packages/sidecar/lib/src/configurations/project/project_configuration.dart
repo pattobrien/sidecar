@@ -1,31 +1,30 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
-import 'package:json_annotation/json_annotation.dart';
-import '../package/package_configuration.dart';
 import 'edit_package_configuration.dart';
+import 'errors.dart';
 import 'lint_package_configuration.dart';
-
-// final myLintConfig = projectConfig.lintPackages['riverpod_lints'].lints['prefer_consumer_widget'];
 
 class ProjectConfiguration {
   const ProjectConfiguration({
     this.lintPackages,
     this.editPackages,
-    List<String> includes = const ['lib/**', 'bin/**'],
-  }) : _includes = includes;
+    List<String>? includes = const ['lib/**', 'bin/**'],
+  }) : _includes = includes ?? const ['lib/**', 'bin/**'];
 
-  factory ProjectConfiguration.parse(
-    String contents,
-  ) {
+  factory ProjectConfiguration.parse(String contents) {
     return checkedYamlDecode(
       contents,
       (m) {
-        final contentMap = m!['sidecar'] as Map;
+        Map contentMap;
+        try {
+          contentMap = m!['sidecar'] as Map;
+        } catch (e) {
+          throw const MissingSidecarConfiguration();
+        }
         return ProjectConfiguration(
-          lintPackages:
-              parseLintPackageConfigurations(contentMap['lints'] as Map?),
-          editPackages:
-              parseEditPackageConfigurations(contentMap['edits'] as Map?),
+          lintPackages: parseLintPackages(contentMap['lints'] as Map?),
+          editPackages: parseEditPackages(contentMap['edits'] as Map?),
+          includes: parseIncludes(contentMap['includes'] as List?),
         );
       },
     );
@@ -46,34 +45,52 @@ class ProjectConfiguration {
 
 typedef PackageName = String;
 
-Map<PackageName, LintPackageConfiguration>? parseLintPackageConfigurations(
+Map<PackageName, LintPackageConfiguration>? parseLintPackages(
   Map? map,
 ) {
-  return map?.map((dynamic key, dynamic value) {
-    if (value is Map) {
-      final config =
-          LintPackageConfiguration.fromJson(value, packageName: key as String);
-      return MapEntry(key, config);
-    } else {
-      // we want to throw an error if the package doesnt have a single lint declared
-      throw UnimplementedError(
-          'expected one or more lints for package $key in analysis_options.yaml');
-    }
-  });
+  try {
+    return map?.map((dynamic key, dynamic value) {
+      if (value is Map) {
+        final config = LintPackageConfiguration.fromJson(value,
+            packageName: key as String);
+        return MapEntry(key, config);
+      } else {
+        // we want to throw an error if the package doesnt have a single lint declared
+        throw UnimplementedError(
+            'expected one or more lints for package $key in analysis_options.yaml');
+      }
+    });
+  } catch (e) {
+    throw InvalidSidecarConfiguration();
+  }
 }
 
-Map<PackageName, EditPackageConfiguration>? parseEditPackageConfigurations(
+Map<PackageName, EditPackageConfiguration>? parseEditPackages(
   Map? map,
 ) {
-  return map?.map((dynamic key, dynamic value) {
-    if (value is Map) {
-      final config =
-          EditPackageConfiguration.fromJson(value, packageName: key as String);
-      return MapEntry(key, config);
+  try {
+    return map?.map((dynamic key, dynamic value) {
+      if (value is Map) {
+        final config = EditPackageConfiguration.fromJson(value,
+            packageName: key as String);
+        return MapEntry(key, config);
+      } else {
+        // we want to throw an error if the package doesnt have a single lint declared
+        throw UnimplementedError(
+            'expected one or more edits for package $key in analysis_options.yaml');
+      }
+    });
+  } catch (e) {
+    throw InvalidSidecarConfiguration();
+  }
+}
+
+List<String>? parseIncludes(List? globs) {
+  return globs?.map((dynamic value) {
+    if (value is String) {
+      return value;
     } else {
-      // we want to throw an error if the package doesnt have a single lint declared
-      throw UnimplementedError(
-          'expected one or more edits for package $key in analysis_options.yaml');
+      throw UnimplementedError('expected one or more includes globs');
     }
-  });
+  }).toList();
 }

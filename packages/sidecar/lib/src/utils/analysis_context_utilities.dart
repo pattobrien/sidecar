@@ -11,6 +11,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
+import '../configurations/project/errors.dart';
 import '../configurations/project/project_configuration.dart';
 import 'ast_utilities.dart';
 
@@ -157,6 +158,8 @@ extension AnalysisContextX on AnalysisContext {
       final contents = optionsFile.readAsStringSync();
       try {
         return ProjectConfiguration.parse(contents);
+        // } on MissingSidecarConfiguration catch (e) {
+        //   print(e.toString());
       } catch (e) {
         throw UnimplementedError('cannot parse sidecar options: $e');
       }

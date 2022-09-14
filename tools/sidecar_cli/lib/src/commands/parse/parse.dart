@@ -22,9 +22,8 @@ class ParseCommand extends Command<int> {
       print('project directory: ${Directory.current}');
 
       final projectConfiguration =
-          await ProjectUtilities.getSidecarConfiguration(
-        Directory.current.uri,
-      );
+          await ProjectUtilities.getSidecarConfiguration(Directory.current.uri);
+
       final lintDeclarations = projectConfiguration.lintPackages ?? {};
       print('number of lint configurations: ${lintDeclarations.length}');
       for (var lintDeclaration in lintDeclarations.values) {
@@ -38,6 +37,9 @@ class ParseCommand extends Command<int> {
             'edit package: ${editDeclaration.packageName} || # of package edits: ${editDeclaration.edits.length} || first edit: ${editDeclaration.edits.entries.first.value.editId}');
       }
       return ExitCode.success;
+    } on MissingSidecarConfiguration catch (e) {
+      // print(e.toString());
+      rethrow;
     } catch (e) {
       print('COMMAND RUNNER ERROR: $e');
       rethrow;
