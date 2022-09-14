@@ -9,6 +9,9 @@ import 'package:analyzer/src/dart/ast/utilities.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:source_span/source_span.dart';
 
+import '../models/detected_lint.dart';
+import '../models/lint_rule.dart';
+
 extension SourceSpanX on SourceSpan {
   plugin.Location get location => plugin.Location(
         sourceUrl!.path,
@@ -36,5 +39,15 @@ extension SourceSpanX on SourceSpan {
     ).searchWithin(unit.unit);
 
     return ElementLocator.locate(node);
+  }
+
+  DetectedLint toDetectedLint(ResolvedUnitResult unit, LintRule rule) {
+    return DetectedLint(rule: rule, unit: unit, sourceSpan: this);
+  }
+}
+
+extension ListSourceSpanX on List<SourceSpan> {
+  List<DetectedLint> toDetectedLints(ResolvedUnitResult unit, LintRule rule) {
+    return map((e) => e.toDetectedLint(unit, rule)).toList();
   }
 }
