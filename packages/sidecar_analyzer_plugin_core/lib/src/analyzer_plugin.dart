@@ -168,7 +168,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       } on EmptyConfiguration catch (e, stackTrace) {
         channel.sendError('CodeEdit EmptyConfig: $e', stackTrace);
       } on IncorrectConfiguration catch (e, stackTrace) {
-        channel.sendError('CodeEdit IncorrectConfig: $e', stackTrace);
+        channel.sendError(
+            'CodeEdit IncorrectConfig: ${e.lintName} ${e.error}', stackTrace);
       } catch (e, stackTrace) {
         channel.sendError('CodeEdit Misc error: $e', stackTrace);
       }
@@ -196,7 +197,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         final lints = await errorReporter.generateLints(analysisContext, rule);
         detectedLints.addAll(lints);
       } on EmptyConfiguration catch (e, stackTrace) {
-        channel.sendError('LintRule EmptyConfig: ${e.toString()}', stackTrace);
+        channel.sendError('LintRule EmptyConfig: ${e.error}', stackTrace);
 
         detectedConfigurationErrors.add(
           _calculateAnalysisOptionConfigError(
@@ -207,7 +208,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           ),
         );
       } on IncorrectConfiguration catch (e, stackTrace) {
-        channel.sendError('LintRule IncorrectConfig: $e', stackTrace);
+        channel.sendError(
+            'LintRule IncorrectConfig: ${e.lintName} ${e.error}', stackTrace);
 
         detectedConfigurationErrors.add(
           _calculateAnalysisOptionConfigError(

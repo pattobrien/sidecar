@@ -35,7 +35,8 @@ abstract class LintRule {
         try {
           _configuration = jsonDecoder!(configurationContent);
         } catch (e, stackTrace) {
-          throw IncorrectConfiguration('$code error: $e', stackTrace);
+          throw IncorrectConfiguration(
+              '$code error: $e', stackTrace, '$packageName $code');
         }
       }
     }

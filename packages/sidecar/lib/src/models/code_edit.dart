@@ -2,6 +2,7 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 
+import 'errors.dart';
 import 'requested_code_edit.dart';
 import 'typedefs.dart';
 
@@ -33,7 +34,8 @@ abstract class CodeEdit {
         try {
           _configuration = jsonDecoder!(configurationContent);
         } catch (e, stackTrace) {
-          throw IncorrectConfiguration('$code error: $e', stackTrace);
+          throw IncorrectConfiguration(
+              '$code error: $e', stackTrace, '$packageName $code');
         }
       }
     }
