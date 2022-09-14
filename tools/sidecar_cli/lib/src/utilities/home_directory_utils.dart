@@ -1,8 +1,9 @@
 import 'dart:io';
+import 'logger.dart';
 
 Directory homeDirectory() {
   final homePath = Platform.environment['HOME'];
-  print('home directory: $homePath');
+  logger.trace('home directory: $homePath');
   if (homePath != null) {
     final homeDirectory = Directory(homePath);
     return homeDirectory;

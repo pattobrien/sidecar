@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io' as io;
 
+import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_cli/src/project/vscode_task.dart';
-
-import 'package:pubspec_utilities/pubspec_utilities.dart';
 
 import 'constants.dart';
 import '../utilities/utilities.dart';
@@ -34,16 +33,22 @@ class ProjectService {
   }
 
   Future<void> setupAnalysisOptionsFile() async {
+    final progress = logger.progress(
+        '\nchecking for sidecar configuration in ${logger.ansi.emphasized('analysis_options.yaml')} or ${logger.ansi.emphasized('sidecar.yaml')}');
     final analysisOptionsFile =
         io.File(p.join(projectDirectory.path, 'analysis_options.yaml'));
     if (!analysisOptionsFile.existsSync()) {
+      progress.finish(showTiming: true);
       await analysisOptionsFile.writeAsString(analysisDefaultContents);
     } else {
       //TODO: check if sidecar is setup under analyzer.plugins, and if not add it in
+      progress.finish(showTiming: true);
     }
   }
 
   Future<void> insertProjectPluginIntoPubspec() async {
+    final progress = logger.progress(
+        '\nadding copied ${logger.ansi.emphasized('sidecar_analyzer_plugin')} to project pubspec.yaml');
     final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
       final isFlutterProject =
@@ -61,9 +66,10 @@ class ProjectService {
         ],
         workingDirectory: projectDirectory.path,
       );
-      process.stdout.listen((event) => print(utf8.decode(event)));
-      process.stderr.listen((event) => print(utf8.decode(event)));
+      process.stdout.listen((event) => logger.trace(utf8.decode(event)));
+      process.stderr.listen((event) => logger.trace(utf8.decode(event)));
       await process.exitCode;
+      progress.finish(showTiming: true);
     } else {
       throw UnimplementedError('pubspec file is not in root project dir');
     }
@@ -72,6 +78,8 @@ class ProjectService {
   Future<void> insertPluginIntoProjectPubspec() async {
     final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
+      final progress = logger.progress(
+          'adding ${logger.ansi.emphasized('sidecar_analyzer_plugin')} to project pubspec.yaml file from hosted sidecar server');
       final isFlutterProject =
           await PubspecUtilities.isFlutterProject(projectDirectory.path);
 
@@ -84,8 +92,8 @@ class ProjectService {
         ],
         workingDirectory: projectDirectory.path,
       );
-      process.stdout.listen((event) => print(utf8.decode(event)));
-      process.stderr.listen((event) => print(utf8.decode(event)));
+      process.stdout.listen((event) => logger.trace(utf8.decode(event)));
+      process.stderr.listen((event) => logger.trace(utf8.decode(event)));
 
       await process.exitCode;
       final addProcess = await io.Process.start(
@@ -100,10 +108,12 @@ class ProjectService {
         ],
         workingDirectory: projectDirectory.path,
       );
-      addProcess.stdout.listen((event) => print(utf8.decode(event)));
-      addProcess.stderr.listen((event) => print(utf8.decode(event)));
+      addProcess.stdout.listen((event) => logger.trace(utf8.decode(event)));
+      addProcess.stderr.listen((event) => logger.trace(utf8.decode(event)));
+      progress.finish(showTiming: true);
     } else {
-      throw UnimplementedError('pubspec file is not in root project dir');
+      // throw UnimplementedError('pubspec file is not in root project dir');
+      logger.stderr('\npubspec file is not in current directory!');
     }
   }
 
@@ -121,7 +131,14 @@ class ProjectService {
     //     'sidecar_analyzer_plugin should be set as dependency',
     //   );
     // }
-    return Version.parse('0.1.9');
+    final progress =
+        logger.progress('\nfetching appropriate version for this project ');
+    final version = Version.parse('0.1.9');
+
+    progress.finish(showTiming: true);
+    logger.stdout(
+        '\nplugin will use ${logger.ansi.emphasized('sidecar_analyzer_plugin')} version${logger.ansi.blue} $version ${logger.ansi.none}');
+    return version;
   }
 
   // Future<void> _downloadSidecarAnalyzerPlugin(Version version) async {
@@ -143,6 +160,8 @@ class ProjectService {
   // }
 
   Future<void> copyBasePluginFromSource(Version version) async {
+    final progress = logger.progress(
+        '\ncopying source code into .sidecar/sidecar_analyzer_plugin directory');
     try {
       // delete any previously copied plugin files
       await projectPluginDirectory.delete(recursive: true);
@@ -203,9 +222,13 @@ class ProjectService {
       await file.writeAsString(
           pluginLoaderYamlContentCreator(projectPluginDirectory.path));
     }
+
+    progress.finish();
   }
 
   Future<void> insertVscodeTask() async {
+    final progress = logger
+        .progress('\ncreating VSCode utilities that watch for sidecar changes');
     final taskFile = io.File(vsCodeTaskPath(projectDirectory.path));
     await taskFile.create(recursive: true);
     await taskFile.writeAsString(vsCodeTaskContent);
@@ -214,6 +237,7 @@ class ProjectService {
     await settingsFile.create(recursive: true);
     await settingsFile
         .writeAsString(vsCodeSettingsContent(projectDirectory.path));
+    progress.finish(showTiming: true);
   }
 
   Future<void> createProjectPluginSymlink() async {
