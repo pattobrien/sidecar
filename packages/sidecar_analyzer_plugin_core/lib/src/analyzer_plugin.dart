@@ -237,9 +237,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   void _sendConfigErrors(
       List<plugin.AnalysisError> errors, AnalysisContext analysisContext) {
-    final path = analysisContext.contextRoot.optionsFile!.path;
-    final response = plugin.AnalysisErrorsParams(path, errors).toNotification();
-    channel.sendNotification(response);
+    if (errors.isNotEmpty) {
+      final path = analysisContext.contextRoot.optionsFile!.path;
+      final response =
+          plugin.AnalysisErrorsParams(path, errors).toNotification();
+      channel.sendNotification(response);
+    }
   }
 
   plugin.AnalysisError _calculateAnalysisOptionConfigError(
