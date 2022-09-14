@@ -1,13 +1,9 @@
 // ignore_for_file: implementation_imports
 
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/source/line_info.dart';
-import 'package:analyzer/source/source_range.dart';
-import 'package:source_span/source_span.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/src/dart/ast/utilities.dart';
+import 'package:analyzer/source/source_range.dart';
 import 'package:analyzer/src/dart/ast/element_locator.dart';
+import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import '../../sidecar.dart';
 

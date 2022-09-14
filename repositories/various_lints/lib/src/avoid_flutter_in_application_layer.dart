@@ -40,7 +40,7 @@ class AvoidFlutterInApplicationLayer extends LintRule {
       // final flutterBasedImports =
       //     importNodes.where((e) => e.element2!.accept(visitor) == true);
 
-      //TODO: proper way to find flutter imports
+      // TODO: proper way to find flutter imports
       final flutterBasedImports = importNodes.where(
           (element) => element.uri.stringValue?.contains('flutter') ?? false);
 
@@ -65,14 +65,17 @@ class AvoidFlutterInApplicationLayer extends LintRule {
 
 /// Checks if the given import directive imports flutter libraries
 class _LibraryVisitor extends GeneralizingElementVisitor<bool> {
+  final List<String> imports = [];
   @override
   bool? visitLibraryExportElement(LibraryExportElement element) {
     if (element.exportedLibrary?.isDartAsync != null) {
       if (element.exportedLibrary!.isDartAsync) {
+        imports.add(element.library.name);
         return true;
       }
       if (element.exportedLibrary!.libraryImports
           .any((element) => element.importedLibrary?.isDartAsync ?? false)) {
+        imports.add(element.library.name);
         return true;
       }
     }
@@ -83,6 +86,7 @@ class _LibraryVisitor extends GeneralizingElementVisitor<bool> {
   bool? visitLibraryImportElement(LibraryImportElement element) {
     if (element.importedLibrary?.isDartAsync != null) {
       if (element.importedLibrary!.isDartAsync) {
+        imports.add(element.library.name);
         return true;
       }
     }
@@ -93,9 +97,11 @@ class _LibraryVisitor extends GeneralizingElementVisitor<bool> {
   @override
   bool? visitLibraryElement(LibraryElement element) {
     if (element.importedLibraries.any((library) => library.isDartAsync)) {
+      imports.add(element.library.name);
       return true;
     }
     if (element.exportedLibraries.any((library) => library.isDartAsync)) {
+      imports.add(element.library.name);
       return true;
     }
     return super.visitLibraryElement(element);

@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'package:analyzer/src/dart/ast/utilities.dart';
 
 import '../../sidecar.dart';

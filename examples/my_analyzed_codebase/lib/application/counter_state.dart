@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:io';
-import 'dart:async';
 import 'async.dart';
 
 class TestWidget extends ConsumerWidget {
