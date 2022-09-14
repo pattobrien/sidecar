@@ -1,5 +1,3 @@
-// ignore_for_file: implementation_imports
-
 import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
@@ -11,9 +9,9 @@ import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:riverpod/riverpod.dart';
+import 'package:path/path.dart' as p;
 
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_analyzer_plugin_core/src/providers.dart';
 
 import 'channel_extension.dart';
 
@@ -28,8 +26,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     ResourceProvider? resourceProvider,
     required this.lintRuleConstructors,
     required this.codeEditConstructors,
-  })  : nodeRegistry = NodeLintRegistry(),
-        ref = ProviderContainer(),
+  })  : ref = ProviderContainer(),
         super(
           resourceProvider:
               resourceProvider ?? PhysicalResourceProvider.INSTANCE,
@@ -44,8 +41,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }
 
   final ProviderContainer ref;
-  late AnalysisContextCollection _collection;
-  final NodeLintRegistry nodeRegistry;
   final List<LintRuleConstructor> lintRuleConstructors;
   final List<CodeEditConstructor> codeEditConstructors;
 
@@ -63,8 +58,17 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   String get version => pluginVersion;
 
   @override
-  Future<void> beforeContextCollectionDispose(
-      {required AnalysisContextCollection contextCollection}) {
+  Future<plugin.PluginShutdownResult> handlePluginShutdown(
+    plugin.PluginShutdownParams parameters,
+  ) async {
+    await flushAnalysisState(elementModels: true);
+    return super.handlePluginShutdown(parameters);
+  }
+
+  @override
+  Future<void> beforeContextCollectionDispose({
+    required AnalysisContextCollection contextCollection,
+  }) {
     channel.sendError('received: beforeNewContextCollection');
     return super
         .beforeContextCollectionDispose(contextCollection: contextCollection);
@@ -74,9 +78,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
-    _collection = contextCollection;
     channel.sendError('received: afterNewContextCollection');
-
     await super.afterNewContextCollection(contextCollection: contextCollection);
   }
 
@@ -85,12 +87,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required String path,
   }) async {
+    final rootPath = analysisContext.contextRoot.root.path;
+
     if (!analysisContext.isSidecarEnabled) return;
+    if (!p.isWithin(rootPath, path)) return;
 
     try {
       final errors = await _getAnalysisErrors(analysisContext, path);
       final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
-
       channel.sendNotification(notif);
     } catch (e, stackTrace) {
       channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
@@ -103,12 +107,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) async {
     final filePath = parameters.file;
     try {
-      // final context = _collection.contextFor(filePath);
       final unit = await getResolvedUnitResult(filePath);
       final context = unit.session.analysisContext;
-      // final unit = await context.currentSession.getResolvedUnit(filePath);
 
-      // if (unit is! ResolvedUnitResult) {
       final reportedErrors = await _getReportedErrors(context, filePath).then(
         (value) => value.where((reportedError) {
           final errorLocation = reportedError.toAnalysisError().location;
@@ -124,7 +125,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       );
 
       return plugin.EditGetFixesResult(analysisErrorFixes);
-      // }
     } on Exception catch (e, stackTrace) {
       channel.sendError(e.toString(), stackTrace);
     }
@@ -135,18 +135,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetAssistsResult> handleEditGetAssists(
     EditGetAssistsParams parameters,
   ) async {
-    // final filePath = parameters.file;
-    // final context = _collection.contextFor(filePath);
-    // final unit = await context.currentSession.getResolvedUnit(filePath);
-
-    // if (unit is! ResolvedUnitResult) return EditGetAssistsResult([]);
     final unit = await getResolvedUnitResult(parameters.file);
 
-    final codeEditRequests =
+    final editRequests =
         _getCodeEditRequests(unit, parameters.offset, parameters.length);
 
     final changes = await Future.wait<plugin.PrioritizedSourceChange?>(
-      codeEditRequests.map((e) async => await e.toPrioritizedSourceChange(ref)),
+      editRequests.map((e) async => await e.toPrioritizedSourceChange(ref)),
     );
 
     return EditGetAssistsResult(
@@ -253,14 +248,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     String lintId,
     String message,
   ) {
-    final analysisError = plugin.AnalysisError(
+    return plugin.AnalysisError(
       plugin.AnalysisErrorSeverity.ERROR,
       plugin.AnalysisErrorType.LINT,
       analysisContext.sidecarLintSourceSpan(packageId, lintId).location,
       message,
       'lint_misconfiguration',
     );
-    return analysisError;
   }
 
   Future<List<plugin.AnalysisError>> _getAnalysisErrors(

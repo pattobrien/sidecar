@@ -37,6 +37,7 @@ String vsCodeSettingsContent(String workspacePath) => '''
         ],
     },
     "dart.analyzerAdditionalArgs": [
+        "--port=10000",
         "--instrumentation-log-file=$workspacePath/.sidecar/logs/analysis_instrumentation.log"
     ],
     // "dart.analyzerInstrumentationLogFile": "$workspacePath/.sidecar/logs/analysis_instrumentation.txt",
