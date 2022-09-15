@@ -13,7 +13,7 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.10-dev.2
+    version: ^0.1.10
   source_span: ^1.9.1
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
