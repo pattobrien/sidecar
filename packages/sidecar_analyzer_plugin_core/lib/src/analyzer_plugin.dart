@@ -295,12 +295,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     AnalysisContext analysisContext,
     String path,
   ) async {
-    final reportedErrors = await _getReportedErrors(analysisContext, path);
-    delegate.sidecarMessage(
-        '_getAnalysisErrors: ${reportedErrors.length} errors found');
-    for (var element in reportedErrors) {
-      delegate.lintMessage(element.rule, element.message);
+    final detectedLints = await _getReportedErrors(analysisContext, path);
+    delegate.sidecarMessage('\n${detectedLints.length} errors found');
+    for (var detectedLint in detectedLints) {
+      delegate.lintMessage(detectedLint, detectedLint.message);
     }
-    return reportedErrors.map((lint) => lint.toAnalysisError()).toList();
+    return detectedLints.map((lint) => lint.toAnalysisError()).toList();
   }
 }

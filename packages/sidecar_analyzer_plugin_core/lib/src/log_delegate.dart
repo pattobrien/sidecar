@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:sidecar/sidecar.dart';
+import 'package:path/path.dart' as p;
 
 abstract class LogDelegate {
   void sidecarError(
@@ -18,7 +19,7 @@ abstract class LogDelegate {
   );
 
   void lintMessage(
-    LintRule lint,
+    DetectedLint lint,
     String message,
   );
 
@@ -49,16 +50,21 @@ class DebuggerLogDelegate implements LogDelegate {
   }
 
   @override
-  void lintMessage(LintRule lint, String message) {
-    // print('DebuggerLogDelegate: lintMessage ${lint.code} $message');
-    final label = '[${lint.packageName}.${lint.code}]';
+  void lintMessage(DetectedLint lint, String message) {
+    final label = '[${lint.rule.packageName}] ${lint.rule.code}';
 
-    final msg = message
-        .split('\n')
-        .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')
-        .join();
+    final relativePath =
+        p.relative(lint.unit.path, from: Directory.current.path);
 
-    stdout.write('DebuggerLogDelegate: LintRule $msg');
+    final sourceLocation =
+        '$relativePath:${lint.sourceSpan.start.line}:${lint.sourceSpan.start.column}';
+
+    // final msg = message
+    //     .split('\n')
+    //     .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')
+    //     .join();
+
+    stdout.writeln('$label | ${lint.rule.message}    $sourceLocation');
   }
 
   @override
@@ -70,7 +76,7 @@ class DebuggerLogDelegate implements LogDelegate {
   @override
   void sidecarMessage(String message) {
     // print('DebuggerLogDelegate: sidecarMessage $message');
-    stdout.writeln('DebuggerLogDelegate: $message');
+    // stdout.writeln('DebuggerLogDelegate: $message');
   }
 
   @override
@@ -82,7 +88,7 @@ class DebuggerLogDelegate implements LogDelegate {
         .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')
         .join();
 
-    stdout.write('DebuggerLogDelegate: CodeEdit $msg');
+    stdout.writeln('DebuggerLogDelegate: CodeEdit $msg');
   }
 }
 
@@ -100,7 +106,7 @@ class EmptyDelegate implements LogDelegate {
   }
 
   @override
-  void lintMessage(LintRule lint, String message) {
+  void lintMessage(DetectedLint lint, String message) {
     // do nothing
   }
 

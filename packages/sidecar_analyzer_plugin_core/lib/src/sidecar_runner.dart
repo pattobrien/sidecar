@@ -20,7 +20,6 @@ import 'package:cli_util/cli_util.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
-import 'package:sidecar_analyzer_plugin_core/src/log_delegate.dart';
 
 import 'byte_store_ext.dart';
 import 'constants.dart';
