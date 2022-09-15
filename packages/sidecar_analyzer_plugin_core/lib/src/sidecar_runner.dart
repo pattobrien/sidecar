@@ -17,6 +17,7 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
 
 import 'package:cli_util/cli_util.dart';
+import 'package:hotreloader/hotreloader.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
@@ -33,6 +34,8 @@ class SidecarRunner {
 
   final SidecarAnalyzerPlugin server;
   final Directory root;
+
+  // late final HotReloader reloader;
 
   LogDelegate get delegate => server.delegate;
 
@@ -62,6 +65,10 @@ class SidecarRunner {
   late final Stream<plugin.AnalysisErrorsParams> _lints = _notifications
       .where((e) => e.event == 'analysis.errors')
       .map(plugin.AnalysisErrorsParams.fromNotification);
+
+  late final Stream<Map> _reloader = _notifications
+      .where((e) => e.event == 'sidecar.auto_reload')
+      .map((e) => <dynamic, dynamic>{});
 
   // /// The [Notification]s emitted by the plugin
   // late final Stream<plugin.PrintNotification> messages = notifications
@@ -126,7 +133,12 @@ class SidecarRunner {
   /// Starts the plugin and sends the necessary requests for initializing it.
   Future<void> initialize() async {
     _notifications.listen((request) {
-      delegate.sidecarMessage('>> ${request.event} ${request.params}');
+      delegate.sidecarVerboseMessage('>> ${request.event} ${request.params}');
+    });
+
+    _reloader.listen((event) {
+      delegate.sidecarMessage('\n\nHOTRELOAD.......\n\n');
+      _requestSetContext();
     });
 
     _sendPort = await _receivePortStream
@@ -142,6 +154,19 @@ class SidecarRunner {
       ).toRequest(_uuid.v4()),
     );
 
+    _requestSetContext();
+
+    delegate.sidecarVerboseMessage('done initializing...');
+  }
+
+  void sendRequest(plugin.Request request) {
+    final jsonData = request.toJson();
+    final encodedRequest = json.encode(jsonData);
+    delegate.sidecarVerboseMessage('>> $pluginName $encodedRequest');
+    _sendPort.send(jsonData);
+  }
+
+  void _requestSetContext() {
     sendRequest(
       plugin.AnalysisSetContextRootsParams([
         for (final contextRoot in contextRoots)
@@ -152,15 +177,6 @@ class SidecarRunner {
           ),
       ]).toRequest(_uuid.v4()),
     );
-
-    delegate.sidecarMessage('done initializing...');
-  }
-
-  void sendRequest(plugin.Request request) {
-    final jsonData = request.toJson();
-    final encodedRequest = json.encode(jsonData);
-    delegate.sidecarMessage('>> $pluginName $encodedRequest');
-    _sendPort.send(jsonData);
   }
 
   // Obtains the list of lints for the current workspace.

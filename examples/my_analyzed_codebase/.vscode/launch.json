@@ -5,7 +5,10 @@
             "program": "bin/debug.dart",
             // "program": ".sidecar/sidecar_analyzer_plugin/bin/debug.dart",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--enable-vm-service"
+            ]
         }
     ],
 }

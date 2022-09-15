@@ -25,12 +25,12 @@ sidecar:
         configuration:
           prefix: "AppLocalizations.of(context)"
 
-    riverpod_lints:
-      prefer_consumer_widget:
-        configuration:
-          some_property: abc
-    # various_lints:
-    #   avoid_flutter_in_application_layer:
+    # riverpod_lints:
+    #   prefer_consumer_widget:
+    #     configuration:
+    #       some_property: abc
+    various_lints:
+      avoid_flutter_in_application_layer:
 
   edits:
     riverpod_lints:

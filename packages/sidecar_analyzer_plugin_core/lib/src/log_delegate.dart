@@ -9,6 +9,10 @@ abstract class LogDelegate {
     StackTrace stackTrace,
   );
 
+  void sidecarVerboseMessage(
+    String message,
+  );
+
   void sidecarMessage(
     String message,
   );
@@ -28,9 +32,11 @@ abstract class LogDelegate {
     String message,
   );
 
+  void pluginRestart();
+
   void lintError(
     LintRule lint,
-    String err,
+    Object err,
     String stackTrace,
   );
 }
@@ -38,7 +44,7 @@ abstract class LogDelegate {
 class DebuggerLogDelegate implements LogDelegate {
   const DebuggerLogDelegate();
   @override
-  void lintError(LintRule lint, String err, String stackTrace) {
+  void lintError(LintRule lint, Object err, String stackTrace) {
     // print('DebuggerLogDelegate: lintError');
     stderr.writeln('DebuggerLogDelegate: $err\n$stackTrace');
   }
@@ -51,7 +57,7 @@ class DebuggerLogDelegate implements LogDelegate {
 
   @override
   void lintMessage(DetectedLint lint, String message) {
-    final label = '[${lint.rule.packageName}] ${lint.rule.code}';
+    final lintId = '[${lint.rule.packageName}] ${lint.rule.code}';
 
     final relativePath =
         p.relative(lint.unit.path, from: Directory.current.path);
@@ -64,7 +70,7 @@ class DebuggerLogDelegate implements LogDelegate {
     //     .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')
     //     .join();
 
-    stdout.writeln('$label | ${lint.rule.message}    $sourceLocation');
+    stdout.writeln('$lintId | ${lint.rule.message}    $sourceLocation');
   }
 
   @override
@@ -74,7 +80,7 @@ class DebuggerLogDelegate implements LogDelegate {
   }
 
   @override
-  void sidecarMessage(String message) {
+  void sidecarVerboseMessage(String message) {
     // print('DebuggerLogDelegate: sidecarMessage $message');
     // stdout.writeln('DebuggerLogDelegate: $message');
   }
@@ -90,6 +96,14 @@ class DebuggerLogDelegate implements LogDelegate {
 
     stdout.writeln('DebuggerLogDelegate: CodeEdit $msg');
   }
+
+  @override
+  void pluginRestart() {}
+
+  @override
+  void sidecarMessage(String message) {
+    stdout.writeln('DebuggerLogDelegate: $message');
+  }
 }
 
 class EmptyDelegate implements LogDelegate {
@@ -101,7 +115,7 @@ class EmptyDelegate implements LogDelegate {
   }
 
   @override
-  void lintError(LintRule lint, String err, String stackTrace) {
+  void lintError(LintRule lint, Object err, String stackTrace) {
     // do nothing
   }
 
@@ -121,7 +135,17 @@ class EmptyDelegate implements LogDelegate {
   }
 
   @override
-  void sidecarMessage(String message) {
+  void sidecarVerboseMessage(String message) {
     // do nothing
+  }
+
+  @override
+  void pluginRestart() {
+    // TODO: implement pluginRestart
+  }
+
+  @override
+  void sidecarMessage(String message) {
+    // TODO: implement sidecarMessage
   }
 }
