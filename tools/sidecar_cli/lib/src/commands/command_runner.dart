@@ -19,6 +19,7 @@ class PlatformCommandRunner extends CommandRunner<int> {
     addCommand(PublishCommand());
     addCommand(ParseCommand());
   }
+
   @override
   Future<int> run(Iterable<String> args) async {
     try {

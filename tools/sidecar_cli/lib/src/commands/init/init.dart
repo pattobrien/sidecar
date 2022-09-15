@@ -36,6 +36,7 @@ class InitCommand extends Command<int> {
       // check for a sidecar.yaml file or an analysis_options.yaml file with sidecar config
       // and if one doesn't exist, create one
       await projectService.setupAnalysisOptionsFile();
+      await Future.delayed(Duration(seconds: 2));
 
       // insert a VSCode setting that watches analysis_options.yaml and/or sidecar.yaml for changes and triggers ```sidecar rebuild``` automatically
       await projectService.insertVscodeTask();

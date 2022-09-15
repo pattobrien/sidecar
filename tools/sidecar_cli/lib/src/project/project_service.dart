@@ -54,27 +54,41 @@ class ProjectService {
       try {
         final isFlutterProject =
             await PubspecUtilities.isFlutterProject(projectDirectory.path);
-
+        final processRemove = await io.Process.start(
+          isFlutterProject ? 'flutter' : 'dart',
+          [
+            'pub',
+            'remove',
+            'sidecar_analyzer_plugin',
+          ],
+          workingDirectory: projectDirectory.path,
+        );
+        processRemove.stdout
+            .listen((event) => logger.stdout(utf8.decode(event)));
+        processRemove.stderr
+            .listen((event) => logger.stdout(utf8.decode(event)));
+        await processRemove.exitCode;
         final process = await io.Process.start(
           isFlutterProject ? 'flutter' : 'dart',
           [
             'pub',
             'add',
-            '--dev',
-            '--path',
-            '.sidecar/sidecar_analyzer_plugin/',
             'sidecar_analyzer_plugin',
+            '--path',
+            '.sidecar/sidecar_analyzer_plugin',
+            '--dev',
           ],
           workingDirectory: projectDirectory.path,
         );
-        process.stdout.listen((event) => logger.trace(utf8.decode(event)));
-        process.stderr.listen((event) => logger.trace(utf8.decode(event)));
+        process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
+        process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
         await process.exitCode;
         progress.finish(showTiming: true);
       } catch (e) {
         logger.stderr('failure while retrieving ');
       }
     } else {
+      logger.stderr('pubspec file is not in root project dir');
       throw UnimplementedError('pubspec file is not in root project dir');
     }
   }
@@ -326,39 +340,6 @@ class ProjectService {
       await process.exitCode;
     }
   }
-
-  // Future<void> importEdits(List<EditPackageConfiguration> editPackages) async {
-  //   final pluginPubspecFile =
-  //       io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
-
-  //   if (!pluginPubspecFile.existsSync()) {
-  //     throw UnimplementedError('plugin pubspec not found');
-  //   }
-
-  //   String pubspecContent = await pluginPubspecFile.readAsString();
-  //   final pubspec = Pubspec.parse(pubspecContent);
-  //   await Future.wait(editPackages.map((editConfiguration) async {
-  //     if (!pubspec.dependencies.containsKey(editConfiguration.packageName)) {
-  //       final isFlutterProject =
-  //           await PubspecUtilities.isFlutterProject(projectDirectory.path);
-  //       final process = await io.Process.start(
-  //         isFlutterProject ? 'flutter' : 'dart',
-  //         [
-  //           'pub',
-  //           'add',
-  //           '--hosted-url',
-  //           'https://micropub-3qduh.ondigitalocean.app/',
-  //           editConfiguration.packageName,
-  //         ],
-  //         workingDirectory: pluginPubspecFile.parent.path,
-  //       );
-
-  //       process.stdout.listen((event) => print(utf8.decode(event)));
-  //       process.stderr.listen((event) => print(utf8.decode(event)));
-  //       await process.exitCode;
-  //     }
-  //   }));
-  // }
 
   Future<void> generateLintBootstrapFunction(
     List<LintPackageConfiguration> lintPackages,

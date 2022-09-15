@@ -2,6 +2,8 @@ import 'package:pubspec_parse/pubspec_parse.dart';
 import 'dart:io' as io;
 import 'package:path/path.dart' as p;
 
+import 'logger.dart';
+
 class PubspecUtilities {
   static Future<bool> isFlutterProject(
     String projectRootPath,
@@ -16,6 +18,7 @@ class PubspecUtilities {
         return false;
       }
     } else {
+      logger.stderr('PubspecUtilities pubspec not found');
       throw UnimplementedError('pubspec not found');
     }
   }
