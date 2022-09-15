@@ -29,8 +29,7 @@ class RebuildCommand extends Command<int> {
       final lints = projectConfiguration.lintPackages?.values.toList() ?? [];
       final edits = projectConfiguration.editPackages?.values.toList() ?? [];
       await projectService.clearPreviousLints(lints, edits);
-      await projectService.importLints(lints);
-      await projectService.importEdits(edits);
+      await projectService.importLintsAndEdits(lints, edits);
       await projectService.generateLintBootstrapFunction(lints);
       await projectService.generateCodeEditBootstrapFunction(edits);
       await projectService.restartAnalyzerPlugin();

@@ -284,7 +284,10 @@ class ProjectService {
     }));
   }
 
-  Future<void> importLints(List<LintPackageConfiguration> lints) async {
+  Future<void> importLintsAndEdits(
+    List<LintPackageConfiguration> lints,
+    List<EditPackageConfiguration> edits,
+  ) async {
     final pluginPubspecFile =
         io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
 
@@ -294,61 +297,68 @@ class ProjectService {
 
     String pubspecContent = await pluginPubspecFile.readAsString();
     final pubspec = Pubspec.parse(pubspecContent); //TODO: set lenient = true
-    await Future.wait(lints.map((lintConfiguration) async {
-      if (!pubspec.dependencies.containsKey(lintConfiguration.packageName)) {
-        final isFlutterProject =
-            await PubspecUtilities.isFlutterProject(projectDirectory.path);
-        final process = await io.Process.start(
-          isFlutterProject ? 'flutter' : 'dart',
-          [
-            'pub',
-            'add',
-            '--hosted-url',
-            'https://micropub-3qduh.ondigitalocean.app/',
-            lintConfiguration.packageName,
-          ],
-          workingDirectory: pluginPubspecFile.parent.path,
-        );
+    final packageSet = <String>{}
+      ..addAll(lints.map((l) => l.packageName))
+      ..addAll(edits.map((e) => e.packageName))
+      ..removeWhere((p) => pubspec.dependencies.containsKey(p));
 
-        process.stdout.listen((event) => print(utf8.decode(event)));
-        process.stderr.listen((event) => print(utf8.decode(event)));
-        await process.exitCode;
+    if (packageSet.isNotEmpty) {
+      final lintArguments = <String>['pub', 'add'];
+
+      for (final package in packageSet) {
+        lintArguments.add(package);
       }
-    }));
-  }
 
-  Future<void> importEdits(List<EditPackageConfiguration> editPackages) async {
-    final pluginPubspecFile =
-        io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
+      lintArguments.add('--hosted-url');
+      lintArguments.add('https://micropub-3qduh.ondigitalocean.app/');
 
-    if (!pluginPubspecFile.existsSync()) {
-      throw UnimplementedError('plugin pubspec not found');
+      final isFlutterProject =
+          await PubspecUtilities.isFlutterProject(projectDirectory.path);
+
+      final process = await io.Process.start(
+        isFlutterProject ? 'flutter' : 'dart',
+        lintArguments,
+        workingDirectory: pluginPubspecFile.parent.path,
+      );
+
+      process.stdout.listen((event) => print(utf8.decode(event)));
+      process.stderr.listen((event) => print(utf8.decode(event)));
+      await process.exitCode;
     }
-
-    String pubspecContent = await pluginPubspecFile.readAsString();
-    final pubspec = Pubspec.parse(pubspecContent);
-    await Future.wait(editPackages.map((editConfiguration) async {
-      if (!pubspec.dependencies.containsKey(editConfiguration.packageName)) {
-        final isFlutterProject =
-            await PubspecUtilities.isFlutterProject(projectDirectory.path);
-        final process = await io.Process.start(
-          isFlutterProject ? 'flutter' : 'dart',
-          [
-            'pub',
-            'add',
-            '--hosted-url',
-            'https://micropub-3qduh.ondigitalocean.app/',
-            editConfiguration.packageName,
-          ],
-          workingDirectory: pluginPubspecFile.parent.path,
-        );
-
-        process.stdout.listen((event) => print(utf8.decode(event)));
-        process.stderr.listen((event) => print(utf8.decode(event)));
-        await process.exitCode;
-      }
-    }));
   }
+
+  // Future<void> importEdits(List<EditPackageConfiguration> editPackages) async {
+  //   final pluginPubspecFile =
+  //       io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
+
+  //   if (!pluginPubspecFile.existsSync()) {
+  //     throw UnimplementedError('plugin pubspec not found');
+  //   }
+
+  //   String pubspecContent = await pluginPubspecFile.readAsString();
+  //   final pubspec = Pubspec.parse(pubspecContent);
+  //   await Future.wait(editPackages.map((editConfiguration) async {
+  //     if (!pubspec.dependencies.containsKey(editConfiguration.packageName)) {
+  //       final isFlutterProject =
+  //           await PubspecUtilities.isFlutterProject(projectDirectory.path);
+  //       final process = await io.Process.start(
+  //         isFlutterProject ? 'flutter' : 'dart',
+  //         [
+  //           'pub',
+  //           'add',
+  //           '--hosted-url',
+  //           'https://micropub-3qduh.ondigitalocean.app/',
+  //           editConfiguration.packageName,
+  //         ],
+  //         workingDirectory: pluginPubspecFile.parent.path,
+  //       );
+
+  //       process.stdout.listen((event) => print(utf8.decode(event)));
+  //       process.stderr.listen((event) => print(utf8.decode(event)));
+  //       await process.exitCode;
+  //     }
+  //   }));
+  // }
 
   Future<void> generateLintBootstrapFunction(
     List<LintPackageConfiguration> lintPackages,

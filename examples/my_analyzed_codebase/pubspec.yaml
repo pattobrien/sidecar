@@ -19,10 +19,7 @@ dev_dependencies:
   intl: ^0.17.0
   lints: ^2.0.0
   sidecar_analyzer_plugin: 
-    hosted:
-      url: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
-      name: sidecar_analyzer_plugin
-    version: ^0.1.10
+    path: .sidecar/sidecar_analyzer_plugin
   test: ^1.16.0
 
 dependency_overrides:
