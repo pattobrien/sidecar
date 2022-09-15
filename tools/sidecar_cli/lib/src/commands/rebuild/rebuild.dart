@@ -19,25 +19,29 @@ class RebuildCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     try {
-      final projectService = ProjectService(Directory.current);
-
-      print('project directory: ${Directory.current}');
-
-      final projectConfiguration =
-          await ProjectUtilities.getSidecarConfiguration(Directory.current.uri);
-
-      final lints = projectConfiguration.lintPackages?.values.toList() ?? [];
-      final edits = projectConfiguration.editPackages?.values.toList() ?? [];
-      await projectService.clearPreviousLints(lints, edits);
-      await projectService.importLintsAndEdits(lints, edits);
-      await projectService.generateLintBootstrapFunction(lints);
-      await projectService.generateCodeEditBootstrapFunction(edits);
-      await projectService.restartAnalyzerPlugin();
-
+      await rebuildProcess();
       return ExitCode.success;
     } catch (e) {
       print('COMMAND RUNNER ERROR: $e');
       rethrow;
     }
   }
+}
+
+Future<void> rebuildProcess() async {
+  final projectService = ProjectService(Directory.current);
+
+  print('project directory: ${Directory.current}');
+
+  final projectConfiguration =
+      await ProjectUtilities.getSidecarConfiguration(Directory.current.uri);
+
+  final lints = projectConfiguration.lintPackages?.values.toList() ?? [];
+  final edits = projectConfiguration.editPackages?.values.toList() ?? [];
+
+  await projectService.clearPreviousLints(lints, edits);
+  await projectService.importLintsAndEdits(lints, edits);
+  await projectService.generateLintBootstrapFunction(lints);
+  await projectService.generateCodeEditBootstrapFunction(edits);
+  await projectService.restartAnalyzerPlugin();
 }

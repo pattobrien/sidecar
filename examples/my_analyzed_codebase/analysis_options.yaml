@@ -32,7 +32,6 @@ sidecar:
     # various_lints:
     #   avoid_flutter_in_application_layer:
 
-
   edits:
     riverpod_lints:
       create_text_edit_controller_provider:

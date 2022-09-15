@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:cli_util/cli_logging.dart';
+
 import '../exit_codes.dart';
 import '../../utilities/utilities.dart';
 import '../../project/project.dart';
+import '../rebuild/rebuild.dart';
 
 class InitCommand extends Command<int> {
   InitCommand();
@@ -44,7 +45,10 @@ class InitCommand extends Command<int> {
 
       // insert a VSCode setting that watches analysis_options.yaml and/or sidecar.yaml for changes and triggers ```sidecar rebuild``` automatically
       await projectService.insertVscodeTask();
+      await Future.delayed(Duration(seconds: 1));
+
       logger.stdout('\nSIDECAR initialization completed.');
+      // await rebuildProcess();
       return ExitCode.success;
     } catch (e) {
       logger.stderr('\nSIDECAR ERROR: $e');
