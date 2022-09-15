@@ -13,6 +13,7 @@ import 'package:path/path.dart' as p;
 
 import 'package:sidecar/sidecar.dart';
 
+import 'log_delegate.dart';
 import 'channel_extension.dart';
 
 const pluginName = 'sidecar_analyzer_plugin';
@@ -25,12 +26,15 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({
     required this.lintRuleConstructors,
     required this.codeEditConstructors,
+    this.delegate = const DebuggerLogDelegate(),
     ResourceProvider? resourceProvider,
   })  : ref = ProviderContainer(),
         super(
           resourceProvider:
               resourceProvider ?? PhysicalResourceProvider.INSTANCE,
         ) {
+    delegate.sidecarMessage(
+        'initializing ${lintRuleConstructors.length} lints and ${codeEditConstructors.length} edits.');
     for (var constructor in lintRuleConstructors) {
       allLintRules.add(constructor(ref));
     }
@@ -40,8 +44,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     }
     initialization();
   }
+  @override
+  Future<plugin.PluginVersionCheckResult> handlePluginVersionCheck(
+      plugin.PluginVersionCheckParams parameters) {
+    print('version check');
+    delegate.sidecarMessage('version check');
+    return super.handlePluginVersionCheck(parameters);
+  }
 
   void initialization() {
+    delegate.sidecarMessage('SidecarAnalyzerPlugin initialization complete');
     // todo:
     // read options file for sidecar configuration
   }
@@ -49,6 +61,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   final ProviderContainer ref;
   final List<LintRuleConstructor> lintRuleConstructors;
   final List<CodeEditConstructor> codeEditConstructors;
+  final LogDelegate delegate;
 
   final List<CodeEdit> allCodeEdits = [];
   final List<LintRule> allLintRules = [];
@@ -75,7 +88,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> beforeContextCollectionDispose({
     required AnalysisContextCollection contextCollection,
   }) {
-    channel.sendError('beforeNewContextCollection');
+    delegate.sidecarMessage('beforeNewContextCollection');
+    // channel.sendError('beforeNewContextCollection');
     return super
         .beforeContextCollectionDispose(contextCollection: contextCollection);
   }
@@ -84,6 +98,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
+    delegate.sidecarMessage('afterNewContextCollection');
     channel.sendError('afterNewContextCollection');
     await super.afterNewContextCollection(contextCollection: contextCollection);
   }
@@ -203,6 +218,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         final lints = await errorReporter.generateLints(analysisContext, rule);
         detectedLints.addAll(lints);
       } on EmptyConfiguration catch (e, stackTrace) {
+        delegate.lintError(rule, e.toString(), stackTrace.toString());
         channel.sendError('LintRule EmptyConfig: ${e.error}', stackTrace);
 
         detectedConfigurationErrors.add(
@@ -273,6 +289,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     String path,
   ) async {
     final reportedErrors = await _getReportedErrors(analysisContext, path);
+    for (var element in reportedErrors) {
+      delegate.lintMessage(element.rule, element.message);
+    }
     return reportedErrors.map((lint) => lint.toAnalysisError()).toList();
   }
 }
