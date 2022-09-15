@@ -20,12 +20,6 @@ final bootstrapFooter = '''
 ''';
 
 final analysisDefaultContents = '''
-# include: package:lints/recommended.yaml
-
-# linter:
-#   rules:
-#    - camel_case_types
-
 analyzer:
   plugins:
     - sidecar_analyzer_plugin

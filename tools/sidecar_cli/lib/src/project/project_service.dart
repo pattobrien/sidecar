@@ -13,7 +13,18 @@ import '../utilities/utilities.dart';
 import 'file_content_constants.dart';
 
 class ProjectService {
-  const ProjectService(this.projectDirectory);
+  ProjectService(this.projectDirectory) {
+    checkIfPubspecExists();
+  }
+
+  Future<void> checkIfPubspecExists() async {
+    if (await pubspecFile.exists()) {
+      return;
+    } else {
+      logger.stderr('pubspec file is not in root project dir');
+      throw UnimplementedError('pubspec file is not in root project dir');
+    }
+  }
 
   final io.Directory projectDirectory;
 
@@ -25,6 +36,15 @@ class ProjectService {
     );
     return io.Directory(pluginPath)..create(recursive: true);
   }
+
+  io.File get pubspecFile {
+    return io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
+  }
+
+  io.File get sidecarFile =>
+      io.File(p.join(projectDirectory.path, 'sidecar.yaml'));
+  io.File get analysisOptionsFile =>
+      io.File(p.join(projectDirectory.path, 'analysis_options.yaml'));
 
   io.Directory get projectRepositoryDirectory {
     final toolPath = io.Directory(p.join(projectDirectory.path, 'tool'));
@@ -48,45 +68,34 @@ class ProjectService {
   Future<void> insertProjectPluginIntoPubspec() async {
     final progress = logger.progress(
         '\nadding copied ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml');
-    final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
-    if (pubspecFile.existsSync()) {
-      try {
-        await pubRemovePackages(['sidecar_analyzer_plugin']);
-        await pubAddPackages(
-          [kSidecarPluginPackageId],
-          pathUrl: '.sidecar/sidecar_analyzer_plugin',
-          isDevDependency: true,
-          workingDirectory: projectDirectory.path,
-        );
-        progress.finish(showTiming: true);
-      } catch (e) {
-        logger.stderr('failure while retrieving ');
-      }
-    } else {
-      logger.stderr('pubspec file is not in root project dir');
-      throw UnimplementedError('pubspec file is not in root project dir');
+
+    try {
+      await pubRemovePackages(['sidecar_analyzer_plugin']);
+      await pubAddPackages(
+        [kSidecarPluginPackageId],
+        pathUrl: '.sidecar/sidecar_analyzer_plugin',
+        isDevDependency: true,
+        workingDirectory: projectDirectory.path,
+      );
+      progress.finish(showTiming: true);
+    } catch (e) {
+      logger.stderr('failure while retrieving packages $e');
     }
   }
 
   Future<void> insertPluginIntoProjectPubspec() async {
-    final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
-    if (pubspecFile.existsSync()) {
-      final progress = logger.progress(
-          'adding ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml file from hosted sidecar server');
+    final progress = logger.progress(
+        'adding ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml file from hosted sidecar server');
 
-      await pubRemovePackages([kSidecarPluginPackageId]);
+    await pubRemovePackages([kSidecarPluginPackageId]);
 
-      await pubAddPackages(
-        [kSidecarPluginPackageId],
-        hostedUrl: sidecarPluginHostedUrl,
-        isDevDependency: true,
-      );
+    await pubAddPackages(
+      [kSidecarPluginPackageId],
+      hostedUrl: sidecarPluginHostedUrl,
+      isDevDependency: true,
+    );
 
-      progress.finish(showTiming: true);
-    } else {
-      // throw UnimplementedError('pubspec file is not in root project dir');
-      logger.stderr('\npubspec file is not in current directory!');
-    }
+    progress.finish(showTiming: true);
   }
 
   Future<void> pubRemovePackages(
@@ -131,17 +140,15 @@ class ProjectService {
 
     final isFlutterProject =
         await PubspecUtilities.isFlutterProject(projectDirectory.path);
+
     final process = await io.Process.start(
       isFlutterProject ? 'flutter' : 'dart',
-      [
-        ...arguments,
-        ...packages,
-      ],
+      [...arguments, ...packages],
       workingDirectory: workingDirectory ?? projectDirectory.path,
     );
+
     process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
     process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
-
     await process.exitCode;
   }
 
@@ -245,13 +252,13 @@ class ProjectService {
     List<LintPackageConfiguration> lints,
     List<EditPackageConfiguration> edits,
   ) async {
-    final pubspecFile =
+    final pluginPubspecFile =
         io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
-    final pubspec = Pubspec.parse(await pubspecFile.readAsString());
+    final pluginPubspec = Pubspec.parse(await pluginPubspecFile.readAsString());
 
     final dependenciesToRemove = {
-      ...pubspec.dependencies,
-      ...pubspec.devDependencies,
+      ...pluginPubspec.dependencies,
+      ...pluginPubspec.devDependencies,
     }..removeWhere((key, value) {
         if (value is! HostedDependency) return true;
         if (key == 'sidecar_analyzer_plugin_core') return true;
