@@ -17,10 +17,12 @@ String getPluginPackagePathForVersion(Version version) => p.join(
       kPluginMasterRootPath,
       'sidecar_analyzer_plugin-${version.canonicalizedVersion}',
     );
-
+const kSidecarPluginPackageId = 'sidecar_analyzer_plugin';
 final kCloudsmithSidecarUrl =
     'https://dart.cloudsmith.io/fine-designs/sidecar/';
 
+const sidecarPluginHostedUrl =
+    'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/';
 io.Directory kPluginMasterRoot(Version version) =>
     io.Directory(getPluginPackagePathForVersion(version));
 

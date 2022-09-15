@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io' as io;
 
-import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
@@ -22,7 +21,7 @@ class ProjectService {
     final pluginPath = p.join(
       projectDirectory.path,
       '.sidecar',
-      'sidecar_analyzer_plugin',
+      kSidecarPluginPackageId,
     );
     return io.Directory(pluginPath)..create(recursive: true);
   }
@@ -48,41 +47,17 @@ class ProjectService {
 
   Future<void> insertProjectPluginIntoPubspec() async {
     final progress = logger.progress(
-        '\nadding copied ${logger.ansi.emphasized('sidecar_analyzer_plugin')} to project pubspec.yaml');
+        '\nadding copied ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml');
     final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
       try {
-        final isFlutterProject =
-            await PubspecUtilities.isFlutterProject(projectDirectory.path);
-        final processRemove = await io.Process.start(
-          isFlutterProject ? 'flutter' : 'dart',
-          [
-            'pub',
-            'remove',
-            'sidecar_analyzer_plugin',
-          ],
+        await pubRemovePackages(['sidecar_analyzer_plugin']);
+        await pubAddPackages(
+          [kSidecarPluginPackageId],
+          pathUrl: '.sidecar/sidecar_analyzer_plugin',
+          isDevDependency: true,
           workingDirectory: projectDirectory.path,
         );
-        processRemove.stdout
-            .listen((event) => logger.stdout(utf8.decode(event)));
-        processRemove.stderr
-            .listen((event) => logger.stdout(utf8.decode(event)));
-        await processRemove.exitCode;
-        final process = await io.Process.start(
-          isFlutterProject ? 'flutter' : 'dart',
-          [
-            'pub',
-            'add',
-            'sidecar_analyzer_plugin',
-            '--path',
-            '.sidecar/sidecar_analyzer_plugin',
-            '--dev',
-          ],
-          workingDirectory: projectDirectory.path,
-        );
-        process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
-        process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
-        await process.exitCode;
         progress.finish(showTiming: true);
       } catch (e) {
         logger.stderr('failure while retrieving ');
@@ -97,43 +72,77 @@ class ProjectService {
     final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
       final progress = logger.progress(
-          'adding ${logger.ansi.emphasized('sidecar_analyzer_plugin')} to project pubspec.yaml file from hosted sidecar server');
-      final isFlutterProject =
-          await PubspecUtilities.isFlutterProject(projectDirectory.path);
+          'adding ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml file from hosted sidecar server');
 
-      final process = await io.Process.start(
-        isFlutterProject ? 'flutter' : 'dart',
-        [
-          'pub',
-          'remove',
-          'sidecar_analyzer_plugin',
-        ],
-        workingDirectory: projectDirectory.path,
+      await pubRemovePackages([kSidecarPluginPackageId]);
+
+      await pubAddPackages(
+        [kSidecarPluginPackageId],
+        hostedUrl: sidecarPluginHostedUrl,
+        isDevDependency: true,
       );
-      process.stdout.listen((event) => logger.trace(utf8.decode(event)));
-      process.stderr.listen((event) => logger.trace(utf8.decode(event)));
 
-      await process.exitCode;
-
-      final addProcess = await io.Process.start(
-        isFlutterProject ? 'flutter' : 'dart',
-        [
-          'pub',
-          'add',
-          '--dev',
-          '--hosted-url',
-          'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/',
-          'sidecar_analyzer_plugin',
-        ],
-        workingDirectory: projectDirectory.path,
-      );
-      addProcess.stdout.listen((event) => logger.trace(utf8.decode(event)));
-      addProcess.stderr.listen((event) => logger.trace(utf8.decode(event)));
       progress.finish(showTiming: true);
     } else {
       // throw UnimplementedError('pubspec file is not in root project dir');
       logger.stderr('\npubspec file is not in current directory!');
     }
+  }
+
+  Future<void> pubRemovePackages(
+    List<String> packages, {
+    String? workingDirectory,
+  }) async {
+    if (packages.isEmpty) return;
+
+    final isFlutterProject =
+        await PubspecUtilities.isFlutterProject(projectDirectory.path);
+    final process = await io.Process.start(
+      isFlutterProject ? 'flutter' : 'dart',
+      [
+        'pub',
+        'remove',
+        ...packages,
+      ],
+      workingDirectory: workingDirectory ?? projectDirectory.path,
+    );
+    process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
+    process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
+
+    await process.exitCode;
+  }
+
+  Future<void> pubAddPackages(
+    List<String> packages, {
+    bool isDevDependency = false,
+    String? hostedUrl,
+    String? pathUrl,
+    String? workingDirectory,
+  }) async {
+    assert(pathUrl != null && hostedUrl != null);
+
+    if (packages.isEmpty) return;
+
+    final arguments = ['pub', 'add'];
+
+    if (isDevDependency) arguments.add('--dev');
+    if (hostedUrl != null) arguments.addAll(['--hosted-url', hostedUrl]);
+    if (pathUrl != null) arguments.addAll(['--path', pathUrl]);
+
+    final isFlutterProject =
+        await PubspecUtilities.isFlutterProject(projectDirectory.path);
+    final process = await io.Process.start(
+      isFlutterProject ? 'flutter' : 'dart',
+      [
+        ...arguments,
+        ...packages,
+      ],
+      workingDirectory: workingDirectory ?? projectDirectory.path,
+    );
+    process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
+    process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
+
+    await process.exitCode;
   }
 
   Future<Version> getPluginVersion() async {
@@ -152,35 +161,17 @@ class ProjectService {
     // }
     final progress =
         logger.progress('\nfetching appropriate version for this project ');
-    final version = Version.parse('0.1.10');
+    final version = Version.parse('0.1.11');
 
     progress.finish(showTiming: true);
     logger.stdout(
-        '\nplugin will use ${logger.ansi.emphasized('sidecar_analyzer_plugin')} version${logger.ansi.blue} $version ${logger.ansi.none}');
+        '\nplugin will use ${logger.ansi.emphasized(kSidecarPluginPackageId)} version${logger.ansi.blue} $version ${logger.ansi.none}');
     return version;
   }
 
-  // Future<void> _downloadSidecarAnalyzerPlugin(Version version) async {
-  //   final process = await io.Process.start(
-  //     'dart',
-  //     [
-  //       'pub',
-  //       'add',
-  //       '--dev',
-  //       '--hosted-url',
-  //       'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/',
-  //       'sidecar_analyzer_plugin',
-  //     ],
-  //     workingDirectory: projectDirectory.path,
-  //   );
-  //   process.stdout.listen((event) => print(utf8.decode(event)));
-  //   process.stderr.listen((event) => print(utf8.decode(event)));
-  //   await process.exitCode;
-  // }
-
   Future<void> copyBasePluginFromSource(Version version) async {
     final progress = logger.progress(
-        '\ncopying source code into .sidecar/sidecar_analyzer_plugin directory');
+        '\ncopying source code into .sidecar/$kSidecarPluginPackageId directory');
     try {
       // delete any previously copied plugin files
       await projectPluginDirectory.delete(recursive: true);
@@ -196,11 +187,6 @@ class ProjectService {
         .listSync(recursive: true)
         .whereType<io.File>();
 
-    // print(
-    //     'copying ${packageSourceFiles.length} plugin source files to project');
-    // print(
-    //     'copying from relative path: ${getPluginPackagePathForVersion(pluginVersion)}');
-
     bool hasOverrides = false;
     for (final packageSourceFile in packageSourceFiles) {
       final sourceFileRelativePath = p.relative(
@@ -208,12 +194,8 @@ class ProjectService {
         from: rootPluginPath,
       );
 
-      // print('relative source path: $sourceFileRelativePath');
-
       final pluginProjectPath =
           p.join(projectPluginDirectory.path, sourceFileRelativePath);
-
-      // print('copied source path: $pluginProjectPath');
 
       final file = await io.File(pluginProjectPath).create(recursive: true);
       if (packageSourceFile.path ==
@@ -259,13 +241,6 @@ class ProjectService {
     progress.finish(showTiming: true);
   }
 
-  Future<void> createProjectPluginSymlink() async {
-    final linkPath = p.join(projectDirectory.path, '.plugin');
-    final pluginPath = projectPluginDirectory.path;
-    final link = io.Link(linkPath);
-    if (!link.existsSync()) await link.create(pluginPath);
-  }
-
   Future<void> clearPreviousLints(
     List<LintPackageConfiguration> lints,
     List<EditPackageConfiguration> edits,
@@ -281,21 +256,14 @@ class ProjectService {
         if (value is! HostedDependency) return true;
         if (key == 'sidecar_analyzer_plugin_core') return true;
         if (key == 'sidecar') return true;
+        if (key == 'test') return true;
         if (lints.any((lint) => lint.packageName == key)) return true;
         if (edits.any((edit) => edit.packageName == key)) return true;
         return false;
       });
 
-    await Future.wait<void>(dependenciesToRemove.entries.map((dep) async {
-      final process = await io.Process.start(
-        'dart',
-        ['pub', 'remove', dep.key],
-        workingDirectory: projectPluginDirectory.path,
-      );
-      process.stdout.listen((event) => print(utf8.decode(event)));
-      process.stderr.listen((event) => print(utf8.decode(event)));
-      await process.exitCode;
-    }));
+    await pubRemovePackages(dependenciesToRemove.keys.toList(),
+        workingDirectory: projectPluginDirectory.path);
   }
 
   Future<void> importLintsAndEdits(
@@ -316,29 +284,11 @@ class ProjectService {
       ..addAll(edits.map((e) => e.packageName))
       ..removeWhere((p) => pubspec.dependencies.containsKey(p));
 
-    if (packageSet.isNotEmpty) {
-      final lintArguments = <String>['pub', 'add'];
-
-      for (final package in packageSet) {
-        lintArguments.add(package);
-      }
-
-      lintArguments.add('--hosted-url');
-      lintArguments.add('https://micropub-3qduh.ondigitalocean.app/');
-
-      final isFlutterProject =
-          await PubspecUtilities.isFlutterProject(projectDirectory.path);
-
-      final process = await io.Process.start(
-        isFlutterProject ? 'flutter' : 'dart',
-        lintArguments,
-        workingDirectory: pluginPubspecFile.parent.path,
-      );
-
-      process.stdout.listen((event) => print(utf8.decode(event)));
-      process.stderr.listen((event) => print(utf8.decode(event)));
-      await process.exitCode;
-    }
+    await pubAddPackages(
+      packageSet.toList(),
+      hostedUrl: 'https://micropub-3qduh.ondigitalocean.app/',
+      workingDirectory: projectPluginDirectory.path,
+    );
   }
 
   Future<void> generateLintBootstrapFunction(
@@ -442,11 +392,5 @@ class ProjectService {
 
 final projectServiceProvider =
     Provider.family.autoDispose<ProjectService, io.Directory>(
-  (ref, projectDirectory) {
-    // final sidecarPubService = ref.watch(sidecarPubServiceProvider);
-    return ProjectService(
-      projectDirectory,
-      // cacheDirectory: sidecarPubService.cacheDirectory,
-    );
-  },
+  (ref, projectDirectory) => ProjectService(projectDirectory),
 );

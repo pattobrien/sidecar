@@ -1,6 +1,6 @@
 name: sidecar_analyzer_plugin
 description: Analyzer plugin for the sidecar ecosystem.
-version: 0.1.10
+version: 0.1.11
 publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
 repository: https://github.com/pattobrien/sidecar/
 
@@ -15,3 +15,5 @@ dependencies:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/
     version: ^0.1.10
 
+dev_dependencies:
+  test: ^1.21.4

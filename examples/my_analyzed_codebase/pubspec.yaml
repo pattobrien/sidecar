@@ -13,10 +13,10 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^1.0.3+1
   path: ^1.8.0
+  intl: ^0.17.0
 
 dev_dependencies:
   auto_route_generator: ^5.0.2
-  intl: ^0.17.0
   lints: ^2.0.0
   sidecar_analyzer_plugin:
     path: .sidecar/sidecar_analyzer_plugin
