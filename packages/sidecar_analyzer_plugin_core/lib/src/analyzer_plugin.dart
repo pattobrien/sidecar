@@ -15,12 +15,7 @@ import 'package:sidecar/sidecar.dart';
 
 import 'log_delegate.dart';
 import 'channel_extension.dart';
-
-const pluginName = 'sidecar_analyzer_plugin';
-
-// this cannot be any random number for some reason
-// ("Plugin is not compatible." error is thrown)
-const pluginVersion = '1.0.0-alpha.0';
+import 'constants.dart';
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({
@@ -47,8 +42,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   @override
   Future<plugin.PluginVersionCheckResult> handlePluginVersionCheck(
       plugin.PluginVersionCheckParams parameters) {
-    print('version check');
-    delegate.sidecarMessage('version check');
+    delegate
+        .sidecarMessage('version check - server version ${parameters.version}');
     return super.handlePluginVersionCheck(parameters);
   }
 
@@ -110,14 +105,26 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     final rootPath = analysisContext.contextRoot.root.path;
 
-    if (!analysisContext.isSidecarEnabled) return;
-    if (!p.isWithin(rootPath, path)) return;
+    if (!analysisContext.isSidecarEnabled) {
+      delegate.sidecarMessage(
+          'analyzeFile: sidecar is not enabled in root dir: $rootPath     (file; $path)');
+      return;
+    }
+    ;
+    if (!p.isWithin(rootPath, path)) {
+      delegate.sidecarMessage(
+          'analyzeFile: file is not within root path    (file: $path) (root: $rootPath)');
+      return;
+    }
 
     try {
       final errors = await _getAnalysisErrors(analysisContext, path);
       final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
+
       channel.sendNotification(notif);
     } catch (e, stackTrace) {
+      delegate.sidecarError(
+          'error analyzing $path -- ${e.toString()}', stackTrace);
       channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
     }
   }
@@ -289,6 +296,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     String path,
   ) async {
     final reportedErrors = await _getReportedErrors(analysisContext, path);
+    delegate.sidecarMessage(
+        '_getAnalysisErrors: ${reportedErrors.length} errors found');
     for (var element in reportedErrors) {
       delegate.lintMessage(element.rule, element.message);
     }

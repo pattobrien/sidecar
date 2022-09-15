@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "name": "Sidecar Lint Debugger",
+            "program": "bin/debug.dart",
+            // "program": ".sidecar/sidecar_analyzer_plugin/bin/debug.dart",
+            "request": "launch",
+            "type": "dart"
+        }
+    ],
+}

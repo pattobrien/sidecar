@@ -1,23 +1,24 @@
 import 'dart:isolate';
 
-import 'package:sidecar_analyzer_plugin_core/src/log_delegate.dart';
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 
 import 'code_edit_constructors.dart';
 import 'lint_rule_constructors.dart';
 
 Future<void> start(List<String> args, SendPort sendPort) async {
-  print('start');
   LogDelegate delegate;
-  if (args.contains('release')) {
+  bool isDebugMode;
+  if (args.contains('--debug')) {
     delegate = DebuggerLogDelegate();
+    isDebugMode = true;
   } else {
-    delegate = DebuggerLogDelegate();
+    delegate = EmptyDelegate();
+    isDebugMode = false;
   }
   final plugin = SidecarAnalyzerPlugin(
     lintRuleConstructors: lintRuleConstructors,
     codeEditConstructors: codeEditConstructors,
     delegate: delegate,
   );
-  startSidecarPlugin(sendPort, plugin);
+  startSidecarPlugin(sendPort, plugin, isDebugMode: isDebugMode);
 }
