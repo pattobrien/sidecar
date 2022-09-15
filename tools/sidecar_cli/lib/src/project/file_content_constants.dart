@@ -32,7 +32,7 @@ sidecar:
     l10n_lints:
       avoid_string_literals:
         configuration:
-          prefix: "AppLocalizations.of(context)"
+          prefix: AppLocalizations.of(context)
   edits:
 
     ''';

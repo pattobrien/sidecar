@@ -29,11 +29,8 @@ class ProjectService {
   final io.Directory projectDirectory;
 
   io.Directory get projectPluginDirectory {
-    final pluginPath = p.join(
-      projectDirectory.path,
-      '.sidecar',
-      kSidecarPluginPackageId,
-    );
+    final pluginPath =
+        p.join(projectDirectory.path, '.sidecar', kSidecarPluginPackageId);
     return io.Directory(pluginPath)..create(recursive: true);
   }
 
