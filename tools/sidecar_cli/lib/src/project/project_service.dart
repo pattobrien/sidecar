@@ -51,25 +51,29 @@ class ProjectService {
         '\nadding copied ${logger.ansi.emphasized('sidecar_analyzer_plugin')} to project pubspec.yaml');
     final pubspecFile = io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
     if (pubspecFile.existsSync()) {
-      final isFlutterProject =
-          await PubspecUtilities.isFlutterProject(projectDirectory.path);
+      try {
+        final isFlutterProject =
+            await PubspecUtilities.isFlutterProject(projectDirectory.path);
 
-      final process = await io.Process.start(
-        isFlutterProject ? 'flutter' : 'dart',
-        [
-          'pub',
-          'add',
-          '--dev',
-          '--hosted-url',
-          'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/',
-          'sidecar_analyzer_plugin',
-        ],
-        workingDirectory: projectDirectory.path,
-      );
-      process.stdout.listen((event) => logger.trace(utf8.decode(event)));
-      process.stderr.listen((event) => logger.trace(utf8.decode(event)));
-      await process.exitCode;
-      progress.finish(showTiming: true);
+        final process = await io.Process.start(
+          isFlutterProject ? 'flutter' : 'dart',
+          [
+            'pub',
+            'add',
+            '--dev',
+            '--path',
+            '.sidecar/sidecar_analyzer_plugin/',
+            'sidecar_analyzer_plugin',
+          ],
+          workingDirectory: projectDirectory.path,
+        );
+        process.stdout.listen((event) => logger.trace(utf8.decode(event)));
+        process.stderr.listen((event) => logger.trace(utf8.decode(event)));
+        await process.exitCode;
+        progress.finish(showTiming: true);
+      } catch (e) {
+        logger.stderr('failure while retrieving ');
+      }
     } else {
       throw UnimplementedError('pubspec file is not in root project dir');
     }
@@ -96,14 +100,15 @@ class ProjectService {
       process.stderr.listen((event) => logger.trace(utf8.decode(event)));
 
       await process.exitCode;
+
       final addProcess = await io.Process.start(
         isFlutterProject ? 'flutter' : 'dart',
         [
           'pub',
           'add',
           '--dev',
-          '--path',
-          '.sidecar/sidecar_analyzer_plugin/',
+          '--hosted-url',
+          'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/',
           'sidecar_analyzer_plugin',
         ],
         workingDirectory: projectDirectory.path,
