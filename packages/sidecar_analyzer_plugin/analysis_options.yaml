@@ -1,2 +1,1 @@
-linter:
-  rules:
+import: ../../analysis_options.yaml

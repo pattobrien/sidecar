@@ -5,9 +5,21 @@ import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 
 /// Run lints with the debugger
 void main(List<String> args) async {
-  final reloader = await HotReloader.create();
+  final isDebug = args.any((element) => element == '--enable-vm-service');
+
+  late HotReloader reloader;
+  final newArgs = [...args];
+
+  if (isDebug) {
+    print('running in debug mode; HOTRELOAD enabled.');
+    reloader = await HotReloader.create();
+    newArgs.add('--debug');
+  } else {
+    print('running in CLI mode.');
+  }
+
   final receivePort = ReceivePort();
-  final newArgs = [...args, '--debug'];
-  start(newArgs, receivePort.sendPort);
-  reloader.stop();
+  await start(newArgs, receivePort.sendPort);
+
+  if (isDebug) reloader.stop();
 }

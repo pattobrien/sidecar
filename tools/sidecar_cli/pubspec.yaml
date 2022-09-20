@@ -1,6 +1,6 @@
 name: sidecar_cli
 description: A sample command-line application.
-version: 0.1.11-dev.4
+version: 0.1.11-dev.7
 publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_cli/
 repository: https://github.com/pattobrien/sidecar/
 

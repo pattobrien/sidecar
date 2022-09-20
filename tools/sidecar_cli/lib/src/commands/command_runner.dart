@@ -1,12 +1,11 @@
 import 'package:args/command_runner.dart';
 import 'package:cli_util/cli_logging.dart';
-import 'package:sidecar_cli/src/commands/init/init.dart';
-import 'package:sidecar_cli/src/commands/parse/parse.dart';
-import 'package:sidecar_cli/src/commands/publish/publish.dart';
-import 'package:sidecar_cli/src/commands/rebuild/rebuild.dart';
 
-import 'exit_codes.dart';
 import '../utilities/logger.dart';
+import 'init/init.dart';
+import 'rebuild/rebuild.dart';
+import 'analyze/analyze.dart';
+import 'exit_codes.dart';
 
 const kExecutableName = 'Sidecar CLI';
 const kExecutableDescription = '\n\n';
@@ -16,8 +15,7 @@ class PlatformCommandRunner extends CommandRunner<int> {
     // All CLI commands are listed below
     addCommand(InitCommand());
     addCommand(RebuildCommand());
-    addCommand(PublishCommand());
-    addCommand(ParseCommand());
+    addCommand(AnalyzeCommand());
   }
 
   @override

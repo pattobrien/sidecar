@@ -20,12 +20,15 @@ import 'log_delegate.dart';
 import 'channel_extension.dart';
 import 'constants.dart';
 
+enum SidecarAnalyzerPluginMode { debug, cli, plugin }
+
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({
     required this.lintRuleConstructors,
     required this.codeEditConstructors,
     this.delegate = const DebuggerLogDelegate(),
     ResourceProvider? resourceProvider,
+    required this.mode,
   })  : ref = ProviderContainer(),
         super(
           resourceProvider:
@@ -44,11 +47,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }
   late final HotReloader reloader;
   final reloadCompleter = Completer();
+  final SidecarAnalyzerPluginMode mode;
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
     super.start(channel);
-    _start(channel);
+    if (mode == SidecarAnalyzerPluginMode.debug) {
+      _start(channel);
+    }
   }
 
   Future<void> _start(plugin.PluginCommunicationChannel channel) async {
