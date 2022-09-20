@@ -4,7 +4,7 @@ linter:
   rules:
     - camel_case_types
     - prefer_relative_imports
-    - use_full_hex_values_for_flutter_colors
+    # - use_full_hex_values_for_flutter_colors
 
 analyzer:
   plugins:
@@ -29,10 +29,10 @@ sidecar:
         configuration:
           prefix: "AppLocalizations.of(context)"
 
-    # riverpod_lints:
-    #   prefer_consumer_widget:
-    #     configuration:
-    #       some_property: abc
+    riverpod_lints:
+      prefer_consumer_widget:
+        configuration:
+          some_property: abc
     # various_lints:
     #   avoid_flutter_in_application_layer:
 

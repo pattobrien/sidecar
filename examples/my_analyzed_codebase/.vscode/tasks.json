@@ -7,10 +7,10 @@
             "label": "sidecar rebuild",
             "type": "shell",
             "command": "sidecar rebuild",
-            "isBackground": true,
+            "group": "test",
             "presentation": {
-                "reveal": "silent",
-                "panel": "dedicated",
+                "reveal": "always",
+                "panel": "new"
             },
         }
     ]

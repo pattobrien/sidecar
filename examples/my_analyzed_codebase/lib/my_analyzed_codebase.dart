@@ -8,7 +8,7 @@ int calculate() {
 }
 
 class SomePage extends ConsumerWidget {
-  final color = Color(0x12345678);
+  final color = Color(0x1234567);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';

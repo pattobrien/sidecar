@@ -22,8 +22,6 @@ Future<void> startSidecarPlugin(
     await runner.initialize();
     print('cli initialization ended');
   } else {
-    print('plugin initialization started');
     ServerPluginStarter(plugin).start(sendPort);
-    print('plugin initialization complete');
   }
 }
