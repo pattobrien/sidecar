@@ -4,12 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 int calculate() {
   final aStringThatShouldBeLinted = 'some string that should be linted';
   final x = aStringThatShouldBeLinted;
-
   return 6 * 7;
 }
 
 class SomePage extends ConsumerWidget {
-  final color = Color(0x1234567);
+  final color = Color(0x12345678);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
@@ -40,5 +39,3 @@ class MyNewPage extends StatelessWidget {
 final myTextControllerProvider = ChangeNotifierProvider((ref) {
   return TextEditingController();
 });
-
-// (node => parents): SimpleStringLiteralImpl => ArgumentListImpl => InstanceCreationExpressionImpl => ListLiteralImpl

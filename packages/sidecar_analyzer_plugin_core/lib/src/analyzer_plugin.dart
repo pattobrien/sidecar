@@ -8,29 +8,34 @@ import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
+import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:riverpod/riverpod.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:sidecar/sidecar.dart';
+import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 
+import 'log_delegate.dart';
 import 'channel_extension.dart';
+import 'constants.dart';
 
-const pluginName = 'sidecar_analyzer_plugin';
-
-// this cannot be any random number for some reason
-// ("Plugin is not compatible." error is thrown)
-const pluginVersion = '1.0.0-alpha.0';
+enum SidecarAnalyzerPluginMode { debug, cli, plugin }
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({
     required this.lintRuleConstructors,
     required this.codeEditConstructors,
+    this.delegate = const DebuggerLogDelegate(),
     ResourceProvider? resourceProvider,
+    required this.mode,
   })  : ref = ProviderContainer(),
         super(
           resourceProvider:
               resourceProvider ?? PhysicalResourceProvider.INSTANCE,
         ) {
+    delegate.sidecarVerboseMessage(
+        'initializing ${lintRuleConstructors.length} lints and ${codeEditConstructors.length} edits.');
     for (var constructor in lintRuleConstructors) {
       allLintRules.add(constructor(ref));
     }
@@ -40,8 +45,48 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     }
     initialization();
   }
+  late final HotReloader reloader;
+  final reloadCompleter = Completer();
+  final SidecarAnalyzerPluginMode mode;
+
+  @override
+  void start(plugin.PluginCommunicationChannel channel) {
+    super.start(channel);
+    if (mode == SidecarAnalyzerPluginMode.debug) {
+      _start(channel);
+    }
+  }
+
+  Future<void> _start(plugin.PluginCommunicationChannel channel) async {
+    reloader = await HotReloader.create(onAfterReload: (c) {
+      if (c.result == HotReloadResult.Succeeded) {
+        channel.sendNotification(
+          plugin.Notification('sidecar.auto_reload', {}),
+        );
+      }
+    });
+    reloadCompleter.complete();
+  }
+
+  Future<void> reload() async {
+    delegate.sidecarVerboseMessage('reload request received');
+    await reloadCompleter.future;
+    await reloader.reloadCode();
+    // test //
+    delegate.sidecarVerboseMessage('reload request completed');
+  }
+
+  @override
+  Future<plugin.PluginVersionCheckResult> handlePluginVersionCheck(
+      plugin.PluginVersionCheckParams parameters) {
+    delegate.sidecarVerboseMessage(
+        'version check - server version ${parameters.version}');
+    return super.handlePluginVersionCheck(parameters);
+  }
 
   void initialization() {
+    delegate
+        .sidecarVerboseMessage('SidecarAnalyzerPlugin initialization complete');
     // todo:
     // read options file for sidecar configuration
   }
@@ -49,6 +94,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   final ProviderContainer ref;
   final List<LintRuleConstructor> lintRuleConstructors;
   final List<CodeEditConstructor> codeEditConstructors;
+  final LogDelegate delegate;
 
   final List<CodeEdit> allCodeEdits = [];
   final List<LintRule> allLintRules = [];
@@ -75,7 +121,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> beforeContextCollectionDispose({
     required AnalysisContextCollection contextCollection,
   }) {
-    channel.sendError('beforeNewContextCollection');
+    delegate.sidecarVerboseMessage('beforeNewContextCollection');
+    // channel.sendError('beforeNewContextCollection');
     return super
         .beforeContextCollectionDispose(contextCollection: contextCollection);
   }
@@ -84,6 +131,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
+    delegate.sidecarVerboseMessage('afterNewContextCollection');
     channel.sendError('afterNewContextCollection');
     await super.afterNewContextCollection(contextCollection: contextCollection);
   }
@@ -95,14 +143,26 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     final rootPath = analysisContext.contextRoot.root.path;
 
-    if (!analysisContext.isSidecarEnabled) return;
-    if (!p.isWithin(rootPath, path)) return;
+    if (!analysisContext.isSidecarEnabled) {
+      delegate.sidecarVerboseMessage(
+          'analyzeFile: sidecar is not enabled in root dir: $rootPath     (file; $path)');
+      return;
+    }
+    ;
+    if (!p.isWithin(rootPath, path)) {
+      delegate.sidecarVerboseMessage(
+          'analyzeFile: file is not within root path    (file: $path) (root: $rootPath)');
+      return;
+    }
 
     try {
       final errors = await _getAnalysisErrors(analysisContext, path);
       final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
+
       channel.sendNotification(notif);
     } catch (e, stackTrace) {
+      delegate.sidecarError(
+          'error analyzing $path -- ${e.toString()}', stackTrace);
       channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
     }
   }
@@ -203,6 +263,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         final lints = await errorReporter.generateLints(analysisContext, rule);
         detectedLints.addAll(lints);
       } on EmptyConfiguration catch (e, stackTrace) {
+        delegate.lintError(rule, e.toString(), stackTrace.toString());
         channel.sendError('LintRule EmptyConfig: ${e.error}', stackTrace);
 
         detectedConfigurationErrors.add(
@@ -272,7 +333,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     AnalysisContext analysisContext,
     String path,
   ) async {
-    final reportedErrors = await _getReportedErrors(analysisContext, path);
-    return reportedErrors.map((lint) => lint.toAnalysisError()).toList();
+    final detectedLints = await _getReportedErrors(analysisContext, path);
+    delegate.sidecarVerboseMessage('\n${detectedLints.length} errors found');
+    for (var detectedLint in detectedLints) {
+      delegate.lintMessage(detectedLint, detectedLint.message);
+    }
+    return detectedLints.map((lint) => lint.toAnalysisError()).toList();
   }
 }

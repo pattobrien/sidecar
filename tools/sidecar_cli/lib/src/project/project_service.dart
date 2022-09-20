@@ -29,20 +29,17 @@ class ProjectService {
   final io.Directory projectDirectory;
 
   io.Directory get projectPluginDirectory {
-    final pluginPath = p.join(
-      projectDirectory.path,
-      '.sidecar',
-      kSidecarPluginPackageId,
-    );
+    final pluginPath =
+        p.join(projectDirectory.path, '.sidecar', kSidecarPluginPackageId);
     return io.Directory(pluginPath)..create(recursive: true);
   }
 
-  io.File get pubspecFile {
-    return io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
-  }
+  io.File get pubspecFile =>
+      io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
 
   io.File get sidecarFile =>
       io.File(p.join(projectDirectory.path, 'sidecar.yaml'));
+
   io.File get analysisOptionsFile =>
       io.File(p.join(projectDirectory.path, 'analysis_options.yaml'));
 
@@ -54,11 +51,18 @@ class ProjectService {
   Future<void> setupAnalysisOptionsFile() async {
     final progress = logger.progress(
         '\nchecking for sidecar configuration in ${logger.ansi.emphasized('analysis_options.yaml')} or ${logger.ansi.emphasized('sidecar.yaml')}');
-    final analysisOptionsFile =
-        io.File(p.join(projectDirectory.path, 'analysis_options.yaml'));
+
+    // if (!(await sidecarFile.exists())) {
+    //   await sidecarFile.create(recursive: true);
+    //   await sidecarFile.writeAsString(sidecarYamlDefaultContents);
+    //   progress.finish(showTiming: true);
+    // }
+    // progress.finish(showTiming: true);
     if (!analysisOptionsFile.existsSync()) {
+      await analysisOptionsFile.create(recursive: true);
+      await analysisOptionsFile.writeAsString(analyzerPluginDefaultContents);
+      await analysisOptionsFile.writeAsString(sidecarYamlDefaultContents);
       progress.finish(showTiming: true);
-      await analysisOptionsFile.writeAsString(analysisDefaultContents);
     } else {
       //TODO: check if sidecar is setup under analyzer.plugins, and if not add it in
       progress.finish(showTiming: true);
@@ -168,7 +172,7 @@ class ProjectService {
     // }
     final progress =
         logger.progress('\nfetching appropriate version for this project ');
-    final version = Version.parse('0.1.11');
+    final version = Version.parse('0.1.11-dev.8');
 
     progress.finish(showTiming: true);
     logger.stdout(

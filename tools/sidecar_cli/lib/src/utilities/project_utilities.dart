@@ -14,6 +14,20 @@ class ProjectUtilities {
         io.File(p.join(projectRootUri.path, analysisOptionsFileName));
     final sidecarOptions =
         io.File(p.join(projectRootUri.path, sidecarOptionsFileName));
+    if (await sidecarOptions.exists()) {
+      try {
+        final sidecarOptionsContents = await sidecarOptions.readAsString();
+        return ProjectConfiguration.parse(sidecarOptionsContents);
+      } catch (e) {
+        print(
+            'SIDECAR: Sidecar is not properly configured in sidecar.yaml file.');
+        print(
+            'SIDECAR: Please ensure the plugin is listed under analyzer_options.yaml > "analyzer" > "plugins" and');
+        print(
+            'SIDECAR: that a top-level sidecar configuration is given in sidecar.yaml.');
+        rethrow;
+      }
+    }
     if (await analysisOptions.exists()) {
       try {
         final analysisOptionsContents = await analysisOptions.readAsString();
@@ -25,27 +39,12 @@ class ProjectUtilities {
         }
         return config;
       } catch (e) {
-        if (await sidecarOptions.exists()) {
-          try {
-            final sidecarOptionsContents = await sidecarOptions.readAsString();
-            return ProjectConfiguration.parse(sidecarOptionsContents);
-          } catch (e) {
-            print(
-                'SIDECAR: Sidecar is not properly configured in sidecar.yaml file.');
-            print(
-                'SIDECAR: Please ensure the plugin is listed under analyzer_options.yaml > "analyzer" > "plugins" and');
-            print(
-                'SIDECAR: that a top-level sidecar configuration is given in sidecar.yaml.');
-            rethrow;
-          }
-        } else {
-          print(
-              'SIDECAR: Sidecar is not configured in analysis_options.yaml file.');
-          print(
-              'SIDECAR: Please ensure the plugin is listed under "analyzer" > "plugins" and');
-          print('SIDECAR: that a top-level sidecar configuration is given.');
-          rethrow;
-        }
+        print(
+            'SIDECAR: Sidecar is not configured in analysis_options.yaml file.');
+        print(
+            'SIDECAR: Please ensure the plugin is listed under "analyzer" > "plugins" and');
+        print('SIDECAR: that a top-level sidecar configuration is given.');
+        rethrow;
       }
     } else {
       throw UnimplementedError(
