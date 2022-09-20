@@ -18,10 +18,10 @@ final vsCodeTaskContent = '''
             "label": "sidecar rebuild",
             "type": "shell",
             "command": "sidecar rebuild",
-            "group": "test",
+            "isBackground": true,
             "presentation": {
-                "reveal": "always",
-                "panel": "new"
+                "reveal": "silent",
+                "panel": "dedicated"
             },
         }
     ]

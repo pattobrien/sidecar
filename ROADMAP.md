@@ -18,9 +18,8 @@ Lints and Edits support for the following file types
 
 ### DevX and Usability
 
-- [ ] Debugging Support
+- [X] Debugging Support
 - [ ] Analysis Report via CLI
-- [ ] Lint URL documentation
 
 ### Performance Benchmarking
 
@@ -40,10 +39,15 @@ Benchmarks against Linter package
 
 - [ ] Ignore statments
 - [ ] Arb File Parse / Builder
+- [ ] Import inheritence
+- [ ] Multi-Import inheritence
+- [ ] Automated Lint URL documentation
+- [ ] CLI various output formats
+- [ ] ```dart fix``` Sidecar CLI alternative
 
 ### IDE Features (Advanced)
 
+- [ ] Snippets
 - [ ] Refactoring - Form Inputs
 - [ ] Syntax Highlighting
-- [ ] Multi-Import inheritence
 

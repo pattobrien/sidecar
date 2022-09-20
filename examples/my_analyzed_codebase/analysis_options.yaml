@@ -4,11 +4,15 @@ linter:
   rules:
     - camel_case_types
     - prefer_relative_imports
-    # - use_full_hex_values_for_flutter_colors
+    - use_full_hex_values_for_flutter_colors
 
 analyzer:
   plugins:
     - sidecar_analyzer_plugin
+  # errors:
+  #   use_full_hex_values_for_flutter_colors: warning
+  #   unused_local_variable: error
+  #   dead_code: info
 
 sidecar:
   includes:
