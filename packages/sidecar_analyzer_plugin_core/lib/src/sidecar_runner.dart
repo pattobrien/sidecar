@@ -17,7 +17,6 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
 
 import 'package:cli_util/cli_util.dart';
-import 'package:hotreloader/hotreloader.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
@@ -34,8 +33,6 @@ class SidecarRunner {
 
   final SidecarAnalyzerPlugin server;
   final Directory root;
-
-  // late final HotReloader reloader;
 
   LogDelegate get delegate => server.delegate;
 

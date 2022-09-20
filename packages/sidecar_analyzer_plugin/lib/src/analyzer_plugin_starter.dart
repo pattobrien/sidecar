@@ -5,18 +5,18 @@ import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 import 'code_edit_constructors.dart';
 import 'lint_rule_constructors.dart';
 
-Future<void> start(List<String> args, SendPort sendPort) async {
+Future<void> start(List<String> args, SendPort sendPort, bool isPlugin) async {
   LogDelegate delegate;
-  bool isDebugMode;
   SidecarAnalyzerPluginMode mode;
   if (args.contains('--debug')) {
     delegate = DebuggerLogDelegate();
-    isDebugMode = true;
     mode = SidecarAnalyzerPluginMode.debug;
-  } else {
+  } else if (isPlugin) {
     delegate = EmptyDelegate();
-    isDebugMode = false;
     mode = SidecarAnalyzerPluginMode.plugin;
+  } else {
+    delegate = DebuggerLogDelegate();
+    mode = SidecarAnalyzerPluginMode.cli;
   }
   final plugin = SidecarAnalyzerPlugin(
     lintRuleConstructors: lintRuleConstructors,
@@ -24,5 +24,5 @@ Future<void> start(List<String> args, SendPort sendPort) async {
     delegate: delegate,
     mode: mode,
   );
-  startSidecarPlugin(sendPort, plugin, isDebugMode: isDebugMode);
+  await startSidecarPlugin(sendPort, plugin, mode: mode);
 }

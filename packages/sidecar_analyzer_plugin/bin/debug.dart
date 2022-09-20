@@ -19,7 +19,7 @@ void main(List<String> args) async {
   }
 
   final receivePort = ReceivePort();
-  await start(newArgs, receivePort.sendPort);
+  await start(newArgs, receivePort.sendPort, false);
 
   if (isDebug) reloader.stop();
 }

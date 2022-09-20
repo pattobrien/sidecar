@@ -9,13 +9,18 @@ import 'analyzer_plugin.dart';
 Future<void> startSidecarPlugin(
   SendPort sendPort,
   SidecarAnalyzerPlugin plugin, {
-  bool isDebugMode = false,
+  required SidecarAnalyzerPluginMode mode,
 }) async {
-  if (isDebugMode) {
+  if (mode == SidecarAnalyzerPluginMode.debug) {
     print('debug initialization started');
     final runner = SidecarRunner(plugin, Directory.current);
     await runner.initialize();
     print('debug initialization complete');
+  } else if (mode == SidecarAnalyzerPluginMode.cli) {
+    print('cli initialization started');
+    final runner = SidecarRunner(plugin, Directory.current);
+    await runner.initialize();
+    print('cli initialization ended');
   } else {
     print('plugin initialization started');
     ServerPluginStarter(plugin).start(sendPort);
