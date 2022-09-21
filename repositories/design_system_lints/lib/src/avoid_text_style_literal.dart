@@ -2,15 +2,13 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:flutter_utilities/flutter_utilities.dart';
+const _desc = r'Avoid TextStyle literal.';
 
-const _desc = r'Avoid color literal.';
-
-class AvoidColorLiteral extends LintRule {
-  AvoidColorLiteral(super.ref);
+class AvoidTextStyleLiteral extends LintRule {
+  AvoidTextStyleLiteral(super.ref);
 
   @override
-  String get code => 'avoid_color_literal';
+  String get code => 'avoid_text_style_literal';
 
   @override
   String get packageName => 'design_system_lints';
@@ -51,10 +49,8 @@ class _Visitor extends GeneralizingAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-    if (element != null &&
-        element.isSameAs(uri: 'dart.ui', className: 'Color')) {
+    if (element != null && element.returnType.element2.name == 'TextStyle') {
       nodes.add(node);
-      // nodes.add(node.parent!.parent!);
     }
     super.visitInstanceCreationExpression(node);
   }

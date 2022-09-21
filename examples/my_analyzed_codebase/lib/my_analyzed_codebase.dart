@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 int calculate() {
@@ -9,20 +10,31 @@ int calculate() {
 
 class SomePage extends ConsumerWidget {
   final color = Color(0x12345678);
+  final insets = EdgeInsets.all(10);
+  final shadow = BoxShadow();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
     final someString2 = someString;
     final x = Color(123);
-    return Column(
-      children: [
-        TextFormField(
-          controller: ref.watch(myTextControllerProvider),
-        ),
-        Text('some declaration'),
-        Text(someString),
-        Text(someString2),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.zero),
+      ),
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        children: [
+          SizedBox(width: 10),
+          Icon(Icons.abc),
+          TextFormField(
+            controller: ref.watch(myTextControllerProvider),
+          ),
+          Text('some declaration'),
+          Text(someString),
+          Text(someString2),
+        ],
+      ),
     );
   }
 }

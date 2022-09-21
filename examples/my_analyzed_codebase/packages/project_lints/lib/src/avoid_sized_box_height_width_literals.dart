@@ -2,18 +2,16 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:flutter_utilities/flutter_utilities.dart';
+const _desc = r'Avoid using height or width literals in SizedBox widgets.';
 
-const _desc = r'Avoid color literal.';
-
-class AvoidColorLiteral extends LintRule {
-  AvoidColorLiteral(super.ref);
+class AvoidSizedBoxHeightWidthLiterals extends LintRule {
+  AvoidSizedBoxHeightWidthLiterals(super.ref);
 
   @override
-  String get code => 'avoid_color_literal';
+  String get code => 'avoid_sized_box_height_width_literals';
 
   @override
-  String get packageName => 'design_system_lints';
+  String get packageName => 'project_lints';
 
   @override
   String get message => _desc;
@@ -51,10 +49,9 @@ class _Visitor extends GeneralizingAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-    if (element != null &&
-        element.isSameAs(uri: 'dart.ui', className: 'Color')) {
+    if (element != null && element.returnType.element2.name == 'SizedBox') {
+      // if (element.declaration.)
       nodes.add(node);
-      // nodes.add(node.parent!.parent!);
     }
     super.visitInstanceCreationExpression(node);
   }

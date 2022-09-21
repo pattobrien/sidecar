@@ -2,15 +2,13 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:flutter_utilities/flutter_utilities.dart';
+const _desc = r'Avoid BorderRadius literal.';
 
-const _desc = r'Avoid color literal.';
-
-class AvoidColorLiteral extends LintRule {
-  AvoidColorLiteral(super.ref);
+class AvoidBorderRadiusLiteral extends LintRule {
+  AvoidBorderRadiusLiteral(super.ref);
 
   @override
-  String get code => 'avoid_color_literal';
+  String get code => 'avoid_border_radius_literal';
 
   @override
   String get packageName => 'design_system_lints';
@@ -50,11 +48,13 @@ class _Visitor extends GeneralizingAstVisitor {
 
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
-    final element = node.constructorName.staticElement;
+    final element = node.constructorName.staticElement?.returnType.element2;
     if (element != null &&
-        element.isSameAs(uri: 'dart.ui', className: 'Color')) {
+        TypeChecker.fromName(
+          'BorderRadius',
+          packageName: 'flutter',
+        ).isAssignableFrom(element)) {
       nodes.add(node);
-      // nodes.add(node.parent!.parent!);
     }
     super.visitInstanceCreationExpression(node);
   }

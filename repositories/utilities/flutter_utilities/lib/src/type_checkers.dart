@@ -17,6 +17,8 @@ class WidgetsTypeChecker {
 class MaterialTypeChecker {
   const MaterialTypeChecker();
   static const color = TypeChecker.fromName('Color', packageName: 'flutter');
+  static const edgeInsets =
+      TypeChecker.fromName('EdgeInsets', packageName: 'flutter');
 }
 
 class FlutterTypeChecker {

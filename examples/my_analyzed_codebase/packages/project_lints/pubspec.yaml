@@ -1,0 +1,33 @@
+name: project_lints
+description: A starting point for Dart libraries or applications.
+version: 0.1.0
+publish_to: https://micropub-3qduh.ondigitalocean.app/
+repository: https://github.com/pattobrien/sidecar/tree/master/repositories/flutter_lints
+
+environment:
+  sdk: ">=2.17.5 <3.0.0"
+
+dependencies:
+  analyzer: ^4.7.0
+  code_builder: ^4.2.0
+  collection: ^1.16.0
+  flutter_utilities:
+    hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
+    version: ^0.1.6
+  path: ^1.8.0
+  sidecar:
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
+    version: ^0.1.10
+  source_span: ^1.8.2
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0
+# sidecar:
+#   lints:
+#     avoid_sized_box_height_width_literals:
+#       class: AvoidSizedBoxHeightWidthLiterals
+#       import: project_lints/project_lints.dart
+# dependency_overrides:
+#   flutter_utilities:
+#     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

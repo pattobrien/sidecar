@@ -13,7 +13,7 @@ dependencies:
   collection: ^1.16.0
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
-    version: ^0.1.5
+    version: ^0.1.6
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
@@ -29,3 +29,25 @@ sidecar:
     avoid_color_literal:
       class: AvoidColorLiteral
       import: design_system_lints/design_system_lints.dart
+    avoid_edge_insets_literal:
+      class: AvoidEdgeInsetsLiteral
+      import: design_system_lints/design_system_lints.dart
+    avoid_icon_literal:
+      class: AvoidIconLiteral
+      import: design_system_lints/design_system_lints.dart
+    avoid_box_shadow_literal:
+      class: AvoidBoxShadowLiteral
+      import: design_system_lints/design_system_lints.dart
+    avoid_text_style_literal:
+      class: AvoidTextStyleLiteral
+      import: design_system_lints/design_system_lints.dart
+    avoid_border_radius_literal:
+      class: AvoidBorderRadiusLiteral
+      import: design_system_lints/design_system_lints.dart
+    avoid_sized_box_height_width_literals:
+      class: AvoidSizedBoxHeightWidthLiterals
+      import: design_system_lints/design_system_lints.dart
+
+dependency_overrides:
+  flutter_utilities:
+    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
