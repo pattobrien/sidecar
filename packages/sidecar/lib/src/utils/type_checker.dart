@@ -89,6 +89,19 @@ abstract class TypeChecker {
     return false;
   }
 
+  static bool isTypeMatch(
+    InterfaceType? interfaceType, {
+    required String type,
+    required String sourcePath,
+    bool isFromFile = false,
+  }) {
+    if (interfaceType == null) return false;
+
+    final uri = Uri(scheme: isFromFile ? 'file' : 'package', path: sourcePath);
+    return interfaceType.element2.name == type &&
+        interfaceType.element2.source.uri == uri;
+  }
+
   // static bool isMatch(
   //   Element? element, {
   //   required String type,

@@ -13,7 +13,7 @@ dependencies:
   collection: ^1.16.0
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
-    version: ^0.1.7
+    version: ^0.1.9
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
@@ -32,6 +32,6 @@ sidecar:
     avoid_sized_box_height_width_literals:
       class: AvoidSizedBoxHeightWidthLiterals
       import: project_lints/project_lints.dart
-dependency_overrides:
-  flutter_utilities:
-    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
+# dependency_overrides:
+#   flutter_utilities:
+#     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

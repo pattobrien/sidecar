@@ -60,7 +60,8 @@ class _Visitor extends GeneralizingAstVisitor<void> {
     var classElement = node.declaredElement2;
     if (classElement != null &&
         classElement.isPublic &&
-        FlutterUtils().hasWidgetAsAscendant(classElement) &&
+        // FlutterUtils().hasWidgetAsAscendant(classElement) &&
+        FlutterTypeChecker.isWidget(classElement.thisType) &&
         classElement.constructors.where((e) => !e.isSynthetic).isEmpty) {
       // rule.reportAstNode(node.name);
       // final lint = DetectedLint.fromAstNode(node.name, unit, rule);
@@ -81,8 +82,9 @@ class _Visitor extends GeneralizingAstVisitor<void> {
         !constructorElement.isFactory &&
         classElement.isPublic &&
         classElement is ClassElement &&
-        FlutterUtils().hasWidgetAsAscendant(classElement) &&
-        !FlutterUtils().isExactWidget(classElement) &&
+        // FlutterUtils().hasWidgetAsAscendant(classElement) &&
+        // !FlutterUtils().isExactWidget(classElement) &&
+        FlutterTypeChecker.isWidget(classElement.thisType) &&
         !_hasKeySuperParameterInitializerArg(node) &&
         !node.initializers.any((initializer) {
           if (initializer is SuperConstructorInvocation) {

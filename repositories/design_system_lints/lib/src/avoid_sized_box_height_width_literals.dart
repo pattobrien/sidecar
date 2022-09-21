@@ -51,9 +51,7 @@ class _Visitor extends GeneralizingAstVisitor {
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
 
-    final isSizedBox = FlutterTypeChecker.isMatch(element?.returnType.element2,
-        type: 'SizedBox', sourcePath: 'src/widgets/basic.dart');
-    
+    final isSizedBox = FlutterTypeChecker.isSizedBox(element?.returnType);
 
     if (isSizedBox) {
       final args = node.argumentList.arguments
