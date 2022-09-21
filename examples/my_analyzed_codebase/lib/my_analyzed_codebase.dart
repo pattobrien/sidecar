@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/theme/icons.dart';
+
 int calculate() {
   final aStringThatShouldBeLinted = 'some string that should be linted';
   final x = aStringThatShouldBeLinted;
@@ -17,6 +19,7 @@ class SomePage extends ConsumerWidget {
     final someString = 'translation';
     final someString2 = someString;
     final someIconData = Icons.abc;
+    final double someNumnber = 10;
     final x = Color(123);
     return Container(
       decoration: BoxDecoration(
@@ -33,8 +36,10 @@ class SomePage extends ConsumerWidget {
             someIconData,
             color: x,
           ),
-          SizedBox(width: 10),
+          SizedBox(width: 10.0),
+          SizedBox(width: someNumnber),
           Icon(Icons.abc),
+          Icon(ProjectIcons.abc),
           TextFormField(
             controller: ref.watch(myTextControllerProvider),
           ),
@@ -66,3 +71,11 @@ final myTextControllerProvider = ChangeNotifierProvider((ref) {
 // abc (node => parents): SimpleIdentifierImpl => PrefixedIdentifierImpl => ArgumentListImpl => InstanceCreationExpressionImpl
 
 // Icons (node => parents): SimpleIdentifierImpl => PrefixedIdentifierImpl => ArgumentListImpl => InstanceCreationExpressionImpl
+
+// width (node => parents): SimpleIdentifierImpl => LabelImpl => NamedExpressionImpl => ArgumentListImpl
+
+// 10 (node => parents): IntegerLiteralImpl => NamedExpressionImpl => ArgumentListImpl => InstanceCreationExpressionImpl
+
+// 10.0 (node => parents): DoubleLiteralImpl => NamedExpressionImpl => ArgumentListImpl => InstanceCreationExpressionImpl
+
+// someNumnber (node => parents): SimpleIdentifierImpl => NamedExpressionImpl => ArgumentListImpl => InstanceCreationExpressionImpl

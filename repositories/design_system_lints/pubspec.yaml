@@ -13,7 +13,7 @@ dependencies:
   collection: ^1.16.0
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
-    version: ^0.1.6
+    version: ^0.1.7
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/

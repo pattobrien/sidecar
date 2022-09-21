@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
 
@@ -49,9 +50,32 @@ class _Visitor extends GeneralizingAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-    if (element != null && element.returnType.element2.name == 'SizedBox') {
-      // if (element.declaration.)
-      nodes.add(node);
+
+    final isSizedBox = FlutterTypeChecker.isMatch(element?.returnType.element2,
+        type: 'SizedBox', sourcePath: 'src/widgets/basic.dart');
+    
+
+    if (isSizedBox) {
+      final args = node.argumentList.arguments
+          .whereType<NamedExpression>()
+          .where((e) =>
+              e.name.label.name == 'width' || e.name.label.name == 'height');
+
+      for (var arg in args) {
+        final exp = arg.expression;
+        if (exp is DoubleLiteral || exp is IntegerLiteral) {
+          nodes.add(exp);
+        }
+        if (exp is PrefixedIdentifier) {
+          //TODO: handle expressions like "SomeClass.staticInteger"
+        }
+        if (exp is SimpleIdentifier) {
+          final element = exp.staticElement;
+          //TODO: handle variables that are not declared
+          // within the allowed design system spec file
+          final x = element;
+        }
+      }
     }
     super.visitInstanceCreationExpression(node);
   }

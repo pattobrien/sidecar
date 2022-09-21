@@ -9,20 +9,15 @@ class FlutterUtils {
   static const _nameContainer = 'Container';
   static const _nameSizedBox = 'SizedBox';
 
-  final String widgetsUri;
+  final String widgetsUri = 'package:flutter/widgets.dart';
 
-  final Uri _uriBasic;
-  final Uri _uriContainer;
-  final Uri _uriFramework;
-  final Uri _uriFoundation;
+  final _uriBasic = Uri.parse('package:flutter/src/widgets/basic.dart');
+  final _uriContainer = Uri.parse('package:flutter/src/widgets/container.dart');
+  final _uriFramework = Uri.parse('package:flutter/src/widgets/framework.dart');
+  final _uriFoundation =
+      Uri.parse('package:flutter/src/foundation/constants.dart');
 
-  FlutterUtils()
-      : widgetsUri = 'package:flutter/widgets.dart',
-        _uriBasic = Uri.parse('package:flutter/src/widgets/basic.dart'),
-        _uriContainer = Uri.parse('package:flutter/src/widgets/container.dart'),
-        _uriFramework = Uri.parse('package:flutter/src/widgets/framework.dart'),
-        _uriFoundation =
-            Uri.parse('package:flutter/src/foundation/constants.dart');
+  FlutterUtils();
 
   bool hasWidgetAsAscendant(InterfaceElement? element,
       [Set<InterfaceElement>? alreadySeen]) {

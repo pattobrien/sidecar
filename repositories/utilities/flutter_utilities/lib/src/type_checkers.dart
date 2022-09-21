@@ -1,3 +1,4 @@
+import 'package:analyzer/dart/element/element.dart';
 import 'package:sidecar/sidecar.dart';
 
 class WidgetsTypeChecker {
@@ -26,6 +27,20 @@ class FlutterTypeChecker {
 
   WidgetsTypeChecker get widgets => WidgetsTypeChecker();
   MaterialTypeChecker get material => MaterialTypeChecker();
+
+  /// Check if an element is declared in the Flutter package.
+  ///
+  /// For example, a given ```sourcePath: material.dart```, this function will
+  /// search within ```package:flutter/material.dart```.
+  static bool isMatch(
+    Element? element, {
+    required String type,
+    required String sourcePath,
+  }) {
+    if (element == null) return false;
+    final uri = Uri(scheme: 'package', path: 'flutter/$sourcePath');
+    return element.name == type && element.source?.uri == uri;
+  }
 }
 
 const flutterTypeChecker = FlutterTypeChecker();
