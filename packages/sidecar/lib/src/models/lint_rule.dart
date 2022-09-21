@@ -3,6 +3,8 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:ansicolor/ansicolor.dart';
+import 'package:cli_util/cli_logging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -60,6 +62,27 @@ abstract class LintRule {
 }
 
 enum LintRuleType { info, warning, error }
+
+extension LintRuleTypeX on LintRuleType {
+  String get coloredNamed {
+    // final ansi = AnsiPen();
+    final ansi = Ansi(true);
+    switch (this) {
+      case LintRuleType.info:
+        // ansi.white(bold: true);
+        // return ansi(name);
+        return '${ansi.blue}$name';
+      case LintRuleType.warning:
+        // ansi.yellow();
+        // return ansi(name);
+        return '${ansi.yellow}$name';
+      case LintRuleType.error:
+        // ansi.red();
+        // return ansi(name);
+        return '${ansi.red}$name';
+    }
+  }
+}
 
 extension LintErrorTypeX on LintRuleType {
   plugin.AnalysisErrorSeverity get analysisError {

@@ -1,7 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
+import 'package:characters/characters.dart';
+import 'package:cli_util/cli_logging.dart';
+
+final logger = Logger.standard();
 
 abstract class LogDelegate {
   void sidecarError(
@@ -43,6 +48,7 @@ abstract class LogDelegate {
 
 class DebuggerLogDelegate implements LogDelegate {
   const DebuggerLogDelegate();
+
   @override
   void lintError(LintRule lint, Object err, String stackTrace) {
     // print('DebuggerLogDelegate: lintError');
@@ -57,20 +63,25 @@ class DebuggerLogDelegate implements LogDelegate {
 
   @override
   void lintMessage(DetectedLint lint, String message) {
-    final lintId = '[${lint.rule.packageName}] ${lint.rule.code}';
+    // final lintId = '${lint.rule.packageName} • ${lint.rule.code}';
 
+    // stdout.encoding = AsciiCodec(allowInvalid: false);
     final relativePath =
         p.relative(lint.unit.path, from: Directory.current.path);
 
     final sourceLocation =
         '$relativePath:${lint.sourceSpan.start.line}:${lint.sourceSpan.start.column}';
-
+    final lintErrorType = lint.rule.defaultType.coloredNamedd;
+    final lintPackage = lint.rule.packageName.padRight(20).characters.take(20);
+    final lintCode = lint.rule.code.padRight(20).characters.take(20);
+    final lintMessage = lint.rule.message.padRight(40).characters.take(40);
     // final msg = message
     //     .split('\n')
     //     .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')
     //     .join();
 
-    stdout.writeln('$lintId | ${lint.rule.message}    $sourceLocation');
+    stdout.writeln(
+        '  $lintErrorType • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
   }
 
   @override
@@ -103,6 +114,27 @@ class DebuggerLogDelegate implements LogDelegate {
   @override
   void sidecarMessage(String message) {
     stdout.writeln('DebuggerLogDelegate: $message');
+  }
+}
+
+extension LintRuleTypeX on LintRuleType {
+  String get coloredNamedd {
+    // final ansi = AnsiPen();
+
+    switch (this) {
+      case LintRuleType.info:
+        // ansi.white(bold: true);
+        // return ansi(name);
+        return '   ${logger.ansi.blue}$name${logger.ansi.none}';
+      case LintRuleType.warning:
+        // ansi.yellow();
+        // return ansi(name);
+        return '${logger.ansi.yellow}$name${logger.ansi.none}';
+      case LintRuleType.error:
+        // ansi.red();
+        // return ansi(name);
+        return '  ${logger.ansi.red}$name${logger.ansi.none}';
+    }
   }
 }
 

@@ -19,6 +19,9 @@ class AvoidFlutterInApplicationLayer extends LintRule {
   String get message => 'Avoid using UI code in your application layer.';
 
   @override
+  LintRuleType get defaultType => LintRuleType.error;
+
+  @override
   Future<List<DetectedLint>> computeAnalysisError(
     AnalysisContext analysisContext,
     String path,

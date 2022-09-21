@@ -1,6 +1,6 @@
 name: sidecar_analyzer_plugin_core
 description: A starting point for Dart libraries or applications.
-version: 0.1.11-dev.9
+version: 0.1.11-dev.16
 publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/
 repository: https://github.com/pattobrien/sidecar/
 
@@ -10,6 +10,7 @@ environment:
 dependencies:
   analyzer: ^4.7.0
   analyzer_plugin: ^0.11.1
+  characters: ^1.2.0
   cli_util: ^0.3.5
   collection: ^1.16.0
   glob: ^2.1.0
@@ -19,7 +20,7 @@ dependencies:
   riverpod: ^1.0.3+1
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.11-dev.4
+    version: ^0.1.11-dev.12
   source_span: ^1.8.0
   uuid: ^3.0.6
   yaml: ^3.1.1
