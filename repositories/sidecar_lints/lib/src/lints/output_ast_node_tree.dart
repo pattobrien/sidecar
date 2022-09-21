@@ -26,14 +26,15 @@ class OutputAstNodeTree extends CodeEdit {
           unit.unit.length,
           (builder) {
             builder.write(
-                '\n// (node => parents): ${node.runtimeType} => ${node.parent.runtimeType} => ${node.parent?.parent.runtimeType} => ${node.parent?.parent?.parent.runtimeType}\n');
+                '\n// ${node.beginToken} (node => parents): ${node.runtimeType} => ${node.parent.runtimeType} => ${node.parent?.parent.runtimeType} => ${node.parent?.parent?.parent.runtimeType}\n');
           },
         );
       },
     );
     return PrioritizedSourceChange(
       0,
-      changeBuilder.sourceChange..message = 'Output AstNode and parents.',
+      changeBuilder.sourceChange
+        ..message = 'Output AstNode info into a comment',
     );
   }
 }

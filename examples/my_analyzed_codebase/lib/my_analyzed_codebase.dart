@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 int calculate() {
@@ -17,6 +16,7 @@ class SomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
     final someString2 = someString;
+    final someIconData = Icons.abc;
     final x = Color(123);
     return Container(
       decoration: BoxDecoration(
@@ -25,6 +25,14 @@ class SomePage extends ConsumerWidget {
       padding: EdgeInsets.all(10.0),
       child: Column(
         children: [
+          Icon(
+            Icons.abc,
+            color: x,
+          ),
+          Icon(
+            someIconData,
+            color: x,
+          ),
           SizedBox(width: 10),
           Icon(Icons.abc),
           TextFormField(
@@ -51,3 +59,10 @@ class MyNewPage extends StatelessWidget {
 final myTextControllerProvider = ChangeNotifierProvider((ref) {
   return TextEditingController();
 });
+
+
+// someIconData (node => parents): SimpleIdentifierImpl => ArgumentListImpl => InstanceCreationExpressionImpl => ListLiteralImpl
+
+// abc (node => parents): SimpleIdentifierImpl => PrefixedIdentifierImpl => ArgumentListImpl => InstanceCreationExpressionImpl
+
+// Icons (node => parents): SimpleIdentifierImpl => PrefixedIdentifierImpl => ArgumentListImpl => InstanceCreationExpressionImpl

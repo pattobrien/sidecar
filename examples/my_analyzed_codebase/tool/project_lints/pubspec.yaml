@@ -23,11 +23,12 @@ dependencies:
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
-# sidecar:
-#   lints:
-#     avoid_sized_box_height_width_literals:
-#       class: AvoidSizedBoxHeightWidthLiterals
-#       import: project_lints/project_lints.dart
+
+sidecar:
+  lints:
+    avoid_icon_literal:
+      class: AvoidIconLiteral
+      import: project_lints/project_lints.dart
 # dependency_overrides:
 #   flutter_utilities:
 #     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
