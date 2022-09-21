@@ -14,7 +14,7 @@ dependencies:
   path: ^1.8.0
   riverpod_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/riverpod_utilities/
-    version: ^0.1.2
+    version: ^0.1.4
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
     version: ^0.1.10

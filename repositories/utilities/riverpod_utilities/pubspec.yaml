@@ -1,6 +1,6 @@
 name: riverpod_utilities
 description: A starting point for Dart libraries or applications.
-version: 0.1.3
+version: 0.1.4
 publish_to: https://dart.cloudsmith.io/fine-designs/riverpod_utilities/
 repository: https://github.com/pattobrien/sidecar/
 
