@@ -11,8 +11,6 @@ import 'package:path/path.dart' as p;
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 
-import 'utils/utils.dart';
-
 const _desc = r'Use key in widget constructors.';
 
 class UseKeyInWidgetConstructors extends LintRule {

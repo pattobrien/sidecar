@@ -35,6 +35,8 @@ sidecar:
           some_property: abc
     various_lints:
       avoid_flutter_in_application_layer:
+    design_system_lints:
+      avoid_color_literal:
 
   edits:
     riverpod_lints:
