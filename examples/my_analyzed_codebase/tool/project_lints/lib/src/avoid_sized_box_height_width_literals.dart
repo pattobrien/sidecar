@@ -61,6 +61,7 @@ class _Visitor extends GeneralizingAstVisitor {
 
       for (var arg in args) {
         final exp = arg.expression;
+        // TODO: if expression is a variable reference to a variable declared within the DesignSystem spec, then skip; else: mark node
         if (exp is DoubleLiteral || exp is IntegerLiteral) {
           nodes.add(exp);
         }
@@ -69,8 +70,7 @@ class _Visitor extends GeneralizingAstVisitor {
         }
         if (exp is SimpleIdentifier) {
           final element = exp.staticElement;
-          //TODO: handle variables that are not declared
-          // within the allowed design system spec file
+          // TODO: handle variables that are not declared within the allowed design system spec file
           final x = element;
         }
       }
