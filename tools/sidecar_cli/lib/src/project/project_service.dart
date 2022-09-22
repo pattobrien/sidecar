@@ -309,9 +309,9 @@ class ProjectService {
     final returnBuffer = StringBuffer();
 
     for (final lintPackage in lintPackages) {
+      importBuffer.write(
+          'import \'package:${lintPackage.packageName}/${lintPackage.packageName}.dart\' as ${lintPackage.packageName}; \n');
       for (final lint in lintPackage.lints.values) {
-        importBuffer.write(
-            'import \'package:${lint.filePath}\' as ${lint.packageName}; \n');
         returnBuffer.write('\t\t${lint.packageName}.${lint.className}.new, \n');
       }
 
@@ -333,10 +333,13 @@ class ProjectService {
     final importBuffer = StringBuffer()..writeln(pluginImport);
     final returnBuffer = StringBuffer();
 
+    // final packages = <String>{};
+
     for (final editPackage in editPackages) {
+      importBuffer.write(
+          'import \'package:${editPackage.packageName}/${editPackage.packageName}.dart\' as ${editPackage.packageName}; \n');
       for (final edit in editPackage.edits.values) {
-        importBuffer.write(
-            'import \'package:${edit.filePath}\' as ${edit.packageName}; \n');
+        // packages.add(edit.packageName);
         returnBuffer.write('\t\t${edit.packageName}.${edit.className}.new,\n');
       }
 
