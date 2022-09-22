@@ -6,6 +6,7 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:ansicolor/ansicolor.dart';
 import 'package:cli_util/cli_logging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../sidecar.dart';
@@ -19,6 +20,7 @@ abstract class LintRule {
 
   LintRuleType get defaultType => LintRuleType.info;
   String? get url => null;
+  List<Glob>? get includes => null;
 
   @mustCallSuper
   Object get configuration => _configuration;

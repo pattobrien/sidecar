@@ -23,16 +23,16 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
     String path,
   ) async {
     final visitor = _Visitor();
-    final rootDirectory = analysisContext.contextRoot.root;
-    final relativePath = p.relative(path, from: rootDirectory.path);
-    final isIncluded = analysisContext.sidecarOptions.includes(relativePath);
 
-    if (!isIncluded) return [];
-
+    print('AvoidSizedBoxHeightWidthLiterals getResolvedUnit started');
     final unit = await analysisContext.currentSession.getResolvedUnit(path);
+    print('AvoidSizedBoxHeightWidthLiterals getResolvedUnit complete');
     if (unit is! ResolvedUnitResult) return [];
 
+    print('AvoidSizedBoxHeightWidthLiterals accept started');
     unit.unit.accept(visitor);
+    print('AvoidSizedBoxHeightWidthLiterals accept complete');
+    print('AvoidSizedBoxHeightWidthLiterals ended');
     return visitor.nodes.toDetectedLints(unit, this);
   }
 

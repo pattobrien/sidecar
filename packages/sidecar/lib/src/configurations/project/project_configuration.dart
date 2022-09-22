@@ -1,5 +1,6 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
+import '../configurations.dart';
 import 'edit_package_configuration.dart';
 import 'errors.dart';
 import 'lint_package_configuration.dart';
@@ -41,6 +42,12 @@ class ProjectConfiguration {
     // final relativePath = p.relative(path, from: rootDirectory.path);
     return includeGlobs.any((glob) => glob.matches(relativePath));
   }
+
+  LintConfiguration? lintConfiguration(String packageId, String lintId) =>
+      lintPackages?[packageId]?.lints[lintId];
+
+  EditConfiguration? editConfiguration(String packageId, String editId) =>
+      editPackages?[packageId]?.edits[editId];
 }
 
 typedef PackageName = String;
