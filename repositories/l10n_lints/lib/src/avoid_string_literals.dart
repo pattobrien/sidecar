@@ -1,7 +1,6 @@
 // ignore_for_file: implementation_imports
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
-import 'package:analyzer/dart/analysis/results.dart';
 import 'package:l10n_lints/src/constants.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';

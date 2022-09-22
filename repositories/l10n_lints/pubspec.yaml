@@ -17,7 +17,7 @@ dependencies:
   source_span: ^1.8.2
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
-    version: ^0.1.4
+    version: ^0.1.9
   intl_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/intl_utilities/
     version: ^0.1.0

@@ -45,6 +45,74 @@ abstract class TypeChecker {
     required String packageName,
   }) = _NamedChecker;
 
+  /// Check if an element is declared within a specified package.
+  ///
+  /// For example, to check if ```someElement``` is MaterialApp:
+  /// ```dart
+  /// final isMaterialApp = TypeChecker.isMatch(
+  ///   someElement,
+  ///   type: 'MaterialApp',
+  ///   sourcePath: 'flutter/src/material/app.dart',
+  /// );
+  /// ```
+  ///
+  static bool isMatch(
+    Element? element, {
+    required String type,
+    required String sourcePath,
+    bool isFromFile = false,
+  }) {
+    if (element == null) return false;
+    final uri = Uri(scheme: isFromFile ? 'file' : 'package', path: sourcePath);
+    return element.name == type && element.source?.uri == uri;
+  }
+
+  /// This method is untested.
+  //TODO: this method is untested
+  static bool isThisOrSuperMatch(
+    Element? element, {
+    required String type,
+    required String sourcePath,
+    bool isFromFile = false,
+  }) {
+    if (element is ClassElement) {
+      final thisOrSupers = <InterfaceType>[
+        element.thisType,
+        ...element.allSupertypes
+      ];
+      return thisOrSupers.any(
+        (interfaceType) => isMatch(interfaceType.element2,
+            type: type, sourcePath: sourcePath, isFromFile: isFromFile),
+      );
+    }
+
+    return false;
+  }
+
+  static bool isTypeMatch(
+    InterfaceType? interfaceType, {
+    required String type,
+    required String sourcePath,
+    bool isFromFile = false,
+  }) {
+    if (interfaceType == null) return false;
+
+    final uri = Uri(scheme: isFromFile ? 'file' : 'package', path: sourcePath);
+    return interfaceType.element2.name == type &&
+        interfaceType.element2.source.uri == uri;
+  }
+
+  // static bool isMatch(
+  //   Element? element, {
+  //   required String type,
+  //   required String sourcePath,
+  //   bool isFromFile = false,
+  // }) {
+  //   if (element == null) return false;
+  //   final uri = Uri(scheme: isFromFile ? 'file' : 'package', path: sourcePath);
+  //   return element.name == type && element.source?.uri == uri;
+  // }
+
   /// Create a new [TypeChecker] backed by a library [url].
   ///
   /// Example of referring to a `LinkedHashMap` from `dart:collection`:

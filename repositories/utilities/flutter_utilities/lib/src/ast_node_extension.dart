@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:flutter_utilities/flutter_utilities.dart';
 
 import 'flutter_utilities.dart';
 
@@ -11,7 +12,7 @@ extension FlutterAstNodeX on AstNode {
         final isParentClassDeclaration = parent is ClassDeclaration;
 
         if (isBuildMethod && isParentClassDeclaration) {
-          return FlutterUtils().isWidget(parent.declaredElement2!);
+          return FlutterTypeChecker.isWidget(parent.declaredElement2?.thisType);
         }
         return false;
       } else {

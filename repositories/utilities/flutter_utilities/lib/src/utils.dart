@@ -166,7 +166,7 @@ extension ConstructorElementExtension on ConstructorElement {
   bool isSameAs({
     required String uri,
     required String className,
-    required String constructorName,
+    String constructorName = '',
   }) =>
       library.name == uri &&
       enclosingElement3.name == className &&

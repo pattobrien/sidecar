@@ -1,27 +1,21 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:flutter_utilities/flutter_utilities.dart';
+const _desc = r'Avoid using height or width literals in SizedBox widgets.';
 
-const _desc =
-    r'Prefer an 8-digit hexadecimal integer(0xFFFFFFFF) to instantiate Color.';
-
-class UseFullHexValuesForFlutterColors extends LintRule {
-  UseFullHexValuesForFlutterColors(super.ref);
+class AvoidSizedBoxHeightWidthLiterals extends LintRule {
+  AvoidSizedBoxHeightWidthLiterals(super.ref);
 
   @override
-  String get code => 'use_full_hex_values_for_flutter_colors';
+  String get code => 'avoid_sized_box_height_width_literals';
 
   @override
-  String get packageName => 'flutter_lints';
+  String get packageName => 'project_lints';
 
   @override
   String get message => _desc;
-
-  @override
-  String? get url =>
-      'https://dart-lang.github.io/linter/lints/use_full_hex_values_for_flutter_colors.html';
 
   @override
   Future<List<DetectedLint>> computeAnalysisError(
@@ -56,16 +50,28 @@ class _Visitor extends GeneralizingAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-    if (element != null &&
-        element.isSameAs(uri: 'dart.ui', className: 'Color')) {
-      final arguments = node.argumentList.arguments;
-      if (arguments.isNotEmpty) {
-        final argument = arguments.first;
-        if (argument is IntegerLiteral) {
-          final value = argument.literal.lexeme.toLowerCase();
-          if (!value.startsWith('0x') || value.length != 10) {
-            nodes.add(argument);
-          }
+
+    final isSizedBox = FlutterTypeChecker.isSizedBox(element?.returnType);
+
+    if (isSizedBox) {
+      final args = node.argumentList.arguments
+          .whereType<NamedExpression>()
+          .where((e) =>
+              e.name.label.name == 'width' || e.name.label.name == 'height');
+
+      for (var arg in args) {
+        final exp = arg.expression;
+        if (exp is DoubleLiteral || exp is IntegerLiteral) {
+          nodes.add(exp);
+        }
+        if (exp is PrefixedIdentifier) {
+          //TODO: handle expressions like "SomeClass.staticInteger"
+        }
+        if (exp is SimpleIdentifier) {
+          final element = exp.staticElement;
+          //TODO: handle variables that are not declared
+          // within the allowed design system spec file
+          final x = element;
         }
       }
     }
