@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
@@ -21,12 +23,6 @@ class PreferConsumerWidget extends LintRule {
     AnalysisContext analysisContext,
     String path,
   ) async {
-    final rootDirectory = analysisContext.contextRoot.root;
-    final relativePath = p.relative(path, from: rootDirectory.path);
-    final isIncluded = analysisContext.sidecarOptions.includes(relativePath);
-
-    if (!isIncluded) return [];
-
     final unit = await analysisContext.currentSession.getResolvedUnit(path);
     if (unit is! ResolvedUnitResult) return [];
     return [];
@@ -47,5 +43,12 @@ class PreferConsumerWidget extends LintRule {
         changeBuilder.sourceChange..message,
       ),
     ];
+  }
+
+  @override
+  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) {
+    return [];
   }
 }

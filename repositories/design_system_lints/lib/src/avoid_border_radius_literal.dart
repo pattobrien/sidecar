@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
@@ -22,11 +24,6 @@ class AvoidBorderRadiusLiteral extends LintRule {
     String path,
   ) async {
     final visitor = _Visitor();
-    final rootDirectory = analysisContext.contextRoot.root;
-    final relativePath = p.relative(path, from: rootDirectory.path);
-    final isIncluded = analysisContext.sidecarOptions.includes(relativePath);
-
-    if (!isIncluded) return [];
 
     final unit = await analysisContext.currentSession.getResolvedUnit(path);
     if (unit is! ResolvedUnitResult) return [];
@@ -38,6 +35,15 @@ class AvoidBorderRadiusLiteral extends LintRule {
   @override
   SourceSpan computeLintHighlight(DetectedLint lint) {
     return lint.sourceSpan;
+  }
+
+  @override
+  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) {
+    final visitor = _Visitor();
+    unit.unit.accept(visitor);
+    return visitor.nodes.toDetectedLints(unit, this);
   }
 }
 

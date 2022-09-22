@@ -17,7 +17,7 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.10
+    version: ^0.1.11-dev.17
   source_span: ^1.8.2
 
 dev_dependencies:
@@ -33,5 +33,9 @@ sidecar:
       class: AvoidSizedBoxHeightWidthLiterals
       import: project_lints/project_lints.dart
 # dependency_overrides:
+#   sidecar:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar
+#   sidecar_analyzer_plugin_core:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core
 #   flutter_utilities:
 #     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

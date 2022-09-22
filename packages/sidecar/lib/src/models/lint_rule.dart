@@ -1,12 +1,16 @@
 // ignore_for_file: implementation_imports
 
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:ansicolor/ansicolor.dart';
+
 import 'package:cli_util/cli_logging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:yaml/yaml.dart';
 
 import '../../sidecar.dart';
 
@@ -19,6 +23,7 @@ abstract class LintRule {
 
   LintRuleType get defaultType => LintRuleType.info;
   String? get url => null;
+  List<Glob>? get includes => null;
 
   @mustCallSuper
   Object get configuration => _configuration;
@@ -44,10 +49,21 @@ abstract class LintRule {
     }
   }
 
-  @Deprecated(
-      'Moving away from registering node processors. Use computeAnalysisError instead.')
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
+  //TODO: can we remove the future here?
+  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) =>
+      [];
+
+  //TODO: can we remove the future here?
+  FutureOr<List<DetectedLint>> computeYamlAnalysisError(
+    YamlMap yamlMap,
+  ) =>
+      [];
+
+  @Deprecated('use computeDartAnalysisError')
   Future<List<DetectedLint>> computeAnalysisError(
     AnalysisContext analysisContext,
     String path,
@@ -64,6 +80,19 @@ abstract class LintRule {
 enum LintRuleType { info, warning, error }
 
 extension LintRuleTypeX on LintRuleType {
+  static LintRuleType fromString(String string) {
+    if (string == LintRuleType.error.name) {
+      return LintRuleType.error;
+    }
+    if (string == LintRuleType.warning.name) {
+      return LintRuleType.warning;
+    }
+    if (string == LintRuleType.info.name) {
+      return LintRuleType.info;
+    }
+    throw UnimplementedError('invalid LintRuleType');
+  }
+
   String get coloredNamed {
     // final ansi = AnsiPen();
     final ansi = Ansi(true);

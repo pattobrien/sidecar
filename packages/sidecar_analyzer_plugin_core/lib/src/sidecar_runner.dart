@@ -33,6 +33,7 @@ class SidecarRunner {
 
   final SidecarAnalyzerPlugin server;
   final Directory root;
+  final completed = Completer();
 
   LogDelegate get delegate => server.delegate;
 
@@ -183,15 +184,15 @@ class SidecarRunner {
 
   //   StreamSubscription? sub;
   //   try {
-  //     // channel.listen((response) {
-  //     //   print('notification: ${response.toString()}');
-  //     // }, (notification) {
-  //     //   print('notification: ${notification.toString()}');
-  //     // });
-  //     // sub = channel.lints.listen((event) => result[event.file] = event);
+  //     channel.listen((response) {
+  //       print('notification: ${response.toString()}');
+  //     }, (notification) {
+  //       print('notification: ${notification.toString()}');
+  //     });
+  //     sub = _clientChannel.lints.listen((event) => result[event.file] = event);
   //     // receivePortStream = receivePort.asBroadcastStream();
   //     // channel.sendRequest(AwaitAnalysisDoneParams(reload: reload));
-  //     // return result.values.toList()..sort((a, b) => a.file.compareTo(b.file));
+  //     return result.values.toList()..sort((a, b) => a.file.compareTo(b.file));
   //     return [];
   //   } finally {
   //     await sub?.cancel();

@@ -172,7 +172,7 @@ class ProjectService {
     // }
     final progress =
         logger.progress('\nfetching appropriate version for this project ');
-    final version = Version.parse('0.1.11-dev.10');
+    final version = Version.parse('0.1.11-dev.17');
 
     progress.finish(showTiming: true);
     logger.stdout(
@@ -309,9 +309,10 @@ class ProjectService {
     final returnBuffer = StringBuffer();
 
     for (final lintPackage in lintPackages) {
+      importBuffer.write(
+          'import \'package:${lintPackage.packageName}/${lintPackage.packageName}.dart\' as ${lintPackage.packageName}; \n');
       for (final lint in lintPackage.lints.values) {
-        importBuffer.write('import \'package:${lint.filePath}\'; \n');
-        returnBuffer.write('\t\t${lint.className}.new, \n');
+        returnBuffer.write('\t\t${lint.packageName}.${lint.className}.new, \n');
       }
 
       final entireContents = StringBuffer()
@@ -332,10 +333,14 @@ class ProjectService {
     final importBuffer = StringBuffer()..writeln(pluginImport);
     final returnBuffer = StringBuffer();
 
+    // final packages = <String>{};
+
     for (final editPackage in editPackages) {
+      importBuffer.write(
+          'import \'package:${editPackage.packageName}/${editPackage.packageName}.dart\' as ${editPackage.packageName}; \n');
       for (final edit in editPackage.edits.values) {
-        importBuffer.write('import \'package:${edit.filePath}\'; \n');
-        returnBuffer.write('\t\t${edit.className}.new,\n');
+        // packages.add(edit.packageName);
+        returnBuffer.write('\t\t${edit.packageName}.${edit.className}.new,\n');
       }
 
       final entireContents = StringBuffer()

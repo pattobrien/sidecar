@@ -152,21 +152,21 @@ extension AnalysisContextX on AnalysisContext {
     }
   }
 
-  ProjectConfiguration get sidecarOptions {
-    final optionsFile = contextRoot.optionsFile;
-    if (optionsFile != null) {
-      final contents = optionsFile.readAsStringSync();
-      try {
-        return ProjectConfiguration.parse(contents);
-        // } on MissingSidecarConfiguration catch (e) {
-        //   print(e.toString());
-      } catch (e) {
-        throw UnimplementedError('cannot parse sidecar options: $e');
-      }
-    } else {
-      return const ProjectConfiguration();
-    }
-  }
+  // ProjectConfiguration get sidecarOptions {
+  //   final optionsFile = contextRoot.optionsFile;
+  //   if (optionsFile != null) {
+  //     final contents = optionsFile.readAsStringSync();
+  //     try {
+  //       return ProjectConfiguration.parse(contents);
+  //       // } on MissingSidecarConfiguration catch (e) {
+  //       //   print(e.toString());
+  //     } catch (e) {
+  //       throw UnimplementedError('cannot parse sidecar options: $e');
+  //     }
+  //   } else {
+  //     return const ProjectConfiguration();
+  //   }
+  // }
 
   bool get isSidecarEnabled => analysisOptions.enabledPluginNames
       .where((pluginName) => pluginName == 'sidecar_analyzer_plugin')

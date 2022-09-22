@@ -13,15 +13,6 @@ class DetectedLint {
     this.message = '',
   });
 
-  final LintRule rule;
-
-  final String message;
-
-  /// Source of the source Ast Node
-  final ResolvedUnitResult unit;
-
-  final SourceSpan sourceSpan;
-
   factory DetectedLint.fromAstNode(
     AstNode node,
     ResolvedUnitResult unit,
@@ -35,6 +26,15 @@ class DetectedLint {
       sourceSpan: node.toSourceSpan(unit),
     );
   }
+
+  final LintRule rule;
+
+  final String message;
+
+  /// Source of the source Ast Node
+  final ResolvedUnitResult unit;
+
+  final SourceSpan sourceSpan;
 
   DetectedLint copyWith({
     SourceSpan? sourceSpan,

@@ -1,9 +1,13 @@
+import 'package:glob/glob.dart';
+
+import '../../models/lint_rule.dart';
 import 'lint_configuration.dart';
 
 class LintPackageConfiguration {
   const LintPackageConfiguration({
     required this.packageName,
     required this.lints,
+    this.includes,
   });
 
   factory LintPackageConfiguration.fromJson(
@@ -14,16 +18,30 @@ class LintPackageConfiguration {
       packageName: packageName,
       lints: json.map<String, LintConfiguration>((dynamic key, dynamic value) {
         if (value is Map) {
-          final hasConfiguration = value.containsKey('configuration');
-          // final config = hasConfiguration ? ;
+          final configuration = value.containsKey('configuration')
+              ? value['configuration'] as Map
+              : <dynamic, dynamic>{};
+
+          final severity = value.containsKey('severity')
+              ? LintRuleTypeX.fromString(value['severity'] as String)
+              : null;
+
+          final includes = value.containsKey('includes')
+              ? (value['includes'] as List<String>).map(Glob.new).toList()
+              : null;
+
+          final enabled =
+              value.containsKey('enabled') ? value['enabled'] as bool : null;
+
           return MapEntry(
             key as String,
             LintConfiguration(
               packageName: packageName,
               lintId: key,
-              configuration: hasConfiguration
-                  ? value['configuration'] as Map
-                  : <dynamic, dynamic>{},
+              includes: includes,
+              severity: severity,
+              enabled: enabled,
+              configuration: configuration,
             ),
           );
         } else if (value == null) {
@@ -45,4 +63,5 @@ class LintPackageConfiguration {
   }
   final String packageName;
   final Map<String, LintConfiguration> lints;
+  final List<Glob>? includes;
 }

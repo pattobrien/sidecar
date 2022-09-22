@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
@@ -33,16 +35,20 @@ class UseKeyInWidgetConstructors extends LintRule {
       'https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html';
 
   @override
+  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) {
+    final visitor = _Visitor();
+    unit.unit.accept(visitor);
+    return visitor.nodes.toDetectedLints(unit, this);
+  }
+
+  @override
   Future<List<DetectedLint>> computeAnalysisError(
     AnalysisContext analysisContext,
     String path,
   ) async {
     final visitor = _Visitor();
-    final rootDirectory = analysisContext.contextRoot.root;
-    final relativePath = p.relative(path, from: rootDirectory.path);
-    final isIncluded = analysisContext.sidecarOptions.includes(relativePath);
-
-    if (!isIncluded) return [];
     final unit = await analysisContext.currentSession.getResolvedUnit(path);
     if (unit is! ResolvedUnitResult) return [];
     unit.unit.accept(visitor);
