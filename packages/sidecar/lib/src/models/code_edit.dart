@@ -42,6 +42,7 @@ abstract class CodeEdit {
     // _reporter = reporter;
   }
 
+  //TODO: can we use SourceChange instead of PrioritizedSourceChange?
   Future<plugin.PrioritizedSourceChange?> computeSourceChange(
     RequestedCodeEdit requestedCodeEdit,
   );

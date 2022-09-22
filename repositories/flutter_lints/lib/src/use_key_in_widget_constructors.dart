@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
@@ -31,6 +33,15 @@ class UseKeyInWidgetConstructors extends LintRule {
   @override
   String? get url =>
       'https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html';
+
+  @override
+  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) {
+    final visitor = _Visitor();
+    unit.unit.accept(visitor);
+    return visitor.nodes.toDetectedLints(unit, this);
+  }
 
   @override
   Future<List<DetectedLint>> computeAnalysisError(

@@ -15,9 +15,9 @@ sidecar:
     - "lib/**"
     # - ".sidecar/**"
   lints:
-    # flutter_lints:
-    #   use_full_hex_values_for_flutter_colors:
-    #   use_key_in_widget_constructors:
+    flutter_lints:
+      use_full_hex_values_for_flutter_colors:
+      use_key_in_widget_constructors:
     # riverpod_lints:
     #   prefer_consumer_widget:
     #     configuration:
@@ -41,8 +41,8 @@ sidecar:
     # avoid_edge_insets_literal:
     # project_lints:
 
-  # edits:
-  #   riverpod_lints:
-  #     create_text_edit_controller_provider:
-  #   sidecar_lints:
-  #     output_ast_node_tree:
+  edits:
+    riverpod_lints:
+      create_text_edit_controller_provider:
+    sidecar_lints:
+      output_ast_node_tree:
