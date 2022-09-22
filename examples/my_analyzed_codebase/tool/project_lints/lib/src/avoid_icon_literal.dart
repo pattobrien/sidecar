@@ -32,6 +32,15 @@ class AvoidIconLiteral extends LintRule {
   }
 
   @override
+  Future<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) async {
+    final visitor = _Visitor();
+    unit.unit.accept(visitor);
+    return visitor.nodes.toDetectedLints(unit, this);
+  }
+
+  @override
   SourceSpan computeLintHighlight(DetectedLint lint) {
     final node = lint.sourceSpan.toAstNode(lint.unit);
     if (node is InstanceCreationExpression) {

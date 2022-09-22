@@ -1,5 +1,7 @@
 // ignore_for_file: implementation_imports
 
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
@@ -50,6 +52,12 @@ abstract class LintRule {
       'Moving away from registering node processors. Use computeAnalysisError instead.')
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
+  //TODO: can we remove the future here?
+  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  );
+
+  @Deprecated('use computeDartAnalysisError')
   Future<List<DetectedLint>> computeAnalysisError(
     AnalysisContext analysisContext,
     String path,

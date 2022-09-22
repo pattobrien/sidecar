@@ -32,6 +32,11 @@ sidecar:
     avoid_sized_box_height_width_literals:
       class: AvoidSizedBoxHeightWidthLiterals
       import: project_lints/project_lints.dart
-# dependency_overrides:
+
+dependency_overrides:
+  sidecar:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar
+  sidecar_analyzer_plugin_core:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core
 #   flutter_utilities:
 #     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

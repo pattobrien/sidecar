@@ -1,9 +1,12 @@
+import 'package:glob/glob.dart';
+
 import 'lint_configuration.dart';
 
 class LintPackageConfiguration {
   const LintPackageConfiguration({
     required this.packageName,
     required this.lints,
+    this.includes,
   });
 
   factory LintPackageConfiguration.fromJson(
@@ -45,4 +48,5 @@ class LintPackageConfiguration {
   }
   final String packageName;
   final Map<String, LintConfiguration> lints;
+  final List<Glob>? includes;
 }

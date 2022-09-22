@@ -41,8 +41,8 @@ sidecar:
     # avoid_edge_insets_literal:
     # project_lints:
 
-  edits:
-    riverpod_lints:
-      create_text_edit_controller_provider:
-    sidecar_lints:
-      output_ast_node_tree:
+  # edits:
+  #   riverpod_lints:
+  #     create_text_edit_controller_provider:
+  #   sidecar_lints:
+  #     output_ast_node_tree:

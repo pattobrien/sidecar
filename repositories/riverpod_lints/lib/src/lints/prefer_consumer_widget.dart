@@ -91,6 +91,7 @@ class PreferConsumerWidget extends LintRule {
       ),
     ];
   }
+  
 }
 
 class _Visitor<R> extends GeneralizingAstVisitor<R> {

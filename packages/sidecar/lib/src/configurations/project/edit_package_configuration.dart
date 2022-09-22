@@ -1,9 +1,12 @@
+import 'package:glob/glob.dart';
+
 import 'edit_configuration.dart';
 
 class EditPackageConfiguration {
   const EditPackageConfiguration({
     required this.packageName,
     required this.edits,
+    this.includes,
   });
 
   factory EditPackageConfiguration.fromJson(
@@ -43,4 +46,5 @@ class EditPackageConfiguration {
   }
   final String packageName;
   final Map<String, EditConfiguration> edits;
+  final List<Glob>? includes;
 }

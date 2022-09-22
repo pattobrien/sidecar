@@ -30,7 +30,7 @@ class SomePage extends ConsumerWidget {
         children: [
           Icon(
             Icons.abc,
-            color: x,
+            color: x, 
           ),
           Icon(
             someIconData,

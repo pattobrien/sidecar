@@ -1,3 +1,4 @@
+import 'package:glob/glob.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:recase/recase.dart';
 
@@ -10,6 +11,7 @@ class LintConfiguration {
     required this.lintId,
     this.enabled = true,
     required this.configuration,
+    this.includes,
   });
 
   factory LintConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -19,6 +21,7 @@ class LintConfiguration {
   final String lintId;
   final bool enabled;
   final Map<dynamic, dynamic> configuration;
+  final List<Glob>? includes;
 }
 
 extension LintConfigurationX on LintConfiguration {

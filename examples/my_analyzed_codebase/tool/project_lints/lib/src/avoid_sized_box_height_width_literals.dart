@@ -24,21 +24,27 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
   ) async {
     final visitor = _Visitor();
 
-    print('AvoidSizedBoxHeightWidthLiterals getResolvedUnit started');
     final unit = await analysisContext.currentSession.getResolvedUnit(path);
-    print('AvoidSizedBoxHeightWidthLiterals getResolvedUnit complete');
+
     if (unit is! ResolvedUnitResult) return [];
 
-    print('AvoidSizedBoxHeightWidthLiterals accept started');
     unit.unit.accept(visitor);
-    print('AvoidSizedBoxHeightWidthLiterals accept complete');
-    print('AvoidSizedBoxHeightWidthLiterals ended');
+
     return visitor.nodes.toDetectedLints(unit, this);
   }
 
   @override
   SourceSpan computeLintHighlight(DetectedLint lint) {
     return lint.sourceSpan;
+  }
+
+  @override
+  Future<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) async {
+    final visitor = _Visitor();
+    unit.unit.accept(visitor);
+    return visitor.nodes.toDetectedLints(unit, this);
   }
 }
 
