@@ -30,7 +30,7 @@ class SomePage extends ConsumerWidget {
         children: [
           Icon(
             Icons.abc,
-            color: x, 
+            color: x,
           ),
           Icon(
             someIconData,
@@ -64,18 +64,3 @@ class MyNewPage extends StatelessWidget {
 final myTextControllerProvider = ChangeNotifierProvider((ref) {
   return TextEditingController();
 });
-
-
-// someIconData (node => parents): SimpleIdentifierImpl => ArgumentListImpl => InstanceCreationExpressionImpl => ListLiteralImpl
-
-// abc (node => parents): SimpleIdentifierImpl => PrefixedIdentifierImpl => ArgumentListImpl => InstanceCreationExpressionImpl
-
-// Icons (node => parents): SimpleIdentifierImpl => PrefixedIdentifierImpl => ArgumentListImpl => InstanceCreationExpressionImpl
-
-// width (node => parents): SimpleIdentifierImpl => LabelImpl => NamedExpressionImpl => ArgumentListImpl
-
-// 10 (node => parents): IntegerLiteralImpl => NamedExpressionImpl => ArgumentListImpl => InstanceCreationExpressionImpl
-
-// 10.0 (node => parents): DoubleLiteralImpl => NamedExpressionImpl => ArgumentListImpl => InstanceCreationExpressionImpl
-
-// someNumnber (node => parents): SimpleIdentifierImpl => NamedExpressionImpl => ArgumentListImpl => InstanceCreationExpressionImpl

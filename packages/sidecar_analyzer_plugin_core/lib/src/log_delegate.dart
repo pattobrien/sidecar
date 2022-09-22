@@ -81,7 +81,7 @@ class DebuggerLogDelegate implements LogDelegate {
     //     .join();
 
     stdout.writeln(
-        '  $lintErrorType • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
+        '${DateTime.now().toIso8601String()}  $lintErrorType • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
   }
 
   @override
@@ -93,7 +93,7 @@ class DebuggerLogDelegate implements LogDelegate {
   @override
   void sidecarVerboseMessage(String message) {
     // print('DebuggerLogDelegate: sidecarMessage $message');
-    // stdout.writeln('DebuggerLogDelegate: $message');
+    // stdout.writeln('${DateTime.now().toIso8601String()} $message');
   }
 
   @override

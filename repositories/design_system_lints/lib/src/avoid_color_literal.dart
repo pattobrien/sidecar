@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
@@ -17,6 +19,15 @@ class AvoidColorLiteral extends LintRule {
 
   @override
   String get message => _desc;
+
+  @override
+  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) {
+    final visitor = _Visitor();
+    unit.unit.accept(visitor);
+    return visitor.nodes.toDetectedLints(unit, this);
+  }
 
   @override
   Future<List<DetectedLint>> computeAnalysisError(

@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
@@ -41,5 +43,12 @@ class PreferConsumerWidget extends LintRule {
         changeBuilder.sourceChange..message,
       ),
     ];
+  }
+
+  @override
+  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) {
+    return [];
   }
 }
