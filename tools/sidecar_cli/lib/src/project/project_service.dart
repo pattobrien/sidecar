@@ -310,8 +310,9 @@ class ProjectService {
 
     for (final lintPackage in lintPackages) {
       for (final lint in lintPackage.lints.values) {
-        importBuffer.write('import \'package:${lint.filePath}\'; \n');
-        returnBuffer.write('\t\t${lint.className}.new, \n');
+        importBuffer.write(
+            'import \'package:${lint.filePath}\' as ${lint.packageName}; \n');
+        returnBuffer.write('\t\t${lint.packageName}.${lint.className}.new, \n');
       }
 
       final entireContents = StringBuffer()
@@ -334,8 +335,9 @@ class ProjectService {
 
     for (final editPackage in editPackages) {
       for (final edit in editPackage.edits.values) {
-        importBuffer.write('import \'package:${edit.filePath}\'; \n');
-        returnBuffer.write('\t\t${edit.className}.new,\n');
+        importBuffer.write(
+            'import \'package:${edit.filePath}\' as ${edit.packageName}; \n');
+        returnBuffer.write('\t\t${edit.packageName}.${edit.className}.new,\n');
       }
 
       final entireContents = StringBuffer()

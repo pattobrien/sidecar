@@ -28,10 +28,10 @@ sidecar:
     #     configuration:
     #       prefix: "AppLocalizations.of(context)"
 
-    # project_lints:
-    #   avoid_icon_literal:
-    #     severity: error
-    #   avoid_sized_box_height_width_literals:
+    project_lints:
+      avoid_icon_literal:
+        severity: error
+      avoid_sized_box_height_width_literals:
     design_system_lints:
       avoid_color_literal:
       # avoid_sized_box_height_width_literals:

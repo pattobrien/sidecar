@@ -1,6 +1,6 @@
 name: sidecar_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.7
+version: 0.1.8
 publish_to: https://micropub-3qduh.ondigitalocean.app/
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/sidecar_lints/
 
