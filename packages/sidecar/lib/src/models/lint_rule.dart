@@ -80,6 +80,19 @@ abstract class LintRule {
 enum LintRuleType { info, warning, error }
 
 extension LintRuleTypeX on LintRuleType {
+  static LintRuleType fromString(String string) {
+    if (string == LintRuleType.error.name) {
+      return LintRuleType.error;
+    }
+    if (string == LintRuleType.warning.name) {
+      return LintRuleType.warning;
+    }
+    if (string == LintRuleType.info.name) {
+      return LintRuleType.info;
+    }
+    throw UnimplementedError('invalid LintRuleType');
+  }
+
   String get coloredNamed {
     // final ansi = AnsiPen();
     final ansi = Ansi(true);

@@ -1,5 +1,7 @@
 // ignore_for_file: implementation_imports
 
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:l10n_lints/src/constants.dart';
 import 'package:sidecar/sidecar.dart';
@@ -119,6 +121,15 @@ class AvoidStringLiterals extends LintRule {
     } else {
       return [];
     }
+  }
+
+  @override
+  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) {
+    final visitor = _LiteralAstVisitor();
+    unit.unit.accept(visitor);
+    return visitor.detectedNodes.toDetectedLints(unit, this);
   }
 }
 

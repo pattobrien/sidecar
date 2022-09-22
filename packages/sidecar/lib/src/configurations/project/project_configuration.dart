@@ -72,9 +72,7 @@ Map<PackageName, LintPackageConfiguration>? parseLintPackages(
   }
 }
 
-Map<PackageName, EditPackageConfiguration>? parseEditPackages(
-  Map? map,
-) {
+Map<PackageName, EditPackageConfiguration>? parseEditPackages(Map? map) {
   try {
     return map?.map((dynamic key, dynamic value) {
       if (value is Map) {

@@ -211,7 +211,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) {
     delegate.sidecarVerboseMessage('beforeNewContextCollection');
-    // channel.sendError('beforeNewContextCollection');
     return super
         .beforeContextCollectionDispose(contextCollection: contextCollection);
   }
