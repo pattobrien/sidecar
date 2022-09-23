@@ -130,6 +130,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     delegate.sidecarVerboseMessage('afterNewContextCollection');
     await _initializeLintsAndEdits();
+    delegate.sidecarVerboseMessage('afterNewContextCollection _getConfigs');
     await _getConfigs(contextCollection);
     delegate.sidecarVerboseMessage('afterNewContextCollection complete');
     await super.afterNewContextCollection(contextCollection: contextCollection);
@@ -318,13 +319,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     // #1 check explicit LintRule/CodeEdit includes from project config
     final ruleProjectConfig = lintConfigurations[contextRoot]?[rule.code];
-    if (ruleProjectConfig != null && ruleProjectConfig.includes != null) {
-      return ruleProjectConfig.includes!.any((glob) => glob.matches(path));
+    final ruleConfigIncludes = ruleProjectConfig?.includes;
+    if (ruleProjectConfig != null && ruleConfigIncludes != null) {
+      return ruleConfigIncludes.any((glob) => glob.matches(relativePath));
     }
 
     // #2 check default LintRule/CodeEdit includes from lint/edit definition
     if (rule.includes != null) {
-      return rule.includes!.any((glob) => glob.matches(path));
+      return rule.includes!.any((glob) => glob.matches(relativePath));
     }
 
     // TODO: #3 check explicit LintPackage includes from project config

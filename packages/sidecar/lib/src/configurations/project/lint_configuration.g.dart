@@ -8,7 +8,7 @@ part of 'lint_configuration.dart';
 
 LintConfiguration _$LintConfigurationFromJson(Map json) => LintConfiguration(
       packageName: json['packageName'] as String,
-      lintId: json['lintId'] as String,
+      id: json['id'] as String,
       configuration: json['configuration'] as Map,
       enabled: json['enabled'] as bool?,
       includes: globsFromJson(json['includes'] as List<String>?),
@@ -18,7 +18,7 @@ LintConfiguration _$LintConfigurationFromJson(Map json) => LintConfiguration(
 Map<String, dynamic> _$LintConfigurationToJson(LintConfiguration instance) =>
     <String, dynamic>{
       'packageName': instance.packageName,
-      'lintId': instance.lintId,
+      'id': instance.id,
       'enabled': instance.enabled,
       'configuration': instance.configuration,
       'includes': globsToJson(instance.includes),

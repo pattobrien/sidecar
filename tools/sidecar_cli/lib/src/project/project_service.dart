@@ -172,7 +172,7 @@ class ProjectService {
     // }
     final progress =
         logger.progress('\nfetching appropriate version for this project ');
-    final version = Version.parse('0.1.12');
+    final version = Version.parse('0.1.13-dev.5');
 
     progress.finish(showTiming: true);
     logger.stdout(

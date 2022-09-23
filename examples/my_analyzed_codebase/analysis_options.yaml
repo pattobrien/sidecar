@@ -16,7 +16,7 @@ sidecar:
   includes:
     - "bin/**"
     - "lib/**"
-    # - ".sidecar/**"
+  #   - ".sidecar/**"
   lints:
     flutter_lints:
       use_full_hex_values_for_flutter_colors:
@@ -30,6 +30,9 @@ sidecar:
 
     l10n_lints:
       avoid_string_literals:
+        includes:
+          - "bin/**"
+          - "lib/**"
         configuration:
           prefix: "AppLocalizations.of(context)"
 

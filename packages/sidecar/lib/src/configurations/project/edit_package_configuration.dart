@@ -1,5 +1,7 @@
 import 'package:glob/glob.dart';
+import 'package:yaml/yaml.dart';
 
+import '../../models/lint_rule.dart';
 import 'edit_configuration.dart';
 
 class EditPackageConfiguration {
@@ -17,15 +19,32 @@ class EditPackageConfiguration {
       packageName: packageName,
       edits: json.map<String, EditConfiguration>((dynamic key, dynamic value) {
         if (value is Map) {
-          final hasConfiguration = value.containsKey('configuration');
+          final configuration = value.containsKey('configuration')
+              ? value['configuration'] as Map
+              : <dynamic, dynamic>{};
+
+          final severity = value.containsKey('severity')
+              ? LintRuleTypeX.fromString(value['severity'] as String)
+              : null;
+
+          final includes = value.containsKey('includes')
+              ? ((value['includes'] as YamlList).nodes)
+                  .map<Glob>((e) => Glob(e.value as String))
+                  .toList()
+              : null;
+
+          final enabled =
+              value.containsKey('enabled') ? value['enabled'] as bool : null;
+
           return MapEntry(
             key as String,
             EditConfiguration(
               packageName: packageName,
-              editId: key,
-              configuration: hasConfiguration
-                  ? value['configuration'] as Map
-                  : <dynamic, dynamic>{},
+              id: key,
+              configuration: configuration,
+              enabled: enabled,
+              includes: includes,
+              severity: severity,
             ),
           );
         } else if (value == null) {
@@ -33,7 +52,7 @@ class EditPackageConfiguration {
             key as String,
             EditConfiguration(
               packageName: packageName,
-              editId: key,
+              id: key,
               configuration: <dynamic, dynamic>{},
             ),
           );

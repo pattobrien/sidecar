@@ -1,4 +1,5 @@
 import 'package:glob/glob.dart';
+import 'package:yaml/yaml.dart';
 
 import '../../models/lint_rule.dart';
 import 'lint_configuration.dart';
@@ -27,7 +28,9 @@ class LintPackageConfiguration {
               : null;
 
           final includes = value.containsKey('includes')
-              ? (value['includes'] as List<String>).map(Glob.new).toList()
+              ? ((value['includes'] as YamlList).nodes)
+                  .map<Glob>((e) => Glob(e.value as String))
+                  .toList()
               : null;
 
           final enabled =
@@ -37,7 +40,7 @@ class LintPackageConfiguration {
             key as String,
             LintConfiguration(
               packageName: packageName,
-              lintId: key,
+              id: key,
               includes: includes,
               severity: severity,
               enabled: enabled,
@@ -49,7 +52,7 @@ class LintPackageConfiguration {
             key as String,
             LintConfiguration(
               packageName: packageName,
-              lintId: key,
+              id: key,
               configuration: <dynamic, dynamic>{},
             ),
           );

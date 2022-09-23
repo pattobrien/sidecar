@@ -56,53 +56,53 @@ final analysisContextUtilitiesProvider = Provider<AnalysisContextUtilities>(
 );
 
 extension AnalysisContextX on AnalysisContext {
-  SourceSpan sidecarPackageSourceSpan(String packageId) {
-    final optionsFile = contextRoot.optionsFile;
-    if (optionsFile != null) {
-      final contents = optionsFile.readAsStringSync();
-      try {
-        final uri = optionsFile.toUri();
-        final doc = loadYamlNode(contents, sourceUrl: uri) as YamlMap;
+  // SourceSpan sidecarPackageSourceSpan(String packageId) {
+  //   final optionsFile = contextRoot.optionsFile;
+  //   if (optionsFile != null) {
+  //     final contents = optionsFile.readAsStringSync();
+  //     try {
+  //       final uri = optionsFile.toUri();
+  //       final doc = loadYamlNode(contents, sourceUrl: uri) as YamlMap;
 
-        final sidecar = doc.nodes['sidecar']! as YamlMap;
+  //       final sidecar = doc.nodes['sidecar']! as YamlMap;
 
-        final lints = sidecar.nodes['lints']! as YamlMap;
+  //       final lints = sidecar.nodes['lints']! as YamlMap;
 
-        final myPackage = lints.nodes.entries
-            .firstWhere((entry) => entry.key.toString() == packageId)
-            .key as YamlScalar;
+  //       final myPackage = lints.nodes.entries
+  //           .firstWhere((entry) => entry.key.toString() == packageId)
+  //           .key as YamlScalar;
 
-        final packageSource = myPackage.span;
-        final startOffset = packageSource.start.offset;
-        final endOffset = packageSource.end.offset;
+  //       final packageSource = myPackage.span;
+  //       final startOffset = packageSource.start.offset;
+  //       final endOffset = packageSource.end.offset;
 
-        final lineInfo = LineInfo.fromContent(contents);
-        final startLocation = lineInfo.getLocation(startOffset);
-        final endLocation = lineInfo.getLocation(endOffset);
-        final sourceSpan = SourceSpan(
-          SourceLocation(
-            startOffset,
-            column: startLocation.columnNumber,
-            line: startLocation.lineNumber,
-            sourceUrl: uri,
-          ),
-          SourceLocation(
-            endOffset,
-            column: endLocation.columnNumber,
-            line: endLocation.lineNumber,
-            sourceUrl: uri,
-          ),
-          contents.substring(startOffset, endOffset),
-        );
+  //       final lineInfo = LineInfo.fromContent(contents);
+  //       final startLocation = lineInfo.getLocation(startOffset);
+  //       final endLocation = lineInfo.getLocation(endOffset);
+  //       final sourceSpan = SourceSpan(
+  //         SourceLocation(
+  //           startOffset,
+  //           column: startLocation.columnNumber,
+  //           line: startLocation.lineNumber,
+  //           sourceUrl: uri,
+  //         ),
+  //         SourceLocation(
+  //           endOffset,
+  //           column: endLocation.columnNumber,
+  //           line: endLocation.lineNumber,
+  //           sourceUrl: uri,
+  //         ),
+  //         contents.substring(startOffset, endOffset),
+  //       );
 
-        return sourceSpan;
-      } catch (e) {
-        throw UnimplementedError('cannot parse sidecar options: $e');
-      }
-    } else {
-      throw UnimplementedError('yaml options file doesnt exist');
-    }
-  }
+  //       return sourceSpan;
+  //     } catch (e) {
+  //       throw UnimplementedError('cannot parse sidecar options: $e');
+  //     }
+  //   } else {
+  //     throw UnimplementedError('yaml options file doesnt exist');
+  //   }
+  // }
 
   // ProjectConfiguration get sidecarOptions {
   //   final optionsFile = contextRoot.optionsFile;
