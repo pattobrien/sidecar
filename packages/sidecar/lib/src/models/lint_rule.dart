@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
@@ -10,16 +11,19 @@ import 'package:cli_util/cli_logging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../sidecar.dart';
+import '../ast/general_visitor.dart';
+import 'detected_lint.dart';
+import 'errors.dart';
+import 'typedefs.dart';
 
 abstract class LintRule {
   LintRule(this.ref);
 
-  String get code;
-  String get packageName;
-  String get message;
+  LintRuleId get code;
+  LintPackageId get packageName;
 
   LintRuleType get defaultType => LintRuleType.info;
   String? get url => null;
@@ -63,11 +67,11 @@ abstract class LintRule {
   ) =>
       [];
 
-  @Deprecated('use computeDartAnalysisError')
   Future<List<DetectedLint>> computeAnalysisError(
     AnalysisContext analysisContext,
     String path,
-  );
+  ) =>
+      Future.value([]);
 
   SourceSpan computeLintHighlight(DetectedLint lint) => lint.sourceSpan;
 

@@ -1,12 +1,8 @@
-// ignore_for_file: public_member_api_docs
-
 import 'dart:async';
 
-import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:collection/collection.dart';
 import 'package:riverpod_utilities/riverpod_utilities.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:path/path.dart' as p;
 
 class PreferConsumerWidget extends LintRule {
   PreferConsumerWidget(super.ref);
@@ -18,26 +14,10 @@ class PreferConsumerWidget extends LintRule {
   String get packageName => 'riverpod_lints';
 
   @override
-  String get message => 'Prefer to use ConsumerWidget.';
-
-  @override
   TestConfig get configuration => super.configuration as TestConfig;
 
   @override
   MapDecoder? get jsonDecoder => TestConfig.fromJson;
-
-  @override
-  Future<List<DetectedLint>> computeAnalysisError(
-    AnalysisContext analysisContext,
-    String path,
-  ) async {
-    final visitor = _Visitor<dynamic>();
-
-    final unit = await analysisContext.currentSession.getResolvedUnit(path);
-    if (unit is! ResolvedUnitResult) return [];
-    unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this);
-  }
 
   @override
   FutureOr<List<DetectedLint>> computeDartAnalysisError(
@@ -45,7 +25,8 @@ class PreferConsumerWidget extends LintRule {
   ) {
     final visitor = _Visitor<dynamic>();
     unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this);
+    return visitor.nodes.toDetectedLints(unit, this,
+        message: 'Prefer to use ConsumerWidget over StatelessWidget.');
   }
 
   @override

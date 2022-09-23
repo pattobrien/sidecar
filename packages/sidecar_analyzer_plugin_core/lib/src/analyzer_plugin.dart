@@ -6,6 +6,7 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
+import 'package:analyzer/source/line_info.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
@@ -17,6 +18,7 @@ import 'package:path/path.dart' as p;
 
 import 'package:sidecar/sidecar.dart' hide ContextRoot;
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
+import 'package:yaml/yaml.dart';
 
 import 'log_delegate.dart';
 import 'channel_extension.dart';
@@ -35,19 +37,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         super(
           resourceProvider:
               resourceProvider ?? PhysicalResourceProvider.INSTANCE,
-        ) {
-    delegate.sidecarVerboseMessage(
-        'initializing ${lintRuleConstructors.length} lints and ${codeEditConstructors.length} edits.');
-    for (var constructor in lintRuleConstructors) {
-      allLintRules.add(constructor(ref));
-    }
+        );
 
-    for (var constructor in codeEditConstructors) {
-      allCodeEdits.add(constructor(ref));
-    }
-    initialization();
-    delegate.sidecarVerboseMessage('init complete');
-  }
   late final HotReloader reloader;
   final reloadCompleter = Completer();
   final SidecarAnalyzerPluginMode mode;
@@ -78,7 +69,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     delegate.sidecarVerboseMessage('reload request received');
     await reloadCompleter.future;
     await reloader.reloadCode();
-    // test //
     delegate.sidecarVerboseMessage('reload request completed');
   }
 
@@ -94,92 +84,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     });
   }
 
-  Future<void> initialization() async {
-    delegate
-        .sidecarVerboseMessage('SidecarAnalyzerPlugin initialization complete');
-    // todo:
-    // read options file for sidecar configuration
-  }
-
-  Map<String, ProjectConfiguration> configurations = {};
-
-  // Map<ContextRoot, Map<String, LintPackageConfiguration?>>
-  //     lintPackageConfigurations = {};
-
-  // Map<ContextRoot, Map<String, EditPackageConfiguration?>>
-  //     editPackageConfigurations = {};
-
-  Map<ContextRoot, Map<String, LintConfiguration?>> lintConfigurations = {};
-  Map<ContextRoot, Map<String, EditConfiguration?>> editConfigurations = {};
-
-  Future<void> _getLintConfigs(
-    AnalysisContextCollection contextCollection,
-  ) async {
-    lintConfigurations.clear();
-    final List<MapEntry<ContextRoot, Map<String, LintConfiguration?>>> configs =
-        [];
-    for (final context in contextCollection.contexts) {
-      final sidecarOptions = configurations[context.contextRoot.root.path]!;
-      final Map<String, LintConfiguration?> lintConfigs = {};
-      for (final lint in allLintRules) {
-        final config =
-            sidecarOptions.lintConfiguration(lint.packageName, lint.code);
-        lintConfigs.addEntries([MapEntry(lint.code, config)]);
-        lint.initialize(configurationContent: config?.configuration);
-      }
-      configs.add(MapEntry(context.contextRoot, lintConfigs));
-    }
-    lintConfigurations.addEntries(configs);
-  }
-
-  Future<void> _getEditConfigs(
-    AnalysisContextCollection contextCollection,
-  ) async {
-    lintConfigurations.clear();
-    final List<MapEntry<ContextRoot, Map<String, EditConfiguration?>>> configs =
-        [];
-    for (final context in contextCollection.contexts) {
-      final sidecarOptions = configurations[context.contextRoot.root.path]!;
-      final Map<String, EditConfiguration?> editConfigs = {};
-      for (final edit in allCodeEdits) {
-        final config =
-            sidecarOptions.editConfiguration(edit.packageName, edit.code);
-        editConfigs.addEntries([MapEntry(edit.code, config)]);
-        edit.initialize(configurationContent: config?.configuration);
-      }
-      configs.add(MapEntry(context.contextRoot, editConfigs));
-    }
-    editConfigurations.addEntries(configs);
-  }
-
-  Future<void> _getConfigs(AnalysisContextCollection contextCollection) async {
-    configurations.clear();
-    await Future.wait<void>(contextCollection.contexts.map((context) async {
-      final optionsFile = context.contextRoot.optionsFile;
-      if (optionsFile != null) {
-        final contents = await io.File(optionsFile.path).readAsString();
-
-        try {
-          configurations.addEntries([
-            MapEntry(
-              context.contextRoot.root.path,
-              ProjectConfiguration.parse(contents),
-            )
-          ]);
-        } catch (e) {
-          throw UnimplementedError('cannot parse sidecar options: $e');
-        }
-      } else {
-        configurations.addEntries([
-          MapEntry(
-            context.contextRoot.root.path,
-            ProjectConfiguration(),
-          )
-        ]);
-      }
-    }));
-  }
-
   final ProviderContainer ref;
   final List<LintRuleConstructor> lintRuleConstructors;
   final List<CodeEditConstructor> codeEditConstructors;
@@ -187,6 +91,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   final List<CodeEdit> allCodeEdits = [];
   final List<LintRule> allLintRules = [];
+
+  Map<ContextRoot, ProjectConfiguration> configurations = {};
+  Map<ContextRoot, Map<LintRuleId, LintConfiguration>> lintConfigurations = {};
+  Map<ContextRoot, Map<CodeEditId, EditConfiguration>> editConfigurations = {};
+  Map<ContextRoot, String> sidecarOptionContents = {};
 
   @override
   List<String> get fileGlobsToAnalyze =>
@@ -220,12 +129,78 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     delegate.sidecarVerboseMessage('afterNewContextCollection');
+    await _initializeLintsAndEdits();
     await _getConfigs(contextCollection);
-    await _getLintConfigs(contextCollection);
-    await _getEditConfigs(contextCollection);
-    channel.sendError('afterNewContextCollection');
     delegate.sidecarVerboseMessage('afterNewContextCollection complete');
     await super.afterNewContextCollection(contextCollection: contextCollection);
+  }
+
+  Future<void> _initializeLintsAndEdits() async {
+    delegate.sidecarVerboseMessage(
+        'initializing ${lintRuleConstructors.length} lints and ${codeEditConstructors.length} edits.');
+    for (var constructor in lintRuleConstructors) {
+      allLintRules.add(constructor(ref));
+    }
+
+    for (var constructor in codeEditConstructors) {
+      allCodeEdits.add(constructor(ref));
+    }
+  }
+
+  void _getEditConfigurations(
+      ProjectConfiguration sidecarOptions, ContextRoot root) {
+    editConfigurations[root] = {};
+    for (final edit in allCodeEdits) {
+      delegate.sidecarVerboseMessage('setting up ${edit.code}');
+      final config =
+          sidecarOptions.editConfiguration(edit.packageName, edit.code);
+      if (config != null) {
+        editConfigurations[root]![edit.code] = config;
+      } else {
+        editConfigurations[root]!.remove(edit.code);
+      }
+      edit.initialize(configurationContent: config?.configuration);
+    }
+  }
+
+  void _getLintConfigurations(
+      ProjectConfiguration sidecarOptions, ContextRoot root) {
+    lintConfigurations[root] = {};
+    for (final lint in allLintRules) {
+      delegate.sidecarVerboseMessage('setting up ${lint.code}');
+      final config =
+          sidecarOptions.lintConfiguration(lint.packageName, lint.code);
+      if (config != null) {
+        lintConfigurations[root]![lint.code] = config;
+      } else {
+        lintConfigurations[root]!.remove(lint.code);
+      }
+      lint.initialize(configurationContent: config?.configuration);
+    }
+  }
+
+  Future<void> _getConfigs(AnalysisContextCollection contextCollection) async {
+    configurations.clear();
+    sidecarOptionContents.clear();
+    await Future.wait<void>(contextCollection.contexts.map((context) async {
+      final optionsFile = context.contextRoot.optionsFile;
+      final root = context.contextRoot;
+      if (optionsFile != null) {
+        final contents = await io.File(optionsFile.path).readAsString();
+        sidecarOptionContents[root] = contents;
+
+        try {
+          configurations[root] = ProjectConfiguration.parse(contents);
+        } catch (e) {
+          throw UnimplementedError('cannot parse sidecar options: $e');
+        }
+      } else {
+        configurations[root] = ProjectConfiguration();
+      }
+
+      _getEditConfigurations(configurations[root]!, root);
+      _getLintConfigurations(configurations[root]!, root);
+    }));
   }
 
   @override
@@ -356,7 +331,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     // TODO: #4 check default LintPackage includes from LintPackage definition
 
     // #5 check project configuration
-    return configurations[rootDirectory.path]!.includes(relativePath);
+    return configurations[contextRoot]!.includes(relativePath);
   }
 
   Future<Iterable<DetectedLint>> _getReportedErrors(
@@ -383,7 +358,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         }
 
         try {
-          final lints = await errorReporter.generateDartLints(unit, rule);
+          final lintConfig =
+              lintConfigurations[analysisContext.contextRoot]![rule.code];
+          final lints =
+              await errorReporter.generateDartLints(unit, rule, lintConfig);
           detectedLints.addAll(lints);
         } on EmptyConfiguration catch (e, stackTrace) {
           delegate.lintError(rule, e.toString(), stackTrace.toString());
@@ -447,10 +425,67 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     return plugin.AnalysisError(
       plugin.AnalysisErrorSeverity.ERROR,
       plugin.AnalysisErrorType.LINT,
-      analysisContext.sidecarLintSourceSpan(packageId, lintId).location,
+      sidecarLintSourceSpan(analysisContext, packageId, lintId).location,
       message,
       'lint_misconfiguration',
     );
+  }
+
+  SourceSpan sidecarLintSourceSpan(
+    AnalysisContext context,
+    String packageId,
+    String lintId,
+  ) {
+    final contents = sidecarOptionContents[context.contextRoot]!;
+    final uri = context.contextRoot.root.toUri();
+    final doc = loadYamlNode(contents, sourceUrl: uri) as YamlMap;
+
+    final sidecar = doc.nodes['sidecar']! as YamlMap;
+
+    final packages = sidecar.nodes['lints']! as YamlMap;
+
+    final lints = packages.nodes[packageId]! as YamlMap;
+    delegate.sidecarVerboseMessage(
+        'root ${context.contextRoot.root.path} searching for $packageId - $lintId');
+
+    delegate.sidecarVerboseMessage(
+        'nodes ${lints.nodes.entries.map((e) => '${e.key}-${e.value}').toString()}');
+    //TODO: is this a dart error?
+    final myLintKey = lints.nodes.entries.firstWhere((entry) {
+      final isMatch = entry.key.toString() == lintId;
+      delegate.sidecarVerboseMessage(
+          'node search for $lintId - ${entry.key} ${entry.value} - $isMatch');
+      return isMatch;
+    }).key as YamlScalar;
+
+    final startOffset = myLintKey.span.start.offset;
+    final endOffset = myLintKey.span.end.offset;
+
+    final lineInfo = LineInfo.fromContent(contents);
+    final startLocation = lineInfo.getLocation(startOffset);
+    final endLocation = lineInfo.getLocation(endOffset);
+    final sourceSpan = SourceSpan(
+      SourceLocation(
+        startOffset,
+        column: startLocation.columnNumber,
+        line: startLocation.lineNumber,
+        sourceUrl: uri,
+      ),
+      SourceLocation(
+        endOffset,
+        column: endLocation.columnNumber,
+        line: endLocation.lineNumber,
+        sourceUrl: uri,
+      ),
+      contents.substring(startOffset, endOffset),
+    );
+    return sourceSpan;
+    // } catch (e) {
+    //   throw UnimplementedError('cannot parse sidecar options: $e');
+    // }
+    // } else {
+    //   throw UnimplementedError('yaml options file doesnt exist');
+    // }
   }
 
   Future<List<plugin.AnalysisError>> _getAnalysisErrors(

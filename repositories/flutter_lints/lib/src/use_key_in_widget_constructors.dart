@@ -4,11 +4,8 @@
 
 import 'dart:async';
 
-import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-
-import 'package:path/path.dart' as p;
 
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
@@ -20,12 +17,6 @@ class UseKeyInWidgetConstructors extends LintRule {
 
   @override
   String get code => 'use_key_in_widget_constructors';
-
-  @override
-  LintRuleType get defaultType => LintRuleType.info;
-
-  @override
-  String get message => _desc;
 
   @override
   String get packageName => 'flutter_lints';
@@ -40,19 +31,7 @@ class UseKeyInWidgetConstructors extends LintRule {
   ) {
     final visitor = _Visitor();
     unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this);
-  }
-
-  @override
-  Future<List<DetectedLint>> computeAnalysisError(
-    AnalysisContext analysisContext,
-    String path,
-  ) async {
-    final visitor = _Visitor();
-    final unit = await analysisContext.currentSession.getResolvedUnit(path);
-    if (unit is! ResolvedUnitResult) return [];
-    unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this);
+    return visitor.nodes.toDetectedLints(unit, this, message: _desc);
   }
 }
 

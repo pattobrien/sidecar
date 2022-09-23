@@ -54,11 +54,30 @@ extension AstNodeX on AstNode {
 
     return ElementLocator.locate(node);
   }
+
+  DetectedLint toDetectedLint(
+    ResolvedUnitResult unit,
+    LintRule rule, {
+    String message = '',
+    String? correction,
+  }) =>
+      DetectedLint(
+          rule: rule,
+          unit: unit,
+          sourceSpan: toSourceSpan(unit),
+          lintType: rule.defaultType,
+          message: message,
+          correction: correction);
 }
 
 extension ListAstNodeX on List<AstNode> {
-  List<DetectedLint> toDetectedLints(ResolvedUnitResult unit, LintRule rule) {
-    return map((e) => DetectedLint(
-        rule: rule, unit: unit, sourceSpan: e.toSourceSpan(unit))).toList();
+  List<DetectedLint> toDetectedLints(
+    ResolvedUnitResult unit,
+    LintRule rule, {
+    String message = '',
+    String? correction,
+  }) {
+    return map((e) => e.toDetectedLint(unit, rule,
+        correction: correction, message: message)).toList();
   }
 }
