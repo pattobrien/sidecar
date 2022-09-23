@@ -23,6 +23,16 @@ extension SourceSpanX on SourceSpan {
         endColumn: end.column,
       );
 
+  plugin.Location get yamlLocation => plugin.Location(
+        sourceUrl!.path,
+        start.offset,
+        length,
+        start.line + 1,
+        start.column + 1,
+        endLine: end.line + 1,
+        endColumn: end.column + 1,
+      );
+
   SourceRange toSourceRange() => SourceRange(start.offset, length);
 
   AstNode? toAstNode(ResolvedUnitResult unit) {

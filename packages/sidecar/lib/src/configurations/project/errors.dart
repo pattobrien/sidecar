@@ -86,7 +86,7 @@ class YamlSourceError {
     return plugin.AnalysisError(
         plugin.AnalysisErrorSeverity.ERROR,
         plugin.AnalysisErrorType.HINT,
-        sourceSpan.location,
+        sourceSpan.yamlLocation,
         message,
         'sidecar_configuration_error'
         // concatLintCode,
