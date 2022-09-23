@@ -19,6 +19,7 @@ class PackageParseUtils {
         return PackageConfiguration.parse(
           contents,
           packageName: pubspec.name,
+          sourceUrl: pubspecFile.uri,
         );
       } catch (e) {
         print('no plugin configuration found for sidecar.');

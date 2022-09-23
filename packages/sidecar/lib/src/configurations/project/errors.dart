@@ -1,3 +1,8 @@
+import 'package:analyzer/error/error.dart';
+import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
+
+import '../../../sidecar.dart';
+
 /// Thrown when sidecar isnt declared under analyzer.plugins in ```analysis_options.yaml``` file.
 class MissingAnalyzerPluginException implements Exception {}
 
@@ -27,6 +32,68 @@ class MissingSidecarConfiguration implements Exception {
   String toString() {
     const message = 'No sidecar configuration found.';
     return 'MissingSidecarConfiguration: $message';
+  }
+}
+
+class PackageConfigurationException implements SidecarException {
+  const PackageConfigurationException(this.messages);
+
+  final Map<SourceSpan, String> messages;
+}
+
+class LintConfigurationException implements SidecarException {
+  const LintConfigurationException(this.messages);
+
+  final Map<SourceSpan, String> messages;
+}
+
+class SidecarConfigurationException implements SidecarException {
+  const SidecarConfigurationException(this.messages);
+
+  final Map<SourceSpan, String> messages;
+}
+
+class SidecarException implements Exception {}
+
+class InvalidSeverityException implements SidecarException {
+  const InvalidSeverityException(this.invalidValue);
+
+  final String invalidValue;
+}
+
+class InvalidConfigurationException implements SidecarException {
+  const InvalidConfigurationException(this.message);
+
+  final MapEntry<SourceSpan, String> message;
+}
+
+class InvalidIncludesException implements SidecarException {
+  const InvalidIncludesException(this.message);
+
+  final MapEntry<SourceSpan, String> message;
+}
+
+class YamlSourceError {
+  const YamlSourceError({
+    required this.sourceSpan,
+    required this.message,
+  });
+
+  final String message;
+  final SourceSpan sourceSpan;
+
+  plugin.AnalysisError toAnalysisError() {
+    return plugin.AnalysisError(
+        plugin.AnalysisErrorSeverity.ERROR,
+        plugin.AnalysisErrorType.HINT,
+        sourceSpan.location,
+        message,
+        'sidecar_configuration_error'
+        // concatLintCode,
+        // url: rule.url,
+        // correction: correction,
+        //TODO: hasFix
+        );
   }
 }
 

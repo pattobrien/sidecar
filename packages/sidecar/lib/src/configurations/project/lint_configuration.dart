@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:recase/recase.dart';
 
 import '../../models/lint_rule.dart';
+import 'errors.dart';
 import 'parsers.dart';
 
 part 'lint_configuration.g.dart';
@@ -16,6 +17,7 @@ class LintConfiguration {
     this.enabled,
     this.includes,
     this.severity,
+    this.sourceErrors = const <YamlSourceError>[],
   });
 
   // factory LintConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -26,6 +28,8 @@ class LintConfiguration {
   final bool? enabled;
 
   final Map<dynamic, dynamic> configuration;
+
+  final List<YamlSourceError> sourceErrors;
 
   @JsonKey(fromJson: globsFromJson, toJson: globsToJson)
   final List<Glob>? includes;

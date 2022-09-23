@@ -1,5 +1,7 @@
+import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
+import 'package:source_span/source_span.dart';
 import '../configurations.dart';
 import 'edit_package_configuration.dart';
 import 'errors.dart';
@@ -12,7 +14,10 @@ class ProjectConfiguration {
     List<String>? includes = const ['lib/**', 'bin/**'],
   }) : _includes = includes ?? const ['lib/**', 'bin/**'];
 
-  factory ProjectConfiguration.parse(String contents) {
+  factory ProjectConfiguration.parse(
+    String contents, {
+    required Uri sourceUrl,
+  }) {
     return checkedYamlDecode(
       contents,
       (m) {
@@ -28,6 +33,7 @@ class ProjectConfiguration {
           includes: parseIncludes(contentMap['includes'] as List?),
         );
       },
+      sourceUrl: sourceUrl,
     );
   }
 
@@ -55,6 +61,7 @@ typedef PackageName = String;
 Map<PackageName, LintPackageConfiguration>? parseLintPackages(
   Map? map,
 ) {
+  final configurationErrors = <SourceSpan, String>{};
   try {
     return map?.map((dynamic key, dynamic value) {
       if (value is Map) {
@@ -67,8 +74,11 @@ Map<PackageName, LintPackageConfiguration>? parseLintPackages(
             'expected one or more lints for package $key in analysis_options.yaml');
       }
     });
-  } catch (e) {
-    throw InvalidSidecarConfiguration();
+  } on PackageConfigurationException catch (e) {
+    configurationErrors.addAll(e.messages);
+  }
+  if (configurationErrors.isNotEmpty) {
+    throw SidecarConfigurationException(configurationErrors);
   }
 }
 

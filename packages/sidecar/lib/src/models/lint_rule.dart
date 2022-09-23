@@ -14,6 +14,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../sidecar.dart';
 import '../ast/general_visitor.dart';
 import 'detected_lint.dart';
 import 'errors.dart';
@@ -94,7 +95,7 @@ extension LintRuleTypeX on LintRuleType {
     if (string == LintRuleType.info.name) {
       return LintRuleType.info;
     }
-    throw UnimplementedError('invalid LintRuleType');
+    throw InvalidSeverityException(string);
   }
 
   String get coloredNamed {

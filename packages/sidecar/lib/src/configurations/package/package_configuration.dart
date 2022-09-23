@@ -14,6 +14,7 @@ class PackageConfiguration {
   factory PackageConfiguration.parse(
     String contents, {
     required String packageName,
+    required Uri sourceUrl,
   }) {
     return checkedYamlDecode(
       contents,
@@ -25,6 +26,7 @@ class PackageConfiguration {
           packageName: packageName,
         );
       },
+      sourceUrl: sourceUrl,
     );
   }
 
