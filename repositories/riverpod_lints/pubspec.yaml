@@ -1,6 +1,6 @@
 name: riverpod_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.12
+version: 0.1.14
 publish_to: https://micropub-3qduh.ondigitalocean.app/
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/riverpod_lints/
 
@@ -17,7 +17,7 @@ dependencies:
     version: ^0.1.4
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.11-dev.17
+    version: ^0.1.11-dev.20
 
 dev_dependencies:
   lints: ^2.0.0

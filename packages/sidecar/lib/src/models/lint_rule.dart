@@ -19,7 +19,6 @@ abstract class LintRule {
 
   String get code;
   String get packageName;
-  String get message;
 
   LintRuleType get defaultType => LintRuleType.info;
   String? get url => null;
@@ -63,11 +62,11 @@ abstract class LintRule {
   ) =>
       [];
 
-  @Deprecated('use computeDartAnalysisError')
   Future<List<DetectedLint>> computeAnalysisError(
     AnalysisContext analysisContext,
     String path,
-  );
+  ) =>
+      Future.value([]);
 
   SourceSpan computeLintHighlight(DetectedLint lint) => lint.sourceSpan;
 

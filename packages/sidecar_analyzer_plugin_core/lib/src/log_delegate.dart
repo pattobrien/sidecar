@@ -74,7 +74,7 @@ class DebuggerLogDelegate implements LogDelegate {
     final lintErrorType = lint.rule.defaultType.coloredNamedd;
     final lintPackage = lint.rule.packageName.padRight(20).characters.take(20);
     final lintCode = lint.rule.code.padRight(20).characters.take(20);
-    final lintMessage = lint.rule.message.padRight(40).characters.take(40);
+    final lintMessage = lint.message.padRight(40).characters.take(40);
     // final msg = message
     //     .split('\n')
     //     .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')

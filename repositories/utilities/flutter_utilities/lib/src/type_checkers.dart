@@ -30,6 +30,12 @@ class FlutterTypeChecker {
   static bool isBorderRadius(InterfaceType? type) => isTypeMatch(type,
       type: 'BorderRadius', sourcePath: 'src/painting/border_radius.dart');
 
+  static bool isBoxShadow(InterfaceType? type) => isTypeMatch(type,
+      type: 'BoxShadow', sourcePath: 'src/painting/box_shadow.dart');
+
+  static bool isTextStyle(InterfaceType? type) => isTypeMatch(type,
+      type: 'TextStyle', sourcePath: 'src/painting/text_style.dart');
+
   static bool isStatefulWidget(
     InterfaceType? type, {
     bool checkSuperInterfaces = true,

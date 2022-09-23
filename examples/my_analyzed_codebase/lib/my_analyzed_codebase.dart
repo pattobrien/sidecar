@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/icons.dart';
 
-int calculate() {
+calculate() {
   final aStringThatShouldBeLinted = 'some string that should be linted';
   final x = aStringThatShouldBeLinted;
   return 6 * 7;

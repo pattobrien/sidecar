@@ -22,6 +22,12 @@ dev_dependencies:
     path: .sidecar/sidecar_analyzer_plugin
   test: ^1.16.0
 
+dependency_overrides:
+  sidecar_analyzer_plugin_core:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
+  sidecar:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+
 flutter:
   uses-material-design: true
   generate: true

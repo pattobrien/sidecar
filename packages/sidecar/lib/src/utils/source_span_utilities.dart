@@ -41,13 +41,13 @@ extension SourceSpanX on SourceSpan {
     return ElementLocator.locate(node);
   }
 
-  DetectedLint toDetectedLint(ResolvedUnitResult unit, LintRule rule) {
-    return DetectedLint(rule: rule, unit: unit, sourceSpan: this);
-  }
+  // DetectedLint toDetectedLint(ResolvedUnitResult unit, LintRule rule) {
+  //   return DetectedLint(rule: rule, unit: unit, sourceSpan: this);
+  // }
 }
 
-extension ListSourceSpanX on List<SourceSpan> {
-  List<DetectedLint> toDetectedLints(ResolvedUnitResult unit, LintRule rule) {
-    return map((e) => e.toDetectedLint(unit, rule)).toList();
-  }
-}
+// extension ListSourceSpanX on List<SourceSpan> {
+//   List<DetectedLint> toDetectedLints(ResolvedUnitResult unit, LintRule rule) {
+//     return map((e) => e.toDetectedLint(unit, rule)).toList();
+//   }
+// }

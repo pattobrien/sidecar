@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/results.dart';
 
-import '../../sidecar.dart';
+import '../configurations/configurations.dart';
 import '../models/models.dart';
 import 'i_error_reporter.dart';
 
@@ -10,12 +11,16 @@ class ErrorReporter extends IErrorReporter {
   Future<List<DetectedLint>> generateDartLints(
     ResolvedUnitResult unit,
     LintRule rule,
+    LintConfiguration? lintConfiguration,
   ) async {
-    final reportedNode = await rule.computeDartAnalysisError(unit);
+    final detectedLints = await rule.computeDartAnalysisError(unit);
 
-    return reportedNode.map((node) {
-      final highlightedError = rule.computeLintHighlight(node);
-      return node.copyWith(sourceSpan: highlightedError);
+    return detectedLints.map((detectedLint) {
+      final lintType = lintConfiguration?.severity ?? rule.defaultType;
+      final highlightedError = rule.computeLintHighlight(detectedLint);
+
+      return detectedLint.copyWith(
+          lintType: lintType, sourceSpan: highlightedError);
     }).toList();
   }
 
