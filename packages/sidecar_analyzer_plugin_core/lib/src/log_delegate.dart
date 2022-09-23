@@ -93,7 +93,7 @@ class DebuggerLogDelegate implements LogDelegate {
   @override
   void sidecarVerboseMessage(String message) {
     // print('DebuggerLogDelegate: sidecarMessage $message');
-    stdout.writeln('${DateTime.now().toIso8601String()} $message');
+    // stdout.writeln('${DateTime.now().toIso8601String()} $message');
   }
 
   @override
