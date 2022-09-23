@@ -69,7 +69,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     delegate.sidecarVerboseMessage('reload request received');
     await reloadCompleter.future;
     await reloader.reloadCode();
-    // test //
     delegate.sidecarVerboseMessage('reload request completed');
   }
 
@@ -85,103 +84,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     });
   }
 
-  Future<void> initialization() async {
-    delegate
-        .sidecarVerboseMessage('SidecarAnalyzerPlugin initialization complete');
-    // todo:
-    // read options file for sidecar configuration
-  }
-
-  Map<ContextRoot, ProjectConfiguration> configurations = {};
-
-  // Map<ContextRoot, Map<String, LintPackageConfiguration?>>
-  //     lintPackageConfigurations = {};
-
-  // Map<ContextRoot, Map<String, EditPackageConfiguration?>>
-  //     editPackageConfigurations = {};
-
-  Map<ContextRoot, Map<String, LintConfiguration>> lintConfigurations = {};
-  Map<ContextRoot, Map<String, EditConfiguration>> editConfigurations = {};
-  Map<ContextRoot, String> sidecarOptionContents = {};
-  Future<void> _initializeLintsAndEdits() async {
-    delegate.sidecarVerboseMessage(
-        'initializing ${lintRuleConstructors.length} lints and ${codeEditConstructors.length} edits.');
-    for (var constructor in lintRuleConstructors) {
-      allLintRules.add(constructor(ref));
-    }
-
-    for (var constructor in codeEditConstructors) {
-      allCodeEdits.add(constructor(ref));
-    }
-  }
-
-  Future<void> _getLintConfigs(
-    AnalysisContextCollection contextCollection,
-  ) async {
-    lintConfigurations.clear();
-    final List<MapEntry<ContextRoot, Map<String, LintConfiguration>>> configs =
-        [];
-    for (final context in contextCollection.contexts) {
-      final sidecarOptions = configurations[context.contextRoot]!;
-      final Map<String, LintConfiguration> lintConfigs = {};
-      for (final lint in allLintRules) {
-        delegate.sidecarVerboseMessage('setting up ${lint.code}');
-        final config =
-            sidecarOptions.lintConfiguration(lint.packageName, lint.code);
-        if (config != null) {
-          lintConfigs.addEntries([MapEntry(lint.code, config)]);
-        }
-        lint.initialize(configurationContent: config?.configuration);
-      }
-      configs.add(MapEntry(context.contextRoot, lintConfigs));
-    }
-    lintConfigurations.addEntries(configs);
-  }
-
-  Future<void> _getEditConfigs(
-    AnalysisContextCollection contextCollection,
-  ) async {
-    editConfigurations.clear();
-    final List<MapEntry<ContextRoot, Map<String, EditConfiguration>>> configs =
-        [];
-    for (final context in contextCollection.contexts) {
-      final sidecarOptions = configurations[context.contextRoot]!;
-      final Map<String, EditConfiguration> editConfigs = {};
-      for (final edit in allCodeEdits) {
-        delegate.sidecarVerboseMessage('setting up ${edit.code}');
-        final config =
-            sidecarOptions.editConfiguration(edit.packageName, edit.code);
-        if (config != null) {
-          editConfigs.addEntries([MapEntry(edit.code, config)]);
-        }
-        edit.initialize(configurationContent: config?.configuration);
-      }
-      configs.add(MapEntry(context.contextRoot, editConfigs));
-    }
-    editConfigurations.addEntries(configs);
-  }
-
-  Future<void> _getConfigs(AnalysisContextCollection contextCollection) async {
-    configurations.clear();
-    sidecarOptionContents.clear();
-    await Future.wait<void>(contextCollection.contexts.map((context) async {
-      final optionsFile = context.contextRoot.optionsFile;
-      if (optionsFile != null) {
-        final contents = await io.File(optionsFile.path).readAsString();
-        sidecarOptionContents[context.contextRoot] = contents;
-
-        try {
-          configurations[context.contextRoot] =
-              ProjectConfiguration.parse(contents);
-        } catch (e) {
-          throw UnimplementedError('cannot parse sidecar options: $e');
-        }
-      } else {
-        configurations[context.contextRoot] = ProjectConfiguration();
-      }
-    }));
-  }
-
   final ProviderContainer ref;
   final List<LintRuleConstructor> lintRuleConstructors;
   final List<CodeEditConstructor> codeEditConstructors;
@@ -189,6 +91,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   final List<CodeEdit> allCodeEdits = [];
   final List<LintRule> allLintRules = [];
+
+  Map<ContextRoot, ProjectConfiguration> configurations = {};
+  Map<ContextRoot, Map<LintRuleId, LintConfiguration>> lintConfigurations = {};
+  Map<ContextRoot, Map<CodeEditId, EditConfiguration>> editConfigurations = {};
+  Map<ContextRoot, String> sidecarOptionContents = {};
 
   @override
   List<String> get fileGlobsToAnalyze =>
@@ -221,18 +128,79 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
-    await _initializeLintsAndEdits();
     delegate.sidecarVerboseMessage('afterNewContextCollection');
+    await _initializeLintsAndEdits();
     await _getConfigs(contextCollection);
-    delegate.sidecarVerboseMessage(
-        'afterNewContextCollection - _getLintConfigs started');
-    await _getLintConfigs(contextCollection);
-    delegate.sidecarVerboseMessage(
-        'afterNewContextCollection - _getEditConfigs started');
-    await _getEditConfigs(contextCollection);
-    channel.sendError('afterNewContextCollection');
     delegate.sidecarVerboseMessage('afterNewContextCollection complete');
     await super.afterNewContextCollection(contextCollection: contextCollection);
+  }
+
+  Future<void> _initializeLintsAndEdits() async {
+    delegate.sidecarVerboseMessage(
+        'initializing ${lintRuleConstructors.length} lints and ${codeEditConstructors.length} edits.');
+    for (var constructor in lintRuleConstructors) {
+      allLintRules.add(constructor(ref));
+    }
+
+    for (var constructor in codeEditConstructors) {
+      allCodeEdits.add(constructor(ref));
+    }
+  }
+
+  void _getEditConfigurations(
+      ProjectConfiguration sidecarOptions, ContextRoot root) {
+    editConfigurations[root] = {};
+    for (final edit in allCodeEdits) {
+      delegate.sidecarVerboseMessage('setting up ${edit.code}');
+      final config =
+          sidecarOptions.editConfiguration(edit.packageName, edit.code);
+      if (config != null) {
+        editConfigurations[root]![edit.code] = config;
+      } else {
+        editConfigurations[root]!.remove(edit.code);
+      }
+      edit.initialize(configurationContent: config?.configuration);
+    }
+  }
+
+  void _getLintConfigurations(
+      ProjectConfiguration sidecarOptions, ContextRoot root) {
+    lintConfigurations[root] = {};
+    for (final lint in allLintRules) {
+      delegate.sidecarVerboseMessage('setting up ${lint.code}');
+      final config =
+          sidecarOptions.lintConfiguration(lint.packageName, lint.code);
+      if (config != null) {
+        lintConfigurations[root]![lint.code] = config;
+      } else {
+        lintConfigurations[root]!.remove(lint.code);
+      }
+      lint.initialize(configurationContent: config?.configuration);
+    }
+  }
+
+  Future<void> _getConfigs(AnalysisContextCollection contextCollection) async {
+    configurations.clear();
+    sidecarOptionContents.clear();
+    await Future.wait<void>(contextCollection.contexts.map((context) async {
+      final optionsFile = context.contextRoot.optionsFile;
+      final root = context.contextRoot;
+      if (optionsFile != null) {
+        final contents = await io.File(optionsFile.path).readAsString();
+        sidecarOptionContents[root] = contents;
+
+        try {
+          configurations[root] = ProjectConfiguration.parse(contents);
+        } catch (e) {
+          throw UnimplementedError('cannot parse sidecar options: $e');
+        }
+      } else {
+        configurations[root] = ProjectConfiguration();
+      }
+
+      _getEditConfigurations(configurations[root]!, root);
+      _getLintConfigurations(configurations[root]!, root);
+    }));
   }
 
   @override

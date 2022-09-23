@@ -9,8 +9,8 @@ import 'typedefs.dart';
 abstract class CodeEdit {
   CodeEdit(this.ref);
 
-  String get code;
-  String get packageName;
+  CodeEditId get code;
+  LintPackageId get packageName;
 
   @mustCallSuper
   Object get configuration => _configuration;
