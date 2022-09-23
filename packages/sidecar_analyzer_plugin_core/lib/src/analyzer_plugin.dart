@@ -390,8 +390,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         }
 
         try {
-          final lintConfig = lintConfigurations[analysisContext.contextRoot]![
-              rule.packageName];
+          final lintConfig =
+              lintConfigurations[analysisContext.contextRoot]![rule.code];
           final lints =
               await errorReporter.generateDartLints(unit, rule, lintConfig);
           detectedLints.addAll(lints);

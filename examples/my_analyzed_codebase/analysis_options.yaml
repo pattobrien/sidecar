@@ -24,7 +24,7 @@ sidecar:
 
     riverpod_lints:
       prefer_consumer_widget:
-        severity: error
+        severity: info
         configuration:
           some_property: abc
 
