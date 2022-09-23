@@ -16,6 +16,7 @@ sidecar:
   includes:
     - "bin/**"
     - "lib/**"
+    # - "test/**"
   #   - ".sidecar/**"
   lints:
     flutter_lints:
@@ -30,9 +31,9 @@ sidecar:
 
     l10n_lints:
       avoid_string_literals:
-        includes:
-          - "bin/**"
-          - "lib/**"
+        # includes:
+        #   - "bin/**"
+        #   - "lib/**"
         configuration:
           prefix: "AppLocalizations.of(context)"
 

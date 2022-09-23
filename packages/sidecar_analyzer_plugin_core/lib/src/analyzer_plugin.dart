@@ -320,6 +320,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     // #1 check explicit LintRule/CodeEdit includes from project config
     final ruleProjectConfig = lintConfigurations[contextRoot]?[rule.code];
     final ruleConfigIncludes = ruleProjectConfig?.includes;
+
     if (ruleProjectConfig != null && ruleConfigIncludes != null) {
       return ruleConfigIncludes.any((glob) => glob.matches(relativePath));
     }
