@@ -25,7 +25,11 @@ sidecar:
 
     riverpod_lints:
       prefer_consumer_widget:
-        severity: martha
+        severity: 123
+        enabled: true
+        includes:
+          - "lib/**"
+          - 123
         configuration:
           some_property: abc
 

@@ -89,7 +89,6 @@ class YamlSourceError {
         sourceSpan.yamlLocation,
         message,
         'sidecar_configuration_error'
-        // concatLintCode,
         // url: rule.url,
         // correction: correction,
         //TODO: hasFix
