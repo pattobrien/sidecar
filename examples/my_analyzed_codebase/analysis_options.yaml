@@ -57,4 +57,4 @@ sidecar:
         enabled: true
     sidecar_lints:
       output_ast_node_tree:
-        enabled: 123
+        enabled: true

@@ -1,6 +1,7 @@
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:yaml/yaml.dart';
 
 import 'errors.dart';
 import 'requested_code_edit.dart';
@@ -23,10 +24,7 @@ abstract class CodeEdit {
   // late ICodeEditReporter _reporter;
   late Object _configuration;
 
-  void initialize({
-    required Map? configurationContent,
-    // required ICodeEditReporter reporter,
-  }) {
+  void initialize({required YamlMap? configurationContent}) {
     if (jsonDecoder != null) {
       if (configurationContent == null) {
         throw EmptyConfiguration('$code error: empty configuration');

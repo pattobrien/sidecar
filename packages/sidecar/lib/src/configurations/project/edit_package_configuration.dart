@@ -47,6 +47,7 @@ class EditPackageConfiguration {
               configuration: configuration,
               enabled: enabled,
               includes: includes,
+              sourceErrors: editConfigurationErrors,
             ),
           );
         } else if (value is YamlScalar) {
@@ -76,6 +77,12 @@ class EditPackageConfiguration {
           EditConfiguration(
             packageName: packageName,
             id: yamlKey.value as String,
+            sourceErrors: [
+              YamlSourceError(
+                  sourceSpan: yamlKey.span,
+                  message:
+                      'CodeEdit definition should be of type null, bool, or map')
+            ],
           ),
         );
       }),

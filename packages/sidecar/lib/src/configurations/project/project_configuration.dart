@@ -64,9 +64,7 @@ class ProjectConfiguration {
 
 typedef PackageName = String;
 
-Map<PackageName, LintPackageConfiguration>? parseLintPackages(
-  YamlMap? map,
-) {
+Map<PackageName, LintPackageConfiguration>? parseLintPackages(YamlMap? map) {
   try {
     return map?.map((dynamic key, dynamic value) {
       if (value is YamlMap) {
