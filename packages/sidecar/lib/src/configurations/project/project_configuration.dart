@@ -2,6 +2,7 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
 import 'package:source_span/source_span.dart';
+import 'package:yaml/yaml.dart';
 import '../configurations.dart';
 import 'edit_package_configuration.dart';
 import 'errors.dart';
@@ -23,12 +24,12 @@ class ProjectConfiguration {
       (m) {
         Map contentMap;
         try {
-          contentMap = m!['sidecar'] as Map;
+          contentMap = m!['sidecar'] as YamlMap;
         } catch (e) {
           throw const MissingSidecarConfiguration();
         }
         return ProjectConfiguration(
-          lintPackages: parseLintPackages(contentMap['lints'] as Map?),
+          lintPackages: parseLintPackages(contentMap['lints'] as YamlMap?),
           editPackages: parseEditPackages(contentMap['edits'] as Map?),
           includes: parseIncludes(contentMap['includes'] as List?),
         );
@@ -59,13 +60,13 @@ class ProjectConfiguration {
 typedef PackageName = String;
 
 Map<PackageName, LintPackageConfiguration>? parseLintPackages(
-  Map? map,
+  YamlMap? map,
 ) {
   final configurationErrors = <SourceSpan, String>{};
   try {
     return map?.map((dynamic key, dynamic value) {
-      if (value is Map) {
-        final config = LintPackageConfiguration.fromJson(value,
+      if (value is YamlMap) {
+        final config = LintPackageConfiguration.fromYamlMap(value,
             packageName: key as String);
         return MapEntry(key, config);
       } else {

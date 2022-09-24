@@ -186,7 +186,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   void _getLintConfigurations(
       ProjectConfiguration sidecarOptions, ContextRoot root) {
     lintConfigurations[root] = {};
-    for (final lint in allLintRules) {
+    final rules = [...allLintRules];
+    for (final lint in rules) {
       delegate.sidecarVerboseMessage('setting up ${lint.code}');
       final config =
           sidecarOptions.lintConfiguration(lint.packageName, lint.code);
@@ -195,7 +196,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       } else {
         lintConfigurations[root]!.remove(lint.code);
       }
-      lint.initialize(configurationContent: config?.configuration);
+      try {
+        lint.initialize(configurationContent: config?.configuration);
+      } catch (e) {
+        // if the lint fails to configure, then it shouldnt be run
+        allLintRules.remove(lint);
+      }
+      final x = lint;
     }
   }
 

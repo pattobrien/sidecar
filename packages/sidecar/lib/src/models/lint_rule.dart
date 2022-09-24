@@ -39,7 +39,7 @@ abstract class LintRule {
 
   late Object _configuration;
 
-  void initialize({required Map? configurationContent}) {
+  void initialize({required YamlMap? configurationContent}) {
     if (jsonDecoder != null) {
       if (configurationContent == null) {
         throw EmptyConfiguration('$code error: empty configuration');

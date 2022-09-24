@@ -41,11 +41,11 @@ class PackageConfigurationException implements SidecarException {
   final Map<SourceSpan, String> messages;
 }
 
-class LintConfigurationException implements SidecarException {
-  const LintConfigurationException(this.messages);
+// class LintConfigurationException implements SidecarException {
+//   const LintConfigurationException(this.messages);
 
-  final Map<SourceSpan, String> messages;
-}
+//   final Map<SourceSpan, String> messages;
+// }
 
 class SidecarConfigurationException implements SidecarException {
   const SidecarConfigurationException(this.messages);

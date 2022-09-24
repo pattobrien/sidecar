@@ -1,41 +1,31 @@
 import 'package:glob/glob.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:recase/recase.dart';
+import 'package:yaml/yaml.dart';
 
 import '../../models/lint_rule.dart';
 import 'errors.dart';
-import 'parsers.dart';
 
-part 'lint_configuration.g.dart';
-
-@JsonSerializable(anyMap: true)
 class LintConfiguration {
   const LintConfiguration({
     required this.packageName,
     required this.id,
-    required this.configuration,
+    this.configuration,
     this.enabled,
     this.includes,
     this.severity,
     this.sourceErrors = const <YamlSourceError>[],
   });
 
-  // factory LintConfiguration.fromJson(Map<String, dynamic> json) =>
-  //     _$LintConfigurationFromJson(json);
-
   final String packageName;
   final String id;
-  final bool? enabled;
 
-  final Map<dynamic, dynamic> configuration;
+  final bool? enabled;
+  final YamlMap? configuration;
+  final List<Glob>? includes;
+  final LintRuleType? severity;
 
   final List<YamlSourceError> sourceErrors;
-
-  @JsonKey(fromJson: globsFromJson, toJson: globsToJson)
-  final List<Glob>? includes;
-
-  @JsonKey(fromJson: ruleTypeFromJson, toJson: ruleTypeToJson)
-  final LintRuleType? severity;
 }
 
 extension LintConfigurationX on LintConfiguration {
