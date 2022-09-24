@@ -1,5 +1,4 @@
 import 'package:glob/glob.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 

@@ -1,38 +1,27 @@
 import 'package:glob/glob.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:recase/recase.dart';
+import 'package:yaml/yaml.dart';
 
-import '../../models/lint_rule.dart';
-import 'parsers.dart';
+import 'errors.dart';
 
-part 'edit_configuration.g.dart';
-
-@JsonSerializable(anyMap: true)
 class EditConfiguration {
   const EditConfiguration({
     required this.packageName,
     required this.id,
-    required this.configuration,
+    this.configuration,
     this.enabled,
     this.includes,
-    this.severity,
+    this.sourceErrors = const <YamlSourceError>[],
   });
-
-  // factory EditConfiguration.fromJson(Map<String, dynamic> json) =>
-  //     _$EditConfigurationFromJson(json);
 
   final String packageName;
   final String id;
 
   final bool? enabled;
-
-  final Map<dynamic, dynamic> configuration;
-
-  @JsonKey(fromJson: globsFromJson, toJson: globsToJson)
+  final YamlMap? configuration;
   final List<Glob>? includes;
 
-  @JsonKey(fromJson: ruleTypeFromJson, toJson: ruleTypeToJson)
-  final LintRuleType? severity;
+  final List<YamlSourceError> sourceErrors;
 }
 
 extension EditConfigurationX on EditConfiguration {

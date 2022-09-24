@@ -42,7 +42,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   late final HotReloader reloader;
   final reloadCompleter = Completer();
   final SidecarAnalyzerPluginMode mode;
-  late ProjectConfiguration projectConfiguration;
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
@@ -150,15 +149,22 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   void _getConfigurationErrors(AnalysisContext context) {
     final errors = <YamlSourceError>[];
+    final root = context.contextRoot;
 
-    final lintConfigs = lintConfigurations[context.contextRoot];
+    final lintConfigs = lintConfigurations[root];
     for (final config in lintConfigs!.entries) {
       errors.addAll(config.value.sourceErrors);
     }
-    // final editsConfigs = editConfigurations[root];
-    // for (final config in editsConfigs!.entries) {
-    //   errors.addAll(config.value.sourceErrors);
-    // }
+
+    final editsConfigs = editConfigurations[root];
+    for (final config in editsConfigs!.entries) {
+      errors.addAll(config.value.sourceErrors);
+    }
+
+    // top-level sidecar config errors
+    final projectConfig = configurations[root]!;
+    errors.addAll(projectConfig.sourceErrors);
+
     final analysisErrors = errors.map((e) => e.toAnalysisError()).toList();
     delegate.sidecarMessage('analysis config errors: ${analysisErrors.length}');
     _sendConfigErrors(analysisErrors, context);
@@ -169,7 +175,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     ContextRoot root,
   ) {
     editConfigurations[root] = {};
-    for (final edit in allCodeEdits) {
+    final edits = [...allCodeEdits];
+    for (final edit in edits) {
       delegate.sidecarVerboseMessage('setting up ${edit.code}');
       final config =
           sidecarOptions.editConfiguration(edit.packageName, edit.code);
@@ -178,13 +185,20 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       } else {
         editConfigurations[root]!.remove(edit.code);
       }
-      edit.initialize(configurationContent: config?.configuration);
+
+      try {
+        edit.initialize(configurationContent: config?.configuration);
+      } catch (e) {
+        // if the edit fails to configure, then it shouldnt be run
+        allCodeEdits.remove(edit);
+      }
     }
-    delegate.sidecarVerboseMessage('setting up');
   }
 
   void _getLintConfigurations(
-      ProjectConfiguration sidecarOptions, ContextRoot root) {
+    ProjectConfiguration sidecarOptions,
+    ContextRoot root,
+  ) {
     lintConfigurations[root] = {};
     final rules = [...allLintRules];
     for (final lint in rules) {
@@ -202,7 +216,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         // if the lint fails to configure, then it shouldnt be run
         allLintRules.remove(lint);
       }
-      final x = lint;
     }
   }
 

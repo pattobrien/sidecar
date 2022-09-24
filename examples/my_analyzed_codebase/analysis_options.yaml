@@ -16,7 +16,7 @@ sidecar:
   includes:
     - "bin/**"
     - "lib/**"
-    # - "test/**"
+  # - "test/**"
   #   - ".sidecar/**"
   lints:
     flutter_lints:
@@ -54,5 +54,7 @@ sidecar:
   edits:
     riverpod_lints:
       create_text_edit_controller_provider:
+        enabled: true
     sidecar_lints:
       output_ast_node_tree:
+        enabled: 123

@@ -10,6 +10,7 @@ class LintPackageConfiguration {
     required this.packageName,
     required this.lints,
     this.includes,
+    this.sourceErrors = const <YamlSourceError>[],
   });
 
   factory LintPackageConfiguration.fromYamlMap(
@@ -97,4 +98,6 @@ class LintPackageConfiguration {
   final String packageName;
   final Map<String, LintConfiguration> lints;
   final List<Glob>? includes;
+
+  final List<YamlSourceError> sourceErrors;
 }

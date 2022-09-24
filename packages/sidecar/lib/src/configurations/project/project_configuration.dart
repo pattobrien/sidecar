@@ -1,19 +1,21 @@
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
-import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
-import '../configurations.dart';
+
+import 'edit_configuration.dart';
 import 'edit_package_configuration.dart';
 import 'errors.dart';
+import 'lint_configuration.dart';
 import 'lint_package_configuration.dart';
+import 'yaml_parsers/yaml_map_include_globs.dart';
 
 class ProjectConfiguration {
   const ProjectConfiguration({
     this.lintPackages,
     this.editPackages,
-    List<String>? includes = const ['lib/**', 'bin/**'],
-  }) : _includes = includes ?? const ['lib/**', 'bin/**'];
+    List<Glob>? includes,
+    this.sourceErrors = const <YamlSourceError>[],
+  }) : _includes = includes;
 
   factory ProjectConfiguration.parse(
     String contents, {
@@ -22,16 +24,21 @@ class ProjectConfiguration {
     return checkedYamlDecode(
       contents,
       (m) {
-        Map contentMap;
+        YamlMap contentMap;
         try {
           contentMap = m!['sidecar'] as YamlMap;
         } catch (e) {
           throw const MissingSidecarConfiguration();
         }
+        final sourceErrors = <YamlSourceError>[];
         return ProjectConfiguration(
           lintPackages: parseLintPackages(contentMap['lints'] as YamlMap?),
-          editPackages: parseEditPackages(contentMap['edits'] as Map?),
-          includes: parseIncludes(contentMap['includes'] as List?),
+          editPackages: parseEditPackages(contentMap['edits'] as YamlMap?),
+          includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
+            sourceErrors.addAll(r);
+            return null;
+          }),
+          sourceErrors: sourceErrors,
         );
       },
       sourceUrl: sourceUrl,
@@ -40,15 +47,13 @@ class ProjectConfiguration {
 
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
   final Map<PackageName, EditPackageConfiguration>? editPackages;
-  final List<String> _includes;
+  final List<Glob>? _includes;
+  final List<YamlSourceError> sourceErrors;
 
-  List<Glob> get includeGlobs => _includes.map<Glob>(Glob.new).toList();
+  List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];
 
-  bool includes(String relativePath) {
-    // final rootDirectory = analysisContext.contextRoot.root;
-    // final relativePath = p.relative(path, from: rootDirectory.path);
-    return includeGlobs.any((glob) => glob.matches(relativePath));
-  }
+  bool includes(String relativePath) =>
+      includeGlobs.any((glob) => glob.matches(relativePath));
 
   LintConfiguration? lintConfiguration(String packageId, String lintId) =>
       lintPackages?[packageId]?.lints[lintId];
@@ -62,7 +67,6 @@ typedef PackageName = String;
 Map<PackageName, LintPackageConfiguration>? parseLintPackages(
   YamlMap? map,
 ) {
-  final configurationErrors = <SourceSpan, String>{};
   try {
     return map?.map((dynamic key, dynamic value) {
       if (value is YamlMap) {
@@ -71,42 +75,34 @@ Map<PackageName, LintPackageConfiguration>? parseLintPackages(
         return MapEntry(key, config);
       } else {
         // we want to throw an error if the package doesnt have a single lint declared
+        //TODO: replace with a better error that we can catch
         throw UnimplementedError(
             'expected one or more lints for package $key in analysis_options.yaml');
       }
     });
   } on PackageConfigurationException catch (e) {
-    configurationErrors.addAll(e.messages);
-  }
-  if (configurationErrors.isNotEmpty) {
-    throw SidecarConfigurationException(configurationErrors);
+    //TODO: replace with a better error that we can catch
+    throw UnimplementedError('PackageConfigurationException error!!! $e');
   }
 }
 
-Map<PackageName, EditPackageConfiguration>? parseEditPackages(Map? map) {
+Map<PackageName, EditPackageConfiguration>? parseEditPackages(YamlMap? map) {
   try {
     return map?.map((dynamic key, dynamic value) {
-      if (value is Map) {
-        final config = EditPackageConfiguration.fromJson(value,
+      if (value is YamlMap) {
+        final config = EditPackageConfiguration.fromYamlMap(value,
             packageName: key as String);
         return MapEntry(key, config);
       } else {
         // we want to throw an error if the package doesnt have a single lint declared
+
+        //TODO: replace with a better error that we can catch
         throw UnimplementedError(
             'expected one or more edits for package $key in analysis_options.yaml');
       }
     });
   } catch (e) {
+    //TODO: replace with a better error that we can catch
     throw InvalidSidecarConfiguration();
   }
-}
-
-List<String>? parseIncludes(List? globs) {
-  return globs?.map((dynamic value) {
-    if (value is String) {
-      return value;
-    } else {
-      throw UnimplementedError('expected one or more includes globs');
-    }
-  }).toList();
 }
