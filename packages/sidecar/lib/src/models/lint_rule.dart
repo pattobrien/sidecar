@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
-import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
@@ -11,13 +10,9 @@ import 'package:cli_util/cli_logging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
-import '../ast/general_visitor.dart';
-import 'detected_lint.dart';
-import 'errors.dart';
-import 'typedefs.dart';
+import '../../sidecar.dart';
 
 abstract class LintRule {
   LintRule(this.ref);
@@ -38,7 +33,7 @@ abstract class LintRule {
 
   late Object _configuration;
 
-  void initialize({required Map? configurationContent}) {
+  void initialize({required YamlMap? configurationContent}) {
     if (jsonDecoder != null) {
       if (configurationContent == null) {
         throw EmptyConfiguration('$code error: empty configuration');
@@ -94,7 +89,7 @@ extension LintRuleTypeX on LintRuleType {
     if (string == LintRuleType.info.name) {
       return LintRuleType.info;
     }
-    throw UnimplementedError('invalid LintRuleType');
+    throw InvalidSeverityException(string);
   }
 
   String get coloredNamed {

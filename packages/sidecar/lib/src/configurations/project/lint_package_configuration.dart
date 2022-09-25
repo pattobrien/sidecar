@@ -1,70 +1,103 @@
 import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../models/lint_rule.dart';
+import 'errors.dart';
 import 'lint_configuration.dart';
+import 'yaml_parsers/yaml_parsers.dart';
 
 class LintPackageConfiguration {
   const LintPackageConfiguration({
     required this.packageName,
     required this.lints,
     this.includes,
+    this.sourceErrors = const <YamlSourceError>[],
   });
 
-  factory LintPackageConfiguration.fromJson(
-    Map json, {
+  factory LintPackageConfiguration.fromYamlMap(
+    YamlMap yamlMap, {
     required String packageName,
   }) {
     return LintPackageConfiguration(
       packageName: packageName,
-      lints: json.map<String, LintConfiguration>((dynamic key, dynamic value) {
-        if (value is Map) {
-          final configuration = value.containsKey('configuration')
-              ? value['configuration'] as Map
-              : <dynamic, dynamic>{};
+      lints: yamlMap.nodes.map<String, LintConfiguration>((dynamic key, value) {
+        // final dynamic extractedValue = value.value;
+        final yamlKey = key as YamlScalar;
+        if (value is YamlMap) {
+          final lintConfigurationErrors = <YamlSourceError>[];
 
-          final severity = value.containsKey('severity')
-              ? LintRuleTypeX.fromString(value['severity'] as String)
-              : null;
+          final configuration = value.parseConfiguration().fold((l) => l, (r) {
+            lintConfigurationErrors.addAll(r);
+            return null;
+          });
 
-          final includes = value.containsKey('includes')
-              ? ((value['includes'] as YamlList).nodes)
-                  .map<Glob>((e) => Glob(e.value as String))
-                  .toList()
-              : null;
+          final severity = value.parseSeverity().fold((l) => l, (r) {
+            lintConfigurationErrors.addAll(r);
+            return null;
+          });
 
-          final enabled =
-              value.containsKey('enabled') ? value['enabled'] as bool : null;
+          final includes = value.parseGlobIncludes().fold((l) => l, (r) {
+            lintConfigurationErrors.addAll(r);
+            return null;
+          });
+
+          final enabled = value.parseEnabled().fold((l) => l, (r) {
+            lintConfigurationErrors.addAll(r);
+            return null;
+          });
 
           return MapEntry(
-            key as String,
+            yamlKey.value as String,
             LintConfiguration(
               packageName: packageName,
-              id: key,
+              id: yamlKey.value as String,
               includes: includes,
               severity: severity,
               enabled: enabled,
               configuration: configuration,
+              sourceErrors: lintConfigurationErrors,
             ),
           );
-        } else if (value == null) {
-          return MapEntry(
-            key as String,
-            LintConfiguration(
-              packageName: packageName,
-              id: key,
-              configuration: <dynamic, dynamic>{},
-            ),
-          );
-        } else {
-          throw UnimplementedError(
-            'could not parse package lints; expected Map was of type ${value.runtimeType}',
-          );
+        } else if (value is YamlScalar) {
+          final dynamic scalarValue = value.value;
+          if (scalarValue is bool) {
+            return MapEntry(
+              yamlKey.value as String,
+              LintConfiguration(
+                packageName: packageName,
+                id: yamlKey.value as String,
+                enabled: scalarValue,
+              ),
+            );
+          }
+          if (scalarValue == null) {
+            return MapEntry(
+              yamlKey.value as String,
+              LintConfiguration(
+                packageName: packageName,
+                id: yamlKey.value as String,
+              ),
+            );
+          }
         }
+        return MapEntry(
+          yamlKey.value as String,
+          LintConfiguration(
+            packageName: packageName,
+            id: yamlKey.value as String,
+            sourceErrors: [
+              YamlSourceError(
+                  sourceSpan: yamlKey.span,
+                  message:
+                      'Lint definition should be of type null, bool, or map')
+            ],
+          ),
+        );
       }),
     );
   }
   final String packageName;
   final Map<String, LintConfiguration> lints;
   final List<Glob>? includes;
+
+  final List<YamlSourceError> sourceErrors;
 }

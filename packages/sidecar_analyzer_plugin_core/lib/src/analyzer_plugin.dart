@@ -42,7 +42,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   late final HotReloader reloader;
   final reloadCompleter = Completer();
   final SidecarAnalyzerPluginMode mode;
-  late ProjectConfiguration projectConfiguration;
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
@@ -148,10 +147,36 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     }
   }
 
+  void _getConfigurationErrors(AnalysisContext context) {
+    final errors = <YamlSourceError>[];
+    final root = context.contextRoot;
+
+    final lintConfigs = lintConfigurations[root];
+    for (final config in lintConfigs!.entries) {
+      errors.addAll(config.value.sourceErrors);
+    }
+
+    final editsConfigs = editConfigurations[root];
+    for (final config in editsConfigs!.entries) {
+      errors.addAll(config.value.sourceErrors);
+    }
+
+    // top-level sidecar config errors
+    final projectConfig = configurations[root]!;
+    errors.addAll(projectConfig.sourceErrors);
+
+    final analysisErrors = errors.map((e) => e.toAnalysisError()).toList();
+    delegate.sidecarMessage('analysis config errors: ${analysisErrors.length}');
+    _sendConfigErrors(analysisErrors, context);
+  }
+
   void _getEditConfigurations(
-      ProjectConfiguration sidecarOptions, ContextRoot root) {
+    ProjectConfiguration sidecarOptions,
+    ContextRoot root,
+  ) {
     editConfigurations[root] = {};
-    for (final edit in allCodeEdits) {
+    final edits = [...allCodeEdits];
+    for (final edit in edits) {
       delegate.sidecarVerboseMessage('setting up ${edit.code}');
       final config =
           sidecarOptions.editConfiguration(edit.packageName, edit.code);
@@ -160,14 +185,23 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       } else {
         editConfigurations[root]!.remove(edit.code);
       }
-      edit.initialize(configurationContent: config?.configuration);
+
+      try {
+        edit.initialize(configurationContent: config?.configuration);
+      } catch (e) {
+        // if the edit fails to configure, then it shouldnt be run
+        allCodeEdits.remove(edit);
+      }
     }
   }
 
   void _getLintConfigurations(
-      ProjectConfiguration sidecarOptions, ContextRoot root) {
+    ProjectConfiguration sidecarOptions,
+    ContextRoot root,
+  ) {
     lintConfigurations[root] = {};
-    for (final lint in allLintRules) {
+    final rules = [...allLintRules];
+    for (final lint in rules) {
       delegate.sidecarVerboseMessage('setting up ${lint.code}');
       final config =
           sidecarOptions.lintConfiguration(lint.packageName, lint.code);
@@ -176,13 +210,19 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       } else {
         lintConfigurations[root]!.remove(lint.code);
       }
-      lint.initialize(configurationContent: config?.configuration);
+      try {
+        lint.initialize(configurationContent: config?.configuration);
+      } catch (e) {
+        // if the lint fails to configure, then it shouldnt be run
+        allLintRules.remove(lint);
+      }
     }
   }
 
   Future<void> _getConfigs(AnalysisContextCollection contextCollection) async {
     configurations.clear();
     sidecarOptionContents.clear();
+
     await Future.wait<void>(contextCollection.contexts.map((context) async {
       final optionsFile = context.contextRoot.optionsFile;
       final root = context.contextRoot;
@@ -191,7 +231,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         sidecarOptionContents[root] = contents;
 
         try {
-          configurations[root] = ProjectConfiguration.parse(contents);
+          configurations[root] = ProjectConfiguration.parse(contents,
+              sourceUrl: optionsFile.toUri());
         } catch (e) {
           throw UnimplementedError('cannot parse sidecar options: $e');
         }
@@ -201,6 +242,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       _getEditConfigurations(configurations[root]!, root);
       _getLintConfigurations(configurations[root]!, root);
+
+      delegate.sidecarVerboseMessage('getting configuration errors');
+      _getConfigurationErrors(context);
+      delegate.sidecarVerboseMessage('getting configuration errors completed');
     }));
   }
 
@@ -211,6 +256,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     delegate.sidecarVerboseMessage('analyzeFile          : $path');
     final rootPath = analysisContext.contextRoot.root.path;
+    final analysisPath = analysisContext.contextRoot.optionsFile?.path;
+
+    if (path == analysisPath) {
+      // we handle analyzing the config file separately
+
+    }
 
     if (!analysisContext.isSidecarEnabled) {
       delegate.sidecarVerboseMessage(
@@ -404,19 +455,19 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           );
         }
       }));
-      _sendConfigErrors(detectedConfigurationErrors, analysisContext);
+      // _sendConfigErrors(detectedConfigurationErrors, analysisContext);
     }
     return detectedLints;
   }
 
   void _sendConfigErrors(
-      List<plugin.AnalysisError> errors, AnalysisContext analysisContext) {
-    if (errors.isNotEmpty) {
-      final path = analysisContext.contextRoot.optionsFile!.path;
-      final response =
-          plugin.AnalysisErrorsParams(path, errors).toNotification();
-      channel.sendNotification(response);
-    }
+    List<plugin.AnalysisError> errors,
+    AnalysisContext analysisContext,
+  ) {
+    final path = analysisContext.contextRoot.optionsFile?.path;
+    if (path == null) return;
+    final response = plugin.AnalysisErrorsParams(path, errors).toNotification();
+    channel.sendNotification(response);
   }
 
   plugin.AnalysisError _calculateAnalysisOptionConfigError(

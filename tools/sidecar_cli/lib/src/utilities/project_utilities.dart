@@ -17,7 +17,10 @@ class ProjectUtilities {
     if (await sidecarOptions.exists()) {
       try {
         final sidecarOptionsContents = await sidecarOptions.readAsString();
-        return ProjectConfiguration.parse(sidecarOptionsContents);
+        return ProjectConfiguration.parse(
+          sidecarOptionsContents,
+          sourceUrl: sidecarOptions.uri,
+        );
       } catch (e) {
         print(
             'SIDECAR: Sidecar is not properly configured in sidecar.yaml file.');
@@ -31,7 +34,10 @@ class ProjectUtilities {
     if (await analysisOptions.exists()) {
       try {
         final analysisOptionsContents = await analysisOptions.readAsString();
-        final config = ProjectConfiguration.parse(analysisOptionsContents);
+        final config = ProjectConfiguration.parse(
+          analysisOptionsContents,
+          sourceUrl: sidecarOptions.uri,
+        );
 
         if (sidecarOptions.existsSync()) {
           throw UnimplementedError(

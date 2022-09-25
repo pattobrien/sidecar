@@ -9,9 +9,6 @@ import 'package:analyzer/src/dart/ast/utilities.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:source_span/source_span.dart';
 
-import '../models/detected_lint.dart';
-import '../models/lint_rule.dart';
-
 extension SourceSpanX on SourceSpan {
   plugin.Location get location => plugin.Location(
         sourceUrl!.path,
@@ -21,6 +18,16 @@ extension SourceSpanX on SourceSpan {
         start.column,
         endLine: end.line,
         endColumn: end.column,
+      );
+
+  plugin.Location get yamlLocation => plugin.Location(
+        sourceUrl!.path,
+        start.offset,
+        length,
+        start.line + 1,
+        start.column + 1,
+        endLine: end.line + 1,
+        endColumn: end.column + 1,
       );
 
   SourceRange toSourceRange() => SourceRange(start.offset, length);

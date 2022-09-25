@@ -16,7 +16,7 @@ sidecar:
   includes:
     - "bin/**"
     - "lib/**"
-    # - "test/**"
+  # - "test/**"
   #   - ".sidecar/**"
   lints:
     flutter_lints:
@@ -25,15 +25,16 @@ sidecar:
 
     riverpod_lints:
       prefer_consumer_widget:
-        severity: info
+        severity: 123
+        enabled: true
+        includes:
+          - "lib/**"
+          - 123
         configuration:
           some_property: abc
 
     l10n_lints:
       avoid_string_literals:
-        # includes:
-        #   - "bin/**"
-        #   - "lib/**"
         configuration:
           prefix: "AppLocalizations.of(context)"
 
@@ -53,5 +54,7 @@ sidecar:
   edits:
     riverpod_lints:
       create_text_edit_controller_provider:
+        enabled: true
     sidecar_lints:
       output_ast_node_tree:
+        enabled: true
