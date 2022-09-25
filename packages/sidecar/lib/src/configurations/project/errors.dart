@@ -86,7 +86,7 @@ class YamlSourceError {
     return plugin.AnalysisError(
         plugin.AnalysisErrorSeverity.ERROR,
         plugin.AnalysisErrorType.HINT,
-        sourceSpan.yamlLocation,
+        sourceSpan.location,
         message,
         'sidecar_configuration_error'
         // url: rule.url,
