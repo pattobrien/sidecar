@@ -4,8 +4,8 @@
 // import 'package:l10n_lints/l10n_lints.dart';
 import 'package:sidecar/sidecar.dart';
 
-List<LintRuleConstructor> lintRuleConstructors = [
+Map<Id, LintRuleConstructor> lintRuleConstructors = {
   // PreferConsumerWidget.new,
   // PreferConsumerWidget.new,
   // AvoidStringLiterals.new,
-];
+};

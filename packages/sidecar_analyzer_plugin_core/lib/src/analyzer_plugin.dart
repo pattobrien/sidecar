@@ -16,8 +16,13 @@ import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:riverpod/riverpod.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:sidecar/sidecar.dart' hide ContextRoot;
+import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
+import 'package:sidecar_analyzer_plugin_core/src/context_root_providers/activated_lints.dart';
+import 'package:sidecar_analyzer_plugin_core/src/context_root_providers/analysis_errors.dart';
+import 'package:sidecar_analyzer_plugin_core/src/context_root_providers/context_root_providers.dart';
+import 'package:sidecar_analyzer_plugin_core/src/context_root_providers/error_composer.dart';
+import 'package:sidecar_analyzer_plugin_core/src/context_root_providers/project_configuration_service.dart';
 import 'package:yaml/yaml.dart';
 
 import 'log_delegate.dart';
@@ -26,6 +31,12 @@ import 'constants.dart';
 
 enum SidecarAnalyzerPluginMode { debug, cli, plugin }
 
+final pluginChannelProvider =
+    StateProvider<plugin.PluginCommunicationChannel?>((ref) => null);
+
+final logDelegateProvider =
+    Provider<LogDelegate>((ref) => throw UnimplementedError());
+
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin({
     required this.lintRuleConstructors,
@@ -33,7 +44,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     this.delegate = const DebuggerLogDelegate(),
     ResourceProvider? resourceProvider,
     required this.mode,
-  })  : ref = ProviderContainer(),
+  })  : ref = ProviderContainer(
+          overrides: [
+            logDelegateProvider.overrideWithValue(delegate),
+          ],
+        ),
         super(
           resourceProvider:
               resourceProvider ?? PhysicalResourceProvider.INSTANCE,
@@ -45,6 +60,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
+    ref.read(pluginChannelProvider.notifier).state = channel;
     delegate.sidecarVerboseMessage('start');
     super.start(channel);
     if (mode == SidecarAnalyzerPluginMode.debug) {
@@ -84,14 +100,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }
 
   final ProviderContainer ref;
-  final List<LintRuleConstructor> lintRuleConstructors;
-  final List<CodeEditConstructor> codeEditConstructors;
+  final Map<Id, LintRuleConstructor> lintRuleConstructors;
+  final Map<Id, CodeEditConstructor> codeEditConstructors;
   final LogDelegate delegate;
 
-  final List<CodeEdit> allCodeEdits = [];
-  final List<LintRule> allLintRules = [];
-
-  Map<ContextRoot, ProjectConfiguration> configurations = {};
   Map<ContextRoot, Map<LintRuleId, LintConfiguration>> lintConfigurations = {};
   Map<ContextRoot, Map<CodeEditId, EditConfiguration>> editConfigurations = {};
   Map<ContextRoot, String> sidecarOptionContents = {};
@@ -128,133 +140,94 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     delegate.sidecarVerboseMessage('afterNewContextCollection');
-    await _initializeLintsAndEdits();
-    delegate.sidecarVerboseMessage('afterNewContextCollection _getConfigs');
-    await _getConfigs(contextCollection);
+    await _parseConfigurations(contextCollection);
+    _initializeLintsAndEdits(contextCollection);
     delegate.sidecarVerboseMessage('afterNewContextCollection complete');
     await super.afterNewContextCollection(contextCollection: contextCollection);
   }
 
-  Future<void> _initializeLintsAndEdits() async {
+  Future<void> _parseConfigurations(
+    AnalysisContextCollection contextCollection,
+  ) {
+    delegate.sidecarVerboseMessage(
+        'parsing ${contextCollection.contexts.length} configurations');
+    return Future.wait(contextCollection.contexts.map<Future<void>>((context) =>
+        ref
+            .read(projectConfigurationServiceProvider(context.contextRoot))
+            .parse()));
+  }
+
+  void _initializeLintsAndEdits(
+    AnalysisContextCollection contextCollection,
+  ) {
     delegate.sidecarVerboseMessage(
         'initializing ${lintRuleConstructors.length} lints and ${codeEditConstructors.length} edits.');
-    for (var constructor in lintRuleConstructors) {
-      allLintRules.add(constructor(ref));
-    }
-
-    for (var constructor in codeEditConstructors) {
-      allCodeEdits.add(constructor(ref));
-    }
-  }
-
-  void _getConfigurationErrors(AnalysisContext context) {
-    final errors = <YamlSourceError>[];
-    final root = context.contextRoot;
-
-    final lintConfigs = lintConfigurations[root];
-    for (final config in lintConfigs!.entries) {
-      errors.addAll(config.value.sourceErrors);
-    }
-
-    final editsConfigs = editConfigurations[root];
-    for (final config in editsConfigs!.entries) {
-      errors.addAll(config.value.sourceErrors);
-    }
-
-    // top-level sidecar config errors
-    final projectConfig = configurations[root]!;
-    errors.addAll(projectConfig.sourceErrors);
-
-    final analysisErrors = errors.map((e) => e.toAnalysisError()).toList();
-    delegate.sidecarMessage('analysis config errors: ${analysisErrors.length}');
-    _sendConfigErrors(analysisErrors, context);
-  }
-
-  void _getEditConfigurations(
-    ProjectConfiguration sidecarOptions,
-    ContextRoot root,
-  ) {
-    editConfigurations[root] = {};
-    final edits = [...allCodeEdits];
-    for (final edit in edits) {
-      delegate.sidecarVerboseMessage('setting up ${edit.code}');
-      final config =
-          sidecarOptions.editConfiguration(edit.packageName, edit.code);
-      if (config != null) {
-        editConfigurations[root]![edit.code] = config;
-      } else {
-        editConfigurations[root]!.remove(edit.code);
-      }
-
-      try {
-        edit.initialize(configurationContent: config?.configuration);
-      } catch (e) {
-        // if the edit fails to configure, then it shouldnt be run
-        allCodeEdits.remove(edit);
-      }
-    }
-  }
-
-  void _getLintConfigurations(
-    ProjectConfiguration sidecarOptions,
-    ContextRoot root,
-  ) {
-    lintConfigurations[root] = {};
-    final rules = [...allLintRules];
-    for (final lint in rules) {
-      delegate.sidecarVerboseMessage('setting up ${lint.code}');
-      final config =
-          sidecarOptions.lintConfiguration(lint.packageName, lint.code);
-      if (config != null) {
-        lintConfigurations[root]![lint.code] = config;
-      } else {
-        lintConfigurations[root]!.remove(lint.code);
-      }
-      try {
-        lint.initialize(configurationContent: config?.configuration);
-      } catch (e) {
-        // if the lint fails to configure, then it shouldnt be run
-        allLintRules.remove(lint);
-      }
-    }
-  }
-
-  Future<void> _getConfigs(AnalysisContextCollection contextCollection) async {
-    configurations.clear();
-    sidecarOptionContents.clear();
-
-    await Future.wait<void>(contextCollection.contexts.map((context) async {
-      final optionsFile = context.contextRoot.optionsFile;
+    for (final context in contextCollection.contexts) {
+      final projectConfigurationService =
+          ref.read(projectConfigurationServiceProvider(context.contextRoot));
+      final projectConfig = projectConfigurationService.projectConfiguration;
       final root = context.contextRoot;
-      if (optionsFile != null) {
-        final contents = await io.File(optionsFile.path).readAsString();
-        sidecarOptionContents[root] = contents;
+      final errorComposer = ref.read(errorComposerProvider(root));
+      if (projectConfig == null) return;
 
-        try {
-          configurations[root] = ProjectConfiguration.parse(contents,
-              sourceUrl: optionsFile.toUri());
-        } catch (e) {
-          throw UnimplementedError('cannot parse sidecar options: $e');
+      for (var lintRule in lintRuleConstructors.entries) {
+        final lintRuleId = lintRule.key.id;
+        final packageId = lintRule.key.packageId;
+
+        final config = projectConfig.lintConfiguration(packageId, lintRuleId);
+        final lint = lintRule.value();
+        lint.initialize(configurationContent: config?.configuration, ref: ref);
+        if (lint.errors?.isNotEmpty ?? false) {
+          errorComposer.addErrors(lint.errors!);
+        } else {
+          final activateLints = ref.read(activatedLintsProvider(root));
+          activateLints.addLint(lint);
+          final x = 123;
         }
-      } else {
-        configurations[root] = ProjectConfiguration();
       }
-
-      _getEditConfigurations(configurations[root]!, root);
-      _getLintConfigurations(configurations[root]!, root);
-
-      delegate.sidecarVerboseMessage('getting configuration errors');
-      _getConfigurationErrors(context);
-      delegate.sidecarVerboseMessage('getting configuration errors completed');
-    }));
+      for (var codeEdit in codeEditConstructors.entries) {
+        final codeEditId = codeEdit.key.id;
+        final config = editConfigurations[root]![codeEditId];
+        final edit = codeEdit.value();
+        edit.initialize(configurationContent: config?.configuration, ref: ref);
+        if (edit.errors != null) {
+          errorComposer.addErrors(edit.errors!);
+        } else {
+          ref.read(activatedEditsProvider(root)).addEdit(edit);
+        }
+      }
+    }
   }
+
+  // void _getConfigurationErrors(AnalysisContext context) {
+  //   final errors = <YamlSourceError>[];
+  //   final root = context.contextRoot;
+
+  //   final lintConfigs = lintConfigurations[root];
+  //   for (final config in lintConfigs!.entries) {
+  //     errors.addAll(config.value.sourceErrors);
+  //   }
+
+  //   final editsConfigs = editConfigurations[root];
+  //   for (final config in editsConfigs!.entries) {
+  //     errors.addAll(config.value.sourceErrors);
+  //   }
+
+  //   // top-level sidecar config errors
+  //   final projectConfig = configurations[root]!;
+  //   errors.addAll(projectConfig.sourceErrors);
+  //   ref.read(errorComposerProvider(root)).addErrors(errors);
+  //   // final analysisErrors = errors.map((e) => e.toAnalysisError()).toList();
+  //   // delegate.sidecarMessage('analysis config errors: ${analysisErrors.length}');
+  //   // _sendConfigErrors(analysisErrors, context);
+  // }
 
   @override
   Future<void> analyzeFile({
     required AnalysisContext analysisContext,
     required String path,
   }) async {
-    delegate.sidecarVerboseMessage('analyzeFile          : $path');
+    // delegate.sidecarVerboseMessage('analyzeFile          : $path');
     final rootPath = analysisContext.contextRoot.root.path;
     final analysisPath = analysisContext.contextRoot.optionsFile?.path;
 
@@ -264,23 +237,22 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     }
 
     if (!analysisContext.isSidecarEnabled) {
-      delegate.sidecarVerboseMessage(
-          'analyzeFile: sidecar is not enabled in root dir: $rootPath     (file; $path)');
+      // delegate.sidecarVerboseMessage(
+      //     'analyzeFile: sidecar is not enabled in root dir: $rootPath     (file; $path)');
       return;
     }
-    ;
+
     if (!p.isWithin(rootPath, path)) {
       delegate.sidecarVerboseMessage(
           'analyzeFile: file is not within root path    (file: $path) (root: $rootPath)');
       return;
     }
-
     try {
       final errors = await _getAnalysisErrors(analysisContext, path);
       final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
 
       channel.sendNotification(notif);
-      delegate.sidecarVerboseMessage('analyzeFile completed: $path');
+      // delegate.sidecarVerboseMessage('analyzeFile completed: $path');
     } catch (e, stackTrace) {
       delegate.sidecarError(
           'error analyzing $path -- ${e.toString()}', stackTrace);
@@ -343,8 +315,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) {
     final codeEditReporter = CodeEditReporter(unit);
     final astNode = unit.astNodeAt(offset, length: length);
-
-    for (final edit in allCodeEdits) {
+    final root = unit.session.analysisContext.contextRoot;
+    final edits = ref.read(activatedEditsProvider(root)).codeEdits;
+    for (final edit in edits) {
       try {
         codeEditReporter.reportAstNode(astNode, edit);
       } on EmptyConfiguration catch (e, stackTrace) {
@@ -385,7 +358,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     // TODO: #4 check default LintPackage includes from LintPackage definition
 
     // #5 check project configuration
-    return configurations[contextRoot]!.includes(relativePath);
+    final projectConfigService =
+        ref.read(projectConfigurationServiceProvider(contextRoot));
+    final projectConfig = projectConfigService.projectConfiguration;
+    if (projectConfig == null) return false;
+    return projectConfig.includes(relativePath);
   }
 
   Future<Iterable<DetectedLint>> _getReportedErrors(
@@ -393,16 +370,25 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     String sourcePath,
   ) async {
     final errorReporter = ErrorReporter(sourcePath);
+    final root = analysisContext.contextRoot;
+
+    final projectConfigurationService =
+        ref.read(projectConfigurationServiceProvider(root));
+    final projectConfig = projectConfigurationService.projectConfiguration;
+
+    if (projectConfig == null) return [];
 
     final detectedLints = <DetectedLint>[];
     final detectedConfigurationErrors = <plugin.AnalysisError>[];
-
+    final allLintRules = ref.read(activatedLintsProvider(root)).lintRules;
+    //TODO: allow analysis of other file extensions
     if (p.extension(sourcePath) == '.dart') {
       final unit =
           await analysisContext.currentSession.getResolvedUnit(sourcePath);
 
       if (unit is! ResolvedUnitResult) return [];
 
+      delegate.sidecarVerboseMessage('analyzeFile          : $sourcePath');
       await Future.wait(allLintRules.map<Future<void>>((rule) async {
         if (!_isPathIncludedForRule(
             contextRoot: analysisContext.contextRoot,
@@ -412,8 +398,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         }
 
         try {
+          // final lintConfig =
+          //     lintConfigurations[analysisContext.contextRoot]![rule.code];
           final lintConfig =
-              lintConfigurations[analysisContext.contextRoot]![rule.code];
+              projectConfig.lintConfiguration(rule.packageName, rule.code);
           final lints =
               await errorReporter.generateDartLints(unit, rule, lintConfig);
           detectedLints.addAll(lints);
@@ -455,6 +443,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           );
         }
       }));
+      delegate.sidecarVerboseMessage('analyzeFile completed: $sourcePath');
       // _sendConfigErrors(detectedConfigurationErrors, analysisContext);
     }
     return detectedLints;
@@ -547,7 +536,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     String path,
   ) async {
     final detectedLints = await _getReportedErrors(analysisContext, path);
-    delegate.sidecarVerboseMessage('\n${detectedLints.length} errors found');
+
+    ref
+        .read(detectedLintsProvider(
+                AnalyzedFile(analysisContext.contextRoot.root.path, path))
+            .notifier)
+        .state = detectedLints;
+
+    // delegate.sidecarVerboseMessage('\n${detectedLints.length} errors found');
     for (var detectedLint in detectedLints) {
       delegate.lintMessage(detectedLint, detectedLint.message);
     }

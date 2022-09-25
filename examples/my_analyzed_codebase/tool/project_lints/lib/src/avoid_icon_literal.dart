@@ -1,13 +1,10 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:path/path.dart' as p;
 
 const _desc = r'Avoid IconData literal. Use design system spec instead.';
 
 class AvoidIconLiteral extends LintRule {
-  AvoidIconLiteral(super.ref);
-
   @override
   String get code => 'avoid_icon_literal';
 
@@ -15,7 +12,13 @@ class AvoidIconLiteral extends LintRule {
   String get packageName => 'design_system_lints';
 
   @override
-  String get message => _desc;
+  Future<List<DetectedLint>> computeDartAnalysisError(
+    ResolvedUnitResult unit,
+  ) async {
+    final visitor = _Visitor();
+    unit.unit.accept(visitor);
+    return visitor.nodes.toDetectedLints(unit, this, message: _desc);
+  }
 
   @override
   Future<List<DetectedLint>> computeAnalysisError(
@@ -27,15 +30,6 @@ class AvoidIconLiteral extends LintRule {
     final unit = await analysisContext.currentSession.getResolvedUnit(path);
     if (unit is! ResolvedUnitResult) return [];
 
-    unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this);
-  }
-
-  @override
-  Future<List<DetectedLint>> computeDartAnalysisError(
-    ResolvedUnitResult unit,
-  ) async {
-    final visitor = _Visitor();
     unit.unit.accept(visitor);
     return visitor.nodes.toDetectedLints(unit, this);
   }

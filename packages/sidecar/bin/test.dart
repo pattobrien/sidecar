@@ -6,7 +6,7 @@ import 'example_edit.dart';
 
 void main(List<String> args) {
   final ref = ProviderContainer();
-  final example = SomeCodeEdit(ref);
+  final example = SomeCodeEdit();
   final config = <dynamic, dynamic>{'property': 'some_property'};
   final stringConfig = jsonEncode(config);
   final converted = example.jsonDecoder(config);

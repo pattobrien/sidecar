@@ -312,7 +312,8 @@ class ProjectService {
       importBuffer.write(
           'import \'package:${lintPackage.packageName}/${lintPackage.packageName}.dart\' as ${lintPackage.packageName}; \n');
       for (final lint in lintPackage.lints.values) {
-        returnBuffer.write('\t\t${lint.packageName}.${lint.className}.new, \n');
+        returnBuffer.write(
+            '\t\tId(type: IdType.lintRule, packageId: \'${lintPackage.packageName}\', id: \'${lint.id}\'): ${lint.packageName}.${lint.className}.new, \n');
       }
 
       final entireContents = StringBuffer()
@@ -340,7 +341,8 @@ class ProjectService {
           'import \'package:${editPackage.packageName}/${editPackage.packageName}.dart\' as ${editPackage.packageName}; \n');
       for (final edit in editPackage.edits.values) {
         // packages.add(edit.packageName);
-        returnBuffer.write('\t\t${edit.packageName}.${edit.className}.new,\n');
+        returnBuffer.write(
+            '\t\tId(type: IdType.codeEdit, packageId: \'${editPackage.packageName}\', id: \'${edit.id}\'): ${edit.packageName}.${edit.className}.new,\n');
       }
 
       final entireContents = StringBuffer()

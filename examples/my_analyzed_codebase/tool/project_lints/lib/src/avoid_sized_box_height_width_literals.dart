@@ -1,37 +1,17 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:path/path.dart' as p;
 
 const _desc = r'Avoid using height or width literals in SizedBox widgets.';
 
 class AvoidSizedBoxHeightWidthLiterals extends LintRule {
-  AvoidSizedBoxHeightWidthLiterals(super.ref);
+  AvoidSizedBoxHeightWidthLiterals();
 
   @override
   String get code => 'avoid_sized_box_height_width_literals';
 
   @override
   String get packageName => 'project_lints';
-
-  @override
-  String get message => _desc;
-
-  @override
-  Future<List<DetectedLint>> computeAnalysisError(
-    AnalysisContext analysisContext,
-    String path,
-  ) async {
-    final visitor = _Visitor();
-
-    final unit = await analysisContext.currentSession.getResolvedUnit(path);
-
-    if (unit is! ResolvedUnitResult) return [];
-
-    unit.unit.accept(visitor);
-
-    return visitor.nodes.toDetectedLints(unit, this);
-  }
 
   @override
   SourceSpan computeLintHighlight(DetectedLint lint) {
@@ -44,7 +24,7 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
   ) async {
     final visitor = _Visitor();
     unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this);
+    return visitor.nodes.toDetectedLints(unit, this, message: _desc);
   }
 }
 
