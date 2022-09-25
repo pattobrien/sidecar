@@ -12,11 +12,6 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
       r'Avoid using height or width literals in SizedBox widgets.';
 
   @override
-  SourceSpan computeLintHighlight(DetectedLint lint) {
-    return lint.sourceSpan;
-  }
-
-  @override
   Future<List<DetectedLint>> computeDartAnalysisError(
     ResolvedUnitResult unit,
   ) async {

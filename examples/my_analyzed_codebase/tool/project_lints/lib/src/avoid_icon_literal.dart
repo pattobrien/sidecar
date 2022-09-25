@@ -1,4 +1,5 @@
-import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'dart:async';
+
 import 'package:analyzer/dart/element/element.dart';
 import 'package:sidecar/sidecar.dart';
 
@@ -21,20 +22,6 @@ class AvoidIconLiteral extends LintRule {
   }
 
   @override
-  Future<List<DetectedLint>> computeAnalysisError(
-    AnalysisContext analysisContext,
-    String path,
-  ) async {
-    final visitor = _Visitor();
-
-    final unit = await analysisContext.currentSession.getResolvedUnit(path);
-    if (unit is! ResolvedUnitResult) return [];
-
-    unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this);
-  }
-
-  @override
   SourceSpan computeLintHighlight(DetectedLint lint) {
     final node = lint.sourceSpan.toAstNode(lint.unit);
     if (node is InstanceCreationExpression) {
@@ -46,8 +33,6 @@ class AvoidIconLiteral extends LintRule {
 
 class _Visitor extends GeneralizingAstVisitor {
   final List<AstNode> nodes = [];
-
-  _Visitor();
 
   @override
   visitPrefixedIdentifier(PrefixedIdentifier node) {
