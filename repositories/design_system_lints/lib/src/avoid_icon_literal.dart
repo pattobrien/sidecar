@@ -4,8 +4,6 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:sidecar/sidecar.dart';
 
 class AvoidIconLiteral extends LintRule {
-  AvoidIconLiteral(super.ref);
-
   @override
   String get code => 'avoid_icon_literal';
 

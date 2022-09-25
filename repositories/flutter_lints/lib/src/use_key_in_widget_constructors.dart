@@ -13,8 +13,6 @@ import 'package:flutter_utilities/flutter_utilities.dart';
 const _desc = r'Use key in widget constructors.';
 
 class UseKeyInWidgetConstructors extends LintRule {
-  UseKeyInWidgetConstructors(super.ref);
-
   @override
   String get code => 'use_key_in_widget_constructors';
 

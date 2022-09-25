@@ -1,8 +1,6 @@
 import 'package:sidecar/sidecar.dart';
 
 class OutputAstNodeTree extends CodeEdit {
-  OutputAstNodeTree(super.ref);
-
   @override
   String get code => 'output_ast_node_tree';
 

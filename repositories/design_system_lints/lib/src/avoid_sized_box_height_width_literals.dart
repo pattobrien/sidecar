@@ -4,8 +4,6 @@ import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 class AvoidSizedBoxHeightWidthLiterals extends LintRule {
-  AvoidSizedBoxHeightWidthLiterals(super.ref);
-
   @override
   String get code => 'avoid_sized_box_height_width_literals';
 

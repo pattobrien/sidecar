@@ -6,8 +6,6 @@ import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:intl_utilities/intl_utilities.dart';
 
 class AvoidStringLiterals extends LintRule {
-  AvoidStringLiterals(super.ref);
-
   @override
   String get code => 'avoid_string_literals';
 

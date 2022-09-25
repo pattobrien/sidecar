@@ -4,8 +4,6 @@ import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 class AvoidBorderRadiusLiteral extends LintRule {
-  AvoidBorderRadiusLiteral(super.ref);
-
   @override
   String get code => 'avoid_border_radius_literal';
 

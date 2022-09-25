@@ -4,8 +4,6 @@ import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 class AvoidBoxShadowLiteral extends LintRule {
-  AvoidBoxShadowLiteral(super.ref);
-
   @override
   String get code => 'avoid_box_shadow_literal';
 
