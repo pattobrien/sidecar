@@ -3,8 +3,8 @@ import 'package:riverpod/riverpod.dart';
 
 import '../log_delegate/log_delegate.dart';
 
-final pluginChannelProvider =
-    StateProvider<plugin.PluginCommunicationChannel?>((ref) => null);
+final pluginChannelProvider = Provider<plugin.PluginCommunicationChannel>(
+    (ref) => throw UnimplementedError());
 
 final logDelegateProvider =
     Provider<LogDelegateBase>((ref) => throw UnimplementedError());

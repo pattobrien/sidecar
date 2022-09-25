@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
+import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 
@@ -24,32 +25,27 @@ import 'plugin_mode.dart';
 import 'plugin_providers.dart';
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
-  SidecarAnalyzerPlugin({
-    required this.lintRuleConstructors,
-    required this.codeEditConstructors,
-    required SidecarAnalyzerPluginMode mode,
-    LogDelegateBase delegate = const DebuggerLogDelegate(),
+  SidecarAnalyzerPlugin(
+    this.ref, {
     ResourceProvider? resourceProvider,
-  })  : ref = ProviderContainer(
-          overrides: [
-            logDelegateProvider.overrideWithValue(delegate),
-            pluginMode.overrideWithValue(mode),
-          ],
-        ),
-        super(
+  }) : super(
           resourceProvider:
               resourceProvider ?? PhysicalResourceProvider.INSTANCE,
         );
 
   HotReloader? reloader;
   final reloadCompleter = Completer();
+  final ProviderContainer ref;
 
   SidecarAnalyzerPluginMode get mode => ref.read(pluginMode);
+
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
 
-  final ProviderContainer ref;
-  final Map<Id, LintRuleConstructor> lintRuleConstructors;
-  final Map<Id, CodeEditConstructor> codeEditConstructors;
+  Map<Id, LintRuleConstructor> get lintRuleConstructors =>
+      ref.read(lintRuleConstructorProvider);
+
+  Map<Id, CodeEditConstructor> get codeEditConstructors =>
+      ref.read(codeEditConstructorProvider);
 
   @override
   List<String> get fileGlobsToAnalyze =>
@@ -63,9 +59,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    ref.read(pluginChannelProvider.notifier).state = channel;
-    super.start(channel);
     if (mode.isDebug) _startWithHotReload(channel);
+    super.start(channel);
   }
 
   Future<void> _startWithHotReload(

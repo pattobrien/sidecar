@@ -7,8 +7,11 @@ import 'package:characters/characters.dart';
 import 'log_delegate_base.dart';
 
 class DebuggerLogDelegate implements LogDelegateBase {
-  const DebuggerLogDelegate();
+  const DebuggerLogDelegate({
+    this.isVerboseEnabled = false,
+  });
 
+  final bool isVerboseEnabled;
   @override
   void lintError(LintRule lint, Object err, String stackTrace) {
     // print('DebuggerLogDelegate: lintError');
@@ -53,6 +56,8 @@ class DebuggerLogDelegate implements LogDelegateBase {
   @override
   void sidecarVerboseMessage(String message) {
     // print('DebuggerLogDelegate: sidecarMessage $message');
+    if (!isVerboseEnabled) return;
+
     stdout.writeln('${DateTime.now().toIso8601String()} $message');
   }
 
@@ -74,5 +79,10 @@ class DebuggerLogDelegate implements LogDelegateBase {
   @override
   void sidecarMessage(String message) {
     stdout.writeln('DebuggerLogDelegate: $message');
+  }
+
+  @override
+  void sendLints() {
+    // TODO: implement sendLints
   }
 }

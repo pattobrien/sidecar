@@ -1,6 +1,6 @@
 name: sidecar_analyzer_plugin
 description: Analyzer plugin for the sidecar ecosystem.
-version: 0.1.14-dev.3
+version: 0.1.14-dev.4
 publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/
 repository: https://github.com/pattobrien/sidecar/
 
@@ -13,7 +13,7 @@ dependencies:
     version: ^0.1.14-dev.2
   sidecar_analyzer_plugin_core:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/
-    version: ^0.1.14-dev.3
+    version: ^0.1.14-dev.4
   # l10n_lints:
   #   path: /Users/pattobrien/Development/sidecar/repositories/l10n_lints/ ## REMOVE THIS TOO
 dev_dependencies:

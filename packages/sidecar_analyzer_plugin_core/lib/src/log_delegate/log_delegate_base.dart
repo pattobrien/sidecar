@@ -9,6 +9,8 @@ abstract class LogDelegateBase {
     StackTrace stackTrace,
   );
 
+  // void sendLints() {}
+
   void sidecarVerboseMessage(
     String message,
   );
