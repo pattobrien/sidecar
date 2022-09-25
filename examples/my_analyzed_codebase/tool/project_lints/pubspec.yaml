@@ -15,11 +15,11 @@ dependencies:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
     version: ^0.1.9
   path: ^1.8.0
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
   # sidecar:
-  #   hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-  #   version: ^0.1.11-dev.17
+  #   path: /Users/pattobrien/Development/sidecar/packages/sidecar
+  sidecar:
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
+    version: ^0.1.11-dev.17
   source_span: ^1.8.2
 
 dependency_overrides:

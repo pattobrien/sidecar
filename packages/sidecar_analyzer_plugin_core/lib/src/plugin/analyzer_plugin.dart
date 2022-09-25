@@ -28,7 +28,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required this.lintRuleConstructors,
     required this.codeEditConstructors,
     required SidecarAnalyzerPluginMode mode,
-    DebuggerLogDelegate delegate = const DebuggerLogDelegate(),
+    LogDelegateBase delegate = const DebuggerLogDelegate(),
     ResourceProvider? resourceProvider,
   })  : ref = ProviderContainer(
           overrides: [

@@ -6,7 +6,7 @@ import 'code_edit_constructors.dart';
 import 'lint_rule_constructors.dart';
 
 Future<void> start(List<String> args, SendPort sendPort, bool isPlugin) async {
-  LogDelegate delegate;
+  LogDelegateBase delegate;
   SidecarAnalyzerPluginMode mode;
   if (args.contains('--debug')) {
     delegate = DebuggerLogDelegate();
