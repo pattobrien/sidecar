@@ -21,7 +21,7 @@ class DetectedLint with _$DetectedLint {
 
   const DetectedLint._();
 
-  Future<plugin.AnalysisErrorFixes> toAnalysisErrorFixes(
+  Future<plugin.AnalysisErrorFixes> computeAnalysisErrorFixes(
     ProviderContainer ref,
   ) async {
     final fixes = await rule.computeCodeEdits(this);

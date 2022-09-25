@@ -1,52 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
 import 'package:characters/characters.dart';
-import 'package:cli_util/cli_logging.dart';
 
-final logger = Logger.standard();
+import 'log_delegate_base.dart';
 
-abstract class LogDelegate {
-  void sidecarError(
-    Object error,
-    StackTrace stackTrace,
-  );
-
-  void sidecarVerboseMessage(
-    String message,
-  );
-
-  void sidecarMessage(
-    String message,
-  );
-
-  void pluginInitializationFail(
-    Object err,
-    StackTrace stackTrace,
-  );
-
-  void lintMessage(
-    DetectedLint lint,
-    String message,
-  );
-
-  void editMessage(
-    CodeEdit edit,
-    String message,
-  );
-
-  void pluginRestart();
-
-  void lintError(
-    LintRule lint,
-    Object err,
-    String stackTrace,
-  );
-}
-
-class DebuggerLogDelegate implements LogDelegate {
+class DebuggerLogDelegate implements LogDelegateBase {
   const DebuggerLogDelegate();
 
   @override
@@ -114,70 +74,5 @@ class DebuggerLogDelegate implements LogDelegate {
   @override
   void sidecarMessage(String message) {
     stdout.writeln('DebuggerLogDelegate: $message');
-  }
-}
-
-extension LintRuleTypeX on LintRuleType {
-  String get coloredNamedd {
-    // final ansi = AnsiPen();
-
-    switch (this) {
-      case LintRuleType.info:
-        // ansi.white(bold: true);
-        // return ansi(name);
-        return '   ${logger.ansi.blue}$name${logger.ansi.none}';
-      case LintRuleType.warning:
-        // ansi.yellow();
-        // return ansi(name);
-        return '${logger.ansi.yellow}$name${logger.ansi.none}';
-      case LintRuleType.error:
-        // ansi.red();
-        // return ansi(name);
-        return '  ${logger.ansi.red}$name${logger.ansi.none}';
-    }
-  }
-}
-
-class EmptyDelegate implements LogDelegate {
-  const EmptyDelegate();
-
-  @override
-  void editMessage(CodeEdit edit, String message) {
-    // do nothing
-  }
-
-  @override
-  void lintError(LintRule lint, Object err, String stackTrace) {
-    // do nothing
-  }
-
-  @override
-  void lintMessage(DetectedLint lint, String message) {
-    // do nothing
-  }
-
-  @override
-  void pluginInitializationFail(Object err, StackTrace stackTrace) {
-    // do nothing
-  }
-
-  @override
-  void sidecarError(Object error, StackTrace stackTrace) {
-    // do nothing
-  }
-
-  @override
-  void sidecarVerboseMessage(String message) {
-    // do nothing
-  }
-
-  @override
-  void pluginRestart() {
-    // TODO: implement pluginRestart
-  }
-
-  @override
-  void sidecarMessage(String message) {
-    // TODO: implement sidecarMessage
   }
 }

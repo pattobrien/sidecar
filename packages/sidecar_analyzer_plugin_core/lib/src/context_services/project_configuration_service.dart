@@ -5,6 +5,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 
+import '../plugin/plugin.dart';
 import 'error_composer.dart';
 
 final projectConfigurationServiceProvider =
@@ -22,21 +23,22 @@ class ProjectConfigurationService {
 
   final ContextRoot contextRoot;
   final Ref ref;
-  final LogDelegate logger;
+  final LogDelegateBase logger;
   final ErrorComposer errorComposer;
 
   late String _contents;
   late ProjectConfiguration? _projectConfiguration;
 
+  LintConfiguration? getLintConfiguration(String packageId, String lintId) =>
+      _projectConfiguration?.lintConfiguration(packageId, lintId);
+
+  EditConfiguration? getEditConfiguration(String packageId, String editId) =>
+      _projectConfiguration?.editConfiguration(packageId, editId);
+
   ProjectConfiguration? get projectConfiguration => _projectConfiguration;
+  String get contents => _contents;
 
   Future<void> parse() async {
-    await _parseProjectConfiguration();
-    // _getEditConfigurations();
-    // _getLintConfigurations();
-  }
-
-  Future<void> _parseProjectConfiguration() async {
     logger.sidecarVerboseMessage('_parseProjectConfiguration');
     final optionsFile = contextRoot.optionsFile;
     if (optionsFile != null) {

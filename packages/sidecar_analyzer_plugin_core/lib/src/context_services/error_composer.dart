@@ -4,7 +4,8 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
+
+import '../plugin/plugin.dart';
 
 final errorComposerProvider = Provider.family<ErrorComposer, ContextRoot>(
   (ref, contextRoot) => ErrorComposer(
