@@ -5,8 +5,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
 import '../log_delegate/log_delegate.dart';
-import '../plugin/plugin.dart';
-import 'error_composer.dart';
+import 'config_error_composer.dart';
 
 final projectConfigurationServiceProvider =
     Provider.family<ProjectConfigurationService, ContextRoot>(
@@ -24,7 +23,7 @@ class ProjectConfigurationService {
   final ContextRoot contextRoot;
   final Ref ref;
   final LogDelegateBase logger;
-  final ErrorComposer errorComposer;
+  final ConfigErrorComposer errorComposer;
 
   late String _contents;
   late ProjectConfiguration? _projectConfiguration;
@@ -50,7 +49,6 @@ class ProjectConfigurationService {
         errorComposer.addErrors(_projectConfiguration!.sourceErrors);
       } catch (e) {
         _projectConfiguration = null;
-        // throw UnimplementedError('cannot parse sidecar options: $e');
       }
     } else {
       _projectConfiguration = ProjectConfiguration();
@@ -58,40 +56,4 @@ class ProjectConfigurationService {
 
     logger.sidecarVerboseMessage('_parseProjectConfiguration completed');
   }
-
-  // void _getEditConfigurations() {
-  //   final editConfigurations = {};
-  //   final edits = [...allCodeEdits[root]!];
-  //   for (final edit in edits) {
-  //     // delegate.sidecarVerboseMessage('setting up ${edit.code}');
-  //     final config =
-  //         _projectConfiguration.editConfiguration(edit.packageName, edit.code);
-  //     if (config != null) {
-  //       editConfigurations[contextRoot]![edit.code] = config;
-  //     } else {
-  //       editConfigurations[contextRoot]!.remove(edit.code);
-  //     }
-  //   }
-  // }
-
-  // void _getLintConfigurations() {
-  //   lintConfigurations[root] = {};
-  //   final rules = [...allLintRules[root]!];
-  //   for (final lint in rules) {
-  //     delegate.sidecarVerboseMessage('setting up ${lint.code}');
-  //     final config =
-  //         sidecarOptions.lintConfiguration(lint.packageName, lint.code);
-  //     if (config != null) {
-  //       lintConfigurations[root]![lint.code] = config;
-  //     } else {
-  //       lintConfigurations[root]!.remove(lint.code);
-  //     }
-  //     try {
-  //       lint.initialize(configurationContent: config?.configuration, ref: ref);
-  //     } catch (e) {
-  //       // if the lint fails to configure, then it shouldnt be run
-  //       allLintRules.remove(lint);
-  //     }
-  //   }
-  // }
 }

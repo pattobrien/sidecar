@@ -12,11 +12,11 @@ import 'package:yaml/yaml.dart';
 import 'activated_edits.dart';
 import 'activated_lints.dart';
 import 'analysis_errors.dart';
-import 'error_composer.dart';
+import 'config_error_composer.dart';
 import 'lint_constructor_providers.dart';
 import 'project_configuration_service.dart';
 import '../utils/channel_extension.dart';
-import '../plugin/plugin_providers.dart';
+import '../plugin/plugin_channel_provider.dart';
 
 class AnalysisContextService {
   AnalysisContextService(this.ref, {required this.context})
@@ -91,12 +91,22 @@ class AnalysisContextService {
   Future<List<AnalysisError>> getAnalysisErrors(
     String path,
   ) async {
+    final rootPath = root.root.path;
+    final analysisPath = context.contextRoot.optionsFile?.path;
+
+    if (!context.isSidecarEnabled) return [];
+    if (!p.isWithin(rootPath, path)) return [];
+
+    if (path == analysisPath) {
+      // we handle analyzing the config file separately
+      await projectConfigurationService.parse();
+      ref.read(errorComposerProvider(root)).flush();
+    }
+
     final detectedLints = await computeLints(path);
 
-    ref
-        .read(
-            detectedLintsProvider(AnalyzedFile(root.root.path, path)).notifier)
-        .state = detectedLints;
+    ref.read(detectedLintsProvider(AnalyzedFile(root, path)).notifier).state =
+        detectedLints;
 
     for (var detectedLint in detectedLints) {
       delegate.lintMessage(detectedLint, detectedLint.message);

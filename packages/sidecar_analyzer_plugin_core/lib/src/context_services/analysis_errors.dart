@@ -17,8 +17,7 @@ final detectedLintsProvider =
 class AnalyzedFile with _$AnalyzedFile {
   const AnalyzedFile._();
   const factory AnalyzedFile(
-    // ContextRoot contextRoot,
-    String contextRootPath,
+    ContextRoot contextRoot,
     String path,
   ) = _AnalyzedFile;
 }

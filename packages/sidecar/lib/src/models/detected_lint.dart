@@ -31,6 +31,12 @@ class DetectedLint with _$DetectedLint {
     );
   }
 
+  bool isWithinOffset(String filePath, int offset) {
+    return sourceSpan.location.file == filePath &&
+        sourceSpan.start.offset <= offset &&
+        offset <= sourceSpan.start.offset + sourceSpan.length;
+  }
+
   plugin.AnalysisError toAnalysisError() {
     final concatLintCode = '${rule.packageName}.${rule.code}';
     return plugin.AnalysisError(

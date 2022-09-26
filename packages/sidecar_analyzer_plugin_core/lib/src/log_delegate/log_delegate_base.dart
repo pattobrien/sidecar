@@ -1,7 +1,11 @@
+import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:cli_util/cli_logging.dart';
 
 final logger = Logger.standard();
+
+final logDelegateProvider =
+    Provider<LogDelegateBase>((ref) => throw UnimplementedError());
 
 abstract class LogDelegateBase {
   void sidecarError(

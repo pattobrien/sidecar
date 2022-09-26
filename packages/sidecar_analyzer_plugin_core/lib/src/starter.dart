@@ -21,17 +21,17 @@ Future<void> startSidecarPlugin(
   Map<Id, LintRuleConstructor> lintRuleConstructors,
 ) async {
   LogDelegateBase delegate;
-  SidecarAnalyzerPluginMode mode;
+  SidecarAnalyzerMode mode;
 
   if (args.contains('--debug')) {
     delegate = DebuggerLogDelegate();
-    mode = SidecarAnalyzerPluginMode.debug;
+    mode = SidecarAnalyzerMode.debug;
   } else if (isPlugin) {
     delegate = EmptyDelegate();
-    mode = SidecarAnalyzerPluginMode.plugin;
+    mode = SidecarAnalyzerMode.plugin;
   } else {
     delegate = DebuggerLogDelegate();
-    mode = SidecarAnalyzerPluginMode.cli;
+    mode = SidecarAnalyzerMode.cli;
   }
 
   final pluginChannel = PluginIsolateChannel(sendPort);
@@ -39,7 +39,7 @@ Future<void> startSidecarPlugin(
   final ref = ProviderContainer(
     overrides: [
       logDelegateProvider.overrideWithValue(delegate),
-      pluginMode.overrideWithValue(mode),
+      sidecarAnalyzerMode.overrideWithValue(mode),
       pluginChannelProvider.overrideWithValue(pluginChannel),
       lintRuleConstructorProvider.overrideWithValue(lintRuleConstructors),
       codeEditConstructorProvider.overrideWithValue(codeEditConstructors),

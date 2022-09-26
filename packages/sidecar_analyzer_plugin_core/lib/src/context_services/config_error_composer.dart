@@ -7,15 +7,15 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
 import '../plugin/plugin.dart';
 
-final errorComposerProvider = Provider.family<ErrorComposer, ContextRoot>(
-  (ref, contextRoot) => ErrorComposer(
+final errorComposerProvider = Provider.family<ConfigErrorComposer, ContextRoot>(
+  (ref, contextRoot) => ConfigErrorComposer(
     channel: ref.watch(pluginChannelProvider)!,
     contextRoot: contextRoot,
   ),
 );
 
-class ErrorComposer {
-  ErrorComposer({
+class ConfigErrorComposer {
+  ConfigErrorComposer({
     required this.channel,
     required this.contextRoot,
   });
