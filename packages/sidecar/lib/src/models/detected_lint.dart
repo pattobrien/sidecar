@@ -38,13 +38,13 @@ class DetectedLint with _$DetectedLint {
   }
 
   plugin.AnalysisError toAnalysisError() {
-    final concatLintCode = '${rule.packageName}.${rule.code}';
+    final concatenatedLintCode = '${rule.packageName}.${rule.code}';
     return plugin.AnalysisError(
       lintType.analysisError,
       plugin.AnalysisErrorType.HINT,
       sourceSpan.location,
       message,
-      concatLintCode,
+      concatenatedLintCode,
       url: rule.url,
       correction: correction,
       //TODO: hasFix

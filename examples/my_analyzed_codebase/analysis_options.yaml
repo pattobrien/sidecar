@@ -25,10 +25,10 @@ sidecar:
 
     riverpod_lints:
       prefer_consumer_widget:
-        severity: true
+        severity: 123
         enabled: true
-        configuration:
-          some_property: abc
+        # configuration:
+        #   some_property:
 
     l10n_lints:
       avoid_string_literals:

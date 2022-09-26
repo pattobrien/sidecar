@@ -37,7 +37,7 @@ Future<void> rebuildProcess() async {
       await ProjectUtilities.getSidecarConfiguration(Directory.current.uri);
 
   final lints = projectConfiguration.lintPackages?.values.toList() ?? [];
-  final edits = projectConfiguration.editPackages?.values.toList() ?? [];
+  final edits = projectConfiguration.assistPackages?.values.toList() ?? [];
 
   await projectService.clearPreviousLints(lints, edits);
   await projectService.importLintsAndEdits(lints, edits);

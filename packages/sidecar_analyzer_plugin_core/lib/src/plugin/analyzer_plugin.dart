@@ -19,7 +19,6 @@ import '../context_services/context_services.dart';
 import '../constants.dart';
 import '../log_delegate/log_delegate.dart';
 import 'analyzer_mode.dart';
-import 'plugin_channel_provider.dart';
 
 final pluginProvider = Provider((ref) => SidecarAnalyzerPlugin(ref));
 
@@ -33,7 +32,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
 
   HotReloader? _reloader;
-  final _initializationCompleter = Completer();
+  // final _initializationCompleter = Completer();
   final Ref _ref;
 
   @override
@@ -44,7 +43,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   @override
   List<String> get fileGlobsToAnalyze => pluginGlobs;
-  Future<void> get isInitialized => _initializationCompleter.future;
+  // Future<void> get isInitialized => _initializationCompleter.future;
   SidecarAnalyzerMode get mode => _ref.read(sidecarAnalyzerMode);
   LogDelegateBase get delegate => _ref.read(logDelegateProvider);
 
@@ -67,12 +66,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
       }
     });
-    _initializationCompleter.complete();
+    // _initializationCompleter.complete();
   }
 
   Future<void> reload() async {
     delegate.sidecarVerboseMessage('reload request received');
-    await _initializationCompleter.future;
+    // await _initializationCompleter.future;
     await _reloader?.reloadCode();
     delegate.sidecarVerboseMessage('reload request completed');
   }
@@ -92,6 +91,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         _ref
             .read(analysisContextServiceProvider(context))
             .initializeLintsAndEdits(context);
+        delegate.sidecarMessage('completed: ${context.contextRoot.root.path}');
       },
     ));
 

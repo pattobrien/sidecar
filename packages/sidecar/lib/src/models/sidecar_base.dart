@@ -39,6 +39,8 @@ abstract class SidecarBase {
     this.ref = ref;
     if (jsonDecoder != null) {
       if (configurationContent == null) {
+        // final error = YamlSourceError(sourceSpan: sourceSpan, message: message);
+        // _errors.add(value);
         throw EmptyConfiguration('$code error: empty configuration');
       } else {
         try {

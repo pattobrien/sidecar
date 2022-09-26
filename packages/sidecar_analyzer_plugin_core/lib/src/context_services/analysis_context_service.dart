@@ -16,11 +16,12 @@ import 'config_error_composer.dart';
 import 'lint_constructor_providers.dart';
 import 'project_configuration_service.dart';
 import '../utils/channel_extension.dart';
-import '../plugin/plugin_channel_provider.dart';
 
 class AnalysisContextService {
-  AnalysisContextService(this.ref, {required this.context})
-      : delegate = ref.read(logDelegateProvider),
+  AnalysisContextService(
+    this.ref, {
+    required this.context,
+  })  : delegate = ref.read(logDelegateProvider),
         channel = ref.read(pluginChannelProvider)!,
         projectConfigurationService =
             ref.read(projectConfigurationServiceProvider(context.contextRoot)),
@@ -61,11 +62,13 @@ class AnalysisContextService {
   ) {
     final projectConfig = projectConfiguration;
 
-    final errorComposer = ref.read(errorComposerProvider(root));
-
     if (projectConfig == null) return;
 
-    for (var lintRule in ref.read(lintRuleConstructorProvider).entries) {
+    final errorComposer = ref.read(errorComposerProvider(root));
+    final lintRules = ref.read(lintRuleConstructorProvider).entries;
+
+    for (var lintRule in lintRules) {
+      delegate.sidecarMessage('activating: ${lintRule.key}');
       final config = projectConfig.lintConfiguration(lintRule.key);
       final lint = lintRule.value();
       lint.initialize(configurationContent: config?.configuration, ref: ref);

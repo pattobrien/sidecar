@@ -3,17 +3,15 @@ import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../models/models.dart';
-import 'edit_configuration.dart';
-import 'edit_package_configuration.dart';
+import 'analysis_configuration.dart';
+import 'analysis_package_configuration.dart';
 import 'errors.dart';
-import 'lint_configuration.dart';
-import 'lint_package_configuration.dart';
 import 'yaml_parsers/yaml_map_include_globs.dart';
 
 class ProjectConfiguration {
   const ProjectConfiguration({
     this.lintPackages,
-    this.editPackages,
+    this.assistPackages,
     List<Glob>? includes,
     this.sourceErrors = const <YamlSourceError>[],
   }) : _includes = includes;
@@ -34,7 +32,7 @@ class ProjectConfiguration {
         final sourceErrors = <YamlSourceError>[];
         return ProjectConfiguration(
           lintPackages: parseLintPackages(contentMap['lints'] as YamlMap?),
-          editPackages: parseEditPackages(contentMap['edits'] as YamlMap?),
+          assistPackages: parseAssistPackages(contentMap['edits'] as YamlMap?),
           includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
             sourceErrors.addAll(r);
             return null;
@@ -47,7 +45,7 @@ class ProjectConfiguration {
   }
 
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
-  final Map<PackageName, EditPackageConfiguration>? editPackages;
+  final Map<PackageName, AssistPackageConfiguration>? assistPackages;
   final List<Glob>? _includes;
   final List<YamlSourceError> sourceErrors;
 
@@ -56,42 +54,43 @@ class ProjectConfiguration {
   bool includes(String relativePath) =>
       includeGlobs.any((glob) => glob.matches(relativePath));
 
-  LintConfiguration? lintConfiguration(Id id) =>
-      lintPackages?[id.packageId]?.lints[id.id];
-
-  EditConfiguration? editConfiguration(Id id) =>
-      editPackages?[id.packageId]?.edits[id.id];
+  AnalysisConfiguration? getConfiguration(Id id) {
+    switch (id.type) {
+      case IdType.lintRule:
+        return lintPackages?[id.packageId]?.lints[id.id];
+      case IdType.codeEdit:
+        return assistPackages?[id.packageId]?.assists[id.id];
+    }
+  }
 }
 
 typedef PackageName = String;
 
-Map<PackageName, LintPackageConfiguration>? parseLintPackages(YamlMap? map) {
-  try {
-    return map?.map((dynamic key, dynamic value) {
-      if (value is YamlMap) {
-        final config = LintPackageConfiguration.fromYamlMap(value,
-            packageName: key as String);
-        return MapEntry(key, config);
-      } else {
-        // we want to throw an error if the package doesnt have a single lint declared
-        //TODO: replace with a better error that we can catch
-        throw UnimplementedError(
-            'expected one or more lints for package $key in analysis_options.yaml');
-      }
-    });
-  } on PackageConfigurationException catch (e) {
-    //TODO: replace with a better error that we can catch
-    throw UnimplementedError('PackageConfigurationException error!!! $e');
-  }
-}
+Map<PackageName, AssistPackageConfiguration>? parseAssistPackages(
+  YamlMap? map,
+) =>
+    parsePackages(map, IdType.codeEdit)?.map(
+        (key, value) => MapEntry(key, value as AssistPackageConfiguration));
 
-Map<PackageName, EditPackageConfiguration>? parseEditPackages(YamlMap? map) {
+Map<PackageName, LintPackageConfiguration>? parseLintPackages(
+  YamlMap? map,
+) =>
+    parsePackages(map, IdType.lintRule)
+        ?.map((key, value) => MapEntry(key, value as LintPackageConfiguration));
+
+Map<PackageName, AnalysisPackageConfiguration>? parsePackages(
+  YamlMap? map,
+  IdType type,
+) {
   try {
     return map?.map((dynamic key, dynamic value) {
       if (value is YamlMap) {
-        final config = EditPackageConfiguration.fromYamlMap(value,
-            packageName: key as String);
-        return MapEntry(key, config);
+        final config = AnalysisPackageConfiguration.fromYamlMap(
+          value,
+          type: type,
+          packageName: key as String,
+        );
+        return MapEntry(key, config as LintPackageConfiguration);
       } else {
         // we want to throw an error if the package doesnt have a single lint declared
 
