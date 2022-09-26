@@ -17,7 +17,7 @@ class RequestedCodeEdit {
   final AstNode node;
 
   Future<plugin.PrioritizedSourceChange?> toPrioritizedSourceChange(
-    ProviderContainer ref,
+    Ref ref,
   ) {
     return codeEdit.computeSourceChange(this);
   }

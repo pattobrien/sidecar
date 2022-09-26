@@ -24,6 +24,8 @@ import '../log_delegate/log_delegate.dart';
 import 'plugin_mode.dart';
 import 'plugin_providers.dart';
 
+final pluginProvider = Provider((ref) => SidecarAnalyzerPlugin(ref));
+
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin(
     this.ref, {
@@ -35,27 +37,19 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   HotReloader? reloader;
   final reloadCompleter = Completer();
-  final ProviderContainer ref;
-
-  SidecarAnalyzerPluginMode get mode => ref.read(pluginMode);
-
-  LogDelegateBase get delegate => ref.read(logDelegateProvider);
-
-  Map<Id, LintRuleConstructor> get lintRuleConstructors =>
-      ref.read(lintRuleConstructorProvider);
-
-  Map<Id, CodeEditConstructor> get codeEditConstructors =>
-      ref.read(codeEditConstructorProvider);
-
-  @override
-  List<String> get fileGlobsToAnalyze =>
-      <String>['**/*.dart', '**/*.arb', '**/*.yaml'];
+  final Ref ref;
 
   @override
   String get name => pluginName;
 
   @override
   String get version => pluginVersion;
+
+  @override
+  List<String> get fileGlobsToAnalyze => pluginGlobs;
+
+  SidecarAnalyzerPluginMode get mode => ref.read(pluginMode);
+  LogDelegateBase get delegate => ref.read(logDelegateProvider);
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
@@ -102,49 +96,15 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         await ref
             .read(projectConfigurationServiceProvider(context.contextRoot))
             .parse();
-        _initializeLintsAndEdits(context);
+
+        ref
+            .read(analysisContextServiceProvider(context))
+            .initializeLintsAndEdits(context);
       },
     ));
 
     delegate.sidecarVerboseMessage('afterNewContextCollection complete');
     await super.afterNewContextCollection(contextCollection: contextCollection);
-  }
-
-  void _initializeLintsAndEdits(
-    AnalysisContext context,
-  ) {
-    final projectConfigurationService =
-        ref.read(projectConfigurationServiceProvider(context.contextRoot));
-    final projectConfig = projectConfigurationService.projectConfiguration;
-    final root = context.contextRoot;
-    final errorComposer = ref.read(errorComposerProvider(root));
-    if (projectConfig == null) return;
-
-    for (var lintRule in lintRuleConstructors.entries) {
-      final lintRuleId = lintRule.key.id;
-      final packageId = lintRule.key.packageId;
-
-      final config = projectConfig.lintConfiguration(packageId, lintRuleId);
-      final lint = lintRule.value();
-      lint.initialize(configurationContent: config?.configuration, ref: ref);
-      if (lint.errors?.isNotEmpty ?? false) {
-        errorComposer.addErrors(lint.errors!);
-      } else {
-        final activateLints = ref.read(activatedLintsProvider(root));
-        activateLints.addLint(lint);
-      }
-    }
-    for (var codeEdit in codeEditConstructors.entries) {
-      final edit = codeEdit.value();
-      final config =
-          projectConfig.editConfiguration(edit.packageName, edit.code);
-      edit.initialize(configurationContent: config?.configuration, ref: ref);
-      if (edit.errors != null) {
-        errorComposer.addErrors(edit.errors!);
-      } else {
-        ref.read(activatedEditsProvider(root)).addEdit(edit);
-      }
-    }
   }
 
   @override

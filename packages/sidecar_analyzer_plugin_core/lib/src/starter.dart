@@ -46,7 +46,7 @@ Future<void> startSidecarPlugin(
     ],
   );
 
-  final plugin = SidecarAnalyzerPlugin(ref);
+  final plugin = ref.read(pluginProvider);
 
   if (mode.isDebug) {
     print('debug initialization started');

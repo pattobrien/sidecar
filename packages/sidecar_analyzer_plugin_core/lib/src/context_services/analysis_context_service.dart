@@ -12,6 +12,8 @@ import 'package:yaml/yaml.dart';
 import 'activated_edits.dart';
 import 'activated_lints.dart';
 import 'analysis_errors.dart';
+import 'error_composer.dart';
+import 'lint_constructor_providers.dart';
 import 'project_configuration_service.dart';
 import '../utils/channel_extension.dart';
 import '../plugin/plugin_providers.dart';
@@ -32,6 +34,9 @@ class AnalysisContextService {
   final LogDelegateBase delegate;
   final ProjectConfigurationService projectConfigurationService;
 
+  ProjectConfiguration? get projectConfiguration =>
+      projectConfigurationService.projectConfiguration;
+
   Iterable<RequestedCodeEdit> getCodeEditRequests(
     ResolvedUnitResult unit,
     int offset,
@@ -49,6 +54,38 @@ class AnalysisContextService {
     }
 
     return codeEditReporter.reportedEdits;
+  }
+
+  void initializeLintsAndEdits(
+    AnalysisContext context,
+  ) {
+    final projectConfig = projectConfiguration;
+
+    final errorComposer = ref.read(errorComposerProvider(root));
+
+    if (projectConfig == null) return;
+
+    for (var lintRule in ref.read(lintRuleConstructorProvider).entries) {
+      final config = projectConfig.lintConfiguration(lintRule.key);
+      final lint = lintRule.value();
+      lint.initialize(configurationContent: config?.configuration, ref: ref);
+      if (lint.errors?.isNotEmpty ?? false) {
+        errorComposer.addErrors(lint.errors!);
+      } else {
+        final activateLints = ref.read(activatedLintsProvider(root));
+        activateLints.addLint(lint);
+      }
+    }
+    for (var codeEdit in ref.read(codeEditConstructorProvider).entries) {
+      final edit = codeEdit.value();
+      final config = projectConfig.editConfiguration(codeEdit.key);
+      edit.initialize(configurationContent: config?.configuration, ref: ref);
+      if (edit.errors != null) {
+        errorComposer.addErrors(edit.errors!);
+      } else {
+        ref.read(activatedEditsProvider(root)).addEdit(edit);
+      }
+    }
   }
 
   Future<List<AnalysisError>> getAnalysisErrors(
@@ -88,8 +125,8 @@ class AnalysisContextService {
         }
 
         try {
-          final lintConfig = projectConfigurationService.getLintConfiguration(
-              rule.packageName, rule.code);
+          final lintConfig =
+              projectConfigurationService.getLintConfiguration(rule.id);
 
           final lints =
               await errorReporter.generateDartLints(unit, rule, lintConfig);
@@ -110,8 +147,8 @@ class AnalysisContextService {
     final relativePath = p.relative(path, from: root.root.path);
 
     // #1 check explicit LintRule/CodeEdit includes from project config
-    final ruleProjectConfig = projectConfigurationService.getLintConfiguration(
-        rule.packageName, rule.code);
+    final ruleProjectConfig =
+        projectConfigurationService.getLintConfiguration(rule.id);
     final ruleConfigIncludes = ruleProjectConfig?.includes;
 
     if (ruleProjectConfig != null && ruleConfigIncludes != null) {

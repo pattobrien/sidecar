@@ -8,3 +8,8 @@ final lintRuleConstructorProvider = Provider<Map<Id, LintRuleConstructor>>(
 final codeEditConstructorProvider = Provider<Map<Id, CodeEditConstructor>>(
   (ref) => throw UnimplementedError(),
 );
+
+final sidecarBaseConstructorProvider =
+    Provider<Map<Id, SidecarBaseConstructor>>(
+  (ref) => throw UnimplementedError(),
+);

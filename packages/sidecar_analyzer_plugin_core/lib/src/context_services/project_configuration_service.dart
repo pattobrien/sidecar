@@ -3,8 +3,8 @@ import 'dart:io' as io;
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 
+import '../log_delegate/log_delegate.dart';
 import '../plugin/plugin.dart';
 import 'error_composer.dart';
 
@@ -29,11 +29,11 @@ class ProjectConfigurationService {
   late String _contents;
   late ProjectConfiguration? _projectConfiguration;
 
-  LintConfiguration? getLintConfiguration(String packageId, String lintId) =>
-      _projectConfiguration?.lintConfiguration(packageId, lintId);
+  LintConfiguration? getLintConfiguration(Id id) =>
+      _projectConfiguration?.lintConfiguration(id);
 
-  EditConfiguration? getEditConfiguration(String packageId, String editId) =>
-      _projectConfiguration?.editConfiguration(packageId, editId);
+  EditConfiguration? getEditConfiguration(Id id) =>
+      _projectConfiguration?.editConfiguration(id);
 
   ProjectConfiguration? get projectConfiguration => _projectConfiguration;
   String get contents => _contents;

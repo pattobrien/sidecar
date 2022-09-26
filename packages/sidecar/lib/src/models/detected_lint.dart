@@ -22,7 +22,7 @@ class DetectedLint with _$DetectedLint {
   const DetectedLint._();
 
   Future<plugin.AnalysisErrorFixes> computeAnalysisErrorFixes(
-    ProviderContainer ref,
+    Ref ref,
   ) async {
     final fixes = await rule.computeCodeEdits(this);
     return plugin.AnalysisErrorFixes(

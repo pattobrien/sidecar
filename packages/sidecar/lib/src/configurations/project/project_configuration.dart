@@ -2,6 +2,7 @@ import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../models/models.dart';
 import 'edit_configuration.dart';
 import 'edit_package_configuration.dart';
 import 'errors.dart';
@@ -55,11 +56,11 @@ class ProjectConfiguration {
   bool includes(String relativePath) =>
       includeGlobs.any((glob) => glob.matches(relativePath));
 
-  LintConfiguration? lintConfiguration(String packageId, String lintId) =>
-      lintPackages?[packageId]?.lints[lintId];
+  LintConfiguration? lintConfiguration(Id id) =>
+      lintPackages?[id.packageId]?.lints[id.id];
 
-  EditConfiguration? editConfiguration(String packageId, String editId) =>
-      editPackages?[packageId]?.edits[editId];
+  EditConfiguration? editConfiguration(Id id) =>
+      editPackages?[id.packageId]?.edits[id.id];
 }
 
 typedef PackageName = String;

@@ -20,22 +20,24 @@ class EditPackageConfiguration {
   }) {
     return EditPackageConfiguration(
       packageName: packageName,
-      edits: yamlMap.nodes.map<String, EditConfiguration>((dynamic key, value) {
+      edits: yamlMap.nodes.map<String, EditConfiguration>((dynamic key, node) {
         final yamlKey = key as YamlScalar;
-        if (value is YamlMap) {
+        if (node is YamlMap) {
           final editConfigurationErrors = <YamlSourceError>[];
-          final configuration = value.parseConfiguration().fold((l) => l, (r) {
-            editConfigurationErrors.addAll(r);
+          final configuration =
+              node.parseConfiguration().fold((map) => map, (errors) {
+            editConfigurationErrors.addAll(errors);
             return null;
           });
 
-          final includes = value.parseGlobIncludes().fold((l) => l, (r) {
-            editConfigurationErrors.addAll(r);
+          final includes =
+              node.parseGlobIncludes().fold((map) => map, (errors) {
+            editConfigurationErrors.addAll(errors);
             return null;
           });
 
-          final enabled = value.parseEnabled().fold((l) => l, (r) {
-            editConfigurationErrors.addAll(r);
+          final enabled = node.parseEnabled().fold((map) => map, (errors) {
+            editConfigurationErrors.addAll(errors);
             return null;
           });
 
@@ -50,8 +52,8 @@ class EditPackageConfiguration {
               sourceErrors: editConfigurationErrors,
             ),
           );
-        } else if (value is YamlScalar) {
-          final dynamic scalarValue = value.value;
+        } else if (node is YamlScalar) {
+          final dynamic scalarValue = node.value;
           if (scalarValue is bool) {
             return MapEntry(
               yamlKey.value as String,

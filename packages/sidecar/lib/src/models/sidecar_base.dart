@@ -3,15 +3,17 @@ import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:yaml/yaml.dart';
 
+import '../ast/ast.dart';
 import '../configurations/configurations.dart';
-import 'errors.dart';
-import 'typedefs.dart';
+import 'models.dart';
 
 abstract class SidecarBase {
   String get code;
   LintPackageId get packageName;
 
   MapDecoder? get jsonDecoder => null;
+
+  Id get id;
 
   @mustCallSuper
   List<YamlSourceError>? get errors => _errors;
@@ -20,15 +22,17 @@ abstract class SidecarBase {
   Object get configuration => _configuration;
 
   @internal
-  late ProviderContainer ref;
+  late Ref ref;
   late Object _configuration;
   final List<YamlSourceError> _errors = [];
 
   List<Glob>? get includes => null;
 
+  void registerNodeProcessors(NodeLintRegistry registry) {}
+
   void initialize({
     required YamlMap? configurationContent,
-    required ProviderContainer ref,
+    required Ref ref,
   }) {
     this.ref = ref;
     if (jsonDecoder != null) {
