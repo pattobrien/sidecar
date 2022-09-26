@@ -16,8 +16,8 @@ sidecar:
   includes:
     - "bin/**"
     - "lib/**"
-  # - "test/**"
-  #   - ".sidecar/**"
+    # - "test/**"
+    # - ".sidecar/**"
   lints:
     flutter_lints:
       use_full_hex_values_for_flutter_colors:
@@ -27,11 +27,8 @@ sidecar:
       prefer_consumer_widget:
         severity: 123
         enabled: true
-        includes:
-          - "lib/**"
-          - 123
-        configuration:
-          some_property: abc
+        # configuration:
+        #   some_property:
 
     l10n_lints:
       avoid_string_literals:
@@ -51,10 +48,10 @@ sidecar:
       avoid_box_shadow_literal:
       avoid_edge_insets_literal:
 
-  edits:
-    riverpod_lints:
-      create_text_edit_controller_provider:
-        enabled: true
-    sidecar_lints:
-      output_ast_node_tree:
-        enabled: true
+  # edits:
+  #   riverpod_lints:
+  #     create_text_edit_controller_provider:
+  #       enabled: true
+  #   sidecar_lints:
+  #     output_ast_node_tree:
+  #       enabled: true

@@ -4,8 +4,6 @@ import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 class AvoidEdgeInsetsLiteral extends LintRule {
-  AvoidEdgeInsetsLiteral(super.ref);
-
   @override
   String get code => 'avoid_edge_insets_literal';
 

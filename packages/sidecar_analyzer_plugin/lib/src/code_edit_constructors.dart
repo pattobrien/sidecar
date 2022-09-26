@@ -3,6 +3,6 @@
 
 import 'package:sidecar/sidecar.dart';
 
-List<CodeEditConstructor> codeEditConstructors = [
+Map<Id, CodeEditConstructor> codeEditConstructors = {
   // CreateTextEditControllerProvider.new
-];
+};

@@ -5,8 +5,6 @@ import 'package:riverpod_utilities/riverpod_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 class PreferConsumerWidget extends LintRule {
-  PreferConsumerWidget(super.ref);
-
   @override
   String get code => 'prefer_consumer_widget';
 

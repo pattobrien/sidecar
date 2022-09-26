@@ -4,8 +4,6 @@ import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 
 class AvoidColorLiteral extends LintRule {
-  AvoidColorLiteral(super.ref);
-
   @override
   String get code => 'avoid_color_literal';
 

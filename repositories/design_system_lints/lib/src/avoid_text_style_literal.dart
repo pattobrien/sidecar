@@ -4,8 +4,6 @@ import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 class AvoidTextStyleLiteral extends LintRule {
-  AvoidTextStyleLiteral(super.ref);
-
   @override
   String get code => 'avoid_text_style_literal';
 

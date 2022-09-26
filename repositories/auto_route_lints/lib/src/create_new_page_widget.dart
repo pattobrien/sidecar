@@ -2,8 +2,6 @@ import 'package:sidecar/sidecar.dart';
 import 'package:auto_route_utilities/auto_route_utilities.dart';
 
 class CreateNewPageWidget extends CodeEdit {
-  CreateNewPageWidget(super.ref);
-
   @override
   String get code => 'create_new_page_widget';
 

@@ -41,11 +41,11 @@ class PackageConfigurationException implements SidecarException {
   final Map<SourceSpan, String> messages;
 }
 
-// class LintConfigurationException implements SidecarException {
-//   const LintConfigurationException(this.messages);
+class LintConfigurationException implements SidecarException {
+  const LintConfigurationException(this.errors);
 
-//   final Map<SourceSpan, String> messages;
-// }
+  final List<YamlSourceError> errors;
+}
 
 class SidecarConfigurationException implements SidecarException {
   const SidecarConfigurationException(this.messages);
@@ -86,7 +86,7 @@ class YamlSourceError {
     return plugin.AnalysisError(
         plugin.AnalysisErrorSeverity.ERROR,
         plugin.AnalysisErrorType.HINT,
-        sourceSpan.yamlLocation,
+        sourceSpan.location,
         message,
         'sidecar_configuration_error'
         // url: rule.url,

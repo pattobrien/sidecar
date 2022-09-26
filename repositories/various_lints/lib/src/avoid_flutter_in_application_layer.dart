@@ -7,8 +7,6 @@ import 'package:path/path.dart' as p;
 import 'utils.dart';
 
 class AvoidFlutterInApplicationLayer extends LintRule {
-  AvoidFlutterInApplicationLayer(super.ref);
-
   @override
   String get code => 'avoid_flutter_in_application_layer';
 
@@ -16,13 +14,10 @@ class AvoidFlutterInApplicationLayer extends LintRule {
   String get packageName => 'various_lints';
 
   @override
-  String get message => 'Avoid using UI code in your application layer.';
-
-  @override
   LintRuleType get defaultType => LintRuleType.error;
 
   @override
-  Future<List<DetectedLint>> computeAnalysisError(
+  Future<List<DetectedLint>> computeGenericAnalysisError(
     AnalysisContext analysisContext,
     String path,
   ) async {
@@ -41,11 +36,8 @@ class AvoidFlutterInApplicationLayer extends LintRule {
       // TODO: proper way to find flutter imports
       final flutterBasedImports = importNodes.where(
           (element) => element.uri.stringValue?.contains('flutter') ?? false);
-
-      return flutterBasedImports
-          .map((e) => e.toSourceSpan(unit))
-          .toList()
-          .toDetectedLints(unit, this);
+      return flutterBasedImports.toList().toDetectedLints(unit, this,
+          message: 'Avoid using UI code in your application layer.');
     } else {
       return [];
     }

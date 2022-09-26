@@ -2,8 +2,6 @@ import 'package:sidecar/sidecar.dart';
 import 'package:riverpod_utilities/riverpod_utilities.dart';
 
 class CreateTextEditControllerProvider extends CodeEdit {
-  CreateTextEditControllerProvider(super.ref);
-
   @override
   String get code => 'create_text_edit_controller_provider';
 

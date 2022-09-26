@@ -8,10 +8,7 @@ import 'dart:isolate';
 import 'package:analyzer/dart/analysis/context_locator.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
-import 'package:analyzer/instrumentation/instrumentation.dart';
 
-import 'package:analyzer_plugin/channel/channel.dart' as plugin;
-import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
@@ -21,8 +18,8 @@ import 'package:uuid/uuid.dart';
 
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 
-import 'byte_store_ext.dart';
-import 'constants.dart';
+import '../utils/byte_store_ext.dart';
+import '../constants.dart';
 
 const _uuid = Uuid();
 
@@ -35,7 +32,7 @@ class SidecarRunner {
   final Directory root;
   final completed = Completer();
 
-  LogDelegate get delegate => server.delegate;
+  LogDelegateBase get delegate => server.delegate;
 
   bool _closed = false;
   final _sdkPath = getSdkPath();

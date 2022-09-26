@@ -7,15 +7,15 @@ import 'package:sidecar/sidecar.dart';
 
 final lintBootstrapHeader = '''
 
-List<LintRuleConstructor> lintRuleConstructors = [
+Map<Id, LintRuleConstructor> lintRuleConstructors = {
 ''';
 final editBootstrapHeader = '''
 
-List<CodeEditConstructor> codeEditConstructors = [
+Map<Id, CodeEditConstructor> codeEditConstructors = {
 ''';
 
 final bootstrapFooter = '''
-];
+};
 
 ''';
 
