@@ -9,10 +9,9 @@ import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
+
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
-
-import 'package:sidecar/sidecar.dart';
 
 import '../context_services/context_services.dart';
 
@@ -142,7 +141,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   @override
   Future<plugin.EditGetAssistsResult> handleEditGetAssists(
-    EditGetAssistsParams parameters,
+    plugin.EditGetAssistsParams parameters,
   ) async {
     final filePath = parameters.file;
     final offset = parameters.offset;
@@ -159,7 +158,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       edits.map((e) async => await e.toPrioritizedSourceChange(_ref)),
     );
 
-    return EditGetAssistsResult(
+    return plugin.EditGetAssistsResult(
       changes.whereType<plugin.PrioritizedSourceChange>().toList(),
     );
   }

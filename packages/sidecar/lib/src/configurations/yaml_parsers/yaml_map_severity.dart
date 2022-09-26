@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../../../sidecar.dart';
+import '../../models/models.dart';
+import '../project/errors.dart';
+import 'yaml_source_error.dart';
 
 extension YamlMapSeverity on YamlMap {
   Either<LintRuleType?, List<YamlSourceError>> parseSeverity() {

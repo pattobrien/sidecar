@@ -1,4 +1,4 @@
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/builder.dart';
 import 'package:auto_route_utilities/auto_route_utilities.dart';
 
 class CreateNewPageWidget extends CodeEdit {

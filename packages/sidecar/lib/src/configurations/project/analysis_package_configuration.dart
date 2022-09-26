@@ -3,9 +3,8 @@ import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../models/models.dart';
+import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
-import 'errors.dart';
-import 'yaml_parsers/yaml_parsers.dart';
 
 part 'analysis_package_configuration.freezed.dart';
 
@@ -103,7 +102,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
               LintConfiguration(
                 packageName: packageName,
                 id: yamlKey.value as String,
-                sourceErrors: [
+                sourceErrors: <YamlSourceError>[
                   YamlSourceError(
                       sourceSpan: yamlKey.span,
                       message:
@@ -176,7 +175,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
               AssistConfiguration(
                 packageName: packageName,
                 id: yamlKey.value as String,
-                sourceErrors: [
+                sourceErrors: <YamlSourceError>[
                   YamlSourceError(
                       sourceSpan: yamlKey.span,
                       message:

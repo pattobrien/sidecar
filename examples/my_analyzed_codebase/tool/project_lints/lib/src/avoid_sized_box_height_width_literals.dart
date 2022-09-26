@@ -1,5 +1,5 @@
 import 'package:flutter_utilities/flutter_utilities.dart';
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/builder.dart';
 
 class AvoidSizedBoxHeightWidthLiterals extends LintRule {
   @override
@@ -17,7 +17,9 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
   ) async {
     final visitor = _Visitor();
     unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this, message: _desc);
+    return visitor.nodes
+        .map((e) => e.toDetectedLint(unit, this, message: _desc))
+        .toList();
   }
 }
 

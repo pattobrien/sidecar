@@ -1,10 +1,12 @@
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:source_span/source_span.dart';
 
-import '../../sidecar.dart';
+import '../utils/source_span_utilities.dart';
+import 'lint_rule.dart';
 
 part 'detected_lint.freezed.dart';
 

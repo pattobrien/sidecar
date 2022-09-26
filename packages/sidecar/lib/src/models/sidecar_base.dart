@@ -4,7 +4,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:yaml/yaml.dart';
 
 import '../ast/ast.dart';
-import '../configurations/configurations.dart';
+import '../configurations/yaml_parsers/yaml_parsers.dart';
 import 'models.dart';
 
 @internal

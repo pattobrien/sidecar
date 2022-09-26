@@ -1,11 +1,15 @@
 // ignore_for_file: implementation_imports
 
+import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/source/source_range.dart';
 import 'package:analyzer/src/dart/ast/element_locator.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
+import 'package:source_span/source_span.dart';
 
-import '../../sidecar.dart';
+import '../models/models.dart';
+import 'source_span_utilities.dart';
 
 /// Used to translate a single AST node into a SourceSpan (i.e. start and end location within source code)
 extension AstNodeX on AstNode {
@@ -70,14 +74,14 @@ extension AstNodeX on AstNode {
           correction: correction);
 }
 
-extension ListAstNodeX on List<AstNode> {
-  List<DetectedLint> toDetectedLints(
-    ResolvedUnitResult unit,
-    LintRule rule, {
-    String message = '',
-    String? correction,
-  }) {
-    return map((e) => e.toDetectedLint(unit, rule,
-        correction: correction, message: message)).toList();
-  }
-}
+// extension ListAstNodeX on List<AstNode> {
+//   List<DetectedLint> toDetectedLints(
+//     ResolvedUnitResult unit,
+//     LintRule rule, {
+//     String message = '',
+//     String? correction,
+//   }) {
+//     return map((e) => e.toDetectedLint(unit, rule,
+//         correction: correction, message: message)).toList();
+//   }
+// }

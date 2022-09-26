@@ -1,7 +1,6 @@
-import 'package:analyzer/error/error.dart';
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
+import 'package:source_span/source_span.dart';
 
-import '../../../sidecar.dart';
+import '../yaml_parsers/yaml_source_error.dart';
 
 /// Thrown when sidecar isnt declared under analyzer.plugins in ```analysis_options.yaml``` file.
 class MissingAnalyzerPluginException implements Exception {}
@@ -71,29 +70,6 @@ class InvalidIncludesException implements SidecarException {
   const InvalidIncludesException(this.message);
 
   final MapEntry<SourceSpan, String> message;
-}
-
-class YamlSourceError {
-  const YamlSourceError({
-    required this.sourceSpan,
-    required this.message,
-  });
-
-  final String message;
-  final SourceSpan sourceSpan;
-
-  plugin.AnalysisError toAnalysisError() {
-    return plugin.AnalysisError(
-        plugin.AnalysisErrorSeverity.ERROR,
-        plugin.AnalysisErrorType.HINT,
-        sourceSpan.location,
-        message,
-        'sidecar_configuration_error'
-        // url: rule.url,
-        // correction: correction,
-        //TODO: hasFix
-        );
-  }
 }
 
 /// Thrown when sidecar declaration is not properly formatted.

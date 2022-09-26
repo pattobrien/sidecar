@@ -1,5 +1,5 @@
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/builder.dart';
 import 'example_config.dart';
 
 class SomeCodeEdit extends CodeEdit {

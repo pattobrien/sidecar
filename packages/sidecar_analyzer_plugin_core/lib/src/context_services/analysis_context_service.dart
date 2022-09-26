@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/source/line_info.dart';
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
@@ -7,6 +8,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
+import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
 import 'activated_edits.dart';
@@ -69,7 +71,7 @@ class AnalysisContextService {
 
     for (var lintRule in lintRules) {
       delegate.sidecarMessage('activating: ${lintRule.key}');
-      final config = projectConfig.lintConfiguration(lintRule.key);
+      final config = projectConfig.getConfiguration(lintRule.key);
       final lint = lintRule.value();
       lint.initialize(configurationContent: config?.configuration, ref: ref);
       if (lint.errors?.isNotEmpty ?? false) {
@@ -81,7 +83,7 @@ class AnalysisContextService {
     }
     for (var codeEdit in ref.read(codeEditConstructorProvider).entries) {
       final edit = codeEdit.value();
-      final config = projectConfig.editConfiguration(codeEdit.key);
+      final config = projectConfig.getConfiguration(codeEdit.key);
       edit.initialize(configurationContent: config?.configuration, ref: ref);
       if (edit.errors != null) {
         errorComposer.addErrors(edit.errors!);

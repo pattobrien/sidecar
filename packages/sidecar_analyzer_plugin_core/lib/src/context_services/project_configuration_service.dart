@@ -29,10 +29,13 @@ class ProjectConfigurationService {
   late ProjectConfiguration? _projectConfiguration;
 
   LintConfiguration? getLintConfiguration(Id id) =>
-      _projectConfiguration?.lintConfiguration(id);
+      getConfiguration(id) as LintConfiguration?;
 
-  EditConfiguration? getEditConfiguration(Id id) =>
-      _projectConfiguration?.editConfiguration(id);
+  AssistConfiguration? getAssistConfiguration(Id id) =>
+      getConfiguration(id) as AssistConfiguration?;
+
+  AnalysisConfiguration? getConfiguration(Id id) =>
+      _projectConfiguration?.getConfiguration(id);
 
   ProjectConfiguration? get projectConfiguration => _projectConfiguration;
   String get contents => _contents;

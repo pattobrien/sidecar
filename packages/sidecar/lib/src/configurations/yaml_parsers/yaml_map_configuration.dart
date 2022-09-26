@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:yaml/yaml.dart';
 
-import '../errors.dart';
+import 'yaml_source_error.dart';
 
 extension YamlMapConfigurationParse on YamlMap {
   Either<YamlMap?, List<YamlSourceError>> parseConfiguration() {
