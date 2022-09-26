@@ -17,7 +17,7 @@ class AvoidFlutterInApplicationLayer extends LintRule {
   LintRuleType get defaultType => LintRuleType.error;
 
   @override
-  Future<List<DetectedLint>> computeAnalysisError(
+  Future<List<DetectedLint>> computeGenericAnalysisError(
     AnalysisContext analysisContext,
     String path,
   ) async {

@@ -7,13 +7,16 @@ import '../ast/ast.dart';
 import '../configurations/configurations.dart';
 import 'models.dart';
 
+@internal
 abstract class SidecarBase {
   String get code;
   LintPackageId get packageName;
 
   MapDecoder? get jsonDecoder => null;
 
-  Id get id;
+  Id get id => Id(id: code, packageId: packageName, type: type);
+
+  IdType get type;
 
   @mustCallSuper
   List<YamlSourceError>? get errors => _errors;
@@ -21,7 +24,6 @@ abstract class SidecarBase {
   @mustCallSuper
   Object get configuration => _configuration;
 
-  @internal
   late Ref ref;
   late Object _configuration;
   final List<YamlSourceError> _errors = [];

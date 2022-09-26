@@ -19,7 +19,7 @@ abstract class LintRule extends SidecarBase {
   String? get url => null;
 
   @override
-  Id get id => Id(id: code, packageId: packageName, type: IdType.lintRule);
+  IdType get type => IdType.lintRule;
 
   //TODO: can we remove the future here?
   FutureOr<List<DetectedLint>> computeDartAnalysisError(
@@ -33,7 +33,7 @@ abstract class LintRule extends SidecarBase {
   ) =>
       [];
 
-  Future<List<DetectedLint>> computeAnalysisError(
+  Future<List<DetectedLint>> computeGenericAnalysisError(
     AnalysisContext analysisContext,
     String path,
   ) =>

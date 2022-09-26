@@ -29,7 +29,8 @@ class ErrorReporter extends IErrorReporter {
     AnalysisContext context,
     LintRule rule,
   ) async {
-    final reportedNode = await rule.computeAnalysisError(context, sourcePath);
+    final reportedNode =
+        await rule.computeGenericAnalysisError(context, sourcePath);
 
     return reportedNode.map((node) {
       final highlightedError = rule.computeLintHighlight(node);
