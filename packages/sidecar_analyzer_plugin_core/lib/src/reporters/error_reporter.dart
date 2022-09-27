@@ -6,12 +6,10 @@ import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_analyzer_plugin_core/src/context_services/analysis_errors.dart';
 
 class ErrorReporter {
-  ErrorReporter(this.file, this.ref)
-      : results = ref.watch(analysisResultsProvider(file).state).state;
+  ErrorReporter(this.file, this.ref);
 
   final AnalyzedFile file;
   final Ref ref;
-  final Iterable<AnalysisResult> results;
 
   Future<List<AnalysisResult>> generateDartLints(
     ResolvedUnitResult unit,
@@ -38,6 +36,7 @@ class ErrorReporter {
     int offset,
     int length,
   ) async {
+    final results = ref.read(analysisResultsProvider(file));
     final relevantResults =
         results.where((element) => element.isWithinOffset(unit.path, offset));
     final editResults = await Future.wait(

@@ -9,7 +9,9 @@ final activatedLintsProvider = Provider.family<ActivatedLints, ContextRoot>(
 );
 
 class ActivatedLints {
-  ActivatedLints({required this.contextRoot});
+  ActivatedLints({
+    required this.contextRoot,
+  });
 
   final ContextRoot contextRoot;
 
@@ -17,4 +19,5 @@ class ActivatedLints {
 
   void addLint(LintRule rule) => lintRules.add(rule);
   void removeLint(LintRule rule) => lintRules.remove(rule);
+  void clearLints() => lintRules.clear();
 }

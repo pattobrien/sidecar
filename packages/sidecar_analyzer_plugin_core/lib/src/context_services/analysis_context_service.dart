@@ -56,6 +56,9 @@ class AnalysisContextService {
 
     final errorComposer = ref.read(errorComposerProvider(root));
     final lintRules = ref.read(lintRuleConstructorProvider).entries;
+    final codeEdits = ref.read(codeEditConstructorProvider).entries;
+    ref.read(activatedLintsProvider(root)).clearLints();
+    ref.read(activatedEditsProvider(root)).clearEdits();
 
     for (var lintRule in lintRules) {
       delegate.sidecarMessage('activating: ${lintRule.key}');
@@ -69,7 +72,7 @@ class AnalysisContextService {
         activateLints.addLint(lint);
       }
     }
-    for (var codeEdit in ref.read(codeEditConstructorProvider).entries) {
+    for (var codeEdit in codeEdits) {
       final edit = codeEdit.value();
       final config = projectConfig.getConfiguration(codeEdit.key);
       edit.initialize(configurationContent: config?.configuration, ref: ref);
@@ -85,7 +88,7 @@ class AnalysisContextService {
     String path,
   ) async {
     final analyzedFile = AnalyzedFile(root, path);
-    final x = ref.read(analysisResultsProvider(analyzedFile));
+
     final rootPath = root.root.path;
     final analysisPath = context.contextRoot.optionsFile?.path;
 

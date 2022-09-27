@@ -131,7 +131,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     final unit = await getResolvedUnitResult(filePath);
     final context = unit.session.analysisContext;
-    final analysisContextService = getAnalysisContextService(context);
+
     final analyzedFile = AnalyzedFile(context.contextRoot, filePath);
 
     final analysisResults =
