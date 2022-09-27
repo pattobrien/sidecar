@@ -22,6 +22,7 @@ sidecar:
     flutter_lints:
       use_full_hex_values_for_flutter_colors:
       use_key_in_widget_constructors:
+        enabled: 123
 
     # riverpod_lints:
     #   prefer_consumer_widget:

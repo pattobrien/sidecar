@@ -2,25 +2,29 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer/source/line_info.dart';
+
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart'
     hide ContextRoot;
+
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
-import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
+import '../log_delegate/log_delegate.dart';
+import '../plugin/plugin.dart';
 import '../reporters/error_reporter.dart';
+import '../utils/channel_extension.dart';
+
 import 'activated_edits.dart';
 import 'activated_lints.dart';
 import 'analysis_errors.dart';
 import 'config_error_composer.dart';
 import 'lint_constructor_providers.dart';
 import 'project_configuration_service.dart';
-import '../utils/channel_extension.dart';
 
 class AnalysisContextService {
   AnalysisContextService(
@@ -91,6 +95,7 @@ class AnalysisContextService {
     if (path == analysisPath) {
       // we handle analyzing the config file separately
       await projectConfigurationService.parse();
+      initializeLintsAndEdits(context);
       ref.read(errorComposerProvider(root)).flush();
     }
 

@@ -9,9 +9,7 @@ final activatedLintsProvider = Provider.family<ActivatedLints, ContextRoot>(
 );
 
 class ActivatedLints {
-  ActivatedLints({
-    required this.contextRoot,
-  });
+  ActivatedLints({required this.contextRoot});
 
   final ContextRoot contextRoot;
 

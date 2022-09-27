@@ -108,6 +108,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required String path,
   }) async {
+    if (!analysisContext.isSidecarEnabled) return;
     final analysisContextService = getAnalysisContextService(analysisContext);
 
     try {
@@ -168,6 +169,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final filePath = parameters.file;
     final offset = parameters.offset;
     final length = parameters.length;
+
     if (p.extension(filePath) == '.dart') {
       final unit = await getResolvedUnitResult(filePath);
       final context = unit.session.analysisContext;

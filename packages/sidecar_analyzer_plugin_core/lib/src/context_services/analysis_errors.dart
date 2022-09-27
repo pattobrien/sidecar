@@ -8,11 +8,6 @@ import 'package:sidecar/sidecar.dart';
 
 part 'analysis_errors.freezed.dart';
 
-final detectedLintsProvider =
-    StateProvider.family<Iterable<DetectedLint>, AnalyzedFile>(
-  (ref, analyzedFile) => <DetectedLint>[],
-);
-
 final analysisResultsProvider =
     StateProvider.family<Iterable<AnalysisResult>, AnalyzedFile>(
   (ref, analyzedFile) => <AnalysisResult>[],

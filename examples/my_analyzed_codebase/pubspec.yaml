@@ -20,8 +20,8 @@ dev_dependencies:
   auto_route_generator: ^5.0.2
   lints: ^2.0.0
   test: ^1.16.0
-  project_lints:
-    path: tool/project_lints
+  # project_lints:
+  #   path: tool/project_lints
   sidecar_analyzer_plugin:
     path: .sidecar/sidecar_analyzer_plugin
   # sidecar_analyzer_plugin:
