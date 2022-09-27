@@ -1,6 +1,6 @@
 name: design_system_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.5
+version: 0.1.6
 publish_to: https://micropub-3qduh.ondigitalocean.app/
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/design_system_lints
 
@@ -17,7 +17,7 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.14-dev.1
+    version: ^0.1.15-dev.2
   source_span: ^1.8.2
 
 dev_dependencies:

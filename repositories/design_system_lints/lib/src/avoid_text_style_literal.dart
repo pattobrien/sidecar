@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_utilities/flutter_utilities.dart';
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/builder.dart';
 
 class AvoidTextStyleLiteral extends LintRule {
   @override
@@ -11,26 +11,21 @@ class AvoidTextStyleLiteral extends LintRule {
   String get packageName => 'design_system_lints';
 
   @override
-  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
     unit.unit.accept(visitor);
-    return visitor.nodes
-        .toDetectedLints(unit, this, message: r'Avoid TextStyle literal.');
+    return visitor.nodes;
   }
 }
 
-class _Visitor extends GeneralizingAstVisitor {
-  final List<AstNode> nodes = [];
-
-  _Visitor();
-
+class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
     if (FlutterTypeChecker.isTextStyle(element?.returnType)) {
-      nodes.add(node);
+      reportAstNode(node, message: r'Avoid TextStyle literal.');
     }
     super.visitInstanceCreationExpression(node);
   }
