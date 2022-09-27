@@ -17,19 +17,20 @@ class CreateNewPageWidget extends CodeEdit {
       CreateNewPageWidgetConfiguration.fromJson;
 
   @override
-  Future<PrioritizedSourceChange?> computeSourceChange(
-    RequestedCodeEdit requestedCodeEdit,
+  Future<List<PrioritizedSourceChange>> computeDartSourceChanges(
+    DartAnalysisResult result,
   ) async {
     // prepare change builder
-    final unit = requestedCodeEdit.unit;
+    final unit = result.unit;
     final changeBuilder = AutoRouteChangeBuilder(session: unit.session);
 
-    final node =
-        requestedCodeEdit.node.thisOrAncestorOfType<ClassDeclaration>();
+    final node = result.sourceSpan
+        .toAstNode(unit)
+        ?.thisOrAncestorOfType<ClassDeclaration>();
 
     final pageClass = node?.name2.value().toString();
 
-    if (node == null || pageClass == null) return null;
+    if (node == null || pageClass == null) return [];
 
     final workspacePath = unit.session.analysisContext.contextRoot.root
         .canonicalizePath(configuration.routePath);
@@ -41,10 +42,12 @@ class CreateNewPageWidget extends CodeEdit {
       });
     });
 
-    return PrioritizedSourceChange(
-      0,
-      changeBuilder.sourceChange..message = 'Add new AdaptiveRoute',
-    );
+    return [
+      PrioritizedSourceChange(
+        0,
+        changeBuilder.sourceChange..message = 'Add new AdaptiveRoute',
+      )
+    ];
   }
 }
 

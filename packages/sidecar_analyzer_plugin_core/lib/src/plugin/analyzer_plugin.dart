@@ -12,12 +12,16 @@ import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:sidecar/sidecar.dart';
 
 import '../context_services/context_services.dart';
 
 import '../constants.dart';
 import '../log_delegate/log_delegate.dart';
 import 'analyzer_mode.dart';
+import '../utils/utils.dart';
+
+import 'package:path/path.dart' as p;
 
 final pluginProvider = Provider((ref) => SidecarAnalyzerPlugin(ref));
 
@@ -95,7 +99,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     ));
 
     delegate.sidecarVerboseMessage('afterNewContextCollection complete');
-    await super.afterNewContextCollection(contextCollection: contextCollection);
+    return super
+        .afterNewContextCollection(contextCollection: contextCollection);
   }
 
   @override
@@ -105,15 +110,15 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     final analysisContextService = getAnalysisContextService(analysisContext);
 
-    // try {
-    final errors = await analysisContextService.getAnalysisErrors(path);
-    final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
-    channel.sendNotification(notif);
-    // } catch (e, stackTrace) {
-    //   delegate.sidecarError(
-    //       'error analyzing $path -- ${e.toString()}', stackTrace);
-    //   channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
-    // }
+    try {
+      final errors = await analysisContextService.getAnalysisErrors(path);
+      final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
+      channel.sendNotification(notif);
+    } catch (e, stackTrace) {
+      delegate.sidecarError(
+          'error analyzing $path -- ${e.toString()}', stackTrace);
+      channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
+    }
   }
 
   @override
@@ -126,15 +131,32 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final unit = await getResolvedUnitResult(filePath);
     final context = unit.session.analysisContext;
     final analysisContextService = getAnalysisContextService(context);
+    final analyzedFile = AnalyzedFile(context.contextRoot, filePath);
 
-    final detectedLints = await analysisContextService
-        .computeLints(filePath)
-        .then((value) => value.where(
-            (detectedLint) => detectedLint.isWithinOffset(filePath, offset)));
+    final analysisResults =
+        _ref.read(analysisResultsProvider(analyzedFile)).where((element) {
+      final isWithinOffset = element.isWithinOffset(filePath, offset);
+      final isLintRule = element.rule is LintRule;
+      return isWithinOffset && isLintRule;
+    });
+    // final analysisResults = await analysisContextService
+    //     .computeLints(filePath)
+    //     .then((value) => value.where((analysisResult) =>
+    //         analysisResult.isWithinOffset(filePath, offset)));
 
     final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
-      detectedLints.map((e) async => await e.computeAnalysisErrorFixes(_ref)),
+      analysisResults.map(
+        (e) => e.rule.computeSourceChanges(e).then(
+              (value) => plugin.AnalysisErrorFixes(
+                e.toAnalysisError()!,
+                fixes: value.map((e) => e.toPrioritizedSourceChange()).toList(),
+              ),
+            ),
+      ),
     );
+    // final flattenedList = analysisErrorFixes
+    //     .expand((element) => element)
+    //     .map((e) => e.toPrioritizedSourceChange());
 
     return plugin.EditGetFixesResult(analysisErrorFixes);
   }
@@ -146,20 +168,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final filePath = parameters.file;
     final offset = parameters.offset;
     final length = parameters.length;
+    if (p.extension(filePath) == '.dart') {
+      final unit = await getResolvedUnitResult(filePath);
+      final context = unit.session.analysisContext;
+      final analysisContextService = getAnalysisContextService(context);
 
-    final unit = await getResolvedUnitResult(filePath);
-    final context = unit.session.analysisContext;
-    final analysisContextService = getAnalysisContextService(context);
+      final edits =
+          await analysisContextService.getCodeAssists(unit, offset, length);
 
-    final edits =
-        analysisContextService.getCodeEditRequests(unit, offset, length);
-
-    final changes = await Future.wait<plugin.PrioritizedSourceChange?>(
-      edits.map((e) async => await e.toPrioritizedSourceChange(_ref)),
-    );
-
-    return plugin.EditGetAssistsResult(
-      changes.whereType<plugin.PrioritizedSourceChange>().toList(),
-    );
+      return plugin.EditGetAssistsResult(edits.toList());
+    }
+    return plugin.EditGetAssistsResult([]);
   }
 }

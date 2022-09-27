@@ -44,4 +44,9 @@ class EmptyDelegate implements LogDelegateBase {
   void sidecarMessage(String message) {
     // TODO: implement sidecarMessage
   }
+
+  @override
+  void analysisResult(AnalysisResult result) {
+    // TODO: implement analysisResultMessage
+  }
 }

@@ -13,6 +13,11 @@ final detectedLintsProvider =
   (ref, analyzedFile) => <DetectedLint>[],
 );
 
+final analysisResultsProvider =
+    StateProvider.family<Iterable<AnalysisResult>, AnalyzedFile>(
+  (ref, analyzedFile) => <AnalysisResult>[],
+);
+
 @freezed
 class AnalyzedFile with _$AnalyzedFile {
   const AnalyzedFile._();

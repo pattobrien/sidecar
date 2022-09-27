@@ -1,8 +1,11 @@
+export 'analysis_result.dart';
 export 'code_edit.dart';
 export 'detected_lint.dart';
+export 'edit_result.dart';
 export 'errors.dart';
 export 'id.dart';
 export 'lint_rule.dart';
+export 'lint_rule_type.dart';
 export 'requested_code_edit.dart';
 export 'sidecar_base.dart';
 export 'typedefs.dart';

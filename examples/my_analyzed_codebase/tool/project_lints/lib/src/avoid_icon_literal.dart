@@ -12,34 +12,66 @@ class AvoidIconLiteral extends LintRule {
   @override
   String get packageName => 'design_system_lints';
 
+  final visitor = _SidecarVisitor();
+
   @override
-  Future<List<DetectedLint>> computeDartAnalysisError(
+  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) async {
-    final visitor = _Visitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes
-        .map((e) => e.toDetectedLint(unit, this, message: _desc))
-        .toList();
+    return visitor.nodes;
   }
 
   @override
-  SourceSpan computeLintHighlight(DetectedLint lint) {
-    final node = lint.sourceSpan.toAstNode(lint.unit);
-    if (node is InstanceCreationExpression) {
-      // return node;
+  Future<List<EditResult>> computeSourceChanges(AnalysisResult result) {
+    result as DartAnalysisResult;
+    visitor.initializeVisitor(result.rule, result.unit);
+    result.unit.unit.accept(visitor);
+    return super.computeSourceChanges(result);
+  }
+}
+
+class _SidecarVisitor extends SidecarAstVisitor {
+  @override
+  visitPrefixedIdentifier(PrefixedIdentifier node) {
+    final isIconData = _isIconData(node.prefix.staticElement);
+    if (isIconData) {
+      reportAstNode(node, message: _desc);
     }
-    return lint.sourceSpan;
+    return super.visitPrefixedIdentifier(node);
+  }
+
+  bool _isIconData(Element? element) {
+    if (element != null) {
+      final iconDataPath = 'flutter/src/material/icons.dart';
+      final uri = element.librarySource?.uri;
+      if (uri == null) return false;
+      if (uri.isScheme('package') && uri.path == iconDataPath) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
 class _Visitor extends GeneralizingAstVisitor {
-  final List<AstNode> nodes = [];
+  _Visitor(this.rule, this.unit);
+  final List<DartAnalysisResult> nodes = [];
+  final SidecarBase rule;
+  final ResolvedUnitResult unit;
 
   @override
   visitPrefixedIdentifier(PrefixedIdentifier node) {
     final isIconData = _isIconData(node.prefix.staticElement);
-    if (isIconData) nodes.add(node);
+    if (isIconData)
+      nodes.add(
+        node.toDartAnalysisResult(
+          rule,
+          unit: unit,
+          message: _desc,
+        ),
+      );
     return super.visitPrefixedIdentifier(node);
   }
 

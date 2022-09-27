@@ -18,11 +18,12 @@ class SomeCodeEdit extends CodeEdit {
   ExampleConfig Function(Map json) get jsonDecoder => ExampleConfig.fromJson;
 
   @override
-  Future<PrioritizedSourceChange?> computeSourceChange(
-    RequestedCodeEdit requestedCodeEdit,
+  Future<List<PrioritizedSourceChange>> computeGenericSourceChanges(
+    DetectedLint lint,
   ) async {
-    final x = configuration;
-    return PrioritizedSourceChange(
-        0, SourceChange('Heres some message to display to the user.'));
+    return [
+      PrioritizedSourceChange(
+          0, SourceChange('Heres some message to display to the user.'))
+    ];
   }
 }

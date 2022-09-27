@@ -1,3 +1,8 @@
+import 'dart:async';
+
+import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
+import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
@@ -5,9 +10,11 @@ import 'package:yaml/yaml.dart';
 
 import '../ast/ast.dart';
 import '../configurations/yaml_parsers/yaml_parsers.dart';
+import 'analysis_result.dart';
+import 'edit_result.dart';
 import 'models.dart';
 
-@internal
+// @internal
 abstract class SidecarBase {
   String get code;
   LintPackageId get packageName;
@@ -52,4 +59,28 @@ abstract class SidecarBase {
       }
     }
   }
+
+  //TODO: can we remove the future here?
+  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+    ResolvedUnitResult unit,
+  ) =>
+      [];
+
+  //TODO: can we remove the future here?
+  FutureOr<List<AnalysisResult>> computeYamlAnalysisResults(
+    YamlMap yamlMap,
+  ) =>
+      [];
+
+  Future<List<AnalysisResult>> computeGenericAnalysisResults(
+    AnalysisContext analysisContext,
+    String path,
+  ) =>
+      Future.value([]);
+
+  //TODO: can we use SourceChange instead of PrioritizedSourceChange?
+  Future<List<EditResult>> computeSourceChanges(
+    AnalysisResult result,
+  ) =>
+      Future.value(<EditResult>[]);
 }

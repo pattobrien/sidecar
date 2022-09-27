@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/builder.dart';
 
@@ -8,25 +10,24 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
   @override
   String get packageName => 'project_lints';
 
-  static const _desc =
-      r'Avoid using height or width literals in SizedBox widgets.';
-
   @override
-  Future<List<DetectedLint>> computeDartAnalysisError(
+  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) async {
-    final visitor = _Visitor();
+    final visitor = _Visitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes
-        .map((e) => e.toDetectedLint(unit, this, message: _desc))
-        .toList();
+    return visitor.nodes;
   }
 }
 
-class _Visitor extends GeneralizingAstVisitor {
-  final List<AstNode> nodes = [];
+class _Visitor extends GeneralizingAstVisitor<void> {
+  _Visitor(this.rule, this.unit);
+  final List<DartAnalysisResult> nodes = [];
+  final SidecarBase rule;
+  final ResolvedUnitResult unit;
 
-  _Visitor();
+  static const _desc =
+      r'Avoid using height or width literals in SizedBox widgets.';
 
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
@@ -44,7 +45,13 @@ class _Visitor extends GeneralizingAstVisitor {
         final exp = arg.expression;
         // TODO: if expression is a variable reference to a variable declared within the DesignSystem spec, then skip; else: mark node
         if (exp is DoubleLiteral || exp is IntegerLiteral) {
-          nodes.add(exp);
+          nodes.add(
+            exp.toDartAnalysisResult(
+              rule,
+              unit: unit,
+              message: _desc,
+            ),
+          );
         }
         if (exp is PrefixedIdentifier) {
           //TODO: handle expressions like "SomeClass.staticInteger"

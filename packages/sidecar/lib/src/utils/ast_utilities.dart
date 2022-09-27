@@ -1,6 +1,6 @@
 // ignore_for_file: implementation_imports
 
-import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/source/source_range.dart';
@@ -59,20 +59,51 @@ extension AstNodeX on AstNode {
     return ElementLocator.locate(node);
   }
 
-  DetectedLint toDetectedLint(
-    ResolvedUnitResult unit,
-    LintRule rule, {
-    String message = '',
+  AnalysisResult toAnalysisResult(
+    SidecarBase rule, {
+    required SourceSpan sourceSpan,
+    required String message,
     String? correction,
+    SourceSpan? highlightedSpan,
   }) =>
-      DetectedLint(
-          rule: rule,
-          unit: unit,
-          sourceSpan: toSourceSpan(unit),
-          lintType: rule.defaultType,
-          message: message,
-          correction: correction);
-}
+      AnalysisResult.generic(
+        rule: rule,
+        sourceSpan: sourceSpan,
+        message: message,
+        correction: correction,
+        highlightedSpan: highlightedSpan,
+      );
+
+  DartAnalysisResult toDartAnalysisResult(
+    SidecarBase rule, {
+    required ResolvedUnitResult unit,
+    required String message,
+    String? correction,
+    SourceSpan? highlightedSpan,
+  }) =>
+      AnalysisResult.dart(
+        unit: unit,
+        rule: rule,
+        sourceSpan: toSourceSpan(unit),
+        message: message,
+        correction: correction,
+        highlightedSpan: highlightedSpan,
+      ) as DartAnalysisResult;
+
+//   DetectedLint toDetectedLint(
+//     ResolvedUnitResult unit,
+//     SidecarBase rule, {
+//     required DartAnalysisResult result,
+//   }) =>
+//       DetectedLint(
+//         rule: rule,
+//         unit: unit,
+//         result: result,
+//         lintType: rule.,
+//         message: message,
+//         correction: correction,
+//       );
+// }
 
 // extension ListAstNodeX on List<AstNode> {
 //   List<DetectedLint> toDetectedLints(
@@ -84,4 +115,4 @@ extension AstNodeX on AstNode {
 //     return map((e) => e.toDetectedLint(unit, rule,
 //         correction: correction, message: message)).toList();
 //   }
-// }
+}
