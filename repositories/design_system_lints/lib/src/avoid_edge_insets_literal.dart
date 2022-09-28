@@ -16,6 +16,7 @@ class AvoidEdgeInsetsLiteral extends LintRule {
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
     return visitor.nodes;
   }

@@ -23,11 +23,13 @@ sidecar:
       use_full_hex_values_for_flutter_colors:
       use_key_in_widget_constructors:
         # enabled: 123
+        # configuration:
+        #   abc: 123
 
     # riverpod_lints:
     #   prefer_consumer_widget:
-    #     severity: 123
-    #     enabled: true
+    # severity: 123
+    # enabled: true
     # configuration:
     #   some_property:
 

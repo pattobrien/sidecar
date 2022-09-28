@@ -23,16 +23,13 @@ class UseFullHexValuesForFlutterColors extends LintRule {
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes
-        .map((e) => e.toDartAnalysisResult(unit: unit, this, message: _desc))
-        .toList();
+    return visitor.nodes;
   }
 }
 
-class _Visitor extends GeneralizingAstVisitor {
-  final List<AstNode> nodes = [];
-
+class _Visitor extends SidecarAstVisitor {
   _Visitor();
 
   @override
@@ -46,7 +43,7 @@ class _Visitor extends GeneralizingAstVisitor {
         if (argument is IntegerLiteral) {
           final value = argument.literal.lexeme.toLowerCase();
           if (!value.startsWith('0x') || value.length != 10) {
-            nodes.add(argument);
+            reportAstNode(argument, message: _desc);
           }
         }
       }

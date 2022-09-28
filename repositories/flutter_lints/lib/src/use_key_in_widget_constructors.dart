@@ -28,16 +28,13 @@ class UseKeyInWidgetConstructors extends LintRule {
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes
-        .map((e) => e.toDartAnalysisResult(unit: unit, this, message: _desc))
-        .toList();
+    return visitor.nodes;
   }
 }
 
-class _Visitor extends GeneralizingAstVisitor<void> {
-  final List<AstNode> nodes = [];
-
+class _Visitor extends SidecarAstVisitor {
   _Visitor();
 
   @override
@@ -48,10 +45,7 @@ class _Visitor extends GeneralizingAstVisitor<void> {
         // FlutterUtils().hasWidgetAsAscendant(classElement) &&
         FlutterTypeChecker.isWidget(classElement.thisType) &&
         classElement.constructors.where((e) => !e.isSynthetic).isEmpty) {
-      // rule.reportAstNode(node.name);
-      // final lint = DetectedLint.fromAstNode(node.name, unit, rule);
-
-      nodes.add(node.name);
+      reportAstNode(node.name, message: _desc);
     }
     super.visitClassDeclaration(node);
   }
@@ -85,8 +79,8 @@ class _Visitor extends GeneralizingAstVisitor<void> {
           }
           return false;
         })) {
-      var errorNode = node.name ?? node.returnType;
-      nodes.add(errorNode);
+      final errorNode = node.name ?? node.returnType;
+      reportAstNode(errorNode, message: _desc);
     }
     super.visitConstructorDeclaration(node);
   }

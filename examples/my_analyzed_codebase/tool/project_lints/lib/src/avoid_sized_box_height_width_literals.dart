@@ -14,18 +14,14 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
   FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) async {
-    final visitor = _Visitor(this, unit);
+    final visitor = _Visitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
     return visitor.nodes;
   }
 }
 
-class _Visitor extends GeneralizingAstVisitor<void> {
-  _Visitor(this.rule, this.unit);
-  final List<DartAnalysisResult> nodes = [];
-  final SidecarBase rule;
-  final ResolvedUnitResult unit;
-
+class _Visitor extends SidecarAstVisitor {
   static const _desc =
       r'Avoid using height or width literals in SizedBox widgets.';
 
@@ -45,13 +41,7 @@ class _Visitor extends GeneralizingAstVisitor<void> {
         final exp = arg.expression;
         // TODO: if expression is a variable reference to a variable declared within the DesignSystem spec, then skip; else: mark node
         if (exp is DoubleLiteral || exp is IntegerLiteral) {
-          nodes.add(
-            exp.toDartAnalysisResult(
-              rule,
-              unit: unit,
-              message: _desc,
-            ),
-          );
+          reportAstNode(exp, message: _desc);
         }
         if (exp is PrefixedIdentifier) {
           //TODO: handle expressions like "SomeClass.staticInteger"

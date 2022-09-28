@@ -12,18 +12,13 @@ class PreferConsumerWidget extends LintRule {
   String get packageName => 'riverpod_lints';
 
   @override
-  TestConfig get configuration => super.configuration as TestConfig;
-
-  @override
-  MapDecoder? get jsonDecoder => TestConfig.fromJson;
-
-  @override
   FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
-    final visitor = _Visitor(this, unit);
+    final visitor = _Visitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.results;
+    return visitor.nodes;
   }
 
   @override
@@ -68,41 +63,18 @@ class PreferConsumerWidget extends LintRule {
   }
 }
 
-class _Visitor extends GeneralizingAstVisitor<void> {
-  _Visitor(this.sidecarBase, this.unit);
-
-  final List<DartAnalysisResult> results = [];
-  final SidecarBase sidecarBase;
-  final ResolvedUnitResult unit;
-
+class _Visitor extends SidecarAstVisitor {
   @override
   void visitClassDeclaration(ClassDeclaration node) {
     final superclass = node.extendsClause?.superclass;
 
     if (superclass?.name.name == 'StatelessWidget') {
-      final result = superclass!.toDartAnalysisResult(
-        sidecarBase,
-        unit: unit,
+      reportAstNode(
+        superclass!,
         message: 'Prefer to use ConsumerWidget over StatelessWidget',
       );
-
-      results.add(result);
     }
 
     return super.visitClassDeclaration(node);
-  }
-}
-
-class TestConfig {
-  const TestConfig({required this.someProperty});
-
-  final String someProperty;
-
-  factory TestConfig.fromJson(Map map) {
-    // try {
-    return TestConfig(someProperty: map['some_property']);
-    // } catch(e) {
-    //  throw StateError('invalid configuration');
-    // }
   }
 }

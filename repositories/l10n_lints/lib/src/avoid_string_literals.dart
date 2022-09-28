@@ -28,6 +28,7 @@ class AvoidStringLiterals extends LintRule {
     ResolvedUnitResult unit,
   ) {
     final visitor = _LiteralAstVisitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
     return visitor.nodes;
   }
