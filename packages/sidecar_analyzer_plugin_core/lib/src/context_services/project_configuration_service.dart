@@ -49,7 +49,36 @@ class ProjectConfigurationService {
         final sourceUrl = optionsFile.toUri();
         _projectConfiguration =
             ProjectConfiguration.parse(_contents, sourceUrl: sourceUrl);
-        errorComposer.addErrors(_projectConfiguration!.sourceErrors);
+        final allErrors = <YamlSourceError>[
+          ..._projectConfiguration!.sourceErrors,
+          ..._projectConfiguration!.assistPackages?.values
+                  .map((e) => e.sourceErrors)
+                  .expand((element) => element)
+                  .toList() ??
+              [],
+          ..._projectConfiguration!.lintPackages?.values
+                  .map((e) => e.sourceErrors)
+                  .expand((element) => element)
+                  .toList() ??
+              [],
+          ..._projectConfiguration!.lintPackages?.values
+                  .map((e) => e.lints)
+                  .map((e) => e.values)
+                  .expand((element) => element)
+                  .map((e) => e.sourceErrors)
+                  .expand((element) => element)
+                  .toList() ??
+              [],
+          ..._projectConfiguration!.assistPackages?.values
+                  .map((e) => e.assists)
+                  .map((e) => e.values)
+                  .expand((element) => element)
+                  .map((e) => e.sourceErrors)
+                  .expand((element) => element)
+                  .toList() ??
+              [],
+        ];
+        errorComposer.addErrors(allErrors);
       } catch (e) {
         _projectConfiguration = null;
       }
