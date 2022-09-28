@@ -1,4 +1,3 @@
-import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:sidecar/builder.dart';
 import 'example_config.dart';
 
@@ -18,12 +17,14 @@ class SomeCodeEdit extends CodeEdit {
   ExampleConfig Function(Map json) get jsonDecoder => ExampleConfig.fromJson;
 
   @override
-  Future<List<PrioritizedSourceChange>> computeGenericSourceChanges(
-    DetectedLint lint,
+  Future<List<EditResult>> computeSourceChanges(
+    AnalysisResult result,
   ) async {
-    return [
-      PrioritizedSourceChange(
-          0, SourceChange('Heres some message to display to the user.'))
+    return const [
+      EditResult(
+        message: 'Heres some message to display to the user.',
+        sourceChanges: [],
+      )
     ];
   }
 }

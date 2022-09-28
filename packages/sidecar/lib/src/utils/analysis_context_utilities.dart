@@ -3,16 +3,12 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/source/line_info.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 import 'package:analyzer/src/dart/micro/utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
-import 'package:yaml/yaml.dart';
 
-import '../configurations/project/errors.dart';
-import '../configurations/project/project_configuration.dart';
 import 'ast_utilities.dart';
 
 class AnalysisContextUtilities {

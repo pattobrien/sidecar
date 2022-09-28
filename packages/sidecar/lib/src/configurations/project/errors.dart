@@ -2,8 +2,22 @@ import 'package:source_span/source_span.dart';
 
 import '../yaml_parsers/yaml_source_error.dart';
 
+class SidecarException implements Exception {}
+
+class EmptyConfiguration implements SidecarException {
+  const EmptyConfiguration(this.error);
+  final Object error;
+}
+
+class IncorrectConfiguration implements SidecarException {
+  const IncorrectConfiguration(this.error, this.stackTrace, this.lintName);
+  final String lintName;
+  final Object error;
+  final StackTrace stackTrace;
+}
+
 /// Thrown when sidecar isnt declared under analyzer.plugins in ```analysis_options.yaml``` file.
-class MissingAnalyzerPluginException implements Exception {}
+class MissingAnalyzerPluginException implements SidecarException {}
 
 /// Thrown when sidecar declaration can't be found.
 ///
@@ -24,7 +38,7 @@ class MissingAnalyzerPluginException implements Exception {}
 ///   edits:
 ///
 /// ```
-class MissingSidecarConfiguration implements Exception {
+class MissingSidecarConfiguration implements SidecarException {
   const MissingSidecarConfiguration();
 
   @override
@@ -51,8 +65,6 @@ class SidecarConfigurationException implements SidecarException {
 
   final Map<SourceSpan, String> messages;
 }
-
-class SidecarException implements Exception {}
 
 class InvalidSeverityException implements SidecarException {
   const InvalidSeverityException(this.invalidValue);
@@ -91,4 +103,4 @@ class InvalidIncludesException implements SidecarException {
 ///   edits:
 ///
 /// ```
-class InvalidSidecarConfiguration implements Exception {}
+class InvalidSidecarConfiguration implements SidecarException {}

@@ -14,15 +14,21 @@ extension SourceSpanX on SourceSpan {
   plugin.Location get location {
     final fileExt = p.extension(sourceUrl!.path);
     final isYaml = fileExt == '.yaml' || fileExt == '.yml';
-    return plugin.Location(
-      sourceUrl!.path,
-      start.offset,
-      length,
-      isYaml ? start.line + 1 : start.line,
-      isYaml ? start.column + 1 : start.column,
-      endLine: isYaml ? end.line + 1 : end.line,
-      endColumn: isYaml ? end.column + 1 : end.column,
-    );
+    final url = sourceUrl;
+    if (url == null) {
+      throw UnimplementedError(
+          'SourceSpanX extension expects the source url to be non-null.');
+    } else {
+      return plugin.Location(
+        url.path,
+        start.offset,
+        length,
+        isYaml ? start.line + 1 : start.line,
+        isYaml ? start.column + 1 : start.column,
+        endLine: isYaml ? end.line + 1 : end.line,
+        endColumn: isYaml ? end.column + 1 : end.column,
+      );
+    }
   }
 
   SourceRange toSourceRange() => SourceRange(start.offset, length);

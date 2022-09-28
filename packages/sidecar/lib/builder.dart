@@ -7,6 +7,8 @@ export 'package:analyzer_plugin/protocol/protocol_generated.dart'
 export 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
 export 'package:source_span/source_span.dart';
 
+export 'src/annotations/annotations.dart';
+
 export 'src/models/models.dart';
 
 export 'src/utils/ast_utilities.dart';

@@ -83,7 +83,6 @@ abstract class SidecarBase {
   ) =>
       Future.value([]);
 
-  //TODO: can we use SourceChange instead of PrioritizedSourceChange?
   Future<List<EditResult>> computeSourceChanges(
     AnalysisResult result,
   ) =>
