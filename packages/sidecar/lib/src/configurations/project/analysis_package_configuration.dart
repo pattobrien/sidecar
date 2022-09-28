@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
+import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../models/models.dart';
@@ -14,6 +15,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
 
   const factory AnalysisPackageConfiguration.lint({
     required String packageName,
+    required SourceSpan packageNameSpan,
     required Map<String, LintConfiguration> lints,
     @Default(<Glob>[]) List<Glob> includes,
     @Default(<YamlSourceError>[]) List<YamlSourceError> sourceErrors,
@@ -21,6 +23,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
 
   const factory AnalysisPackageConfiguration.assist({
     required String packageName,
+    required SourceSpan packageNameSpan,
     required Map<String, AssistConfiguration> assists,
     @Default(<Glob>[]) List<Glob> includes,
     @Default(<YamlSourceError>[]) List<YamlSourceError> sourceErrors,
@@ -30,10 +33,12 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
     YamlMap yamlMap, {
     required IdType type,
     required String packageName,
+    required SourceSpan packageNameSpan,
   }) {
     switch (type) {
       case IdType.lintRule:
         return AnalysisPackageConfiguration.lint(
+          packageNameSpan: packageNameSpan,
           packageName: packageName,
           lints: yamlMap.nodes
               .map<String, LintConfiguration>((dynamic key, value) {
@@ -66,13 +71,14 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
               return MapEntry(
                 yamlKey.value as String,
                 LintConfiguration(
-                  packageName: packageName,
                   id: yamlKey.value as String,
                   includes: includes,
                   severity: severity,
                   enabled: enabled,
                   configuration: configuration,
                   sourceErrors: lintConfigurationErrors,
+                  packageName: packageName,
+                  lintNameSpan: yamlKey.span,
                 ),
               );
             } else if (value is YamlScalar) {
@@ -81,6 +87,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 return MapEntry(
                   yamlKey.value as String,
                   LintConfiguration(
+                    lintNameSpan: yamlKey.span,
                     packageName: packageName,
                     id: yamlKey.value as String,
                     enabled: scalarValue,
@@ -91,6 +98,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 return MapEntry(
                   yamlKey.value as String,
                   LintConfiguration(
+                    lintNameSpan: yamlKey.span,
                     packageName: packageName,
                     id: yamlKey.value as String,
                   ),
@@ -100,6 +108,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
             return MapEntry(
               yamlKey.value as String,
               LintConfiguration(
+                lintNameSpan: yamlKey.span,
                 packageName: packageName,
                 id: yamlKey.value as String,
                 sourceErrors: <YamlSourceError>[
@@ -114,6 +123,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
         );
       case IdType.codeEdit:
         return AnalysisPackageConfiguration.assist(
+          packageNameSpan: packageNameSpan,
           packageName: packageName,
           assists: yamlMap.nodes
               .map<String, AssistConfiguration>((dynamic key, node) {
@@ -140,6 +150,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
               return MapEntry(
                 yamlKey.value as String,
                 AssistConfiguration(
+                  lintNameSpan: yamlKey.span,
                   packageName: packageName,
                   id: yamlKey.value as String,
                   configuration: configuration,
@@ -154,6 +165,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 return MapEntry(
                   yamlKey.value as String,
                   AssistConfiguration(
+                    lintNameSpan: yamlKey.span,
                     packageName: packageName,
                     id: yamlKey.value as String,
                     enabled: scalarValue,
@@ -164,6 +176,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 return MapEntry(
                   yamlKey.value as String,
                   AssistConfiguration(
+                    lintNameSpan: yamlKey.span,
                     packageName: packageName,
                     id: yamlKey.value as String,
                   ),
@@ -174,6 +187,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
               yamlKey.value as String,
               AssistConfiguration(
                 packageName: packageName,
+                lintNameSpan: yamlKey.span,
                 id: yamlKey.value as String,
                 sourceErrors: <YamlSourceError>[
                   YamlSourceError(

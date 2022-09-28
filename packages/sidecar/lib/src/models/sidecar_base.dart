@@ -1,20 +1,16 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
-import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
-import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../builder.dart';
 import '../ast/ast.dart';
 import '../configurations/yaml_parsers/yaml_parsers.dart';
-import 'analysis_result.dart';
-import 'edit_result.dart';
-import 'models.dart';
 
-// @internal
 abstract class SidecarBase {
   String get code;
   LintPackageId get packageName;
@@ -42,12 +38,13 @@ abstract class SidecarBase {
   void initialize({
     required YamlMap? configurationContent,
     required Ref ref,
+    required SourceSpan lintNameSpan,
   }) {
     this.ref = ref;
     if (jsonDecoder != null) {
       if (configurationContent == null) {
         final error = YamlSourceError(
-          sourceSpan: configurationContent!.span,
+          sourceSpan: lintNameSpan,
           message: '$code error: empty configuration',
         );
         _errors.add(error);
@@ -56,8 +53,13 @@ abstract class SidecarBase {
         try {
           _configuration = jsonDecoder!(configurationContent);
         } catch (e, stackTrace) {
-          throw IncorrectConfiguration(
-              '$code error: $e', stackTrace, '$packageName $code');
+          final error = YamlSourceError(
+            sourceSpan: lintNameSpan,
+            message: '$code error: incorrect configuration: $e',
+          );
+          _errors.add(error);
+          // throw IncorrectConfiguration(
+          //     '$code error: $e', stackTrace, '$packageName $code');
         }
       }
     }

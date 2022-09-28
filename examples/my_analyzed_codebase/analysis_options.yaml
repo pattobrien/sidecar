@@ -24,10 +24,10 @@ sidecar:
       use_key_in_widget_constructors:
         # enabled: 123
 
-    riverpod_lints:
-      prefer_consumer_widget:
-        severity: 123
-        enabled: true
+    # riverpod_lints:
+    #   prefer_consumer_widget:
+    #     severity: 123
+    #     enabled: true
     # configuration:
     #   some_property:
 
@@ -49,7 +49,7 @@ sidecar:
       avoid_box_shadow_literal:
       avoid_edge_insets_literal:
 
-  # edits:
+  edits:
   #   riverpod_lints:
   #     create_text_edit_controller_provider:
   #       enabled: true

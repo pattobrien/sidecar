@@ -61,14 +61,19 @@ class ProjectConfiguration {
     required IdType type,
   }) {
     try {
-      return map?.map((dynamic key, dynamic value) {
+      return map?.nodes.map((dynamic key, dynamic value) {
         if (value is YamlMap) {
+          key as YamlScalar;
           final config = AnalysisPackageConfiguration.fromYamlMap(
             value,
             type: type,
-            packageName: key as String,
+            packageName: key.value as String,
+            packageNameSpan: key.span,
           );
-          return MapEntry(key, config as LintPackageConfiguration);
+          return MapEntry(
+            key.value as String,
+            config as LintPackageConfiguration,
+          );
         } else {
           // we want to throw an error if the package doesnt have a single lint declared
 

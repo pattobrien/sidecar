@@ -61,10 +61,14 @@ class AnalysisContextService {
     ref.read(activatedEditsProvider(root)).clearEdits();
 
     for (var lintRule in lintRules) {
-      delegate.sidecarMessage('activating: ${lintRule.key}');
       final config = projectConfig.getConfiguration(lintRule.key);
       final lint = lintRule.value();
-      lint.initialize(configurationContent: config?.configuration, ref: ref);
+      delegate.sidecarMessage('activating ${lintRule.key}');
+      lint.initialize(
+        configurationContent: config?.configuration,
+        ref: ref,
+        lintNameSpan: config!.lintNameSpan,
+      );
       if (lint.errors?.isNotEmpty ?? false) {
         errorComposer.addErrors(lint.errors!);
       } else {
@@ -74,8 +78,13 @@ class AnalysisContextService {
     }
     for (var codeEdit in codeEdits) {
       final edit = codeEdit.value();
+      delegate.sidecarMessage('activating ${codeEdit.key}');
       final config = projectConfig.getConfiguration(codeEdit.key);
-      edit.initialize(configurationContent: config?.configuration, ref: ref);
+      edit.initialize(
+        configurationContent: config?.configuration,
+        ref: ref,
+        lintNameSpan: config!.lintNameSpan,
+      );
       if (edit.errors != null) {
         errorComposer.addErrors(edit.errors!);
       } else {

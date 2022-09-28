@@ -31,7 +31,9 @@ flutter:
   uses-material-design: true
   generate: true
 # dependency_overrides:
-# sidecar:
-#   path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+#   # sidecar:
+#   #   path: /Users/pattobrien/Development/sidecar/packages/sidecar/
 #   sidecar_analyzer_plugin_core:
 #     path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
+#   sidecar:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar/

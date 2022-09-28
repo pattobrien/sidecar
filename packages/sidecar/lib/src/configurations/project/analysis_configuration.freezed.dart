@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AnalysisConfiguration {
   String get id => throw _privateConstructorUsedError;
   String get packageName => throw _privateConstructorUsedError;
+  SourceSpan get lintNameSpan => throw _privateConstructorUsedError;
   List<Glob>? get includes => throw _privateConstructorUsedError;
   YamlMap? get configuration => throw _privateConstructorUsedError;
   bool? get enabled => throw _privateConstructorUsedError;
@@ -27,6 +28,7 @@ mixin _$AnalysisConfiguration {
     required TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             LintRuleType? severity,
             List<Glob>? includes,
             YamlMap? configuration,
@@ -36,6 +38,7 @@ mixin _$AnalysisConfiguration {
     required TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -48,6 +51,7 @@ mixin _$AnalysisConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             LintRuleType? severity,
             List<Glob>? includes,
             YamlMap? configuration,
@@ -57,6 +61,7 @@ mixin _$AnalysisConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -69,6 +74,7 @@ mixin _$AnalysisConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             LintRuleType? severity,
             List<Glob>? includes,
             YamlMap? configuration,
@@ -78,6 +84,7 @@ mixin _$AnalysisConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -119,6 +126,7 @@ abstract class $AnalysisConfigurationCopyWith<$Res> {
   $Res call(
       {String id,
       String packageName,
+      SourceSpan lintNameSpan,
       List<Glob>? includes,
       YamlMap? configuration,
       bool? enabled,
@@ -138,6 +146,7 @@ class _$AnalysisConfigurationCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? packageName = freezed,
+    Object? lintNameSpan = freezed,
     Object? includes = freezed,
     Object? configuration = freezed,
     Object? enabled = freezed,
@@ -152,6 +161,10 @@ class _$AnalysisConfigurationCopyWithImpl<$Res>
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
               as String,
+      lintNameSpan: lintNameSpan == freezed
+          ? _value.lintNameSpan
+          : lintNameSpan // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
       includes: includes == freezed
           ? _value.includes
           : includes // ignore: cast_nullable_to_non_nullable
@@ -182,6 +195,7 @@ abstract class _$$LintConfigurationCopyWith<$Res>
   $Res call(
       {String id,
       String packageName,
+      SourceSpan lintNameSpan,
       LintRuleType? severity,
       List<Glob>? includes,
       YamlMap? configuration,
@@ -204,6 +218,7 @@ class __$$LintConfigurationCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? packageName = freezed,
+    Object? lintNameSpan = freezed,
     Object? severity = freezed,
     Object? includes = freezed,
     Object? configuration = freezed,
@@ -219,6 +234,10 @@ class __$$LintConfigurationCopyWithImpl<$Res>
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
               as String,
+      lintNameSpan: lintNameSpan == freezed
+          ? _value.lintNameSpan
+          : lintNameSpan // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
       severity: severity == freezed
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
@@ -249,6 +268,7 @@ class _$LintConfiguration extends LintConfiguration {
   const _$LintConfiguration(
       {required this.id,
       required this.packageName,
+      required this.lintNameSpan,
       this.severity,
       final List<Glob>? includes,
       this.configuration,
@@ -262,6 +282,8 @@ class _$LintConfiguration extends LintConfiguration {
   final String id;
   @override
   final String packageName;
+  @override
+  final SourceSpan lintNameSpan;
   @override
   final LintRuleType? severity;
   final List<Glob>? _includes;
@@ -287,7 +309,7 @@ class _$LintConfiguration extends LintConfiguration {
 
   @override
   String toString() {
-    return 'AnalysisConfiguration.lint(id: $id, packageName: $packageName, severity: $severity, includes: $includes, configuration: $configuration, enabled: $enabled, sourceErrors: $sourceErrors)';
+    return 'AnalysisConfiguration.lint(id: $id, packageName: $packageName, lintNameSpan: $lintNameSpan, severity: $severity, includes: $includes, configuration: $configuration, enabled: $enabled, sourceErrors: $sourceErrors)';
   }
 
   @override
@@ -298,6 +320,8 @@ class _$LintConfiguration extends LintConfiguration {
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality()
                 .equals(other.packageName, packageName) &&
+            const DeepCollectionEquality()
+                .equals(other.lintNameSpan, lintNameSpan) &&
             const DeepCollectionEquality().equals(other.severity, severity) &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality()
@@ -312,6 +336,7 @@ class _$LintConfiguration extends LintConfiguration {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(packageName),
+      const DeepCollectionEquality().hash(lintNameSpan),
       const DeepCollectionEquality().hash(severity),
       const DeepCollectionEquality().hash(_includes),
       const DeepCollectionEquality().hash(configuration),
@@ -329,6 +354,7 @@ class _$LintConfiguration extends LintConfiguration {
     required TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             LintRuleType? severity,
             List<Glob>? includes,
             YamlMap? configuration,
@@ -338,14 +364,15 @@ class _$LintConfiguration extends LintConfiguration {
     required TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
             List<YamlSourceError> sourceErrors)
         assist,
   }) {
-    return lint(id, packageName, severity, includes, configuration, enabled,
-        sourceErrors);
+    return lint(id, packageName, lintNameSpan, severity, includes,
+        configuration, enabled, sourceErrors);
   }
 
   @override
@@ -354,6 +381,7 @@ class _$LintConfiguration extends LintConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             LintRuleType? severity,
             List<Glob>? includes,
             YamlMap? configuration,
@@ -363,14 +391,15 @@ class _$LintConfiguration extends LintConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
             List<YamlSourceError> sourceErrors)?
         assist,
   }) {
-    return lint?.call(id, packageName, severity, includes, configuration,
-        enabled, sourceErrors);
+    return lint?.call(id, packageName, lintNameSpan, severity, includes,
+        configuration, enabled, sourceErrors);
   }
 
   @override
@@ -379,6 +408,7 @@ class _$LintConfiguration extends LintConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             LintRuleType? severity,
             List<Glob>? includes,
             YamlMap? configuration,
@@ -388,6 +418,7 @@ class _$LintConfiguration extends LintConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -396,8 +427,8 @@ class _$LintConfiguration extends LintConfiguration {
     required TResult orElse(),
   }) {
     if (lint != null) {
-      return lint(id, packageName, severity, includes, configuration, enabled,
-          sourceErrors);
+      return lint(id, packageName, lintNameSpan, severity, includes,
+          configuration, enabled, sourceErrors);
     }
     return orElse();
   }
@@ -438,6 +469,7 @@ abstract class LintConfiguration extends AnalysisConfiguration {
   const factory LintConfiguration(
       {required final String id,
       required final String packageName,
+      required final SourceSpan lintNameSpan,
       final LintRuleType? severity,
       final List<Glob>? includes,
       final YamlMap? configuration,
@@ -449,6 +481,8 @@ abstract class LintConfiguration extends AnalysisConfiguration {
   String get id;
   @override
   String get packageName;
+  @override
+  SourceSpan get lintNameSpan;
   LintRuleType? get severity;
   @override
   List<Glob>? get includes;
@@ -474,6 +508,7 @@ abstract class _$$AssistConfigurationCopyWith<$Res>
   $Res call(
       {String id,
       String packageName,
+      SourceSpan lintNameSpan,
       List<Glob>? includes,
       YamlMap? configuration,
       bool? enabled,
@@ -495,6 +530,7 @@ class __$$AssistConfigurationCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? packageName = freezed,
+    Object? lintNameSpan = freezed,
     Object? includes = freezed,
     Object? configuration = freezed,
     Object? enabled = freezed,
@@ -509,6 +545,10 @@ class __$$AssistConfigurationCopyWithImpl<$Res>
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
               as String,
+      lintNameSpan: lintNameSpan == freezed
+          ? _value.lintNameSpan
+          : lintNameSpan // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
       includes: includes == freezed
           ? _value._includes
           : includes // ignore: cast_nullable_to_non_nullable
@@ -535,6 +575,7 @@ class _$AssistConfiguration extends AssistConfiguration {
   const _$AssistConfiguration(
       {required this.id,
       required this.packageName,
+      required this.lintNameSpan,
       final List<Glob>? includes,
       this.configuration,
       this.enabled,
@@ -547,6 +588,8 @@ class _$AssistConfiguration extends AssistConfiguration {
   final String id;
   @override
   final String packageName;
+  @override
+  final SourceSpan lintNameSpan;
   final List<Glob>? _includes;
   @override
   List<Glob>? get includes {
@@ -570,7 +613,7 @@ class _$AssistConfiguration extends AssistConfiguration {
 
   @override
   String toString() {
-    return 'AnalysisConfiguration.assist(id: $id, packageName: $packageName, includes: $includes, configuration: $configuration, enabled: $enabled, sourceErrors: $sourceErrors)';
+    return 'AnalysisConfiguration.assist(id: $id, packageName: $packageName, lintNameSpan: $lintNameSpan, includes: $includes, configuration: $configuration, enabled: $enabled, sourceErrors: $sourceErrors)';
   }
 
   @override
@@ -581,6 +624,8 @@ class _$AssistConfiguration extends AssistConfiguration {
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality()
                 .equals(other.packageName, packageName) &&
+            const DeepCollectionEquality()
+                .equals(other.lintNameSpan, lintNameSpan) &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality()
                 .equals(other.configuration, configuration) &&
@@ -594,6 +639,7 @@ class _$AssistConfiguration extends AssistConfiguration {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(packageName),
+      const DeepCollectionEquality().hash(lintNameSpan),
       const DeepCollectionEquality().hash(_includes),
       const DeepCollectionEquality().hash(configuration),
       const DeepCollectionEquality().hash(enabled),
@@ -611,6 +657,7 @@ class _$AssistConfiguration extends AssistConfiguration {
     required TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             LintRuleType? severity,
             List<Glob>? includes,
             YamlMap? configuration,
@@ -620,14 +667,15 @@ class _$AssistConfiguration extends AssistConfiguration {
     required TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
             List<YamlSourceError> sourceErrors)
         assist,
   }) {
-    return assist(
-        id, packageName, includes, configuration, enabled, sourceErrors);
+    return assist(id, packageName, lintNameSpan, includes, configuration,
+        enabled, sourceErrors);
   }
 
   @override
@@ -636,6 +684,7 @@ class _$AssistConfiguration extends AssistConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             LintRuleType? severity,
             List<Glob>? includes,
             YamlMap? configuration,
@@ -645,14 +694,15 @@ class _$AssistConfiguration extends AssistConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
             List<YamlSourceError> sourceErrors)?
         assist,
   }) {
-    return assist?.call(
-        id, packageName, includes, configuration, enabled, sourceErrors);
+    return assist?.call(id, packageName, lintNameSpan, includes, configuration,
+        enabled, sourceErrors);
   }
 
   @override
@@ -661,6 +711,7 @@ class _$AssistConfiguration extends AssistConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             LintRuleType? severity,
             List<Glob>? includes,
             YamlMap? configuration,
@@ -670,6 +721,7 @@ class _$AssistConfiguration extends AssistConfiguration {
     TResult Function(
             String id,
             String packageName,
+            SourceSpan lintNameSpan,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -678,8 +730,8 @@ class _$AssistConfiguration extends AssistConfiguration {
     required TResult orElse(),
   }) {
     if (assist != null) {
-      return assist(
-          id, packageName, includes, configuration, enabled, sourceErrors);
+      return assist(id, packageName, lintNameSpan, includes, configuration,
+          enabled, sourceErrors);
     }
     return orElse();
   }
@@ -720,6 +772,7 @@ abstract class AssistConfiguration extends AnalysisConfiguration {
   const factory AssistConfiguration(
       {required final String id,
       required final String packageName,
+      required final SourceSpan lintNameSpan,
       final List<Glob>? includes,
       final YamlMap? configuration,
       final bool? enabled,
@@ -730,6 +783,8 @@ abstract class AssistConfiguration extends AnalysisConfiguration {
   String get id;
   @override
   String get packageName;
+  @override
+  SourceSpan get lintNameSpan;
   @override
   List<Glob>? get includes;
   @override
