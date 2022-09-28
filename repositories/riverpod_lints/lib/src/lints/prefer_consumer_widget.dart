@@ -69,8 +69,12 @@ class _Visitor extends SidecarAstVisitor {
     final superclass = node.extendsClause?.superclass;
 
     if (superclass?.name.name == 'StatelessWidget') {
-      reportAstNode(
-        superclass!,
+      // reportAstNode(
+      //   node.name,
+      //   message: 'Prefer to use ConsumerWidget over StatelessWidget',
+      // );
+      reportToken(
+        node.name2,
         message: 'Prefer to use ConsumerWidget over StatelessWidget',
       );
     }

@@ -40,13 +40,10 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     required String message,
     String? correction,
   }) {
-    final start = SourceLocation(token.offset, sourceUrl: unit.path);
-    final end =
-        SourceLocation(token.offset + token.length, sourceUrl: unit.path);
     final result = DartAnalysisResult(
       unit: unit,
       rule: rule,
-      sourceSpan: SourceSpan(start, end, token.lexeme),
+      sourceSpan: token.toSourceSpan(unit),
       message: message,
       correction: correction,
     );

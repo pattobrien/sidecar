@@ -25,7 +25,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
   }
 
   @override
-  void lintMessage(DetectedLint lint, String message) {
+  void lintMessage(AnalysisResult result, String message) {
     // final lintId = '${lint.rule.packageName} • ${lint.rule.code}';
 
     // stdout.encoding = AsciiCodec(allowInvalid: false);
@@ -50,7 +50,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
   @override
   void sidecarError(Object error, StackTrace stackTrace) {
     // print('DebuggerLogDelegate: sidecarError $error');
-    stderr.writeln('DebuggerLogDelegate: $error\n$stackTrace');
+    stderr.writeln('sidecarError: $error\n$stackTrace');
   }
 
   @override
@@ -78,7 +78,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
 
   @override
   void sidecarMessage(String message) {
-    stdout.writeln('DebuggerLogDelegate: $message');
+    stdout.writeln('sidecarMessage: $message');
   }
 
   @override

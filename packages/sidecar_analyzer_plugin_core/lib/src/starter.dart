@@ -3,7 +3,6 @@
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar_analyzer_plugin_core/src/context_services/context_services.dart';

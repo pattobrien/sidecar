@@ -9,47 +9,50 @@ class CreateTextEditControllerProvider extends CodeEdit {
   String get packageName => 'riverpod_lints';
 
   @override
-  Future<List<PrioritizedSourceChange>> computeDartSourceChanges(
-    DartAnalysisResult result,
+  Future<List<EditResult>> computeSourceChanges(
+    AnalysisResult result,
   ) async {
-    final session = result.unit.session;
-    final unit = result.unit;
-    final changeBuilder = ChangeBuilder(session: session);
+    return result.maybeMap(
+        orElse: () => [],
+        dart: (result) async {
+          final session = result.unit.session;
+          final unit = result.unit;
+          final changeBuilder = ChangeBuilder(session: session);
 
-    final node = result.sourceSpan.toAstNode(unit);
+          final node = result.sourceSpan.toAstNode(unit);
 
-    if (node == null) return [];
+          if (node == null) return [];
 
-    final parentNode = node.parent?.parent;
+          final parentNode = node.parent?.parent;
 
-    if (parentNode is! NamedExpression) return [];
+          if (parentNode is! NamedExpression) return [];
 
-    final argumentOffset = parentNode.expression.beginToken.offset - 1;
+          final argumentOffset = parentNode.expression.beginToken.offset - 1;
 
-    await changeBuilder.addDartFileEdit(
-      result.unit.path,
-      (builder) {
-        builder.addInsertion(unit.unit.length, (builder) {
-          builder.writeChangeNotifierProvider(
-            changeNotifier: 'TextEditingController()',
-            variableName: 'myTextControllerProvider',
+          await changeBuilder.addDartFileEdit(
+            result.unit.path,
+            (builder) {
+              builder.addInsertion(unit.unit.length, (builder) {
+                builder.writeChangeNotifierProvider(
+                  changeNotifier: 'TextEditingController()',
+                  variableName: 'myTextControllerProvider',
+                );
+              });
+              builder.addInsertion(argumentOffset, (builder) {
+                builder.write('ref.watch(');
+                builder.write('myTextControllerProvider');
+                builder.write('), ');
+              });
+              builder.importFlutterRiverpod();
+            },
           );
-        });
-        builder.addInsertion(argumentOffset, (builder) {
-          builder.write('ref.watch(');
-          builder.write('myTextControllerProvider');
-          builder.write('), ');
-        });
-        builder.importFlutterRiverpod();
-      },
-    );
 
-    return [
-      PrioritizedSourceChange(
-        0,
-        changeBuilder.sourceChange
-          ..message = 'Declare a TextEditingController provider',
-      )
-    ];
+          return [
+            EditResult(
+              message: 'Declare a TextEditingController provider',
+              sourceChanges: changeBuilder.sourceChange.edits,
+            )
+          ];
+        });
   }
 }

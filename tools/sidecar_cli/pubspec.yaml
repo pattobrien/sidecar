@@ -1,6 +1,6 @@
 name: sidecar_cli
 description: A sample command-line application.
-version: 0.1.15-dev.3
+version: 0.1.16-dev.1
 publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_cli/
 repository: https://github.com/pattobrien/sidecar/
 
@@ -26,7 +26,7 @@ dependencies:
   riverpod: ^1.0.3+1
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.15-dev.3
+    version: ^0.1.16-dev.1
 
 dev_dependencies:
   build_runner: ^2.2.0

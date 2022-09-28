@@ -16,7 +16,7 @@ class EmptyDelegate implements LogDelegateBase {
   }
 
   @override
-  void lintMessage(DetectedLint lint, String message) {
+  void lintMessage(AnalysisResult result, String message) {
     // do nothing
   }
 

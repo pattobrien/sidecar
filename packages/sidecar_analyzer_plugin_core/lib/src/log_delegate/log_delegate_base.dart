@@ -29,7 +29,7 @@ abstract class LogDelegateBase {
   );
 
   void lintMessage(
-    DetectedLint lint,
+    AnalysisResult result,
     String message,
   );
 

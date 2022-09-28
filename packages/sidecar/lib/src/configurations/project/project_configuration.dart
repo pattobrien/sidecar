@@ -70,10 +70,7 @@ class ProjectConfiguration {
             packageName: key.value as String,
             packageNameSpan: key.span,
           );
-          return MapEntry(
-            key.value as String,
-            config as LintPackageConfiguration,
-          );
+          return MapEntry(key.value as String, config);
         } else {
           // we want to throw an error if the package doesnt have a single lint declared
 

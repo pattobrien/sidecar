@@ -22,6 +22,7 @@ dev_dependencies:
   sidecar_analyzer_plugin:
     path: .sidecar/sidecar_analyzer_plugin
   test: ^1.16.0
+
   # project_lints:
   #   path: tool/project_lints
   # sidecar_analyzer_plugin:
