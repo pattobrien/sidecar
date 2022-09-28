@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer_plugin/channel/channel.dart';
+import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
@@ -27,14 +28,17 @@ class ConfigErrorComposer {
 
   void addErrors(List<YamlSourceError> errors) => _errors.addAll(errors);
 
-  void flush() {
+  void clearErrors() => _errors.clear();
+
+  List<AnalysisError> flush() {
     final analysisErrors = _errors.map((e) => e.toAnalysisError()).toList();
 
     final path = contextRoot.optionsFile?.path;
-    if (path == null) return;
-    final response =
-        plugin.AnalysisErrorsParams(path, analysisErrors).toNotification();
-    channel.sendNotification(response);
-    _errors.clear();
+    if (path == null) return [];
+
+    return analysisErrors;
+    // final response =
+    //     plugin.AnalysisErrorsParams(path, analysisErrors).toNotification();
+    // channel.sendNotification(response);
   }
 }

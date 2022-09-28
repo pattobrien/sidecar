@@ -106,9 +106,11 @@ class AnalysisContextService {
 
     if (path == analysisPath) {
       // we handle analyzing the config file separately
+      final errorComposer = ref.read(errorComposerProvider(root));
+      errorComposer.clearErrors();
       await projectConfigurationService.parse();
       initializeLintsAndEdits(context);
-      ref.read(errorComposerProvider(root)).flush();
+      return errorComposer.flush();
     }
 
     final analysisResults = await _computeLints(path);
