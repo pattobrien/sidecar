@@ -26,10 +26,10 @@ sidecar:
         # configuration:
         #   abc: 123
 
-    # riverpod_lints:
-    #   prefer_consumer_widget:
-    # severity: 123
-    # enabled: true
+    riverpod_lints:
+      prefer_consumer_widget:
+        severity: error
+        enabled: true
     # configuration:
     #   some_property:
 

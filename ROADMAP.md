@@ -45,9 +45,14 @@ Benchmarks against Linter package
 - [ ] CLI various output formats
 - [ ] ```dart fix``` Sidecar CLI alternative
 
+
 ### IDE Features (Advanced)
 
 - [ ] Snippets
 - [ ] Refactoring - Form Inputs
 - [ ] Syntax Highlighting
 
+
+### Parity with Macros
+
+- [ ] Utilize macro code builders defined in _fe_analyzer_shared package for better DX

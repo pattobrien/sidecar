@@ -125,9 +125,10 @@ class _LiteralAstVisitor extends SidecarAstVisitor {
     if (node.parent is! ImportDirective &&
         node is! PartDirective &&
         node is! PartOfDirective) {
-      reportAstNode(node,
-          message:
-              '\${STRING_GOES_HERE} should be extracted to an ARB or ENV file.');
+      reportAstNode(
+        node,
+        message: 'Strings should be extracted to an ARB or ENV file.',
+      );
     }
 
     super.visitStringLiteral(node);
