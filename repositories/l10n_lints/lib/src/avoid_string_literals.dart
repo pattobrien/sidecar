@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:l10n_lints/src/constants.dart';
+import 'package:sidecar/builder.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:intl_utilities/intl_utilities.dart';
@@ -23,25 +24,25 @@ class AvoidStringLiterals extends LintRule {
   MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
 
   @override
-  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _LiteralAstVisitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.detectedNodes.toDetectedLints(unit, this,
-        message:
-            '\${STRING_GOES_HERE} should be extracted to an ARB or ENV file.');
+    return visitor.nodes;
   }
 
   @override
-  Future<List<PrioritizedSourceChange>> computeCodeEdits(
-    DetectedLint lint,
+  Future<List<EditResult>> computeSourceChanges(
+    AnalysisResult result,
   ) async {
-    final unit = lint.unit;
+    result as DartAnalysisResult;
+    final unit = result.unit;
 
     final changeBuilder = ChangeBuilder(session: unit.session);
 
-    final stringNode = lint.sourceSpan.toAstNode(unit);
+    final stringNode = result.sourceSpan.toAstNode(unit);
 
     if (stringNode == null) return [];
 
@@ -102,10 +103,14 @@ class AvoidStringLiterals extends LintRule {
     }
     if (changeBuilder.sourceChange.edits.isNotEmpty) {
       final errorFixes = [
-        PrioritizedSourceChange(
-          0,
-          changeBuilder.sourceChange..message = 'Extract string declaration',
+        EditResult(
+          message: 'Extract string declaration',
+          sourceChanges: changeBuilder.sourceChange.edits,
         ),
+        // PrioritizedSourceChange(
+        //   0,
+        //   changeBuilder.sourceChange..message = 'Extract string declaration',
+        // ),
       ];
       return errorFixes;
     } else {
@@ -114,17 +119,16 @@ class AvoidStringLiterals extends LintRule {
   }
 }
 
-class _LiteralAstVisitor extends GeneralizingAstVisitor<void> {
-  _LiteralAstVisitor();
-
-  final List<AstNode> detectedNodes = [];
-
+class _LiteralAstVisitor extends SidecarAstVisitor {
   @override
   void visitStringLiteral(StringLiteral node) {
     if (node.parent is! ImportDirective &&
         node is! PartDirective &&
         node is! PartOfDirective) {
-      detectedNodes.add(node);
+      reportAstNode(
+        node,
+        message: 'Strings should be extracted to an ARB or ENV file.',
+      );
     }
 
     super.visitStringLiteral(node);

@@ -1,3 +1,4 @@
+import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
 import 'package:sidecar/sidecar.dart';
 
 class OutputAstNodeTree extends CodeEdit {
@@ -8,17 +9,19 @@ class OutputAstNodeTree extends CodeEdit {
   String get packageName => 'sidecar_lints';
 
   @override
-  Future<PrioritizedSourceChange?> computeSourceChange(
-    RequestedCodeEdit requestedCodeEdit,
+  Future<List<EditResult>> computeSourceChanges(
+    AnalysisResult result,
   ) async {
-    final session = requestedCodeEdit.unit.session;
-    final unit = requestedCodeEdit.unit;
+    result as DartAnalysisResult;
+    final session = result.unit.session;
+    final unit = result.unit;
     final changeBuilder = ChangeBuilder(session: session);
 
-    final node = requestedCodeEdit.node;
+    final node = result.sourceSpan.toAstNode(unit);
+    if (node == null) return [];
 
     await changeBuilder.addDartFileEdit(
-      requestedCodeEdit.unit.path,
+      unit.path,
       (builder) {
         builder.addInsertion(
           unit.unit.length,
@@ -29,10 +32,11 @@ class OutputAstNodeTree extends CodeEdit {
         );
       },
     );
-    return PrioritizedSourceChange(
-      0,
-      changeBuilder.sourceChange
-        ..message = 'Output AstNode info into a comment',
-    );
+    return [
+      EditResult(
+        message: 'Output AstNode info into a comment',
+        sourceChanges: changeBuilder.sourceChange.edits,
+      ),
+    ];
   }
 }

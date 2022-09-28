@@ -1,4 +1,4 @@
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/builder.dart';
 import 'package:riverpod_utilities/riverpod_utilities.dart';
 
 class CreateTextEditControllerProvider extends CodeEdit {
@@ -9,22 +9,25 @@ class CreateTextEditControllerProvider extends CodeEdit {
   String get packageName => 'riverpod_lints';
 
   @override
-  Future<PrioritizedSourceChange?> computeSourceChange(
-    RequestedCodeEdit requestedCodeEdit,
+  Future<List<PrioritizedSourceChange>> computeDartSourceChanges(
+    DartAnalysisResult result,
   ) async {
-    final session = requestedCodeEdit.unit.session;
-    final unit = requestedCodeEdit.unit;
+    final session = result.unit.session;
+    final unit = result.unit;
     final changeBuilder = ChangeBuilder(session: session);
 
-    final node = requestedCodeEdit.node;
+    final node = result.sourceSpan.toAstNode(unit);
+
+    if (node == null) return [];
+
     final parentNode = node.parent?.parent;
 
-    if (parentNode is! NamedExpression) return null;
+    if (parentNode is! NamedExpression) return [];
 
     final argumentOffset = parentNode.expression.beginToken.offset - 1;
 
     await changeBuilder.addDartFileEdit(
-      requestedCodeEdit.unit.path,
+      result.unit.path,
       (builder) {
         builder.addInsertion(unit.unit.length, (builder) {
           builder.writeChangeNotifierProvider(
@@ -41,10 +44,12 @@ class CreateTextEditControllerProvider extends CodeEdit {
       },
     );
 
-    return PrioritizedSourceChange(
-      0,
-      changeBuilder.sourceChange
-        ..message = 'Declare a TextEditingController provider',
-    );
+    return [
+      PrioritizedSourceChange(
+        0,
+        changeBuilder.sourceChange
+          ..message = 'Declare a TextEditingController provider',
+      )
+    ];
   }
 }

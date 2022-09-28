@@ -1,13 +1,16 @@
+import 'dart:async';
+
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../builder.dart';
 import '../ast/ast.dart';
-import '../configurations/configurations.dart';
-import 'models.dart';
+import '../configurations/yaml_parsers/yaml_parsers.dart';
 
-@internal
 abstract class SidecarBase {
   String get code;
   LintPackageId get packageName;
@@ -35,21 +38,54 @@ abstract class SidecarBase {
   void initialize({
     required YamlMap? configurationContent,
     required Ref ref,
+    required SourceSpan lintNameSpan,
   }) {
     this.ref = ref;
     if (jsonDecoder != null) {
       if (configurationContent == null) {
-        // final error = YamlSourceError(sourceSpan: sourceSpan, message: message);
-        // _errors.add(value);
-        throw EmptyConfiguration('$code error: empty configuration');
+        final error = YamlSourceError(
+          sourceSpan: lintNameSpan,
+          message: '$code error: empty configuration',
+        );
+        _errors.add(error);
+        // throw EmptyConfiguration('$code error: empty configuration');
       } else {
         try {
           _configuration = jsonDecoder!(configurationContent);
         } catch (e, stackTrace) {
-          throw IncorrectConfiguration(
-              '$code error: $e', stackTrace, '$packageName $code');
+          final error = YamlSourceError(
+            sourceSpan: lintNameSpan,
+            message: '$code error: incorrect configuration: $e',
+          );
+          _errors.add(error);
+          // throw IncorrectConfiguration(
+          //     '$code error: $e', stackTrace, '$packageName $code');
         }
       }
     }
   }
+
+  //TODO: can we remove the future here?
+  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+    ResolvedUnitResult unit,
+  ) =>
+      [];
+
+  //TODO: can we remove the future here?
+  FutureOr<List<AnalysisResult>> computeYamlAnalysisResults(
+    YamlMap yamlMap,
+  ) =>
+      [];
+
+  Future<List<AnalysisResult>> computeGenericAnalysisResults(
+    AnalysisContext analysisContext,
+    String path,
+  ) =>
+      Future.value([]);
+
+  //TODO: can we use SourceChange instead of PrioritizedSourceChange?
+  Future<List<EditResult>> computeSourceChanges(
+    AnalysisResult result,
+  ) =>
+      Future.value(<EditResult>[]);
 }

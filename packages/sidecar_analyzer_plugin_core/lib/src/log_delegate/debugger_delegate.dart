@@ -29,22 +29,22 @@ class DebuggerLogDelegate implements LogDelegateBase {
     // final lintId = '${lint.rule.packageName} • ${lint.rule.code}';
 
     // stdout.encoding = AsciiCodec(allowInvalid: false);
-    final relativePath =
-        p.relative(lint.unit.path, from: Directory.current.path);
+    // final relativePath =
+    //     p.relative(lint.unit.path, from: Directory.current.path);
 
-    final sourceLocation =
-        '$relativePath:${lint.sourceSpan.start.line}:${lint.sourceSpan.start.column}';
-    final lintErrorType = lint.rule.defaultType.coloredNamedd;
-    final lintPackage = lint.rule.packageName.padRight(20).characters.take(20);
-    final lintCode = lint.rule.code.padRight(20).characters.take(20);
-    final lintMessage = lint.message.padRight(40).characters.take(40);
-    // final msg = message
-    //     .split('\n')
-    //     .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')
-    //     .join();
+    // final sourceLocation =
+    //     '$relativePath:${lint.sourceSpan.start.line}:${lint.sourceSpan.start.column}';
+    // final lintErrorType = lint.rule.defaultType.coloredNamedd;
+    // final lintPackage = lint.rule.packageName.padRight(20).characters.take(20);
+    // final lintCode = lint.rule.code.padRight(20).characters.take(20);
+    // final lintMessage = lint.message.padRight(40).characters.take(40);
+    // // final msg = message
+    // //     .split('\n')
+    // //     .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')
+    // //     .join();
 
-    stdout.writeln(
-        '${DateTime.now().toIso8601String()}  $lintErrorType • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
+    // stdout.writeln(
+    //     '${DateTime.now().toIso8601String()}  $lintErrorType • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
   }
 
   @override
@@ -84,5 +84,26 @@ class DebuggerLogDelegate implements LogDelegateBase {
   @override
   void sendLints() {
     // TODO: implement sendLints
+  }
+
+  @override
+  void analysisResult(AnalysisResult result) {
+    final path = result.sourceSpan.sourceUrl!.path;
+    final relativePath = p.relative(path, from: Directory.current.path);
+
+    final sourceLocation =
+        '$relativePath:${result.sourceSpan.start.line}:${result.sourceSpan.start.column}';
+    // final lintErrorType = result.rule.defaultType.coloredNamedd; $lintErrorType
+    final lintPackage =
+        result.rule.packageName.padRight(20).characters.take(20);
+    final lintCode = result.rule.code.padRight(20).characters.take(20);
+    final lintMessage = result.message.padRight(40).characters.take(40);
+    // final msg = message
+    //     .split('\n')
+    //     .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')
+    //     .join();
+
+    stdout.writeln(
+        '${DateTime.now().toIso8601String()}   • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
   }
 }

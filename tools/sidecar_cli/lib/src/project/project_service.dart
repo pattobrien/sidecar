@@ -172,7 +172,7 @@ class ProjectService {
     // }
     final progress =
         logger.progress('\nfetching appropriate version for this project ');
-    final version = Version.parse('0.1.14-dev.4');
+    final version = Version.parse('0.1.15-dev.3');
 
     progress.finish(showTiming: true);
     logger.stdout(
@@ -254,7 +254,7 @@ class ProjectService {
 
   Future<void> clearPreviousLints(
     List<LintPackageConfiguration> lints,
-    List<EditPackageConfiguration> edits,
+    List<AssistPackageConfiguration> edits,
   ) async {
     final pluginPubspecFile =
         io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
@@ -279,7 +279,7 @@ class ProjectService {
 
   Future<void> importLintsAndEdits(
     List<LintPackageConfiguration> lints,
-    List<EditPackageConfiguration> edits,
+    List<AssistPackageConfiguration> edits,
   ) async {
     final pluginPubspecFile =
         io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
@@ -329,7 +329,7 @@ class ProjectService {
   }
 
   Future<void> generateCodeEditBootstrapFunction(
-    List<EditPackageConfiguration> editPackages,
+    List<AssistPackageConfiguration> editPackages,
   ) async {
     final importBuffer = StringBuffer()..writeln(pluginImport);
     final returnBuffer = StringBuffer();
@@ -339,7 +339,7 @@ class ProjectService {
     for (final editPackage in editPackages) {
       importBuffer.write(
           'import \'package:${editPackage.packageName}/${editPackage.packageName}.dart\' as ${editPackage.packageName}; \n');
-      for (final edit in editPackage.edits.values) {
+      for (final edit in editPackage.assists.values) {
         // packages.add(edit.packageName);
         returnBuffer.write(
             '\t\tId(type: IdType.codeEdit, packageId: \'${editPackage.packageName}\', id: \'${edit.id}\'): ${edit.packageName}.${edit.className}.new,\n');

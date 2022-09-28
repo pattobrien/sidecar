@@ -1,11 +1,15 @@
 // ignore_for_file: implementation_imports
 
+import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/source/source_range.dart';
 import 'package:analyzer/src/dart/ast/element_locator.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
+import 'package:source_span/source_span.dart';
 
-import '../../sidecar.dart';
+import '../models/models.dart';
+import 'source_span_utilities.dart';
 
 /// Used to translate a single AST node into a SourceSpan (i.e. start and end location within source code)
 extension AstNodeX on AstNode {
@@ -55,29 +59,60 @@ extension AstNodeX on AstNode {
     return ElementLocator.locate(node);
   }
 
-  DetectedLint toDetectedLint(
-    ResolvedUnitResult unit,
-    LintRule rule, {
-    String message = '',
+  AnalysisResult toAnalysisResult(
+    SidecarBase rule, {
+    required SourceSpan sourceSpan,
+    required String message,
     String? correction,
+    SourceSpan? highlightedSpan,
   }) =>
-      DetectedLint(
-          rule: rule,
-          unit: unit,
-          sourceSpan: toSourceSpan(unit),
-          lintType: rule.defaultType,
-          message: message,
-          correction: correction);
-}
+      AnalysisResult.generic(
+        rule: rule,
+        sourceSpan: sourceSpan,
+        message: message,
+        correction: correction,
+        highlightedSpan: highlightedSpan,
+      );
 
-extension ListAstNodeX on List<AstNode> {
-  List<DetectedLint> toDetectedLints(
-    ResolvedUnitResult unit,
-    LintRule rule, {
-    String message = '',
+  DartAnalysisResult toDartAnalysisResult(
+    SidecarBase rule, {
+    required ResolvedUnitResult unit,
+    required String message,
     String? correction,
-  }) {
-    return map((e) => e.toDetectedLint(unit, rule,
-        correction: correction, message: message)).toList();
-  }
+    SourceSpan? highlightedSpan,
+  }) =>
+      AnalysisResult.dart(
+        unit: unit,
+        rule: rule,
+        sourceSpan: toSourceSpan(unit),
+        message: message,
+        correction: correction,
+        highlightedSpan: highlightedSpan,
+      ) as DartAnalysisResult;
+
+//   DetectedLint toDetectedLint(
+//     ResolvedUnitResult unit,
+//     SidecarBase rule, {
+//     required DartAnalysisResult result,
+//   }) =>
+//       DetectedLint(
+//         rule: rule,
+//         unit: unit,
+//         result: result,
+//         lintType: rule.,
+//         message: message,
+//         correction: correction,
+//       );
+// }
+
+// extension ListAstNodeX on List<AstNode> {
+//   List<DetectedLint> toDetectedLints(
+//     ResolvedUnitResult unit,
+//     LintRule rule, {
+//     String message = '',
+//     String? correction,
+//   }) {
+//     return map((e) => e.toDetectedLint(unit, rule,
+//         correction: correction, message: message)).toList();
+//   }
 }

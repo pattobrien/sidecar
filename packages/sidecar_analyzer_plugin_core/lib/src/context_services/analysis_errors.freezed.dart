@@ -16,8 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnalyzedFile {
-  ContextRoot get contextRoot =>
-      throw _privateConstructorUsedError; // String contextRootPath,
+  ContextRoot get contextRoot => throw _privateConstructorUsedError;
   String get path => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -105,7 +104,6 @@ class _$_AnalyzedFile extends _AnalyzedFile {
 
   @override
   final ContextRoot contextRoot;
-// String contextRootPath,
   @override
   final String path;
 
@@ -143,7 +141,7 @@ abstract class _AnalyzedFile extends AnalyzedFile {
 
   @override
   ContextRoot get contextRoot;
-  @override // String contextRootPath,
+  @override
   String get path;
   @override
   @JsonKey(ignore: true)

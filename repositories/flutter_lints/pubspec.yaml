@@ -1,7 +1,9 @@
 name: flutter_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.18
-publish_to: https://micropub-3qduh.ondigitalocean.app/
+version: 0.1.21
+publish_to: none
+# publish_to: https://micropub-3qduh.ondigitalocean.app/
+
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/flutter_lints
 
 environment:
@@ -17,7 +19,7 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.14-dev.1
+    version: ^0.1.15-dev.8
   source_span: ^1.8.2
 
 dev_dependencies:

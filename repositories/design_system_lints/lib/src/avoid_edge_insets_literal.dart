@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_utilities/flutter_utilities.dart';
+import 'package:sidecar/builder.dart';
 import 'package:sidecar/sidecar.dart';
 
 class AvoidEdgeInsetsLiteral extends LintRule {
@@ -11,27 +12,23 @@ class AvoidEdgeInsetsLiteral extends LintRule {
   String get packageName => 'design_system_lints';
 
   @override
-  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes
-        .toDetectedLints(unit, this, message: 'Avoid edge insets literal.');
+    return visitor.nodes;
   }
 }
 
-class _Visitor extends GeneralizingAstVisitor {
-  final List<AstNode> nodes = [];
-
-  _Visitor();
-
+class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final type = node.constructorName.staticElement?.returnType;
 
     if (FlutterTypeChecker.isEdgeInsets(type)) {
-      nodes.add(node);
+      reportAstNode(node, message: 'Avoid edge insets literal.');
     }
     super.visitInstanceCreationExpression(node);
   }

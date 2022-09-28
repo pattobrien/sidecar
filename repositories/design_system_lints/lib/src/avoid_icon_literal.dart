@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/builder.dart';
 
 class AvoidIconLiteral extends LintRule {
   @override
@@ -11,25 +11,26 @@ class AvoidIconLiteral extends LintRule {
   String get packageName => 'design_system_lints';
 
   @override
-  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this,
-        message: 'Avoid IconData literal. Use design system spec instead.');
+    return visitor.nodes;
   }
 }
 
-class _Visitor extends GeneralizingAstVisitor {
-  final List<AstNode> nodes = [];
-
-  _Visitor();
-
+class _Visitor extends SidecarAstVisitor {
   @override
   visitPrefixedIdentifier(PrefixedIdentifier node) {
     final isIconData = _isIconData(node.prefix.staticElement);
-    if (isIconData) nodes.add(node);
+    if (isIconData) {
+      reportAstNode(
+        node,
+        message: 'Avoid IconData literal. Use design system spec instead.',
+      );
+    }
     return super.visitPrefixedIdentifier(node);
   }
 

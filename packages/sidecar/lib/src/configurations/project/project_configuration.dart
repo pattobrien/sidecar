@@ -3,10 +3,10 @@ import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../models/models.dart';
+import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 import 'analysis_package_configuration.dart';
 import 'errors.dart';
-import 'yaml_parsers/yaml_map_include_globs.dart';
 
 class ProjectConfiguration {
   const ProjectConfiguration({
@@ -31,8 +31,8 @@ class ProjectConfiguration {
         }
         final sourceErrors = <YamlSourceError>[];
         return ProjectConfiguration(
-          lintPackages: parseLintPackages(contentMap['lints'] as YamlMap?),
-          assistPackages: parseAssistPackages(contentMap['edits'] as YamlMap?),
+          lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
+          assistPackages: _parseAssistPackages(contentMap['edits'] as YamlMap?),
           includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
             sourceErrors.addAll(r);
             return null;
@@ -42,6 +42,50 @@ class ProjectConfiguration {
       },
       sourceUrl: sourceUrl,
     );
+  }
+
+  static Map<PackageName, AssistPackageConfiguration>? _parseAssistPackages(
+    YamlMap? map,
+  ) =>
+      _parsePackages(map, type: IdType.codeEdit)?.map(
+          (key, value) => MapEntry(key, value as AssistPackageConfiguration));
+
+  static Map<PackageName, LintPackageConfiguration>? _parseLintPackages(
+    YamlMap? map,
+  ) =>
+      _parsePackages(map, type: IdType.lintRule)?.map(
+          (key, value) => MapEntry(key, value as LintPackageConfiguration));
+
+  static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(
+    YamlMap? map, {
+    required IdType type,
+  }) {
+    try {
+      return map?.nodes.map((dynamic key, dynamic value) {
+        if (value is YamlMap) {
+          key as YamlScalar;
+          final config = AnalysisPackageConfiguration.fromYamlMap(
+            value,
+            type: type,
+            packageName: key.value as String,
+            packageNameSpan: key.span,
+          );
+          return MapEntry(
+            key.value as String,
+            config as LintPackageConfiguration,
+          );
+        } else {
+          // we want to throw an error if the package doesnt have a single lint declared
+
+          //TODO: replace with a better error that we can catch
+          throw UnimplementedError(
+              'expected one or more edits for package $key in analysis_options.yaml');
+        }
+      });
+    } catch (e) {
+      //TODO: replace with a better error that we can catch
+      throw InvalidSidecarConfiguration();
+    }
   }
 
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
@@ -65,42 +109,3 @@ class ProjectConfiguration {
 }
 
 typedef PackageName = String;
-
-Map<PackageName, AssistPackageConfiguration>? parseAssistPackages(
-  YamlMap? map,
-) =>
-    parsePackages(map, IdType.codeEdit)?.map(
-        (key, value) => MapEntry(key, value as AssistPackageConfiguration));
-
-Map<PackageName, LintPackageConfiguration>? parseLintPackages(
-  YamlMap? map,
-) =>
-    parsePackages(map, IdType.lintRule)
-        ?.map((key, value) => MapEntry(key, value as LintPackageConfiguration));
-
-Map<PackageName, AnalysisPackageConfiguration>? parsePackages(
-  YamlMap? map,
-  IdType type,
-) {
-  try {
-    return map?.map((dynamic key, dynamic value) {
-      if (value is YamlMap) {
-        final config = AnalysisPackageConfiguration.fromYamlMap(
-          value,
-          type: type,
-          packageName: key as String,
-        );
-        return MapEntry(key, config as LintPackageConfiguration);
-      } else {
-        // we want to throw an error if the package doesnt have a single lint declared
-
-        //TODO: replace with a better error that we can catch
-        throw UnimplementedError(
-            'expected one or more edits for package $key in analysis_options.yaml');
-      }
-    });
-  } catch (e) {
-    //TODO: replace with a better error that we can catch
-    throw InvalidSidecarConfiguration();
-  }
-}

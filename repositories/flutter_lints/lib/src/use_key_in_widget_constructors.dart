@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/builder.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 
 const _desc = r'Use key in widget constructors.';
@@ -24,18 +24,17 @@ class UseKeyInWidgetConstructors extends LintRule {
       'https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html';
 
   @override
-  FutureOr<List<DetectedLint>> computeDartAnalysisError(
+  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
+    visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes.toDetectedLints(unit, this, message: _desc);
+    return visitor.nodes;
   }
 }
 
-class _Visitor extends GeneralizingAstVisitor<void> {
-  final List<AstNode> nodes = [];
-
+class _Visitor extends SidecarAstVisitor {
   _Visitor();
 
   @override
@@ -46,10 +45,7 @@ class _Visitor extends GeneralizingAstVisitor<void> {
         // FlutterUtils().hasWidgetAsAscendant(classElement) &&
         FlutterTypeChecker.isWidget(classElement.thisType) &&
         classElement.constructors.where((e) => !e.isSynthetic).isEmpty) {
-      // rule.reportAstNode(node.name);
-      // final lint = DetectedLint.fromAstNode(node.name, unit, rule);
-
-      nodes.add(node.name);
+      reportAstNode(node.name, message: _desc);
     }
     super.visitClassDeclaration(node);
   }
@@ -83,8 +79,8 @@ class _Visitor extends GeneralizingAstVisitor<void> {
           }
           return false;
         })) {
-      var errorNode = node.name ?? node.returnType;
-      nodes.add(errorNode);
+      final errorNode = node.name ?? node.returnType;
+      reportAstNode(errorNode, message: _desc);
     }
     super.visitConstructorDeclaration(node);
   }

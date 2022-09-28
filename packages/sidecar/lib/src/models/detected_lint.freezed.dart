@@ -16,12 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DetectedLint {
-  LintRule get rule => throw _privateConstructorUsedError;
-  String get message => throw _privateConstructorUsedError;
+  SidecarBase get rule => throw _privateConstructorUsedError;
+  AnalysisResult get result => throw _privateConstructorUsedError;
   LintRuleType get lintType => throw _privateConstructorUsedError;
   ResolvedUnitResult get unit => throw _privateConstructorUsedError;
-  SourceSpan get sourceSpan => throw _privateConstructorUsedError;
-  String? get correction => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DetectedLintCopyWith<DetectedLint> get copyWith =>
@@ -34,12 +32,12 @@ abstract class $DetectedLintCopyWith<$Res> {
           DetectedLint value, $Res Function(DetectedLint) then) =
       _$DetectedLintCopyWithImpl<$Res>;
   $Res call(
-      {LintRule rule,
-      String message,
+      {SidecarBase rule,
+      AnalysisResult result,
       LintRuleType lintType,
-      ResolvedUnitResult unit,
-      SourceSpan sourceSpan,
-      String? correction});
+      ResolvedUnitResult unit});
+
+  $AnalysisResultCopyWith<$Res> get result;
 }
 
 /// @nodoc
@@ -53,21 +51,19 @@ class _$DetectedLintCopyWithImpl<$Res> implements $DetectedLintCopyWith<$Res> {
   @override
   $Res call({
     Object? rule = freezed,
-    Object? message = freezed,
+    Object? result = freezed,
     Object? lintType = freezed,
     Object? unit = freezed,
-    Object? sourceSpan = freezed,
-    Object? correction = freezed,
   }) {
     return _then(_value.copyWith(
       rule: rule == freezed
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
-              as LintRule,
-      message: message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
+              as SidecarBase,
+      result: result == freezed
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as AnalysisResult,
       lintType: lintType == freezed
           ? _value.lintType
           : lintType // ignore: cast_nullable_to_non_nullable
@@ -76,15 +72,14 @@ class _$DetectedLintCopyWithImpl<$Res> implements $DetectedLintCopyWith<$Res> {
           ? _value.unit
           : unit // ignore: cast_nullable_to_non_nullable
               as ResolvedUnitResult,
-      sourceSpan: sourceSpan == freezed
-          ? _value.sourceSpan
-          : sourceSpan // ignore: cast_nullable_to_non_nullable
-              as SourceSpan,
-      correction: correction == freezed
-          ? _value.correction
-          : correction // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
+  }
+
+  @override
+  $AnalysisResultCopyWith<$Res> get result {
+    return $AnalysisResultCopyWith<$Res>(_value.result, (value) {
+      return _then(_value.copyWith(result: value));
+    });
   }
 }
 
@@ -96,12 +91,13 @@ abstract class _$$_DetectedLintCopyWith<$Res>
       __$$_DetectedLintCopyWithImpl<$Res>;
   @override
   $Res call(
-      {LintRule rule,
-      String message,
+      {SidecarBase rule,
+      AnalysisResult result,
       LintRuleType lintType,
-      ResolvedUnitResult unit,
-      SourceSpan sourceSpan,
-      String? correction});
+      ResolvedUnitResult unit});
+
+  @override
+  $AnalysisResultCopyWith<$Res> get result;
 }
 
 /// @nodoc
@@ -118,21 +114,19 @@ class __$$_DetectedLintCopyWithImpl<$Res>
   @override
   $Res call({
     Object? rule = freezed,
-    Object? message = freezed,
+    Object? result = freezed,
     Object? lintType = freezed,
     Object? unit = freezed,
-    Object? sourceSpan = freezed,
-    Object? correction = freezed,
   }) {
     return _then(_$_DetectedLint(
       rule: rule == freezed
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
-              as LintRule,
-      message: message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
+              as SidecarBase,
+      result: result == freezed
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as AnalysisResult,
       lintType: lintType == freezed
           ? _value.lintType
           : lintType // ignore: cast_nullable_to_non_nullable
@@ -141,14 +135,6 @@ class __$$_DetectedLintCopyWithImpl<$Res>
           ? _value.unit
           : unit // ignore: cast_nullable_to_non_nullable
               as ResolvedUnitResult,
-      sourceSpan: sourceSpan == freezed
-          ? _value.sourceSpan
-          : sourceSpan // ignore: cast_nullable_to_non_nullable
-              as SourceSpan,
-      correction: correction == freezed
-          ? _value.correction
-          : correction // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -158,29 +144,23 @@ class __$$_DetectedLintCopyWithImpl<$Res>
 class _$_DetectedLint extends _DetectedLint {
   const _$_DetectedLint(
       {required this.rule,
-      required this.message,
+      required this.result,
       required this.lintType,
-      required this.unit,
-      required this.sourceSpan,
-      this.correction})
+      required this.unit})
       : super._();
 
   @override
-  final LintRule rule;
+  final SidecarBase rule;
   @override
-  final String message;
+  final AnalysisResult result;
   @override
   final LintRuleType lintType;
   @override
   final ResolvedUnitResult unit;
-  @override
-  final SourceSpan sourceSpan;
-  @override
-  final String? correction;
 
   @override
   String toString() {
-    return 'DetectedLint(rule: $rule, message: $message, lintType: $lintType, unit: $unit, sourceSpan: $sourceSpan, correction: $correction)';
+    return 'DetectedLint(rule: $rule, result: $result, lintType: $lintType, unit: $unit)';
   }
 
   @override
@@ -189,24 +169,18 @@ class _$_DetectedLint extends _DetectedLint {
         (other.runtimeType == runtimeType &&
             other is _$_DetectedLint &&
             const DeepCollectionEquality().equals(other.rule, rule) &&
-            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.result, result) &&
             const DeepCollectionEquality().equals(other.lintType, lintType) &&
-            const DeepCollectionEquality().equals(other.unit, unit) &&
-            const DeepCollectionEquality()
-                .equals(other.sourceSpan, sourceSpan) &&
-            const DeepCollectionEquality()
-                .equals(other.correction, correction));
+            const DeepCollectionEquality().equals(other.unit, unit));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(rule),
-      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(result),
       const DeepCollectionEquality().hash(lintType),
-      const DeepCollectionEquality().hash(unit),
-      const DeepCollectionEquality().hash(sourceSpan),
-      const DeepCollectionEquality().hash(correction));
+      const DeepCollectionEquality().hash(unit));
 
   @JsonKey(ignore: true)
   @override
@@ -216,26 +190,20 @@ class _$_DetectedLint extends _DetectedLint {
 
 abstract class _DetectedLint extends DetectedLint {
   const factory _DetectedLint(
-      {required final LintRule rule,
-      required final String message,
+      {required final SidecarBase rule,
+      required final AnalysisResult result,
       required final LintRuleType lintType,
-      required final ResolvedUnitResult unit,
-      required final SourceSpan sourceSpan,
-      final String? correction}) = _$_DetectedLint;
+      required final ResolvedUnitResult unit}) = _$_DetectedLint;
   const _DetectedLint._() : super._();
 
   @override
-  LintRule get rule;
+  SidecarBase get rule;
   @override
-  String get message;
+  AnalysisResult get result;
   @override
   LintRuleType get lintType;
   @override
   ResolvedUnitResult get unit;
-  @override
-  SourceSpan get sourceSpan;
-  @override
-  String? get correction;
   @override
   @JsonKey(ignore: true)
   _$$_DetectedLintCopyWith<_$_DetectedLint> get copyWith =>

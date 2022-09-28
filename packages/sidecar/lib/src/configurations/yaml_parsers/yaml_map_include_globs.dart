@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../../../sidecar.dart';
+import 'yaml_source_error.dart';
 
 extension YamlMapIncludeGlobs on YamlMap {
   Either<List<Glob>?, List<YamlSourceError>> parseGlobIncludes() {

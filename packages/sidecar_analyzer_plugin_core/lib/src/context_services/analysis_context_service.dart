@@ -1,13 +1,23 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
+import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer/source/line_info.dart';
+
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
+import 'package:analyzer_plugin/protocol/protocol_generated.dart'
+    hide ContextRoot;
+
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
-import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
+import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
+
+import '../log_delegate/log_delegate.dart';
+import '../plugin/plugin.dart';
+import '../reporters/error_reporter.dart';
+import '../utils/channel_extension.dart';
 
 import 'activated_edits.dart';
 import 'activated_lints.dart';
@@ -15,7 +25,6 @@ import 'analysis_errors.dart';
 import 'config_error_composer.dart';
 import 'lint_constructor_providers.dart';
 import 'project_configuration_service.dart';
-import '../utils/channel_extension.dart';
 
 class AnalysisContextService {
   AnalysisContextService(
@@ -38,25 +47,6 @@ class AnalysisContextService {
   ProjectConfiguration? get projectConfiguration =>
       projectConfigurationService.projectConfiguration;
 
-  Iterable<RequestedCodeEdit> getCodeEditRequests(
-    ResolvedUnitResult unit,
-    int offset,
-    int length,
-  ) {
-    final codeEditReporter = CodeEditReporter(unit);
-    final astNode = unit.astNodeAt(offset, length: length);
-    final edits = ref.read(activatedEditsProvider(root)).codeEdits;
-    for (final edit in edits) {
-      try {
-        codeEditReporter.reportAstNode(astNode, edit);
-      } catch (e, stackTrace) {
-        channel.sendError('CodeEdit Misc error: $e', stackTrace);
-      }
-    }
-
-    return codeEditReporter.reportedEdits;
-  }
-
   void initializeLintsAndEdits(
     AnalysisContext context,
   ) {
@@ -66,12 +56,19 @@ class AnalysisContextService {
 
     final errorComposer = ref.read(errorComposerProvider(root));
     final lintRules = ref.read(lintRuleConstructorProvider).entries;
+    final codeEdits = ref.read(codeEditConstructorProvider).entries;
+    ref.read(activatedLintsProvider(root)).clearLints();
+    ref.read(activatedEditsProvider(root)).clearEdits();
 
     for (var lintRule in lintRules) {
-      delegate.sidecarMessage('activating: ${lintRule.key}');
-      final config = projectConfig.lintConfiguration(lintRule.key);
+      final config = projectConfig.getConfiguration(lintRule.key);
       final lint = lintRule.value();
-      lint.initialize(configurationContent: config?.configuration, ref: ref);
+      delegate.sidecarMessage('activating ${lintRule.key}');
+      lint.initialize(
+        configurationContent: config?.configuration,
+        ref: ref,
+        lintNameSpan: config!.lintNameSpan,
+      );
       if (lint.errors?.isNotEmpty ?? false) {
         errorComposer.addErrors(lint.errors!);
       } else {
@@ -79,10 +76,15 @@ class AnalysisContextService {
         activateLints.addLint(lint);
       }
     }
-    for (var codeEdit in ref.read(codeEditConstructorProvider).entries) {
+    for (var codeEdit in codeEdits) {
       final edit = codeEdit.value();
-      final config = projectConfig.editConfiguration(codeEdit.key);
-      edit.initialize(configurationContent: config?.configuration, ref: ref);
+      delegate.sidecarMessage('activating ${codeEdit.key}');
+      final config = projectConfig.getConfiguration(codeEdit.key);
+      edit.initialize(
+        configurationContent: config?.configuration,
+        ref: ref,
+        lintNameSpan: config!.lintNameSpan,
+      );
       if (edit.errors != null) {
         errorComposer.addErrors(edit.errors!);
       } else {
@@ -94,6 +96,8 @@ class AnalysisContextService {
   Future<List<AnalysisError>> getAnalysisErrors(
     String path,
   ) async {
+    final analyzedFile = AnalyzedFile(root, path);
+
     final rootPath = root.root.path;
     final analysisPath = context.contextRoot.optionsFile?.path;
 
@@ -103,26 +107,60 @@ class AnalysisContextService {
     if (path == analysisPath) {
       // we handle analyzing the config file separately
       await projectConfigurationService.parse();
+      initializeLintsAndEdits(context);
       ref.read(errorComposerProvider(root)).flush();
     }
 
-    final detectedLints = await computeLints(path);
+    final analysisResults = await _computeLints(path);
 
-    ref.read(detectedLintsProvider(AnalyzedFile(root, path)).notifier).state =
-        detectedLints;
+    ref.read(analysisResultsProvider(analyzedFile).notifier).state =
+        analysisResults;
 
-    for (var detectedLint in detectedLints) {
-      delegate.lintMessage(detectedLint, detectedLint.message);
+    for (var result in analysisResults) {
+      delegate.analysisResult(result);
     }
-    return detectedLints.map((lint) => lint.toAnalysisError()).toList();
+
+    return analysisResults
+        .map((result) => result.toAnalysisError())
+        .whereType<AnalysisError>()
+        .toList();
   }
 
-  Future<Iterable<DetectedLint>> computeLints(
+  Future<Iterable<PrioritizedSourceChange>> getCodeAssists(
+    ResolvedUnitResult unit,
+    int offset,
+    int length,
+  ) async {
+    final analyzedFile = AnalyzedFile(root, unit.path);
+    final codeEditReporter = ErrorReporter(analyzedFile, ref);
+    final edits = ref.read(activatedEditsProvider(root)).codeEdits;
+    final computedFixes = await Future.wait(edits.map((edit) async {
+      try {
+        return await codeEditReporter.generateDartFixes(
+          unit,
+          edit,
+          offset,
+          length,
+        );
+      } catch (e, stackTrace) {
+        channel.sendError('CodeEdit Misc error: $e', stackTrace);
+      }
+    }));
+    final flattenedList = computedFixes
+        .whereType<List<PrioritizedSourceChange>>()
+        .expand((element) => element)
+        .toList();
+
+    return flattenedList;
+  }
+
+  Future<Iterable<AnalysisResult>> _computeLints(
     String sourcePath,
   ) async {
-    final errorReporter = ErrorReporter(sourcePath);
+    final analyzedFile = AnalyzedFile(root, sourcePath);
+    final errorReporter = ErrorReporter(analyzedFile, ref);
 
-    final detectedLints = <DetectedLint>[];
+    final detectedLints = <AnalysisResult>[];
     final allLintRules = ref.read(activatedLintsProvider(root)).lintRules;
 
     //TODO: allow analysis of other file extensions

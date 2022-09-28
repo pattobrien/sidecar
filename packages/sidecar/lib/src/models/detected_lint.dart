@@ -1,22 +1,24 @@
+import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../sidecar.dart';
+import '../utils/source_span_utilities.dart';
+import 'analysis_result.dart';
+import 'lint_rule.dart';
+import 'lint_rule_type.dart';
+import 'sidecar_base.dart';
 
 part 'detected_lint.freezed.dart';
 
 @freezed
 class DetectedLint with _$DetectedLint {
   const factory DetectedLint({
-    required LintRule rule,
-    required String message,
+    required SidecarBase rule,
+    required AnalysisResult result,
     required LintRuleType lintType,
     required ResolvedUnitResult unit,
-    required SourceSpan sourceSpan,
-    String? correction,
   }) = _DetectedLint;
 
   const DetectedLint._();
@@ -24,29 +26,30 @@ class DetectedLint with _$DetectedLint {
   Future<plugin.AnalysisErrorFixes> computeAnalysisErrorFixes(
     Ref ref,
   ) async {
-    final fixes = await rule.computeCodeEdits(this);
+    final fixes = await rule.computeSourceChanges(result);
     return plugin.AnalysisErrorFixes(
       toAnalysisError()..hasFix = fixes.isNotEmpty,
-      fixes: fixes,
+      fixes: fixes.map((e) => e.toPrioritizedSourceChange()).toList(),
     );
   }
 
   bool isWithinOffset(String filePath, int offset) {
-    return sourceSpan.location.file == filePath &&
-        sourceSpan.start.offset <= offset &&
-        offset <= sourceSpan.start.offset + sourceSpan.length;
+    return result.sourceSpan.location.file == filePath &&
+        result.sourceSpan.start.offset <= offset &&
+        offset <= result.sourceSpan.start.offset + result.sourceSpan.length;
   }
 
   plugin.AnalysisError toAnalysisError() {
-    final concatenatedLintCode = '${rule.packageName}.${rule.code}';
+    final baseRule = rule;
+    final concatenatedLintCode = '${baseRule.packageName}.${baseRule.code}';
     return plugin.AnalysisError(
       lintType.analysisError,
       plugin.AnalysisErrorType.HINT,
-      sourceSpan.location,
-      message,
+      result.sourceSpan.location,
+      result.message,
       concatenatedLintCode,
-      url: rule.url,
-      correction: correction,
+      url: baseRule is LintRule ? baseRule.url : null,
+      correction: result.correction,
       //TODO: hasFix
     );
   }

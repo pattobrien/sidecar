@@ -17,18 +17,21 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AnalysisPackageConfiguration {
   String get packageName => throw _privateConstructorUsedError;
+  SourceSpan get packageNameSpan => throw _privateConstructorUsedError;
   List<Glob> get includes => throw _privateConstructorUsedError;
   List<YamlSourceError> get sourceErrors => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, LintConfiguration> lints,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)
         lint,
     required TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, AssistConfiguration> assists,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)
@@ -37,11 +40,16 @@ mixin _$AnalysisPackageConfiguration {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String packageName, Map<String, LintConfiguration> lints,
-            List<Glob> includes, List<YamlSourceError> sourceErrors)?
+    TResult Function(
+            String packageName,
+            SourceSpan packageNameSpan,
+            Map<String, LintConfiguration> lints,
+            List<Glob> includes,
+            List<YamlSourceError> sourceErrors)?
         lint,
     TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, AssistConfiguration> assists,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)?
@@ -50,11 +58,16 @@ mixin _$AnalysisPackageConfiguration {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String packageName, Map<String, LintConfiguration> lints,
-            List<Glob> includes, List<YamlSourceError> sourceErrors)?
+    TResult Function(
+            String packageName,
+            SourceSpan packageNameSpan,
+            Map<String, LintConfiguration> lints,
+            List<Glob> includes,
+            List<YamlSourceError> sourceErrors)?
         lint,
     TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, AssistConfiguration> assists,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)?
@@ -95,6 +108,7 @@ abstract class $AnalysisPackageConfigurationCopyWith<$Res> {
       _$AnalysisPackageConfigurationCopyWithImpl<$Res>;
   $Res call(
       {String packageName,
+      SourceSpan packageNameSpan,
       List<Glob> includes,
       List<YamlSourceError> sourceErrors});
 }
@@ -111,6 +125,7 @@ class _$AnalysisPackageConfigurationCopyWithImpl<$Res>
   @override
   $Res call({
     Object? packageName = freezed,
+    Object? packageNameSpan = freezed,
     Object? includes = freezed,
     Object? sourceErrors = freezed,
   }) {
@@ -119,6 +134,10 @@ class _$AnalysisPackageConfigurationCopyWithImpl<$Res>
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
               as String,
+      packageNameSpan: packageNameSpan == freezed
+          ? _value.packageNameSpan
+          : packageNameSpan // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
       includes: includes == freezed
           ? _value.includes
           : includes // ignore: cast_nullable_to_non_nullable
@@ -140,6 +159,7 @@ abstract class _$$LintPackageConfigurationCopyWith<$Res>
   @override
   $Res call(
       {String packageName,
+      SourceSpan packageNameSpan,
       Map<String, LintConfiguration> lints,
       List<Glob> includes,
       List<YamlSourceError> sourceErrors});
@@ -160,6 +180,7 @@ class __$$LintPackageConfigurationCopyWithImpl<$Res>
   @override
   $Res call({
     Object? packageName = freezed,
+    Object? packageNameSpan = freezed,
     Object? lints = freezed,
     Object? includes = freezed,
     Object? sourceErrors = freezed,
@@ -169,6 +190,10 @@ class __$$LintPackageConfigurationCopyWithImpl<$Res>
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
               as String,
+      packageNameSpan: packageNameSpan == freezed
+          ? _value.packageNameSpan
+          : packageNameSpan // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
       lints: lints == freezed
           ? _value._lints
           : lints // ignore: cast_nullable_to_non_nullable
@@ -190,6 +215,7 @@ class __$$LintPackageConfigurationCopyWithImpl<$Res>
 class _$LintPackageConfiguration extends LintPackageConfiguration {
   const _$LintPackageConfiguration(
       {required this.packageName,
+      required this.packageNameSpan,
       required final Map<String, LintConfiguration> lints,
       final List<Glob> includes = const <Glob>[],
       final List<YamlSourceError> sourceErrors = const <YamlSourceError>[]})
@@ -200,6 +226,8 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
 
   @override
   final String packageName;
+  @override
+  final SourceSpan packageNameSpan;
   final Map<String, LintConfiguration> _lints;
   @override
   Map<String, LintConfiguration> get lints {
@@ -225,7 +253,7 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
 
   @override
   String toString() {
-    return 'AnalysisPackageConfiguration.lint(packageName: $packageName, lints: $lints, includes: $includes, sourceErrors: $sourceErrors)';
+    return 'AnalysisPackageConfiguration.lint(packageName: $packageName, packageNameSpan: $packageNameSpan, lints: $lints, includes: $includes, sourceErrors: $sourceErrors)';
   }
 
   @override
@@ -235,6 +263,8 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
             other is _$LintPackageConfiguration &&
             const DeepCollectionEquality()
                 .equals(other.packageName, packageName) &&
+            const DeepCollectionEquality()
+                .equals(other.packageNameSpan, packageNameSpan) &&
             const DeepCollectionEquality().equals(other._lints, _lints) &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality()
@@ -245,6 +275,7 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(packageName),
+      const DeepCollectionEquality().hash(packageNameSpan),
       const DeepCollectionEquality().hash(_lints),
       const DeepCollectionEquality().hash(_includes),
       const DeepCollectionEquality().hash(_sourceErrors));
@@ -261,44 +292,57 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
   TResult when<TResult extends Object?>({
     required TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, LintConfiguration> lints,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)
         lint,
     required TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, AssistConfiguration> assists,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)
         assist,
   }) {
-    return lint(packageName, lints, includes, sourceErrors);
+    return lint(packageName, packageNameSpan, lints, includes, sourceErrors);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String packageName, Map<String, LintConfiguration> lints,
-            List<Glob> includes, List<YamlSourceError> sourceErrors)?
+    TResult Function(
+            String packageName,
+            SourceSpan packageNameSpan,
+            Map<String, LintConfiguration> lints,
+            List<Glob> includes,
+            List<YamlSourceError> sourceErrors)?
         lint,
     TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, AssistConfiguration> assists,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)?
         assist,
   }) {
-    return lint?.call(packageName, lints, includes, sourceErrors);
+    return lint?.call(
+        packageName, packageNameSpan, lints, includes, sourceErrors);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String packageName, Map<String, LintConfiguration> lints,
-            List<Glob> includes, List<YamlSourceError> sourceErrors)?
+    TResult Function(
+            String packageName,
+            SourceSpan packageNameSpan,
+            Map<String, LintConfiguration> lints,
+            List<Glob> includes,
+            List<YamlSourceError> sourceErrors)?
         lint,
     TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, AssistConfiguration> assists,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)?
@@ -306,7 +350,7 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
     required TResult orElse(),
   }) {
     if (lint != null) {
-      return lint(packageName, lints, includes, sourceErrors);
+      return lint(packageName, packageNameSpan, lints, includes, sourceErrors);
     }
     return orElse();
   }
@@ -346,6 +390,7 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
 abstract class LintPackageConfiguration extends AnalysisPackageConfiguration {
   const factory LintPackageConfiguration(
       {required final String packageName,
+      required final SourceSpan packageNameSpan,
       required final Map<String, LintConfiguration> lints,
       final List<Glob> includes,
       final List<YamlSourceError> sourceErrors}) = _$LintPackageConfiguration;
@@ -353,6 +398,8 @@ abstract class LintPackageConfiguration extends AnalysisPackageConfiguration {
 
   @override
   String get packageName;
+  @override
+  SourceSpan get packageNameSpan;
   Map<String, LintConfiguration> get lints;
   @override
   List<Glob> get includes;
@@ -374,6 +421,7 @@ abstract class _$$AssistPackageConfigurationCopyWith<$Res>
   @override
   $Res call(
       {String packageName,
+      SourceSpan packageNameSpan,
       Map<String, AssistConfiguration> assists,
       List<Glob> includes,
       List<YamlSourceError> sourceErrors});
@@ -395,6 +443,7 @@ class __$$AssistPackageConfigurationCopyWithImpl<$Res>
   @override
   $Res call({
     Object? packageName = freezed,
+    Object? packageNameSpan = freezed,
     Object? assists = freezed,
     Object? includes = freezed,
     Object? sourceErrors = freezed,
@@ -404,6 +453,10 @@ class __$$AssistPackageConfigurationCopyWithImpl<$Res>
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
               as String,
+      packageNameSpan: packageNameSpan == freezed
+          ? _value.packageNameSpan
+          : packageNameSpan // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
       assists: assists == freezed
           ? _value._assists
           : assists // ignore: cast_nullable_to_non_nullable
@@ -425,6 +478,7 @@ class __$$AssistPackageConfigurationCopyWithImpl<$Res>
 class _$AssistPackageConfiguration extends AssistPackageConfiguration {
   const _$AssistPackageConfiguration(
       {required this.packageName,
+      required this.packageNameSpan,
       required final Map<String, AssistConfiguration> assists,
       final List<Glob> includes = const <Glob>[],
       final List<YamlSourceError> sourceErrors = const <YamlSourceError>[]})
@@ -435,6 +489,8 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
 
   @override
   final String packageName;
+  @override
+  final SourceSpan packageNameSpan;
   final Map<String, AssistConfiguration> _assists;
   @override
   Map<String, AssistConfiguration> get assists {
@@ -460,7 +516,7 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
 
   @override
   String toString() {
-    return 'AnalysisPackageConfiguration.assist(packageName: $packageName, assists: $assists, includes: $includes, sourceErrors: $sourceErrors)';
+    return 'AnalysisPackageConfiguration.assist(packageName: $packageName, packageNameSpan: $packageNameSpan, assists: $assists, includes: $includes, sourceErrors: $sourceErrors)';
   }
 
   @override
@@ -470,6 +526,8 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
             other is _$AssistPackageConfiguration &&
             const DeepCollectionEquality()
                 .equals(other.packageName, packageName) &&
+            const DeepCollectionEquality()
+                .equals(other.packageNameSpan, packageNameSpan) &&
             const DeepCollectionEquality().equals(other._assists, _assists) &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality()
@@ -480,6 +538,7 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(packageName),
+      const DeepCollectionEquality().hash(packageNameSpan),
       const DeepCollectionEquality().hash(_assists),
       const DeepCollectionEquality().hash(_includes),
       const DeepCollectionEquality().hash(_sourceErrors));
@@ -495,44 +554,58 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
   TResult when<TResult extends Object?>({
     required TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, LintConfiguration> lints,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)
         lint,
     required TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, AssistConfiguration> assists,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)
         assist,
   }) {
-    return assist(packageName, assists, includes, sourceErrors);
+    return assist(
+        packageName, packageNameSpan, assists, includes, sourceErrors);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String packageName, Map<String, LintConfiguration> lints,
-            List<Glob> includes, List<YamlSourceError> sourceErrors)?
+    TResult Function(
+            String packageName,
+            SourceSpan packageNameSpan,
+            Map<String, LintConfiguration> lints,
+            List<Glob> includes,
+            List<YamlSourceError> sourceErrors)?
         lint,
     TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, AssistConfiguration> assists,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)?
         assist,
   }) {
-    return assist?.call(packageName, assists, includes, sourceErrors);
+    return assist?.call(
+        packageName, packageNameSpan, assists, includes, sourceErrors);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String packageName, Map<String, LintConfiguration> lints,
-            List<Glob> includes, List<YamlSourceError> sourceErrors)?
+    TResult Function(
+            String packageName,
+            SourceSpan packageNameSpan,
+            Map<String, LintConfiguration> lints,
+            List<Glob> includes,
+            List<YamlSourceError> sourceErrors)?
         lint,
     TResult Function(
             String packageName,
+            SourceSpan packageNameSpan,
             Map<String, AssistConfiguration> assists,
             List<Glob> includes,
             List<YamlSourceError> sourceErrors)?
@@ -540,7 +613,8 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
     required TResult orElse(),
   }) {
     if (assist != null) {
-      return assist(packageName, assists, includes, sourceErrors);
+      return assist(
+          packageName, packageNameSpan, assists, includes, sourceErrors);
     }
     return orElse();
   }
@@ -580,6 +654,7 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
 abstract class AssistPackageConfiguration extends AnalysisPackageConfiguration {
   const factory AssistPackageConfiguration(
       {required final String packageName,
+      required final SourceSpan packageNameSpan,
       required final Map<String, AssistConfiguration> assists,
       final List<Glob> includes,
       final List<YamlSourceError> sourceErrors}) = _$AssistPackageConfiguration;
@@ -587,6 +662,8 @@ abstract class AssistPackageConfiguration extends AnalysisPackageConfiguration {
 
   @override
   String get packageName;
+  @override
+  SourceSpan get packageNameSpan;
   Map<String, AssistConfiguration> get assists;
   @override
   List<Glob> get includes;

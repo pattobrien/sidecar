@@ -19,4 +19,5 @@ class ActivatedLints {
 
   void addLint(LintRule rule) => lintRules.add(rule);
   void removeLint(LintRule rule) => lintRules.remove(rule);
+  void clearLints() => lintRules.clear();
 }

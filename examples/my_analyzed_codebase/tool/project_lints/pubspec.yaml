@@ -15,20 +15,18 @@ dependencies:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
     version: ^0.1.9
   path: ^1.8.0
-  # sidecar:
-  #   path: /Users/pattobrien/Development/sidecar/packages/sidecar
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.11-dev.17
+    version: ^0.1.15-dev.2
   source_span: ^1.8.2
 
-dependency_overrides:
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
-  sidecar_analyzer_plugin_core:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core
-  flutter_utilities:
-    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
+# dependency_overrides:
+#   sidecar:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar
+#   sidecar_analyzer_plugin_core:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core
+#   flutter_utilities:
+#     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
 
 dev_dependencies:
   lints: ^2.0.0

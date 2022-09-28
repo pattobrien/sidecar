@@ -1,6 +1,7 @@
 name: my_analyzed_codebase
 description: An example of a project analyzed by Sidecar.
 version: 1.0.0
+publish_to: none
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
@@ -21,13 +22,18 @@ dev_dependencies:
   sidecar_analyzer_plugin:
     path: .sidecar/sidecar_analyzer_plugin
   test: ^1.16.0
+  # project_lints:
+  #   path: tool/project_lints
+  # sidecar_analyzer_plugin:
+  #   path: .sidecar/sidecar_analyzer_plugin/
 
 flutter:
   uses-material-design: true
   generate: true
-
-dependency_overrides:
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
-  sidecar_analyzer_plugin_core:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
+# dependency_overrides:
+#   # sidecar:
+#   #   path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+#   sidecar_analyzer_plugin_core:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
+#   sidecar:
+#     path: /Users/pattobrien/Development/sidecar/packages/sidecar/

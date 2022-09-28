@@ -33,6 +33,10 @@ abstract class LogDelegateBase {
     String message,
   );
 
+  void analysisResult(
+    AnalysisResult result,
+  );
+
   void editMessage(
     CodeEdit edit,
     String message,
