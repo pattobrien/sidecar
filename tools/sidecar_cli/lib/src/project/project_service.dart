@@ -123,7 +123,7 @@ class ProjectService {
       ],
       workingDirectory: workingDirectory ?? projectDirectory.path,
     );
-    process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
+    // process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
     process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
 
     await process.exitCode;
@@ -155,7 +155,7 @@ class ProjectService {
       workingDirectory: workingDirectory ?? projectDirectory.path,
     );
 
-    process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
+    // process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
     process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
     await process.exitCode;
   }

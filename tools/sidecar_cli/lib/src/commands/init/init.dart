@@ -6,7 +6,6 @@ import 'package:args/command_runner.dart';
 import '../exit_codes.dart';
 import '../../utilities/utilities.dart';
 import '../../project/project.dart';
-import '../rebuild/rebuild.dart';
 
 class InitCommand extends Command<int> {
   InitCommand();
@@ -26,9 +25,9 @@ class InitCommand extends Command<int> {
       final projectService = ProjectService(currentDirectory);
 
       // insert any applicable version of sidecar_analyzer_plugin into project pubspec
-      // get that plugin's version number and
+      // get that plugin's version number from the project package_config.json file and
       // use it as the base of which to copy source code files into <project_root>/.sidecar/sidecar_analyzer_plugin
-      // and then replace the hosted sidecar_analyzer_plugin dependency with the dependency from path
+      // and finally replace the hosted sidecar_analyzer_plugin dependency with the newly-copied dependency from path
       await projectService.insertPluginIntoProjectPubspec();
       await Future.delayed(Duration(seconds: 1));
       final pluginUri = await projectService.getPluginVersion();
