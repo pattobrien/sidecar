@@ -102,6 +102,28 @@ abstract class TypeChecker {
         interfaceType.element2.source.uri == uri;
   }
 
+  bool isThisOrSuperTypeMatch(
+    InterfaceType? interfaceType, {
+    required String type,
+    required String sourcePath,
+    bool isFromFile = false,
+  }) {
+    if (interfaceType == null) return false;
+
+    final thisOrSupers = <InterfaceType>[
+      interfaceType,
+      ...interfaceType.allSupertypes
+    ];
+
+    return thisOrSupers.any(
+      (interfaceType) => TypeChecker.isMatch(
+        interfaceType.element2,
+        type: type,
+        sourcePath: sourcePath,
+        isFromFile: isFromFile,
+      ),
+    );
+  }
   // static bool isMatch(
   //   Element? element, {
   //   required String type,

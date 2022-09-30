@@ -1,14 +1,34 @@
 // APPROVED ICONS
 
 import 'package:flutter/material.dart';
+import 'package:sidecar_annotations/sidecar_annotations.dart';
 
-@designSystem
+@designSystemIcons
+@designSystemIcons2
+@SidecarInput(packageName: 'some_package_name', configuration: {})
 class ProjectIcons {
   static const abc = Icons.abc;
 }
 
-class DesignSystem {
-  const DesignSystem();
+class DesignSystemIcons extends SidecarInput {
+  const DesignSystemIcons()
+      : super(
+          packageName: 'design_system_lints',
+          configuration: const {},
+        );
 }
 
-const designSystem = DesignSystem();
+class DesignSystemIcons2 implements SidecarInput {
+  const DesignSystemIcons2();
+  @override
+  Map get configuration => {};
+
+  @override
+  String? get lintName => null;
+
+  @override
+  String get packageName => 'design_system_lints';
+}
+
+const designSystemIcons = DesignSystemIcons();
+const designSystemIcons2 = DesignSystemIcons2();

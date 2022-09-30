@@ -91,7 +91,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         await _ref
             .read(projectConfigurationServiceProvider(context.contextRoot))
             .parse();
-
+        await _ref
+            .read(analysisContextServiceProvider(context))
+            .getAnnotations();
         _ref
             .read(analysisContextServiceProvider(context))
             .initializeLintsAndEdits();

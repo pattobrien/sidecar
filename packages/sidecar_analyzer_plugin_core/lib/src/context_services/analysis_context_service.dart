@@ -1,6 +1,11 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
+import 'package:analyzer/dart/constant/value.dart';
+import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/source/line_info.dart';
 
 import 'package:analyzer_plugin/channel/channel.dart';
@@ -11,6 +16,7 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart'
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
+import 'package:sidecar_analyzer_plugin_core/src/context_services/annotations_provider.dart';
 import 'package:sidecar_analyzer_plugin_core/src/context_services/queued_files.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
@@ -53,11 +59,26 @@ class AnalysisContextService {
     ref.read(queuedFilesProvider(root)).addPaths(paths);
   }
 
+  Future<void> getAnnotations() async {
+    final visitor = _AnnotationVisitor();
+
+    final files = root.analyzedFiles();
+
+    await Future.wait(files.map((e) async {
+      final result = await context.currentSession.getResolvedUnit(e);
+      if (result is! ResolvedUnitResult) return;
+      result.unit.accept(visitor);
+    }));
+
+    ref
+        .read(annotationServiceProvider(root))
+        .addAnnotations(visitor.annotations);
+  }
+
   void initializeLintsAndEdits() {
     final projectConfig = projectConfiguration;
 
     if (projectConfig == null) return;
-
     final errorComposer = ref.read(errorComposerProvider(root));
     final lintRules = ref.read(lintRuleConstructorProvider).entries;
     final codeEdits = ref.read(codeEditConstructorProvider).entries;
@@ -286,3 +307,46 @@ class AnalysisContextService {
 final analysisContextServiceProvider =
     Provider.family<AnalysisContextService, AnalysisContext>(
         (ref, context) => AnalysisContextService(ref, context: context));
+
+class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
+  final List<ElementAnnotation> annotations = [];
+  @override
+  void visitAnnotation(Annotation node) {
+    final value = node.elementAnnotation?.computeConstantValue();
+    if (_isThisOrSuperTypeMatch(
+      value?.type as InterfaceType,
+      type: 'SidecarInput',
+      sourcePath: 'sidecar_annotations/src/sidecar_annotations_base.dart',
+    )) {
+      final sidecarInput = value!;
+      // final thisOrSupers = <DartObject>[
+      //   sidecarInput,
+      //   ...sidecarInput.,
+      // ];
+      // final val = thisOrSupers.firstWhere((element) => element.comp());
+      final x = value.getField('(super)')?.getField('configuration');
+
+      final y = value.variable;
+      annotations.add(node.elementAnnotation!);
+      print('# o annos: ${annotations.length}');
+    }
+    super.visitAnnotation(node);
+  }
+
+  bool _isThisOrSuperTypeMatch(
+    InterfaceType? interfaceType, {
+    required String type,
+    required String sourcePath,
+  }) {
+    if (interfaceType == null) return false;
+
+    final thisOrSupers = <InterfaceType>[
+      interfaceType,
+      ...interfaceType.allSupertypes
+    ];
+    return thisOrSupers.any(
+      (interfaceType) => TypeChecker.isMatch(interfaceType.element2,
+          type: type, sourcePath: sourcePath),
+    );
+  }
+}

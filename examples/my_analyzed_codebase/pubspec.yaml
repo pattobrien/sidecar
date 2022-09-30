@@ -15,6 +15,8 @@ dependencies:
   flutter_riverpod: ^1.0.3+1
   path: ^1.8.0
   intl: ^0.17.0
+  sidecar_annotations:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar_annotations/
 
 dev_dependencies:
   auto_route_generator: ^5.0.2
