@@ -6,6 +6,7 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
@@ -151,11 +152,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       final isLintRule = element.rule is LintRule;
       return isWithinOffset && isLintRule;
     });
-    // final analysisResults = await analysisContextService
-    //     .computeLints(filePath)
-    //     .then((value) => value.where((analysisResult) =>
-    //         analysisResult.isWithinOffset(filePath, offset)));
-
     final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
       analysisResults.map(
         (e) => e.rule.computeSourceChanges(e).then(
@@ -166,9 +162,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             ),
       ),
     );
-    // final flattenedList = analysisErrorFixes
-    //     .expand((element) => element)
-    //     .map((e) => e.toPrioritizedSourceChange());
 
     return plugin.EditGetFixesResult(analysisErrorFixes);
   }

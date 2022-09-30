@@ -7,13 +7,12 @@
 - [X] Analysis Errors
 - [X] Analysis Errors - Quick Fixes
 - [X] Quick Assist
-- [ ] Code Completion
 
 
 ### File Types
 Lints and Edits support for the following file types
 
-- [ ] Dart Files
+- [X] Dart Files
 - [ ] Yaml Files
 
 ### DevX and Usability
@@ -49,6 +48,7 @@ Benchmarks against Linter package
 ### IDE Features (Advanced)
 
 - [ ] Snippets
+- [ ] Code Completion
 - [ ] Refactoring - Form Inputs
 - [ ] Syntax Highlighting
 
