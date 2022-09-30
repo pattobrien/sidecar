@@ -31,9 +31,9 @@ class InitCommand extends Command<int> {
       // and then replace the hosted sidecar_analyzer_plugin dependency with the dependency from path
       await projectService.insertPluginIntoProjectPubspec();
       await Future.delayed(Duration(seconds: 1));
-      final pluginVersion = await projectService.getPluginVersion();
+      final pluginUri = await projectService.getPluginVersion();
       await Future.delayed(Duration(seconds: 1));
-      await projectService.copyBasePluginFromSource(pluginVersion);
+      await projectService.copyBasePluginFromSource(pluginUri);
       await Future.delayed(Duration(seconds: 1));
       await projectService.insertProjectPluginIntoPubspec();
       await Future.delayed(Duration(seconds: 1));

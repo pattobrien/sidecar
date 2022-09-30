@@ -18,8 +18,8 @@ String getPluginPackagePathForVersion(Version version) => p.join(
       'sidecar_analyzer_plugin-${version.canonicalizedVersion}',
     );
 const kSidecarPluginPackageId = 'sidecar_analyzer_plugin';
-final kCloudsmithSidecarUrl =
-    'https://dart.cloudsmith.io/fine-designs/sidecar/';
+const kProjectPluginRelativePath = '.sidecar/$kSidecarPluginPackageId';
+final kCloudsmithSidecarUrl = 'https://dart.cloudsmith.io/fine-designs/sidecar';
 
 const sidecarPluginHostedUrl =
     'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/';
@@ -45,4 +45,4 @@ dependency_overrides:
 ''';
 
 final sidecarMicropubUri =
-    Uri.parse('https://micropub-3qduh.ondigitalocean.app/');
+    Uri.parse('https://micropub-3qduh.ondigitalocean.app');

@@ -61,9 +61,12 @@ class AnalysisContextService {
     ref.read(activatedEditsProvider(root)).clearEdits();
 
     for (var lintRule in lintRules) {
-      final config = projectConfig.getConfiguration(lintRule.key);
+      final lintId = lintRule.key;
+      final config = projectConfig.getConfiguration(lintId);
       final lint = lintRule.value();
-      delegate.sidecarMessage('activating ${lintRule.key}');
+      final package = lint.packageName;
+      final lintCode = lint.code;
+      delegate.sidecarMessage('activating $lintCode');
       lint.initialize(
         configurationContent: config?.configuration,
         ref: ref,
@@ -77,8 +80,9 @@ class AnalysisContextService {
       }
     }
     for (var codeEdit in codeEdits) {
+      final editId = codeEdit.key;
       final edit = codeEdit.value();
-      delegate.sidecarMessage('activating ${codeEdit.key}');
+      delegate.sidecarMessage('activating $editId');
       final config = projectConfig.getConfiguration(codeEdit.key);
       edit.initialize(
         configurationContent: config?.configuration,

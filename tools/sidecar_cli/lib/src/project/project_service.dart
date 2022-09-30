@@ -11,6 +11,8 @@ import 'package:sidecar_cli/src/project/vscode_task.dart';
 import 'constants.dart';
 import '../utilities/utilities.dart';
 import 'file_content_constants.dart';
+import 'package:package_config/package_config.dart';
+import 'dart:io' show Directory;
 
 class ProjectService {
   ProjectService(this.projectDirectory) {
@@ -30,7 +32,7 @@ class ProjectService {
 
   io.Directory get projectPluginDirectory {
     final pluginPath =
-        p.join(projectDirectory.path, '.sidecar', kSidecarPluginPackageId);
+        p.join(projectDirectory.path, kProjectPluginRelativePath);
     return io.Directory(pluginPath)..create(recursive: true);
   }
 
@@ -74,10 +76,10 @@ class ProjectService {
         '\nadding copied ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml');
 
     try {
-      await pubRemovePackages(['sidecar_analyzer_plugin']);
+      await pubRemovePackages([kSidecarPluginPackageId]);
       await pubAddPackages(
         [kSidecarPluginPackageId],
-        pathUrl: '.sidecar/sidecar_analyzer_plugin',
+        pathUrl: kProjectPluginRelativePath,
         isDevDependency: true,
         workingDirectory: projectDirectory.path,
       );
@@ -90,9 +92,11 @@ class ProjectService {
   Future<void> insertPluginIntoProjectPubspec() async {
     final progress = logger.progress(
         'adding ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml file from hosted sidecar server');
-
-    await pubRemovePackages([kSidecarPluginPackageId]);
-
+    try {
+      await pubRemovePackages([kSidecarPluginPackageId]);
+    } catch (e) {
+      // do nothing
+    }
     await pubAddPackages(
       [kSidecarPluginPackageId],
       hostedUrl: sidecarPluginHostedUrl,
@@ -156,40 +160,43 @@ class ProjectService {
     await process.exitCode;
   }
 
-  Future<Version> getPluginVersion() async {
-    // final pubspecLockFile = io.File(
-    //   p.join(projectDirectory.path, 'pubspec.lock'),
-    // );
-    // final lockFileContents = await pubspecLockFile.readAsString();
-    // final lockFile = PubspecLock.parse(lockFileContents);
-    // final packageDetails = lockFile.packages['sidecar_analyzer_plugin'];
-    // if (packageDetails != null) {
-    //   return packageDetails.version;
-    // } else {
-    //   throw UnimplementedError(
-    //     'sidecar_analyzer_plugin should be set as dependency',
-    //   );
-    // }
+  Future<String> getPluginVersion() async {
     final progress =
         logger.progress('\nfetching appropriate version for this project ');
-    final version = Version.parse('0.1.15-dev.3');
+    final packageConfig = await findPackageConfig(Directory.current);
+    if (packageConfig == null) {
+      logger.stderr('PluginVersion: Failed to locate or read package config.');
+      throw UnimplementedError(
+          'PluginVersion: Failed to locate or read package config.');
+    } else {
+      try {
+        final sidecarPackage = packageConfig.packages
+            .firstWhere((element) => element.name == kSidecarPluginPackageId);
 
-    progress.finish(showTiming: true);
-    logger.stdout(
-        '\nplugin will use ${logger.ansi.emphasized(kSidecarPluginPackageId)} version${logger.ansi.blue} $version ${logger.ansi.none}');
-    return version;
+        final decodedPackagePath = Uri.decodeFull(sidecarPackage.root.path);
+
+        progress.finish(showTiming: true);
+        logger.stdout(
+            '\nplugin will use ${logger.ansi.emphasized(kSidecarPluginPackageId)} version${logger.ansi.blue} at path $decodedPackagePath ${logger.ansi.none}');
+        return decodedPackagePath;
+      } catch (e) {
+        throw UnimplementedError(
+            'PluginVersion: $kSidecarPluginPackageId dependency not found: $e');
+      }
+    }
+    // final version = Version.parse('0.1.15-dev.3');
   }
 
-  Future<void> copyBasePluginFromSource(Version version) async {
+  Future<void> copyBasePluginFromSource(String path) async {
     final progress = logger.progress(
-        '\ncopying source code into .sidecar/$kSidecarPluginPackageId directory');
+        '\ncopying source code into $kProjectPluginRelativePath directory');
     try {
       // delete any previously copied plugin files
       await projectPluginDirectory.delete(recursive: true);
     } catch (e) {
       // print(e.toString());
     }
-    final rootPluginPath = getPluginPackagePathForVersion(version);
+    final rootPluginPath = path;
     if (!io.Directory(rootPluginPath).existsSync()) {
       // await _downloadSidecarAnalyzerPlugin(version);
     }
