@@ -70,7 +70,7 @@ class AnalysisContextService {
       final lint = lintRule.value();
       final package = lint.packageName;
       final lintCode = lint.code;
-      delegate.sidecarMessage('activating $lintCode');
+      delegate.sidecarVerboseMessage('activating $lintCode');
       lint.initialize(
         configurationContent: config?.configuration,
         ref: ref,
@@ -86,7 +86,7 @@ class AnalysisContextService {
     for (var codeEdit in codeEdits) {
       final editId = codeEdit.key;
       final edit = codeEdit.value();
-      delegate.sidecarMessage('activating $editId');
+      delegate.sidecarVerboseMessage('activating $editId');
       final config = projectConfig.getConfiguration(codeEdit.key);
       edit.initialize(
         configurationContent: config?.configuration,
