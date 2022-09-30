@@ -13,6 +13,7 @@ import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
+import 'package:sidecar_analyzer_plugin_core/src/context_services/queued_files.dart';
 
 import '../context_services/context_services.dart';
 
@@ -35,7 +36,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
 
   HotReloader? _reloader;
-  // final _initializationCompleter = Completer();
+  final initializationCompleter = Completer();
   final Ref _ref;
 
   @override
@@ -84,7 +85,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     delegate.sidecarVerboseMessage('afterNewContextCollection');
-
     await Future.wait(contextCollection.contexts.map<Future<void>>(
       (context) async {
         await _ref
@@ -93,7 +93,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
         _ref
             .read(analysisContextServiceProvider(context))
-            .initializeLintsAndEdits(context);
+            .initializeLintsAndEdits();
+        if (mode.isCli) {
+          _ref.read(analysisContextServiceProvider(context)).queueFiles();
+        }
         delegate.sidecarMessage('completed: ${context.contextRoot.root.path}');
       },
     ));
@@ -119,6 +122,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       delegate.sidecarError(
           'error analyzing $path -- ${e.toString()}', stackTrace);
       channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
+    }
+    if (mode.isCli) {
+      if (_ref
+          .read(queuedFilesProvider(analysisContext.contextRoot))
+          .paths
+          .isEmpty) {
+        initializationCompleter.complete();
+      }
     }
   }
 
