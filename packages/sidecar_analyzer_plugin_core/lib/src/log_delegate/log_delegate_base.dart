@@ -13,8 +13,6 @@ abstract class LogDelegateBase {
     StackTrace stackTrace,
   );
 
-  // void sendLints() {}
-
   void sidecarVerboseMessage(
     String message,
   );
@@ -35,6 +33,9 @@ abstract class LogDelegateBase {
 
   void analysisResult(
     AnalysisResult result,
+  );
+  void analysisResults(
+    List<AnalysisResult> results,
   );
 
   void editMessage(

@@ -68,7 +68,6 @@ class AnalysisContextService {
       final lintId = lintRule.key;
       final config = projectConfig.getConfiguration(lintId);
       final lint = lintRule.value();
-      final package = lint.packageName;
       final lintCode = lint.code;
       delegate.sidecarVerboseMessage('activating $lintCode');
       lint.initialize(
@@ -126,11 +125,14 @@ class AnalysisContextService {
     ref.read(analysisResultsProvider(analyzedFile).notifier).state =
         analysisResults;
 
-    for (var result in analysisResults) {
+    final sortedErrors = analysisResults.toList()
+      ..sort((a, b) => a.sourceSpan.location.startLine
+          .compareTo(b.sourceSpan.location.startLine));
+    for (var result in sortedErrors) {
       delegate.analysisResult(result);
     }
 
-    return analysisResults
+    return sortedErrors
         .map((result) => result.toAnalysisError())
         .whereType<AnalysisError>()
         .toList();
