@@ -49,4 +49,9 @@ class EmptyDelegate implements LogDelegateBase {
   void analysisResult(AnalysisResult result) {
     // TODO: implement analysisResultMessage
   }
+
+  @override
+  void analysisResults(List<AnalysisResult> results) {
+    // TODO: implement analysisResults
+  }
 }

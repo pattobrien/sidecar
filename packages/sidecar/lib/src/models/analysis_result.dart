@@ -48,6 +48,7 @@ class AnalysisResult with _$AnalysisResult {
       concatenatedLintCode,
       url: lintRule.url,
       correction: correction,
+      // hasFix: false,
       //TODO: hasFix
     );
   }

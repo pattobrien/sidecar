@@ -6,6 +6,7 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
@@ -13,6 +14,7 @@ import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
+import 'package:sidecar_analyzer_plugin_core/src/context_services/queued_files.dart';
 
 import '../context_services/context_services.dart';
 
@@ -35,7 +37,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
 
   HotReloader? _reloader;
-  // final _initializationCompleter = Completer();
+  final initializationCompleter = Completer();
   final Ref _ref;
 
   @override
@@ -84,7 +86,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     delegate.sidecarVerboseMessage('afterNewContextCollection');
-
     await Future.wait(contextCollection.contexts.map<Future<void>>(
       (context) async {
         await _ref
@@ -93,7 +94,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
         _ref
             .read(analysisContextServiceProvider(context))
-            .initializeLintsAndEdits(context);
+            .initializeLintsAndEdits();
+        if (mode.isCli) {
+          _ref.read(analysisContextServiceProvider(context)).queueFiles();
+        }
         delegate.sidecarMessage('completed: ${context.contextRoot.root.path}');
       },
     ));
@@ -120,6 +124,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           'error analyzing $path -- ${e.toString()}', stackTrace);
       channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
     }
+    if (mode.isCli) {
+      if (_ref
+          .read(queuedFilesProvider(analysisContext.contextRoot))
+          .paths
+          .isEmpty) {
+        initializationCompleter.complete();
+      }
+    }
   }
 
   @override
@@ -140,11 +152,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       final isLintRule = element.rule is LintRule;
       return isWithinOffset && isLintRule;
     });
-    // final analysisResults = await analysisContextService
-    //     .computeLints(filePath)
-    //     .then((value) => value.where((analysisResult) =>
-    //         analysisResult.isWithinOffset(filePath, offset)));
-
     final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
       analysisResults.map(
         (e) => e.rule.computeSourceChanges(e).then(
@@ -155,9 +162,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             ),
       ),
     );
-    // final flattenedList = analysisErrorFixes
-    //     .expand((element) => element)
-    //     .map((e) => e.toPrioritizedSourceChange());
 
     return plugin.EditGetFixesResult(analysisErrorFixes);
   }

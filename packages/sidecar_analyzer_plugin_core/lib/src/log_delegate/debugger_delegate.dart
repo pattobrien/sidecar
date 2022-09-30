@@ -106,4 +106,9 @@ class DebuggerLogDelegate implements LogDelegateBase {
     stdout.writeln(
         '${DateTime.now().toIso8601String()}   • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
   }
+
+  @override
+  void analysisResults(List<AnalysisResult> results) {
+    // TODO: implement analysisResults
+  }
 }

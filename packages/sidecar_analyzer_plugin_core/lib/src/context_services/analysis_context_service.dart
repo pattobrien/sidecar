@@ -11,6 +11,7 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart'
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
+import 'package:sidecar_analyzer_plugin_core/src/context_services/queued_files.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
@@ -47,9 +48,12 @@ class AnalysisContextService {
   ProjectConfiguration? get projectConfiguration =>
       projectConfigurationService.projectConfiguration;
 
-  void initializeLintsAndEdits(
-    AnalysisContext context,
-  ) {
+  void queueFiles() {
+    final paths = context.contextRoot.analyzedFiles();
+    ref.read(queuedFilesProvider(root)).addPaths(paths);
+  }
+
+  void initializeLintsAndEdits() {
     final projectConfig = projectConfiguration;
 
     if (projectConfig == null) return;
@@ -64,9 +68,8 @@ class AnalysisContextService {
       final lintId = lintRule.key;
       final config = projectConfig.getConfiguration(lintId);
       final lint = lintRule.value();
-      final package = lint.packageName;
       final lintCode = lint.code;
-      delegate.sidecarMessage('activating $lintCode');
+      delegate.sidecarVerboseMessage('activating $lintCode');
       lint.initialize(
         configurationContent: config?.configuration,
         ref: ref,
@@ -82,7 +85,7 @@ class AnalysisContextService {
     for (var codeEdit in codeEdits) {
       final editId = codeEdit.key;
       final edit = codeEdit.value();
-      delegate.sidecarMessage('activating $editId');
+      delegate.sidecarVerboseMessage('activating $editId');
       final config = projectConfig.getConfiguration(codeEdit.key);
       edit.initialize(
         configurationContent: config?.configuration,
@@ -101,7 +104,7 @@ class AnalysisContextService {
     String path,
   ) async {
     final analyzedFile = AnalyzedFile(root, path);
-
+    ref.read(queuedFilesProvider(root)).removePath(path);
     final rootPath = root.root.path;
     final analysisPath = context.contextRoot.optionsFile?.path;
 
@@ -113,7 +116,7 @@ class AnalysisContextService {
       final errorComposer = ref.read(errorComposerProvider(root));
       errorComposer.clearErrors();
       await projectConfigurationService.parse();
-      initializeLintsAndEdits(context);
+      initializeLintsAndEdits();
       return errorComposer.flush();
     }
 
@@ -122,11 +125,14 @@ class AnalysisContextService {
     ref.read(analysisResultsProvider(analyzedFile).notifier).state =
         analysisResults;
 
-    for (var result in analysisResults) {
+    final sortedErrors = analysisResults.toList()
+      ..sort((a, b) => a.sourceSpan.location.startLine
+          .compareTo(b.sourceSpan.location.startLine));
+    for (var result in sortedErrors) {
       delegate.analysisResult(result);
     }
 
-    return analysisResults
+    return sortedErrors
         .map((result) => result.toAnalysisError())
         .whereType<AnalysisError>()
         .toList();

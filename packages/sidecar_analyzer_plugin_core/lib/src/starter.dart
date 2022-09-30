@@ -56,7 +56,9 @@ Future<void> startSidecarPlugin(
       Logger.log('cli initialization started');
       final runner = SidecarRunner(plugin, Directory.current);
       await runner.initialize();
+      await runner.server.initializationCompleter.future;
       Logger.log('cli initialization ended');
+      exit(0);
     } else {
       // mode is plugin
       // ServerPluginStarter(plugin).start(sendPort);
