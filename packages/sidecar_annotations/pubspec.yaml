@@ -1,6 +1,6 @@
 name: sidecar_annotations
 description: A starting point for Dart libraries or applications.
-version: 0.1.17-dev.1
+version: 0.1.18
 publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_annotations/
 repository: https://github.com/pattobrien/sidecar/
 

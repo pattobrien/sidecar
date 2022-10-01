@@ -30,7 +30,7 @@ class FileAnnotationsNotifier
   FileAnnotationsNotifier(
     this.ref, {
     required this.analyzedFile,
-  }) : super(AsyncValue.loading());
+  }) : super(const AsyncValue.loading());
 
   final Ref ref;
   final AnalyzedFile analyzedFile;
@@ -52,12 +52,13 @@ class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
   void visitAnnotatedNode(AnnotatedNode node) {
     final annotations = node.metadata.where((annotation) {
       final obj = annotation.elementAnnotation?.computeConstantValue();
-      if (SidecarTypeChecker.isSidecarInput(obj?.type)) return true;
+      if (SidecarTypeChecker.isSidecarInput(obj?.type)) {
+        return true;
+      }
       return false;
     });
-    for (final annotation in annotations) {
-      // annotatedNodes.add(annotation);
-      final x = annotation;
+    for (final _ in annotations) {
+      annotatedNodes.add(node);
     }
     super.visitAnnotatedNode(node);
   }

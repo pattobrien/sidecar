@@ -15,7 +15,7 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   AnalysisNotifier(
     this.ref, {
     required this.analyzedFile,
-  }) : super(AsyncValue.loading());
+  }) : super(const AsyncValue.loading());
 
   final Ref ref;
 
@@ -24,7 +24,7 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
 
   Future<void> refreshAnalysis() async {
-    state = AsyncLoading();
+    state = const AsyncLoading();
     //TODO: allow analysis of other file extensions
     if (analyzedFile.isDartFile) {
       final unit = await ref
@@ -64,7 +64,7 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
           'analyzeFile completed w/ ${allRules.length} rules: ${analyzedFile.path}');
     } else {
       // set all non-Dart files to having no errors
-      state = AsyncValue.data([]);
+      state = const AsyncValue.data([]);
     }
   }
 
