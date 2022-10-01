@@ -1,23 +1,18 @@
-import 'package:analyzer/dart/analysis/context_root.dart';
-import 'package:analyzer/dart/element/element.dart';
-import 'package:riverpod/riverpod.dart';
+// import 'package:analyzer/dart/analysis/analysis_context.dart';
+// import 'package:analyzer/dart/ast/ast.dart';
+// import 'package:riverpod/riverpod.dart';
+// import 'package:sidecar_analyzer_plugin_core/src/states/file_annotations_state.dart';
 
-final annotationServiceProvider =
-    Provider.family<AnnotationService, ContextRoot>(
-  (ref, root) => AnnotationService(root),
-);
+// import 'analysis_errors.dart';
 
-class AnnotationService {
-  AnnotationService(this.root);
-  final ContextRoot root;
-  List<ElementAnnotation> annotations = <ElementAnnotation>[];
-
-  void addAnnotation(ElementAnnotation annotation) =>
-      annotations.add(annotation);
-
-  void addAnnotations(List<ElementAnnotation> annots) {
-    for (final annotation in annots) {
-      annotations.add(annotation);
-    }
-  }
-}
+// final annotationsAggregateProvider =
+//     Provider.family<List<AnnotatedNode>, AnalysisContext>((ref, context) {
+//   List<AnnotatedNode> nodes = [];
+//   for (final file in context.contextRoot.analyzedFiles()) {
+//     final annotations = ref.watch(
+//       annotationsStateNotifierProvider(AnalyzedFile(context.contextRoot, file)),
+//     );
+//     nodes.addAll(annotations.nodes);
+//   }
+//   return nodes;
+// });

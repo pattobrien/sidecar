@@ -6,9 +6,9 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "**/*.g.dart": true,
-        "**/*.freezed.dart": true,
-        "**/*.gr.dart": true
+        "**/*.g.dart": false,
+        "**/*.freezed.dart": false,
+        "**/*.gr.dart": false
     },
     "explorerExclude.backup": {}
 }

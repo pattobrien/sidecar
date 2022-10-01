@@ -102,7 +102,7 @@ abstract class TypeChecker {
         interfaceType.element2.source.uri == uri;
   }
 
-  bool isThisOrSuperTypeMatch(
+  static bool isThisOrSuperTypeMatch(
     InterfaceType? interfaceType, {
     required String type,
     required String sourcePath,

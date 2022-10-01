@@ -18,6 +18,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
 
+import '../services/log_delegate/log_delegate.dart';
 import '../utils/byte_store_ext.dart';
 import '../constants.dart';
 
@@ -39,6 +40,7 @@ class SidecarRunner {
 
   late final _clientChannel =
       plugin.PluginIsolateChannel(_receivePort.sendPort);
+
   late final ResourceProvider _resourceProvider = server.resourceProvider;
 
   /// Used to send requests to sidecar_analyzer_plugin

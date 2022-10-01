@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:sidecar_annotations/sidecar_annotations.dart';
 
-@designSystemIcons
-@designSystemIcons2
-@SidecarInput(packageName: 'some_package_name', configuration: {})
+// @designSystemIcons
+// @designSystemIcons2
+@SidecarInput(packageName: 'design_system_lints', configuration: {})
 class ProjectIcons {
   static const abc = Icons.abc;
 }

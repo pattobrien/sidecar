@@ -4,8 +4,9 @@ import 'package:cli_util/cli_logging.dart';
 
 final logger = Logger.standard();
 
-final logDelegateProvider =
-    Provider<LogDelegateBase>((ref) => throw UnimplementedError());
+final logDelegateProvider = Provider<LogDelegateBase>(
+  (ref) => throw UnimplementedError(),
+);
 
 abstract class LogDelegateBase {
   void sidecarError(
@@ -26,27 +27,14 @@ abstract class LogDelegateBase {
     StackTrace stackTrace,
   );
 
-  void lintMessage(
-    AnalysisResult result,
-    String message,
-  );
-
-  void analysisResult(
-    AnalysisResult result,
-  );
   void analysisResults(
     List<AnalysisResult> results,
   );
 
-  void editMessage(
-    CodeEdit edit,
-    String message,
-  );
-
   void pluginRestart();
 
-  void lintError(
-    LintRule lint,
+  void analysisResultError(
+    AnalysisResult result,
     Object err,
     String stackTrace,
   );

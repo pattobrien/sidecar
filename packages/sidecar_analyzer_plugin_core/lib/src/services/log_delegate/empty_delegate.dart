@@ -6,17 +6,8 @@ class EmptyDelegate implements LogDelegateBase {
   const EmptyDelegate();
 
   @override
-  void editMessage(CodeEdit edit, String message) {
-    // do nothing
-  }
-
-  @override
-  void lintError(LintRule lint, Object err, String stackTrace) {
-    // do nothing
-  }
-
-  @override
-  void lintMessage(AnalysisResult result, String message) {
+  void analysisResultError(
+      AnalysisResult result, Object err, String stackTrace) {
     // do nothing
   }
 

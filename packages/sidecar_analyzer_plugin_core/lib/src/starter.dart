@@ -3,14 +3,15 @@
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_analyzer_plugin_core/src/context_services/context_services.dart';
-import 'package:sidecar_analyzer_plugin_core/src/runner/sidecar_runner.dart';
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
+import 'package:riverpod/riverpod.dart';
 
-import 'log_delegate/log_delegate.dart';
+import 'package:sidecar/sidecar.dart';
+import 'package:sidecar_analyzer_plugin_core/src/services/rule_constructor_provider.dart';
+
+import 'runner/sidecar_runner.dart';
 import 'plugin/plugin.dart';
+import 'services/log_delegate/log_delegate.dart';
 
 Future<void> startSidecarPlugin(
   SendPort sendPort,
@@ -34,14 +35,14 @@ Future<void> startSidecarPlugin(
   }
 
   final pluginChannel = PluginIsolateChannel(sendPort);
-
   final ref = ProviderContainer(
     overrides: [
       logDelegateProvider.overrideWithValue(delegate),
       sidecarAnalyzerMode.overrideWithValue(mode),
       pluginChannelProvider.overrideWithValue(pluginChannel),
-      lintRuleConstructorProvider.overrideWithValue(lintRuleConstructors),
-      codeEditConstructorProvider.overrideWithValue(codeEditConstructors),
+      ruleConstructorProvider.overrideWithValue(
+        {...lintRuleConstructors, ...codeEditConstructors},
+      ),
     ],
   );
 

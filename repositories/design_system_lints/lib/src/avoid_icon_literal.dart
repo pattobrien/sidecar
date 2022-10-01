@@ -15,13 +15,39 @@ class AvoidIconLiteral extends LintRule {
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
-    visitor.initializeVisitor(this, unit);
+    visitor.initializeVisitor(this, unit, annotatedNodes);
     unit.unit.accept(visitor);
     return visitor.nodes;
   }
 }
 
 class _Visitor extends SidecarAstVisitor {
+  @override
+  void visitAnnotation(Annotation node) {
+    // TODO: implement visitAnnotation
+    final potentialClassNode = node.parent;
+    if (annotatedNodes.any((e) {
+      final isEqual = e.toElement(unit) == potentialClassNode.toElement(unit);
+      return isEqual;
+    })) {
+      return;
+    } else {
+      super.visitAnnotation(node);
+    }
+  }
+
+  @override
+  void visitAnnotatedNode(AnnotatedNode node) {
+    if (annotatedNodes.any((e) {
+      // print('comparing: ${element.toSource()} & ${node.toSource()}');
+      return e == node;
+    })) {
+      return;
+    } else {
+      super.visitAnnotatedNode(node);
+    }
+  }
+
   @override
   visitPrefixedIdentifier(PrefixedIdentifier node) {
     final isIconData = _isIconData(node.prefix.staticElement);

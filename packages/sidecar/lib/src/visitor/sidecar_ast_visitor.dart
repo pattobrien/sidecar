@@ -3,21 +3,23 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
-import 'package:source_span/source_span.dart';
-
 import '../models/models.dart';
 import '../utils/utils.dart';
 
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
-  // SidecarAstVisitor._();
-
   final List<DartAnalysisResult> nodes = [];
   late SidecarBase rule;
   late ResolvedUnitResult unit;
+  late List<AnnotatedNode> annotatedNodes;
 
-  void initializeVisitor(SidecarBase rule, ResolvedUnitResult unit) {
+  void initializeVisitor(
+    SidecarBase rule,
+    ResolvedUnitResult unit, [
+    List<AnnotatedNode> annotatedNodes = const [],
+  ]) {
     this.unit = unit;
     this.rule = rule;
+    this.annotatedNodes = annotatedNodes;
   }
 
   void reportAstNode(

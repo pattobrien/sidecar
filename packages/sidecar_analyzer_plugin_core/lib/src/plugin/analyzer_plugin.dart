@@ -6,7 +6,6 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
@@ -14,12 +13,16 @@ import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
+import 'package:sidecar_analyzer_plugin_core/src/application/activated_rules/activated_rules_notifier.dart';
+import 'package:sidecar_analyzer_plugin_core/src/application/analysis/analysis_notifier.dart';
 import 'package:sidecar_analyzer_plugin_core/src/context_services/queued_files.dart';
 
 import '../context_services/context_services.dart';
 
 import '../constants.dart';
-import '../log_delegate/log_delegate.dart';
+import '../services/analysis_context_collection_service/analysis_context_collection_service.dart';
+import '../services/log_delegate/log_delegate.dart';
+import '../services/project_configuration_service/providers.dart';
 import 'analyzer_mode.dart';
 import '../utils/utils.dart';
 
@@ -48,7 +51,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   @override
   List<String> get fileGlobsToAnalyze => pluginGlobs;
-  // Future<void> get isInitialized => _initializationCompleter.future;
+
   SidecarAnalyzerMode get mode => _ref.read(sidecarAnalyzerMode);
   LogDelegateBase get delegate => _ref.read(logDelegateProvider);
 
@@ -71,14 +74,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
       }
     });
-    // _initializationCompleter.complete();
   }
 
   Future<void> reload() async {
-    delegate.sidecarVerboseMessage('reload request received');
-    // await _initializationCompleter.future;
     await _reloader?.reloadCode();
-    delegate.sidecarVerboseMessage('reload request completed');
   }
 
   @override
@@ -86,17 +85,24 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     delegate.sidecarVerboseMessage('afterNewContextCollection');
+
+    _ref.read(analysisContextCollectionServiceProvider).collection =
+        contextCollection;
+
     await Future.wait(contextCollection.contexts.map<Future<void>>(
       (context) async {
         await _ref
+            .read(analysisContextServiceProvider(context))
+            .initializeAnalysisContext();
+
+        await _ref
             .read(projectConfigurationServiceProvider(context.contextRoot))
             .parse();
-        await _ref
-            .read(analysisContextServiceProvider(context))
-            .getAnnotations();
+
         _ref
-            .read(analysisContextServiceProvider(context))
-            .initializeLintsAndEdits();
+            .read(activatedRulesNotifierProvider(context.contextRoot).notifier)
+            .initializeRules();
+
         if (mode.isCli) {
           _ref.read(analysisContextServiceProvider(context)).queueFiles();
         }
@@ -114,7 +120,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required String path,
   }) async {
+    //TODO: make the fetching of annotations more efficient
     if (!analysisContext.isSidecarEnabled) return;
+
     final analysisContextService = getAnalysisContextService(analysisContext);
 
     try {
@@ -148,12 +156,15 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
     final analyzedFile = AnalyzedFile(context.contextRoot, filePath);
 
-    final analysisResults =
-        _ref.read(analysisResultsProvider(analyzedFile)).where((element) {
+    final analysisResults = _ref
+        .read(analysisNotifierProvider(analyzedFile))
+        .value!
+        .where((element) {
       final isWithinOffset = element.isWithinOffset(filePath, offset);
       final isLintRule = element.rule is LintRule;
       return isWithinOffset && isLintRule;
     });
+
     final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
       analysisResults.map(
         (e) => e.rule.computeSourceChanges(e).then(

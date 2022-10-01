@@ -2,10 +2,6 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:analyzer/dart/constant/value.dart';
-import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/source/line_info.dart';
 
 import 'package:analyzer_plugin/channel/channel.dart';
@@ -16,109 +12,58 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart'
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
-import 'package:sidecar_analyzer_plugin_core/src/context_services/annotations_provider.dart';
+import 'package:sidecar_analyzer_plugin_core/src/application/analysis/analysis_notifier.dart';
+import 'package:sidecar_analyzer_plugin_core/src/application/annotations/file_annotations_notifier.dart';
 import 'package:sidecar_analyzer_plugin_core/src/context_services/queued_files.dart';
+import 'package:sidecar_analyzer_plugin_core/src/services/project_configuration_service/providers.dart';
+import 'package:sidecar_analyzer_plugin_core/src/services/resolved_unit_service/resolved_unit_service.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
-import '../log_delegate/log_delegate.dart';
 import '../plugin/plugin.dart';
-import '../reporters/error_reporter.dart';
+import '../services/error_reporter/error_reporter.dart';
+import '../services/log_delegate/log_delegate.dart';
 import '../utils/channel_extension.dart';
 
 import 'activated_edits.dart';
-import 'activated_lints.dart';
 import 'analysis_errors.dart';
-import 'config_error_composer.dart';
-import 'lint_constructor_providers.dart';
-import 'project_configuration_service.dart';
 
 class AnalysisContextService {
   AnalysisContextService(
     this.ref, {
     required this.context,
+    // required this.annotatedNodes,
   })  : delegate = ref.read(logDelegateProvider),
         channel = ref.read(pluginChannelProvider)!,
-        projectConfigurationService =
-            ref.read(projectConfigurationServiceProvider(context.contextRoot)),
         root = context.contextRoot;
 
   final Ref ref;
   final AnalysisContext context;
   final ContextRoot root;
+  // final List<AnnotatedNode> annotatedNodes;
 
   final PluginCommunicationChannel channel;
   final LogDelegateBase delegate;
-  final ProjectConfigurationService projectConfigurationService;
 
-  ProjectConfiguration? get projectConfiguration =>
-      projectConfigurationService.projectConfiguration;
+  Future<void> initializeAnalysisContext() async {
+    if (!context.isSidecarEnabled) return;
+    await Future.wait(context.contextRoot.analyzedFiles().map((path) async {
+      final analyzedFile = AnalyzedFile(root, path);
+      //TODO: handle non-Dart files
+      if (!analyzedFile.isDartFile) return;
+      // if (!p.isWithin(context.contextRoot.root.path, path)) return;
+
+      await ref
+          .read(resolvedUnitServiceProvider(analyzedFile))
+          .getResolvedUnit();
+
+      ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
+    }));
+  }
 
   void queueFiles() {
     final paths = context.contextRoot.analyzedFiles();
     ref.read(queuedFilesProvider(root)).addPaths(paths);
-  }
-
-  Future<void> getAnnotations() async {
-    final visitor = _AnnotationVisitor();
-
-    final files = root.analyzedFiles();
-
-    await Future.wait(files.map((e) async {
-      final result = await context.currentSession.getResolvedUnit(e);
-      if (result is! ResolvedUnitResult) return;
-      result.unit.accept(visitor);
-    }));
-
-    ref
-        .read(annotationServiceProvider(root))
-        .addAnnotations(visitor.annotations);
-  }
-
-  void initializeLintsAndEdits() {
-    final projectConfig = projectConfiguration;
-
-    if (projectConfig == null) return;
-    final errorComposer = ref.read(errorComposerProvider(root));
-    final lintRules = ref.read(lintRuleConstructorProvider).entries;
-    final codeEdits = ref.read(codeEditConstructorProvider).entries;
-    ref.read(activatedLintsProvider(root)).clearLints();
-    ref.read(activatedEditsProvider(root)).clearEdits();
-
-    for (var lintRule in lintRules) {
-      final lintId = lintRule.key;
-      final config = projectConfig.getConfiguration(lintId);
-      final lint = lintRule.value();
-      final lintCode = lint.code;
-      delegate.sidecarVerboseMessage('activating $lintCode');
-      lint.initialize(
-        configurationContent: config?.configuration,
-        ref: ref,
-        lintNameSpan: config!.lintNameSpan,
-      );
-      if (lint.errors?.isNotEmpty ?? false) {
-        errorComposer.addErrors(lint.errors!);
-      } else {
-        final activateLints = ref.read(activatedLintsProvider(root));
-        activateLints.addLint(lint);
-      }
-    }
-    for (var codeEdit in codeEdits) {
-      final editId = codeEdit.key;
-      final edit = codeEdit.value();
-      delegate.sidecarVerboseMessage('activating $editId');
-      final config = projectConfig.getConfiguration(codeEdit.key);
-      edit.initialize(
-        configurationContent: config?.configuration,
-        ref: ref,
-        lintNameSpan: config!.lintNameSpan,
-      );
-      if (edit.errors != null) {
-        errorComposer.addErrors(edit.errors!);
-      } else {
-        ref.read(activatedEditsProvider(root)).addEdit(edit);
-      }
-    }
   }
 
   Future<List<AnalysisError>> getAnalysisErrors(
@@ -133,27 +78,28 @@ class AnalysisContextService {
     if (!p.isWithin(rootPath, path)) return [];
 
     if (path == analysisPath) {
-      // we handle analyzing the config file separately
-      final errorComposer = ref.read(errorComposerProvider(root));
-      errorComposer.clearErrors();
-      await projectConfigurationService.parse();
-      initializeLintsAndEdits();
-      return errorComposer.flush();
+      await ref.watch(projectConfigurationServiceProvider(root)).parse();
+
+      return ref
+          .read(projectConfigurationErrorProvider(root))
+          .map((e) => e.toAnalysisError())
+          .toList();
     }
 
-    final analysisResults = await _computeLints(path);
+    await ref
+        .read(analysisNotifierProvider(analyzedFile).notifier)
+        .refreshAnalysis();
 
-    ref.read(analysisResultsProvider(analyzedFile).notifier).state =
-        analysisResults;
+    final analysisResults =
+        ref.read(analysisNotifierProvider(analyzedFile)).value ?? [];
 
-    final sortedErrors = analysisResults.toList()
+    final sortedResults = analysisResults
       ..sort((a, b) => a.sourceSpan.location.startLine
           .compareTo(b.sourceSpan.location.startLine));
-    for (var result in sortedErrors) {
-      delegate.analysisResult(result);
-    }
 
-    return sortedErrors
+    delegate.analysisResults(sortedResults);
+
+    return sortedResults
         .map((result) => result.toAnalysisError())
         .whereType<AnalysisError>()
         .toList();
@@ -165,7 +111,7 @@ class AnalysisContextService {
     int length,
   ) async {
     final analyzedFile = AnalyzedFile(root, unit.path);
-    final codeEditReporter = ErrorReporter(analyzedFile, ref);
+    final codeEditReporter = ErrorReporter(ref, analyzedFile);
     final edits = ref.read(activatedEditsProvider(root)).codeEdits;
     final computedFixes = await Future.wait(edits.map((edit) async {
       try {
@@ -187,77 +133,11 @@ class AnalysisContextService {
     return flattenedList;
   }
 
-  Future<Iterable<AnalysisResult>> _computeLints(
-    String sourcePath,
-  ) async {
-    final analyzedFile = AnalyzedFile(root, sourcePath);
-    final errorReporter = ErrorReporter(analyzedFile, ref);
-
-    final detectedLints = <AnalysisResult>[];
-    final allLintRules = ref.read(activatedLintsProvider(root)).lintRules;
-
-    //TODO: allow analysis of other file extensions
-    if (p.extension(sourcePath) == '.dart') {
-      final unit = await context.currentSession.getResolvedUnit(sourcePath);
-
-      if (unit is! ResolvedUnitResult) return [];
-
-      delegate.sidecarVerboseMessage('analyzeFile          : $sourcePath');
-      await Future.wait(allLintRules.map<Future<void>>((rule) async {
-        if (!_isPathIncludedForRule(rule: rule, path: sourcePath)) {
-          return;
-        }
-
-        try {
-          final lintConfig =
-              projectConfigurationService.getLintConfiguration(rule.id);
-
-          final lints =
-              await errorReporter.generateDartLints(unit, rule, lintConfig);
-          detectedLints.addAll(lints);
-        } catch (e, stackTrace) {
-          channel.sendError('LintRule Error: ${e.toString()}', stackTrace);
-        }
-      }));
-      delegate.sidecarVerboseMessage('analyzeFile completed: $sourcePath');
-    }
-    return detectedLints;
-  }
-
-  bool _isPathIncludedForRule({
-    required String path,
-    required LintRule rule,
-  }) {
-    final relativePath = p.relative(path, from: root.root.path);
-
-    // #1 check explicit LintRule/CodeEdit includes from project config
-    final ruleProjectConfig =
-        projectConfigurationService.getLintConfiguration(rule.id);
-    final ruleConfigIncludes = ruleProjectConfig?.includes;
-
-    if (ruleProjectConfig != null && ruleConfigIncludes != null) {
-      return ruleConfigIncludes.any((glob) => glob.matches(relativePath));
-    }
-
-    // #2 check default LintRule/CodeEdit includes from lint/edit definition
-    if (rule.includes != null) {
-      return rule.includes!.any((glob) => glob.matches(relativePath));
-    }
-
-    // TODO: #3 check explicit LintPackage includes from project config
-    // TODO: #4 check default LintPackage includes from LintPackage definition
-
-    // #5 check project configuration
-    return projectConfigurationService.projectConfiguration
-            ?.includes(relativePath) ??
-        false;
-  }
-
   SourceSpan sidecarLintSourceSpan(
     String packageId,
     String lintId,
   ) {
-    final contents = projectConfigurationService.contents;
+    final contents = ref.read(projectConfigurationProvider(root))!.rawContent;
     final uri = context.contextRoot.root.toUri();
     final doc = loadYamlNode(contents, sourceUrl: uri) as YamlMap;
 
@@ -306,47 +186,7 @@ class AnalysisContextService {
 
 final analysisContextServiceProvider =
     Provider.family<AnalysisContextService, AnalysisContext>(
-        (ref, context) => AnalysisContextService(ref, context: context));
-
-class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
-  final List<ElementAnnotation> annotations = [];
-  @override
-  void visitAnnotation(Annotation node) {
-    final value = node.elementAnnotation?.computeConstantValue();
-    if (_isThisOrSuperTypeMatch(
-      value?.type as InterfaceType,
-      type: 'SidecarInput',
-      sourcePath: 'sidecar_annotations/src/sidecar_annotations_base.dart',
-    )) {
-      final sidecarInput = value!;
-      // final thisOrSupers = <DartObject>[
-      //   sidecarInput,
-      //   ...sidecarInput.,
-      // ];
-      // final val = thisOrSupers.firstWhere((element) => element.comp());
-      final x = value.getField('(super)')?.getField('configuration');
-
-      final y = value.variable;
-      annotations.add(node.elementAnnotation!);
-      print('# o annos: ${annotations.length}');
-    }
-    super.visitAnnotation(node);
-  }
-
-  bool _isThisOrSuperTypeMatch(
-    InterfaceType? interfaceType, {
-    required String type,
-    required String sourcePath,
-  }) {
-    if (interfaceType == null) return false;
-
-    final thisOrSupers = <InterfaceType>[
-      interfaceType,
-      ...interfaceType.allSupertypes
-    ];
-    return thisOrSupers.any(
-      (interfaceType) => TypeChecker.isMatch(interfaceType.element2,
-          type: type, sourcePath: sourcePath),
-    );
-  }
-}
+        (ref, context) => AnalysisContextService(
+              ref,
+              context: context,
+            ));

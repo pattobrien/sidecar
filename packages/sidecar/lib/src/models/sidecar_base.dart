@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
-import 'package:analyzer/dart/element/element.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:glob/glob.dart';
@@ -31,20 +30,26 @@ abstract class SidecarBase {
   late Ref ref;
   late Object _configuration;
   final List<YamlSourceError> _errors = [];
-  late List<ElementAnnotation> annotations;
+  late List<AnnotatedNode> annotatedNodes;
 
   List<Glob>? get includes => null;
 
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
+  void update({
+    List<AnnotatedNode> annotatedNodes = const [],
+  }) {
+    this.annotatedNodes = annotatedNodes;
+  }
+
   void initialize({
-    required YamlMap? configurationContent,
     required Ref ref,
     required SourceSpan lintNameSpan,
-    List<ElementAnnotation> annotations = const [],
+    required YamlMap? configurationContent,
+    List<AnnotatedNode> annotatedNodes = const [],
   }) {
     this.ref = ref;
-    this.annotations = annotations;
+    this.annotatedNodes = annotatedNodes;
     if (jsonDecoder != null) {
       if (configurationContent == null) {
         final error = YamlSourceError(
@@ -52,7 +57,6 @@ abstract class SidecarBase {
           message: '$code error: empty configuration',
         );
         _errors.add(error);
-        // throw EmptyConfiguration('$code error: empty configuration');
       } else {
         try {
           _configuration = jsonDecoder!(configurationContent);
@@ -62,8 +66,6 @@ abstract class SidecarBase {
             message: '$code error: incorrect configuration: $e',
           );
           _errors.add(error);
-          // throw IncorrectConfiguration(
-          //     '$code error: $e', stackTrace, '$packageName $code');
         }
       }
     }

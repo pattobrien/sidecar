@@ -1,20 +1,18 @@
-import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
-import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:sidecar/builder.dart';
 
-import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_analyzer_plugin_core/src/context_services/analysis_errors.dart';
+import '../../application/analysis/analysis_notifier.dart';
+import '../../context_services/analysis_errors.dart';
 
 class ErrorReporter {
-  ErrorReporter(this.file, this.ref);
+  const ErrorReporter(this.ref, this.file);
 
   final AnalyzedFile file;
   final Ref ref;
 
-  Future<List<AnalysisResult>> generateDartLints(
+  Future<List<DartAnalysisResult>> generateDartAnalysisResults(
     ResolvedUnitResult unit,
     LintRule rule,
-    LintConfiguration? lintConfiguration,
   ) async {
     final detectedLints = await rule.computeDartAnalysisResults(unit);
     return detectedLints;
@@ -36,7 +34,7 @@ class ErrorReporter {
     int offset,
     int length,
   ) async {
-    final results = ref.read(analysisResultsProvider(file));
+    final results = ref.read(analysisNotifierProvider(file)).value!;
     final relevantResults =
         results.where((element) => element.isWithinOffset(unit.path, offset));
     final editResults = await Future.wait(
