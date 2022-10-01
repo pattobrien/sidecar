@@ -42,7 +42,7 @@ class EmptyDelegate implements LogDelegateBase {
   }
 
   @override
-  void analysisResults(List<AnalysisResult> results) {
+  void analysisResults(String path, List<AnalysisResult> results) {
     // TODO: implement analysisResults
   }
 }

@@ -28,6 +28,7 @@ abstract class LogDelegateBase {
   );
 
   void analysisResults(
+    String path,
     List<AnalysisResult> results,
   );
 

@@ -39,11 +39,14 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
 
   Future<void> refreshAnalysis() async {
+    // ref.invalidateSelf();
+    state = AsyncLoading();
     //TODO: allow analysis of other file extensions
     if (analyzedFile.isDartFile) {
       final unit = await ref
           .read(resolvedUnitServiceProvider(analyzedFile))
           .getResolvedUnit();
+
       if (unit == null) return;
 
       ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();

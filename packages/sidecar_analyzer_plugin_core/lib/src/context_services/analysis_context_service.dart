@@ -97,7 +97,7 @@ class AnalysisContextService {
       ..sort((a, b) => a.sourceSpan.location.startLine
           .compareTo(b.sourceSpan.location.startLine));
 
-    delegate.analysisResults(sortedResults);
+    delegate.analysisResults(path, sortedResults);
 
     return sortedResults
         .map((result) => result.toAnalysisError())
