@@ -44,6 +44,8 @@ class AnalysisContextService {
   bool get isInitialized => _completer.isCompleted;
   final _completer = Completer<void>();
 
+  Map subscriptions = <AnalyzedFile, StreamSubscription>{};
+
   Future<void> initializeAnalysisContext() async {
     if (!context.isSidecarEnabled) return;
     await Future.wait(context.contextRoot.analyzedFiles().map((path) async {
@@ -52,6 +54,11 @@ class AnalysisContextService {
       if (!analyzedFile.isDartFile) return;
       if (!p.isWithin(context.contextRoot.root.path, path)) return;
 
+      subscriptions[analyzedFile] =
+          ref.read(resolvedUnitProvider(analyzedFile).stream).listen((event) {
+        delegate.sidecarMessage(
+            '${analyzedFile.contextRoot.root.shortName}: resolved unit updated for ${analyzedFile.relativePath}');
+      });
       await ref
           .read(resolvedUnitServiceProvider(analyzedFile))
           .getResolvedUnit();
@@ -59,46 +66,6 @@ class AnalysisContextService {
       ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
     }));
     _completer.complete();
-  }
-
-  Future<List<AnalysisErrorFixes>> getAnalysisErrorFixes(
-    String path,
-    int offset,
-  ) async {
-    final analyzedFile = AnalyzedFile(root, path);
-
-    // final unit = await ref
-    //     .read(resolvedUnitServiceProvider(analyzedFile))
-    //     .getResolvedUnit();
-
-    // if (unit == null) throw UnimplementedError();
-
-    final analysisResults = ref
-        .read(analysisNotifierProvider(analyzedFile))
-        .value
-        ?.where((analysisResult) {
-      return analysisResult.isWithinOffset(path, offset) &&
-          analysisResult.rule is LintRule;
-    });
-
-    return await Future.wait<AnalysisErrorFixes>(
-      analysisResults?.map(
-            (e) {
-              return e.rule.computeSourceChanges(e).then(
-                (value) {
-                  return AnalysisErrorFixes(
-                    e.toAnalysisError()!,
-                    fixes: value
-                        .map((editResult) =>
-                            editResult.toPrioritizedSourceChange())
-                        .toList(),
-                  );
-                },
-              );
-            },
-          ) ??
-          [],
-    );
   }
 
   Future<List<AnalysisError>> getAnalysisErrors(
@@ -127,9 +94,10 @@ class AnalysisContextService {
     final analysisResults =
         ref.read(analysisNotifierProvider(analyzedFile)).value ?? [];
 
-    final sortedResults = analysisResults
-      ..sort((a, b) => a.sourceSpan.location.startLine
-          .compareTo(b.sourceSpan.location.startLine));
+    final sortedResults =
+        List<AnalysisResult>.from(<AnalysisResult>[...analysisResults])
+          ..sort((a, b) => a.sourceSpan.location.startLine
+              .compareTo(b.sourceSpan.location.startLine));
 
     delegate.analysisResults(path, sortedResults);
 
@@ -137,6 +105,39 @@ class AnalysisContextService {
         .map((result) => result.toAnalysisError())
         .whereType<AnalysisError>()
         .toList();
+  }
+
+  Future<List<AnalysisErrorFixes>> getAnalysisErrorFixes(
+    String path,
+    int offset,
+  ) async {
+    final analyzedFile = AnalyzedFile(root, path);
+
+    final analysisResults = ref
+            .read(analysisNotifierProvider(analyzedFile))
+            .value
+            ?.where((analysisResult) {
+          return analysisResult.isWithinOffset(path, offset) &&
+              analysisResult.rule is LintRule;
+        }) ??
+        <AnalysisResult>[];
+
+    return Future.wait<AnalysisErrorFixes>(
+      analysisResults.map(
+        (e) {
+          return e.rule.computeSourceChanges(e).then(
+            (value) {
+              return AnalysisErrorFixes(
+                e.toAnalysisError()!,
+                fixes: value
+                    .map((editResult) => editResult.toPrioritizedSourceChange())
+                    .toList(),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 
   Future<Iterable<PrioritizedSourceChange>> getCodeAssists(
@@ -152,79 +153,25 @@ class AnalysisContextService {
         .rules
         .whereType<CodeEdit>();
 
-    final unit = await ref
-        .read(resolvedUnitServiceProvider(analyzedFile))
-        .getResolvedUnit();
+    final unit = ref.read(resolvedUnitProvider(analyzedFile)).value;
 
-    if (unit == null) throw UnimplementedError();
+    if (unit == null) return [];
 
     final computedFixes = await Future.wait(editRules.map((rule) async {
       try {
         return await codeEditReporter.generateDartFixes(
             unit, rule, offset, length);
       } catch (e, stackTrace) {
-        channel.sendError('CodeEdit Misc error: $e', stackTrace);
+        channel.sendError('getCodeAssists error: $e', stackTrace);
         return <PrioritizedSourceChange>[];
       }
     }));
 
     return computedFixes.expand((changes) => changes).toList();
   }
-
-  SourceSpan sidecarLintSourceSpan(
-    String packageId,
-    String lintId,
-  ) {
-    final contents = ref.read(projectConfigurationProvider(root))!.rawContent;
-    final uri = context.contextRoot.root.toUri();
-    final doc = loadYamlNode(contents, sourceUrl: uri) as YamlMap;
-
-    final sidecar = doc.nodes['sidecar']! as YamlMap;
-
-    final packages = sidecar.nodes['lints']! as YamlMap;
-
-    final lints = packages.nodes[packageId]! as YamlMap;
-    delegate.sidecarVerboseMessage(
-        'root ${context.contextRoot.root.path} searching for $packageId - $lintId');
-
-    delegate.sidecarVerboseMessage(
-        'nodes ${lints.nodes.entries.map((e) => '${e.key}-${e.value}').toString()}');
-    //TODO: is this a dart error?
-    final myLintKey = lints.nodes.entries.firstWhere((entry) {
-      final isMatch = entry.key.toString() == lintId;
-      delegate.sidecarVerboseMessage(
-          'node search for $lintId - ${entry.key} ${entry.value} - $isMatch');
-      return isMatch;
-    }).key as YamlScalar;
-
-    final startOffset = myLintKey.span.start.offset;
-    final endOffset = myLintKey.span.end.offset;
-
-    final lineInfo = LineInfo.fromContent(contents);
-    final startLocation = lineInfo.getLocation(startOffset);
-    final endLocation = lineInfo.getLocation(endOffset);
-    final sourceSpan = SourceSpan(
-      SourceLocation(
-        startOffset,
-        column: startLocation.columnNumber,
-        line: startLocation.lineNumber,
-        sourceUrl: uri,
-      ),
-      SourceLocation(
-        endOffset,
-        column: endLocation.columnNumber,
-        line: endLocation.lineNumber,
-        sourceUrl: uri,
-      ),
-      contents.substring(startOffset, endOffset),
-    );
-    return sourceSpan;
-  }
 }
 
 final analysisContextServiceProvider =
-    Provider.family<AnalysisContextService, AnalysisContext>(
-        (ref, context) => AnalysisContextService(
-              ref,
-              context: context,
-            ));
+    Provider.family<AnalysisContextService, AnalysisContext>((ref, context) {
+  return AnalysisContextService(ref, context: context);
+});

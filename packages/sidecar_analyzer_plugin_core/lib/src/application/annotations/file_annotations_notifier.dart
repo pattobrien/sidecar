@@ -62,24 +62,4 @@ class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
     }
     super.visitAnnotatedNode(node);
   }
-
-  // @override
-  // void visitAnnotation(Annotation node) {
-  //   final value = node.elementAnnotation?.computeConstantValue();
-  //   if (SidecarTypeChecker.isSidecarInput(value?.type)) {
-  //     final sidecarInput = value!;
-  //     final z = node.childEntities;
-  //     // final thisOrSupers = <DartObject>[
-  //     //   sidecarInput,
-  //     //   ...sidecarInput.,
-  //     // ];
-  //     // final val = thisOrSupers.firstWhere((element) => element.comp());
-  //     final x = value.getField('(super)')?.getField('configuration');
-
-  //     final y = value.variable;
-  //     // annotations.add(node.elementAnnotation!);
-  //     // print('# o annos: ${annotations.length}');
-  //   }
-  //   super.visitAnnotation(node);
-  // }
 }

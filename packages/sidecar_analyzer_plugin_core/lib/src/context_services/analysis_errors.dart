@@ -6,11 +6,14 @@ part 'analysis_errors.freezed.dart';
 
 @freezed
 class AnalyzedFile with _$AnalyzedFile {
-  const AnalyzedFile._();
   const factory AnalyzedFile(
     ContextRoot contextRoot,
     String path,
   ) = _AnalyzedFile;
 
+  const AnalyzedFile._();
+
   bool get isDartFile => p.extension(path) == '.dart';
+
+  String get relativePath => p.relative(path, from: contextRoot.root.path);
 }

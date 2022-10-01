@@ -128,13 +128,16 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           'error analyzing $path -- ${e.toString()}', stackTrace);
       channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
     }
-
-    if (mode.isCli || mode.isDebug) {
+    //TODO: BUG this checked completes when all units have been resolved, even if the file has not been through this analyzeFile method yet
+    // if (mode.isCli || mode.isDebug) {
+    if (mode.isCli) {
       if (_ref
           .read(analysisContextServiceProvider(analysisContext))
           .isInitialized) {
-        delegate.sidecarMessage('isInitialized');
+        delegate.sidecarMessage('all files have completed initialization.');
         initializationCompleter.complete();
+        throw UnimplementedError(
+            'this checked completes when all units have been resolved, even if the file has not been through this analyzeFile method yet');
       }
     }
   }
