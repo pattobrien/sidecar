@@ -103,9 +103,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             .read(activatedRulesNotifierProvider(context.contextRoot).notifier)
             .initializeRules();
 
-        if (mode.isCli) {
-          _ref.read(analysisContextServiceProvider(context)).queueFiles();
-        }
         delegate.sidecarMessage('completed: ${context.contextRoot.root.path}');
       },
     ));
@@ -134,11 +131,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           'error analyzing $path -- ${e.toString()}', stackTrace);
       channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
     }
-    if (mode.isCli) {
+    if (mode.isCli || mode.isDebug) {
       if (_ref
-          .read(queuedFilesProvider(analysisContext.contextRoot))
-          .paths
-          .isEmpty) {
+          .read(analysisContextServiceProvider(analysisContext))
+          .isInitialized) {
+        delegate.sidecarMessage('isInitialized');
         initializationCompleter.complete();
       }
     }
@@ -148,54 +145,38 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetFixesResult> handleEditGetFixes(
     plugin.EditGetFixesParams parameters,
   ) async {
-    final filePath = parameters.file;
+    final path = parameters.file;
     final offset = parameters.offset;
 
-    final unit = await getResolvedUnitResult(filePath);
-    final context = unit.session.analysisContext;
+    final context = _ref
+        .read(analysisContextCollectionServiceProvider)
+        .getContextFromPath(path);
 
-    final analyzedFile = AnalyzedFile(context.contextRoot, filePath);
+    final fixes = await _ref
+        .read(analysisContextServiceProvider(context))
+        .getAnalysisErrorFixes(path, offset);
 
-    final analysisResults = _ref
-        .read(analysisNotifierProvider(analyzedFile))
-        .value!
-        .where((element) {
-      final isWithinOffset = element.isWithinOffset(filePath, offset);
-      final isLintRule = element.rule is LintRule;
-      return isWithinOffset && isLintRule;
-    });
-
-    final analysisErrorFixes = await Future.wait<plugin.AnalysisErrorFixes>(
-      analysisResults.map(
-        (e) => e.rule.computeSourceChanges(e).then(
-              (value) => plugin.AnalysisErrorFixes(
-                e.toAnalysisError()!,
-                fixes: value.map((e) => e.toPrioritizedSourceChange()).toList(),
-              ),
-            ),
-      ),
-    );
-
-    return plugin.EditGetFixesResult(analysisErrorFixes);
+    return plugin.EditGetFixesResult(fixes);
   }
 
   @override
   Future<plugin.EditGetAssistsResult> handleEditGetAssists(
     plugin.EditGetAssistsParams parameters,
   ) async {
-    final filePath = parameters.file;
+    final path = parameters.file;
     final offset = parameters.offset;
     final length = parameters.length;
 
-    if (p.extension(filePath) == '.dart') {
-      final unit = await getResolvedUnitResult(filePath);
-      final context = unit.session.analysisContext;
-      final analysisContextService = getAnalysisContextService(context);
+    if (p.extension(path) == '.dart') {
+      final context = _ref
+          .read(analysisContextCollectionServiceProvider)
+          .getContextFromPath(path);
 
-      final edits =
-          await analysisContextService.getCodeAssists(unit, offset, length);
+      final results = await _ref
+          .read(analysisContextServiceProvider(context))
+          .getCodeAssists(path, offset, length);
 
-      return plugin.EditGetAssistsResult(edits.toList());
+      return plugin.EditGetAssistsResult(results.toList());
     }
     return plugin.EditGetAssistsResult([]);
   }

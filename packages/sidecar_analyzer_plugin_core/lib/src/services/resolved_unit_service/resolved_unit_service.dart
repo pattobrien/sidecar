@@ -11,9 +11,6 @@ class ResolvedUnitService {
     this.ref, {
     required this.analyzedFile,
   });
-  // }) : assert(analyzedFile.isDartFile,
-  //           '${analyzedFile.path}: ResolvedUnitService can only be used by Dart files');
-
   final Ref ref;
   final AnalyzedFile analyzedFile;
 

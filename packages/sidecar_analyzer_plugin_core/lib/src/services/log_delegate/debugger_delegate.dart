@@ -94,23 +94,5 @@ class DebuggerLogDelegate implements LogDelegateBase {
           '${DateTime.now().toIso8601String()}   • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
     }
     stdout.write(stringBuffer.toString());
-
-    // final path = result.sourceSpan.sourceUrl!.path;
-    // final relativePath = p.relative(path, from: Directory.current.path);
-
-    // final sourceLocation =
-    //     '$relativePath:${result.sourceSpan.start.line}:${result.sourceSpan.start.column}';
-    // // final lintErrorType = result.rule.defaultType.coloredNamedd; $lintErrorType
-    // final lintPackage =
-    //     result.rule.packageName.padRight(20).characters.take(20);
-    // final lintCode = result.rule.code.padRight(20).characters.take(20);
-    // final lintMessage = result.message.padRight(40).characters.take(40);
-    // // final msg = message
-    // //     .split('\n')
-    // //     .map((e) => e.isEmpty ? '$label\n' : '$label $e\n')
-    // //     .join();
-
-    // stdout.writeln(
-    //     '${DateTime.now().toIso8601String()}   • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
   }
 }

@@ -18,6 +18,10 @@ class AnalysisContextCollectionService {
     return _collection.contexts
         .firstWhere((element) => element.contextRoot == contextRoot);
   }
+
+  AnalysisContext getContextFromPath(String path) {
+    return _collection.contextFor(path);
+  }
 }
 
 final analysisContextCollectionServiceProvider =

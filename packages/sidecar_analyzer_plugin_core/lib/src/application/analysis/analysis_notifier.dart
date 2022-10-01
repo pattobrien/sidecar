@@ -39,7 +39,6 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
 
   Future<void> refreshAnalysis() async {
-    // ref.invalidateSelf();
     state = AsyncLoading();
     //TODO: allow analysis of other file extensions
     if (analyzedFile.isDartFile) {
@@ -68,13 +67,19 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
           final errorReporter = ErrorReporter(ref, analyzedFile);
           final results =
               await errorReporter.generateDartAnalysisResults(unit, rule);
-          state = AsyncValue.data(List.from([...?state.value, ...results]));
+
+          final data = AsyncValue.data(List<AnalysisResult>.from(
+              <AnalysisResult>[...?state.value, ...results]));
+          state = data;
         } catch (e, stackTrace) {
           delegate.sidecarError('LintRule Error: ${e.toString()}', stackTrace);
         }
       }));
       delegate.sidecarVerboseMessage(
           'analyzeFile completed w/ ${allRules.length} rules: ${analyzedFile.path}');
+    } else {
+      // set all non-Dart files to having no errors
+      state = AsyncValue.data([]);
     }
   }
 

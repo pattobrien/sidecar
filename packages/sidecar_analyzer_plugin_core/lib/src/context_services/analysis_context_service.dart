@@ -12,6 +12,7 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart'
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:path/path.dart' as p;
+import 'package:sidecar_analyzer_plugin_core/src/application/activated_rules/activated_rules_notifier.dart';
 import 'package:sidecar_analyzer_plugin_core/src/application/analysis/analysis_notifier.dart';
 import 'package:sidecar_analyzer_plugin_core/src/application/annotations/file_annotations_notifier.dart';
 import 'package:sidecar_analyzer_plugin_core/src/context_services/queued_files.dart';
@@ -25,14 +26,12 @@ import '../services/error_reporter/error_reporter.dart';
 import '../services/log_delegate/log_delegate.dart';
 import '../utils/channel_extension.dart';
 
-import 'activated_edits.dart';
 import 'analysis_errors.dart';
 
 class AnalysisContextService {
   AnalysisContextService(
     this.ref, {
     required this.context,
-    // required this.annotatedNodes,
   })  : delegate = ref.read(logDelegateProvider),
         channel = ref.read(pluginChannelProvider)!,
         root = context.contextRoot;
@@ -40,10 +39,19 @@ class AnalysisContextService {
   final Ref ref;
   final AnalysisContext context;
   final ContextRoot root;
-  // final List<AnnotatedNode> annotatedNodes;
 
   final PluginCommunicationChannel channel;
   final LogDelegateBase delegate;
+
+  bool get isInitialized {
+    final filesInContext =
+        root.analyzedFiles().map((e) => AnalyzedFile(root, e));
+    final filesHaveValues = filesInContext
+        .map((e) => ref.read(analysisNotifierProvider(e)).hasValue);
+    delegate.sidecarMessage(
+        '${filesHaveValues.where((element) => element == true).length} complete out of ${filesHaveValues.length}');
+    return filesHaveValues.every((element) => element == true);
+  }
 
   Future<void> initializeAnalysisContext() async {
     if (!context.isSidecarEnabled) return;
@@ -61,9 +69,44 @@ class AnalysisContextService {
     }));
   }
 
-  void queueFiles() {
-    final paths = context.contextRoot.analyzedFiles();
-    ref.read(queuedFilesProvider(root)).addPaths(paths);
+  Future<List<AnalysisErrorFixes>> getAnalysisErrorFixes(
+    String path,
+    int offset,
+  ) async {
+    final analyzedFile = AnalyzedFile(root, path);
+
+    final unit = await ref
+        .read(resolvedUnitServiceProvider(analyzedFile))
+        .getResolvedUnit();
+
+    if (unit == null) throw UnimplementedError();
+
+    final analysisResults = ref
+        .read(analysisNotifierProvider(analyzedFile))
+        .value
+        ?.where((analysisResult) {
+      return analysisResult.isWithinOffset(path, offset) &&
+          analysisResult.rule is LintRule;
+    });
+
+    return await Future.wait<AnalysisErrorFixes>(
+      analysisResults?.map(
+            (e) {
+              return e.rule.computeSourceChanges(e).then(
+                (value) {
+                  return AnalysisErrorFixes(
+                    e.toAnalysisError()!,
+                    fixes: value
+                        .map((editResult) =>
+                            editResult.toPrioritizedSourceChange())
+                        .toList(),
+                  );
+                },
+              );
+            },
+          ) ??
+          [],
+    );
   }
 
   Future<List<AnalysisError>> getAnalysisErrors(
@@ -106,29 +149,40 @@ class AnalysisContextService {
   }
 
   Future<Iterable<PrioritizedSourceChange>> getCodeAssists(
-    ResolvedUnitResult unit,
+    // ResolvedUnitResult unit,
+    String path,
     int offset,
     int length,
   ) async {
-    final analyzedFile = AnalyzedFile(root, unit.path);
+    final analyzedFile = AnalyzedFile(root, path);
     final codeEditReporter = ErrorReporter(ref, analyzedFile);
-    final edits = ref.read(activatedEditsProvider(root)).codeEdits;
-    final computedFixes = await Future.wait(edits.map((edit) async {
+
+    final editRules = ref
+        .read(activatedRulesNotifierProvider(root))
+        .rules
+        .whereType<CodeEdit>();
+
+    final unit = await ref
+        .read(resolvedUnitServiceProvider(analyzedFile))
+        .getResolvedUnit();
+
+    if (unit == null) throw UnimplementedError();
+
+    final computedFixes = await Future.wait(editRules.map((rule) async {
       try {
         return await codeEditReporter.generateDartFixes(
           unit,
-          edit,
+          rule,
           offset,
           length,
         );
       } catch (e, stackTrace) {
         channel.sendError('CodeEdit Misc error: $e', stackTrace);
+        return <PrioritizedSourceChange>[];
       }
     }));
-    final flattenedList = computedFixes
-        .whereType<List<PrioritizedSourceChange>>()
-        .expand((element) => element)
-        .toList();
+
+    final flattenedList = computedFixes.expand((changes) => changes).toList();
 
     return flattenedList;
   }
