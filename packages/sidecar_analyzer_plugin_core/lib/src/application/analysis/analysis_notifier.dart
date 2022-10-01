@@ -1,30 +1,15 @@
-import 'package:analyzer/dart/analysis/context_root.dart';
-
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
-import 'package:sidecar_analyzer_plugin_core/src/application/activated_rules/activated_rules_notifier.dart';
-import 'package:sidecar_analyzer_plugin_core/src/application/annotations/file_annotations_notifier.dart';
-import 'package:sidecar_analyzer_plugin_core/src/services/error_reporter/error_reporter.dart';
-
-import '../../services/analysis_context_collection_service/analysis_context_collection_service.dart';
-import '../../services/log_delegate/log_delegate.dart';
-import '../../services/project_configuration_service/providers.dart';
 
 import '../../context_services/analysis_errors.dart';
+import '../../services/analysis_context_collection_service/analysis_context_collection_service.dart';
+import '../../services/error_reporter/error_reporter.dart';
+import '../../services/log_delegate/log_delegate.dart';
+import '../../services/project_configuration_service/providers.dart';
 import '../../services/resolved_unit_service/resolved_unit_service.dart';
-
-final isInitializationComplete =
-    Provider.family<bool, ContextRoot>((ref, contextRoot) {
-  return contextRoot.analyzedFiles().every((path) => !ref
-      .watch(analysisNotifierProvider(AnalyzedFile(contextRoot, path)))
-      .isLoading);
-});
-
-final analysisNotifierProvider = StateNotifierProvider.family<AnalysisNotifier,
-    AsyncValue<List<AnalysisResult>>, AnalyzedFile>((ref, analyzedFile) {
-  return AnalysisNotifier(ref, analyzedFile: analyzedFile);
-});
+import '../activated_rules/activated_rules_notifier.dart';
+import '../annotations/file_annotations_notifier.dart';
 
 class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   AnalysisNotifier(
@@ -50,6 +35,8 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
 
       ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
 
+      final errorReporter = ErrorReporter(ref, analyzedFile);
+
       final context = ref
           .read(analysisContextCollectionServiceProvider)
           .getContextFromRoot(analyzedFile.contextRoot);
@@ -64,13 +51,11 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
         }
 
         try {
-          final errorReporter = ErrorReporter(ref, analyzedFile);
           final results =
               await errorReporter.generateDartAnalysisResults(unit, rule);
 
-          final data = AsyncValue.data(List<AnalysisResult>.from(
+          state = AsyncValue.data(List<AnalysisResult>.from(
               <AnalysisResult>[...?state.value, ...results]));
-          state = data;
         } catch (e, stackTrace) {
           delegate.sidecarError('LintRule Error: ${e.toString()}', stackTrace);
         }
@@ -115,3 +100,8 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
     return projectConfig?.includes(relativePath) ?? false;
   }
 }
+
+final analysisNotifierProvider = StateNotifierProvider.family<AnalysisNotifier,
+    AsyncValue<List<AnalysisResult>>, AnalyzedFile>((ref, analyzedFile) {
+  return AnalysisNotifier(ref, analyzedFile: analyzedFile);
+});

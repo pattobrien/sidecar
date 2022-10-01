@@ -1,6 +1,7 @@
-import 'package:pubspec_parse/pubspec_parse.dart';
 import 'dart:io' as io;
+
 import 'package:path/path.dart' as p;
+import 'package:pubspec_parse/pubspec_parse.dart';
 
 import 'logger.dart';
 

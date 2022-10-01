@@ -1,8 +1,6 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 
-import 'flutter_utilities.dart';
-
 extension FlutterAstNodeX on AstNode {
   bool isInsideBuildMethod() {
     final node = thisOrAncestorMatching((node) {

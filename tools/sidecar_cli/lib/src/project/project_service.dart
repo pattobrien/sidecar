@@ -1,18 +1,17 @@
 import 'dart:convert';
 import 'dart:io' as io;
+import 'dart:io' show Directory;
 
+import 'package:package_config/package_config.dart';
 import 'package:path/path.dart' as p;
-import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_cli/src/project/vscode_task.dart';
 
-import 'constants.dart';
 import '../utilities/utilities.dart';
+import 'constants.dart';
 import 'file_content_constants.dart';
-import 'package:package_config/package_config.dart';
-import 'dart:io' show Directory;
+import 'vscode_task.dart';
 
 class ProjectService {
   ProjectService(this.projectDirectory) {
@@ -205,7 +204,7 @@ class ProjectService {
         .listSync(recursive: true)
         .whereType<io.File>();
 
-    bool hasOverrides = false;
+    var hasOverrides = false;
     for (final packageSourceFile in packageSourceFiles) {
       final sourceFileRelativePath = p.relative(
         packageSourceFile.path,
@@ -223,7 +222,7 @@ class ProjectService {
         hasOverrides = true;
         await file.writeAsString(
             pluginLoaderYamlContentCreator(projectPluginDirectory.path));
-        print('found loader pubspec @ $pluginProjectPath');
+        io.stdout.writeln('found loader pubspec @ $pluginProjectPath');
       } else {
         // for all files that are not the plugin loader pubspec
         // copy the source files as is
@@ -295,12 +294,12 @@ class ProjectService {
       throw UnimplementedError('plugin pubspec not found');
     }
 
-    String pubspecContent = await pluginPubspecFile.readAsString();
+    final pubspecContent = await pluginPubspecFile.readAsString();
     final pubspec = Pubspec.parse(pubspecContent); //TODO: set lenient = true
     final packageSet = <String>{}
       ..addAll(lints.map((l) => l.packageName))
       ..addAll(edits.map((e) => e.packageName))
-      ..removeWhere((p) => pubspec.dependencies.containsKey(p));
+      ..removeWhere(pubspec.dependencies.containsKey);
 
     await pubAddPackages(
       packageSet.toList(),
@@ -317,10 +316,10 @@ class ProjectService {
 
     for (final lintPackage in lintPackages) {
       importBuffer.write(
-          'import \'package:${lintPackage.packageName}/${lintPackage.packageName}.dart\' as ${lintPackage.packageName}; \n');
+          "import 'package:${lintPackage.packageName}/${lintPackage.packageName}.dart' as ${lintPackage.packageName}; \n");
       for (final lint in lintPackage.lints.values) {
         returnBuffer.write(
-            '\t\tId(type: IdType.lintRule, packageId: \'${lintPackage.packageName}\', id: \'${lint.id}\'): ${lint.packageName}.${lint.className}.new, \n');
+            "\t\tId(type: IdType.lintRule, packageId: '${lintPackage.packageName}', id: '${lint.id}'): ${lint.packageName}.${lint.className}.new, \n");
       }
 
       final entireContents = StringBuffer()
@@ -345,11 +344,11 @@ class ProjectService {
 
     for (final editPackage in editPackages) {
       importBuffer.write(
-          'import \'package:${editPackage.packageName}/${editPackage.packageName}.dart\' as ${editPackage.packageName}; \n');
+          "import 'package:${editPackage.packageName}/${editPackage.packageName}.dart' as ${editPackage.packageName}; \n");
       for (final edit in editPackage.assists.values) {
         // packages.add(edit.packageName);
         returnBuffer.write(
-            '\t\tId(type: IdType.codeEdit, packageId: \'${editPackage.packageName}\', id: \'${edit.id}\'): ${edit.packageName}.${edit.className}.new,\n');
+            "\t\tId(type: IdType.codeEdit, packageId: '${editPackage.packageName}', id: '${edit.id}'): ${edit.packageName}.${edit.className}.new,\n");
       }
 
       final entireContents = StringBuffer()
@@ -373,7 +372,7 @@ class ProjectService {
     // }
     final toolDirectory = io.Directory(p.join(projectDirectory.path, 'tool'));
     await toolDirectory.create(recursive: true);
-    print('creating project repository');
+    io.stdout.writeln('creating project repository');
     await io.Process.run(
       'dart',
       ['create', '--template=package', 'sidecar_overrides'],
@@ -402,7 +401,7 @@ class ProjectService {
     // final pubspecFile = p.join(projectDirectory.path, 'pubspec.yaml');
     final isFlutterProject =
         await PubspecUtilities.isFlutterProject(projectDirectory.path);
-    print(isFlutterProject
+    io.stdout.writeln(isFlutterProject
         ? 'running flutter pub get...'
         : 'running dart pub get...');
     final result = await io.Process.run(
@@ -411,7 +410,7 @@ class ProjectService {
       workingDirectory: projectDirectory.path,
     );
 
-    print('restartPlugin: ${result.stderr} ${result.stdout}');
+    io.stdout.writeln('restartPlugin: ${result.stderr} ${result.stdout}');
   }
 }
 

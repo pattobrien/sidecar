@@ -34,12 +34,16 @@ class ErrorReporter {
     int offset,
     int length,
   ) async {
-    final results = ref.read(analysisNotifierProvider(file)).value!;
+    final results = ref.read(analysisNotifierProvider(file)).valueOrNull ?? [];
+
     final relevantResults =
         results.where((element) => element.isWithinOffset(unit.path, offset));
+
     final editResults = await Future.wait(
         relevantResults.map((e) async => await rule.computeSourceChanges(e)));
+
     final flattenedResults = editResults.expand((element) => element).toList();
+
     return flattenedResults.map((e) => e.toPrioritizedSourceChange()).toList();
   }
 }

@@ -5,8 +5,8 @@ part 'activated_rules_state.freezed.dart';
 
 @freezed
 class ActivatedRulesState with _$ActivatedRulesState {
-  const ActivatedRulesState._();
   const factory ActivatedRulesState({
-    @Default([]) List<SidecarBase> rules,
+    @Default(<SidecarBase>[]) List<SidecarBase> rules,
   }) = _ActivatedRulesState;
+  const ActivatedRulesState._();
 }

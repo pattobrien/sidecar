@@ -1,31 +1,28 @@
+import 'dart:async';
+
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
-import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
-import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/source/line_info.dart';
-
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart'
     hide ContextRoot;
 
+import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:path/path.dart' as p;
-import 'package:sidecar_analyzer_plugin_core/src/application/activated_rules/activated_rules_notifier.dart';
-import 'package:sidecar_analyzer_plugin_core/src/application/analysis/analysis_notifier.dart';
-import 'package:sidecar_analyzer_plugin_core/src/application/annotations/file_annotations_notifier.dart';
-import 'package:sidecar_analyzer_plugin_core/src/context_services/queued_files.dart';
-import 'package:sidecar_analyzer_plugin_core/src/services/project_configuration_service/providers.dart';
-import 'package:sidecar_analyzer_plugin_core/src/services/resolved_unit_service/resolved_unit_service.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
+import '../application/activated_rules/activated_rules_notifier.dart';
+import '../application/analysis/analysis_notifier.dart';
+import '../application/annotations/file_annotations_notifier.dart';
 import '../plugin/plugin.dart';
 import '../services/error_reporter/error_reporter.dart';
 import '../services/log_delegate/log_delegate.dart';
+import '../services/project_configuration_service/providers.dart';
+import '../services/resolved_unit_service/resolved_unit_service.dart';
 import '../utils/channel_extension.dart';
-
 import 'analysis_errors.dart';
 
 class AnalysisContextService {
@@ -43,15 +40,9 @@ class AnalysisContextService {
   final PluginCommunicationChannel channel;
   final LogDelegateBase delegate;
 
-  bool get isInitialized {
-    final filesInContext =
-        root.analyzedFiles().map((e) => AnalyzedFile(root, e));
-    final filesHaveValues = filesInContext
-        .map((e) => ref.read(analysisNotifierProvider(e)).hasValue);
-    delegate.sidecarMessage(
-        '${filesHaveValues.where((element) => element == true).length} complete out of ${filesHaveValues.length}');
-    return filesHaveValues.every((element) => element == true);
-  }
+  Future<void> get initialization => _completer.future;
+  bool get isInitialized => _completer.isCompleted;
+  final _completer = Completer<void>();
 
   Future<void> initializeAnalysisContext() async {
     if (!context.isSidecarEnabled) return;
@@ -59,7 +50,7 @@ class AnalysisContextService {
       final analyzedFile = AnalyzedFile(root, path);
       //TODO: handle non-Dart files
       if (!analyzedFile.isDartFile) return;
-      // if (!p.isWithin(context.contextRoot.root.path, path)) return;
+      if (!p.isWithin(context.contextRoot.root.path, path)) return;
 
       await ref
           .read(resolvedUnitServiceProvider(analyzedFile))
@@ -67,6 +58,7 @@ class AnalysisContextService {
 
       ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
     }));
+    _completer.complete();
   }
 
   Future<List<AnalysisErrorFixes>> getAnalysisErrorFixes(
@@ -75,11 +67,11 @@ class AnalysisContextService {
   ) async {
     final analyzedFile = AnalyzedFile(root, path);
 
-    final unit = await ref
-        .read(resolvedUnitServiceProvider(analyzedFile))
-        .getResolvedUnit();
+    // final unit = await ref
+    //     .read(resolvedUnitServiceProvider(analyzedFile))
+    //     .getResolvedUnit();
 
-    if (unit == null) throw UnimplementedError();
+    // if (unit == null) throw UnimplementedError();
 
     final analysisResults = ref
         .read(analysisNotifierProvider(analyzedFile))
@@ -113,7 +105,6 @@ class AnalysisContextService {
     String path,
   ) async {
     final analyzedFile = AnalyzedFile(root, path);
-    ref.read(queuedFilesProvider(root)).removePath(path);
     final rootPath = root.root.path;
     final analysisPath = context.contextRoot.optionsFile?.path;
 
@@ -149,7 +140,6 @@ class AnalysisContextService {
   }
 
   Future<Iterable<PrioritizedSourceChange>> getCodeAssists(
-    // ResolvedUnitResult unit,
     String path,
     int offset,
     int length,
@@ -171,20 +161,14 @@ class AnalysisContextService {
     final computedFixes = await Future.wait(editRules.map((rule) async {
       try {
         return await codeEditReporter.generateDartFixes(
-          unit,
-          rule,
-          offset,
-          length,
-        );
+            unit, rule, offset, length);
       } catch (e, stackTrace) {
         channel.sendError('CodeEdit Misc error: $e', stackTrace);
         return <PrioritizedSourceChange>[];
       }
     }));
 
-    final flattenedList = computedFixes.expand((changes) => changes).toList();
-
-    return flattenedList;
+    return computedFixes.expand((changes) => changes).toList();
   }
 
   SourceSpan sidecarLintSourceSpan(

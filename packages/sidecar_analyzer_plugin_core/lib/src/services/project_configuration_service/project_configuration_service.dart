@@ -3,8 +3,8 @@ import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:sidecar/sidecar.dart';
+
 import '../log_delegate/log_delegate.dart';
 
 class ProjectConfigurationService {
@@ -16,12 +16,10 @@ class ProjectConfigurationService {
   final ContextRoot contextRoot;
   final LogDelegateBase logger;
 
-  // final _controller = BehaviorSubject<ProjectConfiguration?>();
-  // Stream<ProjectConfiguration?> get stream => _controller.stream;
-  late ProjectConfiguration? configuration;
+  ProjectConfiguration? configuration;
 
   Future<void> parse() async {
-    logger.sidecarVerboseMessage('_parseProjectConfiguration');
+    logger.sidecarVerboseMessage('_parseProjectConfiguration started');
     final optionsFile = contextRoot.optionsFile;
     if (optionsFile != null) {
       try {
@@ -29,19 +27,9 @@ class ProjectConfigurationService {
         final sourceUrl = optionsFile.toUri();
         configuration =
             ProjectConfiguration.parse(contents, sourceUrl: sourceUrl);
-        // _controller
-        //     .add(ProjectConfiguration.parse(contents, sourceUrl: sourceUrl));
-        return;
       } catch (e) {
-        //
+        logger.sidecarVerboseMessage('_parseProjectConfiguration error: $e');
       }
-    } else {
-      // _controller.add(ProjectConfiguration(rawContent: contents));
     }
-
-    // _controller.add(null);
-
-    configuration = null;
-    logger.sidecarVerboseMessage('_parseProjectConfiguration completed');
   }
 }

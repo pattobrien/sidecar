@@ -10,6 +10,11 @@ class ProjectIcons {
   static const abc = Icons.abc;
 }
 
+@designSystemIcons2
+class ProjectIcons2 {
+  static const abc = Icons.abc;
+}
+
 class DesignSystemIcons extends SidecarInput {
   const DesignSystemIcons()
       : super(

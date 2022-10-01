@@ -2,7 +2,7 @@ import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../../context_services/context_services.dart';
+import 'project_configuration_service.dart';
 
 final projectConfigurationServiceProvider =
     Provider.family<ProjectConfigurationService, ContextRoot>(

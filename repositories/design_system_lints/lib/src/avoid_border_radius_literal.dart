@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:analyzer/dart/analysis/results.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/builder.dart';
 

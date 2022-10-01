@@ -2,8 +2,8 @@ import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 
-import '../../services/resolved_unit_service/resolved_unit_service.dart';
 import '../../context_services/analysis_errors.dart';
+import '../../services/resolved_unit_service/resolved_unit_service.dart';
 import '../../utils/annotation_utils.dart';
 
 final annotationsAggregateProvider =
@@ -22,12 +22,7 @@ final annotationsNotifierProvider = StateNotifierProvider.family<
     FileAnnotationsNotifier,
     AsyncValue<List<AnnotatedNode>>,
     AnalyzedFile>((ref, analyzedFile) {
-  final unitResult = ref.watch(resolvedUnitProvider(analyzedFile)).value;
-  return FileAnnotationsNotifier(
-    ref,
-    analyzedFile: analyzedFile,
-    unitResult: unitResult,
-  );
+  return FileAnnotationsNotifier(ref, analyzedFile: analyzedFile);
 });
 
 class FileAnnotationsNotifier
@@ -35,15 +30,14 @@ class FileAnnotationsNotifier
   FileAnnotationsNotifier(
     this.ref, {
     required this.analyzedFile,
-    required this.unitResult,
   }) : super(AsyncValue.loading());
 
   final Ref ref;
-  final ResolvedUnitResult? unitResult;
   final AnalyzedFile analyzedFile;
 
   void refresh() {
     final visitor = _AnnotationVisitor(ref);
+    final unitResult = ref.read(resolvedUnitProvider(analyzedFile)).value;
     unitResult?.unit.accept(visitor);
     state = AsyncValue.data(visitor.annotatedNodes);
   }
@@ -62,7 +56,8 @@ class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
       return false;
     });
     for (final annotation in annotations) {
-      annotatedNodes.add(node);
+      // annotatedNodes.add(annotation);
+      final x = annotation;
     }
     super.visitAnnotatedNode(node);
   }

@@ -63,7 +63,7 @@ abstract class SidecarBase {
         } catch (e, stackTrace) {
           final error = YamlSourceError(
             sourceSpan: lintNameSpan,
-            message: '$code error: incorrect configuration: $e',
+            message: '$code error: incorrect configuration: $e $stackTrace',
           );
           _errors.add(error);
         }

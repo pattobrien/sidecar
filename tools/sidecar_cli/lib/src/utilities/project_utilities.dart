@@ -22,11 +22,11 @@ class ProjectUtilities {
           sourceUrl: sidecarOptions.uri,
         );
       } catch (e) {
-        print(
+        io.stdout.writeln(
             'SIDECAR: Sidecar is not properly configured in sidecar.yaml file.');
-        print(
+        io.stdout.writeln(
             'SIDECAR: Please ensure the plugin is listed under analyzer_options.yaml > "analyzer" > "plugins" and');
-        print(
+        io.stdout.writeln(
             'SIDECAR: that a top-level sidecar configuration is given in sidecar.yaml.');
         rethrow;
       }
@@ -45,11 +45,12 @@ class ProjectUtilities {
         }
         return config;
       } catch (e) {
-        print(
+        io.stdout.writeln(
             'SIDECAR: Sidecar is not configured in analysis_options.yaml file.');
-        print(
+        io.stdout.writeln(
             'SIDECAR: Please ensure the plugin is listed under "analyzer" > "plugins" and');
-        print('SIDECAR: that a top-level sidecar configuration is given.');
+        io.stdout.writeln(
+            'SIDECAR: that a top-level sidecar configuration is given.');
         rethrow;
       }
     } else {

@@ -14,7 +14,8 @@ final activatedRulesNotifierProvider = StateNotifierProvider.family<
 });
 
 class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
-  ActivatedRulesNotifier(this.ref, this.root) : super(ActivatedRulesState());
+  ActivatedRulesNotifier(this.ref, this.root)
+      : super(const ActivatedRulesState());
 
   final ContextRoot root;
   final Ref ref;
@@ -22,7 +23,7 @@ class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
 
   void initializeRules() {
-    state = ActivatedRulesState();
+    state = const ActivatedRulesState();
     final annotatedNodes = ref.read(annotationsAggregateProvider(root));
 
     final projectConfig = ref.read(projectConfigurationProvider(root));
@@ -31,7 +32,7 @@ class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
 
     final ruleDefinitions = ref.read(ruleConstructorProvider);
 
-    for (var ruleDefinition in ruleDefinitions.entries) {
+    for (final ruleDefinition in ruleDefinitions.entries) {
       final ruleId = ruleDefinition.key;
       final ruleConfig = projectConfig.getConfiguration(ruleId);
       final rule = ruleDefinition.value();
@@ -47,7 +48,7 @@ class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
         // errorComposer.addErrors(rule.errors!);
       } else {
         state = state.copyWith(
-          rules: List<SidecarBase>.from([...state.rules, rule]),
+          rules: List.from(<SidecarBase>[...state.rules, rule]),
         );
       }
     }

@@ -5,30 +5,27 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 
-import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
+import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
 import 'package:hotreloader/hotreloader.dart';
+import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
+
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_analyzer_plugin_core/src/application/activated_rules/activated_rules_notifier.dart';
-import 'package:sidecar_analyzer_plugin_core/src/application/analysis/analysis_notifier.dart';
-import 'package:sidecar_analyzer_plugin_core/src/context_services/queued_files.dart';
 
-import '../context_services/context_services.dart';
-
+import '../application/activated_rules/activated_rules_notifier.dart';
 import '../constants.dart';
+import '../context_services/context_services.dart';
 import '../services/analysis_context_collection_service/analysis_context_collection_service.dart';
 import '../services/log_delegate/log_delegate.dart';
 import '../services/project_configuration_service/providers.dart';
-import 'analyzer_mode.dart';
 import '../utils/utils.dart';
+import 'analyzer_mode.dart';
 
-import 'package:path/path.dart' as p;
-
-final pluginProvider = Provider((ref) => SidecarAnalyzerPlugin(ref));
+final pluginProvider = Provider(SidecarAnalyzerPlugin.new);
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin(
@@ -40,7 +37,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
 
   HotReloader? _reloader;
-  final initializationCompleter = Completer();
+  final initializationCompleter = Completer<void>();
   final Ref _ref;
 
   @override
@@ -131,6 +128,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           'error analyzing $path -- ${e.toString()}', stackTrace);
       channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
     }
+
     if (mode.isCli || mode.isDebug) {
       if (_ref
           .read(analysisContextServiceProvider(analysisContext))

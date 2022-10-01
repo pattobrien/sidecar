@@ -1,4 +1,3 @@
-import 'package:pubspec/pubspec.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 
 extension PubspecUtilitiesX on String {
