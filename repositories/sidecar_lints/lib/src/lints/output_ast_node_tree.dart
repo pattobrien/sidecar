@@ -1,5 +1,5 @@
-import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
-import 'package:sidecar/sidecar.dart';
+import 'package:analyzer/dart/analysis/session.dart';
+import 'package:sidecar/builder.dart';
 
 class OutputAstNodeTree extends CodeEdit {
   @override
@@ -10,11 +10,12 @@ class OutputAstNodeTree extends CodeEdit {
 
   @override
   Future<List<EditResult>> computeSourceChanges(
+    AnalysisSession session,
     AnalysisResult result,
   ) async {
     result as DartAnalysisResult;
-    final session = result.unit.session;
-    final unit = result.unit;
+    final unit =
+        await session.getResolvedUnit(result.path) as ResolvedUnitResult;
     final changeBuilder = ChangeBuilder(session: session);
 
     final node = result.sourceSpan.toAstNode(unit);

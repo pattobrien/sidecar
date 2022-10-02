@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/analysis/session.dart';
 import 'package:collection/collection.dart';
 import 'package:riverpod_utilities/riverpod_utilities.dart';
 import 'package:sidecar/builder.dart';
@@ -23,14 +24,15 @@ class PreferConsumerWidget extends LintRule {
 
   @override
   Future<List<EditResult>> computeSourceChanges(
+    AnalysisSession session,
     AnalysisResult result,
   ) async {
-    final res = result as DartAnalysisResult;
-    final unit = res.unit;
-    final lintedNode = res.sourceSpan.toAstNode(unit);
+    final unit =
+        await session.getResolvedUnit(result.path) as ResolvedUnitResult;
+    final lintedNode = result.sourceSpan.toAstNode(unit);
 
-    final changeBuilder = ChangeBuilder(session: unit.session);
-    await changeBuilder.addDartFileEdit(unit.path, (fileBuilder) {
+    final changeBuilder = ChangeBuilder(session: session);
+    await changeBuilder.addDartFileEdit(result.path, (fileBuilder) {
       fileBuilder.importFlutterRiverpod();
       if (lintedNode is ClassDeclaration) {
         final superClass = lintedNode.extendsClause!.superclass;

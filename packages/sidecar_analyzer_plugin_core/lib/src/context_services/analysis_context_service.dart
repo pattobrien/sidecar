@@ -138,7 +138,7 @@ class AnalysisContextService {
     return Future.wait<AnalysisErrorFixes>(
       analysisResults.map(
         (e) {
-          return e.rule.computeSourceChanges(e).then(
+          return e.rule.computeSourceChanges(context.currentSession, e).then(
             (value) {
               return AnalysisErrorFixes(
                 e.toAnalysisError()!,

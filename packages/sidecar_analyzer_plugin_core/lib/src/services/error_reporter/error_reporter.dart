@@ -40,7 +40,7 @@ class ErrorReporter {
         results.where((element) => element.isWithinOffset(unit.path, offset));
 
     final editResults = await Future.wait(
-        relevantResults.map((e) async => await rule.computeSourceChanges(e)));
+        relevantResults.map((e) => rule.computeSourceChanges(unit.session, e)));
 
     final flattenedResults = editResults.expand((element) => element).toList();
 

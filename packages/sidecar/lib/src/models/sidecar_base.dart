@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:glob/glob.dart';
@@ -90,6 +91,7 @@ abstract class SidecarBase {
       Future.value([]);
 
   Future<List<EditResult>> computeSourceChanges(
+    AnalysisSession session,
     AnalysisResult result,
   ) =>
       Future.value(<EditResult>[]);

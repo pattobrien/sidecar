@@ -1,3 +1,4 @@
+import 'package:analyzer/dart/analysis/session.dart';
 import 'package:sidecar/builder.dart';
 import 'example_config.dart';
 
@@ -18,6 +19,7 @@ class SomeCodeEdit extends CodeEdit {
 
   @override
   Future<List<EditResult>> computeSourceChanges(
+    AnalysisSession session,
     AnalysisResult result,
   ) async {
     return const [

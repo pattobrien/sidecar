@@ -1,3 +1,4 @@
+import 'package:analyzer/dart/analysis/session.dart';
 import 'package:sidecar/builder.dart';
 import 'package:auto_route_utilities/auto_route_utilities.dart';
 
@@ -18,12 +19,14 @@ class CreateNewPageWidget extends CodeEdit {
 
   @override
   Future<List<EditResult>> computeSourceChanges(
+    AnalysisSession session,
     AnalysisResult result,
   ) async {
     // prepare change builder
     result as DartAnalysisResult;
-    final unit = result.unit;
-    final changeBuilder = AutoRouteChangeBuilder(session: unit.session);
+    final unit =
+        await session.getResolvedUnit(result.path) as ResolvedUnitResult;
+    final changeBuilder = AutoRouteChangeBuilder(session: session);
 
     final node = result.sourceSpan
         .toAstNode(unit)

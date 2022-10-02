@@ -17,35 +17,21 @@ class AvoidIconLiteral extends LintRule {
     final visitor = _Visitor();
     visitor.initializeVisitor(this, unit, annotatedNodes);
     unit.unit.accept(visitor);
-    final nodes = visitor.nodes;
-    return nodes;
+    return visitor.nodes;
   }
 }
 
 class _Visitor extends SidecarAstVisitor {
-//   @override
-//   void visitAnnotatedNode(AnnotatedNode node) {
-//     if (annotatedNodes.any((e) {
-//       final isEqual = e.toElement(unit) == node.toElement(unit);
-//       return isEqual;
-//     })) {
-//       // return;
-//       super.visitAnnotatedNode(node);
-//     } else {
-//       super.visitAnnotatedNode(node);
-//     }
-//   }
-
   @override
   void visitPrefixedIdentifier(PrefixedIdentifier node) {
     final isIconData = _isIconData(node.prefix.staticElement);
     if (isIconData) {
-      final matchingAnnotation = node.thisOrAncestorMatching((p0) {
-        final isMatch = p0 is AnnotatedNode &&
-            p0.metadata.isNotEmpty &&
-            annotatedNodes.any((annotatedNode) {
-              final isSameSource =
-                  annotatedNode.toSourceSpan(unit) == p0.toSourceSpan(unit);
+      final matchingAnnotation = node.thisOrAncestorMatching((ancestorNode) {
+        final isMatch = ancestorNode is AnnotatedNode &&
+            ancestorNode.metadata.isNotEmpty &&
+            annotatedNodes.any((annotation) {
+              final isSameSource = annotation.toSourceSpan(unit) ==
+                  ancestorNode.toSourceSpan(unit);
               return isSameSource;
             });
         return isMatch;
