@@ -5,14 +5,20 @@ import 'package:sidecar_annotations/sidecar_annotations.dart';
 
 // @designSystemIcons
 // @designSystemIcons2
+final x = '';
+
 @SidecarInput(packageName: 'design_system_lints', configuration: {})
 class ProjectIcons {
-  static const abc = Icons.abc;
+  static const abc = Icons.stop;
 }
 
-@designSystemIcons2
+// @designSystemIcons2
 class ProjectIcons2 {
-  static const abc = Icons.abc;
+  static const abc = Icons.party_mode;
+}
+
+class ProjectIcons3 {
+  static const abc = Icons.shield_outlined;
 }
 
 class DesignSystemIcons extends SidecarInput {

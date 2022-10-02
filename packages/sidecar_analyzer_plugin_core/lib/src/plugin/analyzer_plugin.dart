@@ -137,9 +137,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     try {
       final analysisContextService = getAnalysisContextService(analysisContext);
-      final errors = await analysisContextService.getAnalysisResults(path);
-      final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
-      channel.sendNotification(notif);
+      await analysisContextService.getAnalysisResults(path);
+      // final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
+      // channel.sendNotification(notif);
     } catch (e, stackTrace) {
       delegate.sidecarError('error analyzing $path -- $e', stackTrace);
       channel.sendError('error analyzing $path -- $e', stackTrace);

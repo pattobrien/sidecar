@@ -39,18 +39,21 @@ class _Visitor extends SidecarAstVisitor {
   void visitPrefixedIdentifier(PrefixedIdentifier node) {
     final isIconData = _isIconData(node.prefix.staticElement);
     if (isIconData) {
-      // AstNode testedNode = node;
-      // while (testedNode.parent != null) {
-      //   final path = unit.path;
-      //   var parentNode = testedNode;
-      //   var childNode = testedNode.parent;
+      final isAnnotated = node.thisOrAncestorMatching((p0) {
+        return p0 is AnnotatedNode &&
+            p0.metadata.isNotEmpty &&
+            annotatedNodes.any((annotatedNode) {
+              return annotatedNode.toSourceSpan(unit) == p0.toSourceSpan(unit);
+            });
+      });
 
-      //   testedNode = childNode!;
-      // }
-      reportAstNode(
-        node,
-        message: '1.19 Avoid IconData literal. Use design system spec instead.',
-      );
+      if (isAnnotated == null) {
+        reportAstNode(
+          node,
+          message:
+              '1.20 Avoid IconData literal. Use design system spec instead.',
+        );
+      }
     }
     return super.visitPrefixedIdentifier(node);
   }

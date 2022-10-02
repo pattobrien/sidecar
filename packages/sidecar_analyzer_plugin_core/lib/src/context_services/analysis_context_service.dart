@@ -134,23 +134,23 @@ class AnalysisContextService {
               analysisResult.rule is LintRule;
         }) ??
         <AnalysisResult>[];
-    return [];
-    // return Future.wait<AnalysisErrorFixes>(
-    //   analysisResults.map(
-    //     (e) {
-    //       return e.rule.computeSourceChanges(e).then(
-    //         (value) {
-    //           return AnalysisErrorFixes(
-    //             e.toAnalysisError()!,
-    //             fixes: value
-    //                 .map((editResult) => editResult.toPrioritizedSourceChange())
-    //                 .toList(),
-    //           );
-    //         },
-    //       );
-    //     },
-    //   ),
-    // );
+
+    return Future.wait<AnalysisErrorFixes>(
+      analysisResults.map(
+        (e) {
+          return e.rule.computeSourceChanges(e).then(
+            (value) {
+              return AnalysisErrorFixes(
+                e.toAnalysisError()!,
+                fixes: value
+                    .map((editResult) => editResult.toPrioritizedSourceChange())
+                    .toList(),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 
   Future<Iterable<PrioritizedSourceChange>> getCodeAssists(
@@ -171,12 +171,22 @@ class AnalysisContextService {
         .rules
         .whereType<CodeEdit>();
 
-    final unit = ref.read(resolvedUnitProvider(analyzedFile)).value!;
+    var unit = ref.read(resolvedUnitProvider(analyzedFile)).value;
+    // unit should never be null if logic is handled in the right order
+    if (unit == null) {
+      unit = await ref
+          .read(resolvedUnitServiceProvider(analyzedFile))
+          .getResolvedUnit();
+      if (unit == null) {
+        // this should never happen
+        throw UnimplementedError('unit should never be null in this case');
+      }
+    }
 
     final computedFixes = await Future.wait(editRules.map((rule) async {
       try {
         return await codeEditReporter.generateDartFixes(
-            unit, rule, offset, length);
+            unit!, rule, offset, length);
       } catch (e, stackTrace) {
         channel.sendError('getCodeAssists error: $e', stackTrace);
         return <PrioritizedSourceChange>[];

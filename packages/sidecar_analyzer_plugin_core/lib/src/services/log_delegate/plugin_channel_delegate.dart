@@ -56,6 +56,6 @@ class PluginChannelDelegate implements LogDelegateBase {
         .toList();
 
     final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
-    // channel.sendNotification(notif);
+    channel.sendNotification(notif);
   }
 }

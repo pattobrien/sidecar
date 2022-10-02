@@ -28,12 +28,4 @@ void main() {
   final customizedLib = myApp.lib;
   final features = customizedLib.features;
   final core = customizedLib.core;
-
-  print('');
-  print('root directory:    ${myWorkspaceDirectory.path}');
-  print('');
-  print('assets folder:     ${assetsDirectory.path}');
-  print('main() file:       ${mainFile.path}');
-  print('features folder:   ${featuresFolder.path}');
-  print('');
 }

@@ -71,7 +71,7 @@ class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
   void visitAnnotatedNode(AnnotatedNode node) {
     final annotations = node.metadata.where((annotation) {
       final obj = annotation.elementAnnotation?.computeConstantValue();
-      if (SidecarTypeChecker.isSidecarInput(obj?.type)) {
+      if (SidecarTypeChecker.isSidecarInput(obj?.type?.element2)) {
         return true;
       }
       return false;
