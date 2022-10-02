@@ -82,7 +82,6 @@ extension AstNodeX on AstNode {
     SourceSpan? highlightedSpan,
   }) =>
       AnalysisResult.dart(
-        unit: unit,
         rule: rule,
         sourceSpan: toSourceSpan(unit),
         message: message,

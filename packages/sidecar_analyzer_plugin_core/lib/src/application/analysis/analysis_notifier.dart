@@ -1,7 +1,9 @@
+import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 
+import '../../../sidecar_analyzer_plugin_core.dart';
 import '../../context_services/analysis_errors.dart';
 import '../../services/analysis_context_collection_service/analysis_context_collection_service.dart';
 import '../../services/error_reporter/error_reporter.dart';
@@ -22,6 +24,7 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   final AnalyzedFile analyzedFile;
 
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
+  PluginCommunicationChannel get channel => ref.read(pluginChannelProvider);
 
   Future<void> refreshAnalysis() async {
     state = const AsyncLoading();
@@ -61,7 +64,7 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
         }
       }));
       delegate.sidecarVerboseMessage(
-          'analyzeFile completed w/ ${allRules.length} rules: ${analyzedFile.path}');
+          'analyzeFile completed w/ ${allRules.length} rules: ${analyzedFile.relativePath}');
     } else {
       // set all non-Dart files to having no errors
       state = const AsyncValue.data([]);

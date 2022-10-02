@@ -81,32 +81,53 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
-    delegate.sidecarVerboseMessage('afterNewContextCollection');
+    try {
+      delegate.sidecarMessage('afterNewContextCollection');
 
-    _ref.read(analysisContextCollectionServiceProvider).collection =
-        contextCollection;
+      _ref.read(analysisContextCollectionServiceProvider).collection =
+          contextCollection;
 
-    await Future.wait(contextCollection.contexts.map<Future<void>>(
-      (context) async {
-        await _ref
-            .read(analysisContextServiceProvider(context))
-            .initializeAnalysisContext();
+      await Future.wait(contextCollection.contexts.map<Future<void>>(
+        (context) async {
+          delegate.sidecarMessage(
+              'initializing context: ${context.contextRoot.root.path}');
 
-        await _ref
-            .read(projectConfigurationServiceProvider(context.contextRoot))
-            .parse();
+          if (!context.isSidecarEnabled) return;
 
-        _ref
-            .read(activatedRulesNotifierProvider(context.contextRoot).notifier)
-            .initializeRules();
+          await _ref
+              .read(analysisContextServiceProvider(context))
+              .initializeAnalysisContext();
 
-        delegate.sidecarMessage('completed: ${context.contextRoot.root.path}');
-      },
-    ));
+          await _ref
+              .read(projectConfigurationServiceProvider(context.contextRoot))
+              .parse();
 
-    delegate.sidecarVerboseMessage('afterNewContextCollection complete');
-    return super
-        .afterNewContextCollection(contextCollection: contextCollection);
+          _ref
+              .read(
+                  activatedRulesNotifierProvider(context.contextRoot).notifier)
+              .initializeRules();
+
+          await _ref
+              .read(analysisContextServiceProvider(context))
+              .analyzeEntireContext();
+
+          delegate.sidecarMessage(
+              'completed context: ${context.contextRoot.root.path}');
+        },
+      ));
+
+      delegate.sidecarMessage('afterNewContextCollection complete');
+      if (!initializationCompleter.isCompleted) {
+        initializationCompleter.complete();
+      }
+
+      return super
+          .afterNewContextCollection(contextCollection: contextCollection);
+    } catch (e, stackTrace) {
+      delegate.sidecarError('afterNewContextCollection err -- $e', stackTrace);
+      channel.sendError('afterNewContextCollection err -- $e', stackTrace);
+      rethrow;
+    }
   }
 
   @override
@@ -114,31 +135,15 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required String path,
   }) async {
-    //TODO: make the fetching of annotations more efficient
-    if (!analysisContext.isSidecarEnabled) return;
-
-    final analysisContextService = getAnalysisContextService(analysisContext);
-
     try {
-      final errors = await analysisContextService.getAnalysisErrors(path);
+      final analysisContextService = getAnalysisContextService(analysisContext);
+      final errors = await analysisContextService.getAnalysisResults(path);
       final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
       channel.sendNotification(notif);
     } catch (e, stackTrace) {
-      delegate.sidecarError(
-          'error analyzing $path -- ${e.toString()}', stackTrace);
-      channel.sendError('error analyzing $path -- ${e.toString()}', stackTrace);
-    }
-    //TODO: BUG this checked completes when all units have been resolved, even if the file has not been through this analyzeFile method yet
-    // if (mode.isCli || mode.isDebug) {
-    if (mode.isCli) {
-      if (_ref
-          .read(analysisContextServiceProvider(analysisContext))
-          .isInitialized) {
-        delegate.sidecarMessage('all files have completed initialization.');
-        initializationCompleter.complete();
-        throw UnimplementedError(
-            'this checked completes when all units have been resolved, even if the file has not been through this analyzeFile method yet');
-      }
+      delegate.sidecarError('error analyzing $path -- $e', stackTrace);
+      channel.sendError('error analyzing $path -- $e', stackTrace);
+      rethrow;
     }
   }
 
@@ -148,16 +153,21 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) async {
     final path = parameters.file;
     final offset = parameters.offset;
+    try {
+      final context = _ref
+          .read(analysisContextCollectionServiceProvider)
+          .getContextFromPath(path);
 
-    final context = _ref
-        .read(analysisContextCollectionServiceProvider)
-        .getContextFromPath(path);
+      final fixes = await _ref
+          .read(analysisContextServiceProvider(context))
+          .getAnalysisErrorFixes(path, offset);
 
-    final fixes = await _ref
-        .read(analysisContextServiceProvider(context))
-        .getAnalysisErrorFixes(path, offset);
-
-    return plugin.EditGetFixesResult(fixes);
+      return plugin.EditGetFixesResult(fixes);
+    } catch (e, stackTrace) {
+      delegate.sidecarError('handleEditGetFixes $path -- $e', stackTrace);
+      channel.sendError('handleEditGetFixes $path -- $e', stackTrace);
+      rethrow;
+    }
   }
 
   @override
@@ -167,8 +177,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final path = parameters.file;
     final offset = parameters.offset;
     final length = parameters.length;
-
-    if (p.extension(path) == '.dart') {
+    try {
       final context = _ref
           .read(analysisContextCollectionServiceProvider)
           .getContextFromPath(path);
@@ -178,7 +187,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           .getCodeAssists(path, offset, length);
 
       return plugin.EditGetAssistsResult(results.toList());
+    } catch (e, stackTrace) {
+      delegate.sidecarError('handleEditGetAssists $path -- $e', stackTrace);
+      channel.sendError('handleEditGetAssists $path -- $e', stackTrace);
+      rethrow;
     }
-    return plugin.EditGetAssistsResult([]);
   }
 }

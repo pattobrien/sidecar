@@ -23,38 +23,33 @@ class AvoidIconLiteral extends LintRule {
 
 class _Visitor extends SidecarAstVisitor {
   @override
-  void visitAnnotation(Annotation node) {
-    // TODO: implement visitAnnotation
-    final potentialClassNode = node.parent;
-    if (annotatedNodes.any((e) {
-      final isEqual = e.toElement(unit) == potentialClassNode.toElement(unit);
-      return isEqual;
-    })) {
-      return;
-    } else {
-      super.visitAnnotation(node);
-    }
-  }
-
-  @override
   void visitAnnotatedNode(AnnotatedNode node) {
     if (annotatedNodes.any((e) {
-      // print('comparing: ${element.toSource()} & ${node.toSource()}');
-      return e == node;
+      final isEqual = e.toElement(unit) == node.toElement(unit);
+      return isEqual;
     })) {
-      return;
+      // return;
+      super.visitAnnotatedNode(node);
     } else {
       super.visitAnnotatedNode(node);
     }
   }
 
   @override
-  visitPrefixedIdentifier(PrefixedIdentifier node) {
+  void visitPrefixedIdentifier(PrefixedIdentifier node) {
     final isIconData = _isIconData(node.prefix.staticElement);
     if (isIconData) {
+      // AstNode testedNode = node;
+      // while (testedNode.parent != null) {
+      //   final path = unit.path;
+      //   var parentNode = testedNode;
+      //   var childNode = testedNode.parent;
+
+      //   testedNode = childNode!;
+      // }
       reportAstNode(
         node,
-        message: 'Avoid IconData literal. Use design system spec instead.',
+        message: '1.19 Avoid IconData literal. Use design system spec instead.',
       );
     }
     return super.visitPrefixedIdentifier(node);

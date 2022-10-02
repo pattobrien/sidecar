@@ -10,9 +10,6 @@ void main(List<String> args) {
   final config = <dynamic, dynamic>{'property': 'some_property'};
   final stringConfig = jsonEncode(config);
   final converted = example.jsonDecoder(config);
-  print('property: ${converted.property}');
   // example.initialize(configurationContent: stringConfig);
   final configu = example.configuration;
-
-  print('property: ${configu.property}');
 }

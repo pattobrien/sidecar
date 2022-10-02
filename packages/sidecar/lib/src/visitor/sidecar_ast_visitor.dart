@@ -28,7 +28,6 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     String? correction,
   }) {
     final result = DartAnalysisResult(
-      unit: unit,
       rule: rule,
       sourceSpan: node.toSourceSpan(unit),
       message: message,
@@ -43,7 +42,6 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     String? correction,
   }) {
     final result = DartAnalysisResult(
-      unit: unit,
       rule: rule,
       sourceSpan: token.toSourceSpan(unit),
       message: message,

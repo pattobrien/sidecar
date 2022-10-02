@@ -7,7 +7,7 @@ class EmptyDelegate implements LogDelegateBase {
 
   @override
   void analysisResultError(
-      AnalysisResult result, Object err, String stackTrace) {
+      AnalysisResult result, Object err, StackTrace stackTrace) {
     // do nothing
   }
 
@@ -28,21 +28,16 @@ class EmptyDelegate implements LogDelegateBase {
 
   @override
   void pluginRestart() {
-    // TODO: implement pluginRestart
+    // do nothing
   }
 
   @override
   void sidecarMessage(String message) {
-    // TODO: implement sidecarMessage
-  }
-
-  @override
-  void analysisResult(AnalysisResult result) {
-    // TODO: implement analysisResultMessage
+    // do nothing
   }
 
   @override
   void analysisResults(String path, List<AnalysisResult> results) {
-    // TODO: implement analysisResults
+    // do nothing
   }
 }

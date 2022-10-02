@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:riverpod/riverpod.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:sidecar/builder.dart';
 
 import '../../context_services/analysis_errors.dart';
@@ -14,7 +15,7 @@ class ResolvedUnitService {
   final Ref ref;
   final AnalyzedFile analyzedFile;
 
-  final _controller = StreamController<ResolvedUnitResult>();
+  final _controller = BehaviorSubject<ResolvedUnitResult>();
   Stream<ResolvedUnitResult> get stream => _controller.stream;
 
   Future<ResolvedUnitResult?> getResolvedUnit() async {

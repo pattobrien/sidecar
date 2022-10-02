@@ -26,13 +26,8 @@ mixin _$AnalysisResult {
     required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
             String message, String? correction, SourceSpan? highlightedSpan)
         generic,
-    required TResult Function(
-            ResolvedUnitResult unit,
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan)
+    required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
+            String message, String? correction, SourceSpan? highlightedSpan)
         dart,
   }) =>
       throw _privateConstructorUsedError;
@@ -41,13 +36,8 @@ mixin _$AnalysisResult {
     TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
             String? correction, SourceSpan? highlightedSpan)?
         generic,
-    TResult Function(
-            ResolvedUnitResult unit,
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan)?
+    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
+            String? correction, SourceSpan? highlightedSpan)?
         dart,
   }) =>
       throw _privateConstructorUsedError;
@@ -56,13 +46,8 @@ mixin _$AnalysisResult {
     TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
             String? correction, SourceSpan? highlightedSpan)?
         generic,
-    TResult Function(
-            ResolvedUnitResult unit,
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan)?
+    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
+            String? correction, SourceSpan? highlightedSpan)?
         dart,
     required TResult orElse(),
   }) =>
@@ -269,13 +254,8 @@ class _$GenericAnalysisResult extends GenericAnalysisResult {
     required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
             String message, String? correction, SourceSpan? highlightedSpan)
         generic,
-    required TResult Function(
-            ResolvedUnitResult unit,
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan)
+    required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
+            String message, String? correction, SourceSpan? highlightedSpan)
         dart,
   }) {
     return generic(rule, sourceSpan, message, correction, highlightedSpan);
@@ -287,13 +267,8 @@ class _$GenericAnalysisResult extends GenericAnalysisResult {
     TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
             String? correction, SourceSpan? highlightedSpan)?
         generic,
-    TResult Function(
-            ResolvedUnitResult unit,
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan)?
+    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
+            String? correction, SourceSpan? highlightedSpan)?
         dart,
   }) {
     return generic?.call(
@@ -306,13 +281,8 @@ class _$GenericAnalysisResult extends GenericAnalysisResult {
     TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
             String? correction, SourceSpan? highlightedSpan)?
         generic,
-    TResult Function(
-            ResolvedUnitResult unit,
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan)?
+    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
+            String? correction, SourceSpan? highlightedSpan)?
         dart,
     required TResult orElse(),
   }) {
@@ -387,8 +357,7 @@ abstract class _$$DartAnalysisResultCopyWith<$Res>
       __$$DartAnalysisResultCopyWithImpl<$Res>;
   @override
   $Res call(
-      {ResolvedUnitResult unit,
-      SidecarBase rule,
+      {SidecarBase rule,
       SourceSpan sourceSpan,
       String message,
       String? correction,
@@ -408,7 +377,6 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? unit = freezed,
     Object? rule = freezed,
     Object? sourceSpan = freezed,
     Object? message = freezed,
@@ -416,10 +384,6 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
     Object? highlightedSpan = freezed,
   }) {
     return _then(_$DartAnalysisResult(
-      unit: unit == freezed
-          ? _value.unit
-          : unit // ignore: cast_nullable_to_non_nullable
-              as ResolvedUnitResult,
       rule: rule == freezed
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
@@ -448,16 +412,14 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
 
 class _$DartAnalysisResult extends DartAnalysisResult {
   const _$DartAnalysisResult(
-      {required this.unit,
-      required this.rule,
+      {required this.rule,
       required this.sourceSpan,
       required this.message,
       this.correction,
       this.highlightedSpan})
       : super._();
 
-  @override
-  final ResolvedUnitResult unit;
+// required ResolvedUnitResult unit,
   @override
   final SidecarBase rule;
   @override
@@ -471,7 +433,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
 
   @override
   String toString() {
-    return 'AnalysisResult.dart(unit: $unit, rule: $rule, sourceSpan: $sourceSpan, message: $message, correction: $correction, highlightedSpan: $highlightedSpan)';
+    return 'AnalysisResult.dart(rule: $rule, sourceSpan: $sourceSpan, message: $message, correction: $correction, highlightedSpan: $highlightedSpan)';
   }
 
   @override
@@ -479,7 +441,6 @@ class _$DartAnalysisResult extends DartAnalysisResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DartAnalysisResult &&
-            const DeepCollectionEquality().equals(other.unit, unit) &&
             const DeepCollectionEquality().equals(other.rule, rule) &&
             const DeepCollectionEquality()
                 .equals(other.sourceSpan, sourceSpan) &&
@@ -493,7 +454,6 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(unit),
       const DeepCollectionEquality().hash(rule),
       const DeepCollectionEquality().hash(sourceSpan),
       const DeepCollectionEquality().hash(message),
@@ -512,16 +472,11 @@ class _$DartAnalysisResult extends DartAnalysisResult {
     required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
             String message, String? correction, SourceSpan? highlightedSpan)
         generic,
-    required TResult Function(
-            ResolvedUnitResult unit,
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan)
+    required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
+            String message, String? correction, SourceSpan? highlightedSpan)
         dart,
   }) {
-    return dart(unit, rule, sourceSpan, message, correction, highlightedSpan);
+    return dart(rule, sourceSpan, message, correction, highlightedSpan);
   }
 
   @override
@@ -530,17 +485,11 @@ class _$DartAnalysisResult extends DartAnalysisResult {
     TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
             String? correction, SourceSpan? highlightedSpan)?
         generic,
-    TResult Function(
-            ResolvedUnitResult unit,
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan)?
+    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
+            String? correction, SourceSpan? highlightedSpan)?
         dart,
   }) {
-    return dart?.call(
-        unit, rule, sourceSpan, message, correction, highlightedSpan);
+    return dart?.call(rule, sourceSpan, message, correction, highlightedSpan);
   }
 
   @override
@@ -549,18 +498,13 @@ class _$DartAnalysisResult extends DartAnalysisResult {
     TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
             String? correction, SourceSpan? highlightedSpan)?
         generic,
-    TResult Function(
-            ResolvedUnitResult unit,
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan)?
+    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
+            String? correction, SourceSpan? highlightedSpan)?
         dart,
     required TResult orElse(),
   }) {
     if (dart != null) {
-      return dart(unit, rule, sourceSpan, message, correction, highlightedSpan);
+      return dart(rule, sourceSpan, message, correction, highlightedSpan);
     }
     return orElse();
   }
@@ -599,16 +543,14 @@ class _$DartAnalysisResult extends DartAnalysisResult {
 
 abstract class DartAnalysisResult extends AnalysisResult {
   const factory DartAnalysisResult(
-      {required final ResolvedUnitResult unit,
-      required final SidecarBase rule,
+      {required final SidecarBase rule,
       required final SourceSpan sourceSpan,
       required final String message,
       final String? correction,
       final SourceSpan? highlightedSpan}) = _$DartAnalysisResult;
   const DartAnalysisResult._() : super._();
 
-  ResolvedUnitResult get unit;
-  @override
+  @override // required ResolvedUnitResult unit,
   SidecarBase get rule;
   @override
   SourceSpan get sourceSpan;

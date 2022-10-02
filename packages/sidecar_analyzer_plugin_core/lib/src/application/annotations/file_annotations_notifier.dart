@@ -2,9 +2,11 @@ import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 
+import '../../../sidecar_analyzer_plugin_core.dart';
 import '../../context_services/analysis_errors.dart';
+import '../../services/log_delegate/log_delegate_base.dart';
 import '../../services/resolved_unit_service/resolved_unit_service.dart';
-import '../../utils/annotation_utils.dart';
+import '../../utils/utils.dart';
 
 final annotationsAggregateProvider =
     Provider.family<List<AnnotatedNode>, ContextRoot>((ref, contextRoot) {
@@ -12,6 +14,13 @@ final annotationsAggregateProvider =
       .analyzedFiles()
       .map((path) {
         final analyzedFile = AnalyzedFile(contextRoot, path);
+
+        ref.read(pluginChannelProvider).sendError(
+            'annotations refresh: ${analyzedFile.relativePath} - ${analyzedFile.isDartFile}');
+
+        ref.read(logDelegateProvider).sidecarMessage(
+            'annotations refresh: ${analyzedFile.relativePath} - ${analyzedFile.isDartFile}');
+
         return ref.watch(annotationsNotifierProvider(analyzedFile)).value ?? [];
       })
       .expand((element) => element)
@@ -22,7 +31,16 @@ final annotationsNotifierProvider = StateNotifierProvider.family<
     FileAnnotationsNotifier,
     AsyncValue<List<AnnotatedNode>>,
     AnalyzedFile>((ref, analyzedFile) {
-  return FileAnnotationsNotifier(ref, analyzedFile: analyzedFile);
+  final notifier = FileAnnotationsNotifier(ref, analyzedFile: analyzedFile);
+  ref.listen(
+    resolvedUnitProvider(analyzedFile),
+    (previous, next) {
+      ref.read(logDelegateProvider).sidecarMessage(
+          'unit updated, refreshing annotations: ${analyzedFile.relativePath}');
+      notifier.refresh();
+    },
+  );
+  return notifier;
 });
 
 class FileAnnotationsNotifier
@@ -38,7 +56,8 @@ class FileAnnotationsNotifier
   void refresh() {
     final visitor = _AnnotationVisitor(ref);
     final unitResult = ref.read(resolvedUnitProvider(analyzedFile)).value;
-    unitResult?.unit.accept(visitor);
+    if (unitResult == null) return;
+    unitResult.unit.accept(visitor);
     state = AsyncValue.data(visitor.annotatedNodes);
   }
 }

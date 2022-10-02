@@ -22,18 +22,19 @@ Future<void> startSidecarPlugin(
   LogDelegateBase delegate;
   SidecarAnalyzerMode mode;
 
+  final pluginChannel = PluginIsolateChannel(sendPort);
+
   if (args.contains('--debug')) {
     delegate = const DebuggerLogDelegate();
     mode = SidecarAnalyzerMode.debug;
   } else if (isPlugin) {
-    delegate = const EmptyDelegate();
+    delegate = PluginChannelDelegate(channel: pluginChannel);
     mode = SidecarAnalyzerMode.plugin;
   } else {
     delegate = const DebuggerLogDelegate();
     mode = SidecarAnalyzerMode.cli;
   }
 
-  final pluginChannel = PluginIsolateChannel(sendPort);
   final ref = ProviderContainer(
     overrides: [
       logDelegateProvider.overrideWithValue(delegate),
@@ -46,6 +47,7 @@ Future<void> startSidecarPlugin(
   );
 
   final plugin = ref.read(pluginProvider);
+
   try {
     if (mode.isDebug) {
       delegate.sidecarMessage('sidecar - debug initialization started...');

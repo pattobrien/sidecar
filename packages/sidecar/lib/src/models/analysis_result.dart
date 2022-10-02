@@ -20,7 +20,7 @@ class AnalysisResult with _$AnalysisResult {
   }) = GenericAnalysisResult;
 
   const factory AnalysisResult.dart({
-    required ResolvedUnitResult unit,
+    // required ResolvedUnitResult unit,
     required SidecarBase rule,
     required SourceSpan sourceSpan,
     required String message,
@@ -54,7 +54,7 @@ class AnalysisResult with _$AnalysisResult {
   }
 }
 
-extension DartAnalysisResultX on DartAnalysisResult {
-  // remove
-  AstNode? get node => sourceSpan.toAstNode(unit);
-}
+// extension DartAnalysisResultX on DartAnalysisResult {
+//   // remove
+//   AstNode? get node => sourceSpan.toAstNode(unit);
+// }
