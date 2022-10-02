@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/analysis/context_root.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 
@@ -58,7 +59,8 @@ class FileAnnotationsNotifier
     final unitResult = ref.read(resolvedUnitProvider(analyzedFile)).value;
     if (unitResult == null) return;
     unitResult.unit.accept(visitor);
-    state = AsyncValue.data(visitor.annotatedNodes);
+    final annotations = visitor.annotatedNodes;
+    state = AsyncValue.data(annotations);
   }
 }
 
@@ -70,9 +72,10 @@ class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
   @override
   void visitAnnotatedNode(AnnotatedNode node) {
     final annotations = node.metadata.where((annotation) {
-      final obj = annotation.elementAnnotation?.computeConstantValue();
-      if (SidecarTypeChecker.isSidecarInput(obj?.type?.element2)) {
-        return true;
+      final type = annotation.elementAnnotation?.computeConstantValue()?.type;
+      if (type is InterfaceType) {
+        final isSidecarInput = SidecarTypeChecker.isSidecarInput(type);
+        return isSidecarInput;
       }
       return false;
     });

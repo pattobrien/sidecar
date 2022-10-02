@@ -12,11 +12,12 @@ class ProjectIcons {
   static const abc = Icons.stop;
 }
 
-// @designSystemIcons2
+// @designSystemIcons
 class ProjectIcons2 {
   static const abc = Icons.party_mode;
 }
 
+@designSystemIcons2
 class ProjectIcons3 {
   static const abc = Icons.shield_outlined;
 }

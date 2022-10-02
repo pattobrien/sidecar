@@ -17,37 +17,41 @@ class AvoidIconLiteral extends LintRule {
     final visitor = _Visitor();
     visitor.initializeVisitor(this, unit, annotatedNodes);
     unit.unit.accept(visitor);
-    return visitor.nodes;
+    final nodes = visitor.nodes;
+    return nodes;
   }
 }
 
 class _Visitor extends SidecarAstVisitor {
-  @override
-  void visitAnnotatedNode(AnnotatedNode node) {
-    if (annotatedNodes.any((e) {
-      final isEqual = e.toElement(unit) == node.toElement(unit);
-      return isEqual;
-    })) {
-      // return;
-      super.visitAnnotatedNode(node);
-    } else {
-      super.visitAnnotatedNode(node);
-    }
-  }
+//   @override
+//   void visitAnnotatedNode(AnnotatedNode node) {
+//     if (annotatedNodes.any((e) {
+//       final isEqual = e.toElement(unit) == node.toElement(unit);
+//       return isEqual;
+//     })) {
+//       // return;
+//       super.visitAnnotatedNode(node);
+//     } else {
+//       super.visitAnnotatedNode(node);
+//     }
+//   }
 
   @override
   void visitPrefixedIdentifier(PrefixedIdentifier node) {
     final isIconData = _isIconData(node.prefix.staticElement);
     if (isIconData) {
-      final isAnnotated = node.thisOrAncestorMatching((p0) {
-        return p0 is AnnotatedNode &&
+      final matchingAnnotation = node.thisOrAncestorMatching((p0) {
+        final isMatch = p0 is AnnotatedNode &&
             p0.metadata.isNotEmpty &&
             annotatedNodes.any((annotatedNode) {
-              return annotatedNode.toSourceSpan(unit) == p0.toSourceSpan(unit);
+              final isSameSource =
+                  annotatedNode.toSourceSpan(unit) == p0.toSourceSpan(unit);
+              return isSameSource;
             });
+        return isMatch;
       });
 
-      if (isAnnotated == null) {
+      if (matchingAnnotation == null) {
         reportAstNode(
           node,
           message:

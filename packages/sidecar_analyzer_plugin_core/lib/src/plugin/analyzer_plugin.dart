@@ -11,9 +11,7 @@ import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
 import 'package:hotreloader/hotreloader.dart';
-import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-
 import 'package:sidecar/sidecar.dart';
 
 import '../application/activated_rules/activated_rules_notifier.dart';
@@ -22,7 +20,6 @@ import '../context_services/context_services.dart';
 import '../services/analysis_context_collection_service/analysis_context_collection_service.dart';
 import '../services/log_delegate/log_delegate.dart';
 import '../services/project_configuration_service/providers.dart';
-import '../utils/utils.dart';
 import 'analyzer_mode.dart';
 
 final pluginProvider = Provider(SidecarAnalyzerPlugin.new);
@@ -125,7 +122,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           .afterNewContextCollection(contextCollection: contextCollection);
     } catch (e, stackTrace) {
       delegate.sidecarError('afterNewContextCollection err -- $e', stackTrace);
-      channel.sendError('afterNewContextCollection err -- $e', stackTrace);
       rethrow;
     }
   }
@@ -138,11 +134,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     try {
       final analysisContextService = getAnalysisContextService(analysisContext);
       await analysisContextService.getAnalysisResults(path);
-      // final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
-      // channel.sendNotification(notif);
     } catch (e, stackTrace) {
       delegate.sidecarError('error analyzing $path -- $e', stackTrace);
-      channel.sendError('error analyzing $path -- $e', stackTrace);
       rethrow;
     }
   }
@@ -165,7 +158,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       return plugin.EditGetFixesResult(fixes);
     } catch (e, stackTrace) {
       delegate.sidecarError('handleEditGetFixes $path -- $e', stackTrace);
-      channel.sendError('handleEditGetFixes $path -- $e', stackTrace);
       rethrow;
     }
   }
@@ -189,7 +181,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       return plugin.EditGetAssistsResult(results.toList());
     } catch (e, stackTrace) {
       delegate.sidecarError('handleEditGetAssists $path -- $e', stackTrace);
-      channel.sendError('handleEditGetAssists $path -- $e', stackTrace);
       rethrow;
     }
   }
