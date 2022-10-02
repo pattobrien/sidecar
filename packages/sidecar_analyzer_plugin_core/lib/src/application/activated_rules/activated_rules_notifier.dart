@@ -37,7 +37,7 @@ class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
       final ruleConfig = projectConfig.getConfiguration(ruleId);
       final rule = ruleDefinition.value();
       final ruleCode = rule.code;
-      delegate.sidecarMessage('activating $ruleCode');
+      delegate.sidecarVerboseMessage('activating $ruleCode');
       rule.initialize(
         ref: ref,
         configurationContent: ruleConfig?.configuration,

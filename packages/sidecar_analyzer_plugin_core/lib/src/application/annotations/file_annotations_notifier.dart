@@ -3,7 +3,6 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 
-import '../../../sidecar_analyzer_plugin_core.dart';
 import '../../context_services/analysis_errors.dart';
 import '../../services/log_delegate/log_delegate_base.dart';
 import '../../services/resolved_unit_service/resolved_unit_service.dart';
@@ -16,10 +15,7 @@ final annotationsAggregateProvider =
       .map((path) {
         final analyzedFile = AnalyzedFile(contextRoot, path);
 
-        ref.read(pluginChannelProvider).sendError(
-            'annotations refresh: ${analyzedFile.relativePath} - ${analyzedFile.isDartFile}');
-
-        ref.read(logDelegateProvider).sidecarMessage(
+        ref.read(logDelegateProvider).sidecarVerboseMessage(
             'annotations refresh: ${analyzedFile.relativePath} - ${analyzedFile.isDartFile}');
 
         return ref.watch(annotationsNotifierProvider(analyzedFile)).value ?? [];
@@ -36,7 +32,7 @@ final annotationsNotifierProvider = StateNotifierProvider.family<
   ref.listen(
     resolvedUnitProvider(analyzedFile),
     (previous, next) {
-      ref.read(logDelegateProvider).sidecarMessage(
+      ref.read(logDelegateProvider).sidecarVerboseMessage(
           'unit updated, refreshing annotations: ${analyzedFile.relativePath}');
       notifier.refresh();
     },

@@ -79,14 +79,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     try {
-      delegate.sidecarMessage('afterNewContextCollection');
+      delegate.sidecarVerboseMessage('afterNewContextCollection');
 
       _ref.read(analysisContextCollectionServiceProvider).collection =
           contextCollection;
 
       await Future.wait(contextCollection.contexts.map<Future<void>>(
         (context) async {
-          delegate.sidecarMessage(
+          delegate.sidecarVerboseMessage(
               'initializing context: ${context.contextRoot.root.path}');
 
           if (!context.isSidecarEnabled) return;
@@ -108,12 +108,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
               .read(analysisContextServiceProvider(context))
               .analyzeEntireContext();
 
-          delegate.sidecarMessage(
+          delegate.sidecarVerboseMessage(
               'completed context: ${context.contextRoot.root.path}');
         },
       ));
 
-      delegate.sidecarMessage('afterNewContextCollection complete');
+      delegate.sidecarVerboseMessage('afterNewContextCollection complete');
       if (!initializationCompleter.isCompleted) {
         initializationCompleter.complete();
       }
