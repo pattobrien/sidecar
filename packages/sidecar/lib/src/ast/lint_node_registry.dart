@@ -1,6 +1,7 @@
 part of 'general_visitor.dart';
 
 class NodeLintRegistry {
+  NodeLintRegistry();
   final List<VisitorSubscription<AdjacentStrings>> _forAdjacentStrings = [];
   final List<VisitorSubscription<Annotation>> _forAnnotation = [];
   final List<VisitorSubscription<ArgumentList>> _forArgumentList = [];
@@ -191,8 +192,6 @@ class NodeLintRegistry {
       _forRecordTypeAnnotationNamedFields = [];
   final List<VisitorSubscription<RecordTypeAnnotationPositionalField>>
       _forRecordTypeAnnotationPositionalField = [];
-
-  NodeLintRegistry();
 
   void addAdjacentStrings(LintRule linter, AstVisitor visitor) {
     _forAdjacentStrings

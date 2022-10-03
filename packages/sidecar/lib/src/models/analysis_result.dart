@@ -20,7 +20,6 @@ class AnalysisResult with _$AnalysisResult {
   }) = GenericAnalysisResult;
 
   const factory AnalysisResult.dart({
-    required ResolvedUnitResult unit,
     required SidecarBase rule,
     required SourceSpan sourceSpan,
     required String message,
@@ -29,6 +28,9 @@ class AnalysisResult with _$AnalysisResult {
   }) = DartAnalysisResult;
 
   const AnalysisResult._();
+
+  Uri get sourceUrl => sourceSpan.sourceUrl!;
+  String get path => sourceSpan.sourceUrl!.path;
 
   bool isWithinOffset(String filePath, int offset) {
     return sourceSpan.location.file == filePath &&
@@ -54,7 +56,7 @@ class AnalysisResult with _$AnalysisResult {
   }
 }
 
-extension DartAnalysisResultX on DartAnalysisResult {
-  // remove
-  AstNode? get node => sourceSpan.toAstNode(unit);
-}
+// extension DartAnalysisResultX on DartAnalysisResult {
+//   // remove
+//   AstNode? get node => sourceSpan.toAstNode(unit);
+// }

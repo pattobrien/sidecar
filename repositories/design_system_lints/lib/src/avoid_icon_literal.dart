@@ -3,19 +3,21 @@ import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:sidecar/builder.dart';
 
+const designSystemPackage = 'design_system_lints';
+
 class AvoidIconLiteral extends LintRule {
   @override
   String get code => 'avoid_icon_literal';
 
   @override
-  String get packageName => 'design_system_lints';
+  String get packageName => designSystemPackage;
 
   @override
   FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
-    visitor.initializeVisitor(this, unit);
+    visitor.initializeVisitor(this, unit, annotatedNodes);
     unit.unit.accept(visitor);
     return visitor.nodes;
   }
@@ -23,13 +25,29 @@ class AvoidIconLiteral extends LintRule {
 
 class _Visitor extends SidecarAstVisitor {
   @override
-  visitPrefixedIdentifier(PrefixedIdentifier node) {
+  void visitPrefixedIdentifier(PrefixedIdentifier node) {
     final isIconData = _isIconData(node.prefix.staticElement);
     if (isIconData) {
-      reportAstNode(
-        node,
-        message: 'Avoid IconData literal. Use design system spec instead.',
-      );
+      final matchingAnnotation = node.thisOrAncestorMatching((astNode) {
+        final isMatch = astNode is AnnotatedNode &&
+            astNode.metadata.isNotEmpty &&
+            annotatedNodes.any((annotation) {
+              final isSameSource =
+                  annotation.annotatedNode.toSourceSpan(unit) ==
+                      astNode.toSourceSpan(unit);
+              return isSameSource &&
+                  annotation.input.packageName == designSystemPackage;
+            });
+        return isMatch;
+      });
+
+      if (matchingAnnotation == null) {
+        reportAstNode(
+          node,
+          message:
+              '1.20 Avoid IconData literal. Use design system spec instead.',
+        );
+      }
     }
     return super.visitPrefixedIdentifier(node);
   }

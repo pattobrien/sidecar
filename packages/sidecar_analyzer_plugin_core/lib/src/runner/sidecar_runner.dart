@@ -8,18 +8,16 @@ import 'dart:isolate';
 import 'package:analyzer/dart/analysis/context_locator.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
-
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
-
 import 'package:cli_util/cli_util.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:sidecar_analyzer_plugin_core/sidecar_analyzer_plugin_core.dart';
-
-import '../utils/byte_store_ext.dart';
 import '../constants.dart';
+import '../plugin/plugin.dart';
+import '../services/log_delegate/log_delegate.dart';
+import '../utils/byte_store_ext.dart';
 
 const _uuid = Uuid();
 
@@ -30,7 +28,7 @@ class SidecarRunner {
 
   final SidecarAnalyzerPlugin server;
   final Directory root;
-  final completed = Completer();
+  final completed = Completer<void>();
 
   LogDelegateBase get delegate => server.delegate;
 
@@ -39,6 +37,7 @@ class SidecarRunner {
 
   late final _clientChannel =
       plugin.PluginIsolateChannel(_receivePort.sendPort);
+
   late final ResourceProvider _resourceProvider = server.resourceProvider;
 
   /// Used to send requests to sidecar_analyzer_plugin

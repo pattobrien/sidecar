@@ -12,9 +12,12 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_riverpod: ^1.0.3+1
+  flutter_riverpod: ^2.0.0
   path: ^1.8.0
   intl: ^0.17.0
+  sidecar_annotations:
+    hosted: https://dart.cloudsmith.io/fine-designs/sidecar_annotations/
+    version: ^0.1.18
 
 dev_dependencies:
   auto_route_generator: ^5.0.2
@@ -32,8 +35,8 @@ flutter:
   uses-material-design: true
   generate: true
 dependency_overrides:
-  #   # sidecar:
-  #   #   path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+  #   #   # sidecar:
+  #   #   #   path: /Users/pattobrien/Development/sidecar/packages/sidecar/
   sidecar_analyzer_plugin_core:
     path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
 #   sidecar:

@@ -18,7 +18,6 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
     return visitor.nodes;
-    ;
   }
 }
 
@@ -48,10 +47,11 @@ class _Visitor extends SidecarAstVisitor {
           //TODO: handle expressions like "SomeClass.staticInteger"
         }
         if (exp is SimpleIdentifier) {
-          final element = exp.staticElement;
+          // final element = exp.staticElement;
+          // final x = element;
+
           //TODO: handle variables that are not declared
           // within the allowed design system spec file
-          final x = element;
         }
       }
     }

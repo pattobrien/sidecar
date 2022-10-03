@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:cli_util/cli_logging.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_cli/src/utilities/logger.dart';
 
 import '../exit_codes.dart';
 

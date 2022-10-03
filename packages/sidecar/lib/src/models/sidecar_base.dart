@@ -1,6 +1,9 @@
+// ignore_for_file: use_setters_to_change_properties
+
 import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:glob/glob.dart';
@@ -31,16 +34,27 @@ abstract class SidecarBase {
   late Object _configuration;
   final List<YamlSourceError> _errors = [];
 
+  late List<SidecarAnnotatedNode> _annotatedNodes;
+  List<SidecarAnnotatedNode> get annotatedNodes => _annotatedNodes;
+
   List<Glob>? get includes => null;
 
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
+  void update({
+    List<SidecarAnnotatedNode> annotatedNodes = const [],
+  }) {
+    _annotatedNodes = annotatedNodes;
+  }
+
   void initialize({
-    required YamlMap? configurationContent,
     required Ref ref,
     required SourceSpan lintNameSpan,
+    required YamlMap? configurationContent,
+    List<SidecarAnnotatedNode> annotatedNodes = const [],
   }) {
     this.ref = ref;
+    _annotatedNodes = annotatedNodes;
     if (jsonDecoder != null) {
       if (configurationContent == null) {
         final error = YamlSourceError(
@@ -48,18 +62,15 @@ abstract class SidecarBase {
           message: '$code error: empty configuration',
         );
         _errors.add(error);
-        // throw EmptyConfiguration('$code error: empty configuration');
       } else {
         try {
           _configuration = jsonDecoder!(configurationContent);
         } catch (e, stackTrace) {
           final error = YamlSourceError(
             sourceSpan: lintNameSpan,
-            message: '$code error: incorrect configuration: $e',
+            message: '$code error: incorrect configuration: $e $stackTrace',
           );
           _errors.add(error);
-          // throw IncorrectConfiguration(
-          //     '$code error: $e', stackTrace, '$packageName $code');
         }
       }
     }
@@ -84,6 +95,7 @@ abstract class SidecarBase {
       Future.value([]);
 
   Future<List<EditResult>> computeSourceChanges(
+    AnalysisSession session,
     AnalysisResult result,
   ) =>
       Future.value(<EditResult>[]);

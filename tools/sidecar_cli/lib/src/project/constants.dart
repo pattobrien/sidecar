@@ -18,16 +18,20 @@ String getPluginPackagePathForVersion(Version version) => p.join(
       'sidecar_analyzer_plugin-${version.canonicalizedVersion}',
     );
 const kSidecarPluginPackageId = 'sidecar_analyzer_plugin';
+
 const kProjectPluginRelativePath = '.sidecar/$kSidecarPluginPackageId';
-final kCloudsmithSidecarUrl = 'https://dart.cloudsmith.io/fine-designs/sidecar';
+
+const kCloudsmithSidecarUrl = 'https://dart.cloudsmith.io/fine-designs/sidecar';
 
 const sidecarPluginHostedUrl =
     'https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin/';
+
 io.Directory kPluginMasterRoot(Version version) =>
     io.Directory(getPluginPackagePathForVersion(version));
 
-final lintInitializerRelativePath = 'lib/src/lint_rule_constructors.dart';
-final editInitializerRelativePath = 'lib/src/code_edit_constructors.dart';
+const lintInitializerRelativePath = 'lib/src/lint_rule_constructors.dart';
+
+const editInitializerRelativePath = 'lib/src/code_edit_constructors.dart';
 
 String kPluginLoaderAbsolutePath(String packagePath) =>
     p.join(packagePath, kPluginLoaderRelativePath);

@@ -1,14 +1,32 @@
 // APPROVED ICONS
 
 import 'package:flutter/material.dart';
+import 'package:sidecar_annotations/sidecar_annotations.dart';
 
-@designSystem
+final x = '';
+
+@SidecarInput(packageName: 'design_system_lints', configuration: {})
 class ProjectIcons {
-  static const abc = Icons.abc;
+  static const abc = Icons.stop;
 }
 
-class DesignSystem {
-  const DesignSystem();
+@designSystemIcons
+class ProjectIcons2 {
+  static const abc = Icons.party_mode;
 }
 
-const designSystem = DesignSystem();
+final y = 1;
+
+class ProjectIcons3 {
+  static const abc = Icons.shield_outlined;
+}
+
+class DesignSystemIcons extends SidecarInput {
+  const DesignSystemIcons()
+      : super(
+          packageName: 'design_system_lints',
+          configuration: const {},
+        );
+}
+
+const designSystemIcons = DesignSystemIcons();

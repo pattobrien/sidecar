@@ -30,8 +30,8 @@ sidecar:
       prefer_consumer_widget:
         severity: error
         enabled: true
-    # configuration:
-    #   some_property:
+        configuration:
+          some_property:
 
     l10n_lints:
       avoid_string_literals:
@@ -45,6 +45,7 @@ sidecar:
 
     design_system_lints:
       avoid_color_literal:
+      avoid_icon_literal:
       avoid_sized_box_height_width_literals:
       avoid_text_style_literal:
       avoid_border_radius_literal:

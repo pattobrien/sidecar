@@ -6,17 +6,8 @@ class EmptyDelegate implements LogDelegateBase {
   const EmptyDelegate();
 
   @override
-  void editMessage(CodeEdit edit, String message) {
-    // do nothing
-  }
-
-  @override
-  void lintError(LintRule lint, Object err, String stackTrace) {
-    // do nothing
-  }
-
-  @override
-  void lintMessage(AnalysisResult result, String message) {
+  void analysisResultError(
+      AnalysisResult result, Object err, StackTrace stackTrace) {
     // do nothing
   }
 
@@ -37,21 +28,16 @@ class EmptyDelegate implements LogDelegateBase {
 
   @override
   void pluginRestart() {
-    // TODO: implement pluginRestart
+    // do nothing
   }
 
   @override
   void sidecarMessage(String message) {
-    // TODO: implement sidecarMessage
+    // do nothing
   }
 
   @override
-  void analysisResult(AnalysisResult result) {
-    // TODO: implement analysisResultMessage
-  }
-
-  @override
-  void analysisResults(List<AnalysisResult> results) {
-    // TODO: implement analysisResults
+  void analysisResults(String path, List<AnalysisResult> results) {
+    // do nothing
   }
 }

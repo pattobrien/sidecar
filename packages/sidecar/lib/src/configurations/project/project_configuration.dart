@@ -14,6 +14,7 @@ class ProjectConfiguration {
     this.assistPackages,
     List<Glob>? includes,
     this.sourceErrors = const <YamlSourceError>[],
+    required this.rawContent,
   }) : _includes = includes;
 
   factory ProjectConfiguration.parse(
@@ -31,6 +32,7 @@ class ProjectConfiguration {
         }
         final sourceErrors = <YamlSourceError>[];
         return ProjectConfiguration(
+          rawContent: contents,
           lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
           assistPackages: _parseAssistPackages(contentMap['edits'] as YamlMap?),
           includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
@@ -89,11 +91,18 @@ class ProjectConfiguration {
   final Map<PackageName, AssistPackageConfiguration>? assistPackages;
   final List<Glob>? _includes;
   final List<YamlSourceError> sourceErrors;
+  final String rawContent;
 
   List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];
 
   bool includes(String relativePath) =>
       includeGlobs.any((glob) => glob.matches(relativePath));
+
+  LintConfiguration? getLintConfiguration(Id id) =>
+      getConfiguration(id) as LintConfiguration?;
+
+  AssistConfiguration? getAssistConfiguration(Id id) =>
+      getConfiguration(id) as AssistConfiguration?;
 
   AnalysisConfiguration? getConfiguration(Id id) {
     switch (id.type) {

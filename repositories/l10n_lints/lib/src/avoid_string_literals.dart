@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/analysis/session.dart';
 import 'package:l10n_lints/src/constants.dart';
 import 'package:sidecar/builder.dart';
 import 'package:sidecar/sidecar.dart';
@@ -35,12 +36,14 @@ class AvoidStringLiterals extends LintRule {
 
   @override
   Future<List<EditResult>> computeSourceChanges(
+    AnalysisSession session,
     AnalysisResult result,
   ) async {
     result as DartAnalysisResult;
-    final unit = result.unit;
 
-    final changeBuilder = ChangeBuilder(session: unit.session);
+    final changeBuilder = ChangeBuilder(session: session);
+    final unit =
+        await session.getResolvedUnit(result.path) as ResolvedUnitResult;
 
     final stringNode = result.sourceSpan.toAstNode(unit);
 

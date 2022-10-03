@@ -18,7 +18,8 @@ Lints and Edits support for the following file types
 ### DevX and Usability
 
 - [X] Debugging Support
-- [ ] Analysis Report via CLI
+- [X] Analysis via CLI
+- [ ] Annotations
 
 ### Performance Benchmarking
 
@@ -28,7 +29,7 @@ Benchmarks against Linter package
 - [ ] RAM Usage
 - [ ] Update time (Errors, Quick Assists, Code Completion)
 
-### Refactoring
+### Documentation and QA
 
 - [ ] Code Documentation
 - [ ] Example Lints

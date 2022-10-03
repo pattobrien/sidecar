@@ -1,25 +1,26 @@
-final pluginImport = '''
+const pluginImport = '''
 // THIS IS A GENERATED FILE
 // DO NOT MANUALLY MODIFY THIS FILE
 
 import 'package:sidecar/sidecar.dart';
 ''';
 
-final lintBootstrapHeader = '''
+const lintBootstrapHeader = '''
 
 Map<Id, LintRuleConstructor> lintRuleConstructors = {
 ''';
-final editBootstrapHeader = '''
+
+const editBootstrapHeader = '''
 
 Map<Id, CodeEditConstructor> codeEditConstructors = {
 ''';
 
-final bootstrapFooter = '''
+const bootstrapFooter = '''
 };
 
 ''';
 
-final sidecarYamlDefaultContents = '''
+const sidecarYamlDefaultContents = '''
 sidecar:
   includes:
     - "bin/**"
@@ -37,7 +38,7 @@ sidecar:
 
     ''';
 
-final analyzerPluginDefaultContents = '''
+const analyzerPluginDefaultContents = '''
 analyzer:
   plugins:
     - sidecar_analyzer_plugin

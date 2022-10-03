@@ -2,12 +2,13 @@ import 'package:args/command_runner.dart';
 import 'package:cli_util/cli_logging.dart';
 
 import '../utilities/logger.dart';
-import 'init/init.dart';
-import 'rebuild/rebuild.dart';
 import 'analyze/analyze.dart';
 import 'exit_codes.dart';
+import 'init/init.dart';
+import 'rebuild/rebuild.dart';
 
 const kExecutableName = 'Sidecar CLI';
+
 const kExecutableDescription = '\n\n';
 
 class PlatformCommandRunner extends CommandRunner<int> {

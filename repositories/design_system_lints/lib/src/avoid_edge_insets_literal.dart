@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/builder.dart';
-import 'package:sidecar/sidecar.dart';
 
 class AvoidEdgeInsetsLiteral extends LintRule {
   @override

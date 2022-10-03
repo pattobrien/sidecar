@@ -3,14 +3,14 @@
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar_analyzer_plugin_core/src/context_services/context_services.dart';
-import 'package:sidecar_analyzer_plugin_core/src/runner/sidecar_runner.dart';
-import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 
-import 'log_delegate/log_delegate.dart';
 import 'plugin/plugin.dart';
+import 'runner/sidecar_runner.dart';
+import 'services/log_delegate/log_delegate.dart';
+import 'services/rule_constructor_provider.dart';
 
 Future<void> startSidecarPlugin(
   SendPort sendPort,
@@ -22,46 +22,44 @@ Future<void> startSidecarPlugin(
   LogDelegateBase delegate;
   SidecarAnalyzerMode mode;
 
+  final pluginChannel = PluginIsolateChannel(sendPort);
+
   if (args.contains('--debug')) {
-    delegate = DebuggerLogDelegate();
+    delegate = const DebuggerLogDelegate();
     mode = SidecarAnalyzerMode.debug;
   } else if (isPlugin) {
-    delegate = EmptyDelegate();
+    delegate = PluginChannelDelegate(channel: pluginChannel);
     mode = SidecarAnalyzerMode.plugin;
   } else {
-    delegate = DebuggerLogDelegate();
+    delegate = const DebuggerLogDelegate();
     mode = SidecarAnalyzerMode.cli;
   }
-
-  final pluginChannel = PluginIsolateChannel(sendPort);
 
   final ref = ProviderContainer(
     overrides: [
       logDelegateProvider.overrideWithValue(delegate),
       sidecarAnalyzerMode.overrideWithValue(mode),
       pluginChannelProvider.overrideWithValue(pluginChannel),
-      lintRuleConstructorProvider.overrideWithValue(lintRuleConstructors),
-      codeEditConstructorProvider.overrideWithValue(codeEditConstructors),
+      ruleConstructorProvider.overrideWithValue(
+        {...lintRuleConstructors, ...codeEditConstructors},
+      ),
     ],
   );
 
   final plugin = ref.read(pluginProvider);
+
   try {
     if (mode.isDebug) {
-      print('debug initialization started');
+      delegate.sidecarMessage('sidecar - debug initialization started...');
       final runner = SidecarRunner(plugin, Directory.current);
       await runner.initialize();
-      print('debug initialization complete');
     } else if (mode.isCli) {
-      Logger.log('cli initialization started');
+      delegate.sidecarMessage('sidecar - cli initialization started...');
       final runner = SidecarRunner(plugin, Directory.current);
       await runner.initialize();
       await runner.server.initializationCompleter.future;
-      Logger.log('cli initialization ended');
       exit(0);
     } else {
-      // mode is plugin
-      // ServerPluginStarter(plugin).start(sendPort);
       plugin.start(pluginChannel);
     }
   } catch (error, stackTrace) {
