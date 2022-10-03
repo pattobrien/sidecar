@@ -15,6 +15,8 @@ dependencies:
   flutter_riverpod: ^2.0.0
   path: ^1.8.0
   intl: ^0.17.0
+  design_system_annotations:
+    hosted: https://micropub-3qduh.ondigitalocean.app/
   sidecar_annotations:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar_annotations/
     version: ^0.1.18

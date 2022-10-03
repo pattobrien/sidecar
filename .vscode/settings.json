@@ -10,5 +10,8 @@
         "**/*.freezed.dart": true,
         "**/*.gr.dart": true
     },
-    "explorerExclude.backup": {}
+    "explorerExclude.backup": {},
+    "githubPullRequests.ignoredPullRequestBranches": [
+        "master"
+    ]
 }
