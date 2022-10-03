@@ -419,7 +419,6 @@ class _$DartAnalysisResult extends DartAnalysisResult {
       this.highlightedSpan})
       : super._();
 
-// required ResolvedUnitResult unit,
   @override
   final SidecarBase rule;
   @override
@@ -550,7 +549,7 @@ abstract class DartAnalysisResult extends AnalysisResult {
       final SourceSpan? highlightedSpan}) = _$DartAnalysisResult;
   const DartAnalysisResult._() : super._();
 
-  @override // required ResolvedUnitResult unit,
+  @override
   SidecarBase get rule;
   @override
   SourceSpan get sourceSpan;

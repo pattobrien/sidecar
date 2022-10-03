@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:sidecar/builder.dart';
 
+const designSystemPackage = 'design_system_lints';
+
 class AvoidIconLiteral extends LintRule {
   @override
   String get code => 'avoid_icon_literal';
 
   @override
-  String get packageName => 'design_system_lints';
+  String get packageName => designSystemPackage;
 
   @override
   FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
@@ -26,13 +28,15 @@ class _Visitor extends SidecarAstVisitor {
   void visitPrefixedIdentifier(PrefixedIdentifier node) {
     final isIconData = _isIconData(node.prefix.staticElement);
     if (isIconData) {
-      final matchingAnnotation = node.thisOrAncestorMatching((ancestorNode) {
-        final isMatch = ancestorNode is AnnotatedNode &&
-            ancestorNode.metadata.isNotEmpty &&
+      final matchingAnnotation = node.thisOrAncestorMatching((astNode) {
+        final isMatch = astNode is AnnotatedNode &&
+            astNode.metadata.isNotEmpty &&
             annotatedNodes.any((annotation) {
-              final isSameSource = annotation.toSourceSpan(unit) ==
-                  ancestorNode.toSourceSpan(unit);
-              return isSameSource;
+              final isSameSource =
+                  annotation.annotatedNode.toSourceSpan(unit) ==
+                      astNode.toSourceSpan(unit);
+              return isSameSource &&
+                  annotation.input.packageName == designSystemPackage;
             });
         return isMatch;
       });

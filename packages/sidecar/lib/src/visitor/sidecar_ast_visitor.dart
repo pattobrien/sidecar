@@ -10,12 +10,12 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
   final List<DartAnalysisResult> nodes = [];
   late SidecarBase rule;
   late ResolvedUnitResult unit;
-  late List<AnnotatedNode> annotatedNodes;
+  late List<SidecarAnnotatedNode> annotatedNodes;
 
   void initializeVisitor(
     SidecarBase rule,
     ResolvedUnitResult unit, [
-    List<AnnotatedNode> annotatedNodes = const [],
+    List<SidecarAnnotatedNode> annotatedNodes = const [],
   ]) {
     this.unit = unit;
     this.rule = rule;

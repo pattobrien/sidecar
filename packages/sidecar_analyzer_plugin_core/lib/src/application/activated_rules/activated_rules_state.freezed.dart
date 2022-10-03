@@ -90,7 +90,8 @@ class __$$_ActivatedRulesStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ActivatedRulesState extends _ActivatedRulesState {
-  const _$_ActivatedRulesState({final List<SidecarBase> rules = const []})
+  const _$_ActivatedRulesState(
+      {final List<SidecarBase> rules = const <SidecarBase>[]})
       : _rules = rules,
         super._();
 

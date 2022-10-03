@@ -1,3 +1,5 @@
+// ignore_for_file: use_setters_to_change_properties
+
 import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
@@ -31,26 +33,28 @@ abstract class SidecarBase {
   late Ref ref;
   late Object _configuration;
   final List<YamlSourceError> _errors = [];
-  late List<AnnotatedNode> annotatedNodes;
+
+  late List<SidecarAnnotatedNode> _annotatedNodes;
+  List<SidecarAnnotatedNode> get annotatedNodes => _annotatedNodes;
 
   List<Glob>? get includes => null;
 
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
   void update({
-    List<AnnotatedNode> annotatedNodes = const [],
+    List<SidecarAnnotatedNode> annotatedNodes = const [],
   }) {
-    this.annotatedNodes = annotatedNodes;
+    _annotatedNodes = annotatedNodes;
   }
 
   void initialize({
     required Ref ref,
     required SourceSpan lintNameSpan,
     required YamlMap? configurationContent,
-    List<AnnotatedNode> annotatedNodes = const [],
+    List<SidecarAnnotatedNode> annotatedNodes = const [],
   }) {
     this.ref = ref;
-    this.annotatedNodes = annotatedNodes;
+    _annotatedNodes = annotatedNodes;
     if (jsonDecoder != null) {
       if (configurationContent == null) {
         final error = YamlSourceError(

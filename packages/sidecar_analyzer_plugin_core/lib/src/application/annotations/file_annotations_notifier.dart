@@ -1,7 +1,10 @@
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:riverpod/riverpod.dart';
+
 import 'package:sidecar/builder.dart';
+import 'package:sidecar_annotations/sidecar_annotations.dart';
+import 'package:source_gen/source_gen.dart';
 
 import '../../context_services/analysis_errors.dart';
 import '../../services/log_delegate/log_delegate_base.dart';
@@ -9,7 +12,8 @@ import '../../services/resolved_unit_service/resolved_unit_service.dart';
 import '../../utils/utils.dart';
 
 final annotationsAggregateProvider =
-    Provider.family<List<AnnotatedNode>, ContextRoot>((ref, contextRoot) {
+    Provider.family<List<SidecarAnnotatedNode>, ContextRoot>(
+        (ref, contextRoot) {
   return contextRoot
       .analyzedFiles()
       .map((path) {
@@ -26,7 +30,7 @@ final annotationsAggregateProvider =
 
 final annotationsNotifierProvider = StateNotifierProvider.family<
     FileAnnotationsNotifier,
-    AsyncValue<List<AnnotatedNode>>,
+    AsyncValue<List<SidecarAnnotatedNode>>,
     AnalyzedFile>((ref, analyzedFile) {
   final notifier = FileAnnotationsNotifier(ref, analyzedFile: analyzedFile);
   ref.listen(
@@ -41,7 +45,7 @@ final annotationsNotifierProvider = StateNotifierProvider.family<
 });
 
 class FileAnnotationsNotifier
-    extends StateNotifier<AsyncValue<List<AnnotatedNode>>> {
+    extends StateNotifier<AsyncValue<List<SidecarAnnotatedNode>>> {
   FileAnnotationsNotifier(
     this.ref, {
     required this.analyzedFile,
@@ -51,7 +55,7 @@ class FileAnnotationsNotifier
   final AnalyzedFile analyzedFile;
 
   void refresh() {
-    final visitor = _AnnotationVisitor(ref);
+    final visitor = _AnnotationVisitor();
     final unitResult = ref.read(resolvedUnitProvider(analyzedFile)).value;
     if (unitResult == null) return;
     unitResult.unit.accept(visitor);
@@ -61,9 +65,7 @@ class FileAnnotationsNotifier
 }
 
 class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
-  _AnnotationVisitor(this.ref);
-  final Ref ref;
-  final List<AnnotatedNode> annotatedNodes = [];
+  final List<SidecarAnnotatedNode> annotatedNodes = [];
 
   @override
   void visitAnnotatedNode(AnnotatedNode node) {
@@ -75,9 +77,24 @@ class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
       }
       return false;
     });
-    for (final _ in annotations) {
-      annotatedNodes.add(node);
+    for (final annotation in annotations) {
+      final sidecarInput = annotation.computeSidecarInput();
+      annotatedNodes.add(
+        SidecarAnnotatedNode(annotatedNode: node, input: sidecarInput),
+      );
     }
     super.visitAnnotatedNode(node);
+  }
+}
+
+extension SidecarInputAnnotation on Annotation {
+  SidecarInput computeSidecarInput() {
+    final value = elementAnnotation!.computeConstantValue()!;
+    final constantValue = ConstantReader(value);
+    return SidecarInput(
+      packageName: constantValue.read('packageName').literalValue! as String,
+      configuration: constantValue.read('configuration').literalValue! as Map,
+      lintName: constantValue.read('lintName').literalValue as String?,
+    );
   }
 }
