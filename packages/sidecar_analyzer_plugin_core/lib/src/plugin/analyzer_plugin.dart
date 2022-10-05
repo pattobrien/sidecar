@@ -6,11 +6,13 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
+import 'package:analyzer/instrumentation/instrumentation.dart';
 
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
 
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
@@ -63,15 +65,47 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   Future<void> _runProcess(AnalysisContext context) async {
     final root = context.contextRoot.root.path;
-    final runnerFilePath = p.join(root, '.dart_tool', 'sidecar_plugin_runner',
-        'bin', 'sidecar_plugin_runner.dart');
-    final process = await Process.start('dart', ['run', runnerFilePath]);
-    process.stdout
-        .listen((event) => delegate.sidecarMessage(utf8.decode(event)));
-    process.stderr
-        .listen((event) => delegate.sidecarMessage(utf8.decode(event)));
-    await process.exitCode
-        .then((value) => delegate.sidecarMessage('process ended: $value'));
+    // final runnerFilePath = p.join(root, '.dart_tool', 'sidecar_plugin_runner',
+    //     'bin', 'sidecar_plugin_runner.dart');
+    // final process = await Process.start('dart', ['run', runnerFilePath]);
+    // process.stdout
+    //     .listen((event) => delegate.sidecarMessage(utf8.decode(event)));
+    // process.stderr
+    //     .listen((event) => delegate.sidecarMessage(utf8.decode(event)));
+    // await process.exitCode
+    //     .then((value) => delegate.sidecarMessage('process ended: $value'));
+
+    final packagesPath = p.join(
+      root,
+      '.dart_tool',
+      'sidecar_plugin_runner',
+      '.dart_tool',
+      'package_config.json',
+    );
+    final executionPath = p.join(
+      root,
+      '.dart_tool',
+      'sidecar_plugin_runner',
+      'bin',
+      'sidecar_plugin_runner.dart',
+    );
+    final chann = plugin.ServerIsolateChannel.discovered(
+      Uri.file(executionPath, windows: Platform.isWindows),
+      Uri.file(packagesPath, windows: Platform.isWindows),
+      NoopInstrumentationService(),
+    );
+    await chann.listen(
+      (response) =>
+          delegate.sidecarMessage('TESTRESPONSE: ${response.toString()}'),
+      (notification) => delegate
+          .sidecarMessage('TESTNOTIFICATION: ${notification.toString()}'),
+      onDone: () {
+        delegate.sidecarMessage('TESTDONE');
+      },
+      onError: (error) {
+        delegate.sidecarMessage('TESTERROR: ${error.toString()}');
+      },
+    );
   }
 
   Future<void> _startWithHotReload(
