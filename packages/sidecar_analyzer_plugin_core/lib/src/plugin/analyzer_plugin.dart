@@ -14,7 +14,7 @@ import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../application/activated_rules/activated_rules_notifier.dart';
+import '../application/rules/activated_rules_notifier.dart';
 import '../constants.dart';
 import '../context_services/context_services.dart';
 import '../services/analysis_context_collection_service/analysis_context_collection_service.dart';
@@ -90,11 +90,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
               'initializing context: ${context.contextRoot.root.path}');
 
           if (!context.isSidecarEnabled) return;
-
-          await _ref
-              .read(analysisContextServiceProvider(context))
-              .initializeAnalysisContext();
-
           await _ref
               .read(projectConfigurationServiceProvider(context.contextRoot))
               .parse();
@@ -103,10 +98,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
               .read(
                   activatedRulesNotifierProvider(context.contextRoot).notifier)
               .initializeRules();
-
-          await _ref
-              .read(analysisContextServiceProvider(context))
-              .analyzeEntireContext();
 
           delegate.sidecarVerboseMessage(
               'completed context: ${context.contextRoot.root.path}');
@@ -124,6 +115,39 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       delegate.sidecarError('afterNewContextCollection err -- $e', stackTrace);
       rethrow;
     }
+  }
+
+  final isAnnotationsInitialized = Completer<void>();
+
+  @override
+  Future<void> analyzeFiles({
+    required AnalysisContext analysisContext,
+    required List<String> paths,
+  }) async {
+    _ref.read(logDelegateProvider).sidecarMessage('analyzeFiles start');
+
+    await super.analyzeFiles(analysisContext: analysisContext, paths: paths);
+
+    final analysisContextService = getAnalysisContextService(analysisContext);
+    if (!isAnnotationsInitialized.isCompleted) {
+      _ref
+          .read(logDelegateProvider)
+          .sidecarMessage('\n\ninitializing annotations\n');
+
+      await analysisContextService.initializeAnalysisContext();
+
+      isAnnotationsInitialized.complete();
+
+      await super.analyzeFiles(analysisContext: analysisContext, paths: paths);
+
+      _ref
+          .read(logDelegateProvider)
+          .sidecarMessage('initializing annotations complete');
+    }
+
+    await analysisContextService.generateReport();
+
+    _ref.read(logDelegateProvider).sidecarMessage('analyzeFiles end');
   }
 
   @override

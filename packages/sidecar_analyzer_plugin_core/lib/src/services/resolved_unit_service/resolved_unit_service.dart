@@ -4,8 +4,9 @@ import 'package:riverpod/riverpod.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:sidecar/builder.dart';
 
-import '../../context_services/analysis_errors.dart';
+import '../../context_services/analyzed_file.dart';
 import '../analysis_context_collection_service/analysis_context_collection_service.dart';
+import '../log_delegate/log_delegate_base.dart';
 
 class ResolvedUnitService {
   ResolvedUnitService(
@@ -29,8 +30,8 @@ class ResolvedUnitService {
     if (unitResult is! ResolvedUnitResult) {
       _controller.addError(unitResult);
       return null;
-      // throw UnimplementedError();
     }
+
     _controller.add(unitResult);
     return unitResult;
   }

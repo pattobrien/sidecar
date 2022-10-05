@@ -1,5 +1,7 @@
 import 'package:sidecar/sidecar.dart';
 
+import '../../reports/file_report_notifier.dart';
+import '../../reports/file_stats.dart';
 import 'log_delegate_base.dart';
 
 class EmptyDelegate implements LogDelegateBase {
@@ -39,5 +41,10 @@ class EmptyDelegate implements LogDelegateBase {
   @override
   void analysisResults(String path, List<AnalysisResult> results) {
     // do nothing
+  }
+
+  @override
+  void generateReport(Iterable<FileStats> reports) {
+    // TODO: implement generateReport
   }
 }

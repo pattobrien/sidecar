@@ -11,16 +11,18 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../application/activated_rules/activated_rules_notifier.dart';
-import '../application/analysis/analysis_notifier.dart';
+import '../application/analysis_results/analysis_results_notifier.dart';
+import '../application/analysis_results/file_report_provider.dart';
 import '../application/annotations/file_annotations_notifier.dart';
+import '../application/rules/activated_rules_notifier.dart';
 import '../plugin/plugin.dart';
+import '../reports/file_stats.dart';
 import '../services/error_reporter/error_reporter.dart';
 import '../services/log_delegate/log_delegate.dart';
 import '../services/project_configuration_service/providers.dart';
 import '../services/resolved_unit_service/resolved_unit_service.dart';
 import '../utils/utils.dart';
-import 'analysis_errors.dart';
+import 'analyzed_file.dart';
 
 class AnalysisContextService {
   AnalysisContextService(
@@ -49,6 +51,13 @@ class AnalysisContextService {
 
   AnalyzedFile analyzedFileFromPath(String path) => AnalyzedFile(root, path);
 
+  Future<void> generateReport() async {
+    final reports = analyzedFiles
+        .map((file) => ref.read(fileReportProvider(file)).valueOrNull)
+        .whereType<FileStats>();
+    ref.read(logDelegateProvider).generateReport(reports);
+  }
+
   Future<void> initializeAnalysisContext() async {
     if (!context.isSidecarEnabled) return;
     await Future.wait(analyzedFiles.map((analyzedFile) async {
@@ -62,9 +71,9 @@ class AnalysisContextService {
       //       '${analyzedFile.contextRoot.root.shortName}: resolved unit updated for ${analyzedFile.relativePath}');
       // });
 
-      await ref
-          .read(resolvedUnitServiceProvider(analyzedFile))
-          .getResolvedUnit();
+      // await ref
+      //     .read(resolvedUnitServiceProvider(analyzedFile))
+      //     .getResolvedUnit();
 
       ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
       // final ann = ref.read(annotationsNotifierProvider(analyzedFile)).value;

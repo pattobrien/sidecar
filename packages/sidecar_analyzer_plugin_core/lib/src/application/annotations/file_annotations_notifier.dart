@@ -6,10 +6,12 @@ import 'package:sidecar/builder.dart';
 import 'package:sidecar_annotations/sidecar_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
-import '../../context_services/analysis_errors.dart';
+import '../../context_services/analyzed_file.dart';
+import '../../reports/file_report_notifier.dart';
 import '../../services/log_delegate/log_delegate_base.dart';
 import '../../services/resolved_unit_service/resolved_unit_service.dart';
 import '../../utils/utils.dart';
+import '../analysis_results/file_report_provider.dart';
 
 final annotationsAggregateProvider =
     Provider.family<List<SidecarAnnotatedNode>, ContextRoot>(
@@ -33,14 +35,9 @@ final annotationsNotifierProvider = StateNotifierProvider.family<
     AsyncValue<List<SidecarAnnotatedNode>>,
     AnalyzedFile>((ref, analyzedFile) {
   final notifier = FileAnnotationsNotifier(ref, analyzedFile: analyzedFile);
-  ref.listen(
-    resolvedUnitProvider(analyzedFile),
-    (previous, next) {
-      ref.read(logDelegateProvider).sidecarVerboseMessage(
-          'unit updated, refreshing annotations: ${analyzedFile.relativePath}');
-      notifier.refresh();
-    },
-  );
+  ref.listen(resolvedUnitProvider(analyzedFile), (previous, next) {
+    notifier.refresh();
+  });
   return notifier;
 });
 
@@ -54,17 +51,22 @@ class FileAnnotationsNotifier
   final Ref ref;
   final AnalyzedFile analyzedFile;
 
+  FileReportNotifier get reporter =>
+      ref.read(fileReportProvider(analyzedFile).notifier);
+
   void refresh() {
-    final visitor = _AnnotationVisitor();
+    reporter.recordAnnotationsStart();
+    final visitor = AnnotationVisitor();
     final unitResult = ref.read(resolvedUnitProvider(analyzedFile)).value;
     if (unitResult == null) return;
     unitResult.unit.accept(visitor);
     final annotations = visitor.annotatedNodes;
     state = AsyncValue.data(annotations);
+    reporter.recordAnnotationsCompleted();
   }
 }
 
-class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
+class AnnotationVisitor extends GeneralizingAstVisitor<void> {
   final List<SidecarAnnotatedNode> annotatedNodes = [];
 
   @override

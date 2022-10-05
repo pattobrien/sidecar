@@ -7,7 +7,7 @@ class ProjectIcons {
   static const abc = Icons.stop;
 }
 
-// @designSystem
+@designSystem
 class ProjectIcons2 {
   static const abc = Icons.party_mode;
 }

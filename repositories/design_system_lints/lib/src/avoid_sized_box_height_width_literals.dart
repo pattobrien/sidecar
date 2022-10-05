@@ -38,7 +38,7 @@ class _Visitor extends SidecarAstVisitor {
         final exp = arg.expression;
         if (exp is DoubleLiteral || exp is IntegerLiteral) {
           reportAstNode(
-            node,
+            exp,
             message:
                 'Avoid using height or width literals in SizedBox widgets.',
           );

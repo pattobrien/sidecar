@@ -4,6 +4,8 @@ import 'package:characters/characters.dart';
 import 'package:path/path.dart' as p;
 import 'package:sidecar/sidecar.dart';
 
+import '../../reports/file_report_notifier.dart';
+import '../../reports/file_stats.dart';
 import 'log_delegate_base.dart';
 
 class DebuggerLogDelegate implements LogDelegateBase {
@@ -64,5 +66,12 @@ class DebuggerLogDelegate implements LogDelegateBase {
           '${DateTime.now().toIso8601String()}   • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
     }
     stdout.write(stringBuffer.toString());
+  }
+
+  @override
+  void generateReport(Iterable<FileStats> reports) {
+    for (final report in reports) {
+      stdout.write('${report.toOutput()}\n');
+    }
   }
 }
