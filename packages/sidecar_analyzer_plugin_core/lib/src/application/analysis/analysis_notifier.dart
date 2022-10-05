@@ -27,21 +27,27 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   PluginCommunicationChannel get channel => ref.read(pluginChannelProvider);
 
   Future<void> refreshAnalysis() async {
-    state = const AsyncLoading();
+    state = const AsyncLoading<List<AnalysisResult>>().copyWithPrevious(state);
     //TODO: allow analysis of other file extensions
     if (analyzedFile.isDartFile) {
+      final watch = Stopwatch()..start();
+      ref.read(logDelegateProvider).sidecarMessage(
+          'refreshing analysis for: ${analyzedFile.relativePath} ');
       final unit = await ref
           .read(resolvedUnitServiceProvider(analyzedFile))
           .getResolvedUnit();
 
-      if (unit == null) return;
-
-      ref.read(logDelegateProvider).sidecarMessage('');
-      final stopwatch = Stopwatch()..start();
       ref.read(logDelegateProvider).sidecarMessage(
-          '    refreshing analysis for: ${analyzedFile.relativePath} ');
-      // ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
+          '|    unit updated in: ${watch.elapsed.inMicroseconds}us');
+      if (unit == null) {
+        ref.read(logDelegateProvider).sidecarMessage(
+            'refreshing analysis complete for: ${analyzedFile.relativePath} in ${watch.elapsedMicroseconds}us\n');
+        watch.stop();
+        return;
+      }
 
+      // ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
+      final errorCollectingWatch = Stopwatch()..start();
       final errorReporter = ErrorReporter(ref, analyzedFile);
 
       final context = ref
@@ -70,8 +76,10 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
       delegate.sidecarVerboseMessage(
           'analyzeFile completed w/ ${allRules.length} rules: ${analyzedFile.relativePath}');
       ref.read(logDelegateProvider).sidecarMessage(
-          '    refreshing analysis complete for: ${analyzedFile.relativePath} in ${stopwatch.elapsedMicroseconds}us');
-      stopwatch.stop();
+          '|    lint errors collected in: ${errorCollectingWatch.elapsed.inMicroseconds}us');
+      ref.read(logDelegateProvider).sidecarMessage(
+          'refreshing analysis complete for: ${analyzedFile.relativePath} in ${watch.elapsedMicroseconds}us\n');
+      watch.stop();
     } else {
       // set all non-Dart files to having no errors
       state = const AsyncValue.data([]);

@@ -36,8 +36,8 @@ final annotationsNotifierProvider = StateNotifierProvider.family<
   ref.listen(
     resolvedUnitProvider(analyzedFile),
     (previous, next) {
-      ref.read(logDelegateProvider).sidecarMessage(
-          'unit updated, refreshing annotations: ${analyzedFile.relativePath}');
+      // ref.read(logDelegateProvider).sidecarMessage(
+      //     'unit updated, refreshing annotations: ${analyzedFile.relativePath}');
       notifier.refresh();
     },
   );
@@ -64,7 +64,7 @@ class FileAnnotationsNotifier
     final annotations = visitor.annotatedNodes;
     state = AsyncValue.data(annotations);
     ref.read(logDelegateProvider).sidecarMessage(
-        '${analyzedFile.relativePath}: time to collect annotations: ${watch.elapsed.inMicroseconds}us');
+        '|    time to collect annotations: ${watch.elapsed.inMicroseconds}us');
     watch.stop();
   }
 }

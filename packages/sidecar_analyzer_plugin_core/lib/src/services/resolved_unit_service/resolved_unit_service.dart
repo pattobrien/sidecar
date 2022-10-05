@@ -30,7 +30,6 @@ class ResolvedUnitService {
     if (unitResult is! ResolvedUnitResult) {
       _controller.addError(unitResult);
       return null;
-      // throw UnimplementedError();
     }
 
     _controller.add(unitResult);
