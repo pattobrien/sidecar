@@ -7,19 +7,20 @@ import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
+import 'plugin/middleman_plugin.dart';
 import 'plugin/plugin.dart';
 import 'runner/sidecar_runner.dart';
 import 'services/log_delegate/log_delegate.dart';
 import 'services/rule_constructor_provider.dart';
-import 'package:path/path.dart' as p;
 
 Future<void> startSidecarPlugin(
   SendPort sendPort,
   List<String> args,
   bool isPlugin,
   Map<Id, CodeEditConstructor> codeEditConstructors,
-  Map<Id, LintRuleConstructor> lintRuleConstructors,
-) async {
+  Map<Id, LintRuleConstructor> lintRuleConstructors, {
+  required bool isMiddleman,
+}) async {
   LogDelegateBase delegate;
   SidecarAnalyzerMode mode;
 
@@ -35,7 +36,7 @@ Future<void> startSidecarPlugin(
     delegate = const DebuggerLogDelegate();
     mode = SidecarAnalyzerMode.cli;
   }
-
+  delegate.sidecarMessage('ISMIDDLEMAN: $isMiddleman');
   final ref = ProviderContainer(
     overrides: [
       logDelegateProvider.overrideWithValue(delegate),
@@ -48,6 +49,7 @@ Future<void> startSidecarPlugin(
   );
 
   final plugin = ref.read(pluginProvider);
+  final middlemanPlugin = ref.read(middlemanPluginProvider);
 
   try {
     if (mode.isDebug) {
@@ -61,7 +63,11 @@ Future<void> startSidecarPlugin(
       await runner.server.initializationCompleter.future;
       exit(0);
     } else {
-      plugin.start(pluginChannel);
+      if (isMiddleman) {
+        middlemanPlugin.start(pluginChannel);
+      } else {
+        plugin.start(pluginChannel);
+      }
     }
   } catch (error, stackTrace) {
     delegate.sidecarError(error, stackTrace);

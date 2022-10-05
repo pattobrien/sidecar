@@ -62,78 +62,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
+    delegate.sidecarMessage('END PLUGIN STARTING....');
     if (mode.isDebug) _startWithHotReload(channel);
     super.start(channel);
-  }
-
-  Future<void> _runProcess(AnalysisContext context) async {
-    final root = context.contextRoot.root.path;
-    // final runnerFilePath = p.join(root, '.dart_tool', 'sidecar_plugin_runner',
-    //     'bin', 'sidecar_plugin_runner.dart');
-    // final process = await Process.start('dart', ['run', runnerFilePath]);
-    // process.stdout
-    //     .listen((event) => delegate.sidecarMessage(utf8.decode(event)));
-    // process.stderr
-    //     .listen((event) => delegate.sidecarMessage(utf8.decode(event)));
-    // await process.exitCode
-    //     .then((value) => delegate.sidecarMessage('process ended: $value'));
-
-    // final packagesPath = p.join(
-    //   root,
-    //   '.dart_tool',
-    //   'sidecar_plugin_runner',
-    //   '.dart_tool',
-    //   'package_config.json',
-    // );
-    // final executionPath = p.join(
-    //   root,
-    //   '.dart_tool',
-    //   'sidecar_plugin_runner',
-    //   'bin',
-    //   'sidecar_plugin_runner.dart',
-    // );
-    final packagesPath = p.join(
-      root,
-      '.dart_tool',
-      'sidecar_analyzer_plugin',
-      'tools',
-      'analyzer_plugin',
-      '.dart_tool',
-      'package_config.json',
-    );
-    final executionPath = p.join(
-      root,
-      '.dart_tool',
-      'sidecar_analyzer_plugin',
-      'tools',
-      'analyzer_plugin',
-      'bin',
-      'plugin.dart',
-    );
-    final chann = plugin.ServerIsolateChannel.discovered(
-      Uri.file(executionPath, windows: Platform.isWindows),
-      Uri.file(packagesPath, windows: Platform.isWindows),
-      NoopInstrumentationService(),
-    );
-    await chann.listen(
-      (response) => delegate
-          .sidecarMessage('TESTRESPONSE: ${response.toJson().toString()}'),
-      (notification) => delegate
-          .sidecarMessage('TESTNOTIFICATION: ${notification.toString()}'),
-      onDone: () {
-        delegate.sidecarMessage('TESTDONE');
-      },
-      onError: (error) {
-        delegate.sidecarMessage('TESTERROR: ${error.toString()}');
-      },
-    );
-    chann.sendRequest(
-      plugin.PluginVersionCheckParams(
-        resourceProvider.getByteStorePath(pluginName),
-        getSdkPath(),
-        pluginVersion,
-      ).toRequest(const Uuid().v4()),
-    );
   }
 
   Future<void> _startWithHotReload(
@@ -169,7 +100,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
           if (!context.isSidecarEnabled) return;
 
-          await _runProcess(context);
           await _ref
               .read(projectConfigurationServiceProvider(context.contextRoot))
               .parse();
