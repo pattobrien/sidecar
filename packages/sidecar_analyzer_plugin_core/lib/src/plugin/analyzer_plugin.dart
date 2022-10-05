@@ -26,6 +26,7 @@ import '../context_services/context_services.dart';
 import '../services/analysis_context_collection_service/analysis_context_collection_service.dart';
 import '../services/log_delegate/log_delegate.dart';
 import '../services/project_configuration_service/providers.dart';
+import '../services/services.dart';
 import 'analyzer_mode.dart';
 import 'package:path/path.dart' as p;
 import '../utils/byte_store_ext.dart';
@@ -63,6 +64,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   @override
   void start(plugin.PluginCommunicationChannel channel) {
     delegate.sidecarMessage('END PLUGIN STARTING....');
+    delegate.sidecarMessage(
+        '# of lints/edits to activate: ${_ref.read(ruleConstructorProvider).length} ');
     if (mode.isDebug) _startWithHotReload(channel);
     super.start(channel);
   }
@@ -95,7 +98,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       await Future.wait(contextCollection.contexts.map<Future<void>>(
         (context) async {
-          delegate.sidecarVerboseMessage(
+          delegate.sidecarMessage(
               'initializing context: ${context.contextRoot.root.path}');
 
           if (!context.isSidecarEnabled) return;
@@ -109,7 +112,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
                   activatedRulesNotifierProvider(context.contextRoot).notifier)
               .initializeRules();
 
-          delegate.sidecarVerboseMessage(
+          delegate.sidecarMessage(
               'completed context: ${context.contextRoot.root.path}');
         },
       ));
@@ -166,6 +169,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required String path,
   }) async {
     try {
+      _ref.read(logDelegateProvider).sidecarMessage(
+          'analyzeFile: context ${analysisContext.contextRoot.root.path} // path $path');
       final analysisContextService = getAnalysisContextService(analysisContext);
       await analysisContextService.getAnalysisResults(path);
     } catch (e, stackTrace) {

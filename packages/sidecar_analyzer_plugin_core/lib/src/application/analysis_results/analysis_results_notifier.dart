@@ -35,6 +35,8 @@ class AnalysisResultsNotifier
 
   Future<void> refreshAnalysis() async {
     state = const AsyncLoading();
+    // delegate.sidecarMessage(
+    //     'analyzeFile STARTING for ${analyzedFile.relativePath}');
     //TODO: allow analysis of other file extensions
     if (analyzedFile.isDartFile) {
       reporter
@@ -82,8 +84,8 @@ class AnalysisResultsNotifier
       reporter.recordLintsCompleted();
       reporter.complete(state.asData?.value ?? []);
 
-      delegate.sidecarVerboseMessage(
-          'analyzeFile completed w/ ${allRules.length} rules: ${analyzedFile.relativePath}');
+      delegate.sidecarMessage(
+          'analyzeFile completed w/ ${allRules.length} rules, ${state.value?.length ?? 0} errors: ${analyzedFile.relativePath}');
     } else {
       // set all non-Dart files to having no errors
       state = const AsyncValue.data([]);

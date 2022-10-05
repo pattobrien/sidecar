@@ -122,9 +122,9 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   ) async {
     _reloader = await HotReloader.create(onAfterReload: (c) {
       if (c.result == HotReloadResult.Succeeded) {
-        channel.sendNotification(
-          plugin.Notification('sidecar.auto_reload', {}),
-        );
+        _ref.read(pluginChannelProvider).sendNotification(
+              plugin.Notification('sidecar.auto_reload', {}),
+            );
       }
     });
   }

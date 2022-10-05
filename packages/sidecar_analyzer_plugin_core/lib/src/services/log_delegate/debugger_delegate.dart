@@ -33,7 +33,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
 
   @override
   void sidecarVerboseMessage(String message) {
-    if (!isVerboseEnabled) return;
+    // if (!isVerboseEnabled) return;
     stdout.writeln(message);
   }
 
