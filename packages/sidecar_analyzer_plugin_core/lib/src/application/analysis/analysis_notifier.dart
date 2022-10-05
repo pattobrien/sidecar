@@ -36,7 +36,11 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
 
       if (unit == null) return;
 
-      ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
+      ref.read(logDelegateProvider).sidecarMessage('');
+      final stopwatch = Stopwatch()..start();
+      ref.read(logDelegateProvider).sidecarMessage(
+          '    refreshing analysis for: ${analyzedFile.relativePath} ');
+      // ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
 
       final errorReporter = ErrorReporter(ref, analyzedFile);
 
@@ -65,6 +69,9 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
       }));
       delegate.sidecarVerboseMessage(
           'analyzeFile completed w/ ${allRules.length} rules: ${analyzedFile.relativePath}');
+      ref.read(logDelegateProvider).sidecarMessage(
+          '    refreshing analysis complete for: ${analyzedFile.relativePath} in ${stopwatch.elapsedMicroseconds}us');
+      stopwatch.stop();
     } else {
       // set all non-Dart files to having no errors
       state = const AsyncValue.data([]);

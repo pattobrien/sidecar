@@ -62,9 +62,9 @@ class AnalysisContextService {
       //       '${analyzedFile.contextRoot.root.shortName}: resolved unit updated for ${analyzedFile.relativePath}');
       // });
 
-      await ref
-          .read(resolvedUnitServiceProvider(analyzedFile))
-          .getResolvedUnit();
+      // await ref
+      //     .read(resolvedUnitServiceProvider(analyzedFile))
+      //     .getResolvedUnit();
 
       ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
       // final ann = ref.read(annotationsNotifierProvider(analyzedFile)).value;

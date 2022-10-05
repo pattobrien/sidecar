@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/element/element.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/builder.dart';
 
@@ -14,20 +15,58 @@ class AvoidEdgeInsetsLiteral extends LintRule {
   FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
-    final visitor = _Visitor();
+    final visitor = AvoidEdgeInsetsLiteralVisitor();
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
     return visitor.nodes;
   }
 }
 
-class _Visitor extends SidecarAstVisitor {
+class AvoidEdgeInsetsLiteralVisitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final type = node.constructorName.staticElement?.returnType;
 
     if (FlutterTypeChecker.isEdgeInsets(type)) {
-      reportAstNode(node, message: 'Avoid edge insets literal.');
+      final args = node.argumentList.arguments
+          .whereType<NamedExpression>()
+          .where((e) =>
+              e.name.label.name == 'horizontal' ||
+              e.name.label.name == 'vertical');
+
+      for (var arg in args) {
+        final exp = arg.expression;
+        if (exp is DoubleLiteral || exp is IntegerLiteral) {
+          reportAstNode(
+            exp,
+            message: 'Avoid edge insets literal.',
+          );
+        }
+        // e.g. CustomTheme.smallInsets()
+        // if (exp is PrefixedIdentifier) {
+        //   //TODO: dart question: should we be going from AST => Element => AST
+        //   //to do this computation, or is there a way to do this via ASTs only?
+        //   final ele = exp.staticElement!.declaration;
+        //   if (ele is PropertyAccessorElement) {
+        //     // final y = ele.declaration.constantInitializer;
+        //     final x = ele.variable.isConstantEvaluated;
+        //     final y = x;
+        //   }
+        //   if (ele is ParameterElement) {
+        //     final x = ele;
+        //   }
+        //   final element = exp.staticType?.element2;
+        //   final node = ele;
+        //   // final x = ele.canonicalElement;
+        //   //   final x =
+        // }
+        // // e.g. smallInsets()
+        // if (exp is SimpleIdentifier) {
+        //   final element = exp.staticType?.element2;
+        //   // final x = element;
+
+        // }
+      }
     }
     super.visitInstanceCreationExpression(node);
   }

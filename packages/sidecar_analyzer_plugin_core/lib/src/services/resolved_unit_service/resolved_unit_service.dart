@@ -6,6 +6,7 @@ import 'package:sidecar/builder.dart';
 
 import '../../context_services/analysis_errors.dart';
 import '../analysis_context_collection_service/analysis_context_collection_service.dart';
+import '../log_delegate/log_delegate_base.dart';
 
 class ResolvedUnitService {
   ResolvedUnitService(
@@ -31,6 +32,7 @@ class ResolvedUnitService {
       return null;
       // throw UnimplementedError();
     }
+
     _controller.add(unitResult);
     return unitResult;
   }

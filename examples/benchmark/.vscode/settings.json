@@ -1,0 +1,13 @@
+{
+    "triggerTaskOnSave.tasks": {
+        "sidecar rebuild": [
+            // "pubspec.yaml",
+            "analysis_options.yaml",
+        ],
+    },
+    "dart.analyzerAdditionalArgs": [
+        "--port=10000",
+        "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/examples/benchmark/.sidecar/logs/analysis_instrumentation.log"
+    ],
+    // "dart.analyzerInstrumentationLogFile": "/Users/pattobrien/Development/sidecar/examples/benchmark/.sidecar/logs/analysis_instrumentation.txt",
+}

@@ -13,6 +13,15 @@
             "args": [
                 "--enable-vm-service"
             ]
+        },
+        {
+            "name": "Benchmark Debugger",
+            "program": "examples/benchmark/bin/debug.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--enable-vm-service"
+            ]
         }
     ],
 }
