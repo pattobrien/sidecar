@@ -10,7 +10,8 @@ import 'activated_rules_state.dart';
 
 final activatedRulesNotifierProvider = StateNotifierProvider.family<
     ActivatedRulesNotifier, ActivatedRulesState, ContextRoot>((ref, root) {
-  return ActivatedRulesNotifier(ref, root);
+  final activatedRulesNotifier = ActivatedRulesNotifier(ref, root);
+  return activatedRulesNotifier;
 });
 
 class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
@@ -20,7 +21,12 @@ class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
   final ContextRoot root;
   final Ref ref;
 
-  LogDelegateBase get delegate => ref.read(logDelegateProvider);
+  LogDelegateBase get log => ref.read(logDelegateProvider);
+
+  void updateRules() {
+    //TODO: update rules with the latest annotations when theyre updated
+    throw UnimplementedError();
+  }
 
   void initializeRules() {
     state = const ActivatedRulesState();
@@ -37,7 +43,7 @@ class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
       final ruleConfig = projectConfig.getConfiguration(ruleId);
       final rule = ruleDefinition.value();
       final ruleCode = rule.code;
-      delegate.sidecarVerboseMessage('activating $ruleCode');
+      log.sidecarVerboseMessage('activating $ruleCode');
       rule.initialize(
         ref: ref,
         configurationContent: ruleConfig?.configuration,

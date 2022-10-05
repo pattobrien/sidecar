@@ -35,14 +35,9 @@ final annotationsNotifierProvider = StateNotifierProvider.family<
     AsyncValue<List<SidecarAnnotatedNode>>,
     AnalyzedFile>((ref, analyzedFile) {
   final notifier = FileAnnotationsNotifier(ref, analyzedFile: analyzedFile);
-  ref.listen(
-    resolvedUnitProvider(analyzedFile),
-    (previous, next) {
-      // ref.read(logDelegateProvider).sidecarMessage(
-      //     'unit updated, refreshing annotations: ${analyzedFile.relativePath}');
-      notifier.refresh();
-    },
-  );
+  ref.listen(resolvedUnitProvider(analyzedFile), (previous, next) {
+    notifier.refresh();
+  });
   return notifier;
 });
 
@@ -61,7 +56,7 @@ class FileAnnotationsNotifier
 
   void refresh() {
     reporter.recordAnnotationsStart();
-    final visitor = _AnnotationVisitor();
+    final visitor = AnnotationVisitor();
     final unitResult = ref.read(resolvedUnitProvider(analyzedFile)).value;
     if (unitResult == null) return;
     unitResult.unit.accept(visitor);
@@ -71,7 +66,7 @@ class FileAnnotationsNotifier
   }
 }
 
-class _AnnotationVisitor extends GeneralizingAstVisitor<void> {
+class AnnotationVisitor extends GeneralizingAstVisitor<void> {
   final List<SidecarAnnotatedNode> annotatedNodes = [];
 
   @override
