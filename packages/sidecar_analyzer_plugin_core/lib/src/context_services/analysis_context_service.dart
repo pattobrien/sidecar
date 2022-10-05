@@ -89,8 +89,8 @@ class AnalysisContextService {
     final analyzedFile = analyzedFileFromPath(path);
     final analysisPath = context.contextRoot.optionsFile?.path;
 
-    delegate.sidecarMessage(
-        'getAnalysisResults for ${analyzedFile.relativePath} - enabled: ${context.isSidecarEnabled} within ${p.isWithin(root.root.path, path)} @ context ${root.root.path}');
+    // delegate.sidecarMessage(
+    //     'getAnalysisResults for ${analyzedFile.relativePath} - enabled: ${context.isSidecarEnabled} within ${p.isWithin(root.root.path, path)} @ context ${root.root.path}');
     if (!context.isSidecarEnabled) return [];
     if (!p.isWithin(root.root.path, path)) return [];
 

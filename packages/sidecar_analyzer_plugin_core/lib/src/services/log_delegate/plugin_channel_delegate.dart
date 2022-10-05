@@ -56,7 +56,8 @@ class PluginChannelDelegate implements LogDelegateBase {
         .map((result) => result.toAnalysisError())
         .whereType<plugin.AnalysisError>()
         .toList();
-
+    channel.sendError(
+        'analysisResults delegate: $path - ${results.length} ERRORS');
     final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
     channel.sendNotification(notif);
   }

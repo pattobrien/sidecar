@@ -134,7 +134,7 @@ final analysisNotifierProvider = StateNotifierProvider.family<
 
   ref.listen<List<SidecarAnnotatedNode>>(
       annotationsAggregateProvider(analyzedFile.contextRoot), (previous, next) {
-    analysisNotifier.refreshAnalysis();
+    // analysisNotifier.refreshAnalysis();
   });
   return analysisNotifier;
 });

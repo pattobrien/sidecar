@@ -137,7 +137,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
-    _ref.read(logDelegateProvider).sidecarMessage('analyzeFiles start');
+    // _ref.read(logDelegateProvider).sidecarMessage('analyzeFiles start');
 
     await super.analyzeFiles(analysisContext: analysisContext, paths: paths);
 
@@ -169,8 +169,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required String path,
   }) async {
     try {
-      _ref.read(logDelegateProvider).sidecarMessage(
-          'analyzeFile: context ${analysisContext.contextRoot.root.path} // path $path');
+      // _ref.read(logDelegateProvider).sidecarMessage(
+      //     'analyzeFile: context ${analysisContext.contextRoot.root.path} // path $path');
       final analysisContextService = getAnalysisContextService(analysisContext);
       await analysisContextService.getAnalysisResults(path);
     } catch (e, stackTrace) {
