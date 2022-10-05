@@ -11,6 +11,7 @@ import 'plugin/plugin.dart';
 import 'runner/sidecar_runner.dart';
 import 'services/log_delegate/log_delegate.dart';
 import 'services/rule_constructor_provider.dart';
+import 'package:path/path.dart' as p;
 
 Future<void> startSidecarPlugin(
   SendPort sendPort,

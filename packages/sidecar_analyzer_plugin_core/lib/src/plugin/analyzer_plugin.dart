@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -21,6 +23,7 @@ import '../services/analysis_context_collection_service/analysis_context_collect
 import '../services/log_delegate/log_delegate.dart';
 import '../services/project_configuration_service/providers.dart';
 import 'analyzer_mode.dart';
+import 'package:path/path.dart' as p;
 
 final pluginProvider = Provider(SidecarAnalyzerPlugin.new);
 
@@ -58,6 +61,19 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     super.start(channel);
   }
 
+  Future<void> _runProcess(AnalysisContext context) async {
+    final root = context.contextRoot.root.path;
+    final runnerFilePath = p.join(root, '.dart_tool', 'sidecar_plugin_runner',
+        'bin', 'sidecar_plugin_runner.dart');
+    final process = await Process.start('dart', ['run', runnerFilePath]);
+    process.stdout
+        .listen((event) => delegate.sidecarMessage(utf8.decode(event)));
+    process.stderr
+        .listen((event) => delegate.sidecarMessage(utf8.decode(event)));
+    await process.exitCode
+        .then((value) => delegate.sidecarMessage('process ended: $value'));
+  }
+
   Future<void> _startWithHotReload(
     plugin.PluginCommunicationChannel channel,
   ) async {
@@ -90,6 +106,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
               'initializing context: ${context.contextRoot.root.path}');
 
           if (!context.isSidecarEnabled) return;
+
+          await _runProcess(context);
           await _ref
               .read(projectConfigurationServiceProvider(context.contextRoot))
               .parse();
