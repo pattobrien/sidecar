@@ -145,6 +145,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           .sidecarMessage('initializing annotations complete');
     }
 
+    await analysisContextService.generateReport();
+
     _ref.read(logDelegateProvider).sidecarMessage('analyzeFiles end');
   }
 

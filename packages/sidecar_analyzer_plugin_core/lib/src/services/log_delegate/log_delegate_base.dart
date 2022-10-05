@@ -1,6 +1,9 @@
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
+import '../../reports/file_report_notifier.dart';
+import '../../reports/file_stats.dart';
+
 // final logger = Logger.standard();
 
 final logDelegateProvider = Provider<LogDelegateBase>(
@@ -8,6 +11,8 @@ final logDelegateProvider = Provider<LogDelegateBase>(
 );
 
 abstract class LogDelegateBase {
+  void generateReport(Iterable<FileStats> reports);
+
   void sidecarError(
     Object error,
     StackTrace stackTrace,

@@ -5,6 +5,7 @@ import 'package:sidecar/builder.dart';
 
 import '../../../sidecar_analyzer_plugin_core.dart';
 import '../../context_services/analysis_errors.dart';
+import '../../reports/file_report_notifier.dart';
 import '../../services/analysis_context_collection_service/analysis_context_collection_service.dart';
 import '../../services/error_reporter/error_reporter.dart';
 import '../../services/log_delegate/log_delegate.dart';
@@ -12,6 +13,7 @@ import '../../services/project_configuration_service/providers.dart';
 import '../../services/resolved_unit_service/resolved_unit_service.dart';
 import '../activated_rules/activated_rules_notifier.dart';
 import '../annotations/file_annotations_notifier.dart';
+import 'file_report_provider.dart';
 
 class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   AnalysisNotifier(
@@ -26,28 +28,33 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
   PluginCommunicationChannel get channel => ref.read(pluginChannelProvider);
 
+  FileReportNotifier get report =>
+      ref.read(fileReportProvider(analyzedFile).notifier);
+
+  Future<void> initializeAnnotations() async {
+    //
+  }
+
   Future<void> refreshAnalysis() async {
     state = const AsyncLoading<List<AnalysisResult>>().copyWithPrevious(state);
     //TODO: allow analysis of other file extensions
     if (analyzedFile.isDartFile) {
-      final watch = Stopwatch()..start();
-      ref.read(logDelegateProvider).sidecarMessage(
-          'refreshing analysis for: ${analyzedFile.relativePath} ');
+      report
+        ..start()
+        ..recordUnitStart();
+
       final unit = await ref
           .read(resolvedUnitServiceProvider(analyzedFile))
           .getResolvedUnit();
 
-      ref.read(logDelegateProvider).sidecarMessage(
-          '|    unit updated in: ${watch.elapsed.inMicroseconds}us');
+      report.recordUnitResolved();
       if (unit == null) {
-        ref.read(logDelegateProvider).sidecarMessage(
-            'refreshing analysis complete for: ${analyzedFile.relativePath} in ${watch.elapsedMicroseconds}us\n');
-        watch.stop();
         return;
       }
 
-      // ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
-      final errorCollectingWatch = Stopwatch()..start();
+      ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
+
+      report.recordLintsStarted();
       final errorReporter = ErrorReporter(ref, analyzedFile);
 
       final context = ref
@@ -73,13 +80,13 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
           delegate.sidecarError('LintRule Error: ${e.toString()}', stackTrace);
         }
       }));
+
+      report
+        ..recordLintsCompleted()
+        ..complete(state.asData?.value ?? []);
+
       delegate.sidecarVerboseMessage(
           'analyzeFile completed w/ ${allRules.length} rules: ${analyzedFile.relativePath}');
-      ref.read(logDelegateProvider).sidecarMessage(
-          '|    lint errors collected in: ${errorCollectingWatch.elapsed.inMicroseconds}us');
-      ref.read(logDelegateProvider).sidecarMessage(
-          'refreshing analysis complete for: ${analyzedFile.relativePath} in ${watch.elapsedMicroseconds}us\n');
-      watch.stop();
     } else {
       // set all non-Dart files to having no errors
       state = const AsyncValue.data([]);

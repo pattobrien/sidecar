@@ -13,8 +13,10 @@ import 'package:sidecar/sidecar.dart';
 
 import '../application/activated_rules/activated_rules_notifier.dart';
 import '../application/analysis/analysis_notifier.dart';
+import '../application/analysis/file_report_provider.dart';
 import '../application/annotations/file_annotations_notifier.dart';
 import '../plugin/plugin.dart';
+import '../reports/file_stats.dart';
 import '../services/error_reporter/error_reporter.dart';
 import '../services/log_delegate/log_delegate.dart';
 import '../services/project_configuration_service/providers.dart';
@@ -48,6 +50,13 @@ class AnalysisContextService {
   List<AnalyzedFile> get analyzedFiles => root.typedAnalyzedFiles();
 
   AnalyzedFile analyzedFileFromPath(String path) => AnalyzedFile(root, path);
+
+  Future<void> generateReport() async {
+    final reports = analyzedFiles
+        .map((file) => ref.read(fileReportProvider(file)).valueOrNull)
+        .whereType<FileStats>();
+    ref.read(logDelegateProvider).generateReport(reports);
+  }
 
   Future<void> initializeAnalysisContext() async {
     if (!context.isSidecarEnabled) return;

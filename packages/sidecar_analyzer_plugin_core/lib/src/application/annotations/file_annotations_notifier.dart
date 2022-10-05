@@ -7,9 +7,11 @@ import 'package:sidecar_annotations/sidecar_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 import '../../context_services/analysis_errors.dart';
+import '../../reports/file_report_notifier.dart';
 import '../../services/log_delegate/log_delegate_base.dart';
 import '../../services/resolved_unit_service/resolved_unit_service.dart';
 import '../../utils/utils.dart';
+import '../analysis/file_report_provider.dart';
 
 final annotationsAggregateProvider =
     Provider.family<List<SidecarAnnotatedNode>, ContextRoot>(
@@ -54,18 +56,18 @@ class FileAnnotationsNotifier
   final Ref ref;
   final AnalyzedFile analyzedFile;
 
+  FileReportNotifier get reporter =>
+      ref.read(fileReportProvider(analyzedFile).notifier);
+
   void refresh() {
-    // throw UnimplementedError();
-    final watch = Stopwatch()..start();
+    reporter.recordAnnotationsStart();
     final visitor = _AnnotationVisitor();
     final unitResult = ref.read(resolvedUnitProvider(analyzedFile)).value;
     if (unitResult == null) return;
     unitResult.unit.accept(visitor);
     final annotations = visitor.annotatedNodes;
     state = AsyncValue.data(annotations);
-    ref.read(logDelegateProvider).sidecarMessage(
-        '|    time to collect annotations: ${watch.elapsed.inMicroseconds}us');
-    watch.stop();
+    reporter.recordAnnotationsCompleted();
   }
 }
 

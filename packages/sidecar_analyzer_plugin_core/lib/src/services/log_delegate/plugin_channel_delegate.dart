@@ -3,6 +3,8 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:sidecar/sidecar.dart';
 
+import '../../reports/file_report_notifier.dart';
+import '../../reports/file_stats.dart';
 import '../../utils/utils.dart';
 import 'log_delegate_base.dart';
 
@@ -57,5 +59,10 @@ class PluginChannelDelegate implements LogDelegateBase {
 
     final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
     channel.sendNotification(notif);
+  }
+
+  @override
+  void generateReport(Iterable<FileStats> reports) {
+    // TODO: implement generateReport
   }
 }
