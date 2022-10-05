@@ -19,7 +19,7 @@ Lints and Edits support for the following file types
 
 - [X] Debugging Support
 - [X] Analysis via CLI
-- [ ] Annotations
+- [X] Annotations
 
 ### Performance Benchmarking
 
