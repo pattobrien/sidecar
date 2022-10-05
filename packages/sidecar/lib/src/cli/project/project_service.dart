@@ -6,8 +6,8 @@ import 'package:package_config/package_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/sidecar.dart';
 
+import '../../configurations/configurations.dart';
 import '../utilities/utilities.dart';
 import 'constants.dart';
 import 'file_content_constants.dart';
@@ -111,10 +111,9 @@ class ProjectService {
   }) async {
     if (packages.isEmpty) return;
 
-    final isFlutterProject =
-        await PubspecUtilities.isFlutterProject(projectDirectory.path);
+    final isFlutter = await isFlutterProject(projectDirectory.path);
     final process = await io.Process.start(
-      isFlutterProject ? 'flutter' : 'dart',
+      isFlutter ? 'flutter' : 'dart',
       [
         'pub',
         'remove',
@@ -145,11 +144,10 @@ class ProjectService {
     if (hostedUrl != null) arguments.addAll(['--hosted-url', hostedUrl]);
     if (pathUrl != null) arguments.addAll(['--path', pathUrl]);
 
-    final isFlutterProject =
-        await PubspecUtilities.isFlutterProject(projectDirectory.path);
+    final isFlutter = await isFlutterProject(projectDirectory.path);
 
     final process = await io.Process.start(
-      isFlutterProject ? 'flutter' : 'dart',
+      isFlutter ? 'flutter' : 'dart',
       [...arguments, ...packages],
       workingDirectory: workingDirectory ?? projectDirectory.path,
     );
@@ -399,13 +397,11 @@ class ProjectService {
     // simplest way to restart plugin is by calling pub get
     // as analyzer_plugin is already designed to restart on pub get
     // final pubspecFile = p.join(projectDirectory.path, 'pubspec.yaml');
-    final isFlutterProject =
-        await PubspecUtilities.isFlutterProject(projectDirectory.path);
-    io.stdout.writeln(isFlutterProject
-        ? 'running flutter pub get...'
-        : 'running dart pub get...');
+    final isFlutter = await isFlutterProject(projectDirectory.path);
+    io.stdout.writeln(
+        isFlutter ? 'running flutter pub get...' : 'running dart pub get...');
     final result = await io.Process.run(
-      isFlutterProject ? 'flutter' : 'dart',
+      isFlutter ? 'flutter' : 'dart',
       ['pub', 'get'],
       workingDirectory: projectDirectory.path,
     );

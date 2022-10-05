@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:sidecar_cli/src/commands/command_runner.dart';
+import 'package:sidecar/src/cli/commands/command_runner.dart';
 
 void main(List<String> arguments) async {
   await flushThenExit(await PlatformCommandRunner().run(arguments));

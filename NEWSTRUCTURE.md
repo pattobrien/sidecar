@@ -1,0 +1,29 @@
+
+
+- analyzer_core
+    - analysis_context_service
+    - analysis_context_collection_service
+    - analysis_results 
+    - code
+        - code_builders
+    - plugin
+    - visitors
+- cli
+    - commands
+- configurations
+    - project_config_parse
+    - metadata
+- constants
+- rule_definitions
+    - rule_base
+    - lint_rule
+    - assist_rule
+- reports
+    - error_reporter
+    - html_reporter
+    - logging
+- server
+    - runner
+    - starter
+- test_utilities
+- utilities

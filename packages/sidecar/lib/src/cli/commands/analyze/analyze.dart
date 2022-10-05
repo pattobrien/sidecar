@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:sidecar/sidecar.dart';
 
+import '../../../configurations/project/errors.dart';
 import '../exit_codes.dart';
 
 class AnalyzeCommand extends Command<int> {

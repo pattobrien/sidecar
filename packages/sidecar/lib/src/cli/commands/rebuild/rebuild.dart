@@ -3,7 +3,8 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 
-import '../../../sidecar_cli.dart';
+import '../../project/project.dart';
+import '../../utilities/project_utilities.dart';
 import '../exit_codes.dart';
 
 class RebuildCommand extends Command<int> {
@@ -34,7 +35,7 @@ Future<void> rebuildProcess() async {
   print('project directory: ${Directory.current}');
 
   final projectConfiguration =
-      await ProjectUtilities.getSidecarConfiguration(Directory.current.uri);
+      await getSidecarConfiguration(Directory.current.uri);
 
   final lints = projectConfiguration.lintPackages?.values.toList() ?? [];
   final edits = projectConfiguration.assistPackages?.values.toList() ?? [];
