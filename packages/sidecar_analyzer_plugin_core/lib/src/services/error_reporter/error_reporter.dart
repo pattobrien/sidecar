@@ -1,8 +1,8 @@
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 
-import '../../application/analysis/analysis_notifier.dart';
-import '../../context_services/analysis_errors.dart';
+import '../../application/analysis_results/analysis_results_notifier.dart';
+import '../../context_services/analyzed_file.dart';
 
 class ErrorReporter {
   const ErrorReporter(this.ref, this.file);

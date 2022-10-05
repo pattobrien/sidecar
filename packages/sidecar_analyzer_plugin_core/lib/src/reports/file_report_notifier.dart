@@ -1,7 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 
-import '../context_services/analysis_errors.dart';
+import '../context_services/analyzed_file.dart';
 import 'file_stats.dart';
 
 class FileReportNotifier extends StateNotifier<AsyncValue<FileStats>> {

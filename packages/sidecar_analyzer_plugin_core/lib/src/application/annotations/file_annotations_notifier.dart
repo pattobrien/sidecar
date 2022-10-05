@@ -6,12 +6,12 @@ import 'package:sidecar/builder.dart';
 import 'package:sidecar_annotations/sidecar_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
-import '../../context_services/analysis_errors.dart';
+import '../../context_services/analyzed_file.dart';
 import '../../reports/file_report_notifier.dart';
 import '../../services/log_delegate/log_delegate_base.dart';
 import '../../services/resolved_unit_service/resolved_unit_service.dart';
 import '../../utils/utils.dart';
-import '../analysis/file_report_provider.dart';
+import '../analysis_results/file_report_provider.dart';
 
 final annotationsAggregateProvider =
     Provider.family<List<SidecarAnnotatedNode>, ContextRoot>(

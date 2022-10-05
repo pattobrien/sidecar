@@ -14,7 +14,7 @@ import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../application/activated_rules/activated_rules_notifier.dart';
+import '../application/rules/activated_rules_notifier.dart';
 import '../constants.dart';
 import '../context_services/context_services.dart';
 import '../services/analysis_context_collection_service/analysis_context_collection_service.dart';

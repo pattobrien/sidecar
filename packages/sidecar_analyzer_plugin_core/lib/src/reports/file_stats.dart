@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../context_services/analysis_errors.dart';
+import '../context_services/analyzed_file.dart';
 
 part 'file_stats.freezed.dart';
 

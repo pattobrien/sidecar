@@ -1,22 +1,24 @@
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
+
 import 'package:sidecar/builder.dart';
 
 import '../../../sidecar_analyzer_plugin_core.dart';
-import '../../context_services/analysis_errors.dart';
+import '../../context_services/analyzed_file.dart';
 import '../../reports/file_report_notifier.dart';
 import '../../services/analysis_context_collection_service/analysis_context_collection_service.dart';
 import '../../services/error_reporter/error_reporter.dart';
 import '../../services/log_delegate/log_delegate.dart';
 import '../../services/project_configuration_service/providers.dart';
 import '../../services/resolved_unit_service/resolved_unit_service.dart';
-import '../activated_rules/activated_rules_notifier.dart';
 import '../annotations/file_annotations_notifier.dart';
+import '../rules/activated_rules_notifier.dart';
 import 'file_report_provider.dart';
 
-class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
-  AnalysisNotifier(
+class AnalysisResultsNotifier
+    extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
+  AnalysisResultsNotifier(
     this.ref, {
     required this.analyzedFile,
   }) : super(const AsyncValue.loading());
@@ -30,8 +32,6 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
 
   FileReportNotifier get reporter =>
       ref.read(fileReportProvider(analyzedFile).notifier);
-
-  Future<void> initializeAnnotations() async {}
 
   Future<void> refreshAnalysis() async {
     state = const AsyncLoading();
@@ -123,9 +123,12 @@ class AnalysisNotifier extends StateNotifier<AsyncValue<List<AnalysisResult>>> {
   }
 }
 
-final analysisNotifierProvider = StateNotifierProvider.family<AnalysisNotifier,
-    AsyncValue<List<AnalysisResult>>, AnalyzedFile>((ref, analyzedFile) {
-  final analysisNotifier = AnalysisNotifier(ref, analyzedFile: analyzedFile);
+final analysisNotifierProvider = StateNotifierProvider.family<
+    AnalysisResultsNotifier,
+    AsyncValue<List<AnalysisResult>>,
+    AnalyzedFile>((ref, analyzedFile) {
+  final analysisNotifier =
+      AnalysisResultsNotifier(ref, analyzedFile: analyzedFile);
 
   ref.listen<List<SidecarAnnotatedNode>>(
       annotationsAggregateProvider(analyzedFile.contextRoot), (previous, next) {

@@ -1,6 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
-import '../../context_services/analysis_errors.dart';
+import '../../context_services/analyzed_file.dart';
 import '../../reports/file_report_notifier.dart';
 import '../../reports/file_stats.dart';
 
