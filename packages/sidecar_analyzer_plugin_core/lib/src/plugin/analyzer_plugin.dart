@@ -13,10 +13,12 @@ import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
+import 'package:cli_util/cli_util.dart';
 
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
+import 'package:uuid/uuid.dart';
 
 import '../application/rules/activated_rules_notifier.dart';
 import '../constants.dart';
@@ -26,6 +28,7 @@ import '../services/log_delegate/log_delegate.dart';
 import '../services/project_configuration_service/providers.dart';
 import 'analyzer_mode.dart';
 import 'package:path/path.dart' as p;
+import '../utils/byte_store_ext.dart';
 
 final pluginProvider = Provider(SidecarAnalyzerPlugin.new);
 
@@ -75,19 +78,37 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     // await process.exitCode
     //     .then((value) => delegate.sidecarMessage('process ended: $value'));
 
+    // final packagesPath = p.join(
+    //   root,
+    //   '.dart_tool',
+    //   'sidecar_plugin_runner',
+    //   '.dart_tool',
+    //   'package_config.json',
+    // );
+    // final executionPath = p.join(
+    //   root,
+    //   '.dart_tool',
+    //   'sidecar_plugin_runner',
+    //   'bin',
+    //   'sidecar_plugin_runner.dart',
+    // );
     final packagesPath = p.join(
       root,
       '.dart_tool',
-      'sidecar_plugin_runner',
+      'sidecar_analyzer_plugin',
+      'tools',
+      'analyzer_plugin',
       '.dart_tool',
       'package_config.json',
     );
     final executionPath = p.join(
       root,
       '.dart_tool',
-      'sidecar_plugin_runner',
+      'sidecar_analyzer_plugin',
+      'tools',
+      'analyzer_plugin',
       'bin',
-      'sidecar_plugin_runner.dart',
+      'plugin.dart',
     );
     final chann = plugin.ServerIsolateChannel.discovered(
       Uri.file(executionPath, windows: Platform.isWindows),
@@ -95,8 +116,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       NoopInstrumentationService(),
     );
     await chann.listen(
-      (response) =>
-          delegate.sidecarMessage('TESTRESPONSE: ${response.toString()}'),
+      (response) => delegate
+          .sidecarMessage('TESTRESPONSE: ${response.toJson().toString()}'),
       (notification) => delegate
           .sidecarMessage('TESTNOTIFICATION: ${notification.toString()}'),
       onDone: () {
@@ -105,6 +126,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       onError: (error) {
         delegate.sidecarMessage('TESTERROR: ${error.toString()}');
       },
+    );
+    chann.sendRequest(
+      plugin.PluginVersionCheckParams(
+        resourceProvider.getByteStorePath(pluginName),
+        getSdkPath(),
+        pluginVersion,
+      ).toRequest(const Uuid().v4()),
     );
   }
 
