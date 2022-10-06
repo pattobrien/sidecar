@@ -1,6 +1,6 @@
 name: sidecar_analyzer_plugin_core_loader
 description: This pubspec determines the version of the analyzer plugin to load.
-version: 0.1.21-dev.2
+version: 0.1.21-dev.7
 publish_to: none
 
 environment:
@@ -9,7 +9,7 @@ environment:
 dependencies:
   sidecar_analyzer_plugin_core:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/
-    version: ^0.1.21-dev.2
+    version: ^0.1.21-dev.7
 
 dependency_overrides:
   sidecar_analyzer_plugin_core:

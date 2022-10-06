@@ -15,25 +15,15 @@ dependencies:
   flutter_riverpod: ^2.0.0
   path: ^1.8.0
   intl: ^0.17.0
-  # design_system_annotations:
-  #   hosted: https://micropub-3qduh.ondigitalocean.app/
-  # sidecar_annotations:
-  #   hosted: https://dart.cloudsmith.io/fine-designs/sidecar_annotations/
-  #   version: ^0.1.18
 
 dev_dependencies:
   auto_route_generator: ^5.0.2
   lints: ^2.0.0
-  sidecar_analyzer_plugin_core:
-    # hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/
-    # version: ^0.1.21-dev.4
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
+  # design_system_lints:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/design_system_lints/
+  # sidecar_analyzer_plugin_core:
+  #   path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
   test: ^1.16.0
-
-  # project_lints:
-  #   path: tool/project_lints
-  # sidecar_analyzer_plugin:
-  #   path: .sidecar/sidecar_analyzer_plugin/
 
 flutter:
   uses-material-design: true

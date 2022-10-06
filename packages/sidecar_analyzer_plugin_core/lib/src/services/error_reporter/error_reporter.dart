@@ -37,10 +37,10 @@ class ErrorReporter {
     final results = ref.read(analysisNotifierProvider(file)).valueOrNull ?? [];
 
     final relevantResults =
-        results.where((element) => element.isWithinOffset(unit.path, offset));
+        results.where((result) => result.isWithinOffset(unit.path, offset));
 
-    final editResults = await Future.wait(
-        relevantResults.map((e) => rule.computeSourceChanges(unit.session, e)));
+    final editResults = await Future.wait(relevantResults
+        .map((result) => rule.computeSourceChanges(unit.session, result)));
 
     final flattenedResults = editResults.expand((element) => element).toList();
 

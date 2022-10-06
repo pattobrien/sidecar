@@ -24,7 +24,6 @@ class AnalysisResultsNotifier
   }) : super(const AsyncValue.loading());
 
   final Ref ref;
-
   final AnalyzedFile analyzedFile;
 
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
