@@ -29,7 +29,7 @@ class AnalysisContextService {
     this.ref, {
     required this.context,
   })  : delegate = ref.read(logDelegateProvider),
-        channel = ref.read(pluginChannelProvider)!,
+        channel = ref.read(masterPluginChannelProvider)!,
         root = context.contextRoot;
 
   final Ref ref;

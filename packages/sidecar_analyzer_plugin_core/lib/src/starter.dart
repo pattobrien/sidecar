@@ -41,7 +41,7 @@ Future<void> startSidecarPlugin(
     overrides: [
       logDelegateProvider.overrideWithValue(delegate),
       sidecarAnalyzerMode.overrideWithValue(mode),
-      pluginChannelProvider.overrideWithValue(pluginChannel),
+      masterPluginChannelProvider.overrideWithValue(pluginChannel),
       ruleConstructorProvider.overrideWithValue(
         {...lintRuleConstructors, ...codeEditConstructors},
       ),

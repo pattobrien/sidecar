@@ -28,7 +28,8 @@ class AnalysisResultsNotifier
   final AnalyzedFile analyzedFile;
 
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
-  PluginCommunicationChannel get channel => ref.read(pluginChannelProvider);
+  PluginCommunicationChannel get channel =>
+      ref.read(masterPluginChannelProvider);
 
   FileReportNotifier get reporter =>
       ref.read(fileReportProvider(analyzedFile).notifier);

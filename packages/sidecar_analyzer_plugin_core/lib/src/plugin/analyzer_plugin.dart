@@ -91,7 +91,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     try {
-      delegate.sidecarVerboseMessage('afterNewContextCollection');
+      delegate.sidecarMessage('afterNewContextCollection');
 
       _ref.read(analysisContextCollectionServiceProvider).collection =
           contextCollection;
@@ -117,7 +117,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         },
       ));
 
-      delegate.sidecarVerboseMessage('afterNewContextCollection complete');
+      delegate.sidecarMessage('afterNewContextCollection complete');
       if (!initializationCompleter.isCompleted) {
         initializationCompleter.complete();
       }

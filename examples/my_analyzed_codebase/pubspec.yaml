@@ -25,9 +25,9 @@ dev_dependencies:
   auto_route_generator: ^5.0.2
   lints: ^2.0.0
   sidecar_analyzer_plugin_core:
-    hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/
-    version: ^0.1.21-dev.4
-    # path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
+    # hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/
+    # version: ^0.1.21-dev.4
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
   test: ^1.16.0
 
   # project_lints:
