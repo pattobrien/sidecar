@@ -9,8 +9,8 @@ linter:
     # - always_declare_return_types
 
 analyzer:
-  plugins:
-    - sidecar_analyzer_plugin_core
+  # plugins:
+  #   - sidecar_analyzer_plugin_core
 
 sidecar:
   includes:

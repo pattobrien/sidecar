@@ -13,5 +13,9 @@
     "explorerExclude.backup": {},
     "githubPullRequests.ignoredPullRequestBranches": [
         "master"
-    ]
+    ],
+    "dart.analyzerAdditionalArgs": [
+        "--port=10000",
+        "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/.sidecar/logs/analysis_instrumentation.log"
+    ],
 }

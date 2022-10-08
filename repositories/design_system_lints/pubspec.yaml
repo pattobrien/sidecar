@@ -1,6 +1,6 @@
 name: design_system_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.11
+version: 0.1.12
 publish_to: https://micropub-3qduh.ondigitalocean.app/
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/design_system_lints
 
@@ -17,42 +17,21 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.20-dev.6
+    version: ^0.1.21-dev.2
   source_span: ^1.8.2
 
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
 
-dependency_overrides:
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
-
 micropub: sidecar
 
 sidecar:
   lints:
-    avoid_color_literal:
-      class: AvoidColorLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_edge_insets_literal:
-      class: AvoidEdgeInsetsLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_icon_literal:
-      class: AvoidIconLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_box_shadow_literal:
-      class: AvoidBoxShadowLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_text_style_literal:
-      class: AvoidTextStyleLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_border_radius_literal:
-      class: AvoidBorderRadiusLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_sized_box_height_width_literals:
-      class: AvoidSizedBoxHeightWidthLiterals
-      import: design_system_lints/design_system_lints.dart
-# dependency_overrides:
-#   flutter_utilities:
-#     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
+    - avoid_color_literal
+    - avoid_edge_insets_literal
+    - avoid_icon_literal
+    - avoid_box_shadow_literal
+    - avoid_text_style_literal
+    - avoid_border_radius_literal
+    - avoid_sized_box_height_width_literals

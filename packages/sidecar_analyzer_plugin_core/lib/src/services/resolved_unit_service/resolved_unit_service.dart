@@ -31,7 +31,7 @@ class ResolvedUnitService {
       _controller.addError(unitResult);
       return null;
     }
-
+    unitResult.unit.languageVersionToken;
     _controller.add(unitResult);
     return unitResult;
   }
