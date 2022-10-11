@@ -1,6 +1,6 @@
 import 'package:analyzer/dart/analysis/context_root.dart';
 
-import '../context_services/context_services.dart';
+import '../analyzed_file/analyzed_file.dart';
 
 extension ContextRootX on ContextRoot {
   List<AnalyzedFile> typedAnalyzedFiles() =>

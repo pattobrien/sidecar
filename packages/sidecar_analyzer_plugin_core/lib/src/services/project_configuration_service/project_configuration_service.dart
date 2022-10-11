@@ -31,5 +31,6 @@ class ProjectConfigurationService {
         logger.sidecarVerboseMessage('_parseProjectConfiguration error: $e');
       }
     }
+    configuration = null;
   }
 }

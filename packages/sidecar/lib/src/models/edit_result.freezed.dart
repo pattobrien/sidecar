@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$EditResult {
+  AnalysisResult get analysisResult => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   List<SourceFileEdit> get sourceChanges => throw _privateConstructorUsedError;
 
@@ -29,7 +30,12 @@ abstract class $EditResultCopyWith<$Res> {
   factory $EditResultCopyWith(
           EditResult value, $Res Function(EditResult) then) =
       _$EditResultCopyWithImpl<$Res>;
-  $Res call({String message, List<SourceFileEdit> sourceChanges});
+  $Res call(
+      {AnalysisResult analysisResult,
+      String message,
+      List<SourceFileEdit> sourceChanges});
+
+  $AnalysisResultCopyWith<$Res> get analysisResult;
 }
 
 /// @nodoc
@@ -42,10 +48,15 @@ class _$EditResultCopyWithImpl<$Res> implements $EditResultCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? analysisResult = freezed,
     Object? message = freezed,
     Object? sourceChanges = freezed,
   }) {
     return _then(_value.copyWith(
+      analysisResult: analysisResult == freezed
+          ? _value.analysisResult
+          : analysisResult // ignore: cast_nullable_to_non_nullable
+              as AnalysisResult,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -56,6 +67,13 @@ class _$EditResultCopyWithImpl<$Res> implements $EditResultCopyWith<$Res> {
               as List<SourceFileEdit>,
     ));
   }
+
+  @override
+  $AnalysisResultCopyWith<$Res> get analysisResult {
+    return $AnalysisResultCopyWith<$Res>(_value.analysisResult, (value) {
+      return _then(_value.copyWith(analysisResult: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -65,7 +83,13 @@ abstract class _$$_EditResultCopyWith<$Res>
           _$_EditResult value, $Res Function(_$_EditResult) then) =
       __$$_EditResultCopyWithImpl<$Res>;
   @override
-  $Res call({String message, List<SourceFileEdit> sourceChanges});
+  $Res call(
+      {AnalysisResult analysisResult,
+      String message,
+      List<SourceFileEdit> sourceChanges});
+
+  @override
+  $AnalysisResultCopyWith<$Res> get analysisResult;
 }
 
 /// @nodoc
@@ -80,10 +104,15 @@ class __$$_EditResultCopyWithImpl<$Res> extends _$EditResultCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? analysisResult = freezed,
     Object? message = freezed,
     Object? sourceChanges = freezed,
   }) {
     return _then(_$_EditResult(
+      analysisResult: analysisResult == freezed
+          ? _value.analysisResult
+          : analysisResult // ignore: cast_nullable_to_non_nullable
+              as AnalysisResult,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -100,11 +129,14 @@ class __$$_EditResultCopyWithImpl<$Res> extends _$EditResultCopyWithImpl<$Res>
 
 class _$_EditResult extends _EditResult {
   const _$_EditResult(
-      {required this.message,
+      {required this.analysisResult,
+      required this.message,
       required final List<SourceFileEdit> sourceChanges})
       : _sourceChanges = sourceChanges,
         super._();
 
+  @override
+  final AnalysisResult analysisResult;
   @override
   final String message;
   final List<SourceFileEdit> _sourceChanges;
@@ -116,7 +148,7 @@ class _$_EditResult extends _EditResult {
 
   @override
   String toString() {
-    return 'EditResult(message: $message, sourceChanges: $sourceChanges)';
+    return 'EditResult(analysisResult: $analysisResult, message: $message, sourceChanges: $sourceChanges)';
   }
 
   @override
@@ -124,6 +156,8 @@ class _$_EditResult extends _EditResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_EditResult &&
+            const DeepCollectionEquality()
+                .equals(other.analysisResult, analysisResult) &&
             const DeepCollectionEquality().equals(other.message, message) &&
             const DeepCollectionEquality()
                 .equals(other._sourceChanges, _sourceChanges));
@@ -132,6 +166,7 @@ class _$_EditResult extends _EditResult {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(analysisResult),
       const DeepCollectionEquality().hash(message),
       const DeepCollectionEquality().hash(_sourceChanges));
 
@@ -143,10 +178,13 @@ class _$_EditResult extends _EditResult {
 
 abstract class _EditResult extends EditResult {
   const factory _EditResult(
-      {required final String message,
+      {required final AnalysisResult analysisResult,
+      required final String message,
       required final List<SourceFileEdit> sourceChanges}) = _$_EditResult;
   const _EditResult._() : super._();
 
+  @override
+  AnalysisResult get analysisResult;
   @override
   String get message;
   @override

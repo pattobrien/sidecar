@@ -1,6 +1,6 @@
 name: sidecar
 description: Core package for the sidecar ecosystem.
-version: 0.1.21-dev.2
+version: 0.1.22
 publish_to: https://dart.cloudsmith.io/fine-designs/sidecar/
 repository: https://github.com/pattobrien/sidecar/
 
@@ -37,7 +37,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.2.0
-  freezed: ^2.1.0+1
+  freezed: ^2.1.0
   json_serializable: ^6.3.1
   lints: ^2.0.0
   test: ^1.16.0

@@ -8,6 +8,7 @@ part 'edit_result.freezed.dart';
 @freezed
 class EditResult with _$EditResult {
   const factory EditResult({
+    required AnalysisResult analysisResult,
     required String message,
     required List<SourceFileEdit> sourceChanges,
   }) = _EditResult;

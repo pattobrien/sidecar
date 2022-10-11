@@ -410,7 +410,6 @@ class ProjectService {
   }
 }
 
-final projectServiceProvider =
-    Provider.family.autoDispose<ProjectService, io.Directory>(
+final projectServiceProvider = Provider.family<ProjectService, io.Directory>(
   (ref, projectDirectory) => ProjectService(projectDirectory),
 );
