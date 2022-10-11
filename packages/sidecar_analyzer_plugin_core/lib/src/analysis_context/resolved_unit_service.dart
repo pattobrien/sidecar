@@ -27,19 +27,6 @@ class ResolvedUnitService {
   }
 }
 
-final resolvedUnitContextProvider = FutureProvider.family<
-    Map<AnalyzedFile, ResolvedUnitResult?>, AnalysisContext>(
-  (ref, context) async {
-    final service = ref.watch(resolvedUnitServiceProvider(context));
-    final results = <AnalyzedFile, ResolvedUnitResult?>{};
-    await Future.wait(context.contextRoot.typedAnalyzedFiles().map((e) async {
-      return results[e] = await service.getResolvedUnit(e);
-    }));
-    return results;
-  },
-  dependencies: [resolvedUnitServiceProvider],
-);
-
 final resolvedUnitServiceProvider =
     Provider.family<ResolvedUnitService, AnalysisContext>(
   (ref, context) {

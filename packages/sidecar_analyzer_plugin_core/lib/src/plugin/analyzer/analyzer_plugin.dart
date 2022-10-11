@@ -10,21 +10,19 @@ import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/sidecar.dart';
 
 import '../../analysis_context/analysis_context_service.dart';
 import '../../analysis_context_collection/analysis_context_collection_notifier.dart';
-import '../../analysis_context_collection/enabled_contexts_provider.dart';
 import '../../analyzed_file/analyzed_file.dart';
 import '../../analyzed_file/analyzed_file_providers.dart';
 import '../../analyzed_file/analyzer_plugin_providers.dart';
-import '../../analyzed_file/edit_request.dart';
 import '../../application/rules/activated_rules_service.dart';
 import '../../constants.dart';
 import '../../services/log_delegate/log_delegate.dart';
-import '../../services/project_configuration_service/providers.dart';
+import '../../services/project_configuration_service/project_configuration.dart';
 import '../../services/services.dart';
 import '../analyzer_mode.dart';
+import '../protocol/protocol.dart';
 
 final pluginProvider = Provider(
   SidecarAnalyzerPlugin.new,
@@ -39,9 +37,6 @@ final pluginProvider = Provider(
     sidecarAnalyzerMode,
   ],
 );
-
-const kInitializationCompleteMethod = 'sidecar.init_complete';
-const kSidecarHotReloadMethod = 'sidecar.auto_reload';
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin(
@@ -67,9 +62,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   SidecarAnalyzerMode get mode => ref.read(sidecarAnalyzerMode);
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
-
-  AnalysisContextService getAnalysisContextService(AnalysisContext context) =>
-      ref.read(analysisContextServiceProvider(context));
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
@@ -106,19 +98,20 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     try {
       delegate.sidecarMessage('ISOLATE: afterNewContextCollection');
 
-      ref.read(analysisContextsProvider.state).state =
-          contextCollection.contexts;
-
+      ref
+          .read(analysisContextsProvider.state)
+          .update((state) => contextCollection.contexts);
       await Future.wait(contextCollection.contexts.map<Future<void>>(
         (context) async {
           final root = context.contextRoot;
           delegate.sidecarMessage('initializing context: ${root.root.path}');
           // if (!context.isSidecarEnabled) return;
-          final contextService =
-              ref.read(analysisContextServiceProvider(context));
-          await contextService.initialize();
-          await ref.read(projectConfigurationServiceProvider(root)).parse();
-          await ref.read(activatedRulesProvider(root).future);
+
+          // final contextService =
+          //     ref.read(analysisContextServiceProvider(context));
+          // await ref.read(projectConfigurationServiceProvider(root)).parse();
+          // await contextService.initializeContext();
+          // await ref.read(activatedRulesProvider(root).future);
 
           delegate.sidecarMessage('completed context: ${root.root.path}');
         },
@@ -144,22 +137,22 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
+    delegate.sidecarMessage('ISOLATE: analyzeFiles');
     await super.analyzeFiles(analysisContext: analysisContext, paths: paths);
-    final contextService = getAnalysisContextService(analysisContext);
+    final service = ref.read(analysisContextServiceProvider(analysisContext));
     if (!isAnnotationsInitialized.isCompleted) {
-      delegate.sidecarMessage('\n\ninitializing annotations\n');
-
-      await contextService.initialize();
       isAnnotationsInitialized.complete();
+      delegate.sidecarMessage('ISOLATE: initializing annotations\n');
+      await service.initializeContext();
 
       await super.analyzeFiles(analysisContext: analysisContext, paths: paths);
 
-      delegate.sidecarMessage('initializing annotations complete');
+      delegate.sidecarMessage('ISOLATE: initializing annotations complete');
     }
 
-    await contextService.generateReport();
+    await service.generateReport();
 
-    delegate.sidecarMessage('analyzeFiles end');
+    delegate.sidecarMessage('ISOLATE: analyzeFiles end');
   }
 
   @override
@@ -168,15 +161,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required String path,
   }) async {
     try {
-      delegate.sidecarMessage(
-          'ISOLATE analyzeFile @ context root ${analysisContext.contextRoot.root.path} - $path  ');
+      delegate.sidecarMessage('ISOLATE: analyzeFile $path');
       final analyzedFile = AnalyzedFile(analysisContext.contextRoot, path);
       final results =
           await ref.read(analysisErrorsProvider(analyzedFile).future);
       channel.sendNotification(
           plugin.AnalysisErrorsParams(path, results).toNotification());
     } catch (e, stackTrace) {
-      delegate.sidecarError('error analyzing $path -- $e', stackTrace);
+      delegate.sidecarError('ISOLATE ERROR: analyzeFile $path $e', stackTrace);
       rethrow;
     }
   }

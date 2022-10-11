@@ -1,1 +1,1 @@
-export 'project_service.dart';
+export 'package_configuration_service.dart';

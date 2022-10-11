@@ -3,52 +3,32 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../../analysis_context_collection/enabled_contexts_provider.dart';
 import '../log_delegate/log_delegate_base.dart';
 import 'project_configuration_service.dart';
 
-final projectConfigurationServicesProvider = FutureProvider(
-  (ref) async {
-    final roots = await ref.watch(enabledContextsProvider.future);
-    return roots.map((context) =>
-        ref.watch(projectConfigurationServiceProvider(context.contextRoot)));
-  },
-  dependencies: [
-    enabledContextsProvider,
-    projectConfigurationServiceProvider,
-  ],
-);
-
 final projectConfigurationServiceProvider =
     Provider.family<ProjectConfigurationService, ContextRoot>(
-  (ref, contextRoot) {
-    return ProjectConfigurationService(ref, contextRoot: contextRoot);
-  },
+  (ref, root) => ProjectConfigurationService(ref, contextRoot: root),
   dependencies: [logDelegateProvider],
 );
 
 final projectConfigurationProvider =
     FutureProvider.family<ProjectConfiguration?, ContextRoot>(
-  (ref, contextRoot) async {
-    await ref.watch(projectConfigurationServiceProvider(contextRoot)).parse();
-    return ref
-        .watch(projectConfigurationServiceProvider(contextRoot))
-        .configuration;
-  },
+  (ref, contextRoot) async =>
+      ref.watch(projectConfigurationServiceProvider(contextRoot)).parse(),
   dependencies: [projectConfigurationServiceProvider],
 );
 
 final projectConfigurationAnalysisErrorProvider =
     FutureProvider.family<Iterable<AnalysisError>, ContextRoot>(
   (ref, root) async {
-    final yamlSourceErrors =
-        await ref.watch(projectConfigurationErrorProvider(root).future);
-    return yamlSourceErrors.map((e) => e.toAnalysisError());
+    final yamlErrors = await ref.watch(projectConfigErrorProvider(root).future);
+    return yamlErrors.map((yamlError) => yamlError.toAnalysisError());
   },
-  dependencies: [projectConfigurationErrorProvider],
+  dependencies: [projectConfigErrorProvider],
 );
 
-final projectConfigurationErrorProvider =
+final projectConfigErrorProvider =
     FutureProvider.family<List<YamlSourceError>, ContextRoot>(
   (ref, root) async {
     final projectConfiguration =

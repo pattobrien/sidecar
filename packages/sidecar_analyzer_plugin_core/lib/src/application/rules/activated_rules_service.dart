@@ -5,7 +5,7 @@ import 'package:sidecar/sidecar.dart';
 
 import '../../analysis_context/file_annotations_providers.dart';
 import '../../services/log_delegate/log_delegate_base.dart';
-import '../../services/project_configuration_service/providers.dart';
+import '../../services/project_configuration_service/project_configuration.dart';
 import '../../services/rule_constructor_provider.dart';
 
 final activatedRulesProvider =
@@ -16,8 +16,8 @@ final activatedRulesProvider =
     final projectConfiguration =
         await ref.watch(projectConfigurationProvider(root).future);
     final ruleDefinitions = ref.watch(ruleConstructorProvider);
-    final activatedRulesNotifier = ActivatedRulesService(ref, root);
-    return activatedRulesNotifier.initializeRules(
+    final activatedRulesService = ActivatedRulesService(ref, root);
+    return activatedRulesService.initializeRules(
         annotations, projectConfiguration!, ruleDefinitions);
   },
   dependencies: [

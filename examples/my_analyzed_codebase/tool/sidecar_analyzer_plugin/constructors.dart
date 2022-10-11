@@ -13,4 +13,5 @@ List<SidecarBaseConstructor> constructors = [
 	design_system_lints.AvoidTextStyleLiteral.new,
 	design_system_lints.AvoidBorderRadiusLiteral.new,
 	design_system_lints.AvoidSizedBoxHeightWidthLiterals.new,
+
 ];

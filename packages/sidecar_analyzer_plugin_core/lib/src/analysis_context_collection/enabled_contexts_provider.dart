@@ -5,7 +5,8 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
 import '../analyzed_file/analyzed_file.dart';
-import '../services/project_configuration_service/providers.dart';
+import '../services/log_delegate/log_delegate_base.dart';
+import '../services/project_configuration_service/project_configuration.dart';
 import 'analysis_context_collection_notifier.dart';
 
 final contextRootsProvider = Provider<List<ContextRoot>>(
@@ -46,9 +47,17 @@ final enabledContextProvider =
     FutureProvider.family<AnalysisContext, AnalyzedFile>(
   (ref, analyzedFile) async {
     final contexts = await ref.watch(enabledContextsProvider.future);
-    return contexts.firstWhere((context) {
-      return context.contextRoot.isAnalyzed(analyzedFile.path);
-    });
+    try {
+      return contexts.firstWhere((context) {
+        return context.contextRoot.isAnalyzed(analyzedFile.path);
+      });
+    } catch (e, stackTrace) {
+      ref.read(logDelegateProvider).sidecarError(
+          'NON-FATAL ERROR: ${contexts.length} contexts (${contexts.first.contextRoot.root}) // file ${analyzedFile.relativePath} ${e.toString()}',
+          stackTrace);
+      // return null;
+      rethrow;
+    }
   },
   dependencies: [enabledContextsProvider],
 );

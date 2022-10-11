@@ -29,7 +29,7 @@ final middlemanPluginProvider = Provider(
   dependencies: [
     masterPluginChannelProvider,
     middlemanServerIsolateProvider,
-    registeredAnalysisContexts,
+    middlemanAnalysisContexts,
     isCollectionInitializedProvider,
     logDelegateProvider,
     middlemanCommunicationRouterProvider,
@@ -42,7 +42,7 @@ const middlemanPluginVersion = '0.1.21-dev.11';
 
 class MiddlemanPlugin extends plugin.ServerPlugin {
   MiddlemanPlugin(
-    this._pluginRef, {
+    this.ref, {
     ResourceProvider? resourceProvider,
   }) : super(
           resourceProvider:
@@ -51,7 +51,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
 
   HotReloader? _reloader;
   final initializationCompleter = Completer<void>();
-  final Ref _pluginRef;
+  final Ref ref;
 
   @override
   String get name => kSidecarPluginName;
@@ -62,8 +62,8 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   @override
   List<String> get fileGlobsToAnalyze => pluginGlobs;
 
-  SidecarAnalyzerMode get mode => _pluginRef.read(sidecarAnalyzerMode);
-  LogDelegateBase get delegate => _pluginRef.read(logDelegateProvider);
+  SidecarAnalyzerMode get mode => ref.read(sidecarAnalyzerMode);
+  LogDelegateBase get delegate => ref.read(logDelegateProvider);
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
@@ -75,14 +75,14 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     plugin.PluginCommunicationChannel channel,
   ) async {
     if (mode.isDebug) await _startWithHotReload(channel);
-    _pluginRef.read(masterPluginChannelProvider).listen(sendRequest);
+    ref.read(masterPluginChannelProvider).listen(sendRequest);
   }
 
   void sendRequest(plugin.Request request) {
     if (request.method == plugin.PLUGIN_REQUEST_VERSION_CHECK) {
       _handleVersionRequest(request);
     } else {
-      _pluginRef
+      ref
           .read(middlemanCommunicationRouterProvider)
           .handleServerRequest(request);
       if (request.method == plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS) {
@@ -96,7 +96,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     final params = plugin.PluginVersionCheckParams.fromRequest(request);
     final response = await handlePluginVersionCheck(params);
     final id = request.id;
-    _pluginRef
+    ref
         .read(masterPluginChannelProvider)
         .sendResponse(response.toResponse(id, requestTime));
   }
@@ -111,27 +111,26 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     try {
-      _pluginRef.read(isCollectionInitializedProvider.state).state = false;
-      _pluginRef.read(middlemanCommunicationRouterProvider).blockAll();
-      _pluginRef.read(registeredAnalysisContexts.state).state = <ContextRoot>[];
+      ref.read(isCollectionInitializedProvider.state).state = false;
+      ref.read(middlemanCommunicationRouterProvider).blockAll();
+      ref.read(middlemanAnalysisContexts.state).state = <ContextRoot>[];
       await Future.wait(contextCollection.contexts.map((context) async {
         final rootPath = context.contextRoot.root.path;
         delegate
             .sidecarMessage('MIDDLEMAN: setting up context at root: $rootPath');
         final contextService =
-            _pluginRef.read(analysisContextServiceProvider(context));
-        await contextService.initialize();
-        final isValidContext = contextService.isValidContext();
+            ref.read(analysisContextServiceProvider(context));
+        final isValidContext = await contextService.isValidContext();
         if (!isValidContext) {
           delegate.sidecarMessage(
               'MIDDLEMAN: this instance of sidecar plugin is not valid for: $rootPath');
           return;
         }
-        _pluginRef
-            .read(registeredAnalysisContexts.state)
+        ref
+            .read(middlemanAnalysisContexts.state)
             .update((state) => [...state, context.contextRoot]);
-        final serverIsolate = _pluginRef
-            .read(middlemanServerIsolateProvider(context.contextRoot));
+        final serverIsolate =
+            ref.read(middlemanServerIsolateProvider(context.contextRoot));
         if (serverIsolate.doesAlreadyExist()) {
           // delegate.sidecarMessage(
           //     'MIDDLEMAN: server bootstrapper already exists $rootPath');
@@ -148,8 +147,8 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
             'MIDDLEMAN $rootPath - initializing isolate complete');
         // }
       }));
-      final registeredContexts = _pluginRef.read(registeredAnalysisContexts);
-      _pluginRef.read(isCollectionInitializedProvider.state).state = true;
+      final registeredContexts = ref.read(middlemanAnalysisContexts);
+      ref.read(isCollectionInitializedProvider.state).state = true;
       delegate.sidecarMessage(
           'MM: afterNewContextCollection - registered ${registeredContexts.length} contexts');
     } catch (e, stackTrace) {
@@ -171,7 +170,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   ) async {
     _reloader = await HotReloader.create(onAfterReload: (c) {
       if (c.result == HotReloadResult.Succeeded) {
-        _pluginRef
+        ref
             .read(masterPluginChannelProvider)
             .sendNotification(plugin.Notification('sidecar.auto_reload', {}));
       }

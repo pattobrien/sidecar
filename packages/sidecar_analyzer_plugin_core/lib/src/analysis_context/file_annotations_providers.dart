@@ -26,22 +26,22 @@ final annotationsAggregateProvider =
 
 final fileAnnotationProvider =
     FutureProvider.family<List<SidecarAnnotatedNode>, AnalyzedFile>(
-  (ref, analyzedFile) async {
+  (ref, file) async {
     final visitor = AnnotationVisitor();
 
-    final context =
-        await ref.watch(enabledContextProvider(analyzedFile).future);
-    final unitResult =
-        await ref.watch(resolvedUnitContextProvider(context).future);
+    final context = await ref.watch(enabledContextProvider(file).future);
+    final unitResult = await ref
+        .watch(resolvedUnitServiceProvider(context))
+        .getResolvedUnit(file);
 
-    if (unitResult[analyzedFile] == null) return [];
+    if (unitResult == null) return [];
 
-    unitResult[analyzedFile]!.unit.accept(visitor);
+    unitResult.unit.accept(visitor);
     return visitor.annotatedNodes;
   },
   dependencies: [
     enabledContextProvider,
-    resolvedUnitContextProvider,
+    // resolvedUnitContextProvider,
   ],
 );
 

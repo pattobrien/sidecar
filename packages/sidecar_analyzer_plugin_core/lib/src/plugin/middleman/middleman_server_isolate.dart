@@ -5,25 +5,20 @@ import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/instrumentation/noop_service.dart';
-import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../../sidecar_analyzer_plugin_core.dart';
 import '../../services/log_delegate/log_delegate.dart';
-import '../../services/plugin_generator/packages/sidecar_package_config.dart';
-import '../../services/plugin_generator/project_service.dart';
+import '../../services/plugin_generator/package_configuration_service.dart';
 
 final middlemanServerIsolateProvider =
     Provider.family<MiddlemanServerIsolate, ContextRoot>(
-  (ref, root) {
-    return MiddlemanServerIsolate(ref, root: root);
-  },
+  (ref, root) => MiddlemanServerIsolate(ref, root: root),
   dependencies: [
     logDelegateProvider,
-    masterPluginChannelProvider,
-    projectServiceProvider,
+    packageConfigServiceProvider,
     middlemanCommunicationRouterProvider,
   ],
 );
@@ -34,23 +29,20 @@ class MiddlemanServerIsolate {
   final ContextRoot root;
   final Ref _ref;
 
-  late plugin.ServerIsolateChannel pluginChannel;
-
   LogDelegateBase get delegate => _ref.read(logDelegateProvider);
 
-  ProjectServiceImpl get projectService =>
-      _ref.read(projectServiceProvider(root.root.path));
+  PackageConfigurationService get rootPackageService =>
+      _ref.read(packageConfigServiceProvider(root.root.toUri()));
 
   MiddlemanCommunicationRouter get middlemanRouter =>
       _ref.read(middlemanCommunicationRouterProvider);
-  PluginCommunicationChannel get masterChannel =>
-      _ref.read(masterPluginChannelProvider);
+
+  /// isolate running the sidecar plugin
+  late plugin.ServerIsolateChannel pluginIsolateChannel;
 
   String get packagesPath =>
       p.join(root.root.path, '.dart_tool', 'package_config.json');
 
-  // String get pluginRoot =>
-  //     p.join(root.root.path, '.dart_tool', 'sidecar_analyzer_plugin');
   String get pluginRoot =>
       p.join(root.root.path, 'tool', 'sidecar_analyzer_plugin');
 
@@ -60,13 +52,34 @@ class MiddlemanServerIsolate {
 
   bool isRootValidProject() {
     delegate.sidecarMessage('PROJECTSERVICE: root path ${root.root.path}');
-    final isValidProject = projectService.isValidDartProject();
+    final isValidProject = rootPackageService.isValidDartProject();
     delegate.sidecarMessage('PROJECTSERVICE: is valid $isValidProject');
     return isValidProject;
   }
 
+  Future<void> initializeIsolate() async {
+    delegate.sidecarMessage('ISOLATE: init started...');
+
+    pluginIsolateChannel = plugin.ServerIsolateChannel.discovered(
+      Uri.file(pluginExecutablePath, windows: io.Platform.isWindows),
+      Uri.file(packagesPath, windows: io.Platform.isWindows),
+      NoopInstrumentationService(),
+    );
+
+    delegate.sidecarMessage('ISOLATE: server started, setting up listeners...');
+
+    await pluginIsolateChannel.listen(
+      (response) => middlemanRouter.handlePluginResponse(root, response),
+      (notif) => middlemanRouter.handlePluginNotification(root, notif),
+      onDone: () => middlemanRouter.handlePluginDone(root),
+      onError: (error) => middlemanRouter.handlePluginError(root, error),
+    );
+
+    delegate.sidecarMessage('ISOLATE: init completed.');
+  }
+
   Future<void> setupPluginSourceFiles() async {
-    final sidecarDep = await projectService.getSidecarPluginDependency();
+    final sidecarDep = await rootPackageService.getSidecarPluginDependency();
 
     if (sidecarDep == null) {
       throw UnimplementedError('getSidecarPluginDependency returned null');
@@ -96,65 +109,37 @@ class MiddlemanServerIsolate {
       await e.copy(newPath);
     }));
 
-    await setupBootstrapper();
+    await _setupBootstrapper();
   }
 
-  Future<void> setupBootstrapper() async {
-    // delegate.sidecarMessage('MIDDLEMAN: setting up bootstrapper');
+  void shutdown() => pluginIsolateChannel.close();
+
+  Future<void> _setupBootstrapper() async {
     final bootstrapperPath = p.join(pluginRoot, 'constructors.dart');
     final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
     final listBuffer = StringBuffer()..writeln(constructorListBegin);
-    // delegate.sidecarMessage('MIDDLEMAN: getSidecarPackages init');
-    final sidecarPackages = await projectService.getSidecarPackages();
-    // delegate.sidecarMessage(
-    //     'MIDDLEMAN: getSidecarPackages completed: ${sidecarPackages.entries.length} packages');
-    for (final sidecarPackage in sidecarPackages.entries) {
+
+    final config = await _ref.read(packageConfigurationProvider(root).future);
+    final sidecarDeps = await rootPackageService.findAllSidecarDeps(config);
+
+    for (final sidecarPackage in sidecarDeps.entries) {
       final packageName = sidecarPackage.key;
-      final importStatement =
-          "import 'package:$packageName/$packageName.dart' as $packageName;";
-      importsBuffer.writeln(importStatement);
-      for (final rule in sidecarPackage.value.lints ?? <LintNode>[]) {
-        final constructorStatement = '\t$packageName.${rule.className}.new,';
-        listBuffer.writeln(constructorStatement);
+      importsBuffer.writeln(
+          "import 'package:$packageName/$packageName.dart' as $packageName;");
+      final rules = [
+        ...?sidecarPackage.value.lints,
+        ...?sidecarPackage.value.edits,
+      ];
+      for (final rule in rules) {
+        listBuffer.writeln('\t$packageName.${rule.className}.new,');
       }
-      for (final rule in sidecarPackage.value.edits ?? <EditNode>[]) {
-        final constructorStatement = '\t$packageName.${rule.className}.new,';
-        listBuffer.writeln(constructorStatement);
-      }
-      final numberOfConstructors = (sidecarPackage.value.lints?.length ?? 0) +
-          (sidecarPackage.value.edits?.length ?? 0);
-      delegate.sidecarMessage(
-          'MIDDLEMAN: concatenated $numberOfConstructors constructors');
     }
-    importsBuffer.writeln();
-    listBuffer.write(constructorListEnd);
-    final contents = importsBuffer.toString() + listBuffer.toString();
-    await io.File(bootstrapperPath).writeAsString(contents);
-  }
 
-  Future<void> initializeIsolate() async {
-    delegate.sidecarMessage('Isolate initialization started...');
+    final fullContents = StringBuffer()
+      ..writeln(importsBuffer.toString())
+      ..writeln(listBuffer.toString())
+      ..writeln(constructorListEnd);
 
-    pluginChannel = plugin.ServerIsolateChannel.discovered(
-      Uri.file(pluginExecutablePath, windows: io.Platform.isWindows),
-      Uri.file(packagesPath, windows: io.Platform.isWindows),
-      NoopInstrumentationService(),
-    );
-
-    delegate.sidecarMessage(
-        'Isolate initialization completed; setting up listeners...');
-    await pluginChannel.listen(
-      (response) => middlemanRouter.handlePluginResponse(root, response),
-      (notif) => middlemanRouter.handlePluginNotification(root, notif),
-      onDone: () => middlemanRouter.handlePluginDone(root),
-      onError: (error) {
-        delegate.sidecarMessage('ISOLATE ERROR: ${error.toString()}');
-        middlemanRouter.handlePluginError(root, error);
-      },
-    );
-    // TODO: remove this
-    // await Future.delayed(Duration(seconds: 4)); // give isolate time to load
-
-    delegate.sidecarMessage('DONE: Isolate initialization completed.');
+    await io.File(bootstrapperPath).writeAsString(fullContents.toString());
   }
 }

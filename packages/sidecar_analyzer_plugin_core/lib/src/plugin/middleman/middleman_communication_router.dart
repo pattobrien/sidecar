@@ -13,6 +13,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../services/log_delegate/log_delegate.dart';
 import '../analyzer/analyzer_plugin.dart';
+import '../protocol/protocol.dart';
 import 'middleman_response.dart';
 import 'middleman_server_isolate.dart';
 import 'plugin_channel_provider.dart';
@@ -28,14 +29,14 @@ final middlemanCommunicationRouterProvider =
   });
   return router;
 }, dependencies: [
-  registeredAnalysisContexts,
+  middlemanAnalysisContexts,
   isCollectionInitializedProvider,
   // middlemanServerIsolateProvider,
   masterPluginChannelProvider,
   logDelegateProvider,
 ]);
 
-final registeredAnalysisContexts =
+final middlemanAnalysisContexts =
     StateProvider<List<ContextRoot>>((ref) => <ContextRoot>[]);
 
 final isCollectionInitializedProvider = StateProvider<bool>((ref) => false);
@@ -44,7 +45,7 @@ class MiddlemanCommunicationRouter {
   MiddlemanCommunicationRouter(this.ref);
 
   final Ref ref;
-  List<ContextRoot> get contextRoots => ref.read(registeredAnalysisContexts);
+  List<ContextRoot> get contextRoots => ref.read(middlemanAnalysisContexts);
 
   LogDelegateBase get delegate => ref.read(logDelegateProvider);
 
@@ -233,14 +234,14 @@ class MiddlemanCommunicationRouter {
     if (path != null) {
       if (root.isAnalyzed(path)) {
         final isolate = ref.read(middlemanServerIsolateProvider(root));
-        isolate.pluginChannel.sendRequest(request);
+        isolate.pluginIsolateChannel.sendRequest(request);
         // _registerRequestToQueue(request, root);
       } else {
         // do nothing
       }
     } else {
       final isolate = ref.read(middlemanServerIsolateProvider(root));
-      isolate.pluginChannel.sendRequest(request);
+      isolate.pluginIsolateChannel.sendRequest(request);
       // _registerRequestToQueue(request, root);
     }
   }
