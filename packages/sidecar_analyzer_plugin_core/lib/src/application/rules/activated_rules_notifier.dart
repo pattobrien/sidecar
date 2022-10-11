@@ -48,7 +48,8 @@ class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
       rule.initialize(
         ref: ref,
         configurationContent: ruleConfig?.configuration,
-        lintNameSpan: ruleConfig!.lintNameSpan,
+        // lintNameSpan: ruleConfig!.lintNameSpan,
+        lintNameSpan: SourceSpan(SourceLocation(0), SourceLocation(0), ''),
         annotatedNodes: annotatedNodes,
       );
       if (rule.errors?.isNotEmpty ?? false) {

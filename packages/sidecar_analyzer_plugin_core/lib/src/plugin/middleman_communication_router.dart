@@ -96,7 +96,7 @@ class MiddlemanCommunicationRouter {
         await collectionCompleter[contextRoot]!.future;
         flushQueuedRequests(contextRoot);
       }));
-      _rawRequests.clear();
+      // _rawRequests.clear();
       // delegate
       //     .sidecarMessage('TO PLUGIN COMPLETE: ${request.toJson().toString()}');
     }
@@ -290,6 +290,9 @@ class MiddlemanCommunicationRouter {
           masterChannel.sendResponse(response);
           break;
         case COMPLETION_REQUEST_GET_SUGGESTIONS:
+          final results = responses.map(
+              (e) => CompletionGetSuggestionsResult.fromResponse(e.response));
+          //     .toResponse(id, requestTime);
           // TODO complete this request
           // final response =
           //     CompletionGetSuggestionsResult().toResponse(id, requestTime);
@@ -382,74 +385,74 @@ class MiddlemanCommunicationRouter {
         break;
       case ANALYSIS_REQUEST_HANDLE_WATCH_EVENTS:
         final params = AnalysisHandleWatchEventsParams.fromRequest(request);
-
         final filteredEvents = params.events
             .where((element) => root.isAnalyzed(element.path))
             .toList();
-
         final newRequest = AnalysisHandleWatchEventsParams(filteredEvents)
             .toRequest(request.id);
-
         _filteredRequest(newRequest, root);
-
         break;
       case ANALYSIS_REQUEST_SET_CONTEXT_ROOTS:
         final params = AnalysisSetContextRootsParams.fromRequest(request);
         final filteredRoots = params.roots
             .where((contextRoot) => contextRoot.root == root.root.path)
             .toList();
-        final newRequest =
-            AnalysisSetContextRootsParams(filteredRoots).toRequest(request.id);
-        // result = await handleAnalysisSetContextRoots(params);
-        _filteredRequest(newRequest, root);
+        if (filteredRoots.isNotEmpty) {
+          final newRequest = AnalysisSetContextRootsParams(filteredRoots)
+              .toRequest(request.id);
+          _filteredRequest(newRequest, root);
+        }
         break;
       case ANALYSIS_REQUEST_SET_PRIORITY_FILES:
-        // final params = AnalysisSetPriorityFilesParams.fromRequest(request);
-        // result = await handleAnalysisSetPriorityFiles(params);
-
-        _filteredRequest(request, root);
+        final params = AnalysisSetPriorityFilesParams.fromRequest(request);
+        final filteredFilePaths = params.files
+            .where((filePath) => root.isAnalyzed(filePath))
+            .toList();
+        if (filteredFilePaths.isNotEmpty) {
+          final newRequest = AnalysisSetPriorityFilesParams(filteredFilePaths)
+              .toRequest(request.id);
+          _filteredRequest(newRequest, root);
+        }
         break;
       case ANALYSIS_REQUEST_SET_SUBSCRIPTIONS:
-        // var params = AnalysisSetSubscriptionsParams.fromRequest(request);
-        // result = await handleAnalysisSetSubscriptions(params);
-        _filteredRequest(request, root);
+        final params = AnalysisSetSubscriptionsParams.fromRequest(request);
+        final filteredSubscriptions = params.subscriptions.map((key, value) {
+          return MapEntry(
+              key, value.where((path) => root.isAnalyzed(path)).toList());
+        });
+        // if (filteredSubscriptions.isNotEmpty) {
+        final newRequest = AnalysisSetSubscriptionsParams(filteredSubscriptions)
+            .toRequest(request.id);
+        _filteredRequest(newRequest, root);
+        // }
         break;
       case ANALYSIS_REQUEST_UPDATE_CONTENT:
         final params = AnalysisUpdateContentParams.fromRequest(request);
 
-        final newFiles = Map<String, Object>.from(params.files)
-          ..removeWhere((key, value) => !root.isAnalyzed(key));
-
+        final newFiles = Map<String, Object>.from(
+            params.files..removeWhere((key, value) => !root.isAnalyzed(key)));
         final newRequest =
             AnalysisUpdateContentParams(newFiles).toRequest(request.id);
-
         _filteredRequest(newRequest, root);
         break;
       case COMPLETION_REQUEST_GET_SUGGESTIONS:
         final params = CompletionGetSuggestionsParams.fromRequest(request);
-        // result = await handleCompletionGetSuggestions(params);
-
         _filteredRequest(request, root, path: params.file);
         break;
       case EDIT_REQUEST_GET_ASSISTS:
         final params = EditGetAssistsParams.fromRequest(request);
-        // result = await handleEditGetAssists(params);
-
         _filteredRequest(request, root, path: params.file);
         break;
       case EDIT_REQUEST_GET_AVAILABLE_REFACTORINGS:
         final params = EditGetAvailableRefactoringsParams.fromRequest(request);
-        // result = await handleEditGetAvailableRefactorings(params);
         _filteredRequest(request, root, path: params.file);
         break;
       case EDIT_REQUEST_GET_FIXES:
         final params = EditGetFixesParams.fromRequest(request);
-        // result = await handleEditGetFixes(params);
         _filteredRequest(request, root, path: params.file);
         break;
       case EDIT_REQUEST_GET_REFACTORING:
         final params = EditGetRefactoringParams.fromRequest(request);
-        // result = await handleEditGetRefactoring(params);
         _filteredRequest(request, root, path: params.file);
         break;
       case KYTHE_REQUEST_GET_KYTHE_ENTRIES:

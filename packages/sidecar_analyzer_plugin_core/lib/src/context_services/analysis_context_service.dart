@@ -52,6 +52,7 @@ class AnalysisContextService {
   late PackageConfig packageConfig;
 
   bool isValidContext() {
+    assert(_packageConfigCompleter.isCompleted);
     try {
       if (!context.isSidecarEnabled) return false;
       final pluginPackages = packageConfig.packages
@@ -90,10 +91,13 @@ class AnalysisContextService {
     // check if the plugin is the same version as
   }
 
+  final _packageConfigCompleter = Completer<void>();
+
   Future<void> _initPackageConfig() async {
     final path = p.join(root.root.path, '.dart_tool', 'package_config.json');
     final contents = await File(path).readAsBytes();
     packageConfig = PackageConfig.parseBytes(contents, root.root.toUri());
+    _packageConfigCompleter.complete();
   }
 
   List<AnalyzedFile> get analyzedFiles => root.typedAnalyzedFiles();
@@ -160,13 +164,13 @@ class AnalysisContextService {
         .toList();
   }
 
-  Future<void> analyzeEntireContext() async {
-    if (!context.isSidecarEnabled) return;
+  // Future<void> analyzeEntireContext() async {
+  //   if (!context.isSidecarEnabled) return;
 
-    await Future.wait(analyzedFiles.map((e) async {
-      await getAnalysisResults(e.path);
-    }));
-  }
+  //   await Future.wait(analyzedFiles.map((e) async {
+  //     await getAnalysisResults(e.path);
+  //   }));
+  // }
 
   Future<List<AnalysisErrorFixes>> getAnalysisErrorFixes(
     String path,

@@ -19,6 +19,7 @@ class FileReportNotifier extends StateNotifier<AsyncValue<FileStats>> {
   late Duration _annotationsStart;
 
   void start() {
+    state = const AsyncValue.loading();
     _stopwatch.reset();
     _stopwatch.start();
   }

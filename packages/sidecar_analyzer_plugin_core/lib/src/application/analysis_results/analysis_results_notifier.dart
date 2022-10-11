@@ -35,8 +35,8 @@ class AnalysisResultsNotifier
 
   Future<void> refreshAnalysis() async {
     state = const AsyncLoading();
-    // delegate.sidecarMessage(
-    //     'analyzeFile STARTING for ${analyzedFile.relativePath}');
+    delegate.sidecarMessage(
+        'analyzeFile STARTING for ${analyzedFile.relativePath}');
     //TODO: allow analysis of other file extensions
     if (analyzedFile.isDartFile) {
       reporter

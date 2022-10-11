@@ -86,7 +86,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     try {
-      delegate.sidecarMessage('afterNewContextCollection');
+      delegate.sidecarMessage('ISOLATE: afterNewContextCollection');
 
       ref.read(analysisContextCollectionServiceProvider).collection =
           contextCollection;
@@ -151,6 +151,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required String path,
   }) async {
     try {
+      delegate.sidecarMessage(
+          'ISOLATE analyzeFile @ context root ${analysisContext.contextRoot.root.path} - $path  ');
       final analysisContextService = getAnalysisContextService(analysisContext);
       await analysisContextService.getAnalysisResults(path);
     } catch (e, stackTrace) {
@@ -189,13 +191,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final offset = parameters.offset;
     final length = parameters.length;
     try {
-      final context = ref
-          .read(analysisContextCollectionServiceProvider)
-          .getContextFromPath(path);
+      // final context = ref
+      //     .read(analysisContextCollectionServiceProvider)
+      //     .getContextFromPath(path);
 
-      final results = await ref
-          .read(analysisContextServiceProvider(context))
-          .getCodeAssists(path, offset, length);
+      // final results = await ref
+      //     .read(analysisContextServiceProvider(context))
+      //     .getCodeAssists(path, offset, length);
+      final results = <plugin.PrioritizedSourceChange>[];
 
       return plugin.EditGetAssistsResult(results.toList());
     } catch (e, stackTrace) {
