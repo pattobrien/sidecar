@@ -1,31 +1,26 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:async';
-import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/dart/analysis/context_builder.dart';
+import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
-import 'package:analyzer/instrumentation/noop_service.dart';
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
-import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-import 'package:pubspec_lock_parse/pubspec_lock_parse.dart' as pubspec_lock;
+import 'package:sidecar/sidecar.dart';
 
 import '../../sidecar_analyzer_plugin_core.dart';
 import '../constants.dart';
 import '../context_services/context_services.dart';
 import '../services/log_delegate/log_delegate.dart';
-import '../services/plugin_generator/project_service.dart';
+import 'middleman_communication_router.dart';
 import 'middleman_server_isolate.dart';
-import 'package:sidecar/sidecar.dart';
 
 final middlemanPluginProvider = Provider((ref) {
   return MiddlemanPlugin(ref);
@@ -47,7 +42,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   final Ref _ref;
 
   @override
-  String get name => pluginName;
+  String get name => kSidecarPluginName;
 
   @override
   String get version => pluginVersion;
@@ -75,11 +70,15 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   }
 
   void sendRequest(plugin.Request request) {
-    if (request.method == plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS) {
-      _handleContextRequest(request);
-    }
     if (request.method == plugin.PLUGIN_REQUEST_VERSION_CHECK) {
       _handleVersionRequest(request);
+    } else {
+      _ref
+          .read(middlemanCommunicationRouterProvider)
+          .handleServerRequest(request);
+      if (request.method == plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS) {
+        _handleContextRequest(request);
+      }
     }
   }
 
@@ -102,59 +101,55 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
+    _ref.read(isCollectionInitializedProvider.state).state = false;
+    _ref.read(middlemanCommunicationRouterProvider).blockAll();
+    _ref.read(registeredAnalysisContexts.state).state = <ContextRoot>[];
     await Future.wait(contextCollection.contexts.map((context) async {
       final rootPath = context.contextRoot.root.path;
       delegate
           .sidecarMessage('MIDDLEMAN: setting up context at root: $rootPath');
-      if (context.isSidecarEnabled) {
+      final contextService = _ref.read(analysisContextServiceProvider(context));
+      await contextService.initializeAnalysisContext();
+      final isValidContext = contextService.isValidContext();
+      if (!isValidContext) {
         delegate.sidecarMessage(
-            'MIDDLEMAN: sidecar not enabled at root: $rootPath');
+            'MIDDLEMAN: this instance of sidecar plugin is not valid for: $rootPath');
         return;
       }
+      _ref
+          .read(registeredAnalysisContexts.state)
+          .update((state) => [...state, context.contextRoot]);
       final serverIsolate =
           _ref.read(middlemanServerIsolateProvider(context.contextRoot));
       if (serverIsolate.doesAlreadyExist()) {
-        delegate.sidecarMessage('MIDDLEMAN: context already exists $rootPath');
+        // delegate.sidecarMessage(
+        //     'MIDDLEMAN: server bootstrapper already exists $rootPath');
         // TODO: reset isolate so it can check for any new changes, e.g. to pubspec, analysis options, etc
       }
       // else {
-      delegate.sidecarMessage(
-          'MIDDLEMAN $rootPath - setting up plugin source files');
+      // delegate.sidecarMessage(
+      //     'MIDDLEMAN $rootPath - setting up plugin source files');
       await serverIsolate.setupPluginSourceFiles();
       delegate.sidecarMessage(
           'MIDDLEMAN $rootPath - setup plugin source files completed  - initializing isolate...');
       await serverIsolate.initializeIsolate();
       delegate.sidecarMessage(
-          'MIDDLEMAN $rootPath - setup plugin source files completed  - initializing isolate complete');
+          'MIDDLEMAN $rootPath - initializing isolate complete');
       // }
     }));
+    final registeredContexts = _ref.read(registeredAnalysisContexts);
+    _ref.read(isCollectionInitializedProvider.state).state = true;
+    delegate.sidecarMessage(
+        'MM: afterNewContextCollection - registered ${registeredContexts.length} contexts');
   }
 
   Future<void> _handleContextRequest(plugin.Request request) async {
+    // final requestTime = DateTime.now().millisecondsSinceEpoch;
     final params = plugin.AnalysisSetContextRootsParams.fromRequest(request);
-    await handleAnalysisSetContextRoots(params);
-    // await Future.wait(params.roots.map((root) async {
-    //   delegate.sidecarMessage(
-    //       'MIDDLEMAN: setting up context at root: ${root.root}');
-    //   //
-    //   final uri = Uri.parse(root.root);
-    //   final serverIsolate = _ref.read(middlemanServerIsolateProvider(uri));
-    //   if (serverIsolate.doesAlreadyExist()) {
-    //     delegate
-    //         .sidecarMessage('MIDDLEMAN: context already exists ${root.root}');
-    //     // TODO: reset isolate so it can check for any new changes, e.g. to pubspec, analysis options, etc
-    //   }
-    //   // else {
-    //   delegate.sidecarMessage(
-    //       'MIDDLEMAN ${root.root} - setting up plugin source files');
-    //   await serverIsolate.setupPluginSourceFiles();
-    //   delegate.sidecarMessage(
-    //       'MIDDLEMAN ${root.root} - setup plugin source files completed  - initializing isolate...');
-    //   await serverIsolate.initializeIsolate();
-    //   delegate.sidecarMessage(
-    //       'MIDDLEMAN ${root.root} - setup plugin source files completed  - initializing isolate complete');
-    //   // }
-    // }));
+    final result = await handleAnalysisSetContextRoots(params);
+    // _ref
+    //     .read(masterPluginChannelProvider)
+    //     .sendResponse(result.toResponse(request.id, requestTime));
   }
 
   Future<void> _startWithHotReload(

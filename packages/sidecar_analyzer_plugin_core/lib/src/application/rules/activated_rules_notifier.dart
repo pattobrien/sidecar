@@ -38,12 +38,13 @@ class ActivatedRulesNotifier extends StateNotifier<ActivatedRulesState> {
 
     final ruleDefinitions = ref.read(ruleConstructorProvider);
 
-    for (final ruleDefinition in ruleDefinitions.entries) {
-      final ruleId = ruleDefinition.key;
-      final ruleConfig = projectConfig.getConfiguration(ruleId);
-      final rule = ruleDefinition.value();
-      final ruleCode = rule.code;
-      log.sidecarVerboseMessage('activating $ruleCode');
+    for (final ruleDefinition in ruleDefinitions) {
+      // final ruleId = ruleDefinition.key;
+      final rule = ruleDefinition();
+      final id =
+          Id(type: rule.type, packageId: rule.packageName, id: rule.code);
+      final ruleConfig = projectConfig.getConfiguration(id);
+      log.sidecarVerboseMessage('activating ${id.id}');
       rule.initialize(
         ref: ref,
         configurationContent: ruleConfig?.configuration,

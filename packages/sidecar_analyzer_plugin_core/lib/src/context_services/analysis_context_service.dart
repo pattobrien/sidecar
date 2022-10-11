@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
@@ -6,6 +7,7 @@ import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart'
     hide ContextRoot;
+import 'package:package_config/package_config_types.dart';
 
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
@@ -15,13 +17,17 @@ import '../application/analysis_results/analysis_results_notifier.dart';
 import '../application/analysis_results/file_report_provider.dart';
 import '../application/annotations/file_annotations_notifier.dart';
 import '../application/rules/activated_rules_notifier.dart';
+import '../constants.dart';
+import '../plugin/middleman_communication_router.dart';
 import '../plugin/plugin.dart';
+import '../plugin/plugin_from_path.dart';
 import '../reports/file_stats.dart';
 import '../services/error_reporter/error_reporter.dart';
 import '../services/log_delegate/log_delegate.dart';
 import '../services/project_configuration_service/providers.dart';
 import '../services/resolved_unit_service/resolved_unit_service.dart';
 import '../utils/utils.dart';
+import '../version.dart';
 import 'analyzed_file.dart';
 
 class AnalysisContextService {
@@ -43,9 +49,52 @@ class AnalysisContextService {
   bool get isInitialized => _completer.isCompleted;
   final _completer = Completer<void>();
 
-  Map subscriptions = <AnalyzedFile, StreamSubscription>{};
-  Map annotationSubscriptions = <AnalyzedFile, StreamSubscription>{};
-  Map analysisResultsSubscriptions = <AnalyzedFile, StreamSubscription>{};
+  late PackageConfig packageConfig;
+
+  bool isValidContext() {
+    try {
+      if (!context.isSidecarEnabled) return false;
+      final pluginPackages = packageConfig.packages
+          .firstWhere((element) => element.name == kSidecarPluginName);
+      final pluginPackagePubspecFile =
+          File(p.join(pluginPackages.root.path, 'pubspec.yaml'));
+      final pubOfficialCache = p.join(Platform.environment['HOME']!,
+          '.pub-cache', 'hosted', 'pub.dartlang.org');
+      final pubHostedCache =
+          p.join(Platform.environment['HOME']!, '.pub-cache', 'hosted');
+      final pubGitCache =
+          p.join(Platform.environment['HOME']!, '.pub-cache', 'git');
+      final pubRoot = p.join(Platform.environment['HOME']!, '.pub-cache');
+      final isPluginRunningFromPath = ref.read(isPluginFromPath);
+
+      if (p.isWithin(pubOfficialCache, pluginPackagePubspecFile.path)) {
+        // plugin package is from pub
+        final folderName =
+            pluginPackagePubspecFile.parent.uri.pathSegments.last;
+
+        if (folderName == '$kSidecarPluginName-$packageVersion') return true;
+      } else if (p.isWithin(pubHostedCache, pluginPackagePubspecFile.path)) {
+        //TODO: plugin package is from some other hosted dependency
+      } else if (p.isWithin(pubGitCache, pluginPackagePubspecFile.path)) {
+        //TODO: plugin package is from git
+      } else if (!p.isWithin(pubRoot, pluginPackagePubspecFile.path)) {
+        //TODO: not within pub root folder = from path
+        if (isPluginRunningFromPath) {
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+    // check if the plugin is the same version as
+  }
+
+  Future<void> _initPackageConfig() async {
+    final path = p.join(root.root.path, '.dart_tool', 'package_config.json');
+    final contents = await File(path).readAsBytes();
+    packageConfig = PackageConfig.parseBytes(contents, root.root.toUri());
+  }
 
   List<AnalyzedFile> get analyzedFiles => root.typedAnalyzedFiles();
 
@@ -60,20 +109,11 @@ class AnalysisContextService {
 
   Future<void> initializeAnalysisContext() async {
     if (!context.isSidecarEnabled) return;
+    await _initPackageConfig();
     await Future.wait(analyzedFiles.map((analyzedFile) async {
       //TODO: handle non-Dart files
       if (!analyzedFile.isDartFile) return;
       if (!p.isWithin(context.contextRoot.root.path, analyzedFile.path)) return;
-
-      // subscriptions[analyzedFile] =
-      //     ref.read(resolvedUnitProvider(analyzedFile).stream).listen((event) {
-      //   delegate.sidecarMessage(
-      //       '${analyzedFile.contextRoot.root.shortName}: resolved unit updated for ${analyzedFile.relativePath}');
-      // });
-
-      // await ref
-      //     .read(resolvedUnitServiceProvider(analyzedFile))
-      //     .getResolvedUnit();
 
       ref.read(annotationsNotifierProvider(analyzedFile).notifier).refresh();
       // final ann = ref.read(annotationsNotifierProvider(analyzedFile)).value;
@@ -89,8 +129,6 @@ class AnalysisContextService {
     final analyzedFile = analyzedFileFromPath(path);
     final analysisPath = context.contextRoot.optionsFile?.path;
 
-    // delegate.sidecarMessage(
-    //     'getAnalysisResults for ${analyzedFile.relativePath} - enabled: ${context.isSidecarEnabled} within ${p.isWithin(root.root.path, path)} @ context ${root.root.path}');
     if (!context.isSidecarEnabled) return [];
     if (!p.isWithin(root.root.path, path)) return [];
 
@@ -110,10 +148,9 @@ class AnalysisContextService {
     final analysisResults =
         ref.read(analysisNotifierProvider(analyzedFile)).value ?? [];
 
-    final sortedResults =
-        List<AnalysisResult>.from(<AnalysisResult>[...analysisResults])
-          ..sort((a, b) => a.sourceSpan.location.startLine
-              .compareTo(b.sourceSpan.location.startLine));
+    final sortedResults = List<AnalysisResult>.from([...analysisResults])
+      ..sort((a, b) => a.sourceSpan.location.startLine
+          .compareTo(b.sourceSpan.location.startLine));
 
     delegate.analysisResults(path, sortedResults);
 

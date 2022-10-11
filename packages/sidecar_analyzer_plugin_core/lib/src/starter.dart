@@ -9,17 +9,18 @@ import 'package:sidecar/sidecar.dart';
 
 import 'plugin/middleman_plugin.dart';
 import 'plugin/plugin.dart';
+import 'plugin/plugin_from_path.dart';
 import 'runner/sidecar_runner.dart';
 import 'services/log_delegate/log_delegate.dart';
 import 'services/rule_constructor_provider.dart';
 
 Future<void> startSidecarPlugin(
   SendPort sendPort,
-  List<String> args,
-  bool isPlugin,
-  Map<Id, CodeEditConstructor> codeEditConstructors,
-  Map<Id, LintRuleConstructor> lintRuleConstructors, {
+  List<String> args, {
+  List<SidecarBaseConstructor>? constructors,
   required bool isMiddleman,
+  required bool isPlugin,
+  required bool isInitializedFromPath,
 }) async {
   LogDelegateBase delegate;
   SidecarAnalyzerMode mode;
@@ -42,9 +43,8 @@ Future<void> startSidecarPlugin(
       logDelegateProvider.overrideWithValue(delegate),
       sidecarAnalyzerMode.overrideWithValue(mode),
       masterPluginChannelProvider.overrideWithValue(pluginChannel),
-      ruleConstructorProvider.overrideWithValue(
-        {...lintRuleConstructors, ...codeEditConstructors},
-      ),
+      ruleConstructorProvider.overrideWithValue(constructors ?? []),
+      isPluginFromPath.overrideWithValue(isInitializedFromPath),
     ],
   );
 

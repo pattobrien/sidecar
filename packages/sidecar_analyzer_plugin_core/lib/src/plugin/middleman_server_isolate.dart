@@ -3,26 +3,19 @@
 import 'dart:async';
 import 'dart:io' as io;
 
-import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
-import 'package:analyzer/file_system/file_system.dart';
-import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer/instrumentation/noop_service.dart';
-import 'package:analyzer_plugin/channel/channel.dart' as plugin;
-import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-import 'package:pubspec_lock_parse/pubspec_lock_parse.dart' as pubspec_lock;
+import 'package:sidecar/builder.dart';
 
 import '../../sidecar_analyzer_plugin_core.dart';
-import '../constants.dart';
-import '../context_services/context_services.dart';
 import '../services/log_delegate/log_delegate.dart';
+import '../services/plugin_generator/packages/sidecar_package_config.dart';
 import '../services/plugin_generator/project_service.dart';
+import 'bootstrap_constants.dart';
 import 'middleman_communication_router.dart';
 
 final middlemanServerIsolateProvider =
@@ -45,14 +38,18 @@ class MiddlemanServerIsolate {
 
   MiddlemanCommunicationRouter get middlemanRouter =>
       _ref.read(middlemanCommunicationRouterProvider);
+  PluginCommunicationChannel get masterChannel =>
+      _ref.read(masterPluginChannelProvider);
 
   String get packagesPath =>
       p.join(root.root.path, '.dart_tool', 'package_config.json');
 
+  // String get pluginRoot =>
+  //     p.join(root.root.path, '.dart_tool', 'sidecar_analyzer_plugin');
   String get pluginRoot =>
-      p.join(root.root.path, '.dart_tool', 'sidecar_analyzer_plugin');
+      p.join(root.root.path, 'tool', 'sidecar_analyzer_plugin');
 
-  String get pluginExecutablePath => p.join(pluginRoot, 'bin', 'sidecar.dart');
+  String get pluginExecutablePath => p.join(pluginRoot, 'sidecar.dart');
 
   bool doesAlreadyExist() => io.Directory(pluginRoot).existsSync();
 
@@ -70,10 +67,13 @@ class MiddlemanServerIsolate {
       throw UnimplementedError('getSidecarPluginDependency returned null');
     }
 
-    final pluginToolPath = p.join(sidecarDep.path, 'tools', 'analyzer_plugin');
+    final pluginToolPath =
+        p.join(sidecarDep.path, 'tools', 'analyzer_plugin', 'bin');
 
-    final pluginFileEntities =
-        io.Directory(p.join(pluginToolPath)).listSync(recursive: true);
+    final directory = io.Directory(p.join(pluginToolPath));
+    await directory.create(recursive: true);
+
+    final pluginFileEntities = directory.listSync(recursive: true);
 
     String relativePluginFilePath(String path) {
       return p.relative(path, from: pluginToolPath);
@@ -87,17 +87,44 @@ class MiddlemanServerIsolate {
 
     await Future.wait(pluginFileEntities.whereType<io.File>().map((e) async {
       final newPath = p.join(pluginRoot, relativePluginFilePath(e.path));
+
       await e.copy(newPath);
     }));
+
+    await setupBootstrapper();
   }
 
-  Future<void> createBootstrapFile() async {
-    // final deps = await projectService.getSidecarPackages();
-    // delegate.sidecarMessage('PROJECTSERVICE: ${deps.length} sidecar deps');
-
-    // for (final dep in deps.entries) {
-    //   delegate.sidecarMessage('PROJECTSERVICE: dependency: ${dep.key}');
-    // }
+  Future<void> setupBootstrapper() async {
+    // delegate.sidecarMessage('MIDDLEMAN: setting up bootstrapper');
+    final bootstrapperPath = p.join(pluginRoot, 'constructors.dart');
+    final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
+    final listBuffer = StringBuffer()..writeln(constructorListBegin);
+    // delegate.sidecarMessage('MIDDLEMAN: getSidecarPackages init');
+    final sidecarPackages = await projectService.getSidecarPackages();
+    // delegate.sidecarMessage(
+    //     'MIDDLEMAN: getSidecarPackages completed: ${sidecarPackages.entries.length} packages');
+    for (final sidecarPackage in sidecarPackages.entries) {
+      final packageName = sidecarPackage.key;
+      final importStatement =
+          "import 'package:$packageName/$packageName.dart' as $packageName;";
+      importsBuffer.writeln(importStatement);
+      for (final rule in sidecarPackage.value.lints ?? <LintNode>[]) {
+        final constructorStatement = '\t$packageName.${rule.className}.new,';
+        listBuffer.writeln(constructorStatement);
+      }
+      for (final rule in sidecarPackage.value.edits ?? <EditNode>[]) {
+        final constructorStatement = '\t$packageName.${rule.className}.new,';
+        listBuffer.writeln(constructorStatement);
+      }
+      final numberOfConstructors = (sidecarPackage.value.lints?.length ?? 0) +
+          (sidecarPackage.value.edits?.length ?? 0);
+      delegate.sidecarMessage(
+          'MIDDLEMAN: concatenated $numberOfConstructors constructors');
+    }
+    importsBuffer.writeln();
+    listBuffer.write(constructorListEnd);
+    final contents = importsBuffer.toString() + listBuffer.toString();
+    await io.File(bootstrapperPath).writeAsString(contents);
   }
 
   Future<void> initializeIsolate() async {
@@ -112,12 +139,17 @@ class MiddlemanServerIsolate {
     delegate.sidecarMessage(
         'Isolate initialization completed; setting up listeners...');
     await pluginChannel.listen(
-      (request) => middlemanRouter.handlePluginResponse(root, request),
+      (response) => middlemanRouter.handlePluginResponse(root, response),
       (notif) => middlemanRouter.handlePluginNotification(root, notif),
       onDone: () => middlemanRouter.handlePluginDone(root),
-      onError: (error) => middlemanRouter.handlePluginError(root, error),
+      onError: (error) {
+        delegate.sidecarMessage('ISOLATE ERROR: ${error.toString()}');
+        middlemanRouter.handlePluginError(root, error);
+      },
     );
+    // TODO: remove this
+    // await Future.delayed(Duration(seconds: 4)); // give isolate time to load
 
-    delegate.sidecarMessage('Middleman initialization completed.');
+    delegate.sidecarMessage('DONE: Isolate initialization completed.');
   }
 }

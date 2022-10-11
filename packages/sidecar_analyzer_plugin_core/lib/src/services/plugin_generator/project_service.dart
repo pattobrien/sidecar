@@ -8,34 +8,45 @@ import 'package:pubspec_parse/pubspec_parse.dart' as pubspec;
 import 'package:riverpod/riverpod.dart';
 import 'package:path/path.dart' as p;
 
+import '../log_delegate/log_delegate_base.dart';
 import 'lint_package_parser.dart';
+import 'packages/sidecar_package_config.dart';
 
 final projectServiceProvider =
     Provider.family<ProjectServiceImpl, String>((ref, rootPath) {
-  return ProjectServiceImpl(rootPath);
+  return ProjectServiceImpl(ref, rootPath);
 });
 
 class ProjectServiceImpl {
-  const ProjectServiceImpl(this.rootPath);
+  const ProjectServiceImpl(this.ref, this.rootPath);
+
+  final Ref ref;
+
+  LogDelegateBase get delegate => ref.read(logDelegateProvider);
 
   bool isValidDartProject() =>
       File(join(rootPath, 'pubspec.yaml')).existsSync();
 
-  Future<Map<String, package_config.Package>> getSidecarPackages() async {
+  Future<Map<String, SidecarPackageConfig>> getSidecarPackages() async {
     final configFile =
         await package_config.findPackageConfig(Directory(rootPath));
-
+    // delegate.sidecarMessage(
+    //     'PROJECTSERVICE: configFile is null = ${configFile == null}');
     if (configFile == null) throw UnimplementedError();
 
-    final sidecarPackages = <String, pubspec_lock.Package>{};
+    final sidecarPackages = <String, SidecarPackageConfig>{};
 
-    for (final package in configFile.packages) {
-      final sidecarPackageConfig = await parseLintPackage(rootPath);
+    await Future.wait(configFile.packages.map((package) async {
+      // delegate.sidecarMessage(
+      //     'PROJECTSERVICE: parsing ${package.name} at ${package.root.toFilePath()}...');
+      final sidecarPackageConfig = await parseLintPackage(package.root);
+      // delegate.sidecarMessage(
+      //     'PROJECTSERVICE: ${package.name} is sidecar package = ${sidecarPackageConfig == null}');
       if (sidecarPackageConfig != null) {
-        // sidecarPackages[package.key] = package.value;
+        sidecarPackages[package.name] = sidecarPackageConfig;
       }
-    }
-    return {};
+    }));
+    return sidecarPackages;
     // return sidecarPackages;
     // return lockFile.packages.map((key, value) => configFile).values.toSet();
   }

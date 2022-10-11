@@ -1,15 +1,16 @@
+import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
-class SidecarConfig {
-  factory SidecarConfig.fromYamlMap(YamlMap map) {
-    return SidecarConfig._(
-      map['lints'] as YamlList,
-      map['edits'] as YamlList,
+class SidecarPackageConfig {
+  factory SidecarPackageConfig.fromYamlMap(YamlMap map) {
+    return SidecarPackageConfig._(
+      map['lints'] as YamlList?,
+      map['edits'] as YamlList?,
       source: map,
     );
   }
 
-  SidecarConfig._(this._lints, this._edits, {required this.source});
+  SidecarPackageConfig._(this._lints, this._edits, {required this.source});
 
   final YamlList? _lints;
   final YamlList? _edits;
@@ -24,6 +25,8 @@ class LintNode {
 
   final String name;
   final YamlNode node;
+
+  String get className => ReCase(name).pascalCase;
 }
 
 class EditNode {
@@ -31,6 +34,8 @@ class EditNode {
 
   final String name;
   final YamlNode node;
+
+  String get className => ReCase(name).pascalCase;
 }
 
-final x = SidecarConfig.fromYamlMap(YamlMap())._lints?.nodes.first;
+final x = SidecarPackageConfig.fromYamlMap(YamlMap())._lints?.nodes.first;

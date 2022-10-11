@@ -4,14 +4,19 @@ import 'package:checked_yaml/checked_yaml.dart';
 import 'package:sidecar_analyzer_plugin_core/src/services/plugin_generator/packages/sidecar_package_config.dart';
 import 'package:yaml/yaml.dart';
 
-Future<SidecarConfig?> parseLintPackage(String root) async {
+Future<SidecarPackageConfig?> parseLintPackage(Uri root) async {
   final pubspecContent =
-      await File(p.join(root, 'pubspec.yaml')).readAsString();
+      await File(p.join(root.toFilePath(), 'pubspec.yaml')).readAsString();
   try {
-    return checkedYamlDecode<SidecarConfig>(pubspecContent, (yamlMap) {
-      return SidecarConfig.fromYamlMap(yamlMap!['sidecar'] as YamlMap);
+    return checkedYamlDecode<SidecarPackageConfig>(pubspecContent, (yamlMap) {
+      if (yamlMap?['sidecar'] == null) throw PackageMissingSidecarDefinition();
+      return SidecarPackageConfig.fromYamlMap(yamlMap!['sidecar']! as YamlMap);
     });
-  } catch (e) {
+  } on PackageMissingSidecarDefinition {
     return null;
+  } catch (e) {
+    rethrow;
   }
 }
+
+class PackageMissingSidecarDefinition implements Exception {}

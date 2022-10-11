@@ -1,4 +1,4 @@
-const pluginName = 'sidecar_analyzer_plugin_core';
+const kSidecarPluginName = 'sidecar_analyzer_plugin_core';
 
 // this cannot be any random number for some reason
 // ("Plugin is not compatible." error is thrown)

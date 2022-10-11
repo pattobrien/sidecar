@@ -142,7 +142,7 @@ class SidecarRunner {
 
     sendRequest(
       plugin.PluginVersionCheckParams(
-        _resourceProvider.getByteStorePath(pluginName),
+        _resourceProvider.getByteStorePath(kSidecarPluginName),
         _sdkPath,
         pluginVersion,
       ).toRequest(_uuid.v4()),
@@ -156,7 +156,7 @@ class SidecarRunner {
   void sendRequest(plugin.Request request) {
     final jsonData = request.toJson();
     final encodedRequest = json.encode(jsonData);
-    delegate.sidecarVerboseMessage('>> $pluginName $encodedRequest');
+    delegate.sidecarVerboseMessage('>> $kSidecarPluginName $encodedRequest');
     _sendPort.send(jsonData);
   }
 
