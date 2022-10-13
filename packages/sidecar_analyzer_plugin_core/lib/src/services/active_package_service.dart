@@ -29,10 +29,9 @@ class ActivePackageService {
     final root = analysisContext.contextRoot;
     final contextUri = root.root.toUri();
 
-    final packageService = _ref.watch(activePackageServiceProvider);
-    final pluginUri = packageService.getSidecarPluginUriForPackage(contextUri);
-    final packages = packageService.getSidecarDependencies(contextUri);
-    final projectConfig = packageService.getSidecarOptions(root);
+    final pluginUri = getSidecarPluginUriForPackage(contextUri);
+    final packages = getSidecarDependencies(contextUri);
+    final projectConfig = getSidecarOptions(root);
 
     final isSidecarEnabled = analysisContext.isSidecarEnabled;
     final hasProjectConfiguration = projectConfig != null;
@@ -99,4 +98,9 @@ class ActivePackageService {
   }
 }
 
-final activePackageServiceProvider = Provider(ActivePackageService.new);
+final activePackageServiceProvider = Provider(
+  ActivePackageService.new,
+  dependencies: [
+    logDelegateProvider,
+  ],
+);

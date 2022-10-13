@@ -163,6 +163,9 @@ class IsolateBuilderService {
           windows: Platform.isWindows);
 }
 
-final isolateBuilderServiceProvider = Provider((ref) {
-  return const IsolateBuilderService();
-});
+final isolateBuilderServiceProvider = Provider(
+  (ref) {
+    return const IsolateBuilderService();
+  },
+  dependencies: const [],
+);

@@ -104,7 +104,10 @@ final middlemanPluginProvider = Provider(
     return MiddlemanPlugin(ref);
   },
   dependencies: [
+    masterPluginChannelProvider,
+    allContextsProvider,
     logDelegateProvider,
     sidecarAnalyzerMode,
+    isolateCommunicationNotifierProvider,
   ],
 );

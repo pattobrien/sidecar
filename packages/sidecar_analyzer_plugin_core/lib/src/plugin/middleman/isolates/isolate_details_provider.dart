@@ -8,35 +8,43 @@ import 'isolate_builder_service.dart';
 import 'isolate_details.dart';
 
 final isolateDetailForContextProvider =
-    Provider.family<IsolateDetails, ActiveContextRoot>((ref, activeRoot) {
-  final isolateService = ref.watch(isolateBuilderServiceProvider);
+    Provider.family<IsolateDetails, ActiveContextRoot>(
+  (ref, activeRoot) {
+    final isolateService = ref.watch(isolateBuilderServiceProvider);
 
-  ref.onDispose(() => isolateService.shutdownIsolate(ref.state));
+    ref.onDispose(() => isolateService.shutdownIsolate(ref.state));
 
-  ref.listen<ActiveContext>(
-      activeContextsProvider.select((activeContexts) => activeContexts
-          .firstWhere((context) => context.activeRoot == activeRoot)),
-      (previous, next) {
-    // will rebuild any time the plugin package updates
-    if (previous == null) return;
+    ref.listen<ActiveContext>(
+        activeContextsProvider.select((activeContexts) => activeContexts
+            .firstWhere((context) => context.activeRoot == activeRoot)),
+        (previous, next) {
+      // will rebuild any time the plugin package updates
+      if (previous == null) return;
 
-    if (previous.sidecarPluginPackage != next.sidecarPluginPackage) {
-      isolateService.shutdownIsolate(ref.state);
-      ref.invalidateSelf();
-    }
-  });
+      if (previous.sidecarPluginPackage != next.sidecarPluginPackage) {
+        isolateService.shutdownIsolate(ref.state);
+        ref.invalidateSelf();
+      }
+    });
 
-  final pluginSourceUri =
-      ref.watch(contextSidecarPluginPackageProvider(activeRoot))!;
-  final packages = ref.watch(contextSidecarDependenciesProvider(activeRoot));
+    final pluginSourceUri =
+        ref.watch(contextSidecarPluginPackageProvider(activeRoot))!;
+    final packages = ref.watch(contextSidecarDependenciesProvider(activeRoot));
 
-  return isolateService.startIsolate(
-    //TODO: change startIsolate to accept package
-    pluginSourceUri.root,
-    activeRoot,
-    packages,
-  );
-});
+    return isolateService.startIsolate(
+      //TODO: change startIsolate to accept package
+      pluginSourceUri.root,
+      activeRoot,
+      packages,
+    );
+  },
+  dependencies: [
+    contextSidecarDependenciesProvider,
+    activeContextsProvider,
+    isolateBuilderServiceProvider,
+    contextSidecarPluginPackageProvider,
+  ],
+);
 
 
 

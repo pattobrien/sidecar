@@ -5,7 +5,12 @@ import 'package:riverpod/riverpod.dart';
 import '../../../services/services.dart';
 
 final contextSidecarPluginPackageProvider =
-    Provider.family<Package?, ContextRoot>((ref, root) {
-  final service = ref.watch(activePackageServiceProvider);
-  return service.getSidecarPluginUriForPackage(root.root.toUri());
-});
+    Provider.family<Package?, ContextRoot>(
+  (ref, root) {
+    final service = ref.watch(activePackageServiceProvider);
+    return service.getSidecarPluginUriForPackage(root.root.toUri());
+  },
+  dependencies: [
+    activePackageServiceProvider,
+  ],
+);

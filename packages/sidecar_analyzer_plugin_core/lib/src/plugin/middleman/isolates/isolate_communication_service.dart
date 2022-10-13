@@ -8,17 +8,22 @@ import 'isolate_details_provider.dart';
 
 final isolateCommunicationNotifierProvider =
     StateNotifierProvider<IsolateCommunicationService, List<IsolateDetails>>(
-        (ref) {
-  final activeContexts = ref.watch(activeContextRootsProvider);
-  ref.listen(activeContextRootsProvider, (previous, next) {
-    //
-  });
+  (ref) {
+    final activeContexts = ref.watch(activeContextRootsProvider);
+    ref.listen(activeContextRootsProvider, (previous, next) {
+      //
+    });
 
-  final isolates = activeContexts
-      .map((context) => ref.watch(isolateDetailForContextProvider(context)));
+    final isolates = activeContexts
+        .map((context) => ref.watch(isolateDetailForContextProvider(context)));
 
-  return IsolateCommunicationService(isolates.toList());
-});
+    return IsolateCommunicationService(isolates.toList());
+  },
+  dependencies: [
+    activeContextRootsProvider,
+    isolateDetailForContextProvider,
+  ],
+);
 
 class IsolateCommunicationService extends StateNotifier<List<IsolateDetails>> {
   IsolateCommunicationService(List<IsolateDetails> isolateDetails)

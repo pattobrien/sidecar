@@ -1,12 +1,17 @@
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 
-import '../../../../sidecar_analyzer_plugin_core.dart';
+import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
 
-final fileAnalyzerServiceProvider = Provider((ref) {
-  return FileAnalyzerService(ref);
-});
+final fileAnalyzerServiceProvider = Provider(
+  (ref) {
+    return FileAnalyzerService(ref);
+  },
+  dependencies: [
+    logDelegateProvider,
+  ],
+);
 
 class FileAnalyzerService {
   const FileAnalyzerService(this.ref);

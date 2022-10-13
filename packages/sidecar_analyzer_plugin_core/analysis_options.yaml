@@ -5,7 +5,7 @@ linter:
     public_member_api_docs: false
 
 analyzer:
-  # plugins:
-  #   - custom_lint
+  plugins:
+    - custom_lint
   strong-mode:
     implicit-dynamic: true

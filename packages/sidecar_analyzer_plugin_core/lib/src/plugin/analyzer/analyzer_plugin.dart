@@ -96,7 +96,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required List<String> paths,
   }) async {
     for (final path in paths) {
-      ref.refresh(resolvedUnitProvider(path));
+      final file = ref.read(analyzedFileFromPath(path));
+      ref.refresh(resolvedUnitProvider(file));
     }
   }
 
@@ -160,6 +161,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 final pluginProvider = Provider(
   SidecarAnalyzerPlugin.new,
   dependencies: [
+    allAnalysisContextsProvider,
     logDelegateProvider,
     ruleConstructorProvider,
     sidecarAnalyzerMode,

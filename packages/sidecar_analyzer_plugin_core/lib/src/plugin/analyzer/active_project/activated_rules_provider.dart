@@ -6,7 +6,6 @@ import 'package:sidecar/sidecar.dart';
 import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
 import '../analyzer.dart';
-import '../rule_constructors_provider.dart';
 
 final filteredLintRulesProvider =
     Provider.family<List<LintRule>, AnalyzedFile>((ref, analyzedFile) {
@@ -61,6 +60,7 @@ final _filteredRulesProvider =
           file: analyzedFile, rule: rule, projectConfiguration: sidecarOptions))
       .toList();
 }, dependencies: [
+  activeContextForFileProvider,
   _activatedRulesProvider,
 ]);
 

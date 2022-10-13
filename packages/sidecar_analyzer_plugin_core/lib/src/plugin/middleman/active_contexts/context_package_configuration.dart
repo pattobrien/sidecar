@@ -10,7 +10,9 @@ final projectConfigurationProvider =
     final packageService = ref.watch(activePackageServiceProvider);
     return packageService.getSidecarOptions(contextRoot);
   },
-  dependencies: [logDelegateProvider],
+  dependencies: [
+    activePackageServiceProvider,
+  ],
 );
 
 // final projectConfigurationAnalysisErrorProvider =

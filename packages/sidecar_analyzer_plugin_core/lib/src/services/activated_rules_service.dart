@@ -44,4 +44,9 @@ class ActivatedRulesService {
   }
 }
 
-final activatedRulesServiceProvider = Provider(ActivatedRulesService.new);
+final activatedRulesServiceProvider = Provider(
+  ActivatedRulesService.new,
+  dependencies: [
+    logDelegateProvider,
+  ],
+);
