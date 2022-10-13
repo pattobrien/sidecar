@@ -1,6 +1,7 @@
-import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/sidecar.dart';
+// import 'package:riverpod/riverpod.dart';
+// import 'package:sidecar/sidecar.dart';
 
-final ruleConstructorProvider = Provider<List<SidecarBaseConstructor>>(
-  (ref) => throw UnimplementedError(),
-);
+// /// Provides list of rules enabled for the context
+// final ruleConstructorProvider = Provider<List<SidecarBaseConstructor>>(
+//   (ref) => throw UnimplementedError(),
+// );

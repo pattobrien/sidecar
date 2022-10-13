@@ -28,10 +28,10 @@ micropub: sidecar
 
 sidecar:
   lints:
-    - avoid_color_literal
-    - avoid_edge_insets_literal
+    # - avoid_color_literal
+    # - avoid_edge_insets_literal
     - avoid_icon_literal
-    - avoid_box_shadow_literal
-    - avoid_text_style_literal
-    - avoid_border_radius_literal
-    - avoid_sized_box_height_width_literals
+    # - avoid_box_shadow_literal
+    # - avoid_text_style_literal
+    # - avoid_border_radius_literal
+    # - avoid_sized_box_height_width_literals

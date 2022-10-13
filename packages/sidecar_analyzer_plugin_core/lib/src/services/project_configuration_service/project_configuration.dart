@@ -3,64 +3,52 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
+import '../../plugin/middleman/analysis_context_providers.dart';
 import '../log_delegate/log_delegate_base.dart';
 import 'project_configuration_service.dart';
 
-final projectConfigurationServiceProvider =
-    Provider.family<ProjectConfigurationService, ContextRoot>(
-  (ref, root) => ProjectConfigurationService(ref, contextRoot: root),
+final projectConfigurationProvider =
+    Provider.family<ProjectConfiguration?, ContextRoot>(
+  (ref, contextRoot) {
+    final projectConfigurationService = ProjectConfigurationService(ref);
+    return projectConfigurationService.parse(contextRoot);
+  },
   dependencies: [logDelegateProvider],
 );
 
-final projectConfigurationProvider =
-    FutureProvider.family<ProjectConfiguration?, ContextRoot>(
-  (ref, contextRoot) async =>
-      ref.watch(projectConfigurationServiceProvider(contextRoot)).parse(),
-  dependencies: [projectConfigurationServiceProvider],
-);
-
 final projectConfigurationAnalysisErrorProvider =
-    FutureProvider.family<Iterable<AnalysisError>, ContextRoot>(
-  (ref, root) async {
-    final yamlErrors = await ref.watch(projectConfigErrorProvider(root).future);
+    Provider.family<Iterable<AnalysisError>, ContextRoot>(
+  (ref, root) {
+    final yamlErrors = ref.watch(projectConfigErrorProvider(root));
     return yamlErrors.map((yamlError) => yamlError.toAnalysisError());
   },
   dependencies: [projectConfigErrorProvider],
 );
 
 final projectConfigErrorProvider =
-    FutureProvider.family<List<YamlSourceError>, ContextRoot>(
-  (ref, root) async {
-    final projectConfiguration =
-        await ref.watch(projectConfigurationProvider(root).future);
+    Provider.family<List<YamlSourceError>, ContextRoot>(
+  (ref, root) {
+    final projectConfiguration = ref.watch(projectConfigurationProvider(root));
     return <YamlSourceError>[
       ...?projectConfiguration?.sourceErrors,
-      ...projectConfiguration?.assistPackages?.values
-              .map((e) => e.sourceErrors)
-              .expand((element) => element)
-              .toList() ??
-          [],
-      ...projectConfiguration?.lintPackages?.values
-              .map((e) => e.sourceErrors)
-              .expand((element) => element)
-              .toList() ??
-          [],
-      ...projectConfiguration?.lintPackages?.values
-              .map((e) => e.lints)
-              .map((e) => e.values)
-              .expand((element) => element)
-              .map((e) => e.sourceErrors)
-              .expand((element) => element)
-              .toList() ??
-          [],
-      ...projectConfiguration?.assistPackages?.values
-              .map((e) => e.assists)
-              .map((e) => e.values)
-              .expand((element) => element)
-              .map((e) => e.sourceErrors)
-              .expand((element) => element)
-              .toList() ??
-          [],
+      ...?projectConfiguration?.assistPackages?.values
+          .map((e) => e.sourceErrors)
+          .expand((element) => element),
+      ...?projectConfiguration?.lintPackages?.values
+          .map((e) => e.sourceErrors)
+          .expand((element) => element),
+      ...?projectConfiguration?.lintPackages?.values
+          .map((e) => e.lints)
+          .map((e) => e.values)
+          .expand((element) => element)
+          .map((e) => e.sourceErrors)
+          .expand((element) => element),
+      ...?projectConfiguration?.assistPackages?.values
+          .map((e) => e.assists)
+          .map((e) => e.values)
+          .expand((element) => element)
+          .map((e) => e.sourceErrors)
+          .expand((element) => element),
     ];
   },
   dependencies: [projectConfigurationProvider],

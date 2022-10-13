@@ -77,16 +77,16 @@ abstract class SidecarBase {
   }
 
   //TODO: can we remove the future here?
-  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) =>
-      [];
+      Future.value([]);
 
   //TODO: can we remove the future here?
-  FutureOr<List<AnalysisResult>> computeYamlAnalysisResults(
+  Future<List<AnalysisResult>> computeYamlAnalysisResults(
     YamlMap yamlMap,
   ) =>
-      [];
+      Future.value([]);
 
   Future<List<AnalysisResult>> computeGenericAnalysisResults(
     AnalysisContext analysisContext,

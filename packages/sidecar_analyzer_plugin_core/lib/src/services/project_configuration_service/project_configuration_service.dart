@@ -8,28 +8,22 @@ import 'package:sidecar/sidecar.dart';
 import '../log_delegate/log_delegate.dart';
 
 class ProjectConfigurationService {
-  ProjectConfigurationService(
-    this.ref, {
-    required this.contextRoot,
-  });
+  const ProjectConfigurationService(this.ref);
 
-  final ContextRoot contextRoot;
   final Ref ref;
 
   LogDelegateBase get logger => ref.read(logDelegateProvider);
 
-  Future<ProjectConfiguration?> parse() async {
+  ProjectConfiguration? parse(ContextRoot contextRoot) {
     logger.sidecarVerboseMessage('_parseProjectConfiguration started');
-    final optionsFile = contextRoot.optionsFile;
-    if (optionsFile != null) {
-      try {
-        final contents = await io.File(optionsFile.path).readAsString();
-        final sourceUrl = optionsFile.toUri();
-        return ProjectConfiguration.parse(contents, sourceUrl: sourceUrl);
-      } catch (e) {
-        logger.sidecarVerboseMessage('_parseProjectConfiguration error: $e');
-      }
+    final file = contextRoot.optionsFile;
+    if (file == null) return null;
+    try {
+      final contents = io.File(file.path).readAsStringSync();
+      return ProjectConfiguration.parse(contents, sourceUrl: file.toUri());
+    } catch (e) {
+      logger.sidecarVerboseMessage('_parseProjectConfiguration error: $e');
+      return null;
     }
-    return null;
   }
 }

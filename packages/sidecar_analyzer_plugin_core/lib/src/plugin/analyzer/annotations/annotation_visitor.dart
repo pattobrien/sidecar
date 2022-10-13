@@ -4,7 +4,7 @@ import 'package:sidecar/builder.dart';
 import 'package:sidecar_annotations/sidecar_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
-import '../utils/utils.dart';
+import '../../../utils/utils.dart';
 
 class AnnotationVisitor extends GeneralizingAstVisitor<void> {
   final List<SidecarAnnotatedNode> annotatedNodes = [];

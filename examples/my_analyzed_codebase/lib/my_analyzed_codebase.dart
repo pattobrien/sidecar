@@ -30,7 +30,7 @@ class SomePage extends ConsumerWidget {
       child: Column(
         children: [
           Icon(
-            Icons.abc,
+            Icons.snowboarding_outlined,
             color: x,
           ),
           Icon(

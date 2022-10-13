@@ -30,7 +30,7 @@ class SidecarRunner {
   final Directory root;
   final completed = Completer<void>();
 
-  LogDelegateBase get delegate => server.delegate;
+  // LogDelegateBase get delegate => server.delegate;
 
   bool _closed = false;
   final _sdkPath = getSdkPath();
@@ -127,11 +127,11 @@ class SidecarRunner {
   /// Starts the plugin and sends the necessary requests for initializing it.
   Future<void> initialize() async {
     _notifications.listen((request) {
-      delegate.sidecarVerboseMessage('>> ${request.event} ${request.params}');
+      // delegate.sidecarVerboseMessage('>> ${request.event} ${request.params}');
     });
 
     _reloader.listen((event) {
-      delegate.sidecarMessage('\n\nHOTRELOAD.......\n\n');
+      // delegate.sidecarMessage('\n\nHOTRELOAD.......\n\n');
       _requestSetContext();
     });
 
@@ -150,13 +150,13 @@ class SidecarRunner {
 
     _requestSetContext();
 
-    delegate.sidecarVerboseMessage('done initializing...');
+    // delegate.sidecarVerboseMessage('done initializing...');
   }
 
   void sendRequest(plugin.Request request) {
     final jsonData = request.toJson();
     final encodedRequest = json.encode(jsonData);
-    delegate.sidecarVerboseMessage('>> $kSidecarPluginName $encodedRequest');
+    // delegate.sidecarVerboseMessage('>> $kSidecarPluginName $encodedRequest');
     _sendPort.send(jsonData);
   }
 

@@ -7,12 +7,12 @@ import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
+import 'plugin/analyzer/rule_constructors_provider.dart';
 import 'plugin/middleman/middleman_plugin.dart';
+import 'plugin/middleman/plugin_channel_provider.dart';
 import 'plugin/plugin.dart';
-import 'plugin/plugin_from_path.dart';
 import 'runner/sidecar_runner.dart';
 import 'services/log_delegate/log_delegate.dart';
-import 'services/rule_constructor_provider.dart';
 
 Future<void> startSidecarPlugin(
   SendPort sendPort,

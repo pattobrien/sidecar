@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../analyzed_file/analyzed_file.dart';
+import '../plugin/analyzer/analyzed_file.dart';
 
 part 'file_stats.freezed.dart';
 
