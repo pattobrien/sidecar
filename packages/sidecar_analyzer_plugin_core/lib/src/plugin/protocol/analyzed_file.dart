@@ -1,13 +1,14 @@
-import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
+
+import 'protocol.dart';
 
 part 'analyzed_file.freezed.dart';
 
 @freezed
 class AnalyzedFile with _$AnalyzedFile {
   const factory AnalyzedFile(
-    ContextRoot contextRoot,
+    ActiveContextRoot root,
     String path,
   ) = _AnalyzedFile;
 
@@ -18,5 +19,5 @@ class AnalyzedFile with _$AnalyzedFile {
   //TODO: handle sidecar.yaml
   bool get isAnalysisOptionsFile => relativePath == 'analysis_options.yaml';
 
-  String get relativePath => p.relative(path, from: contextRoot.root.path);
+  String get relativePath => p.relative(path, from: root.root.path);
 }

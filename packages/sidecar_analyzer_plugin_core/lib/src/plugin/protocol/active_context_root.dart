@@ -4,10 +4,15 @@ import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/src/workspace/workspace.dart';
 
+import 'analyzed_file.dart';
+
 class ActiveContextRoot implements ContextRoot {
   ActiveContextRoot(this._root);
 
   final ContextRoot _root;
+
+  List<AnalyzedFile> typedAnalyzedFiles() =>
+      analyzedFiles().map((e) => AnalyzedFile(this, e)).toList();
 
   @override
   Iterable<String> analyzedFiles() => _root.analyzedFiles();

@@ -4,6 +4,7 @@ import 'package:sidecar/sidecar.dart';
 import '../../protocol/protocol.dart';
 import '../analysis_context_providers.dart';
 import 'active_contexts.dart';
+import 'context_package_configuration.dart';
 
 /// All contexts properly enabled for Sidecar
 ///

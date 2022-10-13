@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnalyzedFile {
-  ContextRoot get contextRoot => throw _privateConstructorUsedError;
+  ActiveContextRoot get root => throw _privateConstructorUsedError;
   String get path => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +29,7 @@ abstract class $AnalyzedFileCopyWith<$Res> {
   factory $AnalyzedFileCopyWith(
           AnalyzedFile value, $Res Function(AnalyzedFile) then) =
       _$AnalyzedFileCopyWithImpl<$Res>;
-  $Res call({ContextRoot contextRoot, String path});
+  $Res call({ActiveContextRoot root, String path});
 }
 
 /// @nodoc
@@ -42,14 +42,14 @@ class _$AnalyzedFileCopyWithImpl<$Res> implements $AnalyzedFileCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? contextRoot = freezed,
+    Object? root = freezed,
     Object? path = freezed,
   }) {
     return _then(_value.copyWith(
-      contextRoot: contextRoot == freezed
-          ? _value.contextRoot
-          : contextRoot // ignore: cast_nullable_to_non_nullable
-              as ContextRoot,
+      root: root == freezed
+          ? _value.root
+          : root // ignore: cast_nullable_to_non_nullable
+              as ActiveContextRoot,
       path: path == freezed
           ? _value.path
           : path // ignore: cast_nullable_to_non_nullable
@@ -65,7 +65,7 @@ abstract class _$$_AnalyzedFileCopyWith<$Res>
           _$_AnalyzedFile value, $Res Function(_$_AnalyzedFile) then) =
       __$$_AnalyzedFileCopyWithImpl<$Res>;
   @override
-  $Res call({ContextRoot contextRoot, String path});
+  $Res call({ActiveContextRoot root, String path});
 }
 
 /// @nodoc
@@ -81,14 +81,14 @@ class __$$_AnalyzedFileCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? contextRoot = freezed,
+    Object? root = freezed,
     Object? path = freezed,
   }) {
     return _then(_$_AnalyzedFile(
-      contextRoot == freezed
-          ? _value.contextRoot
-          : contextRoot // ignore: cast_nullable_to_non_nullable
-              as ContextRoot,
+      root == freezed
+          ? _value.root
+          : root // ignore: cast_nullable_to_non_nullable
+              as ActiveContextRoot,
       path == freezed
           ? _value.path
           : path // ignore: cast_nullable_to_non_nullable
@@ -100,16 +100,16 @@ class __$$_AnalyzedFileCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AnalyzedFile extends _AnalyzedFile {
-  const _$_AnalyzedFile(this.contextRoot, this.path) : super._();
+  const _$_AnalyzedFile(this.root, this.path) : super._();
 
   @override
-  final ContextRoot contextRoot;
+  final ActiveContextRoot root;
   @override
   final String path;
 
   @override
   String toString() {
-    return 'AnalyzedFile(contextRoot: $contextRoot, path: $path)';
+    return 'AnalyzedFile(root: $root, path: $path)';
   }
 
   @override
@@ -117,15 +117,14 @@ class _$_AnalyzedFile extends _AnalyzedFile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AnalyzedFile &&
-            const DeepCollectionEquality()
-                .equals(other.contextRoot, contextRoot) &&
+            const DeepCollectionEquality().equals(other.root, root) &&
             const DeepCollectionEquality().equals(other.path, path));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(contextRoot),
+      const DeepCollectionEquality().hash(root),
       const DeepCollectionEquality().hash(path));
 
   @JsonKey(ignore: true)
@@ -135,12 +134,12 @@ class _$_AnalyzedFile extends _AnalyzedFile {
 }
 
 abstract class _AnalyzedFile extends AnalyzedFile {
-  const factory _AnalyzedFile(
-      final ContextRoot contextRoot, final String path) = _$_AnalyzedFile;
+  const factory _AnalyzedFile(final ActiveContextRoot root, final String path) =
+      _$_AnalyzedFile;
   const _AnalyzedFile._() : super._();
 
   @override
-  ContextRoot get contextRoot;
+  ActiveContextRoot get root;
   @override
   String get path;
   @override

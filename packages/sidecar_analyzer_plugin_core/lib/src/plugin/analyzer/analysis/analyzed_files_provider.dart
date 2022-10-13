@@ -1,16 +1,9 @@
-import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../utils/utils.dart';
-import 'analyzed_file.dart';
-
-final _unfilteredAnalyzedFilesProvider =
-    Provider.family<List<AnalyzedFile>, ContextRoot>((ref, root) {
-  return root.typedAnalyzedFiles().toList();
-});
+import '../../protocol/protocol.dart';
 
 final analyzedFilesProvider =
-    Provider.family<List<AnalyzedFile>, ContextRoot>((ref, root) {
+    Provider.family<List<AnalyzedFile>, ActiveContextRoot>((ref, root) {
   return ref
       .watch(_unfilteredAnalyzedFilesProvider(root))
       .where((analyzedFile) => !analyzedFile.isAnalysisOptionsFile)
@@ -18,7 +11,12 @@ final analyzedFilesProvider =
 });
 
 final analyzedOptionsFileProvider =
-    Provider.family<AnalyzedFile, ContextRoot>((ref, root) {
+    Provider.family<AnalyzedFile, ActiveContextRoot>((ref, root) {
   return ref.watch(_unfilteredAnalyzedFilesProvider(root).select((files) =>
       files.singleWhere((analyzedFile) => analyzedFile.isAnalysisOptionsFile)));
+});
+
+final _unfilteredAnalyzedFilesProvider =
+    Provider.family<List<AnalyzedFile>, ActiveContextRoot>((ref, root) {
+  return root.typedAnalyzedFiles().toList();
 });
