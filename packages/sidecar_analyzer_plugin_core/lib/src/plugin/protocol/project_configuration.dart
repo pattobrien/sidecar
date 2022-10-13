@@ -3,9 +3,8 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../../plugin/middleman/analysis_context_providers.dart';
-import '../log_delegate/log_delegate_base.dart';
-import 'project_configuration_service.dart';
+import '../../services/log_delegate/log_delegate_base.dart';
+import '../../services/project_configuration_service.dart';
 
 final projectConfigurationProvider =
     Provider.family<ProjectConfiguration?, ContextRoot>(

@@ -3,12 +3,12 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../../services/project_configuration_service/project_configuration.dart';
+import '../protocol/protocol.dart';
 import 'activated_rules_provider.dart';
 import 'analyzed_file.dart';
 
 /// Filter rules based on globs defined in project configuration
-final filteredRulesProvider =
+final _filteredRulesProvider =
     Provider.family<List<SidecarBase>, AnalyzedFile>((ref, analyzedFile) {
   final contextRoot = analyzedFile.contextRoot;
   final allRules = ref.watch(activatedRulesProvider(contextRoot));
@@ -23,7 +23,26 @@ final filteredRulesProvider =
           rule: rule,
           projectConfiguration: projectConfiguration))
       .toList();
-});
+}, dependencies: [
+  activatedRulesProvider,
+  projectConfigurationProvider,
+]);
+
+final filteredLintsProvider =
+    Provider.family<List<LintRule>, AnalyzedFile>((ref, analyzedFile) {
+  return ref.watch(_filteredRulesProvider(analyzedFile)
+      .select((value) => value.whereType<LintRule>().toList()));
+}, dependencies: [
+  _filteredRulesProvider,
+]);
+
+final filteredAssistsProvider =
+    Provider.family<List<CodeEdit>, AnalyzedFile>((ref, analyzedFile) {
+  return ref.watch(_filteredRulesProvider(analyzedFile)
+      .select((value) => value.whereType<CodeEdit>().toList()));
+}, dependencies: [
+  _filteredRulesProvider,
+]);
 
 bool _isPathIncludedForRule({
   required AnalyzedFile file,

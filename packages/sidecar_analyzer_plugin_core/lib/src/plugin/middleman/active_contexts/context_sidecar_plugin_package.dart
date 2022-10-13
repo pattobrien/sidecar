@@ -2,7 +2,7 @@ import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:package_config/package_config.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../../services/active_package_service.dart';
+import '../../../services/services.dart';
 
 final contextSidecarPluginPackageProvider =
     Provider.family<Package?, ContextRoot>((ref, root) {

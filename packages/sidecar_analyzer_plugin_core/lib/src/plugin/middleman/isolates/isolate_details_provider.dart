@@ -1,14 +1,9 @@
 // ignore_for_file: implementation_imports
 
-import 'package:package_config/package_config_types.dart';
-import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/sidecar.dart';
 
-import '../../../services/plugin_generator/packages/sidecar_package.dart';
 import '../../protocol/protocol.dart';
 import '../active_contexts/active_contexts.dart';
-
 import 'isolate_builder_service.dart';
 import 'isolate_details.dart';
 

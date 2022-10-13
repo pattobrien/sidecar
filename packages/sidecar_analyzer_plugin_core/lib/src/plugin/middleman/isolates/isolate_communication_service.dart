@@ -1,8 +1,4 @@
-import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer_plugin/protocol/protocol.dart';
-import 'package:analyzer_plugin/protocol/protocol_constants.dart';
-import 'package:analyzer_plugin/protocol/protocol_generated.dart'
-    hide ContextRoot;
 import 'package:riverpod/riverpod.dart';
 
 import '../active_contexts/active_contexts.dart';

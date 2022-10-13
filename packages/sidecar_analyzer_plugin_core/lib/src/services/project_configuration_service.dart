@@ -5,7 +5,7 @@ import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../log_delegate/log_delegate.dart';
+import 'log_delegate/log_delegate.dart';
 
 class ProjectConfigurationService {
   const ProjectConfigurationService(this.ref);

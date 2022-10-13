@@ -9,8 +9,7 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../../bootstrap_constants.dart';
-import '../../../services/plugin_generator/packages/sidecar_package.dart';
-import '../../protocol/active_context.dart';
+import '../../protocol/protocol.dart';
 import 'isolate_details.dart';
 
 class IsolateBuilderService {

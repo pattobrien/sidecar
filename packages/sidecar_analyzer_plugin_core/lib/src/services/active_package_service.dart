@@ -7,7 +7,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../constants.dart';
 import 'log_delegate/log_delegate.dart';
-import 'plugin_generator/packages/sidecar_package.dart';
+import '../plugin/protocol/sidecar_package.dart';
 
 class ActivePackageService {
   const ActivePackageService(this._ref);

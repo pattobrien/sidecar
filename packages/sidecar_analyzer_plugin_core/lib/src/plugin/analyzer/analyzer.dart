@@ -1,6 +1,6 @@
 export 'activated_rules_for_file_provider.dart';
 export 'activated_rules_provider.dart';
-export 'activated_rules_service.dart';
+export '../../services/activated_rules_service.dart';
 export 'active_context_provider.dart';
 export 'analyzed_file.dart';
 export 'analyzed_files_provider.dart';

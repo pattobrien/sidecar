@@ -1,8 +1,8 @@
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../../services/active_package_service.dart';
-import '../../../services/plugin_generator/packages/sidecar_package.dart';
+import '../../../services/services.dart';
+import '../../protocol/protocol.dart';
 
 final contextSidecarDependenciesProvider =
     Provider.family<List<SidecarPackage>, ContextRoot>((ref, root) {

@@ -3,8 +3,8 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 
 import '../../services/log_delegate/log_delegate_base.dart';
-import '../../services/project_configuration_service/project_configuration.dart';
-import 'activated_rules_service.dart';
+import '../protocol/project_configuration.dart';
+import '../../services/activated_rules_service.dart';
 import 'rule_constructors_provider.dart';
 
 final activatedRulesProvider = Provider.family<List<SidecarBase>, ContextRoot>(

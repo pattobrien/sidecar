@@ -15,12 +15,10 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../constants.dart';
-import '../../services/log_delegate/log_delegate.dart';
-import '../analyzer_mode.dart';
+import '../../services/services.dart';
 import '../plugin.dart';
-import 'analysis_context_providers.dart';
 import 'isolates/isolates.dart';
-import 'plugin_channel_provider.dart';
+import 'middleman.dart';
 
 class MiddlemanPlugin extends plugin.ServerPlugin {
   MiddlemanPlugin(

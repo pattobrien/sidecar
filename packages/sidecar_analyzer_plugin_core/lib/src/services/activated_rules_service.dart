@@ -2,7 +2,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/builder.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../../services/log_delegate/log_delegate_base.dart';
+import 'log_delegate/log_delegate_base.dart';
 
 class ActivatedRulesService {
   const ActivatedRulesService(this.ref);

@@ -15,8 +15,7 @@ import 'package:cli_util/cli_util.dart';
 import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
-import '../plugin/plugin.dart';
-import '../services/log_delegate/log_delegate.dart';
+import '../plugin/analyzer/analyzer.dart';
 import '../utils/byte_store_ext.dart';
 
 const _uuid = Uuid();

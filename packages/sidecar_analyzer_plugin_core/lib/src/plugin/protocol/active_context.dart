@@ -6,7 +6,7 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:package_config/package_config_types.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../../services/plugin_generator/packages/sidecar_package.dart';
+import 'sidecar_package.dart';
 import 'active_context_root.dart';
 
 class ActiveContext implements AnalysisContext {
