@@ -1,4 +1,5 @@
 import 'package:riverpod/riverpod.dart';
+import 'package:collection/collection.dart';
 
 import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
@@ -7,6 +8,7 @@ import 'isolates.dart';
 
 final isolateDetailsProvider = Provider<List<IsolateDetails>>(
   (ref) {
+    ref.watch(_isolateUpdateProvider);
     final isolateService = ref.watch(isolateBuilderServiceProvider);
     final isolateCommunication = ref.watch(isolateCommunicationServiceProvider);
     ref.listenSelf((previous, next) {
@@ -17,29 +19,6 @@ final isolateDetailsProvider = Provider<List<IsolateDetails>>(
     final activeContexts = ref.watch(activeContextsProvider);
     final isolates = activeContexts.map(isolateService.startIsolate).toList();
     return isolates;
-    // return activeContextRoots.map((activeRoot) {
-    //   final isolate =
-    //       ref.state.firstWhere((details) => details.activeRoot == activeRoot);
-
-    //   ref.onDispose(() => isolateService.shutdownIsolate(isolate));
-
-    //   ref.listen<ActiveContext>(activeContextForContextRootProvider(activeRoot),
-    //       (prev, next) {
-    //     // will rebuild any time the plugin package updates
-    //     if (prev == null) return;
-    //     final didChange =
-    //         prev.sidecarPluginPackage != next.sidecarPluginPackage ||
-    //             prev.sidecarPackages != next.sidecarPackages;
-    //     if (didChange) {
-    //       isolateService.shutdownIsolate(isolate);
-    //       ref.invalidateSelf();
-    //     }
-    //   });
-
-    //   final context =
-    //       ref.watch(activeContextForContextRootProvider(activeRoot));
-    //   return isolateService.startIsolate(context);
-    // }).toList();
   },
   name: 'isolateDetailsProvider',
   dependencies: [
@@ -49,32 +28,38 @@ final isolateDetailsProvider = Provider<List<IsolateDetails>>(
   ],
 );
 
-// final isolateDetailForContextProvider =
-//     Provider.family<IsolateDetails, ActiveContextRoot>(
-//   (ref, activeRoot) {
-//     final isolateService = ref.watch(isolateBuilderServiceProvider);
+final _isolateUpdateProvider = Provider<void>(
+  (ref) {
+    void _log(String msg) => ref.watch(logDelegateProvider).sidecarMessage(msg);
+    ref.listen<List<ActiveContext>>(activeContextsProvider,
+        (oldContexts, newContexts) {
+      _log(
+          'LINT EQUALITY CHECK ||  ${oldContexts?.length ?? 0} old context || ${newContexts.length} new contexts');
+      // for all new contexts
+      if (oldContexts == null) {
+        // definitely rebuild
+      } else {
+        for (final newContext in newContexts) {
+          final oldContext = oldContexts.firstWhereOrNull(
+              (oldContext) => oldContext.activeRoot == newContext.activeRoot);
 
-//     ref.onDispose(() => isolateService.shutdownIsolate(ref.state));
-
-//     ref.listen<ActiveContext>(activeContextForContextRootProvider(activeRoot),
-//         (prev, next) {
-//       // will rebuild any time the plugin package updates
-//       if (prev == null) return;
-//       final didChange =
-//           prev.sidecarPluginPackage != next.sidecarPluginPackage ||
-//               prev.sidecarPackages != next.sidecarPackages;
-//       if (didChange) {
-//         isolateService.shutdownIsolate(ref.state);
-//         ref.invalidateSelf();
-//       }
-//     });
-
-//     final context = ref.watch(activeContextForContextRootProvider(activeRoot));
-//     return isolateService.startIsolate(context);
-//   },
-//   dependencies: [
-//     contextSidecarDependenciesProvider,
-//     activeContextForContextRootProvider,
-//     isolateBuilderServiceProvider,
-//   ],
-// );
+          if (oldContext == null) {
+            //definitely rebuild
+            return;
+          }
+          // did packages change
+          final oldLints = oldContext.sidecarOptions.lintPackages;
+          final newLints = newContext.sidecarOptions.lintPackages;
+          final areLintsEqual =
+              const DeepCollectionEquality().equals(oldLints, newLints);
+          _log('LINT EQUALITY: $areLintsEqual');
+        }
+      }
+    }, fireImmediately: true);
+  },
+  name: '_isolateUpdateProvider',
+  dependencies: [
+    logDelegateProvider,
+    activeContextsProvider,
+  ],
+);

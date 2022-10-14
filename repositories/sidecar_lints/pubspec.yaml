@@ -14,7 +14,7 @@ dependencies:
   path: ^1.8.0
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.20-dev.3
+    version: ^0.1.23-dev.3
 
 dev_dependencies:
   lints: ^2.0.0
@@ -24,6 +24,4 @@ micropub: sidecar
 
 sidecar:
   edits:
-    output_ast_node_tree:
-      class: OutputAstNodeTree
-      import: sidecar_lints/sidecar_lints.dart
+    - output_ast_node_tree

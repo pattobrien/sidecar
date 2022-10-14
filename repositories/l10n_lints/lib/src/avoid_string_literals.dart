@@ -25,13 +25,13 @@ class AvoidStringLiterals extends LintRule {
   MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
 
   @override
-  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _LiteralAstVisitor();
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes;
+    return Future.value(visitor.nodes);
   }
 
   @override
@@ -107,6 +107,7 @@ class AvoidStringLiterals extends LintRule {
     if (changeBuilder.sourceChange.edits.isNotEmpty) {
       final errorFixes = [
         EditResult(
+          analysisResult: result,
           message: 'Extract string declaration',
           sourceChanges: changeBuilder.sourceChange.edits,
         ),

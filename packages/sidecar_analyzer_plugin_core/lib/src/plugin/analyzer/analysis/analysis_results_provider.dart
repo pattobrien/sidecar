@@ -5,7 +5,7 @@ import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
 import '../analyzer.dart';
 
-final analysisResultsProvider =
+final analysisResultsForFileProvider =
     FutureProvider.family<List<AnalysisResult>, AnalyzedFile>(
   (ref, file) async {
     final fileService = ref.watch(fileAnalyzerServiceProvider);
@@ -30,4 +30,29 @@ final analysisResultsProvider =
     fileAnalyzerServiceProvider,
     resolvedUnitProvider,
   ],
+);
+
+final analysisResultsCompletedForContextProvider =
+    Provider.family<bool, ActiveContextRoot>(
+  (ref, root) {
+    final allFiles = root.typedAnalyzedFiles();
+    return allFiles
+        .every((e) => ref.watch(analysisResultsForFileProvider(e)).hasValue);
+  },
+  name: 'analysisResultsCompletedForContextProvider',
+  dependencies: [
+    analysisResultsForFileProvider,
+  ],
+);
+
+final analysisResultsForContextProvider =
+    Provider.family<List<AnalysisResult>, ActiveContextRoot>(
+  (ref, root) {
+    final allFiles = root.typedAnalyzedFiles();
+    final values = allFiles.map(
+        (e) => ref.watch(analysisResultsForFileProvider(e)).valueOrNull ?? []);
+    return values.expand((element) => element).toList();
+  },
+  name: 'analysisResultsForContextProvider',
+  dependencies: [analysisResultsForFileProvider],
 );

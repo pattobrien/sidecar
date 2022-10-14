@@ -4,8 +4,6 @@ import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/file_system/file_system.dart';
-import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
@@ -84,7 +82,8 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
-    _log('MIDDLEMAN afterNewContextCollection');
+    _log(
+        'MIDDLEMAN afterNewContextCollection || ${contextCollection.contexts.length} contexts');
     ref
         .read(allContextsProvider.state)
         .update((_) => contextCollection.contexts);
@@ -109,5 +108,6 @@ final middlemanPluginProvider = Provider(
     logDelegateProvider,
     sidecarAnalyzerMode,
     isolateCommunicationServiceProvider,
+    middlemanResourceProvider,
   ],
 );

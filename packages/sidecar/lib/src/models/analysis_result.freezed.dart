@@ -21,33 +21,64 @@ mixin _$AnalysisResult {
   String get message => throw _privateConstructorUsedError;
   String? get correction => throw _privateConstructorUsedError;
   SourceSpan? get highlightedSpan => throw _privateConstructorUsedError;
+  List<EditResult> get edits => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
-            String message, String? correction, SourceSpan? highlightedSpan)
+    required TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
         generic,
-    required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
-            String message, String? correction, SourceSpan? highlightedSpan)
+    required TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
         dart,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         generic,
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         dart,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         generic,
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         dart,
     required TResult orElse(),
   }) =>
@@ -87,7 +118,8 @@ abstract class $AnalysisResultCopyWith<$Res> {
       SourceSpan sourceSpan,
       String message,
       String? correction,
-      SourceSpan? highlightedSpan});
+      SourceSpan? highlightedSpan,
+      List<EditResult> edits});
 }
 
 /// @nodoc
@@ -106,6 +138,7 @@ class _$AnalysisResultCopyWithImpl<$Res>
     Object? message = freezed,
     Object? correction = freezed,
     Object? highlightedSpan = freezed,
+    Object? edits = freezed,
   }) {
     return _then(_value.copyWith(
       rule: rule == freezed
@@ -128,6 +161,10 @@ class _$AnalysisResultCopyWithImpl<$Res>
           ? _value.highlightedSpan
           : highlightedSpan // ignore: cast_nullable_to_non_nullable
               as SourceSpan?,
+      edits: edits == freezed
+          ? _value.edits
+          : edits // ignore: cast_nullable_to_non_nullable
+              as List<EditResult>,
     ));
   }
 }
@@ -144,7 +181,8 @@ abstract class _$$GenericAnalysisResultCopyWith<$Res>
       SourceSpan sourceSpan,
       String message,
       String? correction,
-      SourceSpan? highlightedSpan});
+      SourceSpan? highlightedSpan,
+      List<EditResult> edits});
 }
 
 /// @nodoc
@@ -165,6 +203,7 @@ class __$$GenericAnalysisResultCopyWithImpl<$Res>
     Object? message = freezed,
     Object? correction = freezed,
     Object? highlightedSpan = freezed,
+    Object? edits = freezed,
   }) {
     return _then(_$GenericAnalysisResult(
       rule: rule == freezed
@@ -187,6 +226,10 @@ class __$$GenericAnalysisResultCopyWithImpl<$Res>
           ? _value.highlightedSpan
           : highlightedSpan // ignore: cast_nullable_to_non_nullable
               as SourceSpan?,
+      edits: edits == freezed
+          ? _value._edits
+          : edits // ignore: cast_nullable_to_non_nullable
+              as List<EditResult>,
     ));
   }
 }
@@ -199,8 +242,10 @@ class _$GenericAnalysisResult extends GenericAnalysisResult {
       required this.sourceSpan,
       required this.message,
       this.correction,
-      this.highlightedSpan})
-      : super._();
+      this.highlightedSpan,
+      final List<EditResult> edits = const <EditResult>[]})
+      : _edits = edits,
+        super._();
 
   @override
   final SidecarBase rule;
@@ -212,10 +257,17 @@ class _$GenericAnalysisResult extends GenericAnalysisResult {
   final String? correction;
   @override
   final SourceSpan? highlightedSpan;
+  final List<EditResult> _edits;
+  @override
+  @JsonKey()
+  List<EditResult> get edits {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_edits);
+  }
 
   @override
   String toString() {
-    return 'AnalysisResult.generic(rule: $rule, sourceSpan: $sourceSpan, message: $message, correction: $correction, highlightedSpan: $highlightedSpan)';
+    return 'AnalysisResult.generic(rule: $rule, sourceSpan: $sourceSpan, message: $message, correction: $correction, highlightedSpan: $highlightedSpan, edits: $edits)';
   }
 
   @override
@@ -230,7 +282,8 @@ class _$GenericAnalysisResult extends GenericAnalysisResult {
             const DeepCollectionEquality()
                 .equals(other.correction, correction) &&
             const DeepCollectionEquality()
-                .equals(other.highlightedSpan, highlightedSpan));
+                .equals(other.highlightedSpan, highlightedSpan) &&
+            const DeepCollectionEquality().equals(other._edits, _edits));
   }
 
   @override
@@ -240,7 +293,8 @@ class _$GenericAnalysisResult extends GenericAnalysisResult {
       const DeepCollectionEquality().hash(sourceSpan),
       const DeepCollectionEquality().hash(message),
       const DeepCollectionEquality().hash(correction),
-      const DeepCollectionEquality().hash(highlightedSpan));
+      const DeepCollectionEquality().hash(highlightedSpan),
+      const DeepCollectionEquality().hash(_edits));
 
   @JsonKey(ignore: true)
   @override
@@ -251,43 +305,75 @@ class _$GenericAnalysisResult extends GenericAnalysisResult {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
-            String message, String? correction, SourceSpan? highlightedSpan)
+    required TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
         generic,
-    required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
-            String message, String? correction, SourceSpan? highlightedSpan)
+    required TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
         dart,
   }) {
-    return generic(rule, sourceSpan, message, correction, highlightedSpan);
+    return generic(
+        rule, sourceSpan, message, correction, highlightedSpan, edits);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         generic,
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         dart,
   }) {
     return generic?.call(
-        rule, sourceSpan, message, correction, highlightedSpan);
+        rule, sourceSpan, message, correction, highlightedSpan, edits);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         generic,
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         dart,
     required TResult orElse(),
   }) {
     if (generic != null) {
-      return generic(rule, sourceSpan, message, correction, highlightedSpan);
+      return generic(
+          rule, sourceSpan, message, correction, highlightedSpan, edits);
     }
     return orElse();
   }
@@ -330,7 +416,8 @@ abstract class GenericAnalysisResult extends AnalysisResult {
       required final SourceSpan sourceSpan,
       required final String message,
       final String? correction,
-      final SourceSpan? highlightedSpan}) = _$GenericAnalysisResult;
+      final SourceSpan? highlightedSpan,
+      final List<EditResult> edits}) = _$GenericAnalysisResult;
   const GenericAnalysisResult._() : super._();
 
   @override
@@ -343,6 +430,8 @@ abstract class GenericAnalysisResult extends AnalysisResult {
   String? get correction;
   @override
   SourceSpan? get highlightedSpan;
+  @override
+  List<EditResult> get edits;
   @override
   @JsonKey(ignore: true)
   _$$GenericAnalysisResultCopyWith<_$GenericAnalysisResult> get copyWith =>
@@ -361,7 +450,8 @@ abstract class _$$DartAnalysisResultCopyWith<$Res>
       SourceSpan sourceSpan,
       String message,
       String? correction,
-      SourceSpan? highlightedSpan});
+      SourceSpan? highlightedSpan,
+      List<EditResult> edits});
 }
 
 /// @nodoc
@@ -382,6 +472,7 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
     Object? message = freezed,
     Object? correction = freezed,
     Object? highlightedSpan = freezed,
+    Object? edits = freezed,
   }) {
     return _then(_$DartAnalysisResult(
       rule: rule == freezed
@@ -404,6 +495,10 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
           ? _value.highlightedSpan
           : highlightedSpan // ignore: cast_nullable_to_non_nullable
               as SourceSpan?,
+      edits: edits == freezed
+          ? _value._edits
+          : edits // ignore: cast_nullable_to_non_nullable
+              as List<EditResult>,
     ));
   }
 }
@@ -416,8 +511,10 @@ class _$DartAnalysisResult extends DartAnalysisResult {
       required this.sourceSpan,
       required this.message,
       this.correction,
-      this.highlightedSpan})
-      : super._();
+      this.highlightedSpan,
+      final List<EditResult> edits = const <EditResult>[]})
+      : _edits = edits,
+        super._();
 
   @override
   final SidecarBase rule;
@@ -429,10 +526,17 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   final String? correction;
   @override
   final SourceSpan? highlightedSpan;
+  final List<EditResult> _edits;
+  @override
+  @JsonKey()
+  List<EditResult> get edits {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_edits);
+  }
 
   @override
   String toString() {
-    return 'AnalysisResult.dart(rule: $rule, sourceSpan: $sourceSpan, message: $message, correction: $correction, highlightedSpan: $highlightedSpan)';
+    return 'AnalysisResult.dart(rule: $rule, sourceSpan: $sourceSpan, message: $message, correction: $correction, highlightedSpan: $highlightedSpan, edits: $edits)';
   }
 
   @override
@@ -447,7 +551,8 @@ class _$DartAnalysisResult extends DartAnalysisResult {
             const DeepCollectionEquality()
                 .equals(other.correction, correction) &&
             const DeepCollectionEquality()
-                .equals(other.highlightedSpan, highlightedSpan));
+                .equals(other.highlightedSpan, highlightedSpan) &&
+            const DeepCollectionEquality().equals(other._edits, _edits));
   }
 
   @override
@@ -457,7 +562,8 @@ class _$DartAnalysisResult extends DartAnalysisResult {
       const DeepCollectionEquality().hash(sourceSpan),
       const DeepCollectionEquality().hash(message),
       const DeepCollectionEquality().hash(correction),
-      const DeepCollectionEquality().hash(highlightedSpan));
+      const DeepCollectionEquality().hash(highlightedSpan),
+      const DeepCollectionEquality().hash(_edits));
 
   @JsonKey(ignore: true)
   @override
@@ -468,42 +574,74 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
-            String message, String? correction, SourceSpan? highlightedSpan)
+    required TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
         generic,
-    required TResult Function(SidecarBase rule, SourceSpan sourceSpan,
-            String message, String? correction, SourceSpan? highlightedSpan)
+    required TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
         dart,
   }) {
-    return dart(rule, sourceSpan, message, correction, highlightedSpan);
+    return dart(rule, sourceSpan, message, correction, highlightedSpan, edits);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         generic,
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         dart,
   }) {
-    return dart?.call(rule, sourceSpan, message, correction, highlightedSpan);
+    return dart?.call(
+        rule, sourceSpan, message, correction, highlightedSpan, edits);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         generic,
-    TResult Function(SidecarBase rule, SourceSpan sourceSpan, String message,
-            String? correction, SourceSpan? highlightedSpan)?
+    TResult Function(
+            SidecarBase rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
         dart,
     required TResult orElse(),
   }) {
     if (dart != null) {
-      return dart(rule, sourceSpan, message, correction, highlightedSpan);
+      return dart(
+          rule, sourceSpan, message, correction, highlightedSpan, edits);
     }
     return orElse();
   }
@@ -546,7 +684,8 @@ abstract class DartAnalysisResult extends AnalysisResult {
       required final SourceSpan sourceSpan,
       required final String message,
       final String? correction,
-      final SourceSpan? highlightedSpan}) = _$DartAnalysisResult;
+      final SourceSpan? highlightedSpan,
+      final List<EditResult> edits}) = _$DartAnalysisResult;
   const DartAnalysisResult._() : super._();
 
   @override
@@ -559,6 +698,8 @@ abstract class DartAnalysisResult extends AnalysisResult {
   String? get correction;
   @override
   SourceSpan? get highlightedSpan;
+  @override
+  List<EditResult> get edits;
   @override
   @JsonKey(ignore: true)
   _$$DartAnalysisResultCopyWith<_$DartAnalysisResult> get copyWith =>

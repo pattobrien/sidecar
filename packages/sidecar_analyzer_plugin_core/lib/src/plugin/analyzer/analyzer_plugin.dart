@@ -7,15 +7,19 @@ import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../protocol/edit_request.dart';
 import '../../constants.dart';
 import '../../services/services.dart';
 import '../analyzer_mode.dart';
 import '../protocol/protocol.dart';
 import 'active_project/active_project.dart';
 import 'analysis/analysis.dart';
+import 'analysis/quick_fix_results.dart';
 import 'analysis_contexts_provider.dart';
 import 'rule_constructors_provider.dart';
 
@@ -102,21 +106,18 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     if (allContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
         analysisContext.contextRoot.root.path)) {
-      for (final path in paths) {
+      // context is valid
+
+      // analyze all files
+      await Future.wait(paths.map((path) async {
         try {
-          // _log('analyzeFiles for $path');
           final file = ref.read(analyzedFileFromPath(path));
-          // TODO: instead of receiving nullable files, we should check if the context is valid (i.e. active)
-          // if (file == null) return;
           ref.invalidate(resolvedUnitProvider(file));
-          ref.refresh(analysisResultsProvider(file));
+          ref.refresh(analysisResultsForFileProvider(file));
         } catch (e, stackTrace) {
           _logError('analyzeFiles ${e.toString()}', stackTrace);
         }
-      }
-    } else {
-      _log(
-          'analyzeFiles: context is not active || ${analysisContext.contextRoot.root.path}');
+      }));
     }
   }
 
@@ -124,57 +125,51 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> analyzeFile({
     required AnalysisContext analysisContext,
     required String path,
-  }) async {
-    // // TODO: implement analyzeFile
-    // throw UnimplementedError();
+  }) async {}
+
+  @override
+  Future<plugin.EditGetFixesResult> handleEditGetFixes(
+    plugin.EditGetFixesParams parameters,
+  ) async {
+    final path = parameters.file;
+    final offset = parameters.offset;
+    try {
+      final analyzedFile = ref.read(analyzedFileFromPath(path));
+      final editRequest = EditRequest(offset: offset, file: analyzedFile);
+      //TODO: bug, edits are made for multiple files
+      final fixes =
+          await ref.read(quickFixForRequestProvider(editRequest).future);
+
+      return plugin.EditGetFixesResult(fixes);
+    } catch (e, stackTrace) {
+      _logError('handleEditGetFixes $path -- $e', stackTrace);
+      rethrow;
+    }
   }
 
-  // @override
-  // Future<plugin.EditGetFixesResult> handleEditGetFixes(
-  //   plugin.EditGetFixesParams parameters,
-  // ) async {
-  //   final path = parameters.file;
-  //   final offset = parameters.offset;
-  //   try {
-  //     final contexts = await ref.read(enabledContextsProvider.future);
-  //     final context = contexts
-  //         .firstWhere((element) => element.contextRoot.isAnalyzed(path));
-  //     final analyzedFile = AnalyzedFile(context.contextRoot, path);
-  //     final editRequest = EditRequest(offset: offset, file: analyzedFile);
+  @override
+  Future<plugin.EditGetAssistsResult> handleEditGetAssists(
+    plugin.EditGetAssistsParams parameters,
+  ) async {
+    final path = parameters.file;
+    final offset = parameters.offset;
+    final length = parameters.length;
+    try {
+      // final context = ref
+      //     .read(analysisContextCollectionServiceProvider)
+      //     .getContextFromPath(path);
 
-  //     final fixes =
-  //         await ref.read(analysisErrorFixesProvider(editRequest).future);
+      // final results = await ref
+      //     .read(analysisContextServiceProvider(context))
+      //     .getCodeAssists(path, offset, length);
+      final results = <plugin.PrioritizedSourceChange>[];
 
-  //     return plugin.EditGetFixesResult(fixes);
-  //   } catch (e, stackTrace) {
-  //     delegate.sidecarError('handleEditGetFixes $path -- $e', stackTrace);
-  //     rethrow;
-  //   }
-  // }
-
-  // @override
-  // Future<plugin.EditGetAssistsResult> handleEditGetAssists(
-  //   plugin.EditGetAssistsParams parameters,
-  // ) async {
-  //   final path = parameters.file;
-  //   final offset = parameters.offset;
-  //   final length = parameters.length;
-  //   try {
-  //     // final context = ref
-  //     //     .read(analysisContextCollectionServiceProvider)
-  //     //     .getContextFromPath(path);
-
-  //     // final results = await ref
-  //     //     .read(analysisContextServiceProvider(context))
-  //     //     .getCodeAssists(path, offset, length);
-  //     final results = <plugin.PrioritizedSourceChange>[];
-
-  //     return plugin.EditGetAssistsResult(results.toList());
-  //   } catch (e, stackTrace) {
-  //     delegate.sidecarError('handleEditGetAssists $path -- $e', stackTrace);
-  //     rethrow;
-  //   }
-  // }
+      return plugin.EditGetAssistsResult(results.toList());
+    } catch (e, stackTrace) {
+      _logError('handleEditGetAssists $path -- $e', stackTrace);
+      rethrow;
+    }
+  }
 }
 
 final pluginProvider = Provider(

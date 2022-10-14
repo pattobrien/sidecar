@@ -3,6 +3,7 @@ import 'package:analyzer/dart/analysis/analysis_options.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/dart/analysis/session.dart';
 import 'package:analyzer/file_system/file_system.dart';
+import 'package:collection/collection.dart';
 import 'package:package_config/package_config_types.dart';
 import 'package:sidecar/sidecar.dart';
 
@@ -46,8 +47,8 @@ class ActiveContext implements AnalysisContext {
 }
 
 extension ContextsX on List<ActiveContext> {
-  ActiveContext contextFor(AnalyzedFile analyzedFile) {
-    return firstWhere((activeContext) => activeContext.activeRoot
+  ActiveContext? contextFor(AnalyzedFile analyzedFile) {
+    return firstWhereOrNull((activeContext) => activeContext.activeRoot
         .analyzedFiles()
         .any((filePath) => filePath == analyzedFile.path));
   }

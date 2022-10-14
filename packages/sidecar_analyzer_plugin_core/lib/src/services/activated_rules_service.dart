@@ -16,7 +16,9 @@ class ActivatedRulesService {
     List<SidecarBaseConstructor> ruleConstructors,
   ) {
     _log(
-        'package configuration = ${projectConfiguration.lintPackages?.entries.first ?? 0}');
+        'initializing ${projectConfiguration.lintPackages?.length ?? 0} lint packages');
+    _log(
+        'initializing ${projectConfiguration.assistPackages?.length ?? 0} assist packages');
     return ruleConstructors
         .map<SidecarBase?>((ruleConstructor) {
           final rule = ruleConstructor();

@@ -60,7 +60,7 @@ final _activatedRulesProvider =
 final _filteredRulesProvider = Provider.family<List<SidecarBase>, AnalyzedFile>(
   (ref, analyzedFile) {
     final allRules = ref.watch(_activatedRulesProvider(analyzedFile.root));
-    final context = ref.watch(activeContextsProvider).contextFor(analyzedFile);
+    final context = ref.watch(activeContextsProvider).contextFor(analyzedFile)!;
     final sidecarOptions = context.sidecarOptions;
 
     return allRules

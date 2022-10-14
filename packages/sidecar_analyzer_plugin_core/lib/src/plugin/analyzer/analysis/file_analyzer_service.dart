@@ -53,6 +53,33 @@ class FileAnalyzerService {
     }
   }
 
+  Future<List<AnalysisResult>> computeQuickAssists({
+    required AnalyzedFile file,
+    required List<CodeEdit> activatedRules,
+    required ResolvedUnitResult? unitResult,
+  }) async {
+    //TODO: allow analysis of other file extensions
+    if (file.isDartFile) {
+      if (unitResult == null) return [];
+
+      final results = await Future.wait(
+          activatedRules.map<Future<List<DartAnalysisResult>>>((rule) {
+        try {
+          return rule.computeDartAnalysisResults(unitResult);
+        } catch (e, stackTrace) {
+          _logError('LintRule Error: ${e.toString()}', stackTrace);
+          return Future.value([]);
+        }
+      }));
+
+      return results.expand((e) => e).toList()
+        ..sort((a, b) => a.sourceSpan.location.startLine
+            .compareTo(b.sourceSpan.location.startLine));
+    } else {
+      return Future.value([]);
+    }
+  }
+
   Iterable<AnalysisResult> getAnalysisResultsAtOffset(
     Iterable<AnalysisResult> analysisResults,
     String path,
@@ -63,7 +90,24 @@ class FileAnalyzerService {
         analysisResult.rule is LintRule);
   }
 
+  Future<Iterable<EditResult>> calculateEditResultsForAnalysisResult(
+    ActiveContext context,
+    AnalysisResult analysisResult,
+  ) async {
+    return analysisResult.rule
+        .computeSourceChanges(context.currentSession, analysisResult);
+  }
+
+  Future<Iterable<EditResult>> calculateAssistEdits(
+    ActiveContext context,
+    AnalysisResult analysisResult,
+  ) async {
+    return analysisResult.rule
+        .computeSourceChanges(context.currentSession, analysisResult);
+  }
+
   // Future<Iterable<EditResult>> calculateEditResults(
+  //   ActiveContext context,
   //   Iterable<AnalysisResult> analysisResults,
   //   String path,
   //   int offset,
@@ -72,5 +116,4 @@ class FileAnalyzerService {
   //       .map((e) => e.rule.computeSourceChanges(context.currentSession, e)));
   //   return results.expand((element) => element);
   // }
-
 }

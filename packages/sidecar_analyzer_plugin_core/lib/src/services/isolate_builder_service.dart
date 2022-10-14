@@ -101,7 +101,10 @@ class IsolateBuilderService {
     final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
     final listBuffer = StringBuffer()..writeln(constructorListBegin);
 
-    for (final sidecarPackage in activeContext.sidecarPackages) {
+    final sidecarPackages = activeContext.sidecarPackages;
+    _log('_setupBootstrapper || adding ${sidecarPackages.length} packages');
+
+    for (final sidecarPackage in sidecarPackages) {
       final name = sidecarPackage.packageName;
       importsBuffer.writeln("import 'package:$name/$name.dart' as $name;");
       final rules = [

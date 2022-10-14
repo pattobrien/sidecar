@@ -17,6 +17,7 @@ class AnalysisResult with _$AnalysisResult {
     required String message,
     String? correction,
     SourceSpan? highlightedSpan,
+    @Default(<EditResult>[]) List<EditResult> edits,
   }) = GenericAnalysisResult;
 
   const factory AnalysisResult.dart({
@@ -25,6 +26,7 @@ class AnalysisResult with _$AnalysisResult {
     required String message,
     String? correction,
     SourceSpan? highlightedSpan,
+    @Default(<EditResult>[]) List<EditResult> edits,
   }) = DartAnalysisResult;
 
   const AnalysisResult._();
@@ -50,7 +52,7 @@ class AnalysisResult with _$AnalysisResult {
       concatenatedLintCode,
       url: lintRule.url,
       correction: correction,
-      // hasFix: false,
+      hasFix: edits.isNotEmpty,
       //TODO: hasFix
     );
   }
