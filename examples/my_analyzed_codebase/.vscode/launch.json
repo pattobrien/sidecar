@@ -9,6 +9,16 @@
             "args": [
                 "--enable-vm-service"
             ]
+        },
+        {
+            "name": "Sidecar Debugger from Path",
+            "program": "${userHome}/Development/sidecar/packages/sidecar_analyzer_plugin_core/bin/debug.dart",
+            // "program": ".sidecar/sidecar_analyzer_plugin/bin/debug.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--enable-vm-service"
+            ]
         }
     ],
 }

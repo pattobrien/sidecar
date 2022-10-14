@@ -9,15 +9,18 @@ import 'package:riverpod/riverpod.dart';
 
 import '../bootstrap_constants.dart';
 import '../plugin/protocol/protocol.dart';
+import 'log_delegate/log_delegate.dart';
 
 class IsolateBuilderService {
   const IsolateBuilderService(this.ref);
   final Ref ref;
 
+  void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
   IsolateDetails startIsolate(ActiveContext activeContext) {
+    _log('STARTING ISOLATE');
     return IsolateDetails(
       channel: _startNewIsolate(activeContext),
-      activeContext: activeContext,
+      activeRoot: activeContext.activeRoot,
     );
   }
 
@@ -32,9 +35,14 @@ class IsolateBuilderService {
     _setupBootstrapper(activeContext);
 
     // start isolate
+    final packagesUri = _packagesUri(activeContext.activeRoot);
+    final executableUri = _executableUri(activeContext.activeRoot);
+
+    _log(
+        'plugin isolate details: package_config.json=${packagesUri.path} || executable=${executableUri.path}');
     final pluginIsolateChannel = ServerIsolateChannel.discovered(
-      _packagesUri(activeContext.activeRoot),
-      _executableUri(activeContext.activeRoot),
+      executableUri,
+      packagesUri,
       NoopInstrumentationService(),
     );
 
@@ -46,6 +54,8 @@ class IsolateBuilderService {
   }
 
   void _setupPluginSourceFiles(ActiveContext activeContext) {
+    // _log(
+    //     'getting source files for plugin: ${activeContext.pluginSourceUri.path}');
     final sourceExecutableDirectory = Directory(p.join(
         activeContext.pluginSourceUri.path, 'tools', 'analyzer_plugin', 'bin'));
 
@@ -53,18 +63,24 @@ class IsolateBuilderService {
         sourceExecutableDirectory.listSync(recursive: true);
 
     String _pluginPath(String path, {required Uri newDirectory}) {
-      return p.relative(path, from: sourceExecutableDirectory.path);
+      return p.join(newDirectory.path,
+          p.relative(path, from: sourceExecutableDirectory.path));
     }
 
-    pluginFileEntities.whereType<File>().map((sourceFileEntity) {
+    pluginFileEntities.whereType<File>().forEach((sourceFileEntity) {
+      // _log('copying file.... ${sourceFileEntity.absolute.path}');
       Directory(_pluginPath(
-        sourceFileEntity.parent.path,
+        sourceFileEntity.absolute.parent.path,
         newDirectory: _packageToolDirectory(activeContext.activeRoot),
-      )).createSync();
-
-      sourceFileEntity.copySync(_pluginPath(sourceFileEntity.path,
-          newDirectory: _packageToolDirectory(activeContext.activeRoot)));
+      )).createSync(recursive: true);
+      // _log('created directory: ${directory.path}');
+      final newDirectory = _packageToolDirectory(activeContext.activeRoot);
+      final newPath = _pluginPath(sourceFileEntity.absolute.path,
+          newDirectory: newDirectory);
+      // _log('copying file to new path: $newPath in directory #{}');
+      sourceFileEntity.copySync(newPath);
     });
+    // _log('created: ${pluginFileEntities.length} files');
   }
 
   IsolateDetails _restartIsolate(
@@ -74,7 +90,8 @@ class IsolateBuilderService {
     final channel = _startNewIsolate(activeContext);
 
     shutdownIsolate(previousDetails);
-    return IsolateDetails(channel: channel, activeContext: activeContext);
+    return IsolateDetails(
+        channel: channel, activeRoot: activeContext.activeRoot);
   }
 
   void _setupBootstrapper(ActiveContext activeContext) {
@@ -121,6 +138,7 @@ final isolateBuilderServiceProvider = Provider(
   (ref) {
     return IsolateBuilderService(ref);
   },
+  name: 'isolateBuilderServiceProvider',
   dependencies: const [],
 );
 

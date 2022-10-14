@@ -10,6 +10,7 @@ final contextSidecarDependenciesProvider =
     final service = ref.watch(activePackageServiceProvider);
     return service.getSidecarDependencies(root.root.toUri());
   },
+  name: 'contextSidecarDependenciesProvider',
   dependencies: [
     activePackageServiceProvider,
   ],

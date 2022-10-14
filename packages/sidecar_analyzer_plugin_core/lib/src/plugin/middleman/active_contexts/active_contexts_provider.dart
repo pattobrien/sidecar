@@ -20,6 +20,7 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
         .whereType<ActiveContext>()
         .toList();
   },
+  name: 'activeContextsProvider',
   dependencies: [
     allContextsProvider,
     activePackageServiceProvider,
@@ -32,6 +33,7 @@ final activeContextForContextRootProvider =
     return ref.watch(activeContextsProvider.select((activeContexts) =>
         activeContexts.firstWhere((context) => context.activeRoot == root)));
   },
+  name: 'activeContextForContextRootProvider',
   dependencies: [
     activeContextsProvider,
   ],
@@ -42,6 +44,7 @@ final activeContextRootsProvider = Provider<List<ActiveContextRoot>>(
     final activeContexts = ref.watch(activeContextsProvider);
     return activeContexts.map((e) => ActiveContextRoot(e.contextRoot)).toList();
   },
+  name: 'activeContextRootsProvider',
   dependencies: [
     activeContextsProvider,
   ],

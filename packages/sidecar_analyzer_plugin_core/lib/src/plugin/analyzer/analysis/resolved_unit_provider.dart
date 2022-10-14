@@ -14,6 +14,7 @@ final resolvedUnitProvider =
     final someUnitResult = await analysisSession.getResolvedUnit(file.path);
     return someUnitResult is ResolvedUnitResult ? someUnitResult : null;
   },
+  name: 'resolvedUnitProvider',
   dependencies: [
     activeContextsProvider,
   ],

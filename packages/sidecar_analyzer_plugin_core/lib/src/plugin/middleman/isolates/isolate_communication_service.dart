@@ -2,33 +2,14 @@ import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol.dart';
 import 'package:analyzer_plugin/protocol/protocol_constants.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart';
+import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../sidecar_analyzer_plugin_core.dart';
 import '../../protocol/isolate_message.dart';
 import '../../protocol/protocol.dart';
 import '../middleman.dart';
-import 'isolate_details_provider.dart';
-
-final isolateCommunicationServiceProvider =
-    Provider<IsolateCommunicationService>(
-  (ref) {
-    final isolates = ref.watch(isolateDetailsProvider);
-    final service = IsolateCommunicationService(ref, isolates: isolates);
-    ref.listen<List<IsolateDetails>>(
-      isolateDetailsProvider,
-      (previous, next) {
-        final changedIsolates = next.where((isolate) =>
-            previous?.any((element) => isolate != element) ?? false);
-        changedIsolates.forEach(service.addIsolateListener);
-      },
-    );
-    return service;
-  },
-  dependencies: [
-    isolateDetailsProvider,
-  ],
-);
 
 class IsolateCommunicationService {
   IsolateCommunicationService(
@@ -36,7 +17,7 @@ class IsolateCommunicationService {
     required this.isolates,
   });
 
-  final state = <int, MultiIsolateMessage>{};
+  final state = <String, MultiIsolateMessage>{};
 
   final Ref ref;
   final List<IsolateDetails> isolates;
@@ -49,18 +30,25 @@ class IsolateCommunicationService {
       ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
   void addIsolateListener(IsolateDetails isolate) {
+    _log('addIsolateListener: context=${isolate.activeRoot.root.shortName}');
     // setup listeners for isolate responses, middleman communication
-    final root = isolate.activeContext.activeRoot;
+    final root = isolate.activeRoot;
     isolate.channel.listen(
       (response) => handlePluginResponse(root, response),
       (notif) => handlePluginNotification(isolate, notif),
       onError: (error) => handlePluginError(isolate, error),
       onDone: () => handlePluginDone(isolate),
     );
+    isolates.add(isolate);
   }
 
   void _addNewMessage(MultiIsolateMessage message) {
-    //
+    state[message.originalRequest.id] = message;
+    for (final request in message.requests) {
+      final isolate =
+          isolates.firstWhere((element) => element.activeRoot == request.root);
+      isolate.channel.sendRequest(request.request);
+    }
   }
 
   void handleServerRequest(
@@ -77,8 +65,10 @@ class IsolateCommunicationService {
     ActiveContextRoot root,
     Response response,
   ) {
+    _log('ISOLATE RESPONSE || ${root.root.shortName} || ${response.toJson()} ');
     final isoResponse = IsolateResponse(response: response, root: root);
-    final cachedMessage = state[int.parse(response.id)];
+
+    final cachedMessage = state[response.id];
 
     assert(
         cachedMessage != null, 'response should always have a cached request');
@@ -86,10 +76,10 @@ class IsolateCommunicationService {
     final newMessage = cachedMessage!
         .copyWith(responses: [...cachedMessage.responses, isoResponse]);
     if (newMessage.isResponseReady) {
-      state.remove(newMessage.id);
+      state.remove(newMessage.originalRequest.id);
       _parseAndHandleResponse(newMessage);
     } else {
-      state[newMessage.id] = newMessage;
+      state[newMessage.originalRequest.id] = newMessage;
     }
   }
 
@@ -98,7 +88,35 @@ class IsolateCommunicationService {
     Notification notification,
   ) {
     //TODO: verify that notifications dont need to be aggregated like responses do
+    _log(
+        'ISOLATE NOTIFICATION || ${details.activeRoot.root.shortName} || ${notification.toJson()} ');
+    _parsePluginNotification(details, notification);
+  }
+
+  void _parsePluginNotification(
+    IsolateDetails details,
+    Notification notification,
+  ) {
+    //
+    switch (notification.event) {
+      case kInitializationCompleteMethod:
+        _handlePluginInitialization(details);
+        break;
+    }
     channel.sendNotification(notification);
+  }
+
+  void _handlePluginInitialization(IsolateDetails isolate) {
+    const uuid = Uuid();
+    final id = uuid.v4();
+    final newRequest =
+        AnalysisSetContextRootsParams([isolate.activeRoot.toPluginContextRoot])
+            .toRequest(id);
+    _addNewMessage(MultiIsolateMessage(
+      originalRequest: newRequest,
+      requests: [IsolateRequest(request: newRequest, root: isolate.activeRoot)],
+      initialTimestamp: DateTime.now(),
+    ));
   }
 
   void handlePluginError(
@@ -106,29 +124,29 @@ class IsolateCommunicationService {
     dynamic error,
   ) {
     return _log(
-        'ISOLATE ERROR: ${details.activeContext.activeRoot.root.path} || $error');
+        'ISOLATE ERROR || ${details.activeRoot.root.shortName} || $error');
   }
 
   void handlePluginDone(
     IsolateDetails details,
   ) {
-    return _log('ISOLATE DONE: ${details.activeContext.activeRoot.root.path}');
+    return _log('ISOLATE DONE || ${details.activeRoot.root.shortName}');
   }
 
   List<IsolateRequest> _aggregateRequests(
     Request request, {
     String? path,
   }) {
+    // if path is null, we send it to all isolates
+    // if path has a value, we send the request to isolates responsible for that path (should only be one isolate)
     if (path != null) {
       return isolates
-          .where((isolate) => isolate.activeContext.activeRoot.isAnalyzed(path))
-          .map((e) => IsolateRequest(
-              request: request, root: e.activeContext.activeRoot))
+          .where((isolate) => isolate.activeRoot.isAnalyzed(path))
+          .map((e) => IsolateRequest(request: request, root: e.activeRoot))
           .toList();
     } else {
       return isolates
-          .map((e) => IsolateRequest(
-              request: request, root: e.activeContext.activeRoot))
+          .map((e) => IsolateRequest(request: request, root: e.activeRoot))
           .toList();
     }
   }
@@ -142,7 +160,7 @@ class IsolateCommunicationService {
         final params = AnalysisHandleWatchEventsParams.fromRequest(request);
         return isolates
             .map<IsolateRequest?>((isolate) {
-              final root = isolate.activeContext.activeRoot;
+              final root = isolate.activeRoot;
               final filteredEvents = params.events
                   .where((event) => root.isAnalyzed(event.path))
                   .toList();
@@ -159,20 +177,21 @@ class IsolateCommunicationService {
         final params = AnalysisSetContextRootsParams.fromRequest(request);
         final roots = params.roots;
         final newRoots = roots
-            .map((root) => isolates.firstWhere((isolate) =>
-                isolate.activeContext.activeRoot.root.path == root.root))
-            .map((e) => e.activeContext.activeRoot);
+            .map((root) => isolates.firstWhereOrNull(
+                (isolate) => isolate.activeRoot.root.path == root.root))
+            .map((e) => e?.activeRoot)
+            .whereType<ActiveContextRoot>();
         return newRoots.map((filteredRoot) {
-          final root = ContextRoot(filteredRoot.root.path, []);
           final newRequest =
-              AnalysisSetContextRootsParams([root]).toRequest(request.id);
+              AnalysisSetContextRootsParams([filteredRoot.toPluginContextRoot])
+                  .toRequest(request.id);
           return IsolateRequest(request: newRequest, root: filteredRoot);
         }).toList();
       case ANALYSIS_REQUEST_SET_PRIORITY_FILES:
         final params = AnalysisSetPriorityFilesParams.fromRequest(request);
         final contextFilesEntries =
             isolates.map<MapEntry<ActiveContextRoot, List<String>>>((e) {
-          final root = e.activeContext.activeRoot;
+          final root = e.activeRoot;
           return MapEntry(root, params.files.where(root.isAnalyzed).toList());
         });
         return contextFilesEntries
@@ -184,7 +203,7 @@ class IsolateCommunicationService {
         final subscriptions = params.subscriptions;
         return isolates
             .map<IsolateRequest?>((isolate) {
-              final root = isolate.activeContext.activeRoot;
+              final root = isolate.activeRoot;
               final filteredSubscriptions = subscriptions.map((sub, files) =>
                   MapEntry(sub, files.where(root.isAnalyzed).toList()));
               // TODO: do we need to not send a request if files arent applicable to a particular isolate?
@@ -200,7 +219,7 @@ class IsolateCommunicationService {
         final files = params.files;
         return isolates
             .map<IsolateRequest?>((isolate) {
-              final root = isolate.activeContext.activeRoot;
+              final root = isolate.activeRoot;
               final filteredFiles =
                   files.entries.where((e) => root.isAnalyzed(e.key));
               // if no updates for an isolate, then dont send a request at all
@@ -377,3 +396,15 @@ class IsolateCommunicationService {
     }
   }
 }
+
+final isolateCommunicationServiceProvider =
+    Provider<IsolateCommunicationService>(
+  (ref) {
+    return IsolateCommunicationService(ref, isolates: []);
+  },
+  name: 'isolateCommunicationServiceProvider',
+  dependencies: [
+    masterPluginChannelProvider,
+    logDelegateProvider,
+  ],
+);

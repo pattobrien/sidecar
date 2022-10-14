@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
@@ -11,18 +12,27 @@ final analyzedFilesProvider =
         .where((analyzedFile) => !analyzedFile.isAnalysisOptionsFile)
         .toList();
   },
+  name: 'analyzedFilesProvider',
   dependencies: [
     _unfilteredAnalyzedFilesProvider,
   ],
 );
 
-final analyzedFileFromPath = Provider.family<AnalyzedFile, String>((ref, path) {
-  final activeContexts = ref.watch(activeContextsProvider);
-  final context = activeContexts
-      .firstWhere((activeContext) => activeContext.activeRoot.isAnalyzed(path));
-  final analyzedFiles = ref.watch(analyzedFilesProvider(context.activeRoot));
-  return analyzedFiles.firstWhere((element) => element.path == path);
-});
+final analyzedFileFromPath = Provider.family<AnalyzedFile, String>(
+  (ref, path) {
+    final activeContexts = ref.watch(activeContextsProvider);
+    final context = activeContexts.firstWhere((activeContext) =>
+        activeContext.activeRoot.analyzedFiles().any((file) => file == path));
+    // if (context == null) return null;
+    final analyzedFiles = ref.watch(analyzedFilesProvider(context.activeRoot));
+    return analyzedFiles.firstWhere((element) => element.path == path);
+  },
+  name: 'analyzedFileFromPath',
+  dependencies: [
+    activeContextsProvider,
+    analyzedFilesProvider,
+  ],
+);
 
 final analyzedOptionsFileProvider =
     Provider.family<AnalyzedFile, ActiveContextRoot>(
@@ -31,6 +41,7 @@ final analyzedOptionsFileProvider =
         files.singleWhere(
             (analyzedFile) => analyzedFile.isAnalysisOptionsFile)));
   },
+  name: 'analyzedOptionsFileProvider',
   dependencies: [
     _unfilteredAnalyzedFilesProvider,
   ],
@@ -41,5 +52,6 @@ final _unfilteredAnalyzedFilesProvider =
   (ref, root) {
     return root.typedAnalyzedFiles().toList();
   },
+  name: '_unfilteredAnalyzedFilesProvider',
   dependencies: [],
 );

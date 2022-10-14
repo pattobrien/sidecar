@@ -44,6 +44,7 @@ class ActivatedRulesService {
 
 final activatedRulesServiceProvider = Provider(
   ActivatedRulesService.new,
+  name: 'activatedRulesServiceProvider',
   dependencies: [
     logDelegateProvider,
   ],

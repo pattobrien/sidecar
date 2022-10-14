@@ -12,7 +12,7 @@ part 'isolate_details.freezed.dart';
 class IsolateDetails with _$IsolateDetails {
   const factory IsolateDetails({
     required ServerIsolateChannel channel,
-    required ActiveContext activeContext,
+    required ActiveContextRoot activeRoot,
   }) = _IsolateDetails;
   const IsolateDetails._();
 }

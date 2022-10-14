@@ -7,21 +7,28 @@ import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
 import '../analyzer.dart';
 
-final projectLintRulesProvider =
-    Provider.family<List<LintRule>, AnalyzedFile>((ref, analyzedFile) {
-  return ref.watch(_filteredRulesProvider(analyzedFile)
-      .select((value) => value.whereType<LintRule>().toList()));
-}, dependencies: [
-  _filteredRulesProvider,
-]);
+final projectLintRulesProvider = Provider.family<List<LintRule>, AnalyzedFile>(
+  (ref, analyzedFile) {
+    return ref.watch(_filteredRulesProvider(analyzedFile)
+        .select((value) => value.whereType<LintRule>().toList()));
+  },
+  name: 'projectLintRulesProvider',
+  dependencies: [
+    _filteredRulesProvider,
+  ],
+);
 
 final projectAssistRulesProvider =
-    Provider.family<List<CodeEdit>, AnalyzedFile>((ref, analyzedFile) {
-  return ref.watch(_filteredRulesProvider(analyzedFile)
-      .select((value) => value.whereType<CodeEdit>().toList()));
-}, dependencies: [
-  _filteredRulesProvider,
-]);
+    Provider.family<List<CodeEdit>, AnalyzedFile>(
+  (ref, analyzedFile) {
+    return ref.watch(_filteredRulesProvider(analyzedFile)
+        .select((value) => value.whereType<CodeEdit>().toList()));
+  },
+  name: 'projectAssistRulesProvider',
+  dependencies: [
+    _filteredRulesProvider,
+  ],
+);
 
 final _activatedRulesProvider =
     Provider.family<List<SidecarBase>, ActiveContextRoot>(
@@ -40,6 +47,7 @@ final _activatedRulesProvider =
       ruleConstructors,
     );
   },
+  name: '_activatedRulesProvider',
   dependencies: [
     activeContextForContextRootProvider,
     activatedRulesServiceProvider,
@@ -49,20 +57,25 @@ final _activatedRulesProvider =
 );
 
 /// Filter rules based on globs defined in project configuration
-final _filteredRulesProvider =
-    Provider.family<List<SidecarBase>, AnalyzedFile>((ref, analyzedFile) {
-  final allRules = ref.watch(_activatedRulesProvider(analyzedFile.root));
-  final context = ref.watch(activeContextForFileProvider(analyzedFile));
-  final sidecarOptions = context.sidecarOptions;
+final _filteredRulesProvider = Provider.family<List<SidecarBase>, AnalyzedFile>(
+  (ref, analyzedFile) {
+    final allRules = ref.watch(_activatedRulesProvider(analyzedFile.root));
+    final context = ref.watch(activeContextForFileProvider(analyzedFile));
+    final sidecarOptions = context.sidecarOptions;
 
-  return allRules
-      .where((rule) => _isPathIncludedForRule(
-          file: analyzedFile, rule: rule, projectConfiguration: sidecarOptions))
-      .toList();
-}, dependencies: [
-  activeContextForFileProvider,
-  _activatedRulesProvider,
-]);
+    return allRules
+        .where((rule) => _isPathIncludedForRule(
+            file: analyzedFile,
+            rule: rule,
+            projectConfiguration: sidecarOptions))
+        .toList();
+  },
+  name: '_filteredRulesProvider',
+  dependencies: [
+    activeContextForFileProvider,
+    _activatedRulesProvider,
+  ],
+);
 
 bool _isPathIncludedForRule({
   required AnalyzedFile file,

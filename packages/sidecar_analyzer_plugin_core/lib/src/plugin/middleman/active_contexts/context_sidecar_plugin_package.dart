@@ -10,6 +10,7 @@ final contextSidecarPluginPackageProvider =
     final service = ref.watch(activePackageServiceProvider);
     return service.getSidecarPluginUriForPackage(root.root.toUri());
   },
+  name: 'contextSidecarPluginPackageProvider',
   dependencies: [
     activePackageServiceProvider,
   ],

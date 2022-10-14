@@ -8,5 +8,7 @@ extension SidecarAnalyzerModeX on SidecarAnalyzerMode {
   bool get isPlugin => this == SidecarAnalyzerMode.plugin;
 }
 
-final sidecarAnalyzerMode =
-    Provider<SidecarAnalyzerMode>((ref) => throw UnimplementedError());
+final sidecarAnalyzerMode = Provider<SidecarAnalyzerMode>(
+  (ref) => throw UnimplementedError(),
+  name: 'sidecarAnalyzerMode',
+);

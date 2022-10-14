@@ -15,7 +15,5 @@ class MultiIsolateMessage with _$MultiIsolateMessage {
   }) = _MultiIsolateReponse;
   const MultiIsolateMessage._();
 
-  int get id => int.parse(originalRequest.id);
-
   bool get isResponseReady => requests.length == responses.length;
 }

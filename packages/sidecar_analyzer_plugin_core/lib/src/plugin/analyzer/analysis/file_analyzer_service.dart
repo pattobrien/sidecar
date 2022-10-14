@@ -8,6 +8,7 @@ final fileAnalyzerServiceProvider = Provider(
   (ref) {
     return FileAnalyzerService(ref);
   },
+  name: 'fileAnalyzerServiceProvider',
   dependencies: [
     logDelegateProvider,
   ],

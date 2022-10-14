@@ -26,30 +26,34 @@ class ActivePackageService {
   //     File(p.join(root.toFilePath(), 'pubspec.yaml')).existsSync();
 
   ActiveContext? initializeContext(AnalysisContext analysisContext) {
-    final root = analysisContext.contextRoot;
-    final contextUri = root.root.toUri();
+    try {
+      final root = analysisContext.contextRoot;
+      final contextUri = root.root.toUri();
+      final pluginUri = getSidecarPluginUriForPackage(contextUri);
+      final packages = getSidecarDependencies(contextUri);
+      final projectConfig = getSidecarOptions(root);
 
-    final pluginUri = getSidecarPluginUriForPackage(contextUri);
-    final packages = getSidecarDependencies(contextUri);
-    final projectConfig = getSidecarOptions(root);
+      final isSidecarEnabled = analysisContext.isSidecarEnabled;
+      final hasProjectConfiguration = projectConfig != null;
+      final hasSidecarPlugin = pluginUri != null;
+      final hasLintPackages = packages.isNotEmpty;
 
-    final isSidecarEnabled = analysisContext.isSidecarEnabled;
-    final hasProjectConfiguration = projectConfig != null;
-    final hasSidecarPlugin = pluginUri != null;
-    final hasLintPackages = packages.isNotEmpty;
-
-    if (!isSidecarEnabled ||
-        !hasProjectConfiguration ||
-        !hasSidecarPlugin ||
-        !hasLintPackages) {
-      return null;
+      if (!isSidecarEnabled ||
+          !hasProjectConfiguration ||
+          !hasSidecarPlugin ||
+          !hasLintPackages) {
+        return null;
+      }
+      return ActiveContext(
+        analysisContext,
+        sidecarOptions: projectConfig,
+        sidecarPluginPackage: pluginUri,
+        sidecarPackages: packages,
+      );
+    } catch (e, stackTrace) {
+      _logError('ActivePackageService ERROR: ${e.toString()}', stackTrace);
+      rethrow;
     }
-    return ActiveContext(
-      analysisContext,
-      sidecarOptions: projectConfig,
-      sidecarPluginPackage: pluginUri,
-      sidecarPackages: packages,
-    );
   }
 
   // is this needed for any external functions ?
@@ -92,7 +96,8 @@ class ActivePackageService {
       final contents = File(file.path).readAsStringSync();
       return ProjectConfiguration.parse(contents, sourceUrl: file.toUri());
     } catch (e, stackTrace) {
-      _logError('_parseProjectConfiguration error: $e', stackTrace);
+      _logError(
+          'ISOLATE NON-FATAL: _parseProjectConfiguration || $e', stackTrace);
       return null;
     }
   }
@@ -100,6 +105,7 @@ class ActivePackageService {
 
 final activePackageServiceProvider = Provider(
   ActivePackageService.new,
+  name: 'activePackageServiceProvider',
   dependencies: [
     logDelegateProvider,
   ],

@@ -3,6 +3,7 @@
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/src/workspace/workspace.dart';
+import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
 import 'analyzed_file.dart';
 
@@ -13,6 +14,9 @@ class ActiveContextRoot implements ContextRoot {
 
   List<AnalyzedFile> typedAnalyzedFiles() =>
       analyzedFiles().map((e) => AnalyzedFile(this, e)).toList();
+
+  plugin.ContextRoot get toPluginContextRoot =>
+      plugin.ContextRoot(_root.root.path, []);
 
   @override
   Iterable<String> analyzedFiles() => _root.analyzedFiles();

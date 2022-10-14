@@ -14,6 +14,7 @@ import '../../constants.dart';
 import '../../services/services.dart';
 import '../analyzer_mode.dart';
 import '../protocol/protocol.dart';
+import 'active_project/active_project.dart';
 import 'analysis/analysis.dart';
 import 'analysis_contexts_provider.dart';
 import 'rule_constructors_provider.dart';
@@ -42,9 +43,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   SidecarAnalyzerMode get mode => ref.read(sidecarAnalyzerMode);
 
-  void _log(String message) => ref.read(logDelegateProvider).sidecarMessage;
-  void _logError(Object e, [StackTrace? stackTrace]) =>
-      ref.read(logDelegateProvider).sidecarError;
+  void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
+  void _logError(Object e, StackTrace stackTrace) =>
+      ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
@@ -79,8 +80,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     try {
       _log('ISOLATE: afterNewContextCollection');
-      ref.read(allAnalysisContextsProvider.state).state =
-          contextCollection.contexts;
+      // ref.invalidate(activeContextsProvider);
+      ref
+          .read(allAnalysisContextsProvider.state)
+          .update((_) => contextCollection.contexts);
 
       return super
           .afterNewContextCollection(contextCollection: contextCollection);
@@ -95,9 +98,25 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
-    for (final path in paths) {
-      final file = ref.read(analyzedFileFromPath(path));
-      ref.refresh(resolvedUnitProvider(file));
+    final allContexts = ref.read(activeContextsProvider);
+    if (allContexts.any((activeContext) =>
+        activeContext.activeRoot.root.path ==
+        analysisContext.contextRoot.root.path)) {
+      for (final path in paths) {
+        try {
+          // _log('analyzeFiles for $path');
+          final file = ref.read(analyzedFileFromPath(path));
+          // TODO: instead of receiving nullable files, we should check if the context is valid (i.e. active)
+          // if (file == null) return;
+          ref.invalidate(resolvedUnitProvider(file));
+          ref.refresh(analysisResultsProvider(file));
+        } catch (e, stackTrace) {
+          _logError('analyzeFiles ${e.toString()}', stackTrace);
+        }
+      }
+    } else {
+      _log(
+          'analyzeFiles: context is not active || ${analysisContext.contextRoot.root.path}');
     }
   }
 
@@ -160,7 +179,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
 final pluginProvider = Provider(
   SidecarAnalyzerPlugin.new,
+  name: 'pluginProvider',
   dependencies: [
+    analyzedFileFromPath,
     allAnalysisContextsProvider,
     logDelegateProvider,
     ruleConstructorProvider,

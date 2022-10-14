@@ -46,7 +46,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
       ref.read(isolateCommunicationServiceProvider);
 
   // HotReloader? _reloader;
-  void _log(String message) => ref.read(logDelegateProvider).sidecarMessage;
+  void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
   void _logError(Object e, StackTrace stackTrace) =>
       ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
@@ -69,6 +69,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     } else if (request.method == plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS) {
       final params = AnalysisSetContextRootsParams.fromRequest(request);
       handleAnalysisSetContextRoots(params);
+      isolateService.handleServerRequest(request);
     } else {
       isolateService.handleServerRequest(request);
     }
@@ -87,9 +88,11 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
+    _log('MIDDLEMAN afterNewContextCollection');
     ref
         .read(allContextsProvider.state)
         .update((_) => contextCollection.contexts);
+    ref.read(isolateDetailsProvider);
   }
 
   @override
@@ -103,6 +106,7 @@ final middlemanPluginProvider = Provider(
   (ref) {
     return MiddlemanPlugin(ref);
   },
+  name: 'middlemanPluginProvider',
   dependencies: [
     masterPluginChannelProvider,
     allContextsProvider,

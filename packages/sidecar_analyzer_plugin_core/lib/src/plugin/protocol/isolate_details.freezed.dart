@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$IsolateDetails {
   ServerIsolateChannel get channel => throw _privateConstructorUsedError;
-  ActiveContext get activeContext => throw _privateConstructorUsedError;
+  ActiveContextRoot get activeRoot => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $IsolateDetailsCopyWith<IsolateDetails> get copyWith =>
@@ -29,7 +29,7 @@ abstract class $IsolateDetailsCopyWith<$Res> {
   factory $IsolateDetailsCopyWith(
           IsolateDetails value, $Res Function(IsolateDetails) then) =
       _$IsolateDetailsCopyWithImpl<$Res>;
-  $Res call({ServerIsolateChannel channel, ActiveContext activeContext});
+  $Res call({ServerIsolateChannel channel, ActiveContextRoot activeRoot});
 }
 
 /// @nodoc
@@ -44,17 +44,17 @@ class _$IsolateDetailsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? channel = freezed,
-    Object? activeContext = freezed,
+    Object? activeRoot = freezed,
   }) {
     return _then(_value.copyWith(
       channel: channel == freezed
           ? _value.channel
           : channel // ignore: cast_nullable_to_non_nullable
               as ServerIsolateChannel,
-      activeContext: activeContext == freezed
-          ? _value.activeContext
-          : activeContext // ignore: cast_nullable_to_non_nullable
-              as ActiveContext,
+      activeRoot: activeRoot == freezed
+          ? _value.activeRoot
+          : activeRoot // ignore: cast_nullable_to_non_nullable
+              as ActiveContextRoot,
     ));
   }
 }
@@ -66,7 +66,7 @@ abstract class _$$_IsolateDetailsCopyWith<$Res>
           _$_IsolateDetails value, $Res Function(_$_IsolateDetails) then) =
       __$$_IsolateDetailsCopyWithImpl<$Res>;
   @override
-  $Res call({ServerIsolateChannel channel, ActiveContext activeContext});
+  $Res call({ServerIsolateChannel channel, ActiveContextRoot activeRoot});
 }
 
 /// @nodoc
@@ -83,17 +83,17 @@ class __$$_IsolateDetailsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? channel = freezed,
-    Object? activeContext = freezed,
+    Object? activeRoot = freezed,
   }) {
     return _then(_$_IsolateDetails(
       channel: channel == freezed
           ? _value.channel
           : channel // ignore: cast_nullable_to_non_nullable
               as ServerIsolateChannel,
-      activeContext: activeContext == freezed
-          ? _value.activeContext
-          : activeContext // ignore: cast_nullable_to_non_nullable
-              as ActiveContext,
+      activeRoot: activeRoot == freezed
+          ? _value.activeRoot
+          : activeRoot // ignore: cast_nullable_to_non_nullable
+              as ActiveContextRoot,
     ));
   }
 }
@@ -101,17 +101,17 @@ class __$$_IsolateDetailsCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_IsolateDetails extends _IsolateDetails {
-  const _$_IsolateDetails({required this.channel, required this.activeContext})
+  const _$_IsolateDetails({required this.channel, required this.activeRoot})
       : super._();
 
   @override
   final ServerIsolateChannel channel;
   @override
-  final ActiveContext activeContext;
+  final ActiveContextRoot activeRoot;
 
   @override
   String toString() {
-    return 'IsolateDetails(channel: $channel, activeContext: $activeContext)';
+    return 'IsolateDetails(channel: $channel, activeRoot: $activeRoot)';
   }
 
   @override
@@ -121,14 +121,14 @@ class _$_IsolateDetails extends _IsolateDetails {
             other is _$_IsolateDetails &&
             const DeepCollectionEquality().equals(other.channel, channel) &&
             const DeepCollectionEquality()
-                .equals(other.activeContext, activeContext));
+                .equals(other.activeRoot, activeRoot));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(channel),
-      const DeepCollectionEquality().hash(activeContext));
+      const DeepCollectionEquality().hash(activeRoot));
 
   @JsonKey(ignore: true)
   @override
@@ -139,13 +139,13 @@ class _$_IsolateDetails extends _IsolateDetails {
 abstract class _IsolateDetails extends IsolateDetails {
   const factory _IsolateDetails(
       {required final ServerIsolateChannel channel,
-      required final ActiveContext activeContext}) = _$_IsolateDetails;
+      required final ActiveContextRoot activeRoot}) = _$_IsolateDetails;
   const _IsolateDetails._() : super._();
 
   @override
   ServerIsolateChannel get channel;
   @override
-  ActiveContext get activeContext;
+  ActiveContextRoot get activeRoot;
   @override
   @JsonKey(ignore: true)
   _$$_IsolateDetailsCopyWith<_$_IsolateDetails> get copyWith =>

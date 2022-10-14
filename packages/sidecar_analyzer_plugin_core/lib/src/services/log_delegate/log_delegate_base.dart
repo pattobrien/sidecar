@@ -4,10 +4,9 @@ import 'package:sidecar/sidecar.dart';
 import '../../reports/file_report_notifier.dart';
 import '../../reports/file_stats.dart';
 
-// final logger = Logger.standard();
-
 final logDelegateProvider = Provider<LogDelegateBase>(
   (ref) => throw UnimplementedError(),
+  name: 'logDelegateProvider',
 );
 
 abstract class LogDelegateBase {
