@@ -19,15 +19,11 @@ import '../../services/services.dart';
 import '../plugin.dart';
 import 'isolates/isolates.dart';
 import 'middleman.dart';
+import 'middleman_resource_provider.dart';
 
 class MiddlemanPlugin extends plugin.ServerPlugin {
-  MiddlemanPlugin(
-    this.ref, {
-    ResourceProvider? resourceProvider,
-  }) : super(
-          resourceProvider:
-              resourceProvider ?? PhysicalResourceProvider.INSTANCE,
-        );
+  MiddlemanPlugin(this.ref)
+      : super(resourceProvider: ref.read(middlemanResourceProvider));
 
   final Ref ref;
 

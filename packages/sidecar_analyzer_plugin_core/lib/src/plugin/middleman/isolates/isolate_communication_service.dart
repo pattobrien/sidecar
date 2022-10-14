@@ -1,8 +1,11 @@
+import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol.dart';
+import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_constants.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:collection/collection.dart';
+
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -10,17 +13,20 @@ import '../../../../sidecar_analyzer_plugin_core.dart';
 import '../../protocol/isolate_message.dart';
 import '../../protocol/protocol.dart';
 import '../middleman.dart';
+import '../middleman_resource_provider.dart';
 
 class IsolateCommunicationService {
   IsolateCommunicationService(
     this.ref, {
-    required this.isolates,
+    required this.resourceProvider,
   });
 
   final state = <String, MultiIsolateMessage>{};
+  final contentFiles = <String>{};
+  final isolates = <IsolateDetails>[];
 
   final Ref ref;
-  final List<IsolateDetails> isolates;
+  final ResourceProvider resourceProvider;
 
   PluginCommunicationChannel get channel =>
       ref.read(masterPluginChannelProvider);
@@ -107,16 +113,40 @@ class IsolateCommunicationService {
   }
 
   void _handlePluginInitialization(IsolateDetails isolate) {
+    // analysis.setContextRoots
+    // analysis.setSubscriptions
+    // analysis.updateContent
+    // analysis.setPriorityFiles
     const uuid = Uuid();
-    final id = uuid.v4();
-    final newRequest =
+
+    final setRootRequest =
         AnalysisSetContextRootsParams([isolate.activeRoot.toPluginContextRoot])
-            .toRequest(id);
+            .toRequest(uuid.v4());
     _addNewMessage(MultiIsolateMessage(
-      originalRequest: newRequest,
-      requests: [IsolateRequest(request: newRequest, root: isolate.activeRoot)],
+      originalRequest: setRootRequest,
+      requests: [
+        IsolateRequest(request: setRootRequest, root: isolate.activeRoot)
+      ],
       initialTimestamp: DateTime.now(),
     ));
+    final updateContentMap = Map.fromEntries(contentFiles.map(
+      (e) => MapEntry(e, _getContentForFile(e)),
+    ));
+    final updateContentRequest =
+        AnalysisUpdateContentParams(updateContentMap).toRequest(uuid.v4());
+    _addNewMessage(MultiIsolateMessage(
+      originalRequest: updateContentRequest,
+      requests: [
+        IsolateRequest(request: updateContentRequest, root: isolate.activeRoot)
+      ],
+      initialTimestamp: DateTime.now(),
+    ));
+  }
+
+  AddContentOverlay _getContentForFile(String path) {
+    final file = resourceProvider.getFile(path);
+    final content = file.readAsStringSync();
+    return AddContentOverlay(content);
   }
 
   void handlePluginError(
@@ -217,6 +247,7 @@ class IsolateCommunicationService {
       case ANALYSIS_REQUEST_UPDATE_CONTENT:
         final params = AnalysisUpdateContentParams.fromRequest(request);
         final files = params.files;
+        contentFiles.addAll(files.keys);
         return isolates
             .map<IsolateRequest?>((isolate) {
               final root = isolate.activeRoot;
@@ -400,11 +431,13 @@ class IsolateCommunicationService {
 final isolateCommunicationServiceProvider =
     Provider<IsolateCommunicationService>(
   (ref) {
-    return IsolateCommunicationService(ref, isolates: []);
+    final resourceProvider = ref.watch(middlemanResourceProvider);
+    return IsolateCommunicationService(ref, resourceProvider: resourceProvider);
   },
   name: 'isolateCommunicationServiceProvider',
   dependencies: [
     masterPluginChannelProvider,
     logDelegateProvider,
+    middlemanResourceProvider,
   ],
 );
