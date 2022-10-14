@@ -116,9 +116,9 @@ class ProjectConfiguration {
   AnalysisConfiguration? getConfigurationForRule(SidecarBase rule) {
     switch (rule.type) {
       case IdType.lintRule:
-        return lintPackages?[rule.packageName]?.lints[rule.id];
+        return lintPackages?[rule.packageName]?.lints[rule.code];
       case IdType.codeEdit:
-        return assistPackages?[rule.packageName]?.assists[rule.id];
+        return assistPackages?[rule.packageName]?.assists[rule.code];
     }
   }
 }

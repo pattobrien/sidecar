@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';

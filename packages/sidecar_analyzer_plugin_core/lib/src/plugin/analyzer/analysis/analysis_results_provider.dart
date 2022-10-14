@@ -1,7 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../../../../sidecar_analyzer_plugin_core.dart';
+import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
 import '../analyzer.dart';
 
@@ -20,6 +20,7 @@ final analysisResultsProvider =
     );
     ref.watch(logDelegateProvider).sidecarMessage(
         'analysis complete w/ ${results.length} results || ${file.path}');
+
     ref.watch(logDelegateProvider).analysisResults(file.path, results);
     return results;
   },
