@@ -25,6 +25,8 @@ dev_dependencies:
     path: /Users/pattobrien/Development/sidecar/repositories/sidecar_lints/
   l10n_lints:
     path: /Users/pattobrien/Development/sidecar/repositories/l10n_lints/
+  riverpod_lints:
+    path: /Users/pattobrien/Development/sidecar/repositories/riverpod_lints/
   sidecar_analyzer_plugin_core:
     path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
     # hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/

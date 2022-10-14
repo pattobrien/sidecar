@@ -7,12 +7,10 @@ import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../protocol/edit_request.dart';
 import '../../constants.dart';
 import '../../services/services.dart';
 import '../analyzer_mode.dart';
@@ -151,10 +149,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetAssistsResult> handleEditGetAssists(
     plugin.EditGetAssistsParams parameters,
   ) async {
-    final path = parameters.file;
-    final offset = parameters.offset;
-    final length = parameters.length;
     try {
+      final analyzedFile = ref.read(analyzedFileFromPath(parameters.file));
+      final quickAssistRequest = QuickAssistRequest(
+          file: analyzedFile,
+          offset: parameters.offset,
+          length: parameters.length);
       // final context = ref
       //     .read(analysisContextCollectionServiceProvider)
       //     .getContextFromPath(path);
@@ -166,7 +166,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       return plugin.EditGetAssistsResult(results.toList());
     } catch (e, stackTrace) {
-      _logError('handleEditGetAssists $path -- $e', stackTrace);
+      _logError('handleEditGetAssists ${parameters.file} -- $e', stackTrace);
       rethrow;
     }
   }

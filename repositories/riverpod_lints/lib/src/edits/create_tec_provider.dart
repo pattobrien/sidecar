@@ -12,7 +12,7 @@ class CreateTextEditControllerProvider extends CodeEdit {
   String get packageName => 'riverpod_lints';
 
   @override
-  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) async {
     return [];
@@ -59,6 +59,7 @@ class CreateTextEditControllerProvider extends CodeEdit {
 
           return [
             EditResult(
+              analysisResult: result,
               message: 'Declare a TextEditingController provider',
               sourceChanges: changeBuilder.sourceChange.edits,
             )

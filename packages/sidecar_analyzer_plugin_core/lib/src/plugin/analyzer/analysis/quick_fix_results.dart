@@ -2,6 +2,7 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
+import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
 import '../analyzer.dart';
 
@@ -16,12 +17,20 @@ final quickFixForRequestProvider =
 
     final analysisResultsForOffset = analysisResults.where(
         (element) => element.isWithinOffset(request.file.path, request.offset));
-
+    ref.read(logDelegateProvider).sidecarMessage(
+        'RESULTS FOR OFFSET: ${analysisResultsForOffset.length}');
     return Future.wait(analysisResultsForOffset.map((e) async {
       final edits =
           await fileService.calculateEditResultsForAnalysisResult(context, e);
+      ref
+          .read(logDelegateProvider)
+          .sidecarMessage('RESULTS FOR OFFSET - EDITS: ${edits.length}');
       return AnalysisErrorFixes(e.toAnalysisError()!,
-          fixes: edits.map((e) => e.toPrioritizedSourceChange()).toList());
+          fixes: edits.map((e) {
+            ref.read(logDelegateProvider).sidecarMessage(
+                'RESULTS FOR OFFSET - EDITS - SOURCE EDITS: ${e.sourceChanges.length}');
+            return e.toPrioritizedSourceChange();
+          }).toList());
     }));
   },
   name: 'quickFixForRequestProvider',

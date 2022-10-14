@@ -26,12 +26,12 @@ sidecar:
     #     # configuration:
     #     #   abc: 123
 
-    # riverpod_lints:
-    #   prefer_consumer_widget:
-    #     severity: error
-    #     enabled: true
-    #     configuration:
-    #       some_property:
+    riverpod_lints:
+      prefer_consumer_widget:
+        severity: error
+        enabled: true
+        configuration:
+          some_property:
 
     l10n_lints:
       avoid_string_literals:
@@ -53,8 +53,8 @@ sidecar:
       # avoid_edge_insets_literal:
 
   edits:
-    #   riverpod_lints:
-    #     create_text_edit_controller_provider:
+    riverpod_lints:
+      create_text_edit_controller_provider:
     sidecar_lints:
       output_ast_node_tree:
         enabled: true

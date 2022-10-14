@@ -38,6 +38,11 @@ class SomePage extends ConsumerWidget {
             color: x,
           ),
           SizedBox(width: 10.0),
+          Icon(
+            someIconData,
+            color: x,
+          ),
+          SizedBox(width: 10.0),
           SizedBox(width: someNumnber),
           Icon(Icons.abc),
           Icon(ProjectIcons.abc),
