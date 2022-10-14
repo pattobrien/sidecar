@@ -35,10 +35,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   String get name => kSidecarPluginName;
 
   @override
-  String get version => pluginVersion;
+  String get version => kPluginVersion;
 
   @override
-  List<String> get fileGlobsToAnalyze => pluginGlobs;
+  List<String> get fileGlobsToAnalyze => kPluginGlobs;
 
   SidecarAnalyzerMode get mode => ref.read(sidecarAnalyzerMode);
 

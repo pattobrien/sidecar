@@ -35,15 +35,15 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   String get name => kSidecarPluginName;
 
   @override
-  String get version => pluginVersion;
+  String get version => kPluginVersion;
 
   @override
-  List<String> get fileGlobsToAnalyze => pluginGlobs;
+  List<String> get fileGlobsToAnalyze => kPluginGlobs;
 
   SidecarAnalyzerMode get analyzerMode => ref.read(sidecarAnalyzerMode);
 
   IsolateCommunicationService get isolateService =>
-      ref.read(isolateCommunicationNotifierProvider.notifier);
+      ref.read(isolateCommunicationServiceProvider);
 
   // HotReloader? _reloader;
   void _log(String message) => ref.read(logDelegateProvider).sidecarMessage;
@@ -108,6 +108,6 @@ final middlemanPluginProvider = Provider(
     allContextsProvider,
     logDelegateProvider,
     sidecarAnalyzerMode,
-    isolateCommunicationNotifierProvider,
+    isolateCommunicationServiceProvider,
   ],
 );

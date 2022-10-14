@@ -25,7 +25,7 @@ class ActivePackageService {
   // bool isValidDartProject(Uri root) =>
   //     File(p.join(root.toFilePath(), 'pubspec.yaml')).existsSync();
 
-  ActiveContext initializeContext(AnalysisContext analysisContext) {
+  ActiveContext? initializeContext(AnalysisContext analysisContext) {
     final root = analysisContext.contextRoot;
     final contextUri = root.root.toUri();
 
@@ -42,7 +42,7 @@ class ActivePackageService {
         !hasProjectConfiguration ||
         !hasSidecarPlugin ||
         !hasLintPackages) {
-      throw StateError('ISOLATE: invalid ActiveContext state!');
+      return null;
     }
     return ActiveContext(
       analysisContext,

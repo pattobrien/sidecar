@@ -12,7 +12,9 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
   (ref) {
     final activePackageService = ref.watch(activePackageServiceProvider);
     final allContexts = ref.watch(allContextsProvider);
-    return allContexts.map(activePackageService.initializeContext).toList();
+    return allContexts
+        .map((e) => activePackageService.initializeContext(e)!)
+        .toList();
   },
   dependencies: [
     activePackageServiceProvider,
@@ -22,8 +24,8 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
 
 final activeContextRootsProvider = Provider<List<ActiveContextRoot>>(
   (ref) {
-    return ref.watch(activeContextsProvider
-        .select((value) => value.map((e) => e.activeRoot).toList()));
+    return ref.watch(activeContextsProvider.select(
+        (contexts) => contexts.map((context) => context.activeRoot).toList()));
   },
   dependencies: [
     activeContextsProvider,

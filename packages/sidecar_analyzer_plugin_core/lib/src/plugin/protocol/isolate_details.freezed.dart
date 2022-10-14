@@ -17,10 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$IsolateDetails {
   ServerIsolateChannel get channel => throw _privateConstructorUsedError;
-  ContextRoot get contextRoot => throw _privateConstructorUsedError;
-  Uri get pluginSourceUri => throw _privateConstructorUsedError;
-  List<SidecarPackage> get enabledPackages =>
-      throw _privateConstructorUsedError;
+  ActiveContext get activeContext => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $IsolateDetailsCopyWith<IsolateDetails> get copyWith =>
@@ -32,11 +29,7 @@ abstract class $IsolateDetailsCopyWith<$Res> {
   factory $IsolateDetailsCopyWith(
           IsolateDetails value, $Res Function(IsolateDetails) then) =
       _$IsolateDetailsCopyWithImpl<$Res>;
-  $Res call(
-      {ServerIsolateChannel channel,
-      ContextRoot contextRoot,
-      Uri pluginSourceUri,
-      List<SidecarPackage> enabledPackages});
+  $Res call({ServerIsolateChannel channel, ActiveContext activeContext});
 }
 
 /// @nodoc
@@ -51,27 +44,17 @@ class _$IsolateDetailsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? channel = freezed,
-    Object? contextRoot = freezed,
-    Object? pluginSourceUri = freezed,
-    Object? enabledPackages = freezed,
+    Object? activeContext = freezed,
   }) {
     return _then(_value.copyWith(
       channel: channel == freezed
           ? _value.channel
           : channel // ignore: cast_nullable_to_non_nullable
               as ServerIsolateChannel,
-      contextRoot: contextRoot == freezed
-          ? _value.contextRoot
-          : contextRoot // ignore: cast_nullable_to_non_nullable
-              as ContextRoot,
-      pluginSourceUri: pluginSourceUri == freezed
-          ? _value.pluginSourceUri
-          : pluginSourceUri // ignore: cast_nullable_to_non_nullable
-              as Uri,
-      enabledPackages: enabledPackages == freezed
-          ? _value.enabledPackages
-          : enabledPackages // ignore: cast_nullable_to_non_nullable
-              as List<SidecarPackage>,
+      activeContext: activeContext == freezed
+          ? _value.activeContext
+          : activeContext // ignore: cast_nullable_to_non_nullable
+              as ActiveContext,
     ));
   }
 }
@@ -83,11 +66,7 @@ abstract class _$$_IsolateDetailsCopyWith<$Res>
           _$_IsolateDetails value, $Res Function(_$_IsolateDetails) then) =
       __$$_IsolateDetailsCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {ServerIsolateChannel channel,
-      ContextRoot contextRoot,
-      Uri pluginSourceUri,
-      List<SidecarPackage> enabledPackages});
+  $Res call({ServerIsolateChannel channel, ActiveContext activeContext});
 }
 
 /// @nodoc
@@ -104,27 +83,17 @@ class __$$_IsolateDetailsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? channel = freezed,
-    Object? contextRoot = freezed,
-    Object? pluginSourceUri = freezed,
-    Object? enabledPackages = freezed,
+    Object? activeContext = freezed,
   }) {
     return _then(_$_IsolateDetails(
       channel: channel == freezed
           ? _value.channel
           : channel // ignore: cast_nullable_to_non_nullable
               as ServerIsolateChannel,
-      contextRoot: contextRoot == freezed
-          ? _value.contextRoot
-          : contextRoot // ignore: cast_nullable_to_non_nullable
-              as ContextRoot,
-      pluginSourceUri: pluginSourceUri == freezed
-          ? _value.pluginSourceUri
-          : pluginSourceUri // ignore: cast_nullable_to_non_nullable
-              as Uri,
-      enabledPackages: enabledPackages == freezed
-          ? _value._enabledPackages
-          : enabledPackages // ignore: cast_nullable_to_non_nullable
-              as List<SidecarPackage>,
+      activeContext: activeContext == freezed
+          ? _value.activeContext
+          : activeContext // ignore: cast_nullable_to_non_nullable
+              as ActiveContext,
     ));
   }
 }
@@ -132,30 +101,17 @@ class __$$_IsolateDetailsCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_IsolateDetails extends _IsolateDetails {
-  const _$_IsolateDetails(
-      {required this.channel,
-      required this.contextRoot,
-      required this.pluginSourceUri,
-      required final List<SidecarPackage> enabledPackages})
-      : _enabledPackages = enabledPackages,
-        super._();
+  const _$_IsolateDetails({required this.channel, required this.activeContext})
+      : super._();
 
   @override
   final ServerIsolateChannel channel;
   @override
-  final ContextRoot contextRoot;
-  @override
-  final Uri pluginSourceUri;
-  final List<SidecarPackage> _enabledPackages;
-  @override
-  List<SidecarPackage> get enabledPackages {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_enabledPackages);
-  }
+  final ActiveContext activeContext;
 
   @override
   String toString() {
-    return 'IsolateDetails(channel: $channel, contextRoot: $contextRoot, pluginSourceUri: $pluginSourceUri, enabledPackages: $enabledPackages)';
+    return 'IsolateDetails(channel: $channel, activeContext: $activeContext)';
   }
 
   @override
@@ -165,20 +121,14 @@ class _$_IsolateDetails extends _IsolateDetails {
             other is _$_IsolateDetails &&
             const DeepCollectionEquality().equals(other.channel, channel) &&
             const DeepCollectionEquality()
-                .equals(other.contextRoot, contextRoot) &&
-            const DeepCollectionEquality()
-                .equals(other.pluginSourceUri, pluginSourceUri) &&
-            const DeepCollectionEquality()
-                .equals(other._enabledPackages, _enabledPackages));
+                .equals(other.activeContext, activeContext));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(channel),
-      const DeepCollectionEquality().hash(contextRoot),
-      const DeepCollectionEquality().hash(pluginSourceUri),
-      const DeepCollectionEquality().hash(_enabledPackages));
+      const DeepCollectionEquality().hash(activeContext));
 
   @JsonKey(ignore: true)
   @override
@@ -189,19 +139,13 @@ class _$_IsolateDetails extends _IsolateDetails {
 abstract class _IsolateDetails extends IsolateDetails {
   const factory _IsolateDetails(
       {required final ServerIsolateChannel channel,
-      required final ContextRoot contextRoot,
-      required final Uri pluginSourceUri,
-      required final List<SidecarPackage> enabledPackages}) = _$_IsolateDetails;
+      required final ActiveContext activeContext}) = _$_IsolateDetails;
   const _IsolateDetails._() : super._();
 
   @override
   ServerIsolateChannel get channel;
   @override
-  ContextRoot get contextRoot;
-  @override
-  Uri get pluginSourceUri;
-  @override
-  List<SidecarPackage> get enabledPackages;
+  ActiveContext get activeContext;
   @override
   @JsonKey(ignore: true)
   _$$_IsolateDetailsCopyWith<_$_IsolateDetails> get copyWith =>

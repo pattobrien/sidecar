@@ -8,7 +8,8 @@ final allContextsProvider = StateProvider<List<AnalysisContext>>((ref) => []);
 /// All valid and invalid context roots.
 final allContextRootsProvider = Provider<List<ContextRoot>>(
   (ref) {
-    return ref.watch(allContextsProvider).map((e) => e.contextRoot).toList();
+    return ref.watch(allContextsProvider.select(
+        (value) => value.map((context) => context.contextRoot).toList()));
   },
   dependencies: [
     allContextsProvider,

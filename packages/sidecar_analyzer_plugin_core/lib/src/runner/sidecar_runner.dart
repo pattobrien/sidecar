@@ -143,7 +143,7 @@ class SidecarRunner {
       plugin.PluginVersionCheckParams(
         _resourceProvider.getByteStorePath(kSidecarPluginName),
         _sdkPath,
-        pluginVersion,
+        kPluginVersion,
       ).toRequest(_uuid.v4()),
     );
 

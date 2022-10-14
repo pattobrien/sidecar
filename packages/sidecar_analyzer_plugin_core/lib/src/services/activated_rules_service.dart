@@ -8,7 +8,7 @@ class ActivatedRulesService {
   const ActivatedRulesService(this.ref);
   final Ref ref;
 
-  LogDelegateBase get log => ref.read(logDelegateProvider);
+  void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
 
   List<SidecarBase> initializeRules(
     List<SidecarAnnotatedNode> annotatedNodes,
@@ -18,14 +18,12 @@ class ActivatedRulesService {
     return ruleConstructors
         .map<SidecarBase?>((ruleConstructor) {
           final rule = ruleConstructor.call();
-          final i =
-              Id(type: rule.type, packageId: rule.packageName, id: rule.code);
-          final ruleConfig = projectConfiguration.getConfiguration(i);
+          final ruleConfig = projectConfiguration.getConfigurationForRule(rule);
 
           // rule was not included in yaml, so it shouldnt be initialized
           if (ruleConfig == null) return null;
 
-          log.sidecarVerboseMessage('activating ${i.id}');
+          _log('activating ${rule.id}');
           rule.initialize(
             ref: ref,
             configurationContent: ruleConfig.configuration,

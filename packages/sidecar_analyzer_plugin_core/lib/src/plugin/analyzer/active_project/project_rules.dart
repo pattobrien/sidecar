@@ -7,7 +7,7 @@ import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
 import '../analyzer.dart';
 
-final filteredLintRulesProvider =
+final projectLintRulesProvider =
     Provider.family<List<LintRule>, AnalyzedFile>((ref, analyzedFile) {
   return ref.watch(_filteredRulesProvider(analyzedFile)
       .select((value) => value.whereType<LintRule>().toList()));
@@ -15,7 +15,7 @@ final filteredLintRulesProvider =
   _filteredRulesProvider,
 ]);
 
-final filteredAssistRulesProvider =
+final projectAssistRulesProvider =
     Provider.family<List<CodeEdit>, AnalyzedFile>((ref, analyzedFile) {
   return ref.watch(_filteredRulesProvider(analyzedFile)
       .select((value) => value.whereType<CodeEdit>().toList()));

@@ -112,6 +112,15 @@ class ProjectConfiguration {
         return assistPackages?[id.packageId]?.assists[id.id];
     }
   }
+
+  AnalysisConfiguration? getConfigurationForRule(SidecarBase rule) {
+    switch (rule.type) {
+      case IdType.lintRule:
+        return lintPackages?[rule.packageName]?.lints[rule.id];
+      case IdType.codeEdit:
+        return assistPackages?[rule.packageName]?.assists[rule.id];
+    }
+  }
 }
 
 typedef PackageName = String;

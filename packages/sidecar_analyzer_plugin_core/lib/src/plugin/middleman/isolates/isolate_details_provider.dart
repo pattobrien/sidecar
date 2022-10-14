@@ -2,87 +2,63 @@
 
 import 'package:riverpod/riverpod.dart';
 
+import '../../../services/isolate_builder_service.dart';
 import '../../protocol/protocol.dart';
 import '../active_contexts/active_contexts.dart';
-import 'isolate_builder_service.dart';
-import 'isolate_details.dart';
 
-final isolateDetailForContextProvider =
-    Provider.family<IsolateDetails, ActiveContextRoot>(
-  (ref, activeRoot) {
+// final isolateDetailForContextProvider =
+//     Provider.family<IsolateDetails, ActiveContextRoot>(
+//   (ref, activeRoot) {
+//     final isolateService = ref.watch(isolateBuilderServiceProvider);
+
+//     ref.onDispose(() => isolateService.shutdownIsolate(ref.state));
+
+//     ref.listen<ActiveContext>(activeContextForContextRootProvider(activeRoot),
+//         (prev, next) {
+//       // will rebuild any time the plugin package updates
+//       if (prev == null) return;
+//       final didChange =
+//           prev.sidecarPluginPackage != next.sidecarPluginPackage ||
+//               prev.sidecarPackages != next.sidecarPackages;
+//       if (didChange) {
+//         isolateService.shutdownIsolate(ref.state);
+//         ref.invalidateSelf();
+//       }
+//     });
+
+//     final context = ref.watch(activeContextForContextRootProvider(activeRoot));
+//     return isolateService.startIsolate(context);
+//   },
+//   dependencies: [
+//     contextSidecarDependenciesProvider,
+//     activeContextForContextRootProvider,
+//     isolateBuilderServiceProvider,
+//   ],
+// );
+
+final isolateDetailsProvider = Provider<List<IsolateDetails>>((ref) {
+  final activeContextRoots = ref.watch(activeContextRootsProvider);
+  return activeContextRoots.map((activeRoot) {
     final isolateService = ref.watch(isolateBuilderServiceProvider);
+    final isolate = ref.state.firstWhere(
+        (details) => details.activeContext.activeRoot == activeRoot);
 
-    ref.onDispose(() => isolateService.shutdownIsolate(ref.state));
+    ref.onDispose(() => isolateService.shutdownIsolate(isolate));
 
-    ref.listen<ActiveContext>(
-        activeContextsProvider.select((activeContexts) => activeContexts
-            .firstWhere((context) => context.activeRoot == activeRoot)),
-        (previous, next) {
+    ref.listen<ActiveContext>(activeContextForContextRootProvider(activeRoot),
+        (prev, next) {
       // will rebuild any time the plugin package updates
-      if (previous == null) return;
-
-      if (previous.sidecarPluginPackage != next.sidecarPluginPackage) {
-        isolateService.shutdownIsolate(ref.state);
+      if (prev == null) return;
+      final didChange =
+          prev.sidecarPluginPackage != next.sidecarPluginPackage ||
+              prev.sidecarPackages != next.sidecarPackages;
+      if (didChange) {
+        isolateService.shutdownIsolate(isolate);
         ref.invalidateSelf();
       }
     });
 
-    final pluginSourceUri =
-        ref.watch(contextSidecarPluginPackageProvider(activeRoot))!;
-    final packages = ref.watch(contextSidecarDependenciesProvider(activeRoot));
-
-    return isolateService.startIsolate(
-      //TODO: change startIsolate to accept package
-      pluginSourceUri.root,
-      activeRoot,
-      packages,
-    );
-  },
-  dependencies: [
-    contextSidecarDependenciesProvider,
-    activeContextsProvider,
-    isolateBuilderServiceProvider,
-    contextSidecarPluginPackageProvider,
-  ],
-);
-
-
-
-// final isolateDetailsForContextRootProvider = Provider.autoDispose
-//     .family<IsolateDetails, ActiveContextRoot>((ref, contextRoot) {
-//   final isolateService = ref.watch(isolateBuilderServiceProvider);
-
-//   final uri = ref.watch<Uri>(activePluginUriProvider(contextRoot));
-//   ref.onDispose(() {
-//     isolateService.shutdownIsolate(ref.state);
-//   });
-
-//   // listen for added/removed sidecar lint packages
-//   ref.listen<List<SidecarPackage>>(
-//       contextSidecarDependenciesProvider(contextRoot), (_, packages) {
-//     ref.state = isolateService.updatePackages(ref.state, packages);
-//   });
-
-//   return isolateService.updateUri(ref.state, uri);
-
-//   // if (ref.state != null) {
-//   //   return isolateService.updateUri(ref.state!, uri);
-//   // } else {
-//   //   final packages = ref.watch(activeSidecarDependenciesProvider(contextRoot));
-//   //   return isolateService.startIsolate(uri, contextRoot, packages);
-//   // }
-// }, dependencies: [
-//   activePluginUriProvider,
-//   contextSidecarDependenciesProvider,
-//   isolateBuilderServiceProvider,
-// ]);
-
-// final isolateDetailsProvider = Provider<List<IsolateDetails>>((ref) {
-// final activeContexts = ref.watch(activeContextRootsProvider);
-// final isolateService = ref.watch(isolateBuilderServiceProvider);
-// ref.onDispose(() {
-//   isolateService.shutdownIsolate(ref.state);
-// });
-
-// return activeContexts.map((e) => isolateService.updatePackages(ref.state, packages)).toList();
-// });
+    final context = ref.watch(activeContextForContextRootProvider(activeRoot));
+    return isolateService.startIsolate(context);
+  }).toList();
+});

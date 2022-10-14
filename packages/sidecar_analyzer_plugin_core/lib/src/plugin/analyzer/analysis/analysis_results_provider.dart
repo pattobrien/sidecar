@@ -9,7 +9,7 @@ final analysisResultsProvider =
   (ref, file) async {
     final fileService = ref.watch(fileAnalyzerServiceProvider);
 
-    final activatedRules = ref.watch(filteredLintRulesProvider(file));
+    final activatedRules = ref.watch(projectLintRulesProvider(file));
     final unitResult = ref.watch(resolvedUnitProvider(file)).valueOrNull;
 
     return fileService.computeAnalysisResults(
@@ -19,7 +19,7 @@ final analysisResultsProvider =
     );
   },
   dependencies: [
-    filteredLintRulesProvider,
+    projectLintRulesProvider,
     fileAnalyzerServiceProvider,
     resolvedUnitProvider,
   ],
