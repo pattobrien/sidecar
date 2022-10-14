@@ -4,11 +4,13 @@ import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/src/workspace/workspace.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:meta/meta.dart';
 
 import 'analyzed_file.dart';
 
+@immutable
 class ActiveContextRoot implements ContextRoot {
-  ActiveContextRoot(this._root);
+  const ActiveContextRoot(this._root);
 
   final ContextRoot _root;
 
@@ -50,4 +52,12 @@ class ActiveContextRoot implements ContextRoot {
 
   @override
   Workspace get workspace => _root.workspace;
+
+  //TODO: verify that this is a good equality check
+  @override
+  bool operator ==(Object other) =>
+      other is ActiveContextRoot && root.path == other.root.path;
+
+  @override
+  int get hashCode => root.hashCode;
 }

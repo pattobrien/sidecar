@@ -9,7 +9,7 @@ final analysisResultsProvider =
     FutureProvider.family<List<AnalysisResult>, AnalyzedFile>(
   (ref, file) async {
     final fileService = ref.watch(fileAnalyzerServiceProvider);
-    final activatedRules = ref.watch(projectLintRulesProvider(file));
+    final activatedRules = ref.watch(lintRulesForFileProvider(file));
 
     final unitResult = await ref.watch(resolvedUnitProvider(file).future);
 
@@ -26,7 +26,7 @@ final analysisResultsProvider =
   },
   name: 'analysisResultsProvider',
   dependencies: [
-    projectLintRulesProvider,
+    lintRulesForFileProvider,
     fileAnalyzerServiceProvider,
     resolvedUnitProvider,
   ],

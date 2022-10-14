@@ -7,24 +7,24 @@ import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
 import '../analyzer.dart';
 
-final projectLintRulesProvider = Provider.family<List<LintRule>, AnalyzedFile>(
+final lintRulesForFileProvider = Provider.family<List<LintRule>, AnalyzedFile>(
   (ref, analyzedFile) {
     return ref.watch(_filteredRulesProvider(analyzedFile)
         .select((value) => value.whereType<LintRule>().toList()));
   },
-  name: 'projectLintRulesProvider',
+  name: 'lintRulesForFileProvider',
   dependencies: [
     _filteredRulesProvider,
   ],
 );
 
-final projectAssistRulesProvider =
+final assistRulesForFileProvider =
     Provider.family<List<CodeEdit>, AnalyzedFile>(
   (ref, analyzedFile) {
     return ref.watch(_filteredRulesProvider(analyzedFile)
         .select((value) => value.whereType<CodeEdit>().toList()));
   },
-  name: 'projectAssistRulesProvider',
+  name: 'assistRulesForFileProvider',
   dependencies: [
     _filteredRulesProvider,
   ],
@@ -60,7 +60,7 @@ final _activatedRulesProvider =
 final _filteredRulesProvider = Provider.family<List<SidecarBase>, AnalyzedFile>(
   (ref, analyzedFile) {
     final allRules = ref.watch(_activatedRulesProvider(analyzedFile.root));
-    final context = ref.watch(activeContextForFileProvider(analyzedFile));
+    final context = ref.watch(activeContextsProvider).contextFor(analyzedFile);
     final sidecarOptions = context.sidecarOptions;
 
     return allRules
@@ -72,7 +72,7 @@ final _filteredRulesProvider = Provider.family<List<SidecarBase>, AnalyzedFile>(
   },
   name: '_filteredRulesProvider',
   dependencies: [
-    activeContextForFileProvider,
+    activeContextsProvider,
     _activatedRulesProvider,
   ],
 );

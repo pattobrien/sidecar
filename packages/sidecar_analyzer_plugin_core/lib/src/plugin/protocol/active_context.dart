@@ -6,6 +6,7 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:package_config/package_config_types.dart';
 import 'package:sidecar/sidecar.dart';
 
+import 'analyzed_file.dart';
 import 'sidecar_package.dart';
 import 'active_context_root.dart';
 
@@ -42,4 +43,12 @@ class ActiveContext implements AnalysisContext {
 
   @override
   Folder? get sdkRoot => _context.sdkRoot;
+}
+
+extension ContextsX on List<ActiveContext> {
+  ActiveContext contextFor(AnalyzedFile analyzedFile) {
+    return firstWhere((activeContext) => activeContext.activeRoot
+        .analyzedFiles()
+        .any((filePath) => filePath == analyzedFile.path));
+  }
 }

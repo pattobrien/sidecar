@@ -8,8 +8,8 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
   (ref) {
     final activePackageService = ref.watch(activePackageServiceProvider);
     final allContexts = ref.watch(allAnalysisContextsProvider);
-    ref.watch(logDelegateProvider).sidecarMessage(
-        'activeContextsProvider refresh : ${allContexts.toString()}');
+    // ref.watch(logDelegateProvider).sidecarMessage(
+    //     'activeContextsProvider refresh : ${allContexts.toString()}');
     final initializedContexts =
         allContexts.map(activePackageService.initializeContext).toList();
     return initializedContexts.whereType<ActiveContext>().toList();
@@ -28,20 +28,6 @@ final activeContextRootsProvider = Provider<List<ActiveContextRoot>>(
         (contexts) => contexts.map((context) => context.activeRoot).toList()));
   },
   name: 'activeContextRootsProvider',
-  dependencies: [
-    activeContextsProvider,
-  ],
-);
-
-final activeContextForFileProvider =
-    Provider.family<ActiveContext, AnalyzedFile>(
-  (ref, file) {
-    return ref.watch(activeContextsProvider.select((contexts) =>
-        contexts.firstWhere((context) => context.activeRoot
-            .analyzedFiles()
-            .any((filePath) => filePath == file.path))));
-  },
-  name: 'activeContextForFileProvider',
   dependencies: [
     activeContextsProvider,
   ],
