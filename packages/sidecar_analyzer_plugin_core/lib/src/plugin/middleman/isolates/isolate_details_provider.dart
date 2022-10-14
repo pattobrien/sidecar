@@ -2,9 +2,36 @@
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../../services/isolate_builder_service.dart';
+import '../../../services/services.dart';
 import '../../protocol/protocol.dart';
 import '../active_contexts/active_contexts.dart';
+
+final isolateDetailsProvider = Provider<List<IsolateDetails>>((ref) {
+  final activeContextRoots = ref.watch(activeContextRootsProvider);
+  return activeContextRoots.map((activeRoot) {
+    final isolateService = ref.watch(isolateBuilderServiceProvider);
+    final isolate = ref.state.firstWhere(
+        (details) => details.activeContext.activeRoot == activeRoot);
+
+    ref.onDispose(() => isolateService.shutdownIsolate(isolate));
+
+    ref.listen<ActiveContext>(activeContextForContextRootProvider(activeRoot),
+        (prev, next) {
+      // will rebuild any time the plugin package updates
+      if (prev == null) return;
+      final didChange =
+          prev.sidecarPluginPackage != next.sidecarPluginPackage ||
+              prev.sidecarPackages != next.sidecarPackages;
+      if (didChange) {
+        isolateService.shutdownIsolate(isolate);
+        ref.invalidateSelf();
+      }
+    });
+
+    final context = ref.watch(activeContextForContextRootProvider(activeRoot));
+    return isolateService.startIsolate(context);
+  }).toList();
+});
 
 // final isolateDetailForContextProvider =
 //     Provider.family<IsolateDetails, ActiveContextRoot>(
@@ -35,30 +62,3 @@ import '../active_contexts/active_contexts.dart';
 //     isolateBuilderServiceProvider,
 //   ],
 // );
-
-final isolateDetailsProvider = Provider<List<IsolateDetails>>((ref) {
-  final activeContextRoots = ref.watch(activeContextRootsProvider);
-  return activeContextRoots.map((activeRoot) {
-    final isolateService = ref.watch(isolateBuilderServiceProvider);
-    final isolate = ref.state.firstWhere(
-        (details) => details.activeContext.activeRoot == activeRoot);
-
-    ref.onDispose(() => isolateService.shutdownIsolate(isolate));
-
-    ref.listen<ActiveContext>(activeContextForContextRootProvider(activeRoot),
-        (prev, next) {
-      // will rebuild any time the plugin package updates
-      if (prev == null) return;
-      final didChange =
-          prev.sidecarPluginPackage != next.sidecarPluginPackage ||
-              prev.sidecarPackages != next.sidecarPackages;
-      if (didChange) {
-        isolateService.shutdownIsolate(isolate);
-        ref.invalidateSelf();
-      }
-    });
-
-    final context = ref.watch(activeContextForContextRootProvider(activeRoot));
-    return isolateService.startIsolate(context);
-  }).toList();
-});

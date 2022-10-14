@@ -243,131 +243,131 @@
 //     }
 //   }
 
-//   void _parseAndHandleResponse(
-//     MiddlemanResponse middlemanResponse,
-//   ) {
-//     final responses = middlemanResponse.responses;
-//     final id = middlemanResponse.request.id;
-//     final requestTime = middlemanResponse.timestamp.millisecondsSinceEpoch;
-//     if (responses.any((element) => element.response.error != null)) {
-//       masterChannel.sendResponse(responses
-//           .firstWhere((element) => element.response.error != null)
-//           .response);
-//     } else {
-//       switch (middlemanResponse.request.method) {
-//         case ANALYSIS_REQUEST_GET_NAVIGATION:
-//           final results = responses
-//               .map((e) => AnalysisGetNavigationResult.fromResponse(e.response));
+  // void _parseAndHandleResponse(
+  //   MiddlemanResponse middlemanResponse,
+  // ) {
+  //   final responses = middlemanResponse.responses;
+  //   final id = middlemanResponse.request.id;
+  //   final requestTime = middlemanResponse.timestamp.millisecondsSinceEpoch;
+  //   if (responses.any((element) => element.response.error != null)) {
+  //     masterChannel.sendResponse(responses
+  //         .firstWhere((element) => element.response.error != null)
+  //         .response);
+  //   } else {
+  //     switch (middlemanResponse.request.method) {
+  //       case ANALYSIS_REQUEST_GET_NAVIGATION:
+  //         final results = responses
+  //             .map((e) => AnalysisGetNavigationResult.fromResponse(e.response));
 
-//           final aggregatedResponse = AnalysisGetNavigationResult(
-//             results.map((e) => e.files).expand((f) => f).toList(),
-//             results.map((e) => e.targets).expand((f) => f).toList(),
-//             results.map((e) => e.regions).expand((f) => f).toList(),
-//           ).toResponse(id, requestTime);
+  //         final aggregatedResponse = AnalysisGetNavigationResult(
+  //           results.map((e) => e.files).expand((f) => f).toList(),
+  //           results.map((e) => e.targets).expand((f) => f).toList(),
+  //           results.map((e) => e.regions).expand((f) => f).toList(),
+  //         ).toResponse(id, requestTime);
 
-//           masterChannel.sendResponse(aggregatedResponse);
-//           break;
-//         case ANALYSIS_REQUEST_HANDLE_WATCH_EVENTS:
-//           final aggregatedResponse =
-//               AnalysisHandleWatchEventsResult().toResponse(id, requestTime);
-//           masterChannel.sendResponse(aggregatedResponse);
-//           break;
-//         case ANALYSIS_REQUEST_SET_CONTEXT_ROOTS:
-//           final response =
-//               AnalysisSetContextRootsResult().toResponse(id, requestTime);
-//           // result = await handleAnalysisSetContextRoots(params);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case ANALYSIS_REQUEST_SET_PRIORITY_FILES:
-//           final response =
-//               AnalysisSetPriorityFilesResult().toResponse(id, requestTime);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case ANALYSIS_REQUEST_SET_SUBSCRIPTIONS:
-//           final response =
-//               AnalysisSetSubscriptionsResult().toResponse(id, requestTime);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case ANALYSIS_REQUEST_UPDATE_CONTENT:
-//           final response =
-//               AnalysisUpdateContentResult().toResponse(id, requestTime);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case COMPLETION_REQUEST_GET_SUGGESTIONS:
-//           final results = responses.map(
-//               (e) => CompletionGetSuggestionsResult.fromResponse(e.response));
-//           //     .toResponse(id, requestTime);
-//           // TODO complete this request
-//           // final response =
-//           //     CompletionGetSuggestionsResult().toResponse(id, requestTime);
-//           // masterChannel.sendResponse(response);
-//           break;
-//         case EDIT_REQUEST_GET_ASSISTS:
-//           final assistResponses = responses
-//               .map((e) => EditGetAssistsResult.fromResponse(e.response));
-//           final response = EditGetAssistsResult(assistResponses
-//                   .map((e) => e.assists)
-//                   .expand((f) => f)
-//                   .toList())
-//               .toResponse(id, requestTime);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case EDIT_REQUEST_GET_AVAILABLE_REFACTORINGS:
-//           final results = responses.map((e) =>
-//               EditGetAvailableRefactoringsResult.fromResponse(e.response));
-//           final response = EditGetAvailableRefactoringsResult(
-//                   results.map((e) => e.kinds).expand((f) => f).toList())
-//               .toResponse(id, requestTime);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case EDIT_REQUEST_GET_FIXES:
-//           final results =
-//               responses.map((e) => EditGetFixesResult.fromResponse(e.response));
-//           final response = EditGetFixesResult(
-//                   results.map((e) => e.fixes).expand((f) => f).toList())
-//               .toResponse(id, requestTime);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case EDIT_REQUEST_GET_REFACTORING:
-//           final results = responses
-//               .map((e) => EditGetRefactoringResult.fromResponse(e.response));
-//           final response = EditGetRefactoringResult(
-//             results.map((e) => e.initialProblems).expand((f) => f).toList(),
-//             results.map((e) => e.optionsProblems).expand((f) => f).toList(),
-//             results.map((e) => e.finalProblems).expand((f) => f).toList(),
-//             //TODO: compelete the aggregate of this method
-//             // results.map((e) => e.feedback).expand((f) => f).toList(),
-//             // results.map((e) => e.change.edits).expand((f) => f).toList(),
-//           ).toResponse(id, requestTime);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case KYTHE_REQUEST_GET_KYTHE_ENTRIES:
-//           final results = responses
-//               .map((e) => KytheGetKytheEntriesResult.fromResponse(e.response));
-//           final response = KytheGetKytheEntriesResult(
-//             results.map((e) => e.entries).expand((f) => f).toList(),
-//             results.map((e) => e.files).expand((f) => f).toList(),
-//           ).toResponse(id, requestTime);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case PLUGIN_REQUEST_SHUTDOWN:
-//           final response = PluginShutdownResult().toResponse(id, requestTime);
-//           masterChannel.sendResponse(response);
-//           break;
-//         case PLUGIN_REQUEST_VERSION_CHECK:
-//           // for (final response in middlemanResponse.responses) {
-//           //   unblock(response.root);
-//           // }
-//           // final response = PluginVersionCheckResult().toResponse(id, requestTime);
-//           // masterChannel.sendResponse(response);
-//           //TODO: version check should happen at end plugin level too
-//           throw UnimplementedError(
-//               'plugin check should happen at middleman level');
+  //         masterChannel.sendResponse(aggregatedResponse);
+  //         break;
+  //       case ANALYSIS_REQUEST_HANDLE_WATCH_EVENTS:
+  //         final aggregatedResponse =
+  //             AnalysisHandleWatchEventsResult().toResponse(id, requestTime);
+  //         masterChannel.sendResponse(aggregatedResponse);
+  //         break;
+  //       case ANALYSIS_REQUEST_SET_CONTEXT_ROOTS:
+  //         final response =
+  //             AnalysisSetContextRootsResult().toResponse(id, requestTime);
+  //         // result = await handleAnalysisSetContextRoots(params);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case ANALYSIS_REQUEST_SET_PRIORITY_FILES:
+  //         final response =
+  //             AnalysisSetPriorityFilesResult().toResponse(id, requestTime);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case ANALYSIS_REQUEST_SET_SUBSCRIPTIONS:
+  //         final response =
+  //             AnalysisSetSubscriptionsResult().toResponse(id, requestTime);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case ANALYSIS_REQUEST_UPDATE_CONTENT:
+  //         final response =
+  //             AnalysisUpdateContentResult().toResponse(id, requestTime);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case COMPLETION_REQUEST_GET_SUGGESTIONS:
+  //         final results = responses.map(
+  //             (e) => CompletionGetSuggestionsResult.fromResponse(e.response));
+  //         //     .toResponse(id, requestTime);
+  //         // TODO complete this request
+  //         // final response =
+  //         //     CompletionGetSuggestionsResult().toResponse(id, requestTime);
+  //         // masterChannel.sendResponse(response);
+  //         break;
+  //       case EDIT_REQUEST_GET_ASSISTS:
+  //         final assistResponses = responses
+  //             .map((e) => EditGetAssistsResult.fromResponse(e.response));
+  //         final response = EditGetAssistsResult(assistResponses
+  //                 .map((e) => e.assists)
+  //                 .expand((f) => f)
+  //                 .toList())
+  //             .toResponse(id, requestTime);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case EDIT_REQUEST_GET_AVAILABLE_REFACTORINGS:
+  //         final results = responses.map((e) =>
+  //             EditGetAvailableRefactoringsResult.fromResponse(e.response));
+  //         final response = EditGetAvailableRefactoringsResult(
+  //                 results.map((e) => e.kinds).expand((f) => f).toList())
+  //             .toResponse(id, requestTime);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case EDIT_REQUEST_GET_FIXES:
+  //         final results =
+  //             responses.map((e) => EditGetFixesResult.fromResponse(e.response));
+  //         final response = EditGetFixesResult(
+  //                 results.map((e) => e.fixes).expand((f) => f).toList())
+  //             .toResponse(id, requestTime);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case EDIT_REQUEST_GET_REFACTORING:
+  //         final results = responses
+  //             .map((e) => EditGetRefactoringResult.fromResponse(e.response));
+  //         final response = EditGetRefactoringResult(
+  //           results.map((e) => e.initialProblems).expand((f) => f).toList(),
+  //           results.map((e) => e.optionsProblems).expand((f) => f).toList(),
+  //           results.map((e) => e.finalProblems).expand((f) => f).toList(),
+  //           //TODO: compelete the aggregate of this method
+  //           // results.map((e) => e.feedback).expand((f) => f).toList(),
+  //           // results.map((e) => e.change.edits).expand((f) => f).toList(),
+  //         ).toResponse(id, requestTime);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case KYTHE_REQUEST_GET_KYTHE_ENTRIES:
+  //         final results = responses
+  //             .map((e) => KytheGetKytheEntriesResult.fromResponse(e.response));
+  //         final response = KytheGetKytheEntriesResult(
+  //           results.map((e) => e.entries).expand((f) => f).toList(),
+  //           results.map((e) => e.files).expand((f) => f).toList(),
+  //         ).toResponse(id, requestTime);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case PLUGIN_REQUEST_SHUTDOWN:
+  //         final response = PluginShutdownResult().toResponse(id, requestTime);
+  //         masterChannel.sendResponse(response);
+  //         break;
+  //       case PLUGIN_REQUEST_VERSION_CHECK:
+  //         // for (final response in middlemanResponse.responses) {
+  //         //   unblock(response.root);
+  //         // }
+  //         // final response = PluginVersionCheckResult().toResponse(id, requestTime);
+  //         // masterChannel.sendResponse(response);
+  //         //TODO: version check should happen at end plugin level too
+  //         throw UnimplementedError(
+  //             'plugin check should happen at middleman level');
 
-//         // break;
-//       }
-//     }
-//   }
+  //       // break;
+  //     }
+  //   }
+  // }
 
 //   // void _shutdownIsolate(AnalysisContext context) {
 //   //   // final isolate =
