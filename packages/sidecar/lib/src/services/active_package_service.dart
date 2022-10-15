@@ -65,11 +65,11 @@ class ActivePackageService {
     return PackageConfig.parseBytes(contents, root);
   }
 
-  List<SidecarPackage> getSidecarDependencies(Uri root) {
+  List<RulePackageConfiguration> getSidecarDependencies(Uri root) {
     _log('findAllSidecarDeps for ${root.toFilePath()} // ${root.path}');
     return _getPackageConfig(root)
         .packages
-        .map<SidecarPackage?>((package) {
+        .map<RulePackageConfiguration?>((package) {
           try {
             // _log(
             //     'findAllSidecarDeps for name ${package.name} @ path ${package.root.toFilePath(windows: Platform.isWindows)} // ${package.root.normalizePath().path}');
@@ -79,7 +79,7 @@ class ActivePackageService {
             return null;
           }
         })
-        .whereType<SidecarPackage>()
+        .whereType<RulePackageConfiguration>()
         .toList();
   }
 

@@ -21,7 +21,7 @@ class ActiveContext implements AnalysisContext {
   final AnalysisContext _context;
   final ProjectConfiguration sidecarOptions;
   final Package sidecarPluginPackage;
-  final List<SidecarPackage> sidecarPackages;
+  final List<RulePackageConfiguration> sidecarPackages;
 
   ActiveContextRoot get activeRoot => ActiveContextRoot(_context.contextRoot);
 

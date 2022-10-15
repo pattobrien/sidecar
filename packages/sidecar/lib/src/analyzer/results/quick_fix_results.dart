@@ -8,7 +8,6 @@ import '../context/context.dart';
 import '../plugin/plugin.dart';
 import 'analysis_results_provider.dart';
 import 'edit_result.dart';
-import 'resolved_unit_provider.dart';
 
 final quickFixForRequestProvider =
     FutureProvider.family<List<AnalysisErrorFixes>, EditRequest>(

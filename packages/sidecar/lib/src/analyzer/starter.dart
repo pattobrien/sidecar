@@ -42,7 +42,9 @@ Future<void> startSidecarPlugin(
       masterPluginChannelProvider.overrideWithValue(pluginChannel),
       ruleConstructorProvider.overrideWithValue(constructors ?? []),
     ],
-    observers: [PluginObserver(delegate, isMiddleman: isMiddleman)],
+    observers: [
+      PluginObserver(delegate, isMiddleman: isMiddleman),
+    ],
   );
 
   try {

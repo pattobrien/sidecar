@@ -5,13 +5,13 @@ import 'package:path/path.dart' as p;
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
-class SidecarPackage {
-  factory SidecarPackage.fromYamlMap(
+class RulePackageConfiguration {
+  factory RulePackageConfiguration.fromYamlMap(
     YamlMap map, {
     required Uri uri,
     required String packageName,
   }) {
-    return SidecarPackage._(
+    return RulePackageConfiguration._(
       map['lints'] as YamlList?,
       map['edits'] as YamlList?,
       source: map,
@@ -20,7 +20,7 @@ class SidecarPackage {
     );
   }
 
-  SidecarPackage._(
+  RulePackageConfiguration._(
     this._lints,
     this._edits, {
     required this.source,
@@ -55,14 +55,15 @@ class EditNode extends SidecarBaseNode {
   EditNode(super.node);
 }
 
-SidecarPackage? parseLintPackage(String name, Uri root) {
+RulePackageConfiguration? parseLintPackage(String name, Uri root) {
   final rootPath = root.toFilePath(windows: Platform.isWindows);
   final pubspecPath = p.join(rootPath, 'pubspec.yaml');
   final pubspecContent = File(pubspecPath).readAsStringSync();
   try {
-    return checkedYamlDecode<SidecarPackage>(pubspecContent, (yamlMap) {
+    return checkedYamlDecode<RulePackageConfiguration>(pubspecContent,
+        (yamlMap) {
       if (yamlMap?['sidecar'] == null) throw PackageMissingSidecarDefinition();
-      return SidecarPackage.fromYamlMap(
+      return RulePackageConfiguration.fromYamlMap(
         yamlMap!['sidecar']! as YamlMap,
         uri: root,
         packageName: name,

@@ -11,7 +11,7 @@ calculate() {
 }
 
 class SomePage extends ConsumerWidget {
-  final color = Color(0x1234578);
+  final color = Color(0x12345678);
   final insets = EdgeInsets.all(10);
   final shadow = BoxShadow();
 

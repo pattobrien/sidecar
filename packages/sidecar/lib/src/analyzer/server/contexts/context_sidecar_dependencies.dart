@@ -5,7 +5,7 @@ import '../../../protocol/protocol.dart';
 import '../../../services/services.dart';
 
 final contextSidecarDependenciesProvider =
-    Provider.family<List<SidecarPackage>, ContextRoot>(
+    Provider.family<List<RulePackageConfiguration>, ContextRoot>(
   (ref, root) {
     final service = ref.watch(activePackageServiceProvider);
     return service.getSidecarDependencies(root.root.toUri());

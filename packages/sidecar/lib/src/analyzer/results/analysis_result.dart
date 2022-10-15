@@ -51,13 +51,8 @@ class AnalysisResult with _$AnalysisResult {
       concatenatedLintCode,
       url: lintRule.url,
       correction: correction,
+      //TODO: hasFix does not seem to work properly
       hasFix: edits.isNotEmpty,
-      //TODO: hasFix
     );
   }
 }
-
-// extension DartAnalysisResultX on DartAnalysisResult {
-//   // remove
-//   AstNode? get node => sourceSpan.toAstNode(unit);
-// }
