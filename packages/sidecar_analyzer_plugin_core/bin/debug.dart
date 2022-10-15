@@ -23,7 +23,6 @@ void main(List<String> args) async {
     newArgs,
     isMiddleman: true,
     isPlugin: false,
-    isInitializedFromPath: false,
   );
 
   if (isDebug) reloader.stop();

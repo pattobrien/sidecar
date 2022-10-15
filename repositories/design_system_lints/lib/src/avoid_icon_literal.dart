@@ -44,8 +44,7 @@ class _Visitor extends SidecarAstVisitor {
       if (matchingAnnotation == null) {
         reportAstNode(
           node,
-          message:
-              '1.20 Avoid IconData literal. Use design system spec instead.',
+          message: 'Avoid IconData literal. Use design system spec instead.',
         );
       }
     }

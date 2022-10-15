@@ -11,20 +11,18 @@ final analysisResultsForFileProvider =
     final fileService = ref.watch(fileAnalyzerServiceProvider);
     final activatedRules = ref.watch(lintRulesForFileProvider(file));
 
-    final unitResult = await ref.watch(resolvedUnitProvider(file).future);
+    final unit = await ref.watch(resolvedUnitProvider(file).future);
 
     final results = await fileService.computeAnalysisResults(
       file: file,
       activatedRules: activatedRules,
-      unitResult: unitResult,
+      unitResult: unit,
     );
-    ref.watch(logDelegateProvider).sidecarMessage(
-        'analysis complete w/ ${results.length} results || ${file.path}');
-
+    // TODO: make sending results a separate provider
     ref.watch(logDelegateProvider).analysisResults(file.path, results);
     return results;
   },
-  name: 'analysisResultsProvider',
+  name: 'analysisResultsForFileProvider',
   dependencies: [
     lintRulesForFileProvider,
     fileAnalyzerServiceProvider,
@@ -35,9 +33,8 @@ final analysisResultsForFileProvider =
 final analysisResultsCompletedForContextProvider =
     Provider.family<bool, ActiveContextRoot>(
   (ref, root) {
-    final allFiles = root.typedAnalyzedFiles();
-    return allFiles
-        .every((e) => ref.watch(analysisResultsForFileProvider(e)).hasValue);
+    return root.typedAnalyzedFiles().every(
+        (file) => ref.watch(analysisResultsForFileProvider(file)).hasValue);
   },
   name: 'analysisResultsCompletedForContextProvider',
   dependencies: [
@@ -48,11 +45,13 @@ final analysisResultsCompletedForContextProvider =
 final analysisResultsForContextProvider =
     Provider.family<List<AnalysisResult>, ActiveContextRoot>(
   (ref, root) {
-    final allFiles = root.typedAnalyzedFiles();
-    final values = allFiles.map(
-        (e) => ref.watch(analysisResultsForFileProvider(e)).valueOrNull ?? []);
-    return values.expand((element) => element).toList();
+    final analyzedFiles = root.typedAnalyzedFiles();
+    final results = analyzedFiles.map((file) =>
+        ref.watch(analysisResultsForFileProvider(file)).valueOrNull ?? []);
+    return results.expand((e) => e).toList();
   },
   name: 'analysisResultsForContextProvider',
-  dependencies: [analysisResultsForFileProvider],
+  dependencies: [
+    analysisResultsForFileProvider,
+  ],
 );

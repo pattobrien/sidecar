@@ -10,8 +10,7 @@ final quickFixForRequestProvider =
     FutureProvider.family<List<AnalysisErrorFixes>, EditRequest>(
   (ref, request) async {
     final fileService = ref.watch(fileAnalyzerServiceProvider);
-    final context =
-        ref.watch(activeContextForContextRootProvider(request.file.root));
+    final context = ref.watch(activeContextForRootProvider(request.file.root));
     final analysisResults =
         await ref.watch(analysisResultsForFileProvider(request.file).future);
 
@@ -35,7 +34,7 @@ final quickFixForRequestProvider =
   },
   name: 'quickFixForRequestProvider',
   dependencies: [
-    activeContextForContextRootProvider,
+    activeContextForRootProvider,
     fileAnalyzerServiceProvider,
     analysisResultsForFileProvider,
   ],
@@ -49,7 +48,7 @@ final analysisQuickFixResultsProvider =
 
     // wait for all analysis results to be computed before calculating quick fixes
     await ref.watch(_isContextAnalyzingFilesProvider(root).future);
-    final context = ref.watch(activeContextForContextRootProvider(root));
+    final context = ref.watch(activeContextForRootProvider(root));
 
     final results = ref.watch(analysisResultsForContextProvider(root));
 
@@ -64,7 +63,7 @@ final analysisQuickFixResultsProvider =
     fileAnalyzerServiceProvider,
     resolvedUnitProvider,
     analysisResultsForContextProvider,
-    activeContextForContextRootProvider,
+    activeContextForRootProvider,
     _isContextAnalyzingFilesProvider,
   ],
 );

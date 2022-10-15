@@ -4,8 +4,8 @@ import 'package:sidecar/sidecar.dart';
 
 import 'log_delegate/log_delegate_base.dart';
 
-class ActivatedRulesService {
-  const ActivatedRulesService(this.ref);
+class RuleInitializationService {
+  const RuleInitializationService(this.ref);
   final Ref ref;
 
   void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
@@ -46,9 +46,9 @@ class ActivatedRulesService {
   }
 }
 
-final activatedRulesServiceProvider = Provider(
-  ActivatedRulesService.new,
-  name: 'activatedRulesServiceProvider',
+final ruleInitializationServiceProvider = Provider(
+  RuleInitializationService.new,
+  name: 'ruleInitializationServiceProvider',
   dependencies: [
     logDelegateProvider,
   ],

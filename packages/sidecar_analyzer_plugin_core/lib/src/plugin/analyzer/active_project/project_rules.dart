@@ -33,15 +33,11 @@ final assistRulesForFileProvider =
 final _activatedRulesProvider =
     Provider.family<List<SidecarBase>, ActiveContextRoot>(
   (ref, root) {
-    ref.listenSelf((_, next) => ref
-        .read(logDelegateProvider)
-        .sidecarMessage('ISOLATE: initializedRules = ${next.length}'));
-
-    final context = ref.watch(activeContextForContextRootProvider(root));
+    final context = ref.watch(activeContextForRootProvider(root));
     final ruleConstructors = ref.watch(ruleConstructorProvider);
-    final activatedRulesService = ref.watch(activatedRulesServiceProvider);
+    final ruleService = ref.watch(ruleInitializationServiceProvider);
 
-    return activatedRulesService.initializeRules(
+    return ruleService.initializeRules(
       [], // annotations,
       context.sidecarOptions,
       ruleConstructors,
@@ -49,8 +45,8 @@ final _activatedRulesProvider =
   },
   name: '_activatedRulesProvider',
   dependencies: [
-    activeContextForContextRootProvider,
-    activatedRulesServiceProvider,
+    activeContextForRootProvider,
+    ruleInitializationServiceProvider,
     ruleConstructorProvider,
     logDelegateProvider,
   ],
@@ -61,13 +57,12 @@ final _filteredRulesProvider = Provider.family<List<SidecarBase>, AnalyzedFile>(
   (ref, analyzedFile) {
     final allRules = ref.watch(_activatedRulesProvider(analyzedFile.root));
     final context = ref.watch(activeContextsProvider).contextFor(analyzedFile)!;
-    final sidecarOptions = context.sidecarOptions;
 
     return allRules
         .where((rule) => _isPathIncludedForRule(
             file: analyzedFile,
             rule: rule,
-            projectConfiguration: sidecarOptions))
+            projectConfiguration: context.sidecarOptions))
         .toList();
   },
   name: '_filteredRulesProvider',

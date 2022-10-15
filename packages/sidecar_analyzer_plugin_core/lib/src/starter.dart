@@ -8,7 +8,6 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'plugin/analyzer/analyzer.dart';
-import 'plugin/analyzer/rule_constructors_provider.dart';
 import 'plugin/middleman/middleman.dart';
 import 'plugin/plugin.dart';
 import 'runner/sidecar_runner.dart';
@@ -20,7 +19,6 @@ Future<void> startSidecarPlugin(
   List<SidecarBaseConstructor>? constructors,
   required bool isMiddleman,
   required bool isPlugin,
-  required bool isInitializedFromPath,
 }) async {
   LogDelegateBase delegate;
   SidecarAnalyzerMode mode;
@@ -47,8 +45,6 @@ Future<void> startSidecarPlugin(
     ],
     observers: [PluginObserver(delegate, isMiddleman: isMiddleman)],
   );
-
-  delegate.sidecarMessage('INITED');
 
   try {
     if (mode.isDebug) {
