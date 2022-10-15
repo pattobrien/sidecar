@@ -12,6 +12,11 @@ void main() {
   final fieldMap = <String, String>{'field': 'String', 'field2': 'bool'};
   final packageName = 'design_system_lints';
 
+  String foldedResult(String resultName, String type) =>
+      '$resultName.fold((l) => throw SidecarException(), (r) => r as $type)';
+  String computedResult(String field, String type) =>
+      'final \$${field}Result = computeField<$type>(yamlMap, packageName, \'$field\')..fold((l) => exceptions.add(l), (r) => null)';
+
   // computation
   final configurationClass = Class(
     (b) => b
@@ -56,22 +61,24 @@ void main() {
               p1.type = Reference('YamlMap', 'package:yaml/yaml.dart');
             },
           ));
-          Code computeResult(String field, String type) => Code(
-              'final ${field}Result = computeField<$type>(yamlMap, packageName, \'$field\')..fold((l) => exceptions.add(l), (r) => null)');
 
-          final results =
-              fieldMap.entries.map((e) => computeResult(e.key, e.value));
           p0.body = Block((b) {
             b.addExpression(
               CodeExpression(
                   Code('final exceptions = <SidecarConfigException>[]')),
             );
-            for (final result in results) {
-              b.addExpression(CodeExpression(result));
+            String foldString = '';
+            for (final fieldMapEntry in fieldMap.entries) {
+              final resultVariableName = '\$${fieldMapEntry.key}Result';
+              final fieldType = fieldMapEntry.value;
+              final fieldVariableName = fieldMapEntry.key;
+              b.addExpression(CodeExpression(
+                  Code(computedResult(fieldVariableName, fieldType))));
+              foldString += '${foldedResult(resultVariableName, fieldType)}, ';
             }
             b.addExpression(
               CodeExpression(Code(
-                  'try { return \$TestConfig(); } on SidecarAggregateException { throw SidecarAggregateException(exceptions); }')),
+                  'try { return \$TestConfig($foldString); } on SidecarAggregateException { throw SidecarAggregateException(exceptions); }')),
             );
           });
         }),
