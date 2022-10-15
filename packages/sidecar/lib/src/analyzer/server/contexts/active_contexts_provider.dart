@@ -13,7 +13,7 @@ import '../server.dart';
 final activeContextsMiddlemanProvider = Provider<List<ActiveContext>>(
   (ref) {
     final allContexts = ref.watch(allContextsProvider);
-    final service = ref.watch(activePackageServiceProvider);
+    final service = ref.watch(activeProjectServiceProvider);
 
     return allContexts
         .map<ActiveContext?>(service.initializeContext)
@@ -23,7 +23,7 @@ final activeContextsMiddlemanProvider = Provider<List<ActiveContext>>(
   name: 'activeContextsProvider',
   dependencies: [
     allContextsProvider,
-    activePackageServiceProvider,
+    activeProjectServiceProvider,
   ],
 );
 

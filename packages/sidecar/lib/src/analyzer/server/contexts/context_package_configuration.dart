@@ -7,11 +7,11 @@ import '../../../services/services.dart';
 final projectConfigurationProvider =
     Provider.family<ProjectConfiguration?, ContextRoot>(
   (ref, contextRoot) {
-    final packageService = ref.watch(activePackageServiceProvider);
+    final packageService = ref.watch(activeProjectServiceProvider);
     return packageService.getSidecarOptions(contextRoot);
   },
   dependencies: [
-    activePackageServiceProvider,
+    activeProjectServiceProvider,
   ],
 );
 

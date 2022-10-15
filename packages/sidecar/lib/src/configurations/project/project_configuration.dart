@@ -17,34 +17,34 @@ class ProjectConfiguration {
     required this.rawContent,
   }) : _includes = includes;
 
-  factory ProjectConfiguration.parseFromAnalysisOptions(
-    String contents, {
-    required Uri sourceUrl,
-  }) {
-    return checkedYamlDecode(
-      contents,
-      (m) {
-        YamlMap contentMap;
-        try {
-          contentMap = m!['sidecar'] as YamlMap;
-        } catch (e) {
-          throw const MissingSidecarConfiguration();
-        }
-        final sourceErrors = <YamlSourceError>[];
-        return ProjectConfiguration(
-          rawContent: contents,
-          lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
-          assistPackages: _parseAssistPackages(contentMap['edits'] as YamlMap?),
-          includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
-            sourceErrors.addAll(r);
-            return null;
-          }),
-          sourceErrors: sourceErrors,
-        );
-      },
-      sourceUrl: sourceUrl,
-    );
-  }
+  // factory ProjectConfiguration.parseFromAnalysisOptions(
+  //   String contents, {
+  //   required Uri sourceUrl,
+  // }) {
+  //   return checkedYamlDecode(
+  //     contents,
+  //     (m) {
+  //       YamlMap contentMap;
+  //       try {
+  //         contentMap = m!['sidecar'] as YamlMap;
+  //       } catch (e) {
+  //         throw const MissingSidecarConfiguration();
+  //       }
+  //       final sourceErrors = <YamlSourceError>[];
+  //       return ProjectConfiguration(
+  //         rawContent: contents,
+  //         lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
+  //         assistPackages: _parseAssistPackages(contentMap['edits'] as YamlMap?),
+  //         includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
+  //           sourceErrors.addAll(r);
+  //           return null;
+  //         }),
+  //         sourceErrors: sourceErrors,
+  //       );
+  //     },
+  //     sourceUrl: sourceUrl,
+  //   );
+  // }
   factory ProjectConfiguration.parseFromSidecarYaml(
     String contents, {
     required Uri sourceUrl,

@@ -1,414 +1,414 @@
-import 'dart:convert';
-import 'dart:io' as io;
-import 'dart:io' show Directory;
+// import 'dart:convert';
+// import 'dart:io' as io;
+// import 'dart:io' show Directory;
 
-import 'package:package_config/package_config.dart';
-import 'package:path/path.dart' as p;
-import 'package:pubspec_parse/pubspec_parse.dart';
-import 'package:riverpod/riverpod.dart';
+// import 'package:package_config/package_config.dart';
+// import 'package:path/path.dart' as p;
+// import 'package:pubspec_parse/pubspec_parse.dart';
+// import 'package:riverpod/riverpod.dart';
 
-import '../../configurations/configurations.dart';
-import '../utilities/utilities.dart';
-import 'constants.dart';
-import 'file_content_constants.dart';
-import 'vscode_task.dart';
+// import '../../configurations/configurations.dart';
+// import '../utilities/utilities.dart';
+// import 'constants.dart';
+// import 'file_content_constants.dart';
+// import 'vscode_task.dart';
 
-class ProjectService {
-  ProjectService(this.projectDirectory) {
-    checkIfPubspecExists();
-  }
+// class ProjectService {
+//   ProjectService(this.projectDirectory) {
+//     checkIfPubspecExists();
+//   }
 
-  Future<void> checkIfPubspecExists() async {
-    if (await pubspecFile.exists()) {
-      return;
-    } else {
-      logger.stderr('pubspec file is not in root project dir');
-      throw UnimplementedError('pubspec file is not in root project dir');
-    }
-  }
+//   Future<void> checkIfPubspecExists() async {
+//     if (await pubspecFile.exists()) {
+//       return;
+//     } else {
+//       logger.stderr('pubspec file is not in root project dir');
+//       throw UnimplementedError('pubspec file is not in root project dir');
+//     }
+//   }
 
-  final io.Directory projectDirectory;
+//   final io.Directory projectDirectory;
 
-  io.Directory get projectPluginDirectory {
-    final pluginPath =
-        p.join(projectDirectory.path, kProjectPluginRelativePath);
-    return io.Directory(pluginPath)..create(recursive: true);
-  }
+//   io.Directory get projectPluginDirectory {
+//     final pluginPath =
+//         p.join(projectDirectory.path, kProjectPluginRelativePath);
+//     return io.Directory(pluginPath)..create(recursive: true);
+//   }
 
-  io.File get pubspecFile =>
-      io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
+//   io.File get pubspecFile =>
+//       io.File(p.join(projectDirectory.path, 'pubspec.yaml'));
 
-  io.File get sidecarFile =>
-      io.File(p.join(projectDirectory.path, 'sidecar.yaml'));
+//   io.File get sidecarFile =>
+//       io.File(p.join(projectDirectory.path, 'sidecar.yaml'));
 
-  io.File get analysisOptionsFile =>
-      io.File(p.join(projectDirectory.path, 'analysis_options.yaml'));
+//   io.File get analysisOptionsFile =>
+//       io.File(p.join(projectDirectory.path, 'analysis_options.yaml'));
 
-  io.Directory get projectRepositoryDirectory {
-    final toolPath = io.Directory(p.join(projectDirectory.path, 'tool'));
-    return io.Directory(p.join(toolPath.path, 'sidecar_overrides'));
-  }
+//   io.Directory get projectRepositoryDirectory {
+//     final toolPath = io.Directory(p.join(projectDirectory.path, 'tool'));
+//     return io.Directory(p.join(toolPath.path, 'sidecar_overrides'));
+//   }
 
-  Future<void> setupAnalysisOptionsFile() async {
-    final progress = logger.progress(
-        '\nchecking for sidecar configuration in ${logger.ansi.emphasized('analysis_options.yaml')} or ${logger.ansi.emphasized('sidecar.yaml')}');
+//   Future<void> setupAnalysisOptionsFile() async {
+//     final progress = logger.progress(
+//         '\nchecking for sidecar configuration in ${logger.ansi.emphasized('analysis_options.yaml')} or ${logger.ansi.emphasized('sidecar.yaml')}');
 
-    // if (!(await sidecarFile.exists())) {
-    //   await sidecarFile.create(recursive: true);
-    //   await sidecarFile.writeAsString(sidecarYamlDefaultContents);
-    //   progress.finish(showTiming: true);
-    // }
-    // progress.finish(showTiming: true);
-    if (!analysisOptionsFile.existsSync()) {
-      await analysisOptionsFile.create(recursive: true);
-      await analysisOptionsFile.writeAsString(analyzerPluginDefaultContents);
-      await analysisOptionsFile.writeAsString(sidecarYamlDefaultContents);
-      progress.finish(showTiming: true);
-    } else {
-      //TODO: check if sidecar is setup under analyzer.plugins, and if not add it in
-      progress.finish(showTiming: true);
-    }
-  }
+//     // if (!(await sidecarFile.exists())) {
+//     //   await sidecarFile.create(recursive: true);
+//     //   await sidecarFile.writeAsString(sidecarYamlDefaultContents);
+//     //   progress.finish(showTiming: true);
+//     // }
+//     // progress.finish(showTiming: true);
+//     if (!analysisOptionsFile.existsSync()) {
+//       await analysisOptionsFile.create(recursive: true);
+//       await analysisOptionsFile.writeAsString(analyzerPluginDefaultContents);
+//       await analysisOptionsFile.writeAsString(sidecarYamlDefaultContents);
+//       progress.finish(showTiming: true);
+//     } else {
+//       //TODO: check if sidecar is setup under analyzer.plugins, and if not add it in
+//       progress.finish(showTiming: true);
+//     }
+//   }
 
-  Future<void> insertProjectPluginIntoPubspec() async {
-    final progress = logger.progress(
-        '\nadding copied ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml');
+//   Future<void> insertProjectPluginIntoPubspec() async {
+//     final progress = logger.progress(
+//         '\nadding copied ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml');
 
-    try {
-      await pubRemovePackages([kSidecarPluginPackageId]);
-      await pubAddPackages(
-        [kSidecarPluginPackageId],
-        pathUrl: kProjectPluginRelativePath,
-        isDevDependency: true,
-        workingDirectory: projectDirectory.path,
-      );
-      progress.finish(showTiming: true);
-    } catch (e) {
-      logger.stderr('failure while retrieving packages $e');
-    }
-  }
+//     try {
+//       await pubRemovePackages([kSidecarPluginPackageId]);
+//       await pubAddPackages(
+//         [kSidecarPluginPackageId],
+//         pathUrl: kProjectPluginRelativePath,
+//         isDevDependency: true,
+//         workingDirectory: projectDirectory.path,
+//       );
+//       progress.finish(showTiming: true);
+//     } catch (e) {
+//       logger.stderr('failure while retrieving packages $e');
+//     }
+//   }
 
-  Future<void> insertPluginIntoProjectPubspec() async {
-    final progress = logger.progress(
-        'adding ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml file from hosted sidecar server');
-    try {
-      await pubRemovePackages([kSidecarPluginPackageId]);
-    } catch (e) {
-      // do nothing
-    }
-    await pubAddPackages(
-      [kSidecarPluginPackageId],
-      hostedUrl: sidecarPluginHostedUrl,
-      isDevDependency: true,
-    );
+//   Future<void> insertPluginIntoProjectPubspec() async {
+//     final progress = logger.progress(
+//         'adding ${logger.ansi.emphasized(kSidecarPluginPackageId)} to project pubspec.yaml file from hosted sidecar server');
+//     try {
+//       await pubRemovePackages([kSidecarPluginPackageId]);
+//     } catch (e) {
+//       // do nothing
+//     }
+//     await pubAddPackages(
+//       [kSidecarPluginPackageId],
+//       hostedUrl: sidecarPluginHostedUrl,
+//       isDevDependency: true,
+//     );
 
-    progress.finish(showTiming: true);
-  }
+//     progress.finish(showTiming: true);
+//   }
 
-  Future<void> pubRemovePackages(
-    List<String> packages, {
-    String? workingDirectory,
-  }) async {
-    if (packages.isEmpty) return;
+//   Future<void> pubRemovePackages(
+//     List<String> packages, {
+//     String? workingDirectory,
+//   }) async {
+//     if (packages.isEmpty) return;
 
-    final isFlutter = await isFlutterProject(projectDirectory.path);
-    final process = await io.Process.start(
-      isFlutter ? 'flutter' : 'dart',
-      [
-        'pub',
-        'remove',
-        ...packages,
-      ],
-      workingDirectory: workingDirectory ?? projectDirectory.path,
-    );
-    // process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
-    process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
+//     final isFlutter = await isFlutterProject(projectDirectory.path);
+//     final process = await io.Process.start(
+//       isFlutter ? 'flutter' : 'dart',
+//       [
+//         'pub',
+//         'remove',
+//         ...packages,
+//       ],
+//       workingDirectory: workingDirectory ?? projectDirectory.path,
+//     );
+//     // process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
+//     process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
 
-    await process.exitCode;
-  }
+//     await process.exitCode;
+//   }
 
-  Future<void> pubAddPackages(
-    List<String> packages, {
-    bool isDevDependency = false,
-    String? hostedUrl,
-    String? pathUrl,
-    String? workingDirectory,
-  }) async {
-    assert(pathUrl != null && hostedUrl != null);
+//   Future<void> pubAddPackages(
+//     List<String> packages, {
+//     bool isDevDependency = false,
+//     String? hostedUrl,
+//     String? pathUrl,
+//     String? workingDirectory,
+//   }) async {
+//     assert(pathUrl != null && hostedUrl != null);
 
-    if (packages.isEmpty) return;
+//     if (packages.isEmpty) return;
 
-    final arguments = ['pub', 'add'];
+//     final arguments = ['pub', 'add'];
 
-    if (isDevDependency) arguments.add('--dev');
-    if (hostedUrl != null) arguments.addAll(['--hosted-url', hostedUrl]);
-    if (pathUrl != null) arguments.addAll(['--path', pathUrl]);
+//     if (isDevDependency) arguments.add('--dev');
+//     if (hostedUrl != null) arguments.addAll(['--hosted-url', hostedUrl]);
+//     if (pathUrl != null) arguments.addAll(['--path', pathUrl]);
 
-    final isFlutter = await isFlutterProject(projectDirectory.path);
+//     final isFlutter = await isFlutterProject(projectDirectory.path);
 
-    final process = await io.Process.start(
-      isFlutter ? 'flutter' : 'dart',
-      [...arguments, ...packages],
-      workingDirectory: workingDirectory ?? projectDirectory.path,
-    );
+//     final process = await io.Process.start(
+//       isFlutter ? 'flutter' : 'dart',
+//       [...arguments, ...packages],
+//       workingDirectory: workingDirectory ?? projectDirectory.path,
+//     );
 
-    // process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
-    process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
-    await process.exitCode;
-  }
+//     // process.stdout.listen((event) => logger.stdout(utf8.decode(event)));
+//     process.stderr.listen((event) => logger.stdout(utf8.decode(event)));
+//     await process.exitCode;
+//   }
 
-  Future<String> getPluginVersion() async {
-    final progress =
-        logger.progress('\nfetching appropriate version for this project ');
-    final packageConfig = await findPackageConfig(Directory.current);
-    if (packageConfig == null) {
-      logger.stderr('PluginVersion: Failed to locate or read package config.');
-      throw UnimplementedError(
-          'PluginVersion: Failed to locate or read package config.');
-    } else {
-      try {
-        final sidecarPackage = packageConfig.packages
-            .firstWhere((element) => element.name == kSidecarPluginPackageId);
+//   Future<String> getPluginVersion() async {
+//     final progress =
+//         logger.progress('\nfetching appropriate version for this project ');
+//     final packageConfig = await findPackageConfig(Directory.current);
+//     if (packageConfig == null) {
+//       logger.stderr('PluginVersion: Failed to locate or read package config.');
+//       throw UnimplementedError(
+//           'PluginVersion: Failed to locate or read package config.');
+//     } else {
+//       try {
+//         final sidecarPackage = packageConfig.packages
+//             .firstWhere((element) => element.name == kSidecarPluginPackageId);
 
-        final decodedPackagePath = Uri.decodeFull(sidecarPackage.root.path);
+//         final decodedPackagePath = Uri.decodeFull(sidecarPackage.root.path);
 
-        progress.finish(showTiming: true);
-        logger.stdout(
-            '\nplugin will use ${logger.ansi.emphasized(kSidecarPluginPackageId)} version${logger.ansi.blue} at path $decodedPackagePath ${logger.ansi.none}');
-        return decodedPackagePath;
-      } catch (e) {
-        throw UnimplementedError(
-            'PluginVersion: $kSidecarPluginPackageId dependency not found: $e');
-      }
-    }
-    // final version = Version.parse('0.1.15-dev.3');
-  }
+//         progress.finish(showTiming: true);
+//         logger.stdout(
+//             '\nplugin will use ${logger.ansi.emphasized(kSidecarPluginPackageId)} version${logger.ansi.blue} at path $decodedPackagePath ${logger.ansi.none}');
+//         return decodedPackagePath;
+//       } catch (e) {
+//         throw UnimplementedError(
+//             'PluginVersion: $kSidecarPluginPackageId dependency not found: $e');
+//       }
+//     }
+//     // final version = Version.parse('0.1.15-dev.3');
+//   }
 
-  Future<void> copyBasePluginFromSource(String path) async {
-    final progress = logger.progress(
-        '\ncopying source code into $kProjectPluginRelativePath directory');
-    try {
-      // delete any previously copied plugin files
-      await projectPluginDirectory.delete(recursive: true);
-    } catch (e) {
-      // print(e.toString());
-    }
-    final rootPluginPath = path;
-    if (!io.Directory(rootPluginPath).existsSync()) {
-      // await _downloadSidecarAnalyzerPlugin(version);
-    }
-    // get all source files from the plugin package
-    final packageSourceFiles = io.Directory(rootPluginPath)
-        .listSync(recursive: true)
-        .whereType<io.File>();
+//   Future<void> copyBasePluginFromSource(String path) async {
+//     final progress = logger.progress(
+//         '\ncopying source code into $kProjectPluginRelativePath directory');
+//     try {
+//       // delete any previously copied plugin files
+//       await projectPluginDirectory.delete(recursive: true);
+//     } catch (e) {
+//       // print(e.toString());
+//     }
+//     final rootPluginPath = path;
+//     if (!io.Directory(rootPluginPath).existsSync()) {
+//       // await _downloadSidecarAnalyzerPlugin(version);
+//     }
+//     // get all source files from the plugin package
+//     final packageSourceFiles = io.Directory(rootPluginPath)
+//         .listSync(recursive: true)
+//         .whereType<io.File>();
 
-    var hasOverrides = false;
-    for (final packageSourceFile in packageSourceFiles) {
-      final sourceFileRelativePath = p.relative(
-        packageSourceFile.path,
-        from: rootPluginPath,
-      );
+//     var hasOverrides = false;
+//     for (final packageSourceFile in packageSourceFiles) {
+//       final sourceFileRelativePath = p.relative(
+//         packageSourceFile.path,
+//         from: rootPluginPath,
+//       );
 
-      final pluginProjectPath =
-          p.join(projectPluginDirectory.path, sourceFileRelativePath);
+//       final pluginProjectPath =
+//           p.join(projectPluginDirectory.path, sourceFileRelativePath);
 
-      final file = await io.File(pluginProjectPath).create(recursive: true);
-      if (packageSourceFile.path ==
-          kPluginLoaderAbsolutePath(pluginProjectPath)) {
-        // replace the plugin loader pubspec file with one that
-        // utilizes the newly copied plugin package's path
-        hasOverrides = true;
-        await file.writeAsString(
-            pluginLoaderYamlContentCreator(projectPluginDirectory.path));
-        io.stdout.writeln('found loader pubspec @ $pluginProjectPath');
-      } else {
-        // for all files that are not the plugin loader pubspec
-        // copy the source files as is
-        final contents = await packageSourceFile.readAsBytes();
-        await file.writeAsBytes(contents);
-      }
-    }
-    if (hasOverrides == false) {
-      final pluginProjectPath = p.join(
-        projectPluginDirectory.path,
-        kPluginLoaderRelativePath,
-      );
-      final file = await io.File(pluginProjectPath).create(recursive: true);
+//       final file = await io.File(pluginProjectPath).create(recursive: true);
+//       if (packageSourceFile.path ==
+//           kPluginLoaderAbsolutePath(pluginProjectPath)) {
+//         // replace the plugin loader pubspec file with one that
+//         // utilizes the newly copied plugin package's path
+//         hasOverrides = true;
+//         await file.writeAsString(
+//             pluginLoaderYamlContentCreator(projectPluginDirectory.path));
+//         io.stdout.writeln('found loader pubspec @ $pluginProjectPath');
+//       } else {
+//         // for all files that are not the plugin loader pubspec
+//         // copy the source files as is
+//         final contents = await packageSourceFile.readAsBytes();
+//         await file.writeAsBytes(contents);
+//       }
+//     }
+//     if (hasOverrides == false) {
+//       final pluginProjectPath = p.join(
+//         projectPluginDirectory.path,
+//         kPluginLoaderRelativePath,
+//       );
+//       final file = await io.File(pluginProjectPath).create(recursive: true);
 
-      await file.writeAsString(
-          pluginLoaderYamlContentCreator(projectPluginDirectory.path));
-    }
+//       await file.writeAsString(
+//           pluginLoaderYamlContentCreator(projectPluginDirectory.path));
+//     }
 
-    progress.finish();
-  }
+//     progress.finish();
+//   }
 
-  Future<void> insertVscodeTask() async {
-    final progress = logger
-        .progress('\ncreating VSCode utilities that watch for sidecar changes');
-    final taskFile = io.File(vsCodeTaskPath(projectDirectory.path));
-    await taskFile.create(recursive: true);
-    await taskFile.writeAsString(vsCodeTaskContent);
+//   Future<void> insertVscodeTask() async {
+//     final progress = logger
+//         .progress('\ncreating VSCode utilities that watch for sidecar changes');
+//     final taskFile = io.File(vsCodeTaskPath(projectDirectory.path));
+//     await taskFile.create(recursive: true);
+//     await taskFile.writeAsString(vsCodeTaskContent);
 
-    final settingsFile = io.File(vsCodeSettingsPath(projectDirectory.path));
-    await settingsFile.create(recursive: true);
-    await settingsFile
-        .writeAsString(vsCodeSettingsContent(projectDirectory.path));
-    progress.finish(showTiming: true);
-  }
+//     final settingsFile = io.File(vsCodeSettingsPath(projectDirectory.path));
+//     await settingsFile.create(recursive: true);
+//     await settingsFile
+//         .writeAsString(vsCodeSettingsContent(projectDirectory.path));
+//     progress.finish(showTiming: true);
+//   }
 
-  Future<void> clearPreviousLints(
-    List<LintPackageConfiguration> lints,
-    List<AssistPackageConfiguration> edits,
-  ) async {
-    final pluginPubspecFile =
-        io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
-    final pluginPubspec = Pubspec.parse(await pluginPubspecFile.readAsString());
+//   Future<void> clearPreviousLints(
+//     List<LintPackageConfiguration> lints,
+//     List<AssistPackageConfiguration> edits,
+//   ) async {
+//     final pluginPubspecFile =
+//         io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
+//     final pluginPubspec = Pubspec.parse(await pluginPubspecFile.readAsString());
 
-    final dependenciesToRemove = {
-      ...pluginPubspec.dependencies,
-      ...pluginPubspec.devDependencies,
-    }..removeWhere((key, value) {
-        if (value is! HostedDependency) return true;
-        if (key == 'sidecar') return true;
-        if (key == 'test') return true;
-        if (lints.any((lint) => lint.packageName == key)) return true;
-        if (edits.any((edit) => edit.packageName == key)) return true;
-        return false;
-      });
+//     final dependenciesToRemove = {
+//       ...pluginPubspec.dependencies,
+//       ...pluginPubspec.devDependencies,
+//     }..removeWhere((key, value) {
+//         if (value is! HostedDependency) return true;
+//         if (key == 'sidecar') return true;
+//         if (key == 'test') return true;
+//         if (lints.any((lint) => lint.packageName == key)) return true;
+//         if (edits.any((edit) => edit.packageName == key)) return true;
+//         return false;
+//       });
 
-    await pubRemovePackages(dependenciesToRemove.keys.toList(),
-        workingDirectory: projectPluginDirectory.path);
-  }
+//     await pubRemovePackages(dependenciesToRemove.keys.toList(),
+//         workingDirectory: projectPluginDirectory.path);
+//   }
 
-  Future<void> importLintsAndEdits(
-    List<LintPackageConfiguration> lints,
-    List<AssistPackageConfiguration> edits,
-  ) async {
-    final pluginPubspecFile =
-        io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
+//   Future<void> importLintsAndEdits(
+//     List<LintPackageConfiguration> lints,
+//     List<AssistPackageConfiguration> edits,
+//   ) async {
+//     final pluginPubspecFile =
+//         io.File(p.join(projectPluginDirectory.path, 'pubspec.yaml'));
 
-    if (!pluginPubspecFile.existsSync()) {
-      throw UnimplementedError('plugin pubspec not found');
-    }
+//     if (!pluginPubspecFile.existsSync()) {
+//       throw UnimplementedError('plugin pubspec not found');
+//     }
 
-    final pubspecContent = await pluginPubspecFile.readAsString();
-    final pubspec = Pubspec.parse(pubspecContent); //TODO: set lenient = true
-    final packageSet = <String>{}
-      ..addAll(lints.map((l) => l.packageName))
-      ..addAll(edits.map((e) => e.packageName))
-      ..removeWhere(pubspec.dependencies.containsKey);
+//     final pubspecContent = await pluginPubspecFile.readAsString();
+//     final pubspec = Pubspec.parse(pubspecContent); //TODO: set lenient = true
+//     final packageSet = <String>{}
+//       ..addAll(lints.map((l) => l.packageName))
+//       ..addAll(edits.map((e) => e.packageName))
+//       ..removeWhere(pubspec.dependencies.containsKey);
 
-    await pubAddPackages(
-      packageSet.toList(),
-      hostedUrl: 'https://micropub-3qduh.ondigitalocean.app/',
-      workingDirectory: projectPluginDirectory.path,
-    );
-  }
+//     await pubAddPackages(
+//       packageSet.toList(),
+//       hostedUrl: 'https://micropub-3qduh.ondigitalocean.app/',
+//       workingDirectory: projectPluginDirectory.path,
+//     );
+//   }
 
-  Future<void> generateLintBootstrapFunction(
-    List<LintPackageConfiguration> lintPackages,
-  ) async {
-    final importBuffer = StringBuffer()..writeln(pluginImport);
-    final returnBuffer = StringBuffer();
+//   Future<void> generateLintBootstrapFunction(
+//     List<LintPackageConfiguration> lintPackages,
+//   ) async {
+//     final importBuffer = StringBuffer()..writeln(pluginImport);
+//     final returnBuffer = StringBuffer();
 
-    for (final lintPackage in lintPackages) {
-      importBuffer.write(
-          "import 'package:${lintPackage.packageName}/${lintPackage.packageName}.dart' as ${lintPackage.packageName}; \n");
-      for (final lint in lintPackage.lints.values) {
-        returnBuffer.write(
-            "\t\tId(type: IdType.lintRule, packageId: '${lintPackage.packageName}', id: '${lint.id}'): ${lint.packageName}.${lint.className}.new, \n");
-      }
+//     for (final lintPackage in lintPackages) {
+//       importBuffer.write(
+//           "import 'package:${lintPackage.packageName}/${lintPackage.packageName}.dart' as ${lintPackage.packageName}; \n");
+//       for (final lint in lintPackage.lints.values) {
+//         returnBuffer.write(
+//             "\t\tId(type: IdType.lintRule, packageId: '${lintPackage.packageName}', id: '${lint.id}'): ${lint.packageName}.${lint.className}.new, \n");
+//       }
 
-      final entireContents = StringBuffer()
-        ..write(importBuffer.toString())
-        ..write(lintBootstrapHeader)
-        ..write(returnBuffer.toString())
-        ..write(bootstrapFooter);
+//       final entireContents = StringBuffer()
+//         ..write(importBuffer.toString())
+//         ..write(lintBootstrapHeader)
+//         ..write(returnBuffer.toString())
+//         ..write(bootstrapFooter);
 
-      await io.File(
-              p.join(projectPluginDirectory.path, lintInitializerRelativePath))
-          .writeAsString(entireContents.toString());
-    }
-  }
+//       await io.File(
+//               p.join(projectPluginDirectory.path, lintInitializerRelativePath))
+//           .writeAsString(entireContents.toString());
+//     }
+//   }
 
-  Future<void> generateCodeEditBootstrapFunction(
-    List<AssistPackageConfiguration> editPackages,
-  ) async {
-    final importBuffer = StringBuffer()..writeln(pluginImport);
-    final returnBuffer = StringBuffer();
+//   Future<void> generateCodeEditBootstrapFunction(
+//     List<AssistPackageConfiguration> editPackages,
+//   ) async {
+//     final importBuffer = StringBuffer()..writeln(pluginImport);
+//     final returnBuffer = StringBuffer();
 
-    // final packages = <String>{};
+//     // final packages = <String>{};
 
-    for (final editPackage in editPackages) {
-      importBuffer.write(
-          "import 'package:${editPackage.packageName}/${editPackage.packageName}.dart' as ${editPackage.packageName}; \n");
-      for (final edit in editPackage.assists.values) {
-        // packages.add(edit.packageName);
-        returnBuffer.write(
-            "\t\tId(type: IdType.codeEdit, packageId: '${editPackage.packageName}', id: '${edit.id}'): ${edit.packageName}.${edit.className}.new,\n");
-      }
+//     for (final editPackage in editPackages) {
+//       importBuffer.write(
+//           "import 'package:${editPackage.packageName}/${editPackage.packageName}.dart' as ${editPackage.packageName}; \n");
+//       for (final edit in editPackage.assists.values) {
+//         // packages.add(edit.packageName);
+//         returnBuffer.write(
+//             "\t\tId(type: IdType.codeEdit, packageId: '${editPackage.packageName}', id: '${edit.id}'): ${edit.packageName}.${edit.className}.new,\n");
+//       }
 
-      final entireContents = StringBuffer()
-        ..write(importBuffer.toString())
-        ..write(editBootstrapHeader)
-        ..write(returnBuffer.toString())
-        ..write(bootstrapFooter);
+//       final entireContents = StringBuffer()
+//         ..write(importBuffer.toString())
+//         ..write(editBootstrapHeader)
+//         ..write(returnBuffer.toString())
+//         ..write(bootstrapFooter);
 
-      await io.File(
-              p.join(projectPluginDirectory.path, editInitializerRelativePath))
-          .writeAsString(entireContents.toString());
-    }
-  }
+//       await io.File(
+//               p.join(projectPluginDirectory.path, editInitializerRelativePath))
+//           .writeAsString(entireContents.toString());
+//     }
+//   }
 
-  Future<void> createProjectRepository() async {
-    final projectRepoDirectory = projectRepositoryDirectory;
-    // if (projectRepositoryDirectory.existsSync()) {
-    //   // directory already exists, so no need to overwrite files
-    //   print('project repository already exists');
-    //   return;
-    // }
-    final toolDirectory = io.Directory(p.join(projectDirectory.path, 'tool'));
-    await toolDirectory.create(recursive: true);
-    io.stdout.writeln('creating project repository');
-    await io.Process.run(
-      'dart',
-      ['create', '--template=package', 'sidecar_overrides'],
-      workingDirectory: toolDirectory.path,
-    );
-    await io.Process.run(
-      'dart',
-      ['pub', 'add', '--hosted-url', kCloudsmithSidecarUrl, 'sidecar'],
-      workingDirectory: projectRepoDirectory.path,
-    );
-    await io.Process.run(
-      'dart',
-      ['pub', 'add', 'analyzer'],
-      workingDirectory: projectRepoDirectory.path,
-    );
-    await io.Process.run(
-      'dart',
-      ['pub', 'get'],
-      workingDirectory: projectRepoDirectory.path,
-    );
-  }
+//   Future<void> createProjectRepository() async {
+//     final projectRepoDirectory = projectRepositoryDirectory;
+//     // if (projectRepositoryDirectory.existsSync()) {
+//     //   // directory already exists, so no need to overwrite files
+//     //   print('project repository already exists');
+//     //   return;
+//     // }
+//     final toolDirectory = io.Directory(p.join(projectDirectory.path, 'tool'));
+//     await toolDirectory.create(recursive: true);
+//     io.stdout.writeln('creating project repository');
+//     await io.Process.run(
+//       'dart',
+//       ['create', '--template=package', 'sidecar_overrides'],
+//       workingDirectory: toolDirectory.path,
+//     );
+//     await io.Process.run(
+//       'dart',
+//       ['pub', 'add', '--hosted-url', kCloudsmithSidecarUrl, 'sidecar'],
+//       workingDirectory: projectRepoDirectory.path,
+//     );
+//     await io.Process.run(
+//       'dart',
+//       ['pub', 'add', 'analyzer'],
+//       workingDirectory: projectRepoDirectory.path,
+//     );
+//     await io.Process.run(
+//       'dart',
+//       ['pub', 'get'],
+//       workingDirectory: projectRepoDirectory.path,
+//     );
+//   }
 
-  Future<void> restartAnalyzerPlugin() async {
-    // simplest way to restart plugin is by calling pub get
-    // as analyzer_plugin is already designed to restart on pub get
-    // final pubspecFile = p.join(projectDirectory.path, 'pubspec.yaml');
-    final isFlutter = await isFlutterProject(projectDirectory.path);
-    io.stdout.writeln(
-        isFlutter ? 'running flutter pub get...' : 'running dart pub get...');
-    final result = await io.Process.run(
-      isFlutter ? 'flutter' : 'dart',
-      ['pub', 'get'],
-      workingDirectory: projectDirectory.path,
-    );
+//   Future<void> restartAnalyzerPlugin() async {
+//     // simplest way to restart plugin is by calling pub get
+//     // as analyzer_plugin is already designed to restart on pub get
+//     // final pubspecFile = p.join(projectDirectory.path, 'pubspec.yaml');
+//     final isFlutter = await isFlutterProject(projectDirectory.path);
+//     io.stdout.writeln(
+//         isFlutter ? 'running flutter pub get...' : 'running dart pub get...');
+//     final result = await io.Process.run(
+//       isFlutter ? 'flutter' : 'dart',
+//       ['pub', 'get'],
+//       workingDirectory: projectDirectory.path,
+//     );
 
-    io.stdout.writeln('restartPlugin: ${result.stderr} ${result.stdout}');
-  }
-}
+//     io.stdout.writeln('restartPlugin: ${result.stderr} ${result.stdout}');
+//   }
+// }
 
-final projectServiceProvider = Provider.family<ProjectService, io.Directory>(
-  (ref, projectDirectory) => ProjectService(projectDirectory),
-);
+// final projectServiceProvider = Provider.family<ProjectService, io.Directory>(
+//   (ref, projectDirectory) => ProjectService(projectDirectory),
+// );

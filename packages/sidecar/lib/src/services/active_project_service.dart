@@ -14,8 +14,8 @@ import '../protocol/protocol.dart';
 import '../utils/logger/logger.dart';
 import '../utils/utils.dart';
 
-class ActivePackageService {
-  const ActivePackageService(this._ref);
+class ActiveProjectService {
+  const ActiveProjectService(this._ref);
 
   final Ref _ref;
 
@@ -71,8 +71,8 @@ class ActivePackageService {
         .packages
         .map<RulePackageConfiguration?>((package) {
           try {
-            // _log(
-            //     'findAllSidecarDeps for name ${package.name} @ path ${package.root.toFilePath(windows: Platform.isWindows)} // ${package.root.normalizePath().path}');
+            // TODO: allow relative roots; right now, there seems to be a bug with how the relative uri is generated
+            if (package.relativeRoot) return null;
             return parseLintPackage(package.name, package.root);
           } catch (e, stackTrace) {
             _logError('NON-FATAL ERROR: findAllSidecarDeps $e', stackTrace);
@@ -110,8 +110,8 @@ class ActivePackageService {
   }
 }
 
-final activePackageServiceProvider = Provider(
-  ActivePackageService.new,
+final activeProjectServiceProvider = Provider(
+  ActiveProjectService.new,
   name: 'activePackageServiceProvider',
   dependencies: [
     logDelegateProvider,

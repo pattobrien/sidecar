@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:cli_util/cli_logging.dart';
 
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
@@ -48,13 +49,15 @@ Future<void> startSidecarPlugin(
   );
 
   try {
+    final ansi = Ansi(true);
     if (mode.isDebug) {
       delegate.sidecarMessage('sidecar - debug initialization started...');
       final plugin = ref.read(pluginProvider);
       final runner = SidecarRunner(plugin, Directory.current);
       await runner.initialize();
     } else if (mode.isCli) {
-      delegate.sidecarMessage('sidecar - cli initialization started...');
+      delegate.sidecarMessage(
+          '${ansi.cyan} sidecar - cli initialization started...${ansi.none}');
       final plugin = ref.read(pluginProvider);
       final runner = SidecarRunner(plugin, Directory.current);
       await runner.initialize();

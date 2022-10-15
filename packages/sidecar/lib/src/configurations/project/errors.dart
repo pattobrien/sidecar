@@ -1,52 +1,6 @@
 import 'package:source_span/source_span.dart';
 
-import '../yaml_parsers/yaml_source_error.dart';
-
 class SidecarException implements Exception {}
-
-class EmptyConfiguration implements SidecarException {
-  const EmptyConfiguration(this.error);
-  final Object error;
-}
-
-class IncorrectConfiguration implements SidecarException {
-  const IncorrectConfiguration(this.error, this.stackTrace, this.lintName);
-  final String lintName;
-  final Object error;
-  final StackTrace stackTrace;
-}
-
-/// Thrown when sidecar isnt declared under analyzer.plugins in ```analysis_options.yaml``` file.
-class MissingAnalyzerPluginException implements SidecarException {}
-
-/// Thrown when sidecar declaration can't be found.
-///
-/// Sidecar configuration can be declared as a top-level function or in a separate ```sidecar.yaml``` file at root.
-/// A well-formed configuration file would take a similar form as:
-///
-/// ```yaml
-///
-/// sidecar:
-///   includes:
-///     - "bin/**"
-///     - "lib/**"
-///
-///   rules:
-///     flutter_lints:
-///       use_full_hex_values_for_flutter_colors:
-///
-///   edits:
-///
-/// ```
-class MissingSidecarConfiguration implements SidecarException {
-  const MissingSidecarConfiguration();
-
-  @override
-  String toString() {
-    const message = 'No sidecar configuration found.';
-    return 'MissingSidecarConfiguration: $message';
-  }
-}
 
 class MissingSidecarYamlConfiguration implements SidecarException {
   const MissingSidecarYamlConfiguration();
@@ -56,24 +10,6 @@ class MissingSidecarYamlConfiguration implements SidecarException {
     const message = 'No sidecar.yaml configuration found.';
     return 'MissingSidecarYamlConfiguration: $message';
   }
-}
-
-class PackageConfigurationException implements SidecarException {
-  const PackageConfigurationException(this.messages);
-
-  final Map<SourceSpan, String> messages;
-}
-
-class LintConfigurationException implements SidecarException {
-  const LintConfigurationException(this.errors);
-
-  final List<YamlSourceError> errors;
-}
-
-class SidecarConfigurationException implements SidecarException {
-  const SidecarConfigurationException(this.messages);
-
-  final Map<SourceSpan, String> messages;
 }
 
 class InvalidSeverityException implements SidecarException {
@@ -94,23 +30,4 @@ class InvalidIncludesException implements SidecarException {
   final MapEntry<SourceSpan, String> message;
 }
 
-/// Thrown when sidecar declaration is not properly formatted.
-///
-/// Sidecar configuration can be declared as a top-level function or in a separate ```sidecar.yaml``` file at root.
-/// A well-formed configuration file would take a similar form as:
-///
-/// ```yaml
-///
-/// sidecar:
-///   includes:
-///     - "bin/**"
-///     - "lib/**"
-///
-///   rules:
-///     flutter_lints:
-///       use_full_hex_values_for_flutter_colors:
-///
-///   edits:
-///
-/// ```
 class InvalidSidecarConfiguration implements SidecarException {}

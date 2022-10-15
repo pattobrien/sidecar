@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:package_config/package_config_types.dart';
 import 'package:path/path.dart' as p;
+import 'package:riverpod/riverpod.dart';
 
 import '../../../configurations/project/errors.dart';
-import '../../project/constants.dart';
+import '../../../services/active_project_service.dart';
 import '../exit_codes.dart';
 
 class AnalyzeCommand extends Command<int> {
@@ -23,26 +23,32 @@ class AnalyzeCommand extends Command<int> {
   FutureOr<int> run() async {
     try {
       // stdout.encoding = AsciiCodec(allowInvalid: false);
-      // stdout.writeln('ansi: ${stdout.supportsAnsiEscapes}');
+      stdout.writeln('ansi support: ${stdout.supportsAnsiEscapes}');
       // print('project directory: ${Directory.current}');
-      final configUri = Uri.file(
-          p.join(Directory.current.path, '.dart_tool', 'package_config.json'));
-      final contents = File.fromUri(configUri).readAsBytesSync();
-      final packageConfig = PackageConfig.parseBytes(contents, configUri);
-      final sidecarUri = packageConfig.packages
-          .firstWhere((element) => element.name == kSidecarPluginPackageId);
+      final root = Directory.current.uri;
+      final container = ProviderContainer();
+      final activeProjectService = container.read(activeProjectServiceProvider);
+      final pluginPackage =
+          activeProjectService.getSidecarPluginUriForPackage(root);
+      if (pluginPackage == null) {
+        throw UnimplementedError(
+            'Invalid dart directory, no package_config.json file found.');
+      }
       final sidecarPackageEntrypointPath =
-          p.join(sidecarUri.root.path, 'bin', 'debug.dart');
+          p.join(pluginPackage.root.path, 'bin', 'debug.dart');
       final process = await Process.start(
         'dart',
         ['run', sidecarPackageEntrypointPath],
         workingDirectory: Directory.current.path,
       );
+
+      // process.stdout
+      //     .listen((e) => stdout.writeln('\u001b[36m${utf8.decode(e)}'));
       process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));
-      process.stderr.listen((e) => stdout.writeln(utf8.decode(e)));
+      process.stderr.listen((e) => stderr.writeln(utf8.decode(e)));
       stdout.writeln((await process.exitCode).toString());
       return ExitCode.success;
-    } on MissingSidecarConfiguration catch (e) {
+    } on MissingSidecarYamlConfiguration catch (e) {
       // print(e.toString());
       rethrow;
     } catch (e) {

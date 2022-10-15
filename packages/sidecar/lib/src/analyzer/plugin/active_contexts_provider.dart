@@ -6,14 +6,14 @@ import 'plugin.dart';
 
 final activeContextsProvider = Provider<List<ActiveContext>>(
   (ref) {
-    final activePackageService = ref.watch(activePackageServiceProvider);
+    final activePackageService = ref.watch(activeProjectServiceProvider);
     final allContexts = ref.watch(allAnalysisContextsProvider);
     final results = allContexts.map(activePackageService.initializeContext);
     return results.whereType<ActiveContext>().toList();
   },
   name: 'activeContextsProvider',
   dependencies: [
-    activePackageServiceProvider,
+    activeProjectServiceProvider,
     allAnalysisContextsProvider,
   ],
 );

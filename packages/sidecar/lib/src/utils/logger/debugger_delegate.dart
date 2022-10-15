@@ -43,7 +43,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
 
   @override
   void sidecarMessage(String message) {
-    stdout.writeln(message);
+    stdout.writeln('$message');
   }
 
   @override

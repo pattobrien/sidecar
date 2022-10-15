@@ -7,11 +7,11 @@ import '../../../services/services.dart';
 final contextSidecarDependenciesProvider =
     Provider.family<List<RulePackageConfiguration>, ContextRoot>(
   (ref, root) {
-    final service = ref.watch(activePackageServiceProvider);
+    final service = ref.watch(activeProjectServiceProvider);
     return service.getSidecarDependencies(root.root.toUri());
   },
   name: 'contextSidecarDependenciesProvider',
   dependencies: [
-    activePackageServiceProvider,
+    activeProjectServiceProvider,
   ],
 );
