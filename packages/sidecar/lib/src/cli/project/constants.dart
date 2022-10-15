@@ -15,9 +15,9 @@ final kPluginMasterRootPath = p.join(
 
 String getPluginPackagePathForVersion(Version version) => p.join(
       kPluginMasterRootPath,
-      'sidecar_analyzer_plugin-${version.canonicalizedVersion}',
+      '$kSidecarPluginPackageId-${version.canonicalizedVersion}',
     );
-const kSidecarPluginPackageId = 'sidecar_analyzer_plugin';
+const kSidecarPluginPackageId = 'sidecar';
 
 const kProjectPluginRelativePath = '.sidecar/$kSidecarPluginPackageId';
 

@@ -9,6 +9,7 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 
+import '../protocol/constants/constants.dart';
 import 'ast_utilities.dart';
 
 class AnalysisContextUtilities {
@@ -53,7 +54,7 @@ final analysisContextUtilitiesProvider = Provider<AnalysisContextUtilities>(
 
 extension AnalysisContextX on AnalysisContext {
   bool get isSidecarEnabled => analysisOptions.enabledPluginNames
-      .where((pluginName) => pluginName == 'sidecar_analyzer_plugin_core')
+      .where((pluginName) => pluginName == kSidecarPluginName)
       .toList()
       .isNotEmpty;
 }

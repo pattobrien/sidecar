@@ -10,7 +10,7 @@ linter:
 
 analyzer:
   plugins:
-    - sidecar_analyzer_plugin_core
+    - sidecar
 
 sidecar:
   includes:
@@ -26,17 +26,17 @@ sidecar:
     #     # configuration:
     #     #   abc: 123
 
-    riverpod_lints:
-      prefer_consumer_widget:
-        severity: error
-        enabled: true
-        configuration:
-          some_property:
+    # riverpod_lints:
+    #   prefer_consumer_widget:
+    #     severity: error
+    #     enabled: true
+    #     configuration:
+    #       some_property:
 
-    l10n_lints:
-      avoid_string_literals:
-        configuration:
-          prefix: "AppLocalizations.of(context)"
+    # l10n_lints:
+    #   avoid_string_literals:
+    #     configuration:
+    #       prefix: "AppLocalizations.of(context)"
 
     # project_lints:
     #   avoid_icon_literal:
@@ -52,9 +52,9 @@ sidecar:
       # avoid_box_shadow_literal:
       avoid_edge_insets_literal:
 
-  edits:
-    riverpod_lints:
-      create_text_edit_controller_provider:
-    sidecar_lints:
-      output_ast_node_tree:
-        enabled: true
+  # edits:
+  #   riverpod_lints:
+  #     create_text_edit_controller_provider:
+  #   sidecar_lints:
+  #     output_ast_node_tree:
+  #       enabled: true

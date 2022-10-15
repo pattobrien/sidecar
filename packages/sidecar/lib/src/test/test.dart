@@ -1,6 +1,9 @@
 // ignore_for_file: implementation_imports
 import 'package:analyzer/dart/analysis/utilities.dart';
-import 'package:sidecar/builder.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
+
+import '../rules/sidecar_base.dart';
 
 String src = """
   Dynamism d = new Dynamism(expert:true);

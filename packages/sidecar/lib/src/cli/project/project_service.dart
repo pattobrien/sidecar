@@ -269,7 +269,6 @@ class ProjectService {
       ...pluginPubspec.devDependencies,
     }..removeWhere((key, value) {
         if (value is! HostedDependency) return true;
-        if (key == 'sidecar_analyzer_plugin_core') return true;
         if (key == 'sidecar') return true;
         if (key == 'test') return true;
         if (lints.any((lint) => lint.packageName == key)) return true;

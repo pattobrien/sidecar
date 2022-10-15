@@ -21,18 +21,23 @@ dev_dependencies:
   lints: ^2.0.0
   design_system_lints:
     path: /Users/pattobrien/Development/sidecar/repositories/design_system_lints/
-  sidecar_lints:
-    path: /Users/pattobrien/Development/sidecar/repositories/sidecar_lints/
-  l10n_lints:
-    path: /Users/pattobrien/Development/sidecar/repositories/l10n_lints/
-  riverpod_lints:
-    path: /Users/pattobrien/Development/sidecar/repositories/riverpod_lints/
-  sidecar_analyzer_plugin_core:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
-    # hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/
-    # version: 0.1.21-dev.11
+  # sidecar_lints:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/sidecar_lints/
+  # l10n_lints:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/l10n_lints/
+  # riverpod_lints:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/riverpod_lints/
+  sidecar:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+  # sidecar:
+  #   hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
+  #   version: ^0.1.24-dev.1
   test: ^1.16.0
 
 flutter:
   uses-material-design: true
   generate: true
+
+dependency_overrides:
+  flutter_utilities:
+    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

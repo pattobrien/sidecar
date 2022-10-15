@@ -5,7 +5,7 @@ import 'package:recase/recase.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../models/models.dart';
+import '../../rules/rules.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 
 part 'analysis_configuration.freezed.dart';

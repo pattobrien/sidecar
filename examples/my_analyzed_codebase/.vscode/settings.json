@@ -12,5 +12,6 @@
     "githubPullRequests.ignoredPullRequestBranches": [
         "master"
     ],
+    "dart.analyzerVmServicePort": 9999,
     // "dart.analyzerInstrumentationLogFile": "/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.txt",
 }

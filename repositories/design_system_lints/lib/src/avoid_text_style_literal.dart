@@ -1,14 +1,16 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:design_system_lints/src/constants.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
-import 'package:sidecar/builder.dart';
+import 'package:sidecar/sidecar.dart';
 
 class AvoidTextStyleLiteral extends LintRule {
   @override
   String get code => 'avoid_text_style_literal';
 
   @override
-  String get packageName => 'design_system_lints';
+  String get packageName => kDesignSystemPackageId;
 
   @override
   Future<List<DartAnalysisResult>> computeDartAnalysisResults(

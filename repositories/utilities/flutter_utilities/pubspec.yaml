@@ -1,8 +1,8 @@
 name: flutter_utilities
 description: A starting point for Dart libraries or applications.
-version: 0.1.11
-# publish_to: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
-publish_to: none
+version: 0.1.12
+publish_to: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
+# publish_to: none
 repository: https://github.com/pattobrien/sidecar/
 
 environment:
@@ -14,7 +14,7 @@ dependencies:
   path: ^1.8.0
   # sidecar:
   #   hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-  #   version: ^0.1.15-dev.2
+  #   version: ^0.1.24-dev.1
   sidecar:
     path: /Users/pattobrien/Development/sidecar/packages/sidecar ## REMOVE THIS TOO
 

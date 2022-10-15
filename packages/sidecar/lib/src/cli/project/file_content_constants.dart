@@ -41,5 +41,5 @@ sidecar:
 const analyzerPluginDefaultContents = '''
 analyzer:
   plugins:
-    - sidecar_analyzer_plugin
+    - sidecar
 ''';

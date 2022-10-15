@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../models/models.dart';
+import '../../rules/rules.dart';
 import '../project/errors.dart';
 import 'yaml_source_error.dart';
 

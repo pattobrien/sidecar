@@ -29,8 +29,8 @@ class AnalyzeCommand extends Command<int> {
           p.join(Directory.current.path, '.dart_tool', 'package_config.json'));
       final contents = File.fromUri(configUri).readAsBytesSync();
       final packageConfig = PackageConfig.parseBytes(contents, configUri);
-      final sidecarUri = packageConfig.packages.firstWhere(
-          (element) => element.name == 'sidecar_analyzer_plugin_core');
+      final sidecarUri = packageConfig.packages
+          .firstWhere((element) => element.name == kSidecarPluginPackageId);
       final sidecarPackageEntrypointPath =
           p.join(sidecarUri.root.path, 'bin', 'debug.dart');
       final process = await Process.start(

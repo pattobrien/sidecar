@@ -1,14 +1,16 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:design_system_lints/src/constants.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
-import 'package:sidecar/builder.dart';
+import 'package:sidecar/sidecar.dart';
 
 class AvoidSizedBoxHeightWidthLiterals extends LintRule {
   @override
   String get code => 'avoid_sized_box_height_width_literals';
 
   @override
-  String get packageName => 'project_lints';
+  String get packageName => kDesignSystemPackageId;
 
   @override
   Future<List<DartAnalysisResult>> computeDartAnalysisResults(

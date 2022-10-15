@@ -2,7 +2,7 @@ import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../models/models.dart';
+import '../../rules/rules.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 import 'analysis_package_configuration.dart';
@@ -99,7 +99,7 @@ class ProjectConfiguration {
       includeGlobs.any((glob) => glob.matches(relativePath));
 
   AnalysisConfiguration? getConfigurationForRule(SidecarBase rule) {
-    if (rule is CodeEdit) {
+    if (rule is AssistRule) {
       return assistPackages?[rule.packageName]?.assists[rule.code];
     } else if (rule is LintRule) {
       return lintPackages?[rule.packageName]?.lints[rule.code];
