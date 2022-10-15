@@ -12,8 +12,6 @@ const kExecutableDescription = '\n\n';
 class PlatformCommandRunner extends CommandRunner<int> {
   PlatformCommandRunner() : super(kExecutableName, kExecutableDescription) {
     // All CLI commands are listed below
-    // addCommand(InitCommand());
-    // addCommand(RebuildCommand());
     addCommand(AnalyzeCommand());
   }
 

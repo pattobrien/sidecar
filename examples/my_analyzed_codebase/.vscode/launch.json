@@ -2,8 +2,7 @@
     "configurations": [
         {
             "name": "Sidecar Lint Debugger",
-            "program": "bin/debug.dart",
-            // "program": ".sidecar/sidecar_analyzer_plugin/bin/debug.dart",
+            "program": ".dart_tool/sidecar/debug.dart",
             "request": "launch",
             "type": "dart",
             "args": [
@@ -12,13 +11,24 @@
         },
         {
             "name": "Sidecar Debugger from Path",
-            "program": "${userHome}/Development/sidecar/packages/sidecar_analyzer_plugin_core/bin/debug.dart",
+            "program": "${userHome}/Development/sidecar/packages/sidecar/bin/debug.dart",
             // "program": ".sidecar/sidecar_analyzer_plugin/bin/debug.dart",
             "request": "launch",
             "type": "dart",
             "args": [
                 "--enable-vm-service"
-            ]
+            ],
+        },
+        {
+            "name": "Sidecar Debugger from Port",
+            "program": ".dart_tool/sidecar/plugin.dart",
+            // "program": ".sidecar/sidecar_analyzer_plugin/bin/debug.dart",
+            "request": "attach",
+            "type": "dart",
+            "vmServiceUri": "http://localhost:9990/ws",
+            // "args": [
+            //     "--enable-vm-service"
+            // ],
         }
     ],
 }

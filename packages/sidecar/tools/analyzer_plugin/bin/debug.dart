@@ -1,6 +1,6 @@
 import 'dart:isolate';
 import 'package:hotreloader/hotreloader.dart';
-import 'package:sidecar/src/analyzer/starter.dart';
+import 'package:sidecar/sidecar.dart';
 
 /// Run lints with the debugger
 void main(List<String> args) async {
@@ -11,6 +11,7 @@ void main(List<String> args) async {
 
   if (isDebug) {
     print('running in debug mode; HOTRELOAD enabled.');
+    //
     reloader = await HotReloader.create();
     newArgs.add('--debug');
   } else {
@@ -22,7 +23,7 @@ void main(List<String> args) async {
     receivePort.sendPort,
     newArgs,
     isMiddleman: true,
-    isPlugin: false,
+    isPlugin: true,
   );
 
   if (isDebug) reloader.stop();
