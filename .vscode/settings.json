@@ -18,5 +18,5 @@
         "--port=10000",
         "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/.sidecar/logs/analysis_instrumentation.log"
     ],
-    "dart.analyzerVmServicePort": 9990,
+    // "dart.analyzerVmServicePort": 9990,
 }

@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/analysis/session.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:l10n_lints/src/constants.dart';
-import 'package:sidecar/builder.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:intl_utilities/intl_utilities.dart';
+import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
+import 'package:source_span/source_span.dart';
 
 class AvoidStringLiterals extends LintRule {
   @override
@@ -111,10 +113,6 @@ class AvoidStringLiterals extends LintRule {
           message: 'Extract string declaration',
           sourceChanges: changeBuilder.sourceChange.edits,
         ),
-        // PrioritizedSourceChange(
-        //   0,
-        //   changeBuilder.sourceChange..message = 'Extract string declaration',
-        // ),
       ];
       return errorFixes;
     } else {

@@ -1,7 +1,8 @@
 name: l10n_lints
 description: A starting point for Dart libraries or applications.
 version: 0.1.16
-publish_to: https://micropub-3qduh.ondigitalocean.app/
+# publish_to: https://micropub-3qduh.ondigitalocean.app/
+publish_to: none
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/l10n_lints/
 
 environment:
@@ -9,18 +10,20 @@ environment:
 
 dependencies:
   analyzer: ^4.7.0
+  analyzer_plugin: ^0.11.1
   collection: ^1.16.0
-  path: ^1.8.0
-  sidecar:
-    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.23-dev.3
-  source_span: ^1.8.2
+  dartz: ^0.10.1
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
     version: ^0.1.9
   intl_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/intl_utilities/
     version: ^0.1.0
+  path: ^1.8.0
+  sidecar:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+  source_span: ^1.8.2
+  yaml: ^3.1.1
 
 dev_dependencies:
   lints: ^2.0.0

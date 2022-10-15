@@ -18,10 +18,10 @@ lints:
   #     configuration:
   #       some_property:
 
-  # l10n_lints:
-  #   avoid_string_literals:
-  #     configuration:
-  #       prefix: "AppLocalizations.of(context)"
+  l10n_lints:
+    avoid_string_literals:
+      configuration:
+        prefix: "AppLocalizations.of(context)"
 
   # project_lints:
   #   avoid_icon_literal:
