@@ -92,11 +92,16 @@ class ActivePackageService {
 
   ProjectConfiguration? getSidecarOptions(ContextRoot contextRoot) {
     _log('_parseProjectConfiguration started');
-    final file = contextRoot.optionsFile;
-    if (file == null) return null;
+    // final file = contextRoot.optionsFile;
+    final rootPath = contextRoot.root.path;
+    final sidecarYamlPath = p.join(rootPath, kSidecarOptionsYaml);
+    final sidecarYamlFile = File(sidecarYamlPath);
+    if (!sidecarYamlFile.existsSync()) return null;
+    // if (file == null) return null;
     try {
-      final contents = File(file.path).readAsStringSync();
-      return ProjectConfiguration.parse(contents, sourceUrl: file.toUri());
+      final contents = sidecarYamlFile.readAsStringSync();
+      return ProjectConfiguration.parseFromSidecarYaml(contents,
+          sourceUrl: sidecarYamlFile.uri);
     } catch (e, stackTrace) {
       _logError(
           'ISOLATE NON-FATAL: _parseProjectConfiguration || $e', stackTrace);

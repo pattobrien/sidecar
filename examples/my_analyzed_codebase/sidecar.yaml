@@ -1,0 +1,44 @@
+includes:
+  - "bin/**"
+  - "lib/**"
+  # - "test/**"
+  # - ".sidecar/**"
+lints:
+  # flutter_lints:
+  #   use_full_hex_values_for_flutter_colors:
+  #   use_key_in_widget_constructors:
+  #     # enabled: 123
+  #     # configuration:
+  #     #   abc: 123
+
+  # riverpod_lints:
+  #   prefer_consumer_widget:
+  #     severity: error
+  #     enabled: true
+  #     configuration:
+  #       some_property:
+
+  # l10n_lints:
+  #   avoid_string_literals:
+  #     configuration:
+  #       prefix: "AppLocalizations.of(context)"
+
+  # project_lints:
+  #   avoid_icon_literal:
+  #     severity: error
+  #   avoid_sized_box_height_width_literals:
+
+  design_system_lints:
+    avoid_color_literal:
+    avoid_icon_literal:
+    # avoid_sized_box_height_width_literals:
+    # avoid_text_style_literal:
+    # avoid_border_radius_literal:
+    # avoid_box_shadow_literal:
+    avoid_edge_insets_literal:
+# edits:
+#   riverpod_lints:
+#     create_text_edit_controller_provider:
+#   sidecar_lints:
+#     output_ast_node_tree:
+#       enabled: true

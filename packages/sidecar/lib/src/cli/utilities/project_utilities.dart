@@ -13,10 +13,10 @@ Future<ProjectConfiguration> getSidecarConfiguration(
       io.File(p.join(projectRootUri.path, analysisOptionsFileName));
   final sidecarOptions =
       io.File(p.join(projectRootUri.path, sidecarOptionsFileName));
-  if (await sidecarOptions.exists()) {
+  if (sidecarOptions.existsSync()) {
     try {
       final sidecarOptionsContents = await sidecarOptions.readAsString();
-      return ProjectConfiguration.parse(
+      return ProjectConfiguration.parseFromSidecarYaml(
         sidecarOptionsContents,
         sourceUrl: sidecarOptions.uri,
       );
@@ -30,10 +30,10 @@ Future<ProjectConfiguration> getSidecarConfiguration(
       rethrow;
     }
   }
-  if (await analysisOptions.exists()) {
+  if (analysisOptions.existsSync()) {
     try {
       final analysisOptionsContents = await analysisOptions.readAsString();
-      final config = ProjectConfiguration.parse(
+      final config = ProjectConfiguration.parseFromAnalysisOptions(
         analysisOptionsContents,
         sourceUrl: sidecarOptions.uri,
       );

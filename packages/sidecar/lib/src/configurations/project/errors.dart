@@ -48,6 +48,16 @@ class MissingSidecarConfiguration implements SidecarException {
   }
 }
 
+class MissingSidecarYamlConfiguration implements SidecarException {
+  const MissingSidecarYamlConfiguration();
+
+  @override
+  String toString() {
+    const message = 'No sidecar.yaml configuration found.';
+    return 'MissingSidecarYamlConfiguration: $message';
+  }
+}
+
 class PackageConfigurationException implements SidecarException {
   const PackageConfigurationException(this.messages);
 

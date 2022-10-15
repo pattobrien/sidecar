@@ -17,7 +17,7 @@ class ProjectConfiguration {
     required this.rawContent,
   }) : _includes = includes;
 
-  factory ProjectConfiguration.parse(
+  factory ProjectConfiguration.parseFromAnalysisOptions(
     String contents, {
     required Uri sourceUrl,
   }) {
@@ -41,6 +41,34 @@ class ProjectConfiguration {
           }),
           sourceErrors: sourceErrors,
         );
+      },
+      sourceUrl: sourceUrl,
+    );
+  }
+  factory ProjectConfiguration.parseFromSidecarYaml(
+    String contents, {
+    required Uri sourceUrl,
+  }) {
+    return checkedYamlDecode(
+      contents,
+      (m) {
+        final contentMap = m as YamlMap?;
+        try {
+          final sourceErrors = <YamlSourceError>[];
+          return ProjectConfiguration(
+            rawContent: contents,
+            lintPackages: _parseLintPackages(contentMap!['lints'] as YamlMap?),
+            assistPackages:
+                _parseAssistPackages(contentMap['edits'] as YamlMap?),
+            includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
+              sourceErrors.addAll(r);
+              return null;
+            }),
+            sourceErrors: sourceErrors,
+          );
+        } catch (e) {
+          throw const MissingSidecarYamlConfiguration();
+        }
       },
       sourceUrl: sourceUrl,
     );
