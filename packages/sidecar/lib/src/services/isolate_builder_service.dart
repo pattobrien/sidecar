@@ -9,7 +9,6 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
-import '../cli/project/constants.dart';
 import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/protocol.dart';
@@ -132,17 +131,18 @@ class IsolateBuilderService {
     File(bootstrapperPath).writeAsStringSync(fullContents.toString());
   }
 
-  Uri _packagesUri(ContextRoot root) =>
-      Uri.file(p.join(root.root.path, '.dart_tool', 'package_config.json'),
-          windows: Platform.isWindows);
-
-  Uri _executableUri(ContextRoot root) => Uri.file(
-      p.join(root.root.path, 'tool', kSidecarPluginPackageId, 'sidecar.dart'),
+  Uri _packagesUri(ContextRoot projectRoot) => Uri.file(
+      p.join(projectRoot.root.path, '.dart_tool', 'package_config.json'),
       windows: Platform.isWindows);
 
-  Uri _packageToolDirectory(ContextRoot root) =>
-      Uri.directory(p.join(root.root.path, 'tool', kSidecarPluginName),
-          windows: Platform.isWindows);
+  Uri _executableUri(ContextRoot projectRoot) => Uri.file(
+      p.join(projectRoot.root.path, '.dart_tool', kSidecarPluginName,
+          'sidecar.dart'),
+      windows: Platform.isWindows);
+
+  Uri _packageToolDirectory(ContextRoot projectRoot) => Uri.directory(
+      p.join(projectRoot.root.path, '.dart_tool', kSidecarPluginName),
+      windows: Platform.isWindows);
 }
 
 final isolateBuilderServiceProvider = Provider(

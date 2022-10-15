@@ -56,9 +56,9 @@ class EditNode extends SidecarBaseNode {
 }
 
 SidecarPackage? parseLintPackage(String name, Uri root) {
-  final pubspecContent =
-      File(p.join(root.toFilePath(windows: Platform.isWindows), 'pubspec.yaml'))
-          .readAsStringSync();
+  final rootPath = root.toFilePath(windows: Platform.isWindows);
+  final pubspecPath = p.join(rootPath, 'pubspec.yaml');
+  final pubspecContent = File(pubspecPath).readAsStringSync();
   try {
     return checkedYamlDecode<SidecarPackage>(pubspecContent, (yamlMap) {
       if (yamlMap?['sidecar'] == null) throw PackageMissingSidecarDefinition();

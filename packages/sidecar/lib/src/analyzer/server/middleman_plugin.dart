@@ -14,10 +14,11 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/constants/constants.dart';
 import '../../utils/logger/logger.dart';
+import 'analysis_context_providers.dart';
 import 'analyzer_mode.dart';
 import 'isolates/isolates.dart';
-import 'middleman.dart';
 import 'middleman_resource_provider.dart';
+import 'plugin_channel_provider.dart';
 
 class MiddlemanPlugin extends plugin.ServerPlugin {
   MiddlemanPlugin(this.ref)

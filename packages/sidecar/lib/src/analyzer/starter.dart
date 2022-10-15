@@ -6,12 +6,11 @@ import 'dart:isolate';
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../rules/typedefs.dart';
+import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
 import 'plugin/plugin.dart';
-import 'server/analyzer_mode.dart';
-import 'server/middleman.dart';
 import 'server/runner/runner.dart';
+import 'server/server.dart';
 
 Future<void> startSidecarPlugin(
   SendPort sendPort,

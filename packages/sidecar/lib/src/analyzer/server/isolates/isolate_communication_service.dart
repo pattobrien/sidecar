@@ -12,8 +12,7 @@ import 'package:uuid/uuid.dart';
 import '../../../protocol/protocol.dart';
 import '../../../utils/logger/logger.dart';
 import '../../context/context.dart';
-import '../middleman.dart';
-import '../middleman_resource_provider.dart';
+import '../server.dart';
 import 'isolate_message.dart';
 import 'multi_isolate_message.dart';
 

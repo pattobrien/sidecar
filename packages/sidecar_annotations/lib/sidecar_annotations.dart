@@ -1,3 +1,3 @@
 library sidecar_annotations;
 
-export 'src/sidecar_annotations_base.dart';
+export 'src/sidecar_input.dart';

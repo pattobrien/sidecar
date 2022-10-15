@@ -19,7 +19,7 @@ class ActivePackageService {
 
   final Ref _ref;
 
-  void _log(String message) => _ref.read(logDelegateProvider).sidecarMessage;
+  void _log(String msg) => _ref.read(logDelegateProvider).sidecarMessage(msg);
   void _logError(Object e, StackTrace stackTrace) =>
       _ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
