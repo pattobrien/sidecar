@@ -15,6 +15,7 @@ import 'package:cli_util/cli_util.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/constants/constants.dart';
+import '../../../protocol/protocol.dart';
 import '../../../utils/byte_store_ext.dart';
 import '../../plugin/plugin.dart';
 
@@ -60,7 +61,7 @@ class SidecarRunner {
       .map(plugin.AnalysisErrorsParams.fromNotification);
 
   late final Stream<Map> _reloader = _notifications
-      .where((e) => e.event == 'sidecar.auto_reload')
+      .where((e) => e.event == kSidecarHotReloadMethod)
       .map((e) => <dynamic, dynamic>{});
 
   // /// The [Notification]s emitted by the plugin

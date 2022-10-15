@@ -2,7 +2,6 @@ import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
-import '../analyzer/results/edit_result.dart';
 import '../analyzer/results/results.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';

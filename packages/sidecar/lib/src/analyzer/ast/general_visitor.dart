@@ -1,6 +1,6 @@
 import 'package:analyzer/dart/ast/ast.dart';
 
-import '../rules/lint_rule.dart';
+import '../../rules/rules.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';

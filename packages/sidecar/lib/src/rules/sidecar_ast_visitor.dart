@@ -4,8 +4,8 @@ import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
 import '../analyzer/results/results.dart';
-import 'sidecar_base.dart';
 import '../utils/utils.dart';
+import 'sidecar_base.dart';
 
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
   final List<DartAnalysisResult> nodes = [];

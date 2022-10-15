@@ -13,7 +13,6 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/constants/constants.dart';
-import '../../services/services.dart';
 import '../../utils/logger/logger.dart';
 import 'analyzer_mode.dart';
 import 'isolates/isolates.dart';
@@ -98,7 +97,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   }) async {}
 }
 
-final middlemanPluginProvider = Provider(
+final middlemanPluginProvider = Provider<MiddlemanPlugin>(
   (ref) {
     return MiddlemanPlugin(ref);
   },

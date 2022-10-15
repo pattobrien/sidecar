@@ -170,7 +170,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }
 }
 
-final pluginProvider = Provider(
+final pluginProvider = Provider.autoDispose<SidecarAnalyzerPlugin>(
   SidecarAnalyzerPlugin.new,
   name: 'pluginProvider',
   dependencies: [

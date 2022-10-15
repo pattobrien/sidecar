@@ -4,7 +4,6 @@ import 'package:riverpod/riverpod.dart';
 import '../../configurations/configurations.dart';
 import '../../rules/rules.dart';
 import '../../services/services.dart';
-import '../../utils/logger/logger.dart';
 import '../context/context.dart';
 import 'active_contexts_provider.dart';
 import 'rule_constructors_provider.dart';

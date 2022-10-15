@@ -12,9 +12,8 @@ import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
-import '../analyzer/results/edit_result.dart';
+import '../analyzer/ast/ast.dart';
 import '../analyzer/results/results.dart';
-import '../ast/ast.dart';
 import '../configurations/yaml_parsers/yaml_parsers.dart';
 import 'typedefs.dart';
 

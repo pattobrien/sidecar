@@ -19,7 +19,7 @@ dependencies:
     path: /Users/pattobrien/Development/sidecar/packages/sidecar
   # sidecar:
   #   hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-  #   version: ^0.1.24-dev.1
+  #   version: ^0.1.24
   source_span: ^1.8.2
 
 dev_dependencies:

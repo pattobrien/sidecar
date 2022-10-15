@@ -46,18 +46,6 @@ class ProjectConfiguration {
     );
   }
 
-  static Map<PackageName, AssistPackageConfiguration>? _parseAssistPackages(
-    YamlMap? map,
-  ) =>
-      _parsePackages(map, type: SidecarBaseType.assist)?.map(
-          (key, value) => MapEntry(key, value as AssistPackageConfiguration));
-
-  static Map<PackageName, LintPackageConfiguration>? _parseLintPackages(
-    YamlMap? map,
-  ) =>
-      _parsePackages(map, type: SidecarBaseType.lint)?.map(
-          (key, value) => MapEntry(key, value as LintPackageConfiguration));
-
   static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(
     YamlMap? map, {
     required SidecarBaseType type,
@@ -86,6 +74,18 @@ class ProjectConfiguration {
       throw InvalidSidecarConfiguration();
     }
   }
+
+  static Map<PackageName, AssistPackageConfiguration>? _parseAssistPackages(
+    YamlMap? map,
+  ) =>
+      _parsePackages(map, type: SidecarBaseType.assist)?.map(
+          (key, value) => MapEntry(key, value as AssistPackageConfiguration));
+
+  static Map<PackageName, LintPackageConfiguration>? _parseLintPackages(
+    YamlMap? map,
+  ) =>
+      _parsePackages(map, type: SidecarBaseType.lint)?.map(
+          (key, value) => MapEntry(key, value as LintPackageConfiguration));
 
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
   final Map<PackageName, AssistPackageConfiguration>? assistPackages;
