@@ -14,15 +14,13 @@ import '../../builder.dart';
 import '../ast/ast.dart';
 import '../configurations/yaml_parsers/yaml_parsers.dart';
 
+enum SidecarBaseType { lint, assist }
+
 abstract class SidecarBase {
   String get code;
   LintPackageId get packageName;
 
   MapDecoder? get jsonDecoder => null;
-
-  Id get id => Id(id: code, packageId: packageName, type: type);
-
-  IdType get type;
 
   @mustCallSuper
   List<YamlSourceError>? get errors => _errors;

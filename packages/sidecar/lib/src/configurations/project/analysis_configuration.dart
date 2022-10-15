@@ -39,8 +39,4 @@ class AnalysisConfiguration with _$AnalysisConfiguration {
 extension AnalysisConfigurationX on AnalysisConfiguration {
   String get filePath => '$packageName/$packageName.dart';
   String get className => ReCase(id).pascalCase;
-  IdType get type => map(
-        lint: (_) => IdType.lintRule,
-        assist: (_) => IdType.codeEdit,
-      );
 }

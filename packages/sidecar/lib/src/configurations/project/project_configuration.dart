@@ -49,18 +49,18 @@ class ProjectConfiguration {
   static Map<PackageName, AssistPackageConfiguration>? _parseAssistPackages(
     YamlMap? map,
   ) =>
-      _parsePackages(map, type: IdType.codeEdit)?.map(
+      _parsePackages(map, type: SidecarBaseType.assist)?.map(
           (key, value) => MapEntry(key, value as AssistPackageConfiguration));
 
   static Map<PackageName, LintPackageConfiguration>? _parseLintPackages(
     YamlMap? map,
   ) =>
-      _parsePackages(map, type: IdType.lintRule)?.map(
+      _parsePackages(map, type: SidecarBaseType.lint)?.map(
           (key, value) => MapEntry(key, value as LintPackageConfiguration));
 
   static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(
     YamlMap? map, {
-    required IdType type,
+    required SidecarBaseType type,
   }) {
     try {
       return map?.nodes.map((dynamic key, dynamic value) {
@@ -98,27 +98,13 @@ class ProjectConfiguration {
   bool includes(String relativePath) =>
       includeGlobs.any((glob) => glob.matches(relativePath));
 
-  LintConfiguration? getLintConfiguration(Id id) =>
-      getConfiguration(id) as LintConfiguration?;
-
-  AssistConfiguration? getAssistConfiguration(Id id) =>
-      getConfiguration(id) as AssistConfiguration?;
-
-  AnalysisConfiguration? getConfiguration(Id id) {
-    switch (id.type) {
-      case IdType.lintRule:
-        return lintPackages?[id.packageId]?.lints[id.id];
-      case IdType.codeEdit:
-        return assistPackages?[id.packageId]?.assists[id.id];
-    }
-  }
-
   AnalysisConfiguration? getConfigurationForRule(SidecarBase rule) {
-    switch (rule.type) {
-      case IdType.lintRule:
-        return lintPackages?[rule.packageName]?.lints[rule.code];
-      case IdType.codeEdit:
-        return assistPackages?[rule.packageName]?.assists[rule.code];
+    if (rule is CodeEdit) {
+      return assistPackages?[rule.packageName]?.assists[rule.code];
+    } else if (rule is LintRule) {
+      return lintPackages?[rule.packageName]?.lints[rule.code];
+    } else {
+      throw UnimplementedError('getConfigurationForRule: unknown base type');
     }
   }
 }

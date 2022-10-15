@@ -23,11 +23,11 @@ class RuleInitializationService {
         .map<SidecarBase?>((ruleConstructor) {
           final rule = ruleConstructor();
           final ruleConfig = projectConfiguration.getConfigurationForRule(rule);
-          // _log('${rule.id} initialized = ${ruleConfig != null}');
+
           // rule was not included in yaml, so it shouldnt be initialized
           if (ruleConfig == null) return null;
 
-          _log('activating ${rule.id}');
+          _log('activating ${rule.code}');
           rule.initialize(
             ref: ref,
             configurationContent: ruleConfig.configuration,

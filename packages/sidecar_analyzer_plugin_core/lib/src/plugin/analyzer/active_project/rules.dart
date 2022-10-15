@@ -80,7 +80,7 @@ bool _isPathIncludedForRule({
   final relativePath = p.relative(file.path, from: file.root.root.path);
 
   // #1 check explicit LintRule/CodeEdit includes from project config
-  final ruleConfig = projectConfiguration.getConfiguration(rule.id);
+  final ruleConfig = projectConfiguration.getConfigurationForRule(rule);
 
   if (ruleConfig != null && ruleConfig.includes != null) {
     return ruleConfig.includes!.any((glob) => glob.matches(relativePath));

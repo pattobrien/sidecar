@@ -4,6 +4,7 @@ import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/instrumentation/noop_service.dart';
 // ignore: implementation_imports
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
@@ -32,7 +33,7 @@ class IsolateBuilderService {
   ServerIsolateChannel _startNewIsolate(ActiveContext activeContext) {
     // create executable file with lints from packages
     _setupPluginSourceFiles(activeContext);
-    _setupBootstrapper(activeContext);
+    setupBootstrapper(activeContext);
 
     // start isolate
     final packagesUri = _packagesUri(activeContext.activeRoot);
@@ -93,8 +94,9 @@ class IsolateBuilderService {
     return IsolateDetails(
         channel: channel, activeRoot: activeContext.activeRoot);
   }
-
-  void _setupBootstrapper(ActiveContext activeContext) {
+  
+  @visibleForTesting
+  void setupBootstrapper(ActiveContext activeContext) {
     final bootstrapperPath = p.join(
         _packageToolDirectory(activeContext.contextRoot).path,
         'constructors.dart');

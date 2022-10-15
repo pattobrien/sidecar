@@ -31,12 +31,12 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
 
   factory AnalysisPackageConfiguration.fromYamlMap(
     YamlMap yamlMap, {
-    required IdType type,
+    required SidecarBaseType type,
     required String packageName,
     required SourceSpan packageNameSpan,
   }) {
     switch (type) {
-      case IdType.lintRule:
+      case SidecarBaseType.lint:
         return AnalysisPackageConfiguration.lint(
           packageNameSpan: packageNameSpan,
           packageName: packageName,
@@ -121,7 +121,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
             );
           }),
         );
-      case IdType.codeEdit:
+      case SidecarBaseType.assist:
         return AnalysisPackageConfiguration.assist(
           packageNameSpan: packageNameSpan,
           packageName: packageName,
