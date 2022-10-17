@@ -1,18 +1,22 @@
-import 'package:dartz/dartz.dart';
 import 'package:yaml/yaml.dart';
 
 import '../builders/builders.dart';
+import '../configurations.dart';
 
 extension YamlMapEnabled on YamlMap {
-  Either<bool?, List<SidecarLintException>> parseEnabled() {
+  SidecarExceptionTuple<bool?> parseEnabled() {
     const key = 'enabled';
     try {
-      return left(containsKey(key) ? value[key] as bool : null);
+      final enabledValue = containsKey(key) ? value[key] as bool : null;
+      return SidecarExceptionTuple<bool?>(enabledValue, []);
     } catch (e) {
-      return right([
-        SidecarLintException(nodes.keys
-            .cast<YamlScalar>()
-            .firstWhere((element) => element.value == key))
+      return SidecarExceptionTuple<bool?>(null, [
+        SidecarLintException(
+          nodes.keys
+              .cast<YamlScalar>()
+              .firstWhere((element) => element.value == key),
+          message: "Invalid value. Must be 'true' or 'false'",
+        )
       ]);
     }
   }

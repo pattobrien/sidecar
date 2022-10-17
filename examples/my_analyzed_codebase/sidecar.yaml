@@ -1,7 +1,6 @@
 includes:
   - "bin/**"
   - "lib/**"
-# - 123
 # - "test/**"
 # - ".sidecar/**"
 lints:
@@ -14,15 +13,16 @@ lints:
 
   riverpod_lints:
     prefer_consumer_widget:
-      # severity: abc
-      # enabled: true
-  #     configuration:
-  #       some_property:
+      severity: warning
+      enabled: true
+      # configuration:
+      #   123
+      # some_property:
 
   l10n_lints:
     avoid_string_literals:
-      enabled: 123
-  #     configuration:
+      enabled: true
+      # configuration: 123
   #       prefix: "AppLocalizations.of(context)"
 
   # project_lints:
@@ -33,7 +33,7 @@ lints:
   design_system_lints:
     avoid_color_literal:
     avoid_icon_literal:
-      # enabled: 123
+      enabled: true
     # avoid_sized_box_height_width_literals:
     # avoid_text_style_literal:
     # avoid_border_radius_literal:

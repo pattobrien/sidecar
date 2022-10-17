@@ -12,26 +12,6 @@ part 'analysis_package_configuration.freezed.dart';
 
 @freezed
 class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
-  const AnalysisPackageConfiguration._();
-
-  const factory AnalysisPackageConfiguration.lint({
-    required String packageName,
-    required SourceSpan packageNameSpan,
-    required Map<String, LintConfiguration> lints,
-    @Default(<Glob>[]) List<Glob> includes,
-    @Default(<SidecarConfigException>[])
-        List<SidecarConfigException> sourceErrors,
-  }) = LintPackageConfiguration;
-
-  const factory AnalysisPackageConfiguration.assist({
-    required String packageName,
-    required SourceSpan packageNameSpan,
-    required Map<String, AssistConfiguration> assists,
-    @Default(<Glob>[]) List<Glob> includes,
-    @Default(<SidecarConfigException>[])
-        List<SidecarConfigException> sourceErrors,
-  }) = AssistPackageConfiguration;
-
   factory AnalysisPackageConfiguration.fromYamlMap(
     YamlMap yamlMap, {
     required SidecarBaseType type,
@@ -45,40 +25,26 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
           packageName: packageName,
           lints: yamlMap.nodes
               .map<String, LintConfiguration>((dynamic key, value) {
-            // final dynamic extractedValue = value.value;
             final yamlKey = key as YamlScalar;
             if (value is YamlMap) {
-              final lintConfigurationErrors = <SidecarConfigException>[];
-
-              final configuration =
-                  value.parseConfiguration().fold((l) => l, (r) {
-                lintConfigurationErrors.addAll(r);
-                return null;
-              });
-
-              final severity = value.parseSeverity().fold((l) => l, (r) {
-                lintConfigurationErrors.addAll(r);
-                return null;
-              });
-
+              final configuration = value.parseConfiguration();
+              final severity = value.parseSeverity();
               final includes = value.parseGlobIncludes();
-
-              final enabled = value.parseEnabled().fold((l) => l, (r) {
-                lintConfigurationErrors.addAll(r);
-                return null;
-              });
+              final enabled = value.parseEnabled();
 
               return MapEntry(
                 yamlKey.value as String,
                 LintConfiguration(
                   id: yamlKey.value as String,
                   includes: includes.value1,
-                  severity: severity,
-                  enabled: enabled,
-                  configuration: configuration,
+                  severity: severity.value1,
+                  enabled: enabled.value1,
+                  configuration: configuration.value1,
                   sourceErrors: [
-                    ...lintConfigurationErrors,
-                    ...includes.value2
+                    ...includes.value2,
+                    ...severity.value2,
+                    ...configuration.value2,
+                    ...enabled.value2,
                   ],
                   packageName: packageName,
                   lintNameSpan: yamlKey.span,
@@ -133,19 +99,9 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
               .map<String, AssistConfiguration>((dynamic key, node) {
             final yamlKey = key as YamlScalar;
             if (node is YamlMap) {
-              final editConfigurationErrors = <SidecarConfigException>[];
-              final configuration =
-                  node.parseConfiguration().fold((map) => map, (errors) {
-                editConfigurationErrors.addAll(errors);
-                return null;
-              });
-
+              final configuration = node.parseConfiguration();
               final includes = node.parseGlobIncludes();
-
-              final enabled = node.parseEnabled().fold((map) => map, (errors) {
-                editConfigurationErrors.addAll(errors);
-                return null;
-              });
+              final enabled = node.parseEnabled();
 
               return MapEntry(
                 yamlKey.value as String,
@@ -153,12 +109,13 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                   lintNameSpan: yamlKey.span,
                   packageName: packageName,
                   id: yamlKey.value as String,
-                  configuration: configuration,
-                  enabled: enabled,
+                  configuration: configuration.value1,
+                  enabled: enabled.value1,
                   includes: includes.value1,
                   sourceErrors: [
-                    ...editConfigurationErrors,
-                    ...includes.value2
+                    ...includes.value2,
+                    ...configuration.value2,
+                    ...enabled.value2,
                   ],
                 ),
               );
@@ -205,4 +162,23 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
         );
     }
   }
+  const AnalysisPackageConfiguration._();
+
+  const factory AnalysisPackageConfiguration.lint({
+    required String packageName,
+    required SourceSpan packageNameSpan,
+    required Map<String, LintConfiguration> lints,
+    @Default(<Glob>[]) List<Glob> includes,
+    @Default(<SidecarConfigException>[])
+        List<SidecarConfigException> sourceErrors,
+  }) = LintPackageConfiguration;
+
+  const factory AnalysisPackageConfiguration.assist({
+    required String packageName,
+    required SourceSpan packageNameSpan,
+    required Map<String, AssistConfiguration> assists,
+    @Default(<Glob>[]) List<Glob> includes,
+    @Default(<SidecarConfigException>[])
+        List<SidecarConfigException> sourceErrors,
+  }) = AssistPackageConfiguration;
 }

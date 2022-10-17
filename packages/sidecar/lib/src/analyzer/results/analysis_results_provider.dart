@@ -27,7 +27,7 @@ final analysisResultsForFileProvider =
           ref: ref, sourceUrl: unit!.uri);
 
       final errors =
-          config.sourceErrors.map((e) => e.toAnalysisResult()).toList();
+          config.combinedSourceErrors.map((e) => e.toAnalysisResult()).toList();
       ref
           .watch(logDelegateProvider)
           .sidecarMessage('SIDECAR CONFIG ERRORS = ${errors.length}');

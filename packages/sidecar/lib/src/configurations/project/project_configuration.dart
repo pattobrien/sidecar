@@ -64,6 +64,24 @@ class ProjectConfiguration {
     }
   }
 
+  List<SidecarConfigException> get combinedSourceErrors => [
+        ...sourceErrors,
+        ...?lintPackages?.values
+            .map((e) => [
+                  ...e.sourceErrors,
+                  ...e.lints.values.map((e) => e.sourceErrors).expand((f) => f),
+                ])
+            .expand((e) => e),
+        ...?assistPackages?.values
+            .map((e) => [
+                  ...e.sourceErrors,
+                  ...e.assists.values
+                      .map((e) => e.sourceErrors)
+                      .expand((f) => f),
+                ])
+            .expand((e) => e),
+      ];
+
   static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(
     YamlMap? map, {
     required SidecarBaseType type,
