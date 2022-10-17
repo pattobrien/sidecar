@@ -16,8 +16,8 @@ class AnalyzedFile with _$AnalyzedFile {
 
   bool get isDartFile => p.extension(path) == '.dart';
 
-  //TODO: handle sidecar.yaml
   bool get isAnalysisOptionsFile => relativePath == 'analysis_options.yaml';
+  bool get isSidecarYamlFile => relativePath == 'sidecar.yaml';
 
   String get relativePath => p.relative(path, from: root.root.path);
 }

@@ -44,7 +44,7 @@ class SomePage extends ConsumerWidget {
           ),
           SizedBox(width: 10.0),
           SizedBox(width: someNumnber),
-          Icon(Icons.abc),
+          Icon(Icons.snowboarding),
           Icon(ProjectIcons.abc),
           TextFormField(
             controller: ref.watch(myTextControllerProvider),

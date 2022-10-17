@@ -22,7 +22,8 @@ mixin _$AnalysisConfiguration {
   List<Glob>? get includes => throw _privateConstructorUsedError;
   YamlMap? get configuration => throw _privateConstructorUsedError;
   bool? get enabled => throw _privateConstructorUsedError;
-  List<YamlSourceError> get sourceErrors => throw _privateConstructorUsedError;
+  List<SidecarConfigException> get sourceErrors =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -33,7 +34,7 @@ mixin _$AnalysisConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)
+            List<SidecarConfigException> sourceErrors)
         lint,
     required TResult Function(
             String id,
@@ -42,7 +43,7 @@ mixin _$AnalysisConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)
+            List<SidecarConfigException> sourceErrors)
         assist,
   }) =>
       throw _privateConstructorUsedError;
@@ -56,7 +57,7 @@ mixin _$AnalysisConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         lint,
     TResult Function(
             String id,
@@ -65,7 +66,7 @@ mixin _$AnalysisConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         assist,
   }) =>
       throw _privateConstructorUsedError;
@@ -79,7 +80,7 @@ mixin _$AnalysisConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         lint,
     TResult Function(
             String id,
@@ -88,7 +89,7 @@ mixin _$AnalysisConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         assist,
     required TResult orElse(),
   }) =>
@@ -130,7 +131,7 @@ abstract class $AnalysisConfigurationCopyWith<$Res> {
       List<Glob>? includes,
       YamlMap? configuration,
       bool? enabled,
-      List<YamlSourceError> sourceErrors});
+      List<SidecarConfigException> sourceErrors});
 }
 
 /// @nodoc
@@ -180,7 +181,7 @@ class _$AnalysisConfigurationCopyWithImpl<$Res>
       sourceErrors: sourceErrors == freezed
           ? _value.sourceErrors
           : sourceErrors // ignore: cast_nullable_to_non_nullable
-              as List<YamlSourceError>,
+              as List<SidecarConfigException>,
     ));
   }
 }
@@ -200,7 +201,7 @@ abstract class _$$LintConfigurationCopyWith<$Res>
       List<Glob>? includes,
       YamlMap? configuration,
       bool? enabled,
-      List<YamlSourceError> sourceErrors});
+      List<SidecarConfigException> sourceErrors});
 }
 
 /// @nodoc
@@ -257,7 +258,7 @@ class __$$LintConfigurationCopyWithImpl<$Res>
       sourceErrors: sourceErrors == freezed
           ? _value._sourceErrors
           : sourceErrors // ignore: cast_nullable_to_non_nullable
-              as List<YamlSourceError>,
+              as List<SidecarConfigException>,
     ));
   }
 }
@@ -273,7 +274,8 @@ class _$LintConfiguration extends LintConfiguration {
       final List<Glob>? includes,
       this.configuration,
       this.enabled,
-      final List<YamlSourceError> sourceErrors = const <YamlSourceError>[]})
+      final List<SidecarConfigException> sourceErrors =
+          const <SidecarConfigException>[]})
       : _includes = includes,
         _sourceErrors = sourceErrors,
         super._();
@@ -299,10 +301,10 @@ class _$LintConfiguration extends LintConfiguration {
   final YamlMap? configuration;
   @override
   final bool? enabled;
-  final List<YamlSourceError> _sourceErrors;
+  final List<SidecarConfigException> _sourceErrors;
   @override
   @JsonKey()
-  List<YamlSourceError> get sourceErrors {
+  List<SidecarConfigException> get sourceErrors {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_sourceErrors);
   }
@@ -359,7 +361,7 @@ class _$LintConfiguration extends LintConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)
+            List<SidecarConfigException> sourceErrors)
         lint,
     required TResult Function(
             String id,
@@ -368,7 +370,7 @@ class _$LintConfiguration extends LintConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)
+            List<SidecarConfigException> sourceErrors)
         assist,
   }) {
     return lint(id, packageName, lintNameSpan, severity, includes,
@@ -386,7 +388,7 @@ class _$LintConfiguration extends LintConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         lint,
     TResult Function(
             String id,
@@ -395,7 +397,7 @@ class _$LintConfiguration extends LintConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         assist,
   }) {
     return lint?.call(id, packageName, lintNameSpan, severity, includes,
@@ -413,7 +415,7 @@ class _$LintConfiguration extends LintConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         lint,
     TResult Function(
             String id,
@@ -422,7 +424,7 @@ class _$LintConfiguration extends LintConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         assist,
     required TResult orElse(),
   }) {
@@ -474,7 +476,7 @@ abstract class LintConfiguration extends AnalysisConfiguration {
       final List<Glob>? includes,
       final YamlMap? configuration,
       final bool? enabled,
-      final List<YamlSourceError> sourceErrors}) = _$LintConfiguration;
+      final List<SidecarConfigException> sourceErrors}) = _$LintConfiguration;
   const LintConfiguration._() : super._();
 
   @override
@@ -491,7 +493,7 @@ abstract class LintConfiguration extends AnalysisConfiguration {
   @override
   bool? get enabled;
   @override
-  List<YamlSourceError> get sourceErrors;
+  List<SidecarConfigException> get sourceErrors;
   @override
   @JsonKey(ignore: true)
   _$$LintConfigurationCopyWith<_$LintConfiguration> get copyWith =>
@@ -512,7 +514,7 @@ abstract class _$$AssistConfigurationCopyWith<$Res>
       List<Glob>? includes,
       YamlMap? configuration,
       bool? enabled,
-      List<YamlSourceError> sourceErrors});
+      List<SidecarConfigException> sourceErrors});
 }
 
 /// @nodoc
@@ -564,7 +566,7 @@ class __$$AssistConfigurationCopyWithImpl<$Res>
       sourceErrors: sourceErrors == freezed
           ? _value._sourceErrors
           : sourceErrors // ignore: cast_nullable_to_non_nullable
-              as List<YamlSourceError>,
+              as List<SidecarConfigException>,
     ));
   }
 }
@@ -579,7 +581,8 @@ class _$AssistConfiguration extends AssistConfiguration {
       final List<Glob>? includes,
       this.configuration,
       this.enabled,
-      final List<YamlSourceError> sourceErrors = const <YamlSourceError>[]})
+      final List<SidecarConfigException> sourceErrors =
+          const <SidecarConfigException>[]})
       : _includes = includes,
         _sourceErrors = sourceErrors,
         super._();
@@ -603,10 +606,10 @@ class _$AssistConfiguration extends AssistConfiguration {
   final YamlMap? configuration;
   @override
   final bool? enabled;
-  final List<YamlSourceError> _sourceErrors;
+  final List<SidecarConfigException> _sourceErrors;
   @override
   @JsonKey()
-  List<YamlSourceError> get sourceErrors {
+  List<SidecarConfigException> get sourceErrors {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_sourceErrors);
   }
@@ -662,7 +665,7 @@ class _$AssistConfiguration extends AssistConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)
+            List<SidecarConfigException> sourceErrors)
         lint,
     required TResult Function(
             String id,
@@ -671,7 +674,7 @@ class _$AssistConfiguration extends AssistConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)
+            List<SidecarConfigException> sourceErrors)
         assist,
   }) {
     return assist(id, packageName, lintNameSpan, includes, configuration,
@@ -689,7 +692,7 @@ class _$AssistConfiguration extends AssistConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         lint,
     TResult Function(
             String id,
@@ -698,7 +701,7 @@ class _$AssistConfiguration extends AssistConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         assist,
   }) {
     return assist?.call(id, packageName, lintNameSpan, includes, configuration,
@@ -716,7 +719,7 @@ class _$AssistConfiguration extends AssistConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         lint,
     TResult Function(
             String id,
@@ -725,7 +728,7 @@ class _$AssistConfiguration extends AssistConfiguration {
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
-            List<YamlSourceError> sourceErrors)?
+            List<SidecarConfigException> sourceErrors)?
         assist,
     required TResult orElse(),
   }) {
@@ -776,7 +779,7 @@ abstract class AssistConfiguration extends AnalysisConfiguration {
       final List<Glob>? includes,
       final YamlMap? configuration,
       final bool? enabled,
-      final List<YamlSourceError> sourceErrors}) = _$AssistConfiguration;
+      final List<SidecarConfigException> sourceErrors}) = _$AssistConfiguration;
   const AssistConfiguration._() : super._();
 
   @override
@@ -792,7 +795,7 @@ abstract class AssistConfiguration extends AnalysisConfiguration {
   @override
   bool? get enabled;
   @override
-  List<YamlSourceError> get sourceErrors;
+  List<SidecarConfigException> get sourceErrors;
   @override
   @JsonKey(ignore: true)
   _$$AssistConfigurationCopyWith<_$AssistConfiguration> get copyWith =>

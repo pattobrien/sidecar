@@ -2,41 +2,33 @@ import 'package:dartz/dartz.dart';
 import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../../sidecar.dart';
 import 'yaml_source_error.dart';
 
 extension YamlMapIncludeGlobs on YamlMap {
-  Either<List<Glob>?, List<YamlSourceError>> parseGlobIncludes() {
+  Either<List<Glob>?, List<SidecarConfigException>> parseGlobIncludes() {
     YamlList? yamlList;
+    const key = 'includes';
     try {
-      yamlList =
-          containsKey('includes') ? (value['includes'] as YamlList) : null;
+      yamlList = containsKey(key) ? (value[key] as YamlList) : null;
     } catch (e) {
-      final errorSpan = nodes.keys
-          .cast<YamlScalar>()
-          .firstWhere((element) => element.value == 'includes')
-          .span;
-
       return right([
-        YamlSourceError(
-          sourceSpan: errorSpan,
-          message: 'value should be a list of strings',
-        )
+        SidecarLintException(nodes.keys
+            .cast<YamlScalar>()
+            .firstWhere((element) => element.value == key)),
       ]);
     }
     if (yamlList != null) {
       final nodes = yamlList.nodes;
       final includes = <Glob>[];
-      final lintConfigurationErrors = <YamlSourceError>[];
+      final lintConfigurationErrors = <SidecarConfigException>[];
       for (final node in nodes) {
         try {
           includes.add(Glob(node.value as String));
         } catch (e) {
           // some value is not valid
-          final errorSpan = node.span;
-          lintConfigurationErrors.add(YamlSourceError(
-            sourceSpan: errorSpan,
-            message: 'Not a valid glob pattern',
-          ));
+          lintConfigurationErrors
+              .add(SidecarFieldException(node.value as YamlScalar));
         }
       }
       if (lintConfigurationErrors.isNotEmpty) {

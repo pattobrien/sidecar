@@ -8,7 +8,7 @@ final analyzedFilesProvider =
   (ref, root) {
     return ref
         .watch(_unfilteredAnalyzedFilesProvider(root))
-        .where((analyzedFile) => !analyzedFile.isAnalysisOptionsFile)
+        // .where((analyzedFile) => !analyzedFile.isSidecarYamlFile)
         .toList();
   },
   name: 'analyzedFilesProvider',
@@ -22,7 +22,6 @@ final analyzedFileFromPath = Provider.family<AnalyzedFile, String>(
     final activeContexts = ref.watch(activeContextsProvider);
     final context = activeContexts.firstWhere((activeContext) =>
         activeContext.activeRoot.analyzedFiles().any((file) => file == path));
-    // if (context == null) return null;
     final analyzedFiles = ref.watch(analyzedFilesProvider(context.activeRoot));
     return analyzedFiles.firstWhere((element) => element.path == path);
   },
@@ -33,14 +32,14 @@ final analyzedFileFromPath = Provider.family<AnalyzedFile, String>(
   ],
 );
 
-final analyzedOptionsFileProvider =
+final sidecarYamlFileProvider =
     Provider.family<AnalyzedFile, ActiveContextRoot>(
   (ref, root) {
     return ref.watch(_unfilteredAnalyzedFilesProvider(root).select((files) =>
         files.singleWhere(
             (analyzedFile) => analyzedFile.isAnalysisOptionsFile)));
   },
-  name: 'analyzedOptionsFileProvider',
+  name: 'sidecarYamlFileProvider',
   dependencies: [
     _unfilteredAnalyzedFilesProvider,
   ],

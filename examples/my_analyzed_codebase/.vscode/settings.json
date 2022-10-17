@@ -5,10 +5,10 @@
     //         "analysis_options.yaml",
     //     ],
     // },
-    // "dart.analyzerAdditionalArgs": [
-    //     "--port=10000",
-    //     "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.log"
-    // ],
+    "dart.analyzerAdditionalArgs": [
+        "--port=10000",
+        "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.log"
+    ],
     // "githubPullRequests.ignoredPullRequestBranches": [
     //     "master"
     // ],

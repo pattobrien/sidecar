@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   auto_route: ^5.0.1
+  # design_system_annotations:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/design_system_annotations/
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -23,8 +25,8 @@ dev_dependencies:
     path: /Users/pattobrien/Development/sidecar/repositories/design_system_lints/
   # sidecar_lints:
   #   path: /Users/pattobrien/Development/sidecar/repositories/sidecar_lints/
-  l10n_lints:
-    path: /Users/pattobrien/Development/sidecar/repositories/l10n_lints/
+  # l10n_lints:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/l10n_lints/
   # riverpod_lints:
   #   path: /Users/pattobrien/Development/sidecar/repositories/riverpod_lints/
   sidecar:
@@ -37,6 +39,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
 dependency_overrides:
   flutter_utilities:
     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

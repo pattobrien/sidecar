@@ -2,38 +2,36 @@ import 'package:dartz/dartz.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
+import '../builders/builders.dart';
 import '../project/errors.dart';
-import 'yaml_source_error.dart';
 
 extension YamlMapSeverity on YamlMap {
-  Either<LintRuleType?, List<YamlSourceError>> parseSeverity() {
+  Either<LintRuleType?, List<SidecarConfigException>> parseSeverity() {
+    const key = 'severity';
     try {
-      return left(containsKey('severity')
-          ? LintRuleTypeX.fromString(value['severity'] as String)
+      return left(containsKey(key)
+          ? LintRuleTypeX.fromString(value[key] as String)
           : null);
     } on InvalidSeverityException catch (e) {
-      final errorSpan = nodes.keys
-          .cast<YamlScalar>()
-          .firstWhere((element) => element.value == 'severity')
-          .span;
       return right([
-        YamlSourceError(
-          sourceSpan: errorSpan,
-          message:
-              '${e.invalidValue} is an invalid value. Severity values are: warning, error, or info.',
-        )
+        SidecarFieldException(nodes.keys
+                .cast<YamlScalar>()
+                .firstWhere((element) => element.value == key)
+
+            // sourceSpan: errorSpan,
+            // message:
+            //     '${e.invalidValue} is an invalid value. Severity values are: warning, error, or info.',
+            )
       ]);
     } catch (e) {
-      final errorSpan = nodes.keys
-          .cast<YamlScalar>()
-          .firstWhere((element) => element.value == 'severity')
-          .span;
       return right([
-        YamlSourceError(
-          sourceSpan: errorSpan,
-          message:
-              'Invalid value. Severity values are: warning, error, or info.',
-        )
+        SidecarFieldException(nodes.keys
+                .cast<YamlScalar>()
+                .firstWhere((element) => element.value == key)
+            // sourceSpan: errorSpan,
+            // message:
+            //     'Invalid value. Severity values are: warning, error, or info.',
+            )
       ]);
     }
   }

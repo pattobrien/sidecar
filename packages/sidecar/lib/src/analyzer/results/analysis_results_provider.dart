@@ -1,8 +1,10 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../configurations/configurations.dart';
 import '../../services/services.dart';
 import '../../utils/logger/logger.dart';
 import '../context/context.dart';
+import '../plugin/plugin_resource_provider.dart';
 import '../plugin/rules.dart';
 import 'results.dart';
 
@@ -14,18 +16,28 @@ final analysisResultsForFileProvider =
 
     final unit = await ref.watch(resolvedUnitProvider(file).future);
 
-    final results = await fileService.computeAnalysisResults(
-      file: file,
-      activatedRules: activatedRules,
-      unitResult: unit,
-    );
-    // TODO: make sending results a separate provider
-    ref.watch(logDelegateProvider).analysisResults(file.path, results);
-    return results;
+    if (file.isSidecarYamlFile) {
+      final config = ProjectConfiguration.parseFromSidecarYaml(unit!.content,
+          sourceUrl: unit.uri);
+      ref
+          .watch(logDelegateProvider)
+          .sidecarMessage('SIDECAR CONFIG = ${unit.content}');
+      final resourceProvider = ref.watch(pluginResourceProvider);
+      final content = resourceProvider.getFile(file.path).readAsStringSync();
+      ref
+          .watch(logDelegateProvider)
+          .sidecarMessage('SIDECAR CONFIG UPDATED = $content');
+      return config.sourceErrors.map((e) => e.toAnalysisResult()).toList();
+    } else {
+      return fileService.computeAnalysisResults(
+          file: file, activatedRules: activatedRules, unitResult: unit);
+      // TODO: make sending results a separate provider
+      // ref.watch(logDelegateProvider).analysisResults(file.path, results);
+    }
   },
   name: 'analysisResultsForFileProvider',
   dependencies: [
-    logDelegateProvider,
+    // logDelegateProvider,
     lintRulesForFileProvider,
     fileAnalyzerServiceProvider,
     resolvedUnitProvider,

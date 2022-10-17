@@ -12,6 +12,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../sidecar.dart';
 import '../analyzer/ast/ast.dart';
 import '../analyzer/results/results.dart';
 import '../configurations/yaml_parsers/yaml_parsers.dart';
@@ -26,14 +27,14 @@ abstract class SidecarBase {
   MapDecoder? get jsonDecoder => null;
 
   @mustCallSuper
-  List<YamlSourceError>? get errors => _errors;
+  List<SidecarConfigException>? get errors => _errors;
 
   @mustCallSuper
   Object get configuration => _configuration;
 
   late Ref ref;
   late Object _configuration;
-  final List<YamlSourceError> _errors = [];
+  final List<SidecarConfigException> _errors = [];
 
   late List<SidecarAnnotatedNode> _annotatedNodes;
   List<SidecarAnnotatedNode> get annotatedNodes => _annotatedNodes;
@@ -58,20 +59,22 @@ abstract class SidecarBase {
     _annotatedNodes = annotatedNodes;
     if (jsonDecoder != null) {
       if (configurationContent == null) {
-        final error = YamlSourceError(
-          sourceSpan: lintNameSpan,
-          message: '$code error: empty configuration',
-        );
-        _errors.add(error);
+        //TODO: need to handle this
+        // final error = SidecarLintPackageException(
+        //   sourceSpan: lintNameSpan,
+        //   message: '$code error: empty configuration',
+        // );
+        // _errors.add(error);
       } else {
         try {
           _configuration = jsonDecoder!(configurationContent);
+        } on SidecarAggregateException catch (e) {
+          _errors.addAll(e.exceptions);
         } catch (e, stackTrace) {
-          final error = YamlSourceError(
-            sourceSpan: lintNameSpan,
-            message: '$code error: incorrect configuration: $e $stackTrace',
-          );
-          _errors.add(error);
+          rethrow;
+          // final error = SidecarLintPackageException(
+          // );
+          // _errors.add(error);
         }
       }
     }

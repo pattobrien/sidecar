@@ -3,6 +3,7 @@ import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
+import '../builders/builders.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 import 'analysis_package_configuration.dart';
@@ -13,7 +14,7 @@ class ProjectConfiguration {
     this.lintPackages,
     this.assistPackages,
     List<Glob>? includes,
-    this.sourceErrors = const <YamlSourceError>[],
+    this.sourceErrors = const <SidecarConfigException>[],
     required this.rawContent,
   }) : _includes = includes;
 
@@ -54,7 +55,7 @@ class ProjectConfiguration {
       (m) {
         final contentMap = m as YamlMap?;
         try {
-          final sourceErrors = <YamlSourceError>[];
+          final sourceErrors = <SidecarConfigException>[];
           return ProjectConfiguration(
             rawContent: contents,
             lintPackages: _parseLintPackages(contentMap!['lints'] as YamlMap?),
@@ -118,7 +119,7 @@ class ProjectConfiguration {
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
   final Map<PackageName, AssistPackageConfiguration>? assistPackages;
   final List<Glob>? _includes;
-  final List<YamlSourceError> sourceErrors;
+  final List<SidecarConfigException> sourceErrors;
   final String rawContent;
 
   List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];

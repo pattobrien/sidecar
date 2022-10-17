@@ -29,6 +29,7 @@ class RuleInitializationService {
           if (ruleConfig == null) return null;
 
           _log('activating ${rule.code}');
+
           rule.initialize(
             ref: ref,
             configurationContent: ruleConfig.configuration,

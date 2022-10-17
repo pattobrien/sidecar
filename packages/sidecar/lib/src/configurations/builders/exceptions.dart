@@ -2,7 +2,10 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../../sidecar.dart';
+import '../../analyzer/results/results.dart';
 import '../../utils/utils.dart';
+import 'rules.dart';
 
 class SidecarException implements Exception {}
 
@@ -19,6 +22,7 @@ abstract class SidecarConfigException {
   String get message;
   String get correction;
   AnalysisError toAnalysisError();
+  AnalysisResult toAnalysisResult();
 }
 
 class SidecarFieldException implements SidecarConfigException {
@@ -27,6 +31,8 @@ class SidecarFieldException implements SidecarConfigException {
   ) : _packageNode = packageNode;
 
   final YamlScalar _packageNode;
+
+  SidecarBase get rule => SidecarFieldLintRule();
 
   @override
   SourceSpan get sourceSpan => _packageNode.span;
@@ -44,11 +50,57 @@ class SidecarFieldException implements SidecarConfigException {
       AnalysisErrorType.LINT,
       sourceSpan.location,
       message,
-      'invalid_field_configuration',
+      rule.code,
       correction: correction,
       contextMessages: [],
       //TODO: url: _url,
     );
+  }
+
+  @override
+  AnalysisResult toAnalysisResult() =>
+      AnalysisResult.dart(rule: rule, sourceSpan: sourceSpan, message: message);
+}
+
+class SidecarLintException implements SidecarConfigException {
+  const SidecarLintException(
+    YamlScalar packageNode,
+  ) : _packageNode = packageNode;
+
+  final YamlScalar _packageNode;
+
+  SidecarBase get rule => SidecarLintRule();
+
+  @override
+  SourceSpan get sourceSpan => _packageNode.span;
+
+  @override
+  String get message => 'Lint configuration is incorrect.';
+
+  @override
+  String get correction => 'Visit the lint documentation to make a correction.';
+
+  @override
+  AnalysisError toAnalysisError() {
+    return AnalysisError(
+      AnalysisErrorSeverity.ERROR,
+      AnalysisErrorType.LINT,
+      sourceSpan.location,
+      message,
+      'invalid_lint_configuration',
+      correction: correction,
+      contextMessages: [],
+      //TODO: url: _url,
+    );
+  }
+
+  @override
+  AnalysisResult toAnalysisResult() {
+    return AnalysisResult.dart(
+        sourceSpan: sourceSpan,
+        rule: rule,
+        message: message,
+        correction: correction);
   }
 }
 
@@ -58,6 +110,8 @@ class SidecarLintPackageException implements SidecarConfigException {
   ) : _packageNode = packageNode;
 
   final YamlScalar _packageNode;
+
+  SidecarBase get rule => SidecarFieldLintRule();
 
   @override
   SourceSpan get sourceSpan => _packageNode.span;
@@ -80,6 +134,15 @@ class SidecarLintPackageException implements SidecarConfigException {
       contextMessages: [],
       //TODO: url: _url,
     );
+  }
+
+  @override
+  AnalysisResult toAnalysisResult() {
+    return AnalysisResult.dart(
+        sourceSpan: sourceSpan,
+        rule: rule,
+        message: message,
+        correction: correction);
   }
 }
 

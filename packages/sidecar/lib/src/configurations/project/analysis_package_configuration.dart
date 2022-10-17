@@ -4,6 +4,7 @@ import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
+import '../builders/builders.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 
@@ -18,7 +19,8 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
     required SourceSpan packageNameSpan,
     required Map<String, LintConfiguration> lints,
     @Default(<Glob>[]) List<Glob> includes,
-    @Default(<YamlSourceError>[]) List<YamlSourceError> sourceErrors,
+    @Default(<SidecarConfigException>[])
+        List<SidecarConfigException> sourceErrors,
   }) = LintPackageConfiguration;
 
   const factory AnalysisPackageConfiguration.assist({
@@ -26,7 +28,8 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
     required SourceSpan packageNameSpan,
     required Map<String, AssistConfiguration> assists,
     @Default(<Glob>[]) List<Glob> includes,
-    @Default(<YamlSourceError>[]) List<YamlSourceError> sourceErrors,
+    @Default(<SidecarConfigException>[])
+        List<SidecarConfigException> sourceErrors,
   }) = AssistPackageConfiguration;
 
   factory AnalysisPackageConfiguration.fromYamlMap(
@@ -45,7 +48,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
             // final dynamic extractedValue = value.value;
             final yamlKey = key as YamlScalar;
             if (value is YamlMap) {
-              final lintConfigurationErrors = <YamlSourceError>[];
+              final lintConfigurationErrors = <SidecarConfigException>[];
 
               final configuration =
                   value.parseConfiguration().fold((l) => l, (r) {
@@ -111,11 +114,10 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 lintNameSpan: yamlKey.span,
                 packageName: packageName,
                 id: yamlKey.value as String,
-                sourceErrors: <YamlSourceError>[
-                  YamlSourceError(
-                      sourceSpan: yamlKey.span,
-                      message:
-                          'Lint definition should be of type null, bool, or map')
+                sourceErrors: <SidecarConfigException>[
+                  SidecarLintException(yamlKey),
+                  // message:
+                  //     'Lint definition should be of type null, bool, or map')
                 ],
               ),
             );
@@ -129,7 +131,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
               .map<String, AssistConfiguration>((dynamic key, node) {
             final yamlKey = key as YamlScalar;
             if (node is YamlMap) {
-              final editConfigurationErrors = <YamlSourceError>[];
+              final editConfigurationErrors = <SidecarConfigException>[];
               final configuration =
                   node.parseConfiguration().fold((map) => map, (errors) {
                 editConfigurationErrors.addAll(errors);
@@ -189,11 +191,11 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 packageName: packageName,
                 lintNameSpan: yamlKey.span,
                 id: yamlKey.value as String,
-                sourceErrors: <YamlSourceError>[
-                  YamlSourceError(
-                      sourceSpan: yamlKey.span,
-                      message:
-                          'CodeEdit definition should be of type null, bool, or map')
+                sourceErrors: <SidecarConfigException>[
+                  SidecarLintException(yamlKey),
+                  // sourceSpan: yamlKey.span,
+                  // message:
+                  //     'CodeEdit definition should be of type null, bool, or map')
                 ],
               ),
             );

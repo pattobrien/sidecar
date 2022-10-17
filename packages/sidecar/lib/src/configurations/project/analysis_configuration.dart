@@ -6,7 +6,7 @@ import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
-import '../yaml_parsers/yaml_parsers.dart';
+import '../builders/builders.dart';
 
 part 'analysis_configuration.freezed.dart';
 
@@ -22,7 +22,8 @@ class AnalysisConfiguration with _$AnalysisConfiguration {
     List<Glob>? includes,
     YamlMap? configuration,
     bool? enabled,
-    @Default(<YamlSourceError>[]) List<YamlSourceError> sourceErrors,
+    @Default(<SidecarConfigException>[])
+        List<SidecarConfigException> sourceErrors,
   }) = LintConfiguration;
 
   const factory AnalysisConfiguration.assist({
@@ -32,7 +33,8 @@ class AnalysisConfiguration with _$AnalysisConfiguration {
     List<Glob>? includes,
     YamlMap? configuration,
     bool? enabled,
-    @Default(<YamlSourceError>[]) List<YamlSourceError> sourceErrors,
+    @Default(<SidecarConfigException>[])
+        List<SidecarConfigException> sourceErrors,
   }) = AssistConfiguration;
 }
 

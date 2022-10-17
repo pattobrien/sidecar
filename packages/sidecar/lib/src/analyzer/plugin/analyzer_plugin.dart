@@ -3,29 +3,32 @@ import 'dart:async';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/file_system.dart';
+import 'package:analyzer/file_system/overlay_file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol.dart';
+import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:hotreloader/hotreloader.dart';
+import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
 import '../../utils/logger/logger.dart';
+import '../results/result_logger.dart';
 import '../results/results.dart';
 import '../server/analyzer_mode.dart';
 import 'plugin.dart';
+import 'plugin_resource_provider.dart';
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
-  SidecarAnalyzerPlugin(
-    this.ref, {
-    ResourceProvider? resourceProvider,
-  }) : super(
-          resourceProvider:
-              resourceProvider ?? PhysicalResourceProvider.INSTANCE,
-        );
+  SidecarAnalyzerPlugin(this.ref)
+      : resourceProvider = ref.read(pluginResourceProvider),
+        super(resourceProvider: ref.read(pluginResourceProvider));
 
   HotReloader? _reloader;
   final initializationCompleter = Completer<void>();
@@ -41,6 +44,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   List<String> get fileGlobsToAnalyze => kPluginGlobs;
 
   SidecarAnalyzerMode get mode => ref.read(sidecarAnalyzerMode);
+
+  @override
+  // ignore: overridden_fields
+  final OverlayResourceProvider resourceProvider;
 
   void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
   void _logError(Object e, StackTrace stackTrace) =>
@@ -74,10 +81,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     await _reloader?.reloadCode();
   }
 
+  AnalysisContextCollection? _contextCollection;
+
   @override
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
+    _contextCollection = contextCollection;
     try {
       _log('ISOLATE: afterNewContextCollection');
       // ref.invalidate(activeContextsProvider);
@@ -93,12 +103,61 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     }
   }
 
+  // overriden from analyzer_plugin to allow for non-Dart files to be analyzed for changes
+  @override
+  Future<void> contentChanged(List<String> paths) async {
+    final contextCollection = _contextCollection;
+    if (contextCollection != null) {
+      await _forAnalysisContexts(contextCollection, (analysisContext) async {
+        // ignore: prefer_foreach
+        for (final path in paths) {
+          analysisContext.changeFile(path);
+        }
+        final affected = await analysisContext.applyPendingFileChanges();
+
+        // custom implementation
+        final nonDartPathsInContext = paths
+            .where((e) => analysisContext.contextRoot.isAnalyzed(e))
+            .where((path) => p.extension(path) != '.dart');
+
+        await handleAffectedFiles(
+          analysisContext: analysisContext,
+          paths: [...affected, ...nonDartPathsInContext],
+        );
+      });
+    }
+  }
+
+  Future<void> _forAnalysisContexts(
+    AnalysisContextCollection contextCollection,
+    Future<void> Function(AnalysisContext analysisContext) f,
+  ) async {
+    final nonPriorityAnalysisContexts = <AnalysisContext>[];
+    for (final analysisContext in contextCollection.contexts) {
+      if (_isPriorityAnalysisContext(analysisContext)) {
+        await f(analysisContext);
+      } else {
+        nonPriorityAnalysisContexts.add(analysisContext);
+      }
+    }
+
+    for (final analysisContext in nonPriorityAnalysisContexts) {
+      await f(analysisContext);
+    }
+  }
+
+  bool _isPriorityAnalysisContext(AnalysisContext analysisContext) {
+    return priorityPaths.any(analysisContext.contextRoot.isAnalyzed);
+  }
+
   @override
   Future<void> analyzeFiles({
     required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
     final allContexts = ref.read(activeContextsProvider);
+    ref.read(logDelegateProvider).sidecarMessage(
+        'CHANGEDFILES1 = ${paths.length} ${paths.toList().toString()}');
     if (allContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
         analysisContext.contextRoot.root.path)) {
@@ -108,8 +167,15 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       await Future.wait(paths.map((path) async {
         try {
           final file = ref.read(analyzedFileFromPath(path));
+          if (file.relativePath == 'sidecar.yaml') {
+            ref
+                .read(logDelegateProvider)
+                .sidecarMessage('SIDECAR YAML CHANGED');
+            // ref.invalidate(provider)
+          }
           ref.invalidate(resolvedUnitProvider(file));
           ref.refresh(analysisResultsForFileProvider(file));
+          await ref.refresh(resultLogDelegateProvider(file).future);
         } catch (e, stackTrace) {
           _logError('analyzeFiles ${e.toString()}', stackTrace);
         }
