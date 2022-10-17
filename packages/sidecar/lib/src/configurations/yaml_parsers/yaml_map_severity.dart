@@ -12,26 +12,26 @@ extension YamlMapSeverity on YamlMap {
       return left(containsKey(key)
           ? LintRuleTypeX.fromString(value[key] as String)
           : null);
-    } on InvalidSeverityException catch (e) {
+    } on InvalidSeverityException {
+      final invalidNode = nodes.keys
+          .cast<YamlScalar>()
+          .firstWhere((element) => element.value == key);
       return right([
-        SidecarFieldException(nodes.keys
-                .cast<YamlScalar>()
-                .firstWhere((element) => element.value == key)
-
-            // sourceSpan: errorSpan,
-            // message:
-            //     '${e.invalidValue} is an invalid value. Severity values are: warning, error, or info.',
-            )
+        SidecarFieldException(
+          invalidNode,
+          message:
+              'Invalid value. Severity values are: warning, error, or info.',
+        )
       ]);
     } catch (e) {
       return right([
-        SidecarFieldException(nodes.keys
-                .cast<YamlScalar>()
-                .firstWhere((element) => element.value == key)
-            // sourceSpan: errorSpan,
-            // message:
-            //     'Invalid value. Severity values are: warning, error, or info.',
-            )
+        SidecarFieldException(
+          nodes.keys
+              .cast<YamlScalar>()
+              .firstWhere((element) => element.value == key),
+          message:
+              'Invalid value. Severity values are: warning, error, or info.',
+        )
       ]);
     }
   }

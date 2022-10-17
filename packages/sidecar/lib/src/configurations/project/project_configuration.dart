@@ -1,8 +1,11 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
+import 'package:riverpod/riverpod.dart';
+import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
+import '../../utils/logger/logger.dart';
 import '../builders/builders.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
@@ -18,61 +21,47 @@ class ProjectConfiguration {
     required this.rawContent,
   }) : _includes = includes;
 
-  // factory ProjectConfiguration.parseFromAnalysisOptions(
-  //   String contents, {
-  //   required Uri sourceUrl,
-  // }) {
-  //   return checkedYamlDecode(
-  //     contents,
-  //     (m) {
-  //       YamlMap contentMap;
-  //       try {
-  //         contentMap = m!['sidecar'] as YamlMap;
-  //       } catch (e) {
-  //         throw const MissingSidecarConfiguration();
-  //       }
-  //       final sourceErrors = <YamlSourceError>[];
-  //       return ProjectConfiguration(
-  //         rawContent: contents,
-  //         lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
-  //         assistPackages: _parseAssistPackages(contentMap['edits'] as YamlMap?),
-  //         includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
-  //           sourceErrors.addAll(r);
-  //           return null;
-  //         }),
-  //         sourceErrors: sourceErrors,
-  //       );
-  //     },
-  //     sourceUrl: sourceUrl,
-  //   );
-  // }
   factory ProjectConfiguration.parseFromSidecarYaml(
     String contents, {
     required Uri sourceUrl,
+    Ref? ref,
   }) {
-    return checkedYamlDecode(
-      contents,
-      (m) {
-        final contentMap = m as YamlMap?;
-        try {
-          final sourceErrors = <SidecarConfigException>[];
-          return ProjectConfiguration(
-            rawContent: contents,
-            lintPackages: _parseLintPackages(contentMap!['lints'] as YamlMap?),
-            assistPackages:
-                _parseAssistPackages(contentMap['edits'] as YamlMap?),
-            includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
-              sourceErrors.addAll(r);
-              return null;
-            }),
-            sourceErrors: sourceErrors,
-          );
-        } catch (e) {
-          throw const MissingSidecarYamlConfiguration();
-        }
-      },
-      sourceUrl: sourceUrl,
-    );
+    try {
+      return checkedYamlDecode(
+        contents,
+        (m) {
+          try {
+            final contentMap = m as YamlMap?;
+            final includesResult = contentMap!.parseGlobIncludes();
+            return ProjectConfiguration(
+              rawContent: contents,
+              lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
+              assistPackages:
+                  _parseAssistPackages(contentMap['edits'] as YamlMap?),
+              includes: includesResult.value1,
+              sourceErrors: [
+                ...includesResult.value2,
+                // SidecarLintException(
+                //   (contentMap.nodes.entries.first.key as YamlScalar?)!,
+                //   message: 'test',
+                // ),
+              ],
+            );
+          } catch (e, stackTrace) {
+            ref?.read(logDelegateProvider).sidecarMessage(
+                  'PROJCONFIG = project config error: $e $stackTrace',
+                );
+            throw const MissingSidecarYamlConfiguration();
+          }
+        },
+        sourceUrl: sourceUrl,
+      );
+    } catch (e, stackTrace) {
+      ref?.read(logDelegateProvider).sidecarMessage(
+          'PROJCONFIG = unexpected project config error: $e $stackTrace');
+      throw UnimplementedError(
+          'unexpected project config error: $e $stackTrace');
+    }
   }
 
   static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(

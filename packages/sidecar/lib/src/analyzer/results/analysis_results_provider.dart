@@ -17,22 +17,24 @@ final analysisResultsForFileProvider =
     final unit = await ref.watch(resolvedUnitProvider(file).future);
 
     if (file.isSidecarYamlFile) {
-      final config = ProjectConfiguration.parseFromSidecarYaml(unit!.content,
-          sourceUrl: unit.uri);
-      ref
-          .watch(logDelegateProvider)
-          .sidecarMessage('SIDECAR CONFIG = ${unit.content}');
       final resourceProvider = ref.watch(pluginResourceProvider);
       final content = resourceProvider.getFile(file.path).readAsStringSync();
       ref
           .watch(logDelegateProvider)
           .sidecarMessage('SIDECAR CONFIG UPDATED = $content');
-      return config.sourceErrors.map((e) => e.toAnalysisResult()).toList();
+
+      final config = ProjectConfiguration.parseFromSidecarYaml(content,
+          ref: ref, sourceUrl: unit!.uri);
+
+      final errors =
+          config.sourceErrors.map((e) => e.toAnalysisResult()).toList();
+      ref
+          .watch(logDelegateProvider)
+          .sidecarMessage('SIDECAR CONFIG ERRORS = ${errors.length}');
+      return errors;
     } else {
       return fileService.computeAnalysisResults(
           file: file, activatedRules: activatedRules, unitResult: unit);
-      // TODO: make sending results a separate provider
-      // ref.watch(logDelegateProvider).analysisResults(file.path, results);
     }
   },
   name: 'analysisResultsForFileProvider',

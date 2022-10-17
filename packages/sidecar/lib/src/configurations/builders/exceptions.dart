@@ -2,8 +2,8 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../../sidecar.dart';
 import '../../analyzer/results/results.dart';
+import '../../rules/rules.dart';
 import '../../utils/utils.dart';
 import 'rules.dart';
 
@@ -27,10 +27,16 @@ abstract class SidecarConfigException {
 
 class SidecarFieldException implements SidecarConfigException {
   const SidecarFieldException(
-    YamlScalar packageNode,
-  ) : _packageNode = packageNode;
+    YamlScalar packageNode, {
+    String? message,
+    String? correction,
+  })  : _message = message,
+        _correction = correction,
+        _packageNode = packageNode;
 
   final YamlScalar _packageNode;
+  final String? _message;
+  final String? _correction;
 
   SidecarBase get rule => SidecarFieldLintRule();
 
@@ -38,21 +44,22 @@ class SidecarFieldException implements SidecarConfigException {
   SourceSpan get sourceSpan => _packageNode.span;
 
   @override
-  String get message => 'Package configuration is incorrect.';
+  String get message => _message ?? 'Package configuration is incorrect.';
 
   @override
-  String get correction => 'Visit the lint documentation to make a correction.';
+  String get correction =>
+      _correction ?? 'Visit the lint documentation to make a correction.';
 
   @override
   AnalysisError toAnalysisError() {
     return AnalysisError(
       AnalysisErrorSeverity.ERROR,
-      AnalysisErrorType.LINT,
+      AnalysisErrorType.HINT,
       sourceSpan.location,
       message,
       rule.code,
       correction: correction,
-      contextMessages: [],
+      // contextMessages: [],
       //TODO: url: _url,
     );
   }
@@ -64,10 +71,16 @@ class SidecarFieldException implements SidecarConfigException {
 
 class SidecarLintException implements SidecarConfigException {
   const SidecarLintException(
-    YamlScalar packageNode,
-  ) : _packageNode = packageNode;
+    YamlScalar packageNode, {
+    String? message,
+    String? correction,
+  })  : _message = message,
+        _correction = correction,
+        _packageNode = packageNode;
 
   final YamlScalar _packageNode;
+  final String? _message;
+  final String? _correction;
 
   SidecarBase get rule => SidecarLintRule();
 
@@ -75,21 +88,22 @@ class SidecarLintException implements SidecarConfigException {
   SourceSpan get sourceSpan => _packageNode.span;
 
   @override
-  String get message => 'Lint configuration is incorrect.';
+  String get message => _message ?? 'Lint configuration is incorrect.';
 
   @override
-  String get correction => 'Visit the lint documentation to make a correction.';
+  String get correction =>
+      _correction ?? 'Visit the lint documentation to make a correction.';
 
   @override
   AnalysisError toAnalysisError() {
     return AnalysisError(
       AnalysisErrorSeverity.ERROR,
-      AnalysisErrorType.LINT,
+      AnalysisErrorType.HINT,
       sourceSpan.location,
       message,
       'invalid_lint_configuration',
       correction: correction,
-      contextMessages: [],
+      // contextMessages: [],
       //TODO: url: _url,
     );
   }
@@ -126,12 +140,12 @@ class SidecarLintPackageException implements SidecarConfigException {
   AnalysisError toAnalysisError() {
     return AnalysisError(
       AnalysisErrorSeverity.ERROR,
-      AnalysisErrorType.LINT,
+      AnalysisErrorType.HINT,
       sourceSpan.location,
       message,
       'incorrect_package_configuration',
       correction: correction,
-      contextMessages: [],
+      // contextMessages: [],
       //TODO: url: _url,
     );
   }

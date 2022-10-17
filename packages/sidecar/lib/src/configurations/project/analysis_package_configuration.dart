@@ -61,10 +61,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 return null;
               });
 
-              final includes = value.parseGlobIncludes().fold((l) => l, (r) {
-                lintConfigurationErrors.addAll(r);
-                return null;
-              });
+              final includes = value.parseGlobIncludes();
 
               final enabled = value.parseEnabled().fold((l) => l, (r) {
                 lintConfigurationErrors.addAll(r);
@@ -75,11 +72,14 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 yamlKey.value as String,
                 LintConfiguration(
                   id: yamlKey.value as String,
-                  includes: includes,
+                  includes: includes.value1,
                   severity: severity,
                   enabled: enabled,
                   configuration: configuration,
-                  sourceErrors: lintConfigurationErrors,
+                  sourceErrors: [
+                    ...lintConfigurationErrors,
+                    ...includes.value2
+                  ],
                   packageName: packageName,
                   lintNameSpan: yamlKey.span,
                 ),
@@ -115,9 +115,11 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 packageName: packageName,
                 id: yamlKey.value as String,
                 sourceErrors: <SidecarConfigException>[
-                  SidecarLintException(yamlKey),
-                  // message:
-                  //     'Lint definition should be of type null, bool, or map')
+                  SidecarLintException(
+                    yamlKey,
+                    message:
+                        'Lint definition should be of type null, bool, or map',
+                  ),
                 ],
               ),
             );
@@ -138,11 +140,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 return null;
               });
 
-              final includes =
-                  node.parseGlobIncludes().fold((map) => map, (errors) {
-                editConfigurationErrors.addAll(errors);
-                return null;
-              });
+              final includes = node.parseGlobIncludes();
 
               final enabled = node.parseEnabled().fold((map) => map, (errors) {
                 editConfigurationErrors.addAll(errors);
@@ -157,8 +155,11 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                   id: yamlKey.value as String,
                   configuration: configuration,
                   enabled: enabled,
-                  includes: includes,
-                  sourceErrors: editConfigurationErrors,
+                  includes: includes.value1,
+                  sourceErrors: [
+                    ...editConfigurationErrors,
+                    ...includes.value2
+                  ],
                 ),
               );
             } else if (node is YamlScalar) {
@@ -192,10 +193,11 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
                 lintNameSpan: yamlKey.span,
                 id: yamlKey.value as String,
                 sourceErrors: <SidecarConfigException>[
-                  SidecarLintException(yamlKey),
-                  // sourceSpan: yamlKey.span,
-                  // message:
-                  //     'CodeEdit definition should be of type null, bool, or map')
+                  SidecarLintException(
+                    yamlKey,
+                    message:
+                        'CodeEdit definition should be of type null, bool, or map',
+                  ),
                 ],
               ),
             );

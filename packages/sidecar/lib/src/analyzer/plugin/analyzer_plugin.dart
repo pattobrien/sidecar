@@ -19,7 +19,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
 import '../../utils/logger/logger.dart';
-import '../results/result_logger.dart';
+import '../results/analysis_results_reporter.dart';
 import '../results/results.dart';
 import '../server/analyzer_mode.dart';
 import 'plugin.dart';
@@ -175,7 +175,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           }
           ref.invalidate(resolvedUnitProvider(file));
           ref.refresh(analysisResultsForFileProvider(file));
-          await ref.refresh(resultLogDelegateProvider(file).future);
+          await ref.refresh(analysisResultsReporterProvider(file).future);
         } catch (e, stackTrace) {
           _logError('analyzeFiles ${e.toString()}', stackTrace);
         }
