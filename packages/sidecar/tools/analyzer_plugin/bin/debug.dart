@@ -1,5 +1,5 @@
 import 'dart:isolate';
-import 'package:hotreloader/hotreloader.dart';
+// import 'package:hotreloader/hotreloader.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'constructors.dart';
@@ -10,13 +10,13 @@ import 'constructors.dart';
 Future<void> main(List<String> args) async {
   final isDebug = args.any((element) => element == '--enable-vm-service');
 
-  late HotReloader reloader;
+  // late HotReloader reloader;
   final newArgs = [...args];
 
   if (isDebug) {
     // print('running in debug mode; HOTRELOAD enabled.');
     //
-    reloader = await HotReloader.create();
+    // reloader = await HotReloader.create();
     newArgs.add('--debug');
   } else {
     // final s = Ansi(true);
@@ -33,5 +33,5 @@ Future<void> main(List<String> args) async {
     isPlugin: false,
   );
 
-  if (isDebug) reloader.stop();
+  // if (isDebug) reloader.stop();
 }

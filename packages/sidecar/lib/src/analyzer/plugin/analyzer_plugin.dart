@@ -15,6 +15,7 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
+import 'package:watcher/watcher.dart';
 
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
@@ -73,11 +74,43 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     plugin.PluginCommunicationChannel channel,
   ) async {
     _reloader = await HotReloader.create(onAfterReload: (c) {
-      if (c.result == HotReloadResult.Succeeded) {
-        channel.sendNotification(
-          plugin.Notification(kSidecarHotReloadMethod, {}),
+      final time = DateTime.now();
+      ref
+          .read(logDelegateProvider)
+          .sidecarMessage('\n${time.toIso8601String()} RELOADING...\n');
+      final events = c.events ?? [];
+
+      // final analyzedFile = ref.read(analyzedFileFromPath(event.path));
+      final analysisContexts = ref.read(activeContextsProvider);
+      for (final analysisContext in analysisContexts) {
+        handleAffectedFiles(
+          analysisContext: analysisContext,
+          paths: events.map((e) => e.path).toList(),
         );
       }
+
+      // for (final event in events) {
+      //   switch (event.type) {
+      //     case ChangeType.ADD:
+      //       // TODO Handle the event.
+      //       break;
+      //     case ChangeType.MODIFY:
+      //       // contentChanged([event.path]);
+      //       break;
+      //     case ChangeType.REMOVE:
+      //       // TODO Handle event.
+      //       break;
+      //     default:
+      //       // Ignore unhandled watch event types.
+      //       break;
+      //   }
+      // }
+      // c.events?.map((e) => e.path);
+      // if (c.result == HotReloadResult.Succeeded) {
+      //   channel.sendNotification(
+      //     plugin.Notification(kSidecarHotReloadMethod, {}),
+      //   );
+      // }
     });
   }
 
@@ -180,8 +213,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
                 .sidecarVerboseMessage('SIDECAR YAML CHANGED');
             // ref.invalidate(provider)
           }
-          ref.invalidate(resolvedUnitProvider(file));
+          ref.refresh(resolvedUnitProvider(file));
           ref.refresh(analysisResultsForFileProvider(file));
+
           await ref.refresh(analysisResultsReporterProvider(file).future);
         } catch (e, stackTrace) {
           _logError('analyzeFiles ${e.toString()}', stackTrace);

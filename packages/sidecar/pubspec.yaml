@@ -35,8 +35,8 @@ dependencies:
     version: ^0.1.18
   source_gen: ^1.2.6
   source_span: ^1.8.0
-  # tuple: ^2.0.1
   uuid: ^3.0.6
+  watcher: ^1.0.2
   yaml: ^3.1.1
   yaml_modify: ^1.0.1
 
@@ -46,13 +46,7 @@ dev_dependencies:
   json_serializable: ^6.3.1
   lints: ^2.0.0
   test: ^1.16.0
-  # custom_lint: ^0.0.12
-  # riverpod_lint:
-  #   git:
-  #     url: https://github.com/rrousselGit/riverpod.git
-  #     path: packages/riverpod_lint/
 # dependency_overrides:
 #   analyzer_plugin: 0.10.0
-
 executables:
   sidecar: sidecar_cli

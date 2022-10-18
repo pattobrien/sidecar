@@ -19,7 +19,8 @@ class SomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
     final someString2 = someString;
-    final someIconData = Icons.abc;
+    final someIconData = Icons.snowboarding;
+    final someIconData2 = Icons.snowboarding;
     final double someNumnber = 10;
     final x = Color(123);
     return Container(
