@@ -49,7 +49,7 @@ Future<void> startSidecarPlugin(
 
   delegate.sidecarVerboseMessage('sidecar - args: $newArgs');
   delegate.sidecarVerboseMessage('sidecar - isMiddleman: $isMiddleman');
-  final ref = ProviderContainer(
+  final mainRef = ProviderContainer(
     overrides: [
       logDelegateProvider.overrideWithValue(delegate),
       sidecarAnalyzerMode.overrideWithValue(mode),
@@ -66,11 +66,11 @@ Future<void> startSidecarPlugin(
     if (mode.isDebug) {
       // delegate
       //     .sidecarVerboseMessage('sidecar - debug initialization started...');
-      final plugin = ref.read(pluginProvider);
+      final plugin = mainRef.read(pluginProvider);
       final runner = SidecarRunner(plugin, Directory.current);
       await runner.initialize();
     } else if (mode.isCli) {
-      final plugin = ref.read(pluginProvider);
+      final plugin = mainRef.read(pluginProvider);
       final runner = SidecarRunner(plugin, Directory.current);
       delegate.sidecarVerboseMessage(
           '${ansi.cyan} sidecar - cli initialization....${ansi.none}');
@@ -79,10 +79,10 @@ Future<void> startSidecarPlugin(
       exit(0);
     } else {
       if (isMiddleman) {
-        final middlemanPlugin = ref.read(middlemanPluginProvider);
+        final middlemanPlugin = mainRef.read(middlemanPluginProvider);
         middlemanPlugin.start(pluginChannel);
       } else {
-        final plugin = ref.read(pluginProvider);
+        final plugin = mainRef.read(pluginProvider);
         plugin.start(pluginChannel);
       }
     }

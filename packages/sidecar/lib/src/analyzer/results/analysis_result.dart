@@ -2,6 +2,7 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:source_span/source_span.dart';
 
+import '../../configurations/configurations.dart';
 import '../../rules/rules.dart';
 import '../../utils/utils.dart';
 import 'edit_result.dart';

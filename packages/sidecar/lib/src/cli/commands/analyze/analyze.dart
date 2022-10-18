@@ -44,8 +44,8 @@ class AnalyzeCommand extends Command<int> {
             'Invalid dart directory, no package_config.json file found.');
       }
       stdout.writeln();
-      stdout.writeln('root: \u001b[35m ${root.toFilePath()} \u001b[0m');
-      stdout.writeln('plugin: ${pluginPackage.root.toFilePath()}');
+      stdout.writeln('project:\u001b[35m ${root.toFilePath()} \u001b[0m');
+      stdout.writeln('plugin:  ${pluginPackage.root.toFilePath()}');
       stdout.writeln();
       // final sidecarPackageEntrypointPath = p.join(pluginPackage.root.path,
       //     'tools', 'analyzer_plugin', 'bin', 'debug.dart');

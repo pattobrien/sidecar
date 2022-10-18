@@ -59,7 +59,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     Expando();
     _log('END PLUGIN STARTING....');
     _log('# of rules to activate: ${ref.read(ruleConstructorProvider).length}');
-    if (mode.isDebug) _startWithHotReload(channel);
+    if (mode.isDebug) {
+      ref.read(logDelegateProvider).sidecarMessage('STARTING WITH HOT RELOAD');
+      _startWithHotReload(channel);
+    }
     super.start(channel);
     channel.sendNotification(
       plugin.Notification(kInitializationCompleteMethod, {}),
@@ -78,9 +81,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     });
   }
 
-  Future<void> reload() async {
-    await _reloader?.reloadCode();
-  }
+  // Future<void> reload() async {
+  //   await _reloader?.reloadCode(); /
+  // }
 
   AnalysisContextCollection? _contextCollection;
 
@@ -98,7 +101,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       await super
           .afterNewContextCollection(contextCollection: contextCollection);
-      initializationCompleter.complete();
+      if (mode.isCli) {
+        initializationCompleter.complete();
+      }
     } catch (e, stackTrace) {
       _logError('afterNewContextCollection err -- $e', stackTrace);
       rethrow;
