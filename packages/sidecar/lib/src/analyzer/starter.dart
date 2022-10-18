@@ -36,6 +36,8 @@ Future<void> startSidecarPlugin(
     delegate = DebuggerLogDelegate(cliOptions: cliOptions);
     mode = SidecarAnalyzerMode.debug;
     delegate.sidecarVerboseMessage('sidecar - debug initialization started...');
+    delegate.sidecarVerboseMessage(
+        'sidecar - verbose enabled: ${cliOptions.isVerboseEnabled}');
   } else if (isPlugin) {
     delegate = PluginChannelDelegate(channel: pluginChannel);
     mode = SidecarAnalyzerMode.plugin;
@@ -44,6 +46,8 @@ Future<void> startSidecarPlugin(
     mode = SidecarAnalyzerMode.cli;
     delegate.sidecarVerboseMessage(
         '${ansi.cyan} sidecar - cli initialization started...${ansi.none}');
+    delegate.sidecarVerboseMessage(
+        'sidecar - verbose enabled: ${cliOptions.isVerboseEnabled}');
   }
 
   delegate.sidecarVerboseMessage('ISMIDDLEMAN: $isMiddleman');

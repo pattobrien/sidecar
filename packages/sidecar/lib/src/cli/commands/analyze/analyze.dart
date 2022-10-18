@@ -29,10 +29,10 @@ class AnalyzeCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     try {
-      final isVerbose = argResults!['verbose'] as bool;
+      // final isVerbose = argResults!['verbose'] as bool;
       // stdout.encoding = AsciiCodec(allowInvalid: false);
       stdout.writeln('ansi support: ${stdout.supportsAnsiEscapes}');
-      stdout.writeln('verbose: $isVerbose');
+      // stdout.writeln('verbose: $isVerbose');
       // print('project directory: ${Directory.current}');
       final root = Directory.current.uri;
       final container = ProviderContainer();
@@ -78,13 +78,12 @@ class AnalyzeCommand extends Command<int> {
         ['run', executableRelativeUri.path],
         workingDirectory: Directory.current.path,
       );
-      print('channel');
+
       // await channel.listen(
       //   (response) => stdout.writeln(response),
       //   (notification) => stdout.writeln(notification),
       //   onError: (dynamic error) => stdout.writeln(error),
       // );
-      print('channel done');
       // process.stdout
       //     .listen((e) => stdout.writeln('\u001b[36m${utf8.decode(e)}'));
       process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));

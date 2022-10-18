@@ -30,7 +30,8 @@ extension LintRuleTypeX on LintRuleType {
       case LintRuleType.info:
         // ansi.white(bold: true);
         // return ansi(name);
-        return '${ansi.blue}$name${ansi.none}';
+        return name;
+      // return '${ansi.blue}$name${ansi.none}';
       case LintRuleType.warning:
         // ansi.yellow();
         // return ansi(name);

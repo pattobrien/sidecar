@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:characters/characters.dart';
+import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 
 import '../../analyzer/results/results.dart';
@@ -56,16 +56,18 @@ class DebuggerLogDelegate implements LogDelegateBase {
     final relativePath = p.relative(path, from: Directory.current.path);
 
     for (final result in results.where((result) => result.rule is LintRule)) {
+      final ansi = Ansi(true);
       final location =
           '$relativePath:${result.sourceSpan.start.line}:${result.sourceSpan.start.column}';
-      final lintErrorType = (result.rule as LintRule).defaultType.ansi;
-      final packageId =
-          result.rule.packageName.padRight(20).characters.take(20);
-      final lintCode = result.rule.code.padRight(20).characters.take(20);
-      final message = result.message.padRight(40).characters.take(40);
+      final lintErrorType =
+          (result.rule as LintRule).defaultType.ansi.padLeft(7);
+      final packageId = '${ansi.green}${result.rule.packageName}${ansi.none}';
+      final lintCode = '${ansi.green}${result.rule.code}${ansi.none}';
+      final message = '${ansi.bold}${result.message}${ansi.none}';
+      final correction = result.correction ?? '';
       final time = DateTime.now().toIso8601String();
       stringBuffer.writeln(
-          '  • $location • $lintErrorType • $message • $packageId • $lintCode');
+          '  $lintErrorType • $location • $message $correction • $packageId.$lintCode');
     }
     stdout.write(stringBuffer.toString());
   }
