@@ -4,10 +4,11 @@
 
 import 'dart:async';
 
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 
-import 'package:sidecar/builder.dart';
+import 'package:sidecar/sidecar.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 
 const _desc = r'Use key in widget constructors.';
@@ -24,13 +25,13 @@ class UseKeyInWidgetConstructors extends LintRule {
       'https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html';
 
   @override
-  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes;
+    return Future.value(visitor.nodes);
   }
 }
 

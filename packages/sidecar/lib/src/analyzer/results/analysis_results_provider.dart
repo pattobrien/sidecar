@@ -19,18 +19,12 @@ final analysisResultsForFileProvider =
     if (file.isSidecarYamlFile) {
       final resourceProvider = ref.watch(pluginResourceProvider);
       final content = resourceProvider.getFile(file.path).readAsStringSync();
-      ref
-          .watch(logDelegateProvider)
-          .sidecarMessage('SIDECAR CONFIG UPDATED = $content');
 
       final config = ProjectConfiguration.parseFromSidecarYaml(content,
           ref: ref, sourceUrl: unit!.uri);
 
       final errors =
           config.combinedSourceErrors.map((e) => e.toAnalysisResult()).toList();
-      ref
-          .watch(logDelegateProvider)
-          .sidecarMessage('SIDECAR CONFIG ERRORS = ${errors.length}');
       return errors;
     } else {
       return fileService.computeAnalysisResults(
@@ -39,7 +33,8 @@ final analysisResultsForFileProvider =
   },
   name: 'analysisResultsForFileProvider',
   dependencies: [
-    // logDelegateProvider,
+    logDelegateProvider,
+    pluginResourceProvider,
     lintRulesForFileProvider,
     fileAnalyzerServiceProvider,
     resolvedUnitProvider,

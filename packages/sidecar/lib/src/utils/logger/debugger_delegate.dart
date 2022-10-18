@@ -4,15 +4,17 @@ import 'package:characters/characters.dart';
 import 'package:path/path.dart' as p;
 
 import '../../analyzer/results/results.dart';
+import '../../cli/options/cli_options.dart';
 import '../../cli/reports/file_stats.dart';
+import '../../rules/rules.dart';
 import 'log_delegate_base.dart';
 
 class DebuggerLogDelegate implements LogDelegateBase {
   const DebuggerLogDelegate({
-    this.isVerboseEnabled = false,
+    required this.cliOptions,
   });
 
-  final bool isVerboseEnabled;
+  final CliOptions cliOptions;
 
   @override
   void analysisResultError(
@@ -32,7 +34,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
 
   @override
   void sidecarVerboseMessage(String message) {
-    // if (!isVerboseEnabled) return;
+    if (!cliOptions.isVerboseEnabled) return;
     stdout.writeln(message);
   }
 
@@ -43,7 +45,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
 
   @override
   void sidecarMessage(String message) {
-    stdout.writeln('$message');
+    stdout.writeln(message);
   }
 
   @override
@@ -53,16 +55,17 @@ class DebuggerLogDelegate implements LogDelegateBase {
 
     final relativePath = p.relative(path, from: Directory.current.path);
 
-    for (final result in results) {
-      final sourceLocation =
+    for (final result in results.where((result) => result.rule is LintRule)) {
+      final location =
           '$relativePath:${result.sourceSpan.start.line}:${result.sourceSpan.start.column}';
-      // final lintErrorType = result.rule.defaultType.coloredNamedd; $lintErrorType
-      final lintPackage =
+      final lintErrorType = (result.rule as LintRule).defaultType.ansi;
+      final packageId =
           result.rule.packageName.padRight(20).characters.take(20);
       final lintCode = result.rule.code.padRight(20).characters.take(20);
-      final lintMessage = result.message.padRight(40).characters.take(40);
+      final message = result.message.padRight(40).characters.take(40);
+      final time = DateTime.now().toIso8601String();
       stringBuffer.writeln(
-          '${DateTime.now().toIso8601String()}   • $sourceLocation • $lintMessage • $lintPackage • $lintCode');
+          '  • $location • $lintErrorType • $message • $packageId • $lintCode');
     }
     stdout.write(stringBuffer.toString());
   }

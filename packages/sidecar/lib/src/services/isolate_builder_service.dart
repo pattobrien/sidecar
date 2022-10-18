@@ -18,7 +18,8 @@ class IsolateBuilderService {
   const IsolateBuilderService(this.ref);
   final Ref ref;
 
-  void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
+  void _log(String msg) =>
+      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
   IsolateDetails startIsolate(ActiveContext activeContext) {
     _log('STARTING ISOLATE');
     return IsolateDetails(

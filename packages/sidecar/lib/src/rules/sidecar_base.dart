@@ -12,10 +12,9 @@ import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../sidecar.dart';
 import '../analyzer/ast/ast.dart';
 import '../analyzer/results/results.dart';
-import '../configurations/yaml_parsers/yaml_parsers.dart';
+import '../configurations/builders/builders.dart';
 import 'typedefs.dart';
 
 enum SidecarBaseType { lint, assist }

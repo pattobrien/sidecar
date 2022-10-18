@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:sidecar/builder.dart';
-
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
+import 'package:sidecar/sidecar.dart';
 
 const _desc =
     r'Prefer an 8-digit hexadecimal integer(0xFFFFFFFF) to instantiate Color.';
@@ -19,13 +19,13 @@ class UseFullHexValuesForFlutterColors extends LintRule {
       'https://dart-lang.github.io/linter/lints/use_full_hex_values_for_flutter_colors.html';
 
   @override
-  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes;
+    return Future.value(visitor.nodes);
   }
 }
 

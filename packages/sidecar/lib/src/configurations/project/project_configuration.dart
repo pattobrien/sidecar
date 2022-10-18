@@ -48,7 +48,7 @@ class ProjectConfiguration {
               ],
             );
           } catch (e, stackTrace) {
-            ref?.read(logDelegateProvider).sidecarMessage(
+            ref?.read(logDelegateProvider).sidecarVerboseMessage(
                   'PROJCONFIG = project config error: $e $stackTrace',
                 );
             throw const MissingSidecarYamlConfiguration();
@@ -57,7 +57,7 @@ class ProjectConfiguration {
         sourceUrl: sourceUrl,
       );
     } catch (e, stackTrace) {
-      ref?.read(logDelegateProvider).sidecarMessage(
+      ref?.read(logDelegateProvider).sidecarVerboseMessage(
           'PROJCONFIG = unexpected project config error: $e $stackTrace');
       throw UnimplementedError(
           'unexpected project config error: $e $stackTrace');

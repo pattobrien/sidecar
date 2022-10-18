@@ -16,7 +16,7 @@ class PluginObserver extends ProviderObserver {
     Object? value,
     ProviderContainer container,
   ) {
-    delegate.sidecarMessage(
+    delegate.sidecarVerboseMessage(
         '$header didAddProvider     ${provider.name}} ${value.toString()}}');
   }
 
@@ -29,7 +29,7 @@ class PluginObserver extends ProviderObserver {
     StackTrace stackTrace,
     ProviderContainer container,
   ) {
-    delegate.sidecarMessage(
+    delegate.sidecarVerboseMessage(
         '$header providerDidFail    ${provider.name}} ${error.toString()} ${stackTrace.toString()}');
   }
 
@@ -44,7 +44,7 @@ class PluginObserver extends ProviderObserver {
     Object? newValue,
     ProviderContainer container,
   ) {
-    delegate.sidecarMessage(
+    delegate.sidecarVerboseMessage(
         '$header didUpdateProvider  ${provider.name}} ${previousValue.toString()} || ${newValue.toString()}');
   }
 
@@ -54,6 +54,7 @@ class PluginObserver extends ProviderObserver {
     ProviderBase provider,
     ProviderContainer container,
   ) {
-    delegate.sidecarMessage('$header didDisposeProvider ${provider.name}}');
+    delegate
+        .sidecarVerboseMessage('$header didDisposeProvider ${provider.name}}');
   }
 }

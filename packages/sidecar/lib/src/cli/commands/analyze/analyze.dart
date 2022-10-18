@@ -3,18 +3,22 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:analyzer/instrumentation/noop_service.dart';
 import 'package:args/command_runner.dart';
-import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
+// ignore: implementation_imports
+import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 
-import '../../../../sidecar.dart';
+import '../../../analyzer/starter.dart';
 import '../../../configurations/project/errors.dart';
 import '../../../services/active_project_service.dart';
 import '../exit_codes.dart';
 
 class AnalyzeCommand extends Command<int> {
-  AnalyzeCommand();
+  AnalyzeCommand() {
+    argParser.addFlag('verbose', abbr: 'v');
+  }
 
   @override
   String get description => 'analyze';
@@ -25,8 +29,10 @@ class AnalyzeCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     try {
+      final isVerbose = argResults!['verbose'] as bool;
       // stdout.encoding = AsciiCodec(allowInvalid: false);
       stdout.writeln('ansi support: ${stdout.supportsAnsiEscapes}');
+      stdout.writeln('verbose: $isVerbose');
       // print('project directory: ${Directory.current}');
       final root = Directory.current.uri;
       final container = ProviderContainer();
@@ -39,19 +45,46 @@ class AnalyzeCommand extends Command<int> {
       }
       stdout.writeln(
           '\u001b[35m sidecar package: ${pluginPackage.root.toFilePath()} \u001b[0m');
-      final sidecarPackageEntrypointPath = p.join(pluginPackage.root.path,
-          'tools', 'analyzer_plugin', 'bin', 'debug.dart');
+      // final sidecarPackageEntrypointPath = p.join(pluginPackage.root.path,
+      //     'tools', 'analyzer_plugin', 'bin', 'debug.dart');
+      // final process = await Process.start(
+      //   'dart',
+      //   ['run', sidecarPackageEntrypointPath],
+      //   workingDirectory: Directory.current.path,
+      // );
+      // final receivePort = ReceivePort();
+      // final stream = receivePort.asBroadcastStream();
+      // stream.listen((dynamic e) => stdout.writeln(e.toString()),
+      //     onError: (dynamic e) => stderr.addError(e.toString()),
+      //     onDone: () => stdout.close());
+      // await startSidecarPlugin(
+      //     receivePort.sendPort, argResults?.arguments ?? [],
+      //     constructors: [], isMiddleman: true, isPlugin: false);
+      final executableUri =
+          Uri.parse(p.join(root.path, '.dart_tool', 'sidecar', 'debug.dart'));
+      final executableRelativeUri =
+          Uri.parse(p.join('.dart_tool', 'sidecar', 'debug.dart'));
+      final packagesUri = Uri.file(
+          p.join(root.path, '.dart_tool', 'package_config.json'),
+          windows: Platform.isWindows);
+
+      // final channel = ServerIsolateChannel.discovered(
+      //   executableUri,
+      //   packagesUri,
+      //   NoopInstrumentationService(),
+      // );
       final process = await Process.start(
         'dart',
-        ['run', sidecarPackageEntrypointPath],
+        ['run', executableRelativeUri.path],
         workingDirectory: Directory.current.path,
       );
-      final receivePort = ReceivePort();
-      final stream = receivePort.asBroadcastStream();
-      stream.listen(stdout.writeln);
-      await startSidecarPlugin(receivePort.sendPort, [],
-          constructors: [], isMiddleman: true, isPlugin: false);
-
+      print('channel');
+      // await channel.listen(
+      //   (response) => stdout.writeln(response),
+      //   (notification) => stdout.writeln(notification),
+      //   onError: (dynamic error) => stdout.writeln(error),
+      // );
+      print('channel done');
       // process.stdout
       //     .listen((e) => stdout.writeln('\u001b[36m${utf8.decode(e)}'));
       process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));

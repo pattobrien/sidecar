@@ -4,11 +4,13 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
-import 'package:riverpod/riverpod.dart';
 import 'package:cli_util/cli_logging.dart';
+import 'package:riverpod/riverpod.dart';
 
+import '../cli/options/cli_options.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
+import 'options_provider.dart';
 import 'plugin/plugin.dart';
 import 'server/runner/runner.dart';
 import 'server/server.dart';
@@ -22,26 +24,36 @@ Future<void> startSidecarPlugin(
 }) async {
   LogDelegateBase delegate;
   SidecarAnalyzerMode mode;
-
+  final newArgs = [
+    ...args,
+    if (!isPlugin && args.contains('--debug')) '--debug' else '--cli'
+  ];
   final pluginChannel = PluginIsolateChannel(sendPort);
+  final cliOptions = CliOptions.fromArgs(newArgs);
 
-  if (args.contains('--debug')) {
-    delegate = const DebuggerLogDelegate();
+  final ansi = Ansi(true);
+  if (newArgs.contains('--debug')) {
+    delegate = DebuggerLogDelegate(cliOptions: cliOptions);
     mode = SidecarAnalyzerMode.debug;
+    delegate.sidecarVerboseMessage('sidecar - debug initialization started...');
   } else if (isPlugin) {
     delegate = PluginChannelDelegate(channel: pluginChannel);
     mode = SidecarAnalyzerMode.plugin;
   } else {
-    delegate = const DebuggerLogDelegate();
+    delegate = DebuggerLogDelegate(cliOptions: cliOptions);
     mode = SidecarAnalyzerMode.cli;
+    delegate.sidecarVerboseMessage(
+        '${ansi.cyan} sidecar - cli initialization started...${ansi.none}');
   }
-  delegate.sidecarMessage('ISMIDDLEMAN: $isMiddleman');
+
+  delegate.sidecarVerboseMessage('ISMIDDLEMAN: $isMiddleman');
   final ref = ProviderContainer(
     overrides: [
       logDelegateProvider.overrideWithValue(delegate),
       sidecarAnalyzerMode.overrideWithValue(mode),
       masterPluginChannelProvider.overrideWithValue(pluginChannel),
       ruleConstructorProvider.overrideWithValue(constructors ?? []),
+      cliOptionsProvider.overrideWithValue(cliOptions),
     ],
     observers: [
       PluginObserver(delegate, isMiddleman: isMiddleman),
@@ -49,17 +61,17 @@ Future<void> startSidecarPlugin(
   );
 
   try {
-    final ansi = Ansi(true);
     if (mode.isDebug) {
-      delegate.sidecarMessage('sidecar - debug initialization started...');
+      // delegate
+      //     .sidecarVerboseMessage('sidecar - debug initialization started...');
       final plugin = ref.read(pluginProvider);
       final runner = SidecarRunner(plugin, Directory.current);
       await runner.initialize();
     } else if (mode.isCli) {
-      delegate.sidecarMessage(
-          '${ansi.cyan} sidecar - cli initialization started...${ansi.none}');
       final plugin = ref.read(pluginProvider);
       final runner = SidecarRunner(plugin, Directory.current);
+      delegate.sidecarVerboseMessage(
+          '${ansi.cyan} sidecar - cli initialization....${ansi.none}');
       await runner.initialize();
       await runner.server.initializationCompleter.future;
       exit(0);

@@ -9,7 +9,8 @@ class RuleInitializationService {
   const RuleInitializationService(this.ref);
   final Ref ref;
 
-  void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
+  void _log(String msg) =>
+      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
 
   List<SidecarBase> initializeRules(
     List<SidecarAnnotatedNode> annotatedNodes,

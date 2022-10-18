@@ -11,7 +11,8 @@
             "request": "launch",
             "type": "dart",
             "args": [
-                "--enable-vm-service"
+                "--enable-vm-service",
+                "--test-arg"
             ]
         },
         {

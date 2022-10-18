@@ -1,8 +1,8 @@
 name: flutter_utilities
 description: A starting point for Dart libraries or applications.
 version: 0.1.12
-publish_to: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
-# publish_to: none
+# publish_to: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
+publish_to: none
 repository: https://github.com/pattobrien/sidecar/
 
 environment:

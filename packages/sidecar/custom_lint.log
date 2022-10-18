@@ -1,0 +1,137 @@
+[riverpod_lint] 2022-10-18T01:58:50.286169 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[riverpod_lint] 2022-10-18T01:58:50.286169
+[riverpod_lint] 2022-10-18T01:58:50.286169 #0      AnalysisSessionImpl._checkConsistency (package:analyzer/src/dart/analysis/session.dart:135:7)
+[riverpod_lint] 2022-10-18T01:58:50.286169 #1      AnalysisSessionImpl.getResolvedLibraryByElement (package:analyzer/src/dart/analysis/session.dart:110:5)
+[riverpod_lint] 2022-10-18T01:58:50.286169 #2      findAstNodeForElement (package:riverpod_lint/src/analyzer_utils.dart:20:30)
+[riverpod_lint] 2022-10-18T01:58:50.286169 #3      ProviderDeclaration.tryParse (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:950:16)
+[riverpod_lint] 2022-10-18T01:58:50.286169 #4      ProviderDeclaration.tryParse (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:963:34)
+[riverpod_lint] 2022-10-18T01:58:50.286169 #5      ProviderRefUsageVisitor.visitRefInvocation (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:402:37)
+[riverpod_lint] 2022-10-18T01:58:50.286169 <asynchronous suspension>
+[riverpod_lint] 2022-10-18T01:58:50.286169
+[riverpod_lint] 2022-10-18T01:58:50.299565 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[riverpod_lint] 2022-10-18T01:58:50.299565
+[riverpod_lint] 2022-10-18T01:58:50.299565 #0      AnalysisSessionImpl._checkConsistency (package:analyzer/src/dart/analysis/session.dart:135:7)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #1      AnalysisSessionImpl.getResolvedLibraryByElement (package:analyzer/src/dart/analysis/session.dart:110:5)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #2      findAstNodeForElement (package:riverpod_lint/src/analyzer_utils.dart:20:30)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #3      ProviderDeclaration.tryParse (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:950:16)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #4      ProviderDeclaration._findDependencies.<anonymous closure> (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:1015:54)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #5      ProviderDeclaration._findDependencies.<anonymous closure> (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:1014:21)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #6      Stream.asyncMap.<anonymous closure>.<anonymous closure> (dart:async/stream.dart:751:29)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #7      _rootRunUnary (dart:async/zone.dart:1434:47)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #8      _CustomZone.runUnary (dart:async/zone.dart:1335:19)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #9      _CustomZone.runUnaryGuarded (dart:async/zone.dart:1244:7)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #10     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341:11)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #11     _IterablePendingEvents.handleNext (dart:async/stream_impl.dart:538:18)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #12     _PendingEvents.schedule.<anonymous closure> (dart:async/stream_impl.dart:663:7)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #13     _rootRun (dart:async/zone.dart:1418:47)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #14     _CustomZone.run (dart:async/zone.dart:1328:19)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #15     _CustomZone.runGuarded (dart:async/zone.dart:1236:7)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #16     _CustomZone.bindCallbackGuarded.<anonymous closure> (dart:async/zone.dart:1276:23)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #17     _rootRun (dart:async/zone.dart:1426:13)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #18     _CustomZone.run (dart:async/zone.dart:1328:19)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #19     _CustomZone.runGuarded (dart:async/zone.dart:1236:7)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #20     _CustomZone.bindCallbackGuarded.<anonymous closure> (dart:async/zone.dart:1276:23)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #21     _microtaskLoop (dart:async/schedule_microtask.dart:40:21)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #22     _startMicrotaskLoop (dart:async/schedule_microtask.dart:49:5)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #23     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:122:13)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #24     _Timer._runTimers (dart:isolate-patch/timer_impl.dart:405:11)
+[riverpod_lint] 2022-10-18T01:58:50.299565 #25     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:192:12)
+[riverpod_lint] 2022-10-18T01:58:50.299565
+[riverpod_lint] 2022-10-18T01:58:50.767699 The following exception was thrown while trying to obtain lints for /Users/pattobrien/Development/sidecar/packages/sidecar/lib/src/analyzer/plugin/analyzer_plugin.dart:
+[riverpod_lint] 2022-10-18T01:58:50.767699 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[riverpod_lint] 2022-10-18T01:58:50.767699
+[riverpod_lint] 2022-10-18T01:58:50.767699 #0      AnalysisSessionImpl._checkConsistency (package:analyzer/src/dart/analysis/session.dart:135:7)
+[riverpod_lint] 2022-10-18T01:58:50.767699 #1      AnalysisSessionImpl.getResolvedLibraryByElement (package:analyzer/src/dart/analysis/session.dart:110:5)
+[riverpod_lint] 2022-10-18T01:58:50.767699 #2      findAstNodeForElement (package:riverpod_lint/src/analyzer_utils.dart:20:30)
+[riverpod_lint] 2022-10-18T01:58:50.767699 #3      ProviderDeclaration.tryParse (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:950:16)
+[riverpod_lint] 2022-10-18T01:58:50.767699 #4      ProviderRefUsageVisitor.visitRefInvocation (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:402:37)
+[riverpod_lint] 2022-10-18T01:58:50.767699 <asynchronous suspension>
+[riverpod_lint] 2022-10-18T01:58:50.767699
+[riverpod_lint] 2022-10-18T01:58:51.463308 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[riverpod_lint] 2022-10-18T01:58:51.463308
+[riverpod_lint] 2022-10-18T01:58:51.463308 #0      AnalysisSessionImpl._checkConsistency (package:analyzer/src/dart/analysis/session.dart:135:7)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #1      AnalysisSessionImpl.getResolvedLibraryByElement (package:analyzer/src/dart/analysis/session.dart:110:5)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #2      findAstNodeForElement (package:riverpod_lint/src/analyzer_utils.dart:20:30)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #3      ProviderDeclaration.tryParse (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:950:16)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #4      ProviderDeclaration._findDependencies.<anonymous closure> (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:1015:54)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #5      ProviderDeclaration._findDependencies.<anonymous closure> (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:1014:21)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #6      Stream.asyncMap.<anonymous closure>.<anonymous closure> (dart:async/stream.dart:751:29)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #7      _rootRunUnary (dart:async/zone.dart:1434:47)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #8      _CustomZone.runUnary (dart:async/zone.dart:1335:19)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #9      _CustomZone.runUnaryGuarded (dart:async/zone.dart:1244:7)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #10     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341:11)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #11     _IterablePendingEvents.handleNext (dart:async/stream_impl.dart:538:18)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #12     _PendingEvents.schedule.<anonymous closure> (dart:async/stream_impl.dart:663:7)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #13     _rootRun (dart:async/zone.dart:1418:47)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #14     _CustomZone.run (dart:async/zone.dart:1328:19)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #15     _CustomZone.runGuarded (dart:async/zone.dart:1236:7)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #16     _CustomZone.bindCallbackGuarded.<anonymous closure> (dart:async/zone.dart:1276:23)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #17     _rootRun (dart:async/zone.dart:1426:13)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #18     _CustomZone.run (dart:async/zone.dart:1328:19)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #19     _CustomZone.runGuarded (dart:async/zone.dart:1236:7)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #20     _CustomZone.bindCallbackGuarded.<anonymous closure> (dart:async/zone.dart:1276:23)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #21     _microtaskLoop (dart:async/schedule_microtask.dart:40:21)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #22     _startMicrotaskLoop (dart:async/schedule_microtask.dart:49:5)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #23     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:122:13)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #24     _Timer._runTimers (dart:isolate-patch/timer_impl.dart:405:11)
+[riverpod_lint] 2022-10-18T01:58:51.463308 #25     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:192:12)
+[riverpod_lint] 2022-10-18T01:58:51.463308
+[riverpod_lint] 2022-10-18T01:58:54.118972 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[riverpod_lint] 2022-10-18T01:58:54.118972
+[riverpod_lint] 2022-10-18T01:58:54.118972 #0      AnalysisSessionImpl._checkConsistency (package:analyzer/src/dart/analysis/session.dart:135:7)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #1      AnalysisSessionImpl.getResolvedLibraryByElement (package:analyzer/src/dart/analysis/session.dart:110:5)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #2      findAstNodeForElement (package:riverpod_lint/src/analyzer_utils.dart:20:30)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #3      ProviderDeclaration.tryParse (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:950:16)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #4      ProviderDeclaration._findDependencies.<anonymous closure> (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:1015:54)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #5      ProviderDeclaration._findDependencies.<anonymous closure> (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:1014:21)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #6      Stream.asyncMap.<anonymous closure>.<anonymous closure> (dart:async/stream.dart:751:29)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #7      _rootRunUnary (dart:async/zone.dart:1434:47)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #8      _CustomZone.runUnary (dart:async/zone.dart:1335:19)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #9      _CustomZone.runUnaryGuarded (dart:async/zone.dart:1244:7)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #10     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341:11)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #11     _IterablePendingEvents.handleNext (dart:async/stream_impl.dart:538:18)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #12     _PendingEvents.schedule.<anonymous closure> (dart:async/stream_impl.dart:663:7)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #13     _rootRun (dart:async/zone.dart:1418:47)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #14     _CustomZone.run (dart:async/zone.dart:1328:19)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #15     _CustomZone.runGuarded (dart:async/zone.dart:1236:7)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #16     _CustomZone.bindCallbackGuarded.<anonymous closure> (dart:async/zone.dart:1276:23)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #17     _rootRun (dart:async/zone.dart:1426:13)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #18     _CustomZone.run (dart:async/zone.dart:1328:19)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #19     _CustomZone.runGuarded (dart:async/zone.dart:1236:7)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #20     _CustomZone.bindCallbackGuarded.<anonymous closure> (dart:async/zone.dart:1276:23)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #21     _microtaskLoop (dart:async/schedule_microtask.dart:40:21)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #22     _startMicrotaskLoop (dart:async/schedule_microtask.dart:49:5)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #23     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:122:13)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #24     _Timer._runTimers (dart:isolate-patch/timer_impl.dart:405:11)
+[riverpod_lint] 2022-10-18T01:58:54.118972 #25     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:192:12)
+[riverpod_lint] 2022-10-18T01:58:54.118972
+[riverpod_lint] 2022-10-18T01:58:54.119444 The following exception was thrown while trying to obtain lints for /Users/pattobrien/Development/sidecar/packages/sidecar/lib/src/analyzer/plugin/analyzer_plugin.dart:
+[riverpod_lint] 2022-10-18T01:58:54.119444 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[riverpod_lint] 2022-10-18T01:58:54.119444
+[riverpod_lint] 2022-10-18T01:58:54.119444 #0      AnalysisSessionImpl._checkConsistency (package:analyzer/src/dart/analysis/session.dart:135:7)
+[riverpod_lint] 2022-10-18T01:58:54.119444 #1      AnalysisSessionImpl.getResolvedLibraryByElement (package:analyzer/src/dart/analysis/session.dart:110:5)
+[riverpod_lint] 2022-10-18T01:58:54.119444 #2      findAstNodeForElement (package:riverpod_lint/src/analyzer_utils.dart:20:30)
+[riverpod_lint] 2022-10-18T01:58:54.119444 #3      ProviderDeclaration.tryParse (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:950:16)
+[riverpod_lint] 2022-10-18T01:58:54.119444 #4      ProviderRefUsageVisitor.visitRefInvocation (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:402:37)
+[riverpod_lint] 2022-10-18T01:58:54.119444 <asynchronous suspension>
+[riverpod_lint] 2022-10-18T01:58:54.119444
+[riverpod_lint] 2022-10-18T01:58:55.043027 The following exception was thrown while trying to obtain lints for /Users/pattobrien/Development/sidecar/packages/sidecar/lib/src/analyzer/plugin/analyzer_plugin.dart:
+[riverpod_lint] 2022-10-18T01:58:55.043027 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[riverpod_lint] 2022-10-18T01:58:55.043027
+[riverpod_lint] 2022-10-18T01:58:55.043027 #0      AnalysisSessionImpl._checkConsistency (package:analyzer/src/dart/analysis/session.dart:135:7)
+[riverpod_lint] 2022-10-18T01:58:55.043027 #1      AnalysisSessionImpl.getResolvedLibraryByElement (package:analyzer/src/dart/analysis/session.dart:110:5)
+[riverpod_lint] 2022-10-18T01:58:55.043027 #2      findAstNodeForElement (package:riverpod_lint/src/analyzer_utils.dart:20:30)
+[riverpod_lint] 2022-10-18T01:58:55.043027 #3      ProviderDeclaration.tryParse (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:950:16)
+[riverpod_lint] 2022-10-18T01:58:55.043027 #4      ProviderRefUsageVisitor.visitRefInvocation (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:402:37)
+[riverpod_lint] 2022-10-18T01:58:55.043027 <asynchronous suspension>
+[riverpod_lint] 2022-10-18T01:58:55.043027
+[riverpod_lint] 2022-10-18T01:58:55.278297 The following exception was thrown while trying to obtain lints for /Users/pattobrien/Development/sidecar/packages/sidecar/lib/src/analyzer/plugin/analyzer_plugin.dart:
+[riverpod_lint] 2022-10-18T01:58:55.278297 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[riverpod_lint] 2022-10-18T01:58:55.278297
+[riverpod_lint] 2022-10-18T01:58:55.278297 #0      AnalysisSessionImpl._checkConsistency (package:analyzer/src/dart/analysis/session.dart:135:7)
+[riverpod_lint] 2022-10-18T01:58:55.278297 #1      AnalysisSessionImpl.getResolvedLibraryByElement (package:analyzer/src/dart/analysis/session.dart:110:5)
+[riverpod_lint] 2022-10-18T01:58:55.278297 #2      findAstNodeForElement (package:riverpod_lint/src/analyzer_utils.dart:20:30)
+[riverpod_lint] 2022-10-18T01:58:55.278297 #3      ProviderDeclaration.tryParse (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:950:16)
+[riverpod_lint] 2022-10-18T01:58:55.278297 #4      ProviderRefUsageVisitor.visitRefInvocation (file:///Users/pattobrien/.pub-cache/git/riverpod-6afc93ed8ef651fef18c0b27fc4f4c20d8dd23b0/packages/riverpod_lint/bin/custom_lint.dart:402:37)
+[riverpod_lint] 2022-10-18T01:58:55.278297 <asynchronous suspension>
+[riverpod_lint] 2022-10-18T01:58:55.278297

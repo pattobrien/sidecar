@@ -9,7 +9,7 @@ final analysisResultsReporterProvider =
   (ref, file) async {
     final results =
         await ref.watch(analysisResultsForFileProvider(file).future);
-    ref.watch(logDelegateProvider).sidecarMessage(
+    ref.watch(logDelegateProvider).sidecarVerboseMessage(
         'analysisResultsReporterProvider = ${file.relativePath}');
     ref.watch(logDelegateProvider).analysisResults(file.path, results);
   },

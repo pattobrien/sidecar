@@ -6,8 +6,19 @@
             "request": "launch",
             "type": "dart",
             "args": [
-                "--enable-vm-service"
-            ]
+                "--enable-vm-service",
+                "--debug",
+            ],
+        },
+        {
+            "name": "Sidecar CLI Debugger",
+            "program": ".dart_tool/sidecar/debug.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--enable-vm-service",
+                "--cli",
+            ],
         },
         {
             "name": "Sidecar Debugger from Path",

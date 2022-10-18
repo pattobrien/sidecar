@@ -19,7 +19,8 @@ class ActiveProjectService {
 
   final Ref _ref;
 
-  void _log(String msg) => _ref.read(logDelegateProvider).sidecarMessage(msg);
+  void _log(String msg) =>
+      _ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
   void _logError(Object e, StackTrace stackTrace) =>
       _ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 

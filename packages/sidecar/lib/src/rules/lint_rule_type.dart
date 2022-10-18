@@ -1,7 +1,7 @@
 // ignore_for_file: implementation_imports
 
+import 'package:analyzer/error/error.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-
 import 'package:cli_util/cli_logging.dart';
 
 import '../configurations/configurations.dart';
@@ -22,6 +22,7 @@ extension LintRuleTypeX on LintRuleType {
     throw InvalidSeverityException(string);
   }
 
+  // used to colorize CLI output
   String get ansi {
     // final ansi = AnsiPen();
     final ansi = Ansi(true);
@@ -29,15 +30,15 @@ extension LintRuleTypeX on LintRuleType {
       case LintRuleType.info:
         // ansi.white(bold: true);
         // return ansi(name);
-        return '${ansi.blue}$name';
+        return '${ansi.blue}$name${ansi.none}';
       case LintRuleType.warning:
         // ansi.yellow();
         // return ansi(name);
-        return '${ansi.yellow}$name';
+        return '${ansi.yellow}$name${ansi.none}';
       case LintRuleType.error:
         // ansi.red();
         // return ansi(name);
-        return '${ansi.red}$name';
+        return '${ansi.red}$name${ansi.none}';
     }
   }
 }
@@ -51,6 +52,22 @@ extension LintErrorTypeX on LintRuleType {
         return plugin.AnalysisErrorSeverity.WARNING;
       case LintRuleType.error:
         return plugin.AnalysisErrorSeverity.ERROR;
+    }
+  }
+}
+
+extension AnalysisErrorSeverityX on ErrorSeverity {
+  LintRuleType toSidecarSeverity() {
+    switch (name) {
+      case 'INFO':
+        return LintRuleType.info;
+      case 'WARNING':
+        return LintRuleType.warning;
+      case 'ERROR':
+        return LintRuleType.error;
+      default:
+        throw UnimplementedError(
+            'invalid analysis error conversion from sidecar.');
     }
   }
 }

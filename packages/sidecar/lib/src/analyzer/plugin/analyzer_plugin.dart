@@ -49,7 +49,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   // ignore: overridden_fields
   final OverlayResourceProvider resourceProvider;
 
-  void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
+  void _log(String msg) =>
+      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
   void _logError(Object e, StackTrace stackTrace) =>
       ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
@@ -156,7 +157,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required List<String> paths,
   }) async {
     final allContexts = ref.read(activeContextsProvider);
-    ref.read(logDelegateProvider).sidecarMessage(
+    ref.read(logDelegateProvider).sidecarVerboseMessage(
         'CHANGEDFILES1 = ${paths.length} ${paths.toList().toString()}');
     if (allContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
@@ -170,7 +171,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           if (file.relativePath == 'sidecar.yaml') {
             ref
                 .read(logDelegateProvider)
-                .sidecarMessage('SIDECAR YAML CHANGED');
+                .sidecarVerboseMessage('SIDECAR YAML CHANGED');
             // ref.invalidate(provider)
           }
           ref.invalidate(resolvedUnitProvider(file));
@@ -247,5 +248,6 @@ final pluginProvider = Provider.autoDispose<SidecarAnalyzerPlugin>(
     logDelegateProvider,
     ruleConstructorProvider,
     sidecarAnalyzerMode,
+    pluginResourceProvider,
   ],
 );

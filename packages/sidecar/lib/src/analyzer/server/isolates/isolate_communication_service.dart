@@ -17,22 +17,20 @@ import 'isolate_message.dart';
 import 'multi_isolate_message.dart';
 
 class IsolateCommunicationService {
-  IsolateCommunicationService(
-    this.ref, {
-    required this.resourceProvider,
-  });
+  IsolateCommunicationService(this.ref);
 
   final state = <String, MultiIsolateMessage>{};
   final contentFiles = <String>{};
   final isolates = <IsolateDetails>[];
+  final queuedRequests = <Request>[];
 
   final Ref ref;
-  final ResourceProvider resourceProvider;
 
   PluginCommunicationChannel get channel =>
       ref.read(masterPluginChannelProvider);
 
-  void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
+  void _log(String msg) =>
+      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
   void _logError(Object e, StackTrace stackTrace) =>
       ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
@@ -58,14 +56,29 @@ class IsolateCommunicationService {
     }
   }
 
+  void dumpRequests() {
+    for (final request in queuedRequests..sort()) {
+      _addNewMessage(MultiIsolateMessage(
+        originalRequest: request,
+        requests: _parseRequestType(request),
+        initialTimestamp: DateTime.now(),
+      ));
+    }
+  }
+
   void handleServerRequest(
     Request request,
   ) {
-    _addNewMessage(MultiIsolateMessage(
-      originalRequest: request,
-      requests: _parseRequestType(request),
-      initialTimestamp: DateTime.now(),
-    ));
+    final isIntialized = ref.read(middlemanPluginIsInitializedProvider);
+    if (isIntialized) {
+      _addNewMessage(MultiIsolateMessage(
+        originalRequest: request,
+        requests: _parseRequestType(request),
+        initialTimestamp: DateTime.now(),
+      ));
+    } else {
+      queuedRequests.add(request);
+    }
   }
 
   void handlePluginResponse(
@@ -130,25 +143,27 @@ class IsolateCommunicationService {
       ],
       initialTimestamp: DateTime.now(),
     ));
-    final updateContentMap = Map.fromEntries(contentFiles.map(
-      (e) => MapEntry(e, _getContentForFile(e)),
-    ));
-    final updateContentRequest =
-        AnalysisUpdateContentParams(updateContentMap).toRequest(uuid.v4());
-    _addNewMessage(MultiIsolateMessage(
-      originalRequest: updateContentRequest,
-      requests: [
-        IsolateRequest(request: updateContentRequest, root: isolate.activeRoot)
-      ],
-      initialTimestamp: DateTime.now(),
-    ));
+    dumpRequests();
+    // final updateContentMap = Map.fromEntries(contentFiles.map(
+    //   (e) => MapEntry(e, _getContentForFile(e)),
+    // ));
+    // final updateContentRequest =
+    //     AnalysisUpdateContentParams(updateContentMap).toRequest(uuid.v4());
+    // _addNewMessage(MultiIsolateMessage(
+    //   originalRequest: updateContentRequest,
+    //   requests: [
+    //     IsolateRequest(request: updateContentRequest, root: isolate.activeRoot)
+    //   ],
+    //   initialTimestamp: DateTime.now(),
+    // ));
+    // resourceProvider;
   }
 
-  AddContentOverlay _getContentForFile(String path) {
-    final file = resourceProvider.getFile(path);
-    final content = file.readAsStringSync();
-    return AddContentOverlay(content);
-  }
+  // AddContentOverlay _getContentForFile(String path) {
+  //   final file = resourceProvider.getFile(path);
+  //   final content = file.readAsStringSync();
+  //   return AddContentOverlay(content);
+  // }
 
   void handlePluginError(
     IsolateDetails details,
@@ -432,8 +447,7 @@ class IsolateCommunicationService {
 final isolateCommunicationServiceProvider =
     Provider<IsolateCommunicationService>(
   (ref) {
-    final resourceProvider = ref.watch(middlemanResourceProvider);
-    return IsolateCommunicationService(ref, resourceProvider: resourceProvider);
+    return IsolateCommunicationService(ref);
   },
   name: 'isolateCommunicationServiceProvider',
   dependencies: [

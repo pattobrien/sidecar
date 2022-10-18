@@ -41,7 +41,8 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
       ref.read(isolateCommunicationServiceProvider);
 
   // HotReloader? _reloader;
-  void _log(String msg) => ref.read(logDelegateProvider).sidecarMessage(msg);
+  void _log(String msg) =>
+      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
   void _logError(Object e, StackTrace stackTrace) =>
       ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
@@ -89,6 +90,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
         .read(allContextsProvider.state)
         .update((_) => contextCollection.contexts);
     ref.read(isolateDetailsProvider);
+    ref.read(middlemanPluginIsInitializedProvider.state).update((_) => true);
   }
 
   @override
@@ -113,3 +115,6 @@ final middlemanPluginProvider = Provider<MiddlemanPlugin>(
     middlemanResourceProvider,
   ],
 );
+
+final middlemanPluginIsInitializedProvider =
+    StateProvider<bool>((ref) => false);

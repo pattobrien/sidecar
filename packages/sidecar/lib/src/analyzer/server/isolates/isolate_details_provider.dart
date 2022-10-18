@@ -33,7 +33,8 @@ final isolateDetailsProvider = Provider<List<IsolateDetails>>(
 
 final _isolateUpdateProvider = Provider<void>(
   (ref) {
-    void _log(String msg) => ref.watch(logDelegateProvider).sidecarMessage(msg);
+    void _log(String msg) =>
+        ref.watch(logDelegateProvider).sidecarVerboseMessage(msg);
     ref.listen<List<ActiveContext>>(activeContextsMiddlemanProvider,
         (oldContexts, newContexts) {
       _log(

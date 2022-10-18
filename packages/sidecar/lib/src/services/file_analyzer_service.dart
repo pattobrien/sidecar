@@ -23,7 +23,7 @@ class FileAnalyzerService {
   final Ref ref;
 
   void _log(String message) =>
-      ref.read(logDelegateProvider).sidecarMessage(message);
+      ref.read(logDelegateProvider).sidecarVerboseMessage(message);
 
   void _logError(Object e, StackTrace stackTrace) =>
       ref.read(logDelegateProvider).sidecarError(e, stackTrace);

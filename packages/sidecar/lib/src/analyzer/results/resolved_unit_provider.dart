@@ -11,7 +11,7 @@ final resolvedUnitProvider =
     final context = ref.watch(activeContextForRootProvider(file.root));
     final analysisSession = context.currentSession;
     final someUnitResult = await analysisSession.getResolvedUnit(file.path);
-    ref.watch(logDelegateProvider).sidecarMessage(
+    ref.watch(logDelegateProvider).sidecarVerboseMessage(
         'resolvedUnitProvider ${file.relativePath} ${someUnitResult is ResolvedUnitResult}');
     return someUnitResult is ResolvedUnitResult ? someUnitResult : null;
   },
