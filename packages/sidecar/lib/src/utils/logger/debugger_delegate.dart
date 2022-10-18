@@ -10,11 +10,12 @@ import '../../rules/rules.dart';
 import 'log_delegate_base.dart';
 
 class DebuggerLogDelegate implements LogDelegateBase {
-  const DebuggerLogDelegate({
+  DebuggerLogDelegate({
     required this.cliOptions,
-  });
+  }) : watch = Stopwatch()..start();
 
   final CliOptions cliOptions;
+  final Stopwatch watch;
 
   @override
   void analysisResultError(
@@ -35,7 +36,8 @@ class DebuggerLogDelegate implements LogDelegateBase {
   @override
   void sidecarVerboseMessage(String message) {
     if (!cliOptions.isVerboseEnabled) return;
-    stdout.writeln(message);
+    // final time = DateTime.now();
+    stdout.writeln('${watch.elapsed} $message');
   }
 
   @override
@@ -64,8 +66,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
       final packageId = '${ansi.green}${result.rule.packageName}${ansi.none}';
       final lintCode = '${ansi.green}${result.rule.code}${ansi.none}';
       final message = '${ansi.bold}${result.message}${ansi.none}';
-      final correction = result.correction ?? '';
-      final time = DateTime.now().toIso8601String();
+      final correction = result.correction;
       stringBuffer.writeln(
           '  $lintErrorType • $location • $message $correction • $packageId.$lintCode');
     }

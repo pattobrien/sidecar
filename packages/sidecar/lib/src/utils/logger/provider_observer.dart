@@ -17,7 +17,7 @@ class PluginObserver extends ProviderObserver {
     ProviderContainer container,
   ) {
     delegate.sidecarVerboseMessage(
-        '$header didAddProvider     ${provider.name}} ${value.toString()}}');
+        '$header didAddProvider     ${provider.name} ${value.toString()}');
   }
 
   /// A provider emitted an error, be it by throwing during initialization
@@ -30,7 +30,7 @@ class PluginObserver extends ProviderObserver {
     ProviderContainer container,
   ) {
     delegate.sidecarVerboseMessage(
-        '$header providerDidFail    ${provider.name}} ${error.toString()} ${stackTrace.toString()}');
+        '$header providerDidFail    ${provider.name} ${error.toString()} ${stackTrace.toString()}');
   }
 
   /// Called my providers when they emit a notification.
@@ -45,7 +45,7 @@ class PluginObserver extends ProviderObserver {
     ProviderContainer container,
   ) {
     delegate.sidecarVerboseMessage(
-        '$header didUpdateProvider  ${provider.name}} ${previousValue.toString()} || ${newValue.toString()}');
+        '$header didUpdateProvider ${provider.name} ${previousValue.toString()} || ${newValue.toString()}');
   }
 
   /// A provider was disposed
@@ -55,6 +55,6 @@ class PluginObserver extends ProviderObserver {
     ProviderContainer container,
   ) {
     delegate
-        .sidecarVerboseMessage('$header didDisposeProvider ${provider.name}}');
+        .sidecarVerboseMessage('$header didDisposeProvider ${provider.name}');
   }
 }

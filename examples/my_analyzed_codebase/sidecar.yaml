@@ -22,8 +22,8 @@ lints:
   l10n_lints:
     avoid_string_literals:
       enabled: true
-      # configuration: 123
-  #       prefix: "AppLocalizations.of(context)"
+      configuration:
+        prefix: "AppLocalizations.of(context)"
 
   # project_lints:
   #   avoid_icon_literal:

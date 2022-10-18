@@ -14,7 +14,7 @@ class CliOptions with _$CliOptions {
 
   factory CliOptions.fromArgs(List<String> args) {
     return CliOptions(
-      isVerboseEnabled: args.contains('verbose'),
+      isVerboseEnabled: args.contains('verbose') || args.contains('--verbose'),
       mode: args.contains('cli')
           ? SidecarAnalyzerMode.cli
           : args.contains('debug')

@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:analyzer/instrumentation/noop_service.dart';
 import 'package:args/command_runner.dart';
+import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 // ignore: implementation_imports
@@ -29,11 +30,10 @@ class AnalyzeCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     try {
-      // final isVerbose = argResults!['verbose'] as bool;
-      // stdout.encoding = AsciiCodec(allowInvalid: false);
-      stdout.writeln('ansi support: ${stdout.supportsAnsiEscapes}');
-      // stdout.writeln('verbose: $isVerbose');
-      // print('project directory: ${Directory.current}');
+      if (!stdout.supportsAnsiEscapes) {
+        stdout.writeln('ansi is not supported!');
+      }
+
       final root = Directory.current.uri;
       final container = ProviderContainer();
       final activeProjectService = container.read(activeProjectServiceProvider);
@@ -43,8 +43,10 @@ class AnalyzeCommand extends Command<int> {
         throw UnimplementedError(
             'Invalid dart directory, no package_config.json file found.');
       }
-      stdout.writeln(
-          '\u001b[35m sidecar package: ${pluginPackage.root.toFilePath()} \u001b[0m');
+      stdout.writeln();
+      stdout.writeln('root: \u001b[35m ${root.toFilePath()} \u001b[0m');
+      stdout.writeln('plugin: ${pluginPackage.root.toFilePath()}');
+      stdout.writeln();
       // final sidecarPackageEntrypointPath = p.join(pluginPackage.root.path,
       //     'tools', 'analyzer_plugin', 'bin', 'debug.dart');
       // final process = await Process.start(
@@ -75,7 +77,7 @@ class AnalyzeCommand extends Command<int> {
       // );
       final process = await Process.start(
         'dart',
-        ['run', executableRelativeUri.path],
+        ['run', executableRelativeUri.path, ...?argResults?.arguments],
         workingDirectory: Directory.current.path,
       );
 
@@ -86,6 +88,7 @@ class AnalyzeCommand extends Command<int> {
       // );
       // process.stdout
       //     .listen((e) => stdout.writeln('\u001b[36m${utf8.decode(e)}'));
+      //
       process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));
       process.stderr.listen((e) => stderr.writeln(utf8.decode(e)));
       stdout.writeln((await process.exitCode).toString());
