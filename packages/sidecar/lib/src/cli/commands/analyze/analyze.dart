@@ -91,7 +91,7 @@ class AnalyzeCommand extends Command<int> {
       //
       process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));
       process.stderr.listen((e) => stderr.writeln(utf8.decode(e)));
-      stdout.writeln((await process.exitCode).toString());
+      stdout.writeln('exit: ${(await process.exitCode).toString()}');
       return ExitCode.success;
     } on MissingSidecarYamlConfiguration catch (e) {
       // print(e.toString());

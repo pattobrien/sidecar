@@ -96,8 +96,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           .read(allAnalysisContextsProvider.state)
           .update((_) => contextCollection.contexts);
 
-      return super
+      await super
           .afterNewContextCollection(contextCollection: contextCollection);
+      initializationCompleter.complete();
     } catch (e, stackTrace) {
       _logError('afterNewContextCollection err -- $e', stackTrace);
       rethrow;
