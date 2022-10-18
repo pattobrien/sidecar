@@ -13,8 +13,8 @@ lints:
 
   riverpod_lints:
     prefer_consumer_widget:
-      severity: warning
-      enabled: true
+      # severity: warning
+      # enabled: true
       # configuration:
       #   123
       # some_property:

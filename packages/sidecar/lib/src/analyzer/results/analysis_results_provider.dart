@@ -16,6 +16,7 @@ final analysisResultsForFileProvider =
 
     final unit = await ref.watch(resolvedUnitProvider(file).future);
 
+    final watch = Stopwatch()..start();
     if (file.isSidecarYamlFile) {
       final resourceProvider = ref.watch(pluginResourceProvider);
       final content = resourceProvider.getFile(file.path).readAsStringSync();
@@ -25,10 +26,25 @@ final analysisResultsForFileProvider =
 
       final errors =
           config.combinedSourceErrors.map((e) => e.toAnalysisResult()).toList();
+      final countS = '${watch.elapsed.inSeconds.remainder(60)}';
+      final countMs = watch.elapsed.inMilliseconds
+          .remainder(1000)
+          .toString()
+          .padLeft(3, '0');
+      ref.watch(logDelegateProvider).sidecarVerboseMessage(
+          'analysisResults computed in $countS.${countMs}s - ${file.relativePath}');
       return errors;
     } else {
-      return fileService.computeAnalysisResults(
+      final results = await fileService.computeAnalysisResults(
           file: file, activatedRules: activatedRules, unitResult: unit);
+      final countMs = '${watch.elapsed.inMilliseconds.remainder(1000)}';
+      final countUs = watch.elapsed.inMicroseconds
+          .remainder(1000)
+          .toString()
+          .padLeft(3, '0');
+      ref.watch(logDelegateProvider).sidecarVerboseMessage(
+          'analysisResults computed in $countMs.${countUs}ms - ${file.relativePath}');
+      return results;
     }
   },
   name: 'analysisResultsForFileProvider',

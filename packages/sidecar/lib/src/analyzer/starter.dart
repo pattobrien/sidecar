@@ -43,7 +43,7 @@ Future<void> startSidecarPlugin(
     delegate = DebuggerLogDelegate(cliOptions: cliOptions);
     mode = SidecarAnalyzerMode.cli;
     delegate.sidecarVerboseMessage(
-        '${ansi.cyan} sidecar - cli initialization started...${ansi.none}');
+        '${ansi.cyan}sidecar - cli initialization started...${ansi.none}');
   }
 
   delegate.sidecarVerboseMessage('sidecar - args: $newArgs');
