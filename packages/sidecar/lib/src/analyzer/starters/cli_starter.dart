@@ -3,11 +3,8 @@
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
-import 'package:cli_util/cli_logging.dart' as logging;
 import 'package:riverpod/riverpod.dart';
 
-import '../../../sidecar.dart';
 import '../../cli/options/cli_options.dart';
 import '../../rules/rules.dart';
 import '../../utils/logger/cli_observer.dart';

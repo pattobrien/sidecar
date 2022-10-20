@@ -78,8 +78,6 @@ class AnalyzeCommand extends Command<int> {
       }
 
       final ansi = Ansi(true);
-      // logger.sidecarVerboseMessage(
-      //     '${ansi.cyan}sidecar - ${cliOptions.mode.name} initialization started...${ansi.none}');
       final xLogger = Logger.standard(ansi: ansi);
       final progress = xLogger.progress('sidecar - Analyzing project');
       final process = await Process.start(
@@ -91,7 +89,7 @@ class AnalyzeCommand extends Command<int> {
         ],
         workingDirectory: Directory.current.path,
       );
-      // await stdout.addStream(process.stdout);
+
       process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));
       process.stderr.listen((e) => stderr.writeln(utf8.decode(e)));
       final exitCode = await process.exitCode;

@@ -4,6 +4,7 @@ import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 
 import '../../analyzer/results/results.dart';
+import '../../analyzer/server/analyzer_mode.dart';
 import '../../cli/options/cli_options.dart';
 import '../../cli/reports/file_stats.dart';
 import '../../rules/rules.dart';
@@ -70,9 +71,13 @@ class DebuggerLogDelegate implements LogDelegateBase {
       stringBuffer.writeln(
           '  $lintErrorType • $location • $message $correction • $packageId.$lintCode');
     }
-    // stdout.write(stringBuffer.toString());
-    buffer.write(stringBuffer.toString());
-    buffer.writeln();
+
+    if (cliOptions.mode.isDebug) {
+      stdout.write(stringBuffer.toString());
+    } else {
+      buffer.write(stringBuffer.toString());
+      buffer.writeln();
+    }
   }
 
   void dumpResults() {
