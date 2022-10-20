@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SidecarType {
   String get typeName => throw _privateConstructorUsedError;
   String get packageName => throw _privateConstructorUsedError;
+  String get packagePath => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SidecarTypeCopyWith<SidecarType> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $SidecarTypeCopyWith<$Res> {
   factory $SidecarTypeCopyWith(
           SidecarType value, $Res Function(SidecarType) then) =
       _$SidecarTypeCopyWithImpl<$Res>;
-  $Res call({String typeName, String packageName});
+  $Res call({String typeName, String packageName, String packagePath});
 }
 
 /// @nodoc
@@ -44,6 +45,7 @@ class _$SidecarTypeCopyWithImpl<$Res> implements $SidecarTypeCopyWith<$Res> {
   $Res call({
     Object? typeName = freezed,
     Object? packageName = freezed,
+    Object? packagePath = freezed,
   }) {
     return _then(_value.copyWith(
       typeName: typeName == freezed
@@ -53,6 +55,10 @@ class _$SidecarTypeCopyWithImpl<$Res> implements $SidecarTypeCopyWith<$Res> {
       packageName: packageName == freezed
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
+              as String,
+      packagePath: packagePath == freezed
+          ? _value.packagePath
+          : packagePath // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -65,7 +71,7 @@ abstract class _$$_SidecarTypeCopyWith<$Res>
           _$_SidecarType value, $Res Function(_$_SidecarType) then) =
       __$$_SidecarTypeCopyWithImpl<$Res>;
   @override
-  $Res call({String typeName, String packageName});
+  $Res call({String typeName, String packageName, String packagePath});
 }
 
 /// @nodoc
@@ -82,6 +88,7 @@ class __$$_SidecarTypeCopyWithImpl<$Res> extends _$SidecarTypeCopyWithImpl<$Res>
   $Res call({
     Object? typeName = freezed,
     Object? packageName = freezed,
+    Object? packagePath = freezed,
   }) {
     return _then(_$_SidecarType(
       typeName: typeName == freezed
@@ -92,6 +99,10 @@ class __$$_SidecarTypeCopyWithImpl<$Res> extends _$SidecarTypeCopyWithImpl<$Res>
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
               as String,
+      packagePath: packagePath == freezed
+          ? _value.packagePath
+          : packagePath // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -99,17 +110,22 @@ class __$$_SidecarTypeCopyWithImpl<$Res> extends _$SidecarTypeCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SidecarType extends _SidecarType {
-  const _$_SidecarType({required this.typeName, required this.packageName})
+  const _$_SidecarType(
+      {required this.typeName,
+      required this.packageName,
+      required this.packagePath})
       : super._();
 
   @override
   final String typeName;
   @override
   final String packageName;
+  @override
+  final String packagePath;
 
   @override
   String toString() {
-    return 'SidecarType(typeName: $typeName, packageName: $packageName)';
+    return 'SidecarType(typeName: $typeName, packageName: $packageName, packagePath: $packagePath)';
   }
 
   @override
@@ -119,14 +135,17 @@ class _$_SidecarType extends _SidecarType {
             other is _$_SidecarType &&
             const DeepCollectionEquality().equals(other.typeName, typeName) &&
             const DeepCollectionEquality()
-                .equals(other.packageName, packageName));
+                .equals(other.packageName, packageName) &&
+            const DeepCollectionEquality()
+                .equals(other.packagePath, packagePath));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(typeName),
-      const DeepCollectionEquality().hash(packageName));
+      const DeepCollectionEquality().hash(packageName),
+      const DeepCollectionEquality().hash(packagePath));
 
   @JsonKey(ignore: true)
   @override
@@ -137,13 +156,16 @@ class _$_SidecarType extends _SidecarType {
 abstract class _SidecarType extends SidecarType {
   const factory _SidecarType(
       {required final String typeName,
-      required final String packageName}) = _$_SidecarType;
+      required final String packageName,
+      required final String packagePath}) = _$_SidecarType;
   const _SidecarType._() : super._();
 
   @override
   String get typeName;
   @override
   String get packageName;
+  @override
+  String get packagePath;
   @override
   @JsonKey(ignore: true)
   _$$_SidecarTypeCopyWith<_$_SidecarType> get copyWith =>

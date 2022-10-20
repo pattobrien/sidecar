@@ -4,6 +4,8 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 
 import 'package:path/path.dart' as p;
+import 'package:pubspec_parse/pubspec_parse.dart';
+import 'package:recase/recase.dart';
 
 import '../../sidecar.dart';
 import 'sidecar_type.dart';
@@ -11,10 +13,13 @@ import 'sidecar_type.dart';
 class PackageGenerator {
   PackageGenerator();
 
-  Future<void> generateForPubPackage(String path) async {
+  Future<void> generateForPubPackage(String packagePath) async {
     final buffer = StringBuffer();
+    final uri = Uri.parse(packagePath);
+    final packageDirectory = Directory.fromUri(uri);
+    assert(packageDirectory.existsSync(), 'package doesnt exist');
     final collection = AnalysisContextCollection(
-      includedPaths: [path],
+      includedPaths: [uri.path],
       resourceProvider: PhysicalResourceProvider.INSTANCE,
     );
     // final context = collection.contexts.first;
@@ -22,31 +27,49 @@ class PackageGenerator {
 
     final types = <SidecarType>{};
     for (final context in collection.contexts) {
-      final uri = Uri.parse('$path/lib/riverpod.dart');
-      final file = File(uri.path);
+      // final uri = Uri.parse('$path/lib/riverpod.dart');
+      final file = File('${uri.path}/lib/riverpod.dart');
 
-      if (!file.existsSync()) throw StateError('file doesnt exist');
+      if (!file.existsSync()) {
+        throw StateError('file doesnt exist - ${file.path}');
+      }
 
-      final lib = await context.currentSession.getResolvedUnit(uri.path);
-      if (lib is! ResolvedUnitResult) throw UnimplementedError('error');
+      final unit = await context.currentSession.getResolvedUnit(file.path);
+      if (unit is! ResolvedUnitResult) throw UnimplementedError('error');
 
       // print(
       //     'got lib: ${lib.path} w ${lib.libraryElement.exportedLibraries.length} elements');
-      final packageName = lib.libraryElement.name;
-      print(
-          'got lib: $packageName w ${lib.libraryElement.context.declaredVariables.variableNames.length} vars');
+      final exports = unit.libraryElement.exportNamespace.definedNames;
 
-      for (final topLevelElement in lib.libraryElement.exportedLibraries) {
-        print('elements = ${topLevelElement.topLevelElements.length}');
-        for (final x in topLevelElement.topLevelElements
-            .where((element) => element.isPublic)) {
-          // final extendedName = topLevelElement.getExtendedDisplayName(null);
-          final name = x.name!;
-          final package = packageName;
-          // final str = generateTypeChecker(name, package);
-          types.add(SidecarType(typeName: name, packageName: package));
-          // buffer.writeln(str);
+      for (final exportEntry in exports.entries) {
+        // final extendedName = topLevelElement.getExtendedDisplayName(null);
+        final library = await context.currentSession
+            .getResolvedLibraryByElement(exportEntry.value.library!);
+        if (library is! ResolvedLibraryResult) {
+          throw UnimplementedError('lib resolve error');
         }
+
+        final name = exportEntry.key;
+
+        final absoluteUri =
+            Uri.file(library.element.identifier, windows: Platform.isWindows);
+        final fp = absoluteUri.toFilePath(windows: Platform.isWindows);
+        final fpfile = File(fp);
+
+        if (!file.existsSync()) {
+          throw StateError('no file @ ${fpfile.path} // $fp');
+        }
+        final pubspecFile = File(p.join(packageDirectory.path, 'pubspec.yaml'));
+        final contents = await pubspecFile.readAsString();
+        final rootPackage = Pubspec.parse(contents, sourceUrl: pubspecFile.uri);
+        final libName = rootPackage.name;
+
+        final relativeRootPath = p.relative(fpfile.path, from: packagePath);
+        types.add(SidecarType(
+          typeName: name,
+          packageName: libName,
+          packagePath: relativeRootPath,
+        ));
       }
     }
     buffer.writeln(generatedHeader);
@@ -59,17 +82,23 @@ class PackageGenerator {
     final file = File(generatedPackagePath);
     await file.create(recursive: true);
     await file.writeAsString(contents);
+    print('din');
   }
 }
 
 String generatedHeader = '''
+//
+// THIS IS A GENERATED FILE
+//
+
 import 'package:sidecar/sidecar.dart';
 
 ''';
 
-String generateTypeChecker(String name, String packageName) {
+String generateTypeChecker(String typeName, String packageName) {
+  final recasedName = ReCase(typeName).camelCase;
   return '''
-const ${name}TypeChecker =
-    TypeChecker.fromName('$name', packageName: '$packageName');
+const ${recasedName}TypeChecker =
+    TypeChecker.fromName('$typeName', packageName: '$packageName');
 ''';
 }
