@@ -10,12 +10,10 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 
-import 'package:meta/meta.dart';
 import 'package:source_span/source_span.dart';
 
 /// An abstraction around doing static type checking at compile/build time.
 
-@internal
 abstract class TypeChecker {
   const TypeChecker._();
 
@@ -83,7 +81,7 @@ abstract class TypeChecker {
         ...element.allSupertypes
       ];
       return thisOrSupers.any(
-        (interfaceType) => isMatch(interfaceType.element2,
+        (interfaceType) => isMatch(interfaceType.element,
             type: type, sourcePath: sourcePath, isFromFile: isFromFile),
       );
     }
@@ -100,8 +98,8 @@ abstract class TypeChecker {
     if (interfaceType == null) return false;
 
     final uri = Uri(scheme: isFromFile ? 'file' : 'package', path: sourcePath);
-    return interfaceType.element2.name == type &&
-        interfaceType.element2.source.uri == uri;
+    return interfaceType.element.name == type &&
+        interfaceType.element.source.uri == uri;
   }
 
   static bool isThisOrSuperTypeMatch(
@@ -119,7 +117,7 @@ abstract class TypeChecker {
 
     return thisOrSupers.any(
       (interfaceType) => TypeChecker.isMatch(
-        interfaceType.element2,
+        interfaceType.element,
         type: type,
         sourcePath: sourcePath,
         isFromFile: isFromFile,
@@ -265,13 +263,13 @@ abstract class TypeChecker {
 
   /// Returns `true` if [staticType] can be assigned to this type.
   bool isAssignableFromType(DartType staticType) =>
-      isAssignableFrom(staticType.element2!);
+      isAssignableFrom(staticType.element!);
 
   /// Returns `true` if representing the exact same class as [element].
   bool isExactly(Element element);
 
   /// Returns `true` if representing the exact same type as [staticType].
-  bool isExactlyType(DartType staticType) => isExactly(staticType.element2!);
+  bool isExactlyType(DartType staticType) => isExactly(staticType.element!);
 
   /// Returns `true` if representing a super class of [element].
   ///
@@ -297,7 +295,7 @@ abstract class TypeChecker {
   ///
   /// This only takes into account the *extends* hierarchy. If you wish
   /// to check mixins and interfaces, use [isAssignableFromType].
-  bool isSuperTypeOf(DartType staticType) => isSuperOf(staticType.element2!);
+  bool isSuperTypeOf(DartType staticType) => isSuperOf(staticType.element!);
 }
 
 // Checks a static type against another static type;
@@ -314,7 +312,6 @@ abstract class TypeChecker {
 //   String toString() => urlOfElement(_type.element2!);
 // }
 
-@immutable
 class _NamedChecker extends TypeChecker {
   const _NamedChecker(this._name, {required this.packageName}) : super._();
 

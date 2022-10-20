@@ -35,7 +35,9 @@ dev_dependencies:
     # path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar_analyzer_plugin_core/
     version: 0.1.21-dev.10
-
+dependency_overrides:
+  flutter_utilities:
+    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
 sidecar:
   lints:
     avoid_icon_literal:

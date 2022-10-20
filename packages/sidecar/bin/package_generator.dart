@@ -1,8 +1,12 @@
 import 'package:sidecar/generator.dart';
 
-void main() {
-  const package = 'riverpod-2.0.2';
+void main() async {
+  const package = 'riverpod-2.0.0';
   const uri =
       'file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/$package';
-  PackageGenerator().generateForPubPackage(uri);
+  const generatedPackagePath =
+      '/Users/pattobrien/Development/sidecar/repositories/riverpod_analyzer';
+  // PackageGenerator().generateForPubPackage(uri);
+  final pack = await PackageGenerator().getPackage(generatedPackagePath);
+  print(pack.root);
 }

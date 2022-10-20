@@ -1,25 +1,60 @@
 import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
+import 'package:package_config/package_config_types.dart';
 
 import 'package:path/path.dart' as p;
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:recase/recase.dart';
 
+import '../../sidecar.dart';
 import 'sidecar_type.dart';
 
 class PackageGenerator {
   PackageGenerator();
 
-  Future<void> generateForPubPackage(String packagePath) async {
+  Future<void> generate(Directory projectDirectory) async {
+    final package = await getPackage(projectDirectory.path);
+    // await generateForPubPackage(package.root.normalizePath());
+  }
+
+  Future<Package> getPackage(String rootPath) async {
+    final uri = p.join(rootPath, 'pubspec.yaml');
+    final pubspecFile = File(uri);
+    final pubspecContents = await pubspecFile.readAsString();
+    final rootPackage =
+        Pubspec.parse(pubspecContents, sourceUrl: pubspecFile.uri);
+    final yaml = loadYaml(pubspecContents) as YamlMap;
+    final packageName = yaml['sidecar_package'] as String;
+
+    // check if dependency is version locked
+    rootPackage.dependencies.entries.where((entry) {
+      final dependency = entry.value;
+      if (dependency is! HostedDependency) return false;
+      return true;
+      //TODO: how can we check that the dependency is locked?
+    });
+
+    // get the package
+    final packageConfigFile =
+        File(p.join(rootPath, '.dart_tool', 'package_config.json'));
+    final packageConfigContents = await packageConfigFile.readAsString();
+    final packageConfig =
+        PackageConfig.parseString(packageConfigContents, packageConfigFile.uri);
+
+    final package = packageConfig.packages
+        .firstWhere((element) => element.name == packageName);
+    print(package.name);
+    return package;
+  }
+
+  Future<void> generateForPubPackage(Uri packageUri) async {
     final buffer = StringBuffer();
-    final uri = Uri.parse(packagePath);
-    final packageDirectory = Directory.fromUri(uri);
+    final packageDirectory = Directory.fromUri(packageUri);
     assert(packageDirectory.existsSync(), 'package doesnt exist');
     final collection = AnalysisContextCollection(
-      includedPaths: [uri.path],
+      includedPaths: [packageUri.path],
       resourceProvider: PhysicalResourceProvider.INSTANCE,
     );
     final pubspecFile = File(p.join(packageDirectory.path, 'pubspec.yaml'));
@@ -33,7 +68,7 @@ class PackageGenerator {
     final types = <SidecarType>{};
     for (final context in collection.contexts) {
       // final uri = Uri.parse('$path/lib/riverpod.dart');
-      final file = File('${uri.path}/lib/riverpod.dart');
+      final file = File('${packageUri.path}/lib/riverpod.dart');
 
       if (!file.existsSync()) {
         throw StateError('file doesnt exist - ${file.path}');
@@ -65,7 +100,7 @@ class PackageGenerator {
           throw StateError('no file @ ${fpfile.path} // $fp');
         }
 
-        final relativeRootPath = p.relative(fpfile.path, from: packagePath);
+        final relativeRootPath = p.relative(fpfile.path, from: packageUri.path);
         types.add(SidecarType(
           typeName: name,
           packageName: libName,
@@ -109,7 +144,7 @@ String generatedHeader = '''
 // THIS IS A GENERATED FILE
 //
 
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar_package_utilities/sidecar_package_utilities.dart';
 
 ''';
 
