@@ -9,15 +9,17 @@ class CliOptions with _$CliOptions {
   const factory CliOptions({
     required bool isVerboseEnabled,
     required SidecarAnalyzerMode mode,
+    required bool isMiddlemanPlugin,
   }) = _CliOptions;
   const CliOptions._();
 
   factory CliOptions.fromArgs(
     List<String> args, {
-    // required bool isMiddleman,
     required bool isPlugin,
+    bool isMiddleman = false,
   }) {
     return CliOptions(
+      isMiddlemanPlugin: isMiddleman,
       isVerboseEnabled: args.contains('verbose') || args.contains('--verbose'),
       mode: args.contains('cli') || args.contains('--cli')
           ? SidecarAnalyzerMode.cli

@@ -8,10 +8,13 @@ import 'dart:isolate';
 import 'package:analyzer/dart/analysis/context_locator.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
+
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
+
 import 'package:cli_util/cli_util.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/constants/constants.dart';
@@ -21,11 +24,19 @@ import '../../plugin/plugin.dart';
 
 const _uuid = Uuid();
 
+final runnerProvider = Provider((ref) {
+  return SidecarRunner(ref);
+});
+
+final activeRunnerDirectory = Provider<Directory>((ref) => Directory.current);
+
 class SidecarRunner {
-  SidecarRunner(this.server, this.root) {
+  SidecarRunner(this.ref)
+      : server = ref.read(pluginProvider),
+        root = ref.read(activeRunnerDirectory) {
     server.start(_clientChannel);
   }
-
+  final Ref ref;
   final SidecarAnalyzerPlugin server;
   final Directory root;
   final completed = Completer<void>();
@@ -53,14 +64,17 @@ class SidecarRunner {
       .where((event) => event.containsKey(plugin.Notification.EVENT))
       .map(plugin.Notification.fromJson);
 
-  /// Lints emitted by the plugin
-  late final Stream<plugin.AnalysisErrorsParams> _lints = _notifications
-      .where((e) => e.event == 'analysis.errors')
-      .map(plugin.AnalysisErrorsParams.fromNotification);
+  late final Stream<plugin.AnalysisErrorsParams> _lints = _notificationStream(
+      'analysis.errors', plugin.AnalysisErrorsParams.fromNotification);
 
   late final Stream<Map> _reloader = _notifications
       .where((e) => e.event == kSidecarHotReloadMethod)
       .map((e) => <dynamic, dynamic>{});
+
+  Stream<T> _notificationStream<T>(
+      String event, T Function(plugin.Notification notification) mapper) {
+    return _notifications.where((e) => e.event == event).map((e) => mapper(e));
+  }
 
   // /// The [Notification]s emitted by the plugin
   // late final Stream<plugin.PrintNotification> messages = notifications
@@ -148,7 +162,7 @@ class SidecarRunner {
 
     _requestSetContext();
 
-    // delegate.sidecarVerboseMessage('done initializing...');
+    return server.initializationCompleter.future;
   }
 
   void sendRequest(plugin.Request request) {

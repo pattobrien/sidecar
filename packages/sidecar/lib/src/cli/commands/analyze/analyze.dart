@@ -11,7 +11,7 @@ import 'package:riverpod/riverpod.dart';
 // ignore: implementation_imports
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 
-import '../../../analyzer/starter.dart';
+import '../../../analyzer/starters/plugin_starter.dart';
 import '../../../configurations/project/errors.dart';
 import '../../../services/active_project_service.dart';
 import '../exit_codes.dart';
@@ -35,7 +35,7 @@ class AnalyzeCommand extends Command<int> {
         stdout.writeln('ansi is not supported!');
       }
 
-      final root = Directory.current.uri;
+      final root = Directory.current.absolute.uri;
       final container = ProviderContainer();
       final activeProjectService = container.read(activeProjectServiceProvider);
       final pluginPackage =
@@ -72,9 +72,15 @@ class AnalyzeCommand extends Command<int> {
           windows: Platform.isWindows);
 
       final newArgs = [...?argResults?.arguments];
-      final isDebug = newArgs.any((flag) => flag == '--debug');
+      final isDebug =
+          newArgs.any((flag) => flag == '--debug' || flag == 'debug');
 
-      if (!isDebug) newArgs.add('--cli');
+      if (!isDebug) {
+        newArgs.add('--cli');
+      }
+      if (isDebug) {
+        newArgs.add('--enable-vm-service');
+      }
 
       final process = await Process.start(
         'dart',
