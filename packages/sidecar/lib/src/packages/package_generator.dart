@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 
 import 'package:path/path.dart' as p;
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:recase/recase.dart';
 
-import '../../sidecar.dart';
 import 'sidecar_type.dart';
 
 class PackageGenerator {
@@ -22,6 +22,11 @@ class PackageGenerator {
       includedPaths: [uri.path],
       resourceProvider: PhysicalResourceProvider.INSTANCE,
     );
+    final pubspecFile = File(p.join(packageDirectory.path, 'pubspec.yaml'));
+    final pubspecContents = await pubspecFile.readAsString();
+    final rootPackage =
+        Pubspec.parse(pubspecContents, sourceUrl: pubspecFile.uri);
+    final libName = rootPackage.name;
     // final context = collection.contexts.first;
     // print('$path // contexts = ${collection.contexts.length}');
 
@@ -59,10 +64,6 @@ class PackageGenerator {
         if (!file.existsSync()) {
           throw StateError('no file @ ${fpfile.path} // $fp');
         }
-        final pubspecFile = File(p.join(packageDirectory.path, 'pubspec.yaml'));
-        final contents = await pubspecFile.readAsString();
-        final rootPackage = Pubspec.parse(contents, sourceUrl: pubspecFile.uri);
-        final libName = rootPackage.name;
 
         final relativeRootPath = p.relative(fpfile.path, from: packagePath);
         types.add(SidecarType(
@@ -73,17 +74,34 @@ class PackageGenerator {
       }
     }
     buffer.writeln(generatedHeader);
+    final contentBuffer = StringBuffer();
     for (final t in types) {
-      buffer.writeln(generateTypeChecker(t.typeName, t.packageName));
+      contentBuffer.writeln(generateTypeChecker(t.typeName, t.packageName));
     }
+    final generatedTypeCheckerClass =
+        generateTypeCheckerClass(libName, contentBuffer.toString());
+
+    buffer.write(generatedTypeCheckerClass);
     final contents = buffer.toString();
     final packageRoot = Directory.current;
     final generatedPackagePath = p.join(packageRoot.path, 'tool', 'test.dart');
     final file = File(generatedPackagePath);
     await file.create(recursive: true);
     await file.writeAsString(contents);
-    print('din');
   }
+}
+
+String generateTypeCheckerClass(String name, String content) {
+  final packageName = ReCase(name).pascalCase;
+  return '''
+
+class ${packageName}TypeCheckers {
+
+  $content
+
+}
+
+''';
 }
 
 String generatedHeader = '''
@@ -98,7 +116,7 @@ import 'package:sidecar/sidecar.dart';
 String generateTypeChecker(String typeName, String packageName) {
   final recasedName = ReCase(typeName).camelCase;
   return '''
-const ${recasedName}TypeChecker =
-    TypeChecker.fromName('$typeName', packageName: '$packageName');
+  static const ${recasedName}TypeChecker =
+      TypeChecker.fromName('$typeName', packageName: '$packageName');
 ''';
 }
