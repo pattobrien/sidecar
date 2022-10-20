@@ -1,11 +1,10 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../analyzer/server/log_delegate.dart';
 import '../../rules/rules.dart';
-import '../../utils/logger/logger.dart';
 import '../builders/builders.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';

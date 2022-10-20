@@ -3,8 +3,8 @@ import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
 import '../analyzer/results/results.dart';
+import '../analyzer/server/log_delegate.dart';
 import '../rules/rules.dart';
-import '../utils/logger/logger.dart';
 import '../utils/utils.dart';
 
 final fileAnalyzerServiceProvider = Provider(

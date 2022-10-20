@@ -2,27 +2,22 @@ import 'dart:async';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
-import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol.dart';
-import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-import 'package:watcher/watcher.dart';
 
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
-import '../../utils/logger/logger.dart';
+import '../options_provider.dart';
 import '../results/analysis_results_reporter.dart';
 import '../results/results.dart';
 import '../server/analyzer_mode.dart';
+import '../server/log_delegate.dart';
 import 'plugin.dart';
 import 'plugin_resource_provider.dart';
 
@@ -44,7 +39,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   @override
   List<String> get fileGlobsToAnalyze => kPluginGlobs;
 
-  SidecarAnalyzerMode get mode => ref.read(sidecarAnalyzerMode);
+  SidecarAnalyzerMode get mode => ref.read(cliOptionsProvider).mode;
 
   @override
   // ignore: overridden_fields
@@ -75,12 +70,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) async {
     _reloader = await HotReloader.create(onAfterReload: (c) {
       final time = DateTime.now();
+      final isos = c.reloadReports.keys;
       ref
           .read(logDelegateProvider)
           .sidecarMessage('\n${time.toIso8601String()} RELOADING...\n');
       final events = c.events ?? [];
 
-      // final analyzedFile = ref.read(analyzedFileFromPath(event.path));
       final analysisContexts = ref.read(activeContextsProvider);
       for (final analysisContext in analysisContexts) {
         handleAffectedFiles(
@@ -287,7 +282,7 @@ final pluginProvider = Provider.autoDispose<SidecarAnalyzerPlugin>(
     allAnalysisContextsProvider,
     logDelegateProvider,
     ruleConstructorProvider,
-    sidecarAnalyzerMode,
+    cliOptionsProvider,
     pluginResourceProvider,
   ],
 );

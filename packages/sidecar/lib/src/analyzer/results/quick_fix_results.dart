@@ -3,9 +3,9 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../services/services.dart';
-import '../../utils/logger/logger.dart';
 import '../context/context.dart';
 import '../plugin/plugin.dart';
+import '../server/log_delegate.dart';
 import 'analysis_results_provider.dart';
 import 'edit_result.dart';
 

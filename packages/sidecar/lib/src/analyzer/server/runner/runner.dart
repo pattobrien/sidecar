@@ -30,8 +30,6 @@ class SidecarRunner {
   final Directory root;
   final completed = Completer<void>();
 
-  // LogDelegateBase get delegate => server.delegate;
-
   bool _closed = false;
   final _sdkPath = getSdkPath();
 

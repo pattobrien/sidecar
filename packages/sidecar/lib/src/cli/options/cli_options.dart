@@ -12,14 +12,20 @@ class CliOptions with _$CliOptions {
   }) = _CliOptions;
   const CliOptions._();
 
-  factory CliOptions.fromArgs(List<String> args) {
+  factory CliOptions.fromArgs(
+    List<String> args, {
+    // required bool isMiddleman,
+    required bool isPlugin,
+  }) {
     return CliOptions(
       isVerboseEnabled: args.contains('verbose') || args.contains('--verbose'),
-      mode: args.contains('cli')
+      mode: args.contains('cli') || args.contains('--cli')
           ? SidecarAnalyzerMode.cli
-          : args.contains('debug')
+          : args.contains('debug') || args.contains('--debug')
               ? SidecarAnalyzerMode.debug
-              : SidecarAnalyzerMode.plugin,
+              : isPlugin
+                  ? SidecarAnalyzerMode.plugin
+                  : throw UnimplementedError('could not parse a mode'),
     );
   }
 }

@@ -8,10 +8,10 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
+import '../analyzer/server/log_delegate.dart';
 import '../configurations/project/project_configuration.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/protocol.dart';
-import '../utils/logger/logger.dart';
 import '../utils/utils.dart';
 
 class ActiveProjectService {

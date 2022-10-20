@@ -12,11 +12,12 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../cli/options/cli_options.dart';
 import '../../protocol/constants/constants.dart';
-import '../../utils/logger/logger.dart';
+import '../options_provider.dart';
 import 'analysis_context_providers.dart';
-import 'analyzer_mode.dart';
 import 'isolates/isolates.dart';
+import 'log_delegate.dart';
 import 'middleman_resource_provider.dart';
 import 'plugin_channel_provider.dart';
 
@@ -35,7 +36,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   @override
   List<String> get fileGlobsToAnalyze => kPluginGlobs;
 
-  SidecarAnalyzerMode get analyzerMode => ref.read(sidecarAnalyzerMode);
+  CliOptions get options => ref.read(cliOptionsProvider);
 
   IsolateCommunicationService get isolateService =>
       ref.read(isolateCommunicationServiceProvider);
@@ -106,13 +107,14 @@ final middlemanPluginProvider = Provider<MiddlemanPlugin>(
   },
   name: 'middlemanPluginProvider',
   dependencies: [
+    cliOptionsProvider,
     isolateDetailsProvider,
     masterPluginChannelProvider,
     allContextsProvider,
     logDelegateProvider,
-    sidecarAnalyzerMode,
     isolateCommunicationServiceProvider,
     middlemanResourceProvider,
+    middlemanPluginIsInitializedProvider,
   ],
 );
 

@@ -1,9 +1,9 @@
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../utils/logger/logger.dart';
 import '../context/context.dart';
 import '../plugin/plugin.dart';
+import '../server/log_delegate.dart';
 
 final resolvedUnitProvider =
     FutureProvider.family<ResolvedUnitResult?, AnalyzedFile>(

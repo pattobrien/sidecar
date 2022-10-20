@@ -2,10 +2,10 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../configurations/configurations.dart';
 import '../../services/services.dart';
-import '../../utils/logger/logger.dart';
 import '../context/context.dart';
 import '../plugin/plugin_resource_provider.dart';
 import '../plugin/rules.dart';
+import '../server/log_delegate.dart';
 import 'results.dart';
 
 final analysisResultsForFileProvider =

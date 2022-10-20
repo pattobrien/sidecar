@@ -1,9 +1,9 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/results/results.dart';
+import '../analyzer/server/log_delegate.dart';
 import '../configurations/project/project.dart';
 import '../rules/rules.dart';
-import '../utils/logger/logger.dart';
 
 class RuleInitializationService {
   const RuleInitializationService(this.ref);

@@ -19,6 +19,7 @@ import '../exit_codes.dart';
 class AnalyzeCommand extends Command<int> {
   AnalyzeCommand() {
     argParser.addFlag('verbose', abbr: 'v');
+    argParser.addFlag('debug', abbr: 'd');
   }
 
   @override
@@ -70,14 +71,18 @@ class AnalyzeCommand extends Command<int> {
           p.join(root.path, '.dart_tool', 'package_config.json'),
           windows: Platform.isWindows);
 
-      // final channel = ServerIsolateChannel.discovered(
-      //   executableUri,
-      //   packagesUri,
-      //   NoopInstrumentationService(),
-      // );
+      final newArgs = [...?argResults?.arguments];
+      final isDebug = newArgs.any((flag) => flag == '--debug');
+
+      if (!isDebug) newArgs.add('--cli');
+
       final process = await Process.start(
         'dart',
-        ['run', executableRelativeUri.path, ...?argResults?.arguments],
+        [
+          'run',
+          executableRelativeUri.path,
+          ...newArgs,
+        ],
         workingDirectory: Directory.current.path,
       );
 

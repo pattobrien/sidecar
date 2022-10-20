@@ -1,14 +1,15 @@
 import 'package:riverpod/riverpod.dart';
-
+import '../../cli/options/cli_options.dart';
 import 'logger.dart';
 
-class PluginObserver extends ProviderObserver {
-  PluginObserver(this.delegate, {required this.isMiddleman});
+class CliObserver extends ProviderObserver {
+  const CliObserver(this.options);
 
-  final LogDelegateBase delegate;
-  final bool isMiddleman;
+  // final LogDelegateBase logger;
+  final CliOptions options;
+  LogDelegateBase get logger => DebuggerLogDelegate(options);
 
-  String get header => isMiddleman ? 'MIDDLEMAN:' : 'ISOLATE:';
+  String get header => '[HEADER]'; // _isMiddleman ? 'MIDDLEMAN:' : 'ISOLATE:';
 
   @override
   void didAddProvider(
@@ -16,7 +17,7 @@ class PluginObserver extends ProviderObserver {
     Object? value,
     ProviderContainer container,
   ) {
-    delegate.sidecarVerboseMessage(
+    logger.sidecarVerboseMessage(
         '$header didAddProvider     ${provider.name} ${value.toString()}');
   }
 
@@ -29,7 +30,7 @@ class PluginObserver extends ProviderObserver {
     StackTrace stackTrace,
     ProviderContainer container,
   ) {
-    delegate.sidecarVerboseMessage(
+    logger.sidecarVerboseMessage(
         '$header providerDidFail    ${provider.name} ${error.toString()} ${stackTrace.toString()}');
   }
 
@@ -44,7 +45,7 @@ class PluginObserver extends ProviderObserver {
     Object? newValue,
     ProviderContainer container,
   ) {
-    delegate.sidecarVerboseMessage(
+    logger.sidecarVerboseMessage(
         '$header didUpdateProvider ${provider.name} ${previousValue.toString()} || ${newValue.toString()}');
   }
 
@@ -54,7 +55,6 @@ class PluginObserver extends ProviderObserver {
     ProviderBase provider,
     ProviderContainer container,
   ) {
-    delegate
-        .sidecarVerboseMessage('$header didDisposeProvider ${provider.name}');
+    logger.sidecarVerboseMessage('$header didDisposeProvider ${provider.name}');
   }
 }

@@ -1,7 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
-import '../../utils/logger/logger.dart';
 import '../context/analyzed_file.dart';
+import '../server/log_delegate.dart';
 import 'analysis_results_provider.dart';
 
 final analysisResultsReporterProvider =

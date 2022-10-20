@@ -1,11 +1,11 @@
-import 'package:riverpod/riverpod.dart';
 import 'package:collection/collection.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../../protocol/protocol.dart';
 import '../../../services/services.dart';
-import '../../../utils/logger/logger.dart';
 import '../../context/context.dart';
 import '../contexts/contexts.dart';
+import '../log_delegate.dart';
 import 'isolates.dart';
 
 final isolateDetailsProvider = Provider<List<IsolateDetails>>(

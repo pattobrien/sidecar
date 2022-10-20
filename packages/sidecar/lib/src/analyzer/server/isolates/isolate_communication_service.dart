@@ -1,7 +1,5 @@
-import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol.dart';
-import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_constants.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:collection/collection.dart';
@@ -10,8 +8,8 @@ import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/protocol.dart';
-import '../../../utils/logger/logger.dart';
 import '../../context/context.dart';
+import '../log_delegate.dart';
 import '../server.dart';
 import 'isolate_message.dart';
 import 'multi_isolate_message.dart';
@@ -453,6 +451,6 @@ final isolateCommunicationServiceProvider =
   dependencies: [
     masterPluginChannelProvider,
     logDelegateProvider,
-    middlemanResourceProvider,
+    middlemanPluginIsInitializedProvider,
   ],
 );

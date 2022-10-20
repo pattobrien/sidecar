@@ -1,12 +1,5 @@
-import 'package:riverpod/riverpod.dart';
-
 import '../../analyzer/results/analysis_result.dart';
 import '../../cli/reports/file_stats.dart';
-
-final logDelegateProvider = Provider<LogDelegateBase>(
-  (ref) => throw UnimplementedError(),
-  name: 'logDelegateProvider',
-);
 
 abstract class LogDelegateBase {
   void generateReport(Iterable<FileStats> reports);

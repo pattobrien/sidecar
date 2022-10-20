@@ -9,10 +9,10 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
+import '../analyzer/server/log_delegate.dart';
 import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/protocol.dart';
-import '../utils/logger/log_delegate_base.dart';
 
 class IsolateBuilderService {
   const IsolateBuilderService(this.ref);

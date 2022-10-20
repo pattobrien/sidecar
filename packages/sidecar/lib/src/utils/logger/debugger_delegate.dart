@@ -10,9 +10,7 @@ import '../../rules/rules.dart';
 import 'log_delegate_base.dart';
 
 class DebuggerLogDelegate implements LogDelegateBase {
-  DebuggerLogDelegate({
-    required this.cliOptions,
-  }) : watch = Stopwatch()..start();
+  DebuggerLogDelegate(this.cliOptions) : watch = Stopwatch()..start();
 
   final CliOptions cliOptions;
   final Stopwatch watch;

@@ -42,11 +42,18 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.2.0
+  # custom_lint: ^0.0.12
   freezed: ^2.1.0
   json_serializable: ^6.3.1
   lints: ^2.0.0
+  # riverpod_lint:
+  #   git:
+  #     url: https://github.com/rrousselGit/riverpod.git
+  #     path: packages/riverpod_lint
   test: ^1.16.0
+
 # dependency_overrides:
 #   analyzer_plugin: 0.10.0
+
 executables:
   sidecar: sidecar_cli

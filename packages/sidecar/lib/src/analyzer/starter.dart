@@ -10,9 +10,11 @@ import 'package:riverpod/riverpod.dart';
 import '../../sidecar.dart';
 import '../cli/options/cli_options.dart';
 import '../rules/rules.dart';
+import '../utils/logger/cli_observer.dart';
 import '../utils/logger/logger.dart';
 import 'options_provider.dart';
 import 'plugin/plugin.dart';
+import 'server/log_delegate.dart';
 import 'server/runner/runner.dart';
 import 'server/server.dart';
 
@@ -23,70 +25,100 @@ Future<void> startSidecarPlugin(
   required bool isMiddleman,
   required bool isPlugin,
 }) async {
-  LogDelegateBase delegate;
-  SidecarAnalyzerMode mode;
-  final newArgs = [
-    ...args,
-    if (!isPlugin && args.contains('--debug')) '--debug' else '--cli'
-  ];
   final pluginChannel = PluginIsolateChannel(sendPort);
-  final cliOptions = CliOptions.fromArgs(newArgs);
+  final cliOptions = CliOptions.fromArgs(args, isPlugin: isPlugin);
 
-  final ansi = Ansi(true);
-  if (newArgs.contains('--debug')) {
-    delegate = DebuggerLogDelegate(cliOptions: cliOptions);
-    mode = SidecarAnalyzerMode.debug;
-    delegate.sidecarVerboseMessage('sidecar - debug initialization started...');
-  } else if (isPlugin) {
-    delegate = PluginChannelDelegate(channel: pluginChannel);
-    mode = SidecarAnalyzerMode.plugin;
-  } else {
-    delegate = DebuggerLogDelegate(cliOptions: cliOptions);
-    mode = SidecarAnalyzerMode.cli;
-    delegate.sidecarVerboseMessage(
-        '${ansi.cyan}sidecar - cli initialization started...${ansi.none}');
+  late final LogDelegateBase logger;
+
+  switch (cliOptions.mode) {
+    case SidecarAnalyzerMode.debug:
+      logger = DebuggerLogDelegate(cliOptions);
+      break;
+    case SidecarAnalyzerMode.cli:
+      logger = DebuggerLogDelegate(cliOptions);
+      break;
+    case SidecarAnalyzerMode.plugin:
+      logger = PluginChannelDelegate(cliOptions, pluginChannel);
+      break;
+    default:
+      // throw StateError('Logger cant be initialized');
+      logger = DebuggerLogDelegate(cliOptions);
+      break;
   }
 
-  delegate.sidecarVerboseMessage('sidecar - args: $newArgs');
-  delegate.sidecarVerboseMessage('sidecar - isMiddleman: $isMiddleman');
-  final mainRef = ProviderContainer(
+  final container = ProviderContainer(
     overrides: [
-      logDelegateProvider.overrideWithValue(delegate),
-      sidecarAnalyzerMode.overrideWithValue(mode),
       masterPluginChannelProvider.overrideWithValue(pluginChannel),
       ruleConstructorProvider.overrideWithValue(constructors ?? []),
       cliOptionsProvider.overrideWithValue(cliOptions),
+      logDelegateProvider.overrideWithValue(logger),
     ],
     observers: [
-      PluginObserver(delegate, isMiddleman: isMiddleman),
+      if (cliOptions.mode.isPlugin)
+        PluginObserver(cliOptions, pluginChannel)
+      else
+        CliObserver(cliOptions)
     ],
   );
 
   try {
-    if (mode.isDebug) {
-      // delegate
-      //     .sidecarVerboseMessage('sidecar - debug initialization started...');
-      final plugin = mainRef.read(pluginProvider);
-      final runner = SidecarRunner(plugin, Directory.current);
-      await runner.initialize();
-    } else if (mode.isCli) {
-      final plugin = mainRef.read(pluginProvider);
-      final runner = SidecarRunner(plugin, Directory.current);
-      delegate.sidecarVerboseMessage(
-          '${ansi.cyan} sidecar - cli initialization....${ansi.none}');
-      await runner.initialize();
-      await runner.server.initializationCompleter.future;
-      exit(0);
-    } else {
-      if (isMiddleman) {
-        final middlemanPlugin = mainRef.read(middlemanPluginProvider);
-        middlemanPlugin.start(pluginChannel);
+    // container.listen<SidecarAnalyzerPlugin>(pluginProvider, (_, next) async {
+    //   final runner = SidecarRunner(next, Directory.current);
+    //   await runner.initialize();
+    //   if (cliOptions.mode.isCli) {
+    //     final ansi = Ansi(true);
+    //     logger.sidecarVerboseMessage(
+    //         '${ansi.cyan} sidecar - cli initialization....${ansi.none}');
+    //     await runner.initialize();
+    //     await runner.server.initializationCompleter.future;
+    //     exit(0);
+    //   } else if (cliOptions.mode.isDebug) {
+    //     logger
+    //         .sidecarVerboseMessage('sidecar - debug initialization started...');
+    //     final plugin = container.read(pluginProvider);
+    //     final runner = SidecarRunner(plugin, Directory.current);
+    //     await runner.initialize();
+    //   } else if (cliOptions.mode.isPlugin) {
+    //     if (isMiddleman) {
+    //       final middlemanPlugin = container.read(middlemanPluginProvider);
+    //       middlemanPlugin.start(pluginChannel);
+    //     } else {
+    //       final plugin = container.read(pluginProvider);
+    //       plugin.start(pluginChannel);
+    //     }
+    //   }
+    // });
+
+    try {
+      if (cliOptions.mode.isDebug) {
+        logger
+            .sidecarVerboseMessage('sidecar - debug initialization started...');
+        final plugin = container.read(pluginProvider);
+        final runner = SidecarRunner(plugin, Directory.current);
+        await runner.initialize();
+      } else if (cliOptions.mode.isCli) {
+        final ansi = Ansi(true);
+        logger.sidecarVerboseMessage(
+            '${ansi.cyan}sidecar - cli initialization....${ansi.none}');
+        final plugin = container.read(pluginProvider);
+        final runner = SidecarRunner(plugin, Directory.current);
+        await runner.initialize();
+        await runner.server.initializationCompleter.future;
+        exit(0);
       } else {
-        final plugin = mainRef.read(pluginProvider);
-        plugin.start(pluginChannel);
+        logger.sidecarVerboseMessage('sidecar - plugin initialization....');
+        if (isMiddleman) {
+          final middlemanPlugin = container.read(middlemanPluginProvider);
+          middlemanPlugin.start(pluginChannel);
+        } else {
+          final plugin = container.read(pluginProvider);
+          plugin.start(pluginChannel);
+        }
       }
+    } catch (error, stackTrace) {
+      logger.sidecarError(error, stackTrace);
     }
   } catch (error, stackTrace) {
-    delegate.sidecarError(error, stackTrace);
+    logger.sidecarError(error, stackTrace);
   }
 }
