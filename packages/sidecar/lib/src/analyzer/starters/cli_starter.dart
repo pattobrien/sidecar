@@ -38,15 +38,8 @@ Future<void> startSidecarCli(
   );
 
   try {
-    final ansi = logging.Ansi(true);
-    // logger.sidecarVerboseMessage(
-    //     '${ansi.cyan}sidecar - ${cliOptions.mode.name} initialization started...${ansi.none}');
-    final xLogger = logging.Logger.standard(ansi: ansi);
-    final progress = xLogger.progress('sidecar - Analyzing project');
-
     final runner = container.read(runnerProvider);
     await runner.initialize();
-    progress.finish(showTiming: true);
     logger.dumpResults();
     if (cliOptions.mode.isCli) exit(0);
   } catch (error, stackTrace) {

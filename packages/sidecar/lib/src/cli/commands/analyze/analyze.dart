@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
@@ -76,6 +77,11 @@ class AnalyzeCommand extends Command<int> {
         newArgs.add('--enable-vm-service');
       }
 
+      final ansi = Ansi(true);
+      // logger.sidecarVerboseMessage(
+      //     '${ansi.cyan}sidecar - ${cliOptions.mode.name} initialization started...${ansi.none}');
+      final xLogger = Logger.standard(ansi: ansi);
+      final progress = xLogger.progress('sidecar - Analyzing project');
       final process = await Process.start(
         'dart',
         [
@@ -85,10 +91,13 @@ class AnalyzeCommand extends Command<int> {
         ],
         workingDirectory: Directory.current.path,
       );
-      await stdout.addStream(process.stdout);
-      // process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));
+      // await stdout.addStream(process.stdout);
+      process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));
       process.stderr.listen((e) => stderr.writeln(utf8.decode(e)));
-      stdout.writeln('exit: ${(await process.exitCode).toString()}');
+      final exitCode = await process.exitCode;
+      progress.finish(showTiming: true);
+      stdout.writeln('exit: ${exitCode.toString()}');
+
       return ExitCode.success;
     } catch (e) {
       stdout.writeln('CLI ERROR: $e');

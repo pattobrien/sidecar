@@ -76,7 +76,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
   }
 
   void dumpResults() {
-    stdout.write('\n${buffer.toString()}');
+    stdout.write('\n\n${buffer.toString()}');
   }
 
   @override
