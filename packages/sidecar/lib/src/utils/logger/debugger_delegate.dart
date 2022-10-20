@@ -10,10 +10,13 @@ import '../../rules/rules.dart';
 import 'log_delegate_base.dart';
 
 class DebuggerLogDelegate implements LogDelegateBase {
-  DebuggerLogDelegate(this.cliOptions) : watch = Stopwatch()..start();
+  DebuggerLogDelegate(this.cliOptions)
+      : watch = Stopwatch()..start(),
+        buffer = StringBuffer();
 
   final CliOptions cliOptions;
   final Stopwatch watch;
+  final StringBuffer buffer;
 
   @override
   void analysisResultError(
@@ -67,7 +70,13 @@ class DebuggerLogDelegate implements LogDelegateBase {
       stringBuffer.writeln(
           '  $lintErrorType • $location • $message $correction • $packageId.$lintCode');
     }
-    stdout.write(stringBuffer.toString());
+    // stdout.write(stringBuffer.toString());
+    buffer.write(stringBuffer.toString());
+    buffer.writeln();
+  }
+
+  void dumpResults() {
+    stdout.write('\n${buffer.toString()}');
   }
 
   @override

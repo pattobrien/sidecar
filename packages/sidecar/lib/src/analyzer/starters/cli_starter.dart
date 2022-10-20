@@ -4,7 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
-import 'package:cli_util/cli_logging.dart';
+import 'package:cli_util/cli_logging.dart' as logging;
 import 'package:riverpod/riverpod.dart';
 
 import '../../../sidecar.dart';
@@ -38,12 +38,16 @@ Future<void> startSidecarCli(
   );
 
   try {
-    final ansi = Ansi(true);
-    logger.sidecarVerboseMessage(
-        '${ansi.cyan}sidecar - ${cliOptions.mode.name} initialization started...${ansi.none}');
+    final ansi = logging.Ansi(true);
+    // logger.sidecarVerboseMessage(
+    //     '${ansi.cyan}sidecar - ${cliOptions.mode.name} initialization started...${ansi.none}');
+    final xLogger = logging.Logger.standard(ansi: ansi);
+    final progress = xLogger.progress('sidecar - Analyzing project');
 
     final runner = container.read(runnerProvider);
     await runner.initialize();
+    progress.finish(showTiming: true);
+    logger.dumpResults();
     if (cliOptions.mode.isCli) exit(0);
   } catch (error, stackTrace) {
     logger.sidecarError(error, stackTrace);

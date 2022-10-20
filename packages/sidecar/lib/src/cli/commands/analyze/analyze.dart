@@ -1,18 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
 
-import 'package:analyzer/instrumentation/noop_service.dart';
 import 'package:args/command_runner.dart';
-import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-// ignore: implementation_imports
-import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 
-import '../../../analyzer/starters/plugin_starter.dart';
-import '../../../configurations/project/errors.dart';
 import '../../../services/active_project_service.dart';
 import '../exit_codes.dart';
 
@@ -40,8 +33,9 @@ class AnalyzeCommand extends Command<int> {
       final activeProjectService = container.read(activeProjectServiceProvider);
       final pluginPackage =
           activeProjectService.getSidecarPluginUriForPackage(root);
+
       if (pluginPackage == null) {
-        throw UnimplementedError(
+        throw StateError(
             'Invalid dart directory, no package_config.json file found.');
       }
       stdout.writeln();
@@ -91,24 +85,13 @@ class AnalyzeCommand extends Command<int> {
         ],
         workingDirectory: Directory.current.path,
       );
-
-      // await channel.listen(
-      //   (response) => stdout.writeln(response),
-      //   (notification) => stdout.writeln(notification),
-      //   onError: (dynamic error) => stdout.writeln(error),
-      // );
-      // process.stdout
-      //     .listen((e) => stdout.writeln('\u001b[36m${utf8.decode(e)}'));
-      //
-      process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));
+      await stdout.addStream(process.stdout);
+      // process.stdout.listen((e) => stdout.writeln(utf8.decode(e)));
       process.stderr.listen((e) => stderr.writeln(utf8.decode(e)));
       stdout.writeln('exit: ${(await process.exitCode).toString()}');
       return ExitCode.success;
-    } on MissingSidecarYamlConfiguration catch (e) {
-      // print(e.toString());
-      rethrow;
     } catch (e) {
-      print('COMMAND RUNNER ERROR: $e');
+      stdout.writeln('CLI ERROR: $e');
       rethrow;
     }
   }

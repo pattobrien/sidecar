@@ -13,6 +13,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
+import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
 import '../results/analysis_results_reporter.dart';
 import '../results/results.dart';
@@ -271,6 +272,18 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     }
   }
 }
+
+final pluginInitializationProvider =
+    FutureProvider.autoDispose<void>((ref) async {
+  final plugin = ref.watch(pluginProvider);
+  await plugin.initializationCompleter.future;
+  final logger = ref.watch(logDelegateProvider);
+  final cliOptions = ref.watch(cliOptionsProvider);
+  if (cliOptions.mode.isCli) {
+    logger as DebuggerLogDelegate;
+    logger.dumpResults();
+  }
+});
 
 final pluginProvider = Provider.autoDispose<SidecarAnalyzerPlugin>(
   SidecarAnalyzerPlugin.new,
