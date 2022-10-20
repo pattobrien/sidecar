@@ -11,7 +11,8 @@
             "request": "launch",
             "type": "dart",
             "args": [
-                "--enable-vm-service"
+                "--enable-vm-service",
+                "--test-arg"
             ]
         },
         {
@@ -22,6 +23,17 @@
             "args": [
                 "--enable-vm-service"
             ]
+        },
+        {
+            "name": "Sidecar Debugger from Port",
+            "program": "/Users/pattobrien/Development/sidecar/packages/sidecar/bin/debug.dart",
+            // "program": ".sidecar/sidecar_analyzer_plugin/bin/debug.dart",
+            "request": "attach",
+            "type": "dart",
+            "vmServiceUri": "http://127.0.0.1:9990/ws",
+            "args": [
+                "--enable-vm-service"
+            ],
         }
     ],
 }

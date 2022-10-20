@@ -1,23 +1,25 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:design_system_lints/src/constants.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
-import 'package:sidecar/builder.dart';
+import 'package:sidecar/sidecar.dart';
 
 class AvoidSizedBoxHeightWidthLiterals extends LintRule {
   @override
   String get code => 'avoid_sized_box_height_width_literals';
 
   @override
-  String get packageName => 'project_lints';
+  String get packageName => kDesignSystemPackageId;
 
   @override
-  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes;
+    return Future.value(visitor.nodes);
   }
 }
 

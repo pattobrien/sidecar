@@ -1,5 +1,11 @@
 export 'analysis_context_utilities.dart';
+export 'annotation_utils.dart';
+export 'ast_equality.dart';
 export 'ast_utilities.dart';
+export 'byte_store_ext.dart';
+export 'channel_extension.dart';
+export 'code.dart';
+export 'file_paths.dart';
 export 'source_span_utilities.dart';
 export 'token_utilities.dart';
 export 'type_checker.dart';

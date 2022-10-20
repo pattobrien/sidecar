@@ -1,25 +1,26 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:sidecar/builder.dart';
+import 'package:sidecar/sidecar.dart';
 
-const designSystemPackage = 'design_system_lints';
+import 'constants.dart';
 
 class AvoidIconLiteral extends LintRule {
   @override
   String get code => 'avoid_icon_literal';
 
   @override
-  String get packageName => designSystemPackage;
+  String get packageName => kDesignSystemPackageId;
 
   @override
-  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
     visitor.initializeVisitor(this, unit, annotatedNodes);
     unit.unit.accept(visitor);
-    return visitor.nodes;
+    return Future.value(visitor.nodes);
   }
 }
 
@@ -36,7 +37,7 @@ class _Visitor extends SidecarAstVisitor {
                   annotation.annotatedNode.toSourceSpan(unit) ==
                       astNode.toSourceSpan(unit);
               return isSameSource &&
-                  annotation.input.packageName == designSystemPackage;
+                  annotation.input.packageName == kDesignSystemPackageId;
             });
         return isMatch;
       });
@@ -44,8 +45,8 @@ class _Visitor extends SidecarAstVisitor {
       if (matchingAnnotation == null) {
         reportAstNode(
           node,
-          message:
-              '1.20 Avoid IconData literal. Use design system spec instead.',
+          message: 'Avoid IconData literal.',
+          correction: 'Use design system spec instead.',
         );
       }
     }

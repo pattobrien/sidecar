@@ -8,7 +8,8 @@ import 'package:analyzer/src/dart/ast/element_locator.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 import 'package:source_span/source_span.dart';
 
-import '../models/models.dart';
+import '../analyzer/results/results.dart';
+import '../rules/rules.dart';
 import 'source_span_utilities.dart';
 
 /// Used to translate a single AST node into a SourceSpan (i.e. start and end location within source code)

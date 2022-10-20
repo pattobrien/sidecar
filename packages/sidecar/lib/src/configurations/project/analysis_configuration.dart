@@ -5,8 +5,8 @@ import 'package:recase/recase.dart';
 import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../models/models.dart';
-import '../yaml_parsers/yaml_parsers.dart';
+import '../../rules/rules.dart';
+import '../builders/builders.dart';
 
 part 'analysis_configuration.freezed.dart';
 
@@ -22,7 +22,8 @@ class AnalysisConfiguration with _$AnalysisConfiguration {
     List<Glob>? includes,
     YamlMap? configuration,
     bool? enabled,
-    @Default(<YamlSourceError>[]) List<YamlSourceError> sourceErrors,
+    @Default(<SidecarConfigException>[])
+        List<SidecarConfigException> sourceErrors,
   }) = LintConfiguration;
 
   const factory AnalysisConfiguration.assist({
@@ -32,15 +33,12 @@ class AnalysisConfiguration with _$AnalysisConfiguration {
     List<Glob>? includes,
     YamlMap? configuration,
     bool? enabled,
-    @Default(<YamlSourceError>[]) List<YamlSourceError> sourceErrors,
+    @Default(<SidecarConfigException>[])
+        List<SidecarConfigException> sourceErrors,
   }) = AssistConfiguration;
 }
 
 extension AnalysisConfigurationX on AnalysisConfiguration {
   String get filePath => '$packageName/$packageName.dart';
   String get className => ReCase(id).pascalCase;
-  IdType get type => map(
-        lint: (_) => IdType.lintRule,
-        assist: (_) => IdType.codeEdit,
-      );
 }

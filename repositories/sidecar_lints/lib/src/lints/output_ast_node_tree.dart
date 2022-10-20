@@ -35,6 +35,7 @@ class OutputAstNodeTree extends CodeEdit {
     );
     return [
       EditResult(
+        analysisResult: result,
         message: 'Output AstNode info into a comment',
         sourceChanges: changeBuilder.sourceChange.edits,
       ),

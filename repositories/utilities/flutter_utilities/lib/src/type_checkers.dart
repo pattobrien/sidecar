@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:sidecar/sidecar.dart';
+
+import 'package:sidecar/utilities.dart';
 
 class FlutterTypeChecker {
   const FlutterTypeChecker._();

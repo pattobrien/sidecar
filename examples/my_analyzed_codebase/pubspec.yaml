@@ -8,38 +8,38 @@ environment:
 
 dependencies:
   auto_route: ^5.0.1
+  # design_system_annotations:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/design_system_annotations/
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_riverpod: ^2.0.0
+  flutter_riverpod: ^2.0.2
   path: ^1.8.0
   intl: ^0.17.0
-  design_system_annotations:
-    hosted: https://micropub-3qduh.ondigitalocean.app/
-  sidecar_annotations:
-    hosted: https://dart.cloudsmith.io/fine-designs/sidecar_annotations/
-    version: ^0.1.18
 
 dev_dependencies:
   auto_route_generator: ^5.0.2
   lints: ^2.0.0
-  sidecar_analyzer_plugin:
-    path: .sidecar/sidecar_analyzer_plugin
+  design_system_lints:
+    path: /Users/pattobrien/Development/sidecar/repositories/design_system_lints/
+  # sidecar_lints:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/sidecar_lints/
+  # l10n_lints:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/l10n_lints/
+  # riverpod_lints:
+  #   path: /Users/pattobrien/Development/sidecar/repositories/riverpod_lints/
+  sidecar:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+  # sidecar:
+  #   hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
+  #   version: ^0.1.24
   test: ^1.16.0
-
-  # project_lints:
-  #   path: tool/project_lints
-  # sidecar_analyzer_plugin:
-  #   path: .sidecar/sidecar_analyzer_plugin/
 
 flutter:
   uses-material-design: true
   generate: true
+
 dependency_overrides:
-  #   #   # sidecar:
-  #   #   #   path: /Users/pattobrien/Development/sidecar/packages/sidecar/
-  sidecar_analyzer_plugin_core:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar_analyzer_plugin_core/
-#   sidecar:
-#     path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+  flutter_utilities:
+    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

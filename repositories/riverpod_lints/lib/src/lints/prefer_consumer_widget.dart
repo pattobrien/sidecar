@@ -13,13 +13,13 @@ class PreferConsumerWidget extends LintRule {
   String get packageName => 'riverpod_lints';
 
   @override
-  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes;
+    return Future.value(visitor.nodes);
   }
 
   @override
@@ -58,6 +58,7 @@ class PreferConsumerWidget extends LintRule {
 
     return [
       EditResult(
+        analysisResult: result,
         message: 'Replace with ConsumerWidget',
         sourceChanges: changeBuilder.sourceChange.edits,
       ),

@@ -1,20 +1,20 @@
 // APPROVED ICONS
 
 import 'package:flutter/material.dart';
-import 'package:design_system_annotations/design_system_annotations.dart';
+// import 'package:design_system_annotations/design_system_annotations.dart';
 
 class ProjectIcons {
   static const abc = Icons.stop;
 }
 
-@designSystem
+// @designSystem
 class ProjectIcons2 {
   static const abc = Icons.party_mode;
 }
 
 final y = 1;
 
-@designSystemIcons
+// @designSystemIcons
 class ProjectIcons3 {
   static const abc = Icons.shield_outlined;
 }

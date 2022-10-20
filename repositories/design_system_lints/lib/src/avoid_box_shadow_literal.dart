@@ -1,23 +1,26 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
-import 'package:sidecar/builder.dart';
+import 'package:sidecar/sidecar.dart';
+
+import 'constants.dart';
 
 class AvoidBoxShadowLiteral extends LintRule {
   @override
   String get code => 'avoid_box_shadow_literal';
 
   @override
-  String get packageName => 'design_system_lints';
+  String get packageName => kDesignSystemPackageId;
 
   @override
-  FutureOr<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {
     final visitor = _Visitor();
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return visitor.nodes;
+    return Future.value(visitor.nodes);
   }
 }
 

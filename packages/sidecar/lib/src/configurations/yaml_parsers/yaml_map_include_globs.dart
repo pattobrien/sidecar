@@ -1,51 +1,46 @@
-import 'package:dartz/dartz.dart';
 import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
-import 'yaml_source_error.dart';
+import '../builders/builders.dart';
+import '../configurations.dart';
 
 extension YamlMapIncludeGlobs on YamlMap {
-  Either<List<Glob>?, List<YamlSourceError>> parseGlobIncludes() {
+  SidecarExceptionTuple<List<Glob>?> parseGlobIncludes() {
     YamlList? yamlList;
+    const key = 'includes';
     try {
-      yamlList =
-          containsKey('includes') ? (value['includes'] as YamlList) : null;
+      yamlList = containsKey(key) ? (value[key] as YamlList) : null;
     } catch (e) {
-      final errorSpan = nodes.keys
-          .cast<YamlScalar>()
-          .firstWhere((element) => element.value == 'includes')
-          .span;
-
-      return right([
-        YamlSourceError(
-          sourceSpan: errorSpan,
-          message: 'value should be a list of strings',
+      return SidecarExceptionTuple<List<Glob>?>(null, [
+        SidecarLintException(
+          nodes.keys
+              .cast<YamlScalar>()
+              .firstWhere((element) => element.value == key),
+          message: 'Includes requires a list',
         )
       ]);
     }
     if (yamlList != null) {
       final nodes = yamlList.nodes;
       final includes = <Glob>[];
-      final lintConfigurationErrors = <YamlSourceError>[];
+      final lintConfigurationErrors = <SidecarConfigException>[];
       for (final node in nodes) {
         try {
           includes.add(Glob(node.value as String));
         } catch (e) {
           // some value is not valid
-          final errorSpan = node.span;
-          lintConfigurationErrors.add(YamlSourceError(
-            sourceSpan: errorSpan,
-            message: 'Not a valid glob pattern',
-          ));
+          lintConfigurationErrors.add(
+            SidecarFieldException(
+              node.value as YamlScalar,
+              message: 'Invalid glob.',
+            ),
+          );
         }
       }
-      if (lintConfigurationErrors.isNotEmpty) {
-        return right(lintConfigurationErrors);
-      } else {
-        return left(includes);
-      }
+      return SidecarExceptionTuple<List<Glob>>(
+          includes, lintConfigurationErrors);
     } else {
-      return left(null);
+      return const SidecarExceptionTuple<List<Glob>?>(null, []);
     }
   }
 }

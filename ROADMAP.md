@@ -17,9 +17,9 @@ Lints and Edits support for the following file types
 
 ### DevX and Usability
 
-- [X] Debugging Support
 - [X] Analysis via CLI
-- [X] Annotations
+- [ ] Debugging Support
+- [ ] Annotations
 
 ### Performance Benchmarking
 

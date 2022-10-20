@@ -1,25 +1,23 @@
-import 'package:dartz/dartz.dart';
 import 'package:yaml/yaml.dart';
 
-import 'yaml_source_error.dart';
+import '../builders/builders.dart';
+import '../configurations.dart';
 
 extension YamlMapConfigurationParse on YamlMap {
-  Either<YamlMap?, List<YamlSourceError>> parseConfiguration() {
+  SidecarExceptionTuple<YamlMap?> parseConfiguration() {
     try {
-      return left(value.containsKey('configuration')
+      final configurationValue = value.containsKey('configuration')
           ? value['configuration'] as YamlMap
-          : null);
+          : null;
+      return SidecarExceptionTuple<YamlMap?>(configurationValue, []);
     } catch (e) {
       //TODO: how can we handle mis-matched configurations here?
-      final errorSpan = nodes.keys
-          .cast<YamlScalar>()
-          .firstWhere((element) => element.value == 'configuration')
-          .span;
-
-      return right([
-        YamlSourceError(
-          sourceSpan: errorSpan,
-          message: 'Configuration is invalid',
+      return SidecarExceptionTuple<YamlMap?>(null, [
+        SidecarLintException(
+          nodes.keys
+              .cast<YamlScalar>()
+              .firstWhere((element) => element.value == 'configuration'),
+          message: 'Invalid configuration',
         )
       ]);
     }

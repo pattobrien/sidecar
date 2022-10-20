@@ -1,7 +1,8 @@
 name: design_system_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.11
-publish_to: https://micropub-3qduh.ondigitalocean.app/
+version: 0.1.12
+# publish_to: https://micropub-3qduh.ondigitalocean.app/
+publish_to: none
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/design_system_lints
 
 environment:
@@ -13,46 +14,32 @@ dependencies:
   collection: ^1.16.0
   flutter_utilities:
     hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
-    version: ^0.1.10
-  path: ^1.8.0
+    version: ^0.1.12
+  freezed_annotation: ^2.2.0
   sidecar:
-    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.20-dev.6
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar
   source_span: ^1.8.2
 
 dev_dependencies:
+  build_runner: ^2.3.0
+  freezed: ^2.2.0
   lints: ^2.0.0
+  sidecar_generator:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar_generator/
   test: ^1.16.0
 
 dependency_overrides:
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
+  flutter_utilities:
+    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
 
 micropub: sidecar
 
 sidecar:
   lints:
-    avoid_color_literal:
-      class: AvoidColorLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_edge_insets_literal:
-      class: AvoidEdgeInsetsLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_icon_literal:
-      class: AvoidIconLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_box_shadow_literal:
-      class: AvoidBoxShadowLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_text_style_literal:
-      class: AvoidTextStyleLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_border_radius_literal:
-      class: AvoidBorderRadiusLiteral
-      import: design_system_lints/design_system_lints.dart
-    avoid_sized_box_height_width_literals:
-      class: AvoidSizedBoxHeightWidthLiterals
-      import: design_system_lints/design_system_lints.dart
-# dependency_overrides:
-#   flutter_utilities:
-#     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
+    - avoid_color_literal
+    - avoid_edge_insets_literal
+    - avoid_icon_literal
+    - avoid_box_shadow_literal
+    - avoid_text_style_literal
+    - avoid_border_radius_literal
+    - avoid_sized_box_height_width_literals

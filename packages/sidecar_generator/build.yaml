@@ -1,0 +1,16 @@
+targets:
+  $default:
+    builders:
+      package_configuration_generator:
+        options:
+          runs_before:
+            - "freezed:freezed"
+builders:
+  package_configuration_generator:
+    import: "package:sidecar_generator/builder.dart"
+    builder_factories: ["packageConfigurationBuilder"]
+    build_extensions: { ".dart": ["sidecar.g.part"] }
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen:combining_builder"]
+    # runs_before: ["freezed:freezed"]

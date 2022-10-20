@@ -1,8 +1,11 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../models/models.dart';
+import '../../analyzer/server/log_delegate.dart';
+import '../../rules/rules.dart';
+import '../builders/builders.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 import 'analysis_package_configuration.dart';
@@ -13,54 +16,74 @@ class ProjectConfiguration {
     this.lintPackages,
     this.assistPackages,
     List<Glob>? includes,
-    this.sourceErrors = const <YamlSourceError>[],
+    this.sourceErrors = const <SidecarConfigException>[],
     required this.rawContent,
   }) : _includes = includes;
 
-  factory ProjectConfiguration.parse(
+  factory ProjectConfiguration.parseFromSidecarYaml(
     String contents, {
     required Uri sourceUrl,
+    Ref? ref,
   }) {
-    return checkedYamlDecode(
-      contents,
-      (m) {
-        YamlMap contentMap;
-        try {
-          contentMap = m!['sidecar'] as YamlMap;
-        } catch (e) {
-          throw const MissingSidecarConfiguration();
-        }
-        final sourceErrors = <YamlSourceError>[];
-        return ProjectConfiguration(
-          rawContent: contents,
-          lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
-          assistPackages: _parseAssistPackages(contentMap['edits'] as YamlMap?),
-          includes: contentMap.parseGlobIncludes().fold((l) => l, (r) {
-            sourceErrors.addAll(r);
-            return null;
-          }),
-          sourceErrors: sourceErrors,
-        );
-      },
-      sourceUrl: sourceUrl,
-    );
+    try {
+      return checkedYamlDecode(
+        contents,
+        (m) {
+          try {
+            final contentMap = m as YamlMap?;
+            final includesResult = contentMap!.parseGlobIncludes();
+            return ProjectConfiguration(
+              rawContent: contents,
+              lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
+              assistPackages:
+                  _parseAssistPackages(contentMap['edits'] as YamlMap?),
+              includes: includesResult.value1,
+              sourceErrors: [
+                ...includesResult.value2,
+                // SidecarLintException(
+                //   (contentMap.nodes.entries.first.key as YamlScalar?)!,
+                //   message: 'test',
+                // ),
+              ],
+            );
+          } catch (e, stackTrace) {
+            ref?.read(logDelegateProvider).sidecarVerboseMessage(
+                  'PROJCONFIG = project config error: $e $stackTrace',
+                );
+            throw const MissingSidecarYamlConfiguration();
+          }
+        },
+        sourceUrl: sourceUrl,
+      );
+    } catch (e, stackTrace) {
+      ref?.read(logDelegateProvider).sidecarVerboseMessage(
+          'PROJCONFIG = unexpected project config error: $e $stackTrace');
+      throw UnimplementedError(
+          'unexpected project config error: $e $stackTrace');
+    }
   }
 
-  static Map<PackageName, AssistPackageConfiguration>? _parseAssistPackages(
-    YamlMap? map,
-  ) =>
-      _parsePackages(map, type: IdType.codeEdit)?.map(
-          (key, value) => MapEntry(key, value as AssistPackageConfiguration));
-
-  static Map<PackageName, LintPackageConfiguration>? _parseLintPackages(
-    YamlMap? map,
-  ) =>
-      _parsePackages(map, type: IdType.lintRule)?.map(
-          (key, value) => MapEntry(key, value as LintPackageConfiguration));
+  List<SidecarConfigException> get combinedSourceErrors => [
+        ...sourceErrors,
+        ...?lintPackages?.values
+            .map((e) => [
+                  ...e.sourceErrors,
+                  ...e.lints.values.map((e) => e.sourceErrors).expand((f) => f),
+                ])
+            .expand((e) => e),
+        ...?assistPackages?.values
+            .map((e) => [
+                  ...e.sourceErrors,
+                  ...e.assists.values
+                      .map((e) => e.sourceErrors)
+                      .expand((f) => f),
+                ])
+            .expand((e) => e),
+      ];
 
   static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(
     YamlMap? map, {
-    required IdType type,
+    required SidecarBaseType type,
   }) {
     try {
       return map?.nodes.map((dynamic key, dynamic value) {
@@ -87,10 +110,22 @@ class ProjectConfiguration {
     }
   }
 
+  static Map<PackageName, AssistPackageConfiguration>? _parseAssistPackages(
+    YamlMap? map,
+  ) =>
+      _parsePackages(map, type: SidecarBaseType.assist)?.map(
+          (key, value) => MapEntry(key, value as AssistPackageConfiguration));
+
+  static Map<PackageName, LintPackageConfiguration>? _parseLintPackages(
+    YamlMap? map,
+  ) =>
+      _parsePackages(map, type: SidecarBaseType.lint)?.map(
+          (key, value) => MapEntry(key, value as LintPackageConfiguration));
+
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
   final Map<PackageName, AssistPackageConfiguration>? assistPackages;
   final List<Glob>? _includes;
-  final List<YamlSourceError> sourceErrors;
+  final List<SidecarConfigException> sourceErrors;
   final String rawContent;
 
   List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];
@@ -98,18 +133,13 @@ class ProjectConfiguration {
   bool includes(String relativePath) =>
       includeGlobs.any((glob) => glob.matches(relativePath));
 
-  LintConfiguration? getLintConfiguration(Id id) =>
-      getConfiguration(id) as LintConfiguration?;
-
-  AssistConfiguration? getAssistConfiguration(Id id) =>
-      getConfiguration(id) as AssistConfiguration?;
-
-  AnalysisConfiguration? getConfiguration(Id id) {
-    switch (id.type) {
-      case IdType.lintRule:
-        return lintPackages?[id.packageId]?.lints[id.id];
-      case IdType.codeEdit:
-        return assistPackages?[id.packageId]?.assists[id.id];
+  AnalysisConfiguration? getConfigurationForRule(SidecarBase rule) {
+    if (rule is AssistRule) {
+      return assistPackages?[rule.packageName]?.assists[rule.code];
+    } else if (rule is LintRule) {
+      return lintPackages?[rule.packageName]?.lints[rule.code];
+    } else {
+      throw UnimplementedError('getConfigurationForRule: unknown base type');
     }
   }
 }
