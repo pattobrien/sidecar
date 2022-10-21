@@ -15,27 +15,28 @@ class PackageGenerator {
   PackageGenerator();
 
   Future<void> generate(Directory projectDirectory) async {
+    // get the package we want to create a utility package from
     final package = await getPackage(projectDirectory.path);
-    // await generateForPubPackage(package.root.normalizePath());
+    // create the utility package
+    await generateForPubPackage(projectDirectory.uri, package);
   }
 
   Future<Package> getPackage(String rootPath) async {
     final uri = p.join(rootPath, 'pubspec.yaml');
     final pubspecFile = File(uri);
     final pubspecContents = await pubspecFile.readAsString();
-    final rootPackage =
-        Pubspec.parse(pubspecContents, sourceUrl: pubspecFile.uri);
     final yaml = loadYaml(pubspecContents) as YamlMap;
     final packageName = yaml['sidecar_package'] as String;
 
     // check if dependency is version locked
-    rootPackage.dependencies.entries.where((entry) {
-      final dependency = entry.value;
-      if (dependency is! HostedDependency) return false;
-      return true;
-      //TODO: how can we check that the dependency is locked?
-    });
-
+    // final rootPackage =
+    //     Pubspec.parse(pubspecContents, sourceUrl: pubspecFile.uri);
+    // rootPackage.dependencies.entries.where((entry) {
+    //   final dependency = entry.value;
+    //   if (dependency is! HostedDependency) return false;
+    //   return true;
+    //   //TODO: how can we check that the dependency is locked?
+    // });
     // get the package
     final packageConfigFile =
         File(p.join(rootPath, '.dart_tool', 'package_config.json'));
@@ -49,80 +50,116 @@ class PackageGenerator {
     return package;
   }
 
-  Future<void> generateForPubPackage(Uri packageUri) async {
+  Future<void> generateForPubPackage(Uri projectUri, Package package) async {
+    // print('generated for project: ${projectUri.path}');
     final buffer = StringBuffer();
-    final packageDirectory = Directory.fromUri(packageUri);
-    assert(packageDirectory.existsSync(), 'package doesnt exist');
+    var packagePath = package.root.normalizePath().path;
+    if (packagePath.endsWith('/')) {
+      packagePath = packagePath.substring(0, packagePath.length - 1);
+    }
+
+    // print(packagePath);
+
     final collection = AnalysisContextCollection(
-      includedPaths: [packageUri.path],
+      includedPaths: [packagePath],
       resourceProvider: PhysicalResourceProvider.INSTANCE,
     );
-    final pubspecFile = File(p.join(packageDirectory.path, 'pubspec.yaml'));
+
+    final pubspecFile = File(p.join(package.root.path, 'pubspec.yaml'));
     final pubspecContents = await pubspecFile.readAsString();
     final rootPackage =
         Pubspec.parse(pubspecContents, sourceUrl: pubspecFile.uri);
-    final libName = rootPackage.name;
-    // final context = collection.contexts.first;
-    // print('$path // contexts = ${collection.contexts.length}');
 
     final types = <SidecarType>{};
+
     for (final context in collection.contexts) {
-      // final uri = Uri.parse('$path/lib/riverpod.dart');
-      final file = File('${packageUri.path}/lib/riverpod.dart');
+      final packageSrcPath = p.join(package.root.path, 'lib', 'src');
+      final packageLibPath = p.join(package.root.path, 'lib');
+      final filePaths = context.contextRoot.analyzedFiles().where((filePath) {
+        final isWithinSrc = p.isWithin(packageSrcPath, filePath);
+        final isWithinLib = p.isWithin(packageLibPath, filePath);
+        return isWithinLib && !isWithinSrc;
+      });
 
-      if (!file.existsSync()) {
-        throw StateError('file doesnt exist - ${file.path}');
+      // print(packageSrcPath);
+      // print('# = ${filePaths.length}');
+
+      for (final filePath in filePaths) {
+        final contentBuffer = StringBuffer()..writeln(generatedHeader);
+        final unit = await context.currentSession.getResolvedUnit(filePath);
+        if (unit is! ResolvedUnitResult) throw UnimplementedError('error');
+
+        final exports = unit.libraryElement.exportNamespace.definedNames;
+
+        // print('# of exports: ${exports.entries.length}');
+        for (final exportEntry in exports.entries) {
+          // print(exportEntry.key);
+          // final extendedName = topLevelElement.getExtendedDisplayName(null);
+          final library = await context.currentSession
+              .getResolvedLibraryByElement(exportEntry.value.library!);
+
+          if (library is! ResolvedLibraryResult) throw UnimplementedError();
+
+          final name = exportEntry.key;
+          // print(library.element.identifier);
+          // final uri =
+          //     Uri.file(library.element.identifier, windows: Platform.isWindows);
+
+          // final fp = uri.toFilePath(windows: Platform.isWindows);
+          // final fpfile = File(fp);
+          // print(fpfile.path);
+          // if (!fpfile.existsSync()) {
+          //   throw StateError('no file @ ${fpfile.path} // $fp');
+          // }
+
+          // types.add(
+          final sidecarType = SidecarType(
+            typeName: name,
+            packageName: rootPackage.name,
+            packagePath: 'relativeRootPath',
+            // ),
+          );
+          types.add(sidecarType);
+        }
+
+        final buffer = StringBuffer();
+        for (final t in types) {
+          print('generating checker for type: ${t.typeName}');
+          buffer.writeln(generateTypeChecker(t.typeName, t.packageName));
+        }
+        final generatedTypeCheckerClass =
+            generateTypeCheckerClass(rootPackage.name, buffer.toString());
+        contentBuffer.write(generatedTypeCheckerClass);
+        final contents = contentBuffer.toString();
+        // print('generating for: ${projectUri.path}');
+        // print('generating for: $filePath');
+        final relativeFilePath = p.relative(filePath, from: package.root.path);
+        final generatedProjectPath = p.join(projectUri.path, relativeFilePath);
+        // print('generating for: $generatedProjectPath');
+        final generatedFile = File(generatedProjectPath);
+        await generatedFile.create(recursive: true);
+        await generatedFile.writeAsString(contents);
+        // create file
+
       }
-
-      final unit = await context.currentSession.getResolvedUnit(file.path);
-      if (unit is! ResolvedUnitResult) throw UnimplementedError('error');
 
       // print(
       //     'got lib: ${lib.path} w ${lib.libraryElement.exportedLibraries.length} elements');
-      final exports = unit.libraryElement.exportNamespace.definedNames;
 
-      for (final exportEntry in exports.entries) {
-        // final extendedName = topLevelElement.getExtendedDisplayName(null);
-        final library = await context.currentSession
-            .getResolvedLibraryByElement(exportEntry.value.library!);
-        if (library is! ResolvedLibraryResult) {
-          throw UnimplementedError('lib resolve error');
-        }
-
-        final name = exportEntry.key;
-
-        final absoluteUri =
-            Uri.file(library.element.identifier, windows: Platform.isWindows);
-        final fp = absoluteUri.toFilePath(windows: Platform.isWindows);
-        final fpfile = File(fp);
-
-        if (!file.existsSync()) {
-          throw StateError('no file @ ${fpfile.path} // $fp');
-        }
-
-        final relativeRootPath = p.relative(fpfile.path, from: packageUri.path);
-        types.add(SidecarType(
-          typeName: name,
-          packageName: libName,
-          packagePath: relativeRootPath,
-        ));
-      }
     }
-    buffer.writeln(generatedHeader);
-    final contentBuffer = StringBuffer();
-    for (final t in types) {
-      contentBuffer.writeln(generateTypeChecker(t.typeName, t.packageName));
-    }
-    final generatedTypeCheckerClass =
-        generateTypeCheckerClass(libName, contentBuffer.toString());
+    // buffer.writeln(generatedHeader);
+    // final contentBuffer = StringBuffer();
+    // for (final t in types) {
+    //   contentBuffer.writeln(generateTypeChecker(t.typeName, t.packageName));
+    // }
 
-    buffer.write(generatedTypeCheckerClass);
-    final contents = buffer.toString();
-    final packageRoot = Directory.current;
-    final generatedPackagePath = p.join(packageRoot.path, 'tool', 'test.dart');
-    final file = File(generatedPackagePath);
-    await file.create(recursive: true);
-    await file.writeAsString(contents);
+    // buffer.write(generatedTypeCheckerClass);
+    // final contents = buffer.toString();
+    // final packageRoot = Directory.current;
+    // final generatedPackagePath = p.join(packageRoot.path, 'tool', 'test.dart');
+    // final file = File(generatedPackagePath);
+    // await file.create(recursive: true);
+    // await file.writeAsString(contents);
   }
 }
 
