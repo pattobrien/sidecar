@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
+import 'package:dart_style/dart_style.dart';
 import 'package:package_config/package_config_types.dart';
 
 import 'package:path/path.dart' as p;
@@ -131,14 +132,17 @@ class PackageGenerator {
             generateTypeCheckerClass(rootPackage.name, buffer.toString());
         contentBuffer.write(generatedTypeCheckerClass);
         final contents = contentBuffer.toString();
+        final formatter = DartFormatter();
         // print('generating for: ${projectUri.path}');
         // print('generating for: $filePath');
         final relativeFilePath = p.relative(filePath, from: package.root.path);
         final generatedProjectPath = p.join(projectUri.path, relativeFilePath);
         // print('generating for: $generatedProjectPath');
+        final formattedContents =
+            formatter.format(contents, uri: generatedProjectPath);
         final generatedFile = File(generatedProjectPath);
         await generatedFile.create(recursive: true);
-        await generatedFile.writeAsString(contents);
+        await generatedFile.writeAsString(formattedContents);
         // create file
 
       }

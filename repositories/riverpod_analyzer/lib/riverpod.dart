@@ -4,30 +4,33 @@
 
 import 'package:sidecar_package_utilities/sidecar_package_utilities.dart';
 
-
-
 class RiverpodTypeCheckers {
-
-    static const autoDisposeAsyncNotifierTypeChecker =
+  static const autoDisposeAsyncNotifierTypeChecker =
       TypeChecker.fromName('AutoDisposeAsyncNotifier', packageName: 'riverpod');
 
   static const autoDisposeAsyncNotifierProviderRefTypeChecker =
-      TypeChecker.fromName('AutoDisposeAsyncNotifierProviderRef', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeAsyncNotifierProviderRef',
+          packageName: 'riverpod');
 
   static const autoDisposeAsyncNotifierProviderTypeChecker =
-      TypeChecker.fromName('AutoDisposeAsyncNotifierProvider', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeAsyncNotifierProvider',
+          packageName: 'riverpod');
 
   static const autoDisposeAsyncNotifierProviderElementTypeChecker =
-      TypeChecker.fromName('AutoDisposeAsyncNotifierProviderElement', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeAsyncNotifierProviderElement',
+          packageName: 'riverpod');
 
-  static const autoDisposeFamilyAsyncNotifierTypeChecker =
-      TypeChecker.fromName('AutoDisposeFamilyAsyncNotifier', packageName: 'riverpod');
+  static const autoDisposeFamilyAsyncNotifierTypeChecker = TypeChecker.fromName(
+      'AutoDisposeFamilyAsyncNotifier',
+      packageName: 'riverpod');
 
   static const autoDisposeFamilyAsyncNotifierProviderTypeChecker =
-      TypeChecker.fromName('AutoDisposeFamilyAsyncNotifierProvider', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeFamilyAsyncNotifierProvider',
+          packageName: 'riverpod');
 
   static const autoDisposeAsyncNotifierProviderFamilyTypeChecker =
-      TypeChecker.fromName('AutoDisposeAsyncNotifierProviderFamily', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeAsyncNotifierProviderFamily',
+          packageName: 'riverpod');
 
   static const asyncNotifierTypeChecker =
       TypeChecker.fromName('AsyncNotifier', packageName: 'riverpod');
@@ -38,17 +41,20 @@ class RiverpodTypeCheckers {
   static const asyncNotifierProviderTypeChecker =
       TypeChecker.fromName('AsyncNotifierProvider', packageName: 'riverpod');
 
-  static const asyncNotifierProviderElementTypeChecker =
-      TypeChecker.fromName('AsyncNotifierProviderElement', packageName: 'riverpod');
+  static const asyncNotifierProviderElementTypeChecker = TypeChecker.fromName(
+      'AsyncNotifierProviderElement',
+      packageName: 'riverpod');
 
   static const familyAsyncNotifierTypeChecker =
       TypeChecker.fromName('FamilyAsyncNotifier', packageName: 'riverpod');
 
-  static const asyncNotifierFamilyProviderTypeChecker =
-      TypeChecker.fromName('AsyncNotifierFamilyProvider', packageName: 'riverpod');
+  static const asyncNotifierFamilyProviderTypeChecker = TypeChecker.fromName(
+      'AsyncNotifierFamilyProvider',
+      packageName: 'riverpod');
 
-  static const asyncNotifierProviderFamilyTypeChecker =
-      TypeChecker.fromName('AsyncNotifierProviderFamily', packageName: 'riverpod');
+  static const asyncNotifierProviderFamilyTypeChecker = TypeChecker.fromName(
+      'AsyncNotifierProviderFamily',
+      packageName: 'riverpod');
 
   static const asyncValueTypeChecker =
       TypeChecker.fromName('AsyncValue', packageName: 'riverpod');
@@ -65,8 +71,9 @@ class RiverpodTypeCheckers {
   static const asyncValueXTypeChecker =
       TypeChecker.fromName('AsyncValueX', packageName: 'riverpod');
 
-  static const alwaysAliveProviderListenableTypeChecker =
-      TypeChecker.fromName('AlwaysAliveProviderListenable', packageName: 'riverpod');
+  static const alwaysAliveProviderListenableTypeChecker = TypeChecker.fromName(
+      'AlwaysAliveProviderListenable',
+      packageName: 'riverpod');
 
   static const alwaysAliveProviderBaseTypeChecker =
       TypeChecker.fromName('AlwaysAliveProviderBase', packageName: 'riverpod');
@@ -80,8 +87,9 @@ class RiverpodTypeCheckers {
   static const overrideWithValueMixinTypeChecker =
       TypeChecker.fromName('OverrideWithValueMixin', packageName: 'riverpod');
 
-  static const overrideWithProviderExtensionTypeChecker =
-      TypeChecker.fromName('OverrideWithProviderExtension', packageName: 'riverpod');
+  static const overrideWithProviderExtensionTypeChecker = TypeChecker.fromName(
+      'OverrideWithProviderExtension',
+      packageName: 'riverpod');
 
   static const refreshableTypeChecker =
       TypeChecker.fromName('Refreshable', packageName: 'riverpod');
@@ -128,17 +136,21 @@ class RiverpodTypeCheckers {
   static const autoDisposeRefTypeChecker =
       TypeChecker.fromName('AutoDisposeRef', packageName: 'riverpod');
 
-  static const autoDisposeFutureProviderRefTypeChecker =
-      TypeChecker.fromName('AutoDisposeFutureProviderRef', packageName: 'riverpod');
+  static const autoDisposeFutureProviderRefTypeChecker = TypeChecker.fromName(
+      'AutoDisposeFutureProviderRef',
+      packageName: 'riverpod');
 
-  static const autoDisposeFutureProviderTypeChecker =
-      TypeChecker.fromName('AutoDisposeFutureProvider', packageName: 'riverpod');
+  static const autoDisposeFutureProviderTypeChecker = TypeChecker.fromName(
+      'AutoDisposeFutureProvider',
+      packageName: 'riverpod');
 
   static const autoDisposeFutureProviderElementTypeChecker =
-      TypeChecker.fromName('AutoDisposeFutureProviderElement', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeFutureProviderElement',
+          packageName: 'riverpod');
 
   static const autoDisposeFutureProviderFamilyTypeChecker =
-      TypeChecker.fromName('AutoDisposeFutureProviderFamily', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeFutureProviderFamily',
+          packageName: 'riverpod');
 
   static const futureProviderRefTypeChecker =
       TypeChecker.fromName('FutureProviderRef', packageName: 'riverpod');
@@ -155,23 +167,29 @@ class RiverpodTypeCheckers {
   static const autoDisposeNotifierTypeChecker =
       TypeChecker.fromName('AutoDisposeNotifier', packageName: 'riverpod');
 
-  static const autoDisposeNotifierProviderRefTypeChecker =
-      TypeChecker.fromName('AutoDisposeNotifierProviderRef', packageName: 'riverpod');
+  static const autoDisposeNotifierProviderRefTypeChecker = TypeChecker.fromName(
+      'AutoDisposeNotifierProviderRef',
+      packageName: 'riverpod');
 
-  static const autoDisposeNotifierProviderTypeChecker =
-      TypeChecker.fromName('AutoDisposeNotifierProvider', packageName: 'riverpod');
+  static const autoDisposeNotifierProviderTypeChecker = TypeChecker.fromName(
+      'AutoDisposeNotifierProvider',
+      packageName: 'riverpod');
 
   static const autoDisposeNotifierProviderElementTypeChecker =
-      TypeChecker.fromName('AutoDisposeNotifierProviderElement', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeNotifierProviderElement',
+          packageName: 'riverpod');
 
-  static const autoDisposeFamilyNotifierTypeChecker =
-      TypeChecker.fromName('AutoDisposeFamilyNotifier', packageName: 'riverpod');
+  static const autoDisposeFamilyNotifierTypeChecker = TypeChecker.fromName(
+      'AutoDisposeFamilyNotifier',
+      packageName: 'riverpod');
 
   static const autoDisposeFamilyNotifierProviderTypeChecker =
-      TypeChecker.fromName('AutoDisposeFamilyNotifierProvider', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeFamilyNotifierProvider',
+          packageName: 'riverpod');
 
   static const autoDisposeNotifierProviderFamilyTypeChecker =
-      TypeChecker.fromName('AutoDisposeNotifierProviderFamily', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeNotifierProviderFamily',
+          packageName: 'riverpod');
 
   static const notifierTypeChecker =
       TypeChecker.fromName('Notifier', packageName: 'riverpod');
@@ -200,11 +218,13 @@ class RiverpodTypeCheckers {
   static const autoDisposeProviderTypeChecker =
       TypeChecker.fromName('AutoDisposeProvider', packageName: 'riverpod');
 
-  static const autoDisposeProviderElementTypeChecker =
-      TypeChecker.fromName('AutoDisposeProviderElement', packageName: 'riverpod');
+  static const autoDisposeProviderElementTypeChecker = TypeChecker.fromName(
+      'AutoDisposeProviderElement',
+      packageName: 'riverpod');
 
-  static const autoDisposeProviderFamilyTypeChecker =
-      TypeChecker.fromName('AutoDisposeProviderFamily', packageName: 'riverpod');
+  static const autoDisposeProviderFamilyTypeChecker = TypeChecker.fromName(
+      'AutoDisposeProviderFamily',
+      packageName: 'riverpod');
 
   static const providerRefTypeChecker =
       TypeChecker.fromName('ProviderRef', packageName: 'riverpod');
@@ -222,16 +242,20 @@ class RiverpodTypeCheckers {
       TypeChecker.fromName('StateController', packageName: 'riverpod');
 
   static const autoDisposeStateNotifierProviderRefTypeChecker =
-      TypeChecker.fromName('AutoDisposeStateNotifierProviderRef', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeStateNotifierProviderRef',
+          packageName: 'riverpod');
 
   static const autoDisposeStateNotifierProviderTypeChecker =
-      TypeChecker.fromName('AutoDisposeStateNotifierProvider', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeStateNotifierProvider',
+          packageName: 'riverpod');
 
   static const autoDisposeStateNotifierProviderElementTypeChecker =
-      TypeChecker.fromName('AutoDisposeStateNotifierProviderElement', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeStateNotifierProviderElement',
+          packageName: 'riverpod');
 
   static const autoDisposeStateNotifierProviderFamilyTypeChecker =
-      TypeChecker.fromName('AutoDisposeStateNotifierProviderFamily', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeStateNotifierProviderFamily',
+          packageName: 'riverpod');
 
   static const stateNotifierProviderRefTypeChecker =
       TypeChecker.fromName('StateNotifierProviderRef', packageName: 'riverpod');
@@ -239,23 +263,28 @@ class RiverpodTypeCheckers {
   static const stateNotifierProviderTypeChecker =
       TypeChecker.fromName('StateNotifierProvider', packageName: 'riverpod');
 
-  static const stateNotifierProviderElementTypeChecker =
-      TypeChecker.fromName('StateNotifierProviderElement', packageName: 'riverpod');
+  static const stateNotifierProviderElementTypeChecker = TypeChecker.fromName(
+      'StateNotifierProviderElement',
+      packageName: 'riverpod');
 
-  static const stateNotifierProviderFamilyTypeChecker =
-      TypeChecker.fromName('StateNotifierProviderFamily', packageName: 'riverpod');
+  static const stateNotifierProviderFamilyTypeChecker = TypeChecker.fromName(
+      'StateNotifierProviderFamily',
+      packageName: 'riverpod');
 
-  static const autoDisposeStateProviderRefTypeChecker =
-      TypeChecker.fromName('AutoDisposeStateProviderRef', packageName: 'riverpod');
+  static const autoDisposeStateProviderRefTypeChecker = TypeChecker.fromName(
+      'AutoDisposeStateProviderRef',
+      packageName: 'riverpod');
 
   static const autoDisposeStateProviderTypeChecker =
       TypeChecker.fromName('AutoDisposeStateProvider', packageName: 'riverpod');
 
   static const autoDisposeStateProviderElementTypeChecker =
-      TypeChecker.fromName('AutoDisposeStateProviderElement', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeStateProviderElement',
+          packageName: 'riverpod');
 
-  static const autoDisposeStateProviderFamilyTypeChecker =
-      TypeChecker.fromName('AutoDisposeStateProviderFamily', packageName: 'riverpod');
+  static const autoDisposeStateProviderFamilyTypeChecker = TypeChecker.fromName(
+      'AutoDisposeStateProviderFamily',
+      packageName: 'riverpod');
 
   static const stateProviderRefTypeChecker =
       TypeChecker.fromName('StateProviderRef', packageName: 'riverpod');
@@ -269,17 +298,21 @@ class RiverpodTypeCheckers {
   static const stateProviderFamilyTypeChecker =
       TypeChecker.fromName('StateProviderFamily', packageName: 'riverpod');
 
-  static const autoDisposeStreamProviderRefTypeChecker =
-      TypeChecker.fromName('AutoDisposeStreamProviderRef', packageName: 'riverpod');
+  static const autoDisposeStreamProviderRefTypeChecker = TypeChecker.fromName(
+      'AutoDisposeStreamProviderRef',
+      packageName: 'riverpod');
 
-  static const autoDisposeStreamProviderTypeChecker =
-      TypeChecker.fromName('AutoDisposeStreamProvider', packageName: 'riverpod');
+  static const autoDisposeStreamProviderTypeChecker = TypeChecker.fromName(
+      'AutoDisposeStreamProvider',
+      packageName: 'riverpod');
 
   static const autoDisposeStreamProviderElementTypeChecker =
-      TypeChecker.fromName('AutoDisposeStreamProviderElement', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeStreamProviderElement',
+          packageName: 'riverpod');
 
   static const autoDisposeStreamProviderFamilyTypeChecker =
-      TypeChecker.fromName('AutoDisposeStreamProviderFamily', packageName: 'riverpod');
+      TypeChecker.fromName('AutoDisposeStreamProviderFamily',
+          packageName: 'riverpod');
 
   static const streamProviderRefTypeChecker =
       TypeChecker.fromName('StreamProviderRef', packageName: 'riverpod');
@@ -292,8 +325,4 @@ class RiverpodTypeCheckers {
 
   static const streamProviderFamilyTypeChecker =
       TypeChecker.fromName('StreamProviderFamily', packageName: 'riverpod');
-
-
-
 }
-
