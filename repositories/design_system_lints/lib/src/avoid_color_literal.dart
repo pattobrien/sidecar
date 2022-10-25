@@ -2,17 +2,19 @@ import 'dart:async';
 // import 'dart:';
 
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:flutter_analyzer_utils/material.dart';
 import 'package:sidecar/sidecar.dart';
-// import 'package:flutter_utilities/flutter_utilities.dart';
 
 import 'constants.dart';
 
 class AvoidColorLiteral extends LintRule {
   @override
   String get code => 'avoid_color_literal';
+
   @override
   String get packageName => kDesignSystemPackageId;
+
+  @override
+  String? get url => kUrl;
 
   @override
   Future<List<DartAnalysisResult>> computeDartAnalysisResults(

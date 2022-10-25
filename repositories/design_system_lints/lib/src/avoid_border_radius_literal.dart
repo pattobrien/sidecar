@@ -14,6 +14,9 @@ class AvoidBorderRadiusLiteral extends LintRule {
   String get packageName => kDesignSystemPackageId;
 
   @override
+  String? get url => kUrl;
+
+  @override
   Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) {

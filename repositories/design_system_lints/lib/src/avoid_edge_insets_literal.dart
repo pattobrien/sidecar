@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_analyzer_utils/painting.dart';
-// import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'constants.dart';
@@ -13,6 +12,9 @@ class AvoidEdgeInsetsLiteral extends LintRule {
 
   @override
   String get packageName => kDesignSystemPackageId;
+
+  @override
+  String? get url => kUrl;
 
   @override
   Future<List<DartAnalysisResult>> computeDartAnalysisResults(
