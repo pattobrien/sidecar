@@ -37,9 +37,9 @@ class ProjectConfiguration {
               lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
               assistPackages:
                   _parseAssistPackages(contentMap['edits'] as YamlMap?),
-              includes: includesResult.value1,
+              includes: includesResult.item1,
               sourceErrors: [
-                ...includesResult.value2,
+                ...includesResult.item2,
                 // SidecarLintException(
                 //   (contentMap.nodes.entries.first.key as YamlScalar?)!,
                 //   message: 'test',

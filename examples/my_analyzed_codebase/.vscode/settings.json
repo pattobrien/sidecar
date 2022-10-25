@@ -1,20 +1,8 @@
 {
-    // "triggerTaskOnSave.tasks": {
-    //     "sidecar rebuild": [
-    //         // "pubspec.yaml",
-    //         "analysis_options.yaml",
-    //     ],
-    // },
-    // "dart.customDevTools" : [],
     "dart.analyzerAdditionalArgs": [
-        // "--no_dds",
         "--port=10000",
         "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.log",
-        // "--observe:8181",
     ],
-    // "githubPullRequests.ignoredPullRequestBranches": [
-    //     "master"
-    // ],
     "dart.analyzerVmServicePort": 9990,
     "dart.analyzerInstrumentationLogFile": "/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.txt",
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
+import 'package:sidecar_package_utilities/sidecar_package_utilities.dart';
 
 import 'constants.dart';
 
@@ -29,9 +30,14 @@ class _Visitor extends SidecarAstVisitor {
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
 
+    if (element?.returnType.matchesType(boxShadow) ?? false) {
+      reportAstNode(node, message: 'Avoid BoxShadow literal');
+    }
     if (FlutterTypeChecker.isBoxShadow(element?.returnType)) {
       reportAstNode(node, message: 'Avoid BoxShadow literal');
     }
     super.visitInstanceCreationExpression(node);
   }
 }
+
+const boxShadow = SidecarType('BoxShadow', 'src/painting/box_shadow.dart');

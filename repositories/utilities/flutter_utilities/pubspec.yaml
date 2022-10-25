@@ -12,8 +12,12 @@ dependencies:
   # analyzer: ^4.7.0
   # collection: ^1.16.0
   # path: ^1.8.0
+  flutter:
+    sdk: flutter
   sidecar_package_utilities:
-    hosted: https://dart.cloudsmith.io/fine-designs/sidecar_package_utilities/
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar_package_utilities
+  # sidecar_package_utilities:
+  #   hosted: https://dart.cloudsmith.io/fine-designs/sidecar_package_utilities/
 
 dev_dependencies:
   lints: ^2.0.0

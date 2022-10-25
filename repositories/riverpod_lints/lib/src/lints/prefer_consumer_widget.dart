@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:analyzer/dart/analysis/session.dart';
 import 'package:collection/collection.dart';
-import 'package:riverpod_utilities/riverpod_utilities.dart';
 import 'package:sidecar/builder.dart';
 
 class PreferConsumerWidget extends LintRule {
@@ -27,13 +26,14 @@ class PreferConsumerWidget extends LintRule {
     AnalysisSession session,
     AnalysisResult result,
   ) async {
+    // final x = RiverpodTypes
     final unit =
         await session.getResolvedUnit(result.path) as ResolvedUnitResult;
     final lintedNode = result.sourceSpan.toAstNode(unit);
 
     final changeBuilder = ChangeBuilder(session: session);
     await changeBuilder.addDartFileEdit(result.path, (fileBuilder) {
-      fileBuilder.importFlutterRiverpod();
+      // fileBuilder.importFlutterRiverpod();
       if (lintedNode is ClassDeclaration) {
         final superClass = lintedNode.extendsClause!.superclass;
 
@@ -72,10 +72,6 @@ class _Visitor extends SidecarAstVisitor {
     final superclass = node.extendsClause?.superclass;
 
     if (superclass?.name.name == 'StatelessWidget') {
-      // reportAstNode(
-      //   node.name,
-      //   message: 'Prefer to use ConsumerWidget over StatelessWidget',
-      // );
       reportToken(
         node.name2,
         message: 'Prefer to use ConsumerWidget over StatelessWidget',

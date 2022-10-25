@@ -1,5 +1,5 @@
-import 'package:dartz/dartz.dart';
 import 'package:source_span/source_span.dart';
+import 'package:tuple/tuple.dart';
 
 import '../builders/builders.dart';
 

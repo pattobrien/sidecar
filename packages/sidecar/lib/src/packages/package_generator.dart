@@ -92,33 +92,20 @@ class PackageGenerator {
 
         final exports = unit.libraryElement.exportNamespace.definedNames;
 
-        // print('# of exports: ${exports.entries.length}');
         for (final exportEntry in exports.entries) {
-          // print(exportEntry.key);
-          // final extendedName = topLevelElement.getExtendedDisplayName(null);
           final library = await context.currentSession
               .getResolvedLibraryByElement(exportEntry.value.library!);
 
           if (library is! ResolvedLibraryResult) throw UnimplementedError();
 
           final name = exportEntry.key;
-          // print(library.element.identifier);
-          // final uri =
-          //     Uri.file(library.element.identifier, windows: Platform.isWindows);
 
-          // final fp = uri.toFilePath(windows: Platform.isWindows);
-          // final fpfile = File(fp);
-          // print(fpfile.path);
-          // if (!fpfile.existsSync()) {
-          //   throw StateError('no file @ ${fpfile.path} // $fp');
-          // }
-
-          // types.add(
+          final relativeFilePath =
+              p.relative(filePath, from: package.root.path);
           final sidecarType = SidecarType(
             typeName: name,
             packageName: rootPackage.name,
-            packagePath: 'relativeRootPath',
-            // ),
+            packagePath: relativeFilePath,
           );
           types.add(sidecarType);
         }
@@ -126,7 +113,7 @@ class PackageGenerator {
         final buffer = StringBuffer();
         for (final t in types) {
           print('generating checker for type: ${t.typeName}');
-          buffer.writeln(generateTypeChecker(t.typeName, t.packageName));
+          buffer.writeln(generateTypeChecker(t.typeName, t.packagePath));
         }
         final generatedTypeCheckerClass =
             generateTypeCheckerClass(rootPackage.name, buffer.toString());
@@ -167,18 +154,18 @@ class PackageGenerator {
   }
 }
 
-String generateTypeCheckerClass(String name, String content) {
-  final packageName = ReCase(name).pascalCase;
-  return '''
+// String generateTypeCheckerClass(String name, String content) {
+//   final packageName = ReCase(name).pascalCase;
+//   return '''
 
-class ${packageName}TypeCheckers {
+// class ${packageName}TypeCheckers {
 
-  $content
+//   $content
 
-}
+// }
 
-''';
-}
+// ''';
+// }
 
 String generatedHeader = '''
 //
@@ -189,10 +176,29 @@ import 'package:sidecar_package_utilities/sidecar_package_utilities.dart';
 
 ''';
 
-String generateTypeChecker(String typeName, String packageName) {
+// String generateTypeChecker(String typeName, String packageName) {
+//   final recasedName = ReCase(typeName).camelCase;
+//   return '''
+//   static const ${recasedName}TypeChecker =
+//       TypeChecker.fromName('$typeName', packageName: '$packageName');
+// ''';
+// }
+
+String generateTypeCheckerClass(String name, String content) {
+  final packageName = ReCase(name).pascalCase;
+  return '''
+
+class ${packageName}Types {
+  $content
+
+}
+
+''';
+}
+
+String generateTypeChecker(String typeName, String filePath) {
   final recasedName = ReCase(typeName).camelCase;
   return '''
-  static const ${recasedName}TypeChecker =
-      TypeChecker.fromName('$typeName', packageName: '$packageName');
+  static const $recasedName = SidecarType('$typeName', '$filePath');
 ''';
 }

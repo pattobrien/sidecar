@@ -1,6 +1,6 @@
 name: sidecar_package_utilities
 description: A starting point for Dart libraries or applications.
-version: 0.1.5
+version: 0.1.6
 publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_package_utilities/
 
 environment:

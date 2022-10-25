@@ -13,7 +13,6 @@ final analysisResultsForFileProvider =
   (ref, file) async {
     final fileService = ref.watch(fileAnalyzerServiceProvider);
     final activatedRules = ref.watch(lintRulesForFileProvider(file));
-
     final unit = await ref.watch(resolvedUnitProvider(file).future);
 
     final watch = Stopwatch()..start();
