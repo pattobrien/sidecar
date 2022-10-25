@@ -5,2891 +5,3736 @@
 import 'package:sidecar_package_utilities/sidecar_package_utilities.dart';
 
 const aboutListTileType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/about.dart#AboutListTile');
+    'package:flutter/src/material/about.dart#AboutListTile');
 
-const aboutDialogType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/about.dart#AboutDialog');
+const aboutDialogType =
+    TypeChecker.fromUrl('package:flutter/src/material/about.dart#AboutDialog');
 
-const licensePageType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/about.dart#LicensePage');
+const licensePageType =
+    TypeChecker.fromUrl('package:flutter/src/material/about.dart#LicensePage');
 
 const animatedIconType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/animated_icons/animated_icons.dart#AnimatedIcon');
+    'package:flutter/src/material/animated_icons/animated_icons.dart#AnimatedIcon');
 
 const animatedIconsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/animated_icons/animated_icons_data.dart#AnimatedIcons');
+    'package:flutter/src/material/animated_icons/animated_icons_data.dart#AnimatedIcons');
 
 const animatedIconDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/animated_icons/animated_icons_data.dart#AnimatedIconData');
+    'package:flutter/src/material/animated_icons/animated_icons_data.dart#AnimatedIconData');
 
-const themeModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/app.dart#ThemeMode');
+const themeModeType =
+    TypeChecker.fromUrl('package:flutter/src/material/app.dart#ThemeMode');
 
-const materialAppType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/app.dart#MaterialApp');
+const materialAppType =
+    TypeChecker.fromUrl('package:flutter/src/material/app.dart#MaterialApp');
 
 const materialScrollBehaviorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/app.dart#MaterialScrollBehavior');
+    'package:flutter/src/material/app.dart#MaterialScrollBehavior');
 
-const appBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/app_bar.dart#AppBar');
+const appBarType =
+    TypeChecker.fromUrl('package:flutter/src/material/app_bar.dart#AppBar');
 
 const sliverAppBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/app_bar.dart#SliverAppBar');
+    'package:flutter/src/material/app_bar.dart#SliverAppBar');
 
 const appBarThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/app_bar_theme.dart#AppBarTheme');
+    'package:flutter/src/material/app_bar_theme.dart#AppBarTheme');
 
 const materialPointArcTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/arc.dart#MaterialPointArcTween');
+    'package:flutter/src/material/arc.dart#MaterialPointArcTween');
 
 const materialRectArcTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/arc.dart#MaterialRectArcTween');
+    'package:flutter/src/material/arc.dart#MaterialRectArcTween');
 
 const materialRectCenterArcTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/arc.dart#MaterialRectCenterArcTween');
+    'package:flutter/src/material/arc.dart#MaterialRectCenterArcTween');
 
 const autocompleteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/autocomplete.dart#Autocomplete');
+    'package:flutter/src/material/autocomplete.dart#Autocomplete');
 
 const backButtonIconType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/back_button.dart#BackButtonIcon');
+    'package:flutter/src/material/back_button.dart#BackButtonIcon');
 
 const backButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/back_button.dart#BackButton');
+    'package:flutter/src/material/back_button.dart#BackButton');
 
 const closeButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/back_button.dart#CloseButton');
+    'package:flutter/src/material/back_button.dart#CloseButton');
 
 const materialBannerClosedReasonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/banner.dart#MaterialBannerClosedReason');
+    'package:flutter/src/material/banner.dart#MaterialBannerClosedReason');
 
 const materialBannerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/banner.dart#MaterialBanner');
+    'package:flutter/src/material/banner.dart#MaterialBanner');
 
 const materialBannerThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/banner_theme.dart#MaterialBannerThemeData');
+    'package:flutter/src/material/banner_theme.dart#MaterialBannerThemeData');
 
 const materialBannerThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/banner_theme.dart#MaterialBannerTheme');
+    'package:flutter/src/material/banner_theme.dart#MaterialBannerTheme');
 
 const bottomAppBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/bottom_app_bar.dart#BottomAppBar');
+    'package:flutter/src/material/bottom_app_bar.dart#BottomAppBar');
 
 const bottomAppBarThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/bottom_app_bar_theme.dart#BottomAppBarTheme');
+    'package:flutter/src/material/bottom_app_bar_theme.dart#BottomAppBarTheme');
 
 const bottomNavigationBarTypeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/bottom_navigation_bar.dart#BottomNavigationBarType');
+    'package:flutter/src/material/bottom_navigation_bar.dart#BottomNavigationBarType');
 
 const bottomNavigationBarLandscapeLayoutType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/bottom_navigation_bar.dart#BottomNavigationBarLandscapeLayout');
+    'package:flutter/src/material/bottom_navigation_bar.dart#BottomNavigationBarLandscapeLayout');
 
 const bottomNavigationBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/bottom_navigation_bar.dart#BottomNavigationBar');
+    'package:flutter/src/material/bottom_navigation_bar.dart#BottomNavigationBar');
 
 const bottomNavigationBarThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/bottom_navigation_bar_theme.dart#BottomNavigationBarThemeData');
+    'package:flutter/src/material/bottom_navigation_bar_theme.dart#BottomNavigationBarThemeData');
 
 const bottomNavigationBarThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/bottom_navigation_bar_theme.dart#BottomNavigationBarTheme');
+    'package:flutter/src/material/bottom_navigation_bar_theme.dart#BottomNavigationBarTheme');
 
 const bottomSheetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/bottom_sheet.dart#BottomSheet');
+    'package:flutter/src/material/bottom_sheet.dart#BottomSheet');
 
 const bottomSheetThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/bottom_sheet_theme.dart#BottomSheetThemeData');
+    'package:flutter/src/material/bottom_sheet_theme.dart#BottomSheetThemeData');
 
 const rawMaterialButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button.dart#RawMaterialButton');
+    'package:flutter/src/material/button.dart#RawMaterialButton');
 
 const buttonBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button_bar.dart#ButtonBar');
+    'package:flutter/src/material/button_bar.dart#ButtonBar');
 
 const buttonBarThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button_bar_theme.dart#ButtonBarThemeData');
+    'package:flutter/src/material/button_bar_theme.dart#ButtonBarThemeData');
 
 const buttonBarThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button_bar_theme.dart#ButtonBarTheme');
+    'package:flutter/src/material/button_bar_theme.dart#ButtonBarTheme');
 
 const buttonStyleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button_style.dart#ButtonStyle');
+    'package:flutter/src/material/button_style.dart#ButtonStyle');
 
 const buttonStyleButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button_style_button.dart#ButtonStyleButton');
+    'package:flutter/src/material/button_style_button.dart#ButtonStyleButton');
 
 const buttonTextThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button_theme.dart#ButtonTextTheme');
+    'package:flutter/src/material/button_theme.dart#ButtonTextTheme');
 
 const buttonBarLayoutBehaviorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button_theme.dart#ButtonBarLayoutBehavior');
+    'package:flutter/src/material/button_theme.dart#ButtonBarLayoutBehavior');
 
 const buttonThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button_theme.dart#ButtonTheme');
+    'package:flutter/src/material/button_theme.dart#ButtonTheme');
 
 const buttonThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/button_theme.dart#ButtonThemeData');
+    'package:flutter/src/material/button_theme.dart#ButtonThemeData');
 
 const calendarDatePickerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/calendar_date_picker.dart#CalendarDatePicker');
+    'package:flutter/src/material/calendar_date_picker.dart#CalendarDatePicker');
 
 const yearPickerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/calendar_date_picker.dart#YearPicker');
+    'package:flutter/src/material/calendar_date_picker.dart#YearPicker');
 
-const cardType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/card.dart#Card');
+const cardType =
+    TypeChecker.fromUrl('package:flutter/src/material/card.dart#Card');
 
 const cardThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/card_theme.dart#CardTheme');
+    'package:flutter/src/material/card_theme.dart#CardTheme');
 
-const checkboxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/checkbox.dart#Checkbox');
+const checkboxType =
+    TypeChecker.fromUrl('package:flutter/src/material/checkbox.dart#Checkbox');
 
 const checkboxListTileType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/checkbox_list_tile.dart#CheckboxListTile');
+    'package:flutter/src/material/checkbox_list_tile.dart#CheckboxListTile');
 
 const checkboxThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/checkbox_theme.dart#CheckboxThemeData');
+    'package:flutter/src/material/checkbox_theme.dart#CheckboxThemeData');
 
 const checkboxThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/checkbox_theme.dart#CheckboxTheme');
+    'package:flutter/src/material/checkbox_theme.dart#CheckboxTheme');
 
 const chipAttributesType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#ChipAttributes');
+    'package:flutter/src/material/chip.dart#ChipAttributes');
 
 const deletableChipAttributesType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#DeletableChipAttributes');
+    'package:flutter/src/material/chip.dart#DeletableChipAttributes');
 
 const checkmarkableChipAttributesType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#CheckmarkableChipAttributes');
+    'package:flutter/src/material/chip.dart#CheckmarkableChipAttributes');
 
 const selectableChipAttributesType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#SelectableChipAttributes');
+    'package:flutter/src/material/chip.dart#SelectableChipAttributes');
 
 const disabledChipAttributesType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#DisabledChipAttributes');
+    'package:flutter/src/material/chip.dart#DisabledChipAttributes');
 
 const tappableChipAttributesType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#TappableChipAttributes');
+    'package:flutter/src/material/chip.dart#TappableChipAttributes');
 
-const chipType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#Chip');
+const chipType =
+    TypeChecker.fromUrl('package:flutter/src/material/chip.dart#Chip');
 
-const inputChipType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#InputChip');
+const inputChipType =
+    TypeChecker.fromUrl('package:flutter/src/material/chip.dart#InputChip');
 
-const choiceChipType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#ChoiceChip');
+const choiceChipType =
+    TypeChecker.fromUrl('package:flutter/src/material/chip.dart#ChoiceChip');
 
-const filterChipType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#FilterChip');
+const filterChipType =
+    TypeChecker.fromUrl('package:flutter/src/material/chip.dart#FilterChip');
 
-const actionChipType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#ActionChip');
+const actionChipType =
+    TypeChecker.fromUrl('package:flutter/src/material/chip.dart#ActionChip');
 
-const rawChipType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip.dart#RawChip');
+const rawChipType =
+    TypeChecker.fromUrl('package:flutter/src/material/chip.dart#RawChip');
 
 const chipThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip_theme.dart#ChipTheme');
+    'package:flutter/src/material/chip_theme.dart#ChipTheme');
 
 const chipThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/chip_theme.dart#ChipThemeData');
+    'package:flutter/src/material/chip_theme.dart#ChipThemeData');
 
 const circleAvatarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/circle_avatar.dart#CircleAvatar');
+    'package:flutter/src/material/circle_avatar.dart#CircleAvatar');
 
 const colorSchemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/color_scheme.dart#ColorScheme');
+    'package:flutter/src/material/color_scheme.dart#ColorScheme');
 
 const materialColorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/colors.dart#MaterialColor');
+    'package:flutter/src/material/colors.dart#MaterialColor');
 
 const materialAccentColorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/colors.dart#MaterialAccentColor');
+    'package:flutter/src/material/colors.dart#MaterialAccentColor');
 
-const colorsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/colors.dart#Colors');
+const colorsType =
+    TypeChecker.fromUrl('package:flutter/src/material/colors.dart#Colors');
 
 const dataColumnType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/data_table.dart#DataColumn');
+    'package:flutter/src/material/data_table.dart#DataColumn');
 
-const dataRowType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/data_table.dart#DataRow');
+const dataRowType =
+    TypeChecker.fromUrl('package:flutter/src/material/data_table.dart#DataRow');
 
 const dataCellType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/data_table.dart#DataCell');
+    'package:flutter/src/material/data_table.dart#DataCell');
 
 const dataTableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/data_table.dart#DataTable');
+    'package:flutter/src/material/data_table.dart#DataTable');
 
 const tableRowInkWellType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/data_table.dart#TableRowInkWell');
+    'package:flutter/src/material/data_table.dart#TableRowInkWell');
 
 const dataTableSourceType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/data_table_source.dart#DataTableSource');
+    'package:flutter/src/material/data_table_source.dart#DataTableSource');
 
 const dataTableThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/data_table_theme.dart#DataTableThemeData');
+    'package:flutter/src/material/data_table_theme.dart#DataTableThemeData');
 
 const dataTableThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/data_table_theme.dart#DataTableTheme');
+    'package:flutter/src/material/data_table_theme.dart#DataTableTheme');
 
-const dateUtilsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/date.dart#DateUtils');
+const dateUtilsType =
+    TypeChecker.fromUrl('package:flutter/src/material/date.dart#DateUtils');
 
 const datePickerEntryModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/date.dart#DatePickerEntryMode');
+    'package:flutter/src/material/date.dart#DatePickerEntryMode');
 
 const datePickerModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/date.dart#DatePickerMode');
+    'package:flutter/src/material/date.dart#DatePickerMode');
 
-const dateTimeRangeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/date.dart#DateTimeRange');
+const dateTimeRangeType =
+    TypeChecker.fromUrl('package:flutter/src/material/date.dart#DateTimeRange');
 
 const datePickerDialogType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/date_picker.dart#DatePickerDialog');
+    'package:flutter/src/material/date_picker.dart#DatePickerDialog');
 
 const dateRangePickerDialogType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/date_picker.dart#DateRangePickerDialog');
+    'package:flutter/src/material/date_picker.dart#DateRangePickerDialog');
 
-const dayPickerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/date_picker_deprecated.dart#DayPicker');
+const dialogType =
+    TypeChecker.fromUrl('package:flutter/src/material/dialog.dart#Dialog');
 
-const monthPickerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/date_picker_deprecated.dart#MonthPicker');
-
-const dialogType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dialog.dart#Dialog');
-
-const alertDialogType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dialog.dart#AlertDialog');
+const alertDialogType =
+    TypeChecker.fromUrl('package:flutter/src/material/dialog.dart#AlertDialog');
 
 const simpleDialogOptionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dialog.dart#SimpleDialogOption');
+    'package:flutter/src/material/dialog.dart#SimpleDialogOption');
 
 const simpleDialogType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dialog.dart#SimpleDialog');
+    'package:flutter/src/material/dialog.dart#SimpleDialog');
 
-const dialogRouteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dialog.dart#DialogRoute');
+const dialogRouteType =
+    TypeChecker.fromUrl('package:flutter/src/material/dialog.dart#DialogRoute');
 
 const dialogThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dialog_theme.dart#DialogTheme');
+    'package:flutter/src/material/dialog_theme.dart#DialogTheme');
 
-const dividerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/divider.dart#Divider');
+const dividerType =
+    TypeChecker.fromUrl('package:flutter/src/material/divider.dart#Divider');
 
 const verticalDividerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/divider.dart#VerticalDivider');
+    'package:flutter/src/material/divider.dart#VerticalDivider');
 
 const dividerThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/divider_theme.dart#DividerThemeData');
+    'package:flutter/src/material/divider_theme.dart#DividerThemeData');
 
 const dividerThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/divider_theme.dart#DividerTheme');
+    'package:flutter/src/material/divider_theme.dart#DividerTheme');
 
 const drawerAlignmentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/drawer.dart#DrawerAlignment');
+    'package:flutter/src/material/drawer.dart#DrawerAlignment');
 
-const drawerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/drawer.dart#Drawer');
+const drawerType =
+    TypeChecker.fromUrl('package:flutter/src/material/drawer.dart#Drawer');
 
 const drawerControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/drawer.dart#DrawerController');
+    'package:flutter/src/material/drawer.dart#DrawerController');
 
 const drawerControllerStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/drawer.dart#DrawerControllerState');
+    'package:flutter/src/material/drawer.dart#DrawerControllerState');
 
 const drawerHeaderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/drawer_header.dart#DrawerHeader');
+    'package:flutter/src/material/drawer_header.dart#DrawerHeader');
 
 const drawerThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/drawer_theme.dart#DrawerThemeData');
+    'package:flutter/src/material/drawer_theme.dart#DrawerThemeData');
 
 const drawerThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/drawer_theme.dart#DrawerTheme');
+    'package:flutter/src/material/drawer_theme.dart#DrawerTheme');
 
 const dropdownMenuItemType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dropdown.dart#DropdownMenuItem');
+    'package:flutter/src/material/dropdown.dart#DropdownMenuItem');
 
 const dropdownButtonHideUnderlineType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dropdown.dart#DropdownButtonHideUnderline');
+    'package:flutter/src/material/dropdown.dart#DropdownButtonHideUnderline');
 
 const dropdownButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dropdown.dart#DropdownButton');
+    'package:flutter/src/material/dropdown.dart#DropdownButton');
 
 const dropdownButtonFormFieldType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/dropdown.dart#DropdownButtonFormField');
+    'package:flutter/src/material/dropdown.dart#DropdownButtonFormField');
 
 const elevatedButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/elevated_button.dart#ElevatedButton');
+    'package:flutter/src/material/elevated_button.dart#ElevatedButton');
 
 const elevatedButtonThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/elevated_button_theme.dart#ElevatedButtonThemeData');
+    'package:flutter/src/material/elevated_button_theme.dart#ElevatedButtonThemeData');
 
 const elevatedButtonThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/elevated_button_theme.dart#ElevatedButtonTheme');
+    'package:flutter/src/material/elevated_button_theme.dart#ElevatedButtonTheme');
 
 const elevationOverlayType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/elevation_overlay.dart#ElevationOverlay');
+    'package:flutter/src/material/elevation_overlay.dart#ElevationOverlay');
 
 const expandIconType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/expand_icon.dart#ExpandIcon');
+    'package:flutter/src/material/expand_icon.dart#ExpandIcon');
 
 const expansionPanelType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/expansion_panel.dart#ExpansionPanel');
+    'package:flutter/src/material/expansion_panel.dart#ExpansionPanel');
 
 const expansionPanelRadioType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/expansion_panel.dart#ExpansionPanelRadio');
+    'package:flutter/src/material/expansion_panel.dart#ExpansionPanelRadio');
 
 const expansionPanelListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/expansion_panel.dart#ExpansionPanelList');
+    'package:flutter/src/material/expansion_panel.dart#ExpansionPanelList');
 
 const expansionTileType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/expansion_tile.dart#ExpansionTile');
+    'package:flutter/src/material/expansion_tile.dart#ExpansionTile');
 
-const feedbackType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/feedback.dart#Feedback');
+const expansionTileThemeDataType = TypeChecker.fromUrl(
+    'package:flutter/src/material/expansion_tile_theme.dart#ExpansionTileThemeData');
+
+const expansionTileThemeType = TypeChecker.fromUrl(
+    'package:flutter/src/material/expansion_tile_theme.dart#ExpansionTileTheme');
+
+const feedbackType =
+    TypeChecker.fromUrl('package:flutter/src/material/feedback.dart#Feedback');
 
 const flatButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/flat_button.dart#FlatButton');
+    'package:flutter/src/material/flat_button.dart#FlatButton');
 
 const collapseModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/flexible_space_bar.dart#CollapseMode');
+    'package:flutter/src/material/flexible_space_bar.dart#CollapseMode');
 
 const stretchModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/flexible_space_bar.dart#StretchMode');
+    'package:flutter/src/material/flexible_space_bar.dart#StretchMode');
 
 const flexibleSpaceBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/flexible_space_bar.dart#FlexibleSpaceBar');
+    'package:flutter/src/material/flexible_space_bar.dart#FlexibleSpaceBar');
 
 const flexibleSpaceBarSettingsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/flexible_space_bar.dart#FlexibleSpaceBarSettings');
+    'package:flutter/src/material/flexible_space_bar.dart#FlexibleSpaceBarSettings');
 
 const floatingActionButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button.dart#FloatingActionButton');
+    'package:flutter/src/material/floating_action_button.dart#FloatingActionButton');
 
 const floatingActionButtonLocationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#FloatingActionButtonLocation');
+    'package:flutter/src/material/floating_action_button_location.dart#FloatingActionButtonLocation');
 
 const standardFabLocationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#StandardFabLocation');
+    'package:flutter/src/material/floating_action_button_location.dart#StandardFabLocation');
 
 const fabTopOffsetYType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#FabTopOffsetY');
+    'package:flutter/src/material/floating_action_button_location.dart#FabTopOffsetY');
 
 const fabFloatOffsetYType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#FabFloatOffsetY');
+    'package:flutter/src/material/floating_action_button_location.dart#FabFloatOffsetY');
 
 const fabDockedOffsetYType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#FabDockedOffsetY');
+    'package:flutter/src/material/floating_action_button_location.dart#FabDockedOffsetY');
 
 const fabStartOffsetXType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#FabStartOffsetX');
+    'package:flutter/src/material/floating_action_button_location.dart#FabStartOffsetX');
 
 const fabCenterOffsetXType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#FabCenterOffsetX');
+    'package:flutter/src/material/floating_action_button_location.dart#FabCenterOffsetX');
 
 const fabEndOffsetXType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#FabEndOffsetX');
+    'package:flutter/src/material/floating_action_button_location.dart#FabEndOffsetX');
 
 const fabMiniOffsetAdjustmentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#FabMiniOffsetAdjustment');
+    'package:flutter/src/material/floating_action_button_location.dart#FabMiniOffsetAdjustment');
 
 const floatingActionButtonAnimatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_location.dart#FloatingActionButtonAnimator');
+    'package:flutter/src/material/floating_action_button_location.dart#FloatingActionButtonAnimator');
 
 const floatingActionButtonThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/floating_action_button_theme.dart#FloatingActionButtonThemeData');
+    'package:flutter/src/material/floating_action_button_theme.dart#FloatingActionButtonThemeData');
 
 const flutterLogoType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/flutter_logo.dart#FlutterLogo');
+    'package:flutter/src/material/flutter_logo.dart#FlutterLogo');
 
-const gridTileType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/grid_tile.dart#GridTile');
+const gridTileType =
+    TypeChecker.fromUrl('package:flutter/src/material/grid_tile.dart#GridTile');
 
 const gridTileBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/grid_tile_bar.dart#GridTileBar');
+    'package:flutter/src/material/grid_tile_bar.dart#GridTileBar');
 
 const iconButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/icon_button.dart#IconButton');
+    'package:flutter/src/material/icon_button.dart#IconButton');
 
 const platformAdaptiveIconsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/icons.dart#PlatformAdaptiveIcons');
+    'package:flutter/src/material/icons.dart#PlatformAdaptiveIcons');
 
-const iconsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/icons.dart#Icons');
+const iconsType =
+    TypeChecker.fromUrl('package:flutter/src/material/icons.dart#Icons');
 
-const inkType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/ink_decoration.dart#Ink');
+const inkType =
+    TypeChecker.fromUrl('package:flutter/src/material/ink_decoration.dart#Ink');
 
 const inkDecorationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/ink_decoration.dart#InkDecoration');
+    'package:flutter/src/material/ink_decoration.dart#InkDecoration');
 
 const inkHighlightType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/ink_highlight.dart#InkHighlight');
+    'package:flutter/src/material/ink_highlight.dart#InkHighlight');
 
 const inkRippleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/ink_ripple.dart#InkRipple');
+    'package:flutter/src/material/ink_ripple.dart#InkRipple');
+
+const inkSparkleType = TypeChecker.fromUrl(
+    'package:flutter/src/material/ink_sparkle.dart#InkSparkle');
+
+const fragmentShaderManagerType = TypeChecker.fromUrl(
+    'package:flutter/src/material/ink_sparkle.dart#FragmentShaderManager');
 
 const inkSplashType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/ink_splash.dart#InkSplash');
+    'package:flutter/src/material/ink_splash.dart#InkSplash');
 
 const interactiveInkFeatureType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/ink_well.dart#InteractiveInkFeature');
+    'package:flutter/src/material/ink_well.dart#InteractiveInkFeature');
 
 const interactiveInkFeatureFactoryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/ink_well.dart#InteractiveInkFeatureFactory');
+    'package:flutter/src/material/ink_well.dart#InteractiveInkFeatureFactory');
 
 const inkResponseType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/ink_well.dart#InkResponse');
+    'package:flutter/src/material/ink_well.dart#InkResponse');
 
-const inkWellType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/ink_well.dart#InkWell');
+const inkWellType =
+    TypeChecker.fromUrl('package:flutter/src/material/ink_well.dart#InkWell');
 
 const inputBorderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/input_border.dart#InputBorder');
+    'package:flutter/src/material/input_border.dart#InputBorder');
 
 const underlineInputBorderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/input_border.dart#UnderlineInputBorder');
+    'package:flutter/src/material/input_border.dart#UnderlineInputBorder');
 
 const outlineInputBorderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/input_border.dart#OutlineInputBorder');
+    'package:flutter/src/material/input_border.dart#OutlineInputBorder');
 
 const inputDatePickerFormFieldType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/input_date_picker_form_field.dart#InputDatePickerFormField');
+    'package:flutter/src/material/input_date_picker_form_field.dart#InputDatePickerFormField');
 
 const floatingLabelBehaviorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/input_decorator.dart#FloatingLabelBehavior');
+    'package:flutter/src/material/input_decorator.dart#FloatingLabelBehavior');
 
 const floatingLabelAlignmentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/input_decorator.dart#FloatingLabelAlignment');
+    'package:flutter/src/material/input_decorator.dart#FloatingLabelAlignment');
 
 const inputDecoratorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/input_decorator.dart#InputDecorator');
+    'package:flutter/src/material/input_decorator.dart#InputDecorator');
 
 const inputDecorationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/input_decorator.dart#InputDecoration');
+    'package:flutter/src/material/input_decorator.dart#InputDecoration');
 
 const inputDecorationThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/input_decorator.dart#InputDecorationTheme');
+    'package:flutter/src/material/input_decorator.dart#InputDecorationTheme');
 
 const listTileStyleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/list_tile.dart#ListTileStyle');
+    'package:flutter/src/material/list_tile.dart#ListTileStyle');
 
 const listTileControlAffinityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/list_tile.dart#ListTileControlAffinity');
+    'package:flutter/src/material/list_tile.dart#ListTileControlAffinity');
+
+const listTileType =
+    TypeChecker.fromUrl('package:flutter/src/material/list_tile.dart#ListTile');
 
 const listTileThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/list_tile.dart#ListTileThemeData');
+    'package:flutter/src/material/list_tile_theme.dart#ListTileThemeData');
 
 const listTileThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/list_tile.dart#ListTileTheme');
-
-const listTileType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/list_tile.dart#ListTile');
+    'package:flutter/src/material/list_tile_theme.dart#ListTileTheme');
 
 const materialTypeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material.dart#MaterialType');
+    'package:flutter/src/material/material.dart#MaterialType');
 
 const materialInkControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material.dart#MaterialInkController');
+    'package:flutter/src/material/material.dart#MaterialInkController');
 
-const materialType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material.dart#Material');
+const materialType =
+    TypeChecker.fromUrl('package:flutter/src/material/material.dart#Material');
 
 const inkFeatureType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material.dart#InkFeature');
+    'package:flutter/src/material/material.dart#InkFeature');
 
 const shapeBorderTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material.dart#ShapeBorderTween');
+    'package:flutter/src/material/material.dart#ShapeBorderTween');
 
 const materialButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_button.dart#MaterialButton');
+    'package:flutter/src/material/material_button.dart#MaterialButton');
 
 const materialButtonWithIconMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_button.dart#MaterialButtonWithIconMixin');
+    'package:flutter/src/material/material_button.dart#MaterialButtonWithIconMixin');
 
 const materialLocalizationsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_localizations.dart#MaterialLocalizations');
+    'package:flutter/src/material/material_localizations.dart#MaterialLocalizations');
 
 const defaultMaterialLocalizationsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_localizations.dart#DefaultMaterialLocalizations');
+    'package:flutter/src/material/material_localizations.dart#DefaultMaterialLocalizations');
 
 const materialStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state.dart#MaterialState');
+    'package:flutter/src/material/material_state.dart#MaterialState');
 
 const materialStateColorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state.dart#MaterialStateColor');
+    'package:flutter/src/material/material_state.dart#MaterialStateColor');
 
 const materialStateMouseCursorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state.dart#MaterialStateMouseCursor');
+    'package:flutter/src/material/material_state.dart#MaterialStateMouseCursor');
 
 const materialStateBorderSideType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state.dart#MaterialStateBorderSide');
+    'package:flutter/src/material/material_state.dart#MaterialStateBorderSide');
 
 const materialStateOutlinedBorderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state.dart#MaterialStateOutlinedBorder');
+    'package:flutter/src/material/material_state.dart#MaterialStateOutlinedBorder');
 
 const materialStateTextStyleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state.dart#MaterialStateTextStyle');
+    'package:flutter/src/material/material_state.dart#MaterialStateTextStyle');
 
 const materialStateOutlineInputBorderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state.dart#MaterialStateOutlineInputBorder');
+    'package:flutter/src/material/material_state.dart#MaterialStateOutlineInputBorder');
 
 const materialStateUnderlineInputBorderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state.dart#MaterialStateUnderlineInputBorder');
+    'package:flutter/src/material/material_state.dart#MaterialStateUnderlineInputBorder');
 
 const materialStatePropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state.dart#MaterialStateProperty');
+    'package:flutter/src/material/material_state.dart#MaterialStateProperty');
 
 const materialStateMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/material_state_mixin.dart#MaterialStateMixin');
+    'package:flutter/src/material/material_state_mixin.dart#MaterialStateMixin');
 
 const mergeableMaterialItemType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/mergeable_material.dart#MergeableMaterialItem');
+    'package:flutter/src/material/mergeable_material.dart#MergeableMaterialItem');
 
 const materialSliceType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/mergeable_material.dart#MaterialSlice');
+    'package:flutter/src/material/mergeable_material.dart#MaterialSlice');
 
 const materialGapType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/mergeable_material.dart#MaterialGap');
+    'package:flutter/src/material/mergeable_material.dart#MaterialGap');
 
 const mergeableMaterialType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/mergeable_material.dart#MergeableMaterial');
+    'package:flutter/src/material/mergeable_material.dart#MergeableMaterial');
 
 const navigationBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_bar.dart#NavigationBar');
+    'package:flutter/src/material/navigation_bar.dart#NavigationBar');
 
 const navigationDestinationLabelBehaviorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_bar.dart#NavigationDestinationLabelBehavior');
+    'package:flutter/src/material/navigation_bar.dart#NavigationDestinationLabelBehavior');
 
 const navigationDestinationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_bar.dart#NavigationDestination');
+    'package:flutter/src/material/navigation_bar.dart#NavigationDestination');
 
 const navigationIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_bar.dart#NavigationIndicator');
+    'package:flutter/src/material/navigation_bar.dart#NavigationIndicator');
 
 const navigationBarThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_bar_theme.dart#NavigationBarThemeData');
+    'package:flutter/src/material/navigation_bar_theme.dart#NavigationBarThemeData');
 
 const navigationBarThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_bar_theme.dart#NavigationBarTheme');
+    'package:flutter/src/material/navigation_bar_theme.dart#NavigationBarTheme');
 
 const navigationRailType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_rail.dart#NavigationRail');
+    'package:flutter/src/material/navigation_rail.dart#NavigationRail');
 
 const navigationRailLabelTypeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_rail.dart#NavigationRailLabelType');
+    'package:flutter/src/material/navigation_rail.dart#NavigationRailLabelType');
 
 const navigationRailDestinationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_rail.dart#NavigationRailDestination');
+    'package:flutter/src/material/navigation_rail.dart#NavigationRailDestination');
 
 const navigationRailThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_rail_theme.dart#NavigationRailThemeData');
+    'package:flutter/src/material/navigation_rail_theme.dart#NavigationRailThemeData');
 
 const navigationRailThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/navigation_rail_theme.dart#NavigationRailTheme');
+    'package:flutter/src/material/navigation_rail_theme.dart#NavigationRailTheme');
 
-const noSplashType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/no_splash.dart#NoSplash');
-
-const outlineButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/outline_button.dart#OutlineButton');
+const noSplashType =
+    TypeChecker.fromUrl('package:flutter/src/material/no_splash.dart#NoSplash');
 
 const outlinedButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/outlined_button.dart#OutlinedButton');
+    'package:flutter/src/material/outlined_button.dart#OutlinedButton');
 
 const outlinedButtonThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/outlined_button_theme.dart#OutlinedButtonThemeData');
+    'package:flutter/src/material/outlined_button_theme.dart#OutlinedButtonThemeData');
 
 const outlinedButtonThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/outlined_button_theme.dart#OutlinedButtonTheme');
+    'package:flutter/src/material/outlined_button_theme.dart#OutlinedButtonTheme');
 
 const materialPageRouteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/page.dart#MaterialPageRoute');
+    'package:flutter/src/material/page.dart#MaterialPageRoute');
 
 const materialRouteTransitionMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/page.dart#MaterialRouteTransitionMixin');
+    'package:flutter/src/material/page.dart#MaterialRouteTransitionMixin');
 
-const materialPageType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/page.dart#MaterialPage');
+const materialPageType =
+    TypeChecker.fromUrl('package:flutter/src/material/page.dart#MaterialPage');
 
 const pageTransitionsBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/page_transitions_theme.dart#PageTransitionsBuilder');
+    'package:flutter/src/material/page_transitions_theme.dart#PageTransitionsBuilder');
 
 const fadeUpwardsPageTransitionsBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/page_transitions_theme.dart#FadeUpwardsPageTransitionsBuilder');
+    'package:flutter/src/material/page_transitions_theme.dart#FadeUpwardsPageTransitionsBuilder');
 
 const openUpwardsPageTransitionsBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/page_transitions_theme.dart#OpenUpwardsPageTransitionsBuilder');
+    'package:flutter/src/material/page_transitions_theme.dart#OpenUpwardsPageTransitionsBuilder');
 
 const zoomPageTransitionsBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/page_transitions_theme.dart#ZoomPageTransitionsBuilder');
+    'package:flutter/src/material/page_transitions_theme.dart#ZoomPageTransitionsBuilder');
 
 const cupertinoPageTransitionsBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/page_transitions_theme.dart#CupertinoPageTransitionsBuilder');
+    'package:flutter/src/material/page_transitions_theme.dart#CupertinoPageTransitionsBuilder');
 
 const pageTransitionsThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/page_transitions_theme.dart#PageTransitionsTheme');
+    'package:flutter/src/material/page_transitions_theme.dart#PageTransitionsTheme');
 
 const paginatedDataTableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/paginated_data_table.dart#PaginatedDataTable');
+    'package:flutter/src/material/paginated_data_table.dart#PaginatedDataTable');
 
 const paginatedDataTableStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/paginated_data_table.dart#PaginatedDataTableState');
+    'package:flutter/src/material/paginated_data_table.dart#PaginatedDataTableState');
+
+const popupMenuPositionType = TypeChecker.fromUrl(
+    'package:flutter/src/material/popup_menu.dart#PopupMenuPosition');
 
 const popupMenuEntryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/popup_menu.dart#PopupMenuEntry');
+    'package:flutter/src/material/popup_menu.dart#PopupMenuEntry');
 
 const popupMenuDividerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/popup_menu.dart#PopupMenuDivider');
+    'package:flutter/src/material/popup_menu.dart#PopupMenuDivider');
 
 const popupMenuItemType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/popup_menu.dart#PopupMenuItem');
+    'package:flutter/src/material/popup_menu.dart#PopupMenuItem');
 
 const popupMenuItemStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/popup_menu.dart#PopupMenuItemState');
+    'package:flutter/src/material/popup_menu.dart#PopupMenuItemState');
 
 const checkedPopupMenuItemType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/popup_menu.dart#CheckedPopupMenuItem');
+    'package:flutter/src/material/popup_menu.dart#CheckedPopupMenuItem');
 
 const popupMenuButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/popup_menu.dart#PopupMenuButton');
+    'package:flutter/src/material/popup_menu.dart#PopupMenuButton');
 
 const popupMenuButtonStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/popup_menu.dart#PopupMenuButtonState');
+    'package:flutter/src/material/popup_menu.dart#PopupMenuButtonState');
 
 const popupMenuThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/popup_menu_theme.dart#PopupMenuThemeData');
+    'package:flutter/src/material/popup_menu_theme.dart#PopupMenuThemeData');
 
 const popupMenuThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/popup_menu_theme.dart#PopupMenuTheme');
+    'package:flutter/src/material/popup_menu_theme.dart#PopupMenuTheme');
 
 const progressIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/progress_indicator.dart#ProgressIndicator');
+    'package:flutter/src/material/progress_indicator.dart#ProgressIndicator');
 
 const linearProgressIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/progress_indicator.dart#LinearProgressIndicator');
+    'package:flutter/src/material/progress_indicator.dart#LinearProgressIndicator');
 
 const circularProgressIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/progress_indicator.dart#CircularProgressIndicator');
+    'package:flutter/src/material/progress_indicator.dart#CircularProgressIndicator');
 
 const refreshProgressIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/progress_indicator.dart#RefreshProgressIndicator');
+    'package:flutter/src/material/progress_indicator.dart#RefreshProgressIndicator');
 
 const progressIndicatorThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/progress_indicator_theme.dart#ProgressIndicatorThemeData');
+    'package:flutter/src/material/progress_indicator_theme.dart#ProgressIndicatorThemeData');
 
 const progressIndicatorThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/progress_indicator_theme.dart#ProgressIndicatorTheme');
+    'package:flutter/src/material/progress_indicator_theme.dart#ProgressIndicatorTheme');
 
-const radioType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/radio.dart#Radio');
+const radioType =
+    TypeChecker.fromUrl('package:flutter/src/material/radio.dart#Radio');
 
 const radioListTileType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/radio_list_tile.dart#RadioListTile');
+    'package:flutter/src/material/radio_list_tile.dart#RadioListTile');
 
 const radioThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/radio_theme.dart#RadioThemeData');
+    'package:flutter/src/material/radio_theme.dart#RadioThemeData');
 
 const radioThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/radio_theme.dart#RadioTheme');
+    'package:flutter/src/material/radio_theme.dart#RadioTheme');
 
 const raisedButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/raised_button.dart#RaisedButton');
+    'package:flutter/src/material/raised_button.dart#RaisedButton');
 
 const rangeSliderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/range_slider.dart#RangeSlider');
+    'package:flutter/src/material/range_slider.dart#RangeSlider');
 
 const refreshIndicatorTriggerModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/refresh_indicator.dart#RefreshIndicatorTriggerMode');
+    'package:flutter/src/material/refresh_indicator.dart#RefreshIndicatorTriggerMode');
 
 const refreshIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/refresh_indicator.dart#RefreshIndicator');
+    'package:flutter/src/material/refresh_indicator.dart#RefreshIndicator');
 
 const refreshIndicatorStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/refresh_indicator.dart#RefreshIndicatorState');
+    'package:flutter/src/material/refresh_indicator.dart#RefreshIndicatorState');
 
 const reorderableListViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/reorderable_list.dart#ReorderableListView');
+    'package:flutter/src/material/reorderable_list.dart#ReorderableListView');
 
 const scaffoldMessengerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scaffold.dart#ScaffoldMessenger');
+    'package:flutter/src/material/scaffold.dart#ScaffoldMessenger');
 
 const scaffoldMessengerStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scaffold.dart#ScaffoldMessengerState');
+    'package:flutter/src/material/scaffold.dart#ScaffoldMessengerState');
 
 const scaffoldPrelayoutGeometryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scaffold.dart#ScaffoldPrelayoutGeometry');
+    'package:flutter/src/material/scaffold.dart#ScaffoldPrelayoutGeometry');
 
 const scaffoldGeometryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scaffold.dart#ScaffoldGeometry');
+    'package:flutter/src/material/scaffold.dart#ScaffoldGeometry');
 
-const scaffoldType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scaffold.dart#Scaffold');
+const scaffoldType =
+    TypeChecker.fromUrl('package:flutter/src/material/scaffold.dart#Scaffold');
 
 const scaffoldStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scaffold.dart#ScaffoldState');
+    'package:flutter/src/material/scaffold.dart#ScaffoldState');
 
 const scaffoldFeatureControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scaffold.dart#ScaffoldFeatureController');
+    'package:flutter/src/material/scaffold.dart#ScaffoldFeatureController');
 
 const persistentBottomSheetControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scaffold.dart#PersistentBottomSheetController');
+    'package:flutter/src/material/scaffold.dart#PersistentBottomSheetController');
 
 const scrollbarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scrollbar.dart#Scrollbar');
+    'package:flutter/src/material/scrollbar.dart#Scrollbar');
 
 const scrollbarThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scrollbar_theme.dart#ScrollbarThemeData');
+    'package:flutter/src/material/scrollbar_theme.dart#ScrollbarThemeData');
 
 const scrollbarThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/scrollbar_theme.dart#ScrollbarTheme');
+    'package:flutter/src/material/scrollbar_theme.dart#ScrollbarTheme');
 
 const searchDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/search.dart#SearchDelegate');
+    'package:flutter/src/material/search.dart#SearchDelegate');
 
 const selectableTextType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/selectable_text.dart#SelectableText');
+    'package:flutter/src/material/selectable_text.dart#SelectableText');
 
-const sliderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider.dart#Slider');
+const sliderType =
+    TypeChecker.fromUrl('package:flutter/src/material/slider.dart#Slider');
 
 const sliderThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#SliderTheme');
+    'package:flutter/src/material/slider_theme.dart#SliderTheme');
 
 const showValueIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#ShowValueIndicator');
+    'package:flutter/src/material/slider_theme.dart#ShowValueIndicator');
 
-const thumbType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#Thumb');
+const thumbType =
+    TypeChecker.fromUrl('package:flutter/src/material/slider_theme.dart#Thumb');
 
 const sliderThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#SliderThemeData');
+    'package:flutter/src/material/slider_theme.dart#SliderThemeData');
 
 const sliderComponentShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#SliderComponentShape');
+    'package:flutter/src/material/slider_theme.dart#SliderComponentShape');
 
 const sliderTickMarkShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#SliderTickMarkShape');
+    'package:flutter/src/material/slider_theme.dart#SliderTickMarkShape');
 
 const sliderTrackShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#SliderTrackShape');
+    'package:flutter/src/material/slider_theme.dart#SliderTrackShape');
 
 const rangeSliderThumbShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RangeSliderThumbShape');
+    'package:flutter/src/material/slider_theme.dart#RangeSliderThumbShape');
 
 const rangeSliderValueIndicatorShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RangeSliderValueIndicatorShape');
+    'package:flutter/src/material/slider_theme.dart#RangeSliderValueIndicatorShape');
 
 const rangeSliderTickMarkShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RangeSliderTickMarkShape');
+    'package:flutter/src/material/slider_theme.dart#RangeSliderTickMarkShape');
 
 const rangeSliderTrackShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RangeSliderTrackShape');
+    'package:flutter/src/material/slider_theme.dart#RangeSliderTrackShape');
 
 const baseSliderTrackShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#BaseSliderTrackShape');
+    'package:flutter/src/material/slider_theme.dart#BaseSliderTrackShape');
 
 const rectangularSliderTrackShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RectangularSliderTrackShape');
+    'package:flutter/src/material/slider_theme.dart#RectangularSliderTrackShape');
 
 const roundedRectSliderTrackShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RoundedRectSliderTrackShape');
+    'package:flutter/src/material/slider_theme.dart#RoundedRectSliderTrackShape');
 
 const rectangularRangeSliderTrackShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RectangularRangeSliderTrackShape');
+    'package:flutter/src/material/slider_theme.dart#RectangularRangeSliderTrackShape');
 
 const roundedRectRangeSliderTrackShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RoundedRectRangeSliderTrackShape');
+    'package:flutter/src/material/slider_theme.dart#RoundedRectRangeSliderTrackShape');
 
 const roundSliderTickMarkShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RoundSliderTickMarkShape');
+    'package:flutter/src/material/slider_theme.dart#RoundSliderTickMarkShape');
 
 const roundRangeSliderTickMarkShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RoundRangeSliderTickMarkShape');
+    'package:flutter/src/material/slider_theme.dart#RoundRangeSliderTickMarkShape');
 
 const roundSliderThumbShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RoundSliderThumbShape');
+    'package:flutter/src/material/slider_theme.dart#RoundSliderThumbShape');
 
 const roundRangeSliderThumbShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RoundRangeSliderThumbShape');
+    'package:flutter/src/material/slider_theme.dart#RoundRangeSliderThumbShape');
 
 const roundSliderOverlayShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RoundSliderOverlayShape');
+    'package:flutter/src/material/slider_theme.dart#RoundSliderOverlayShape');
 
 const rectangularSliderValueIndicatorShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RectangularSliderValueIndicatorShape');
+    'package:flutter/src/material/slider_theme.dart#RectangularSliderValueIndicatorShape');
 
 const rectangularRangeSliderValueIndicatorShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RectangularRangeSliderValueIndicatorShape');
+    'package:flutter/src/material/slider_theme.dart#RectangularRangeSliderValueIndicatorShape');
 
 const paddleSliderValueIndicatorShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#PaddleSliderValueIndicatorShape');
+    'package:flutter/src/material/slider_theme.dart#PaddleSliderValueIndicatorShape');
 
 const paddleRangeSliderValueIndicatorShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#PaddleRangeSliderValueIndicatorShape');
+    'package:flutter/src/material/slider_theme.dart#PaddleRangeSliderValueIndicatorShape');
 
 const rangeValuesType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RangeValues');
+    'package:flutter/src/material/slider_theme.dart#RangeValues');
 
 const rangeLabelsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/slider_theme.dart#RangeLabels');
+    'package:flutter/src/material/slider_theme.dart#RangeLabels');
 
 const snackBarClosedReasonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/snack_bar.dart#SnackBarClosedReason');
+    'package:flutter/src/material/snack_bar.dart#SnackBarClosedReason');
 
 const snackBarActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/snack_bar.dart#SnackBarAction');
+    'package:flutter/src/material/snack_bar.dart#SnackBarAction');
 
-const snackBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/snack_bar.dart#SnackBar');
+const snackBarType =
+    TypeChecker.fromUrl('package:flutter/src/material/snack_bar.dart#SnackBar');
 
 const snackBarBehaviorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/snack_bar_theme.dart#SnackBarBehavior');
+    'package:flutter/src/material/snack_bar_theme.dart#SnackBarBehavior');
 
 const snackBarThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/snack_bar_theme.dart#SnackBarThemeData');
+    'package:flutter/src/material/snack_bar_theme.dart#SnackBarThemeData');
 
-const stepStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/stepper.dart#StepState');
+const stepStateType =
+    TypeChecker.fromUrl('package:flutter/src/material/stepper.dart#StepState');
 
 const stepperTypeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/stepper.dart#StepperType');
+    'package:flutter/src/material/stepper.dart#StepperType');
 
 const controlsDetailsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/stepper.dart#ControlsDetails');
+    'package:flutter/src/material/stepper.dart#ControlsDetails');
 
-const stepType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/stepper.dart#Step');
+const stepType =
+    TypeChecker.fromUrl('package:flutter/src/material/stepper.dart#Step');
 
-const stepperType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/stepper.dart#Stepper');
+const stepperType =
+    TypeChecker.fromUrl('package:flutter/src/material/stepper.dart#Stepper');
 
-const switchType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/switch.dart#Switch');
+const switchType =
+    TypeChecker.fromUrl('package:flutter/src/material/switch.dart#Switch');
 
 const switchListTileType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/switch_list_tile.dart#SwitchListTile');
+    'package:flutter/src/material/switch_list_tile.dart#SwitchListTile');
 
 const switchThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/switch_theme.dart#SwitchThemeData');
+    'package:flutter/src/material/switch_theme.dart#SwitchThemeData');
 
 const switchThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/switch_theme.dart#SwitchTheme');
+    'package:flutter/src/material/switch_theme.dart#SwitchTheme');
 
 const tabBarThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tab_bar_theme.dart#TabBarTheme');
+    'package:flutter/src/material/tab_bar_theme.dart#TabBarTheme');
 
 const tabControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tab_controller.dart#TabController');
+    'package:flutter/src/material/tab_controller.dart#TabController');
 
 const defaultTabControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tab_controller.dart#DefaultTabController');
+    'package:flutter/src/material/tab_controller.dart#DefaultTabController');
 
 const underlineTabIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tab_indicator.dart#UnderlineTabIndicator');
+    'package:flutter/src/material/tab_indicator.dart#UnderlineTabIndicator');
 
 const tabBarIndicatorSizeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tabs.dart#TabBarIndicatorSize');
+    'package:flutter/src/material/tabs.dart#TabBarIndicatorSize');
 
-const tabType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tabs.dart#Tab');
+const tabType =
+    TypeChecker.fromUrl('package:flutter/src/material/tabs.dart#Tab');
 
-const tabBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tabs.dart#TabBar');
+const tabBarType =
+    TypeChecker.fromUrl('package:flutter/src/material/tabs.dart#TabBar');
 
-const tabBarViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tabs.dart#TabBarView');
+const tabBarViewType =
+    TypeChecker.fromUrl('package:flutter/src/material/tabs.dart#TabBarView');
 
 const tabPageSelectorIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tabs.dart#TabPageSelectorIndicator');
+    'package:flutter/src/material/tabs.dart#TabPageSelectorIndicator');
 
 const tabPageSelectorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tabs.dart#TabPageSelector');
+    'package:flutter/src/material/tabs.dart#TabPageSelector');
 
 const textButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_button.dart#TextButton');
+    'package:flutter/src/material/text_button.dart#TextButton');
 
 const textButtonThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_button_theme.dart#TextButtonThemeData');
+    'package:flutter/src/material/text_button_theme.dart#TextButtonThemeData');
 
 const textButtonThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_button_theme.dart#TextButtonTheme');
+    'package:flutter/src/material/text_button_theme.dart#TextButtonTheme');
 
 const textFieldType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_field.dart#TextField');
+    'package:flutter/src/material/text_field.dart#TextField');
+
+const smartDashesTypeType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#SmartDashesType');
+
+const smartQuotesTypeType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#SmartQuotesType');
+
+const textInputTypeType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextInputType');
+
+const textInputActionType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextInputAction');
+
+const textCapitalizationType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextCapitalization');
 
 const textFormFieldType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_form_field.dart#TextFormField');
+    'package:flutter/src/material/text_form_field.dart#TextFormField');
 
 const materialTextSelectionControlsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_selection.dart#MaterialTextSelectionControls');
+    'package:flutter/src/material/text_selection.dart#MaterialTextSelectionControls');
 
 const textSelectionThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_selection_theme.dart#TextSelectionThemeData');
+    'package:flutter/src/material/text_selection_theme.dart#TextSelectionThemeData');
 
 const textSelectionThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_selection_theme.dart#TextSelectionTheme');
+    'package:flutter/src/material/text_selection_theme.dart#TextSelectionTheme');
 
 const textSelectionToolbarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_selection_toolbar.dart#TextSelectionToolbar');
+    'package:flutter/src/material/text_selection_toolbar.dart#TextSelectionToolbar');
 
 const textSelectionToolbarTextButtonType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_selection_toolbar_text_button.dart#TextSelectionToolbarTextButton');
+    'package:flutter/src/material/text_selection_toolbar_text_button.dart#TextSelectionToolbarTextButton');
 
 const textThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/text_theme.dart#TextTheme');
+    'package:flutter/src/material/text_theme.dart#TextTheme');
 
-const themeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/theme.dart#Theme');
+const themeType =
+    TypeChecker.fromUrl('package:flutter/src/material/theme.dart#Theme');
 
 const themeDataTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/theme.dart#ThemeDataTween');
+    'package:flutter/src/material/theme.dart#ThemeDataTween');
 
 const animatedThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/theme.dart#AnimatedTheme');
+    'package:flutter/src/material/theme.dart#AnimatedTheme');
 
 const themeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/theme_data.dart#ThemeData');
+    'package:flutter/src/material/theme_data.dart#ThemeData');
+
+const brightnessType = TypeChecker.fromUrl('dart:ui/window.dart#Brightness');
+
+const themeExtensionType = TypeChecker.fromUrl(
+    'package:flutter/src/material/theme_data.dart#ThemeExtension');
 
 const materialTapTargetSizeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/theme_data.dart#MaterialTapTargetSize');
+    'package:flutter/src/material/theme_data.dart#MaterialTapTargetSize');
 
 const materialBasedCupertinoThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/theme_data.dart#MaterialBasedCupertinoThemeData');
+    'package:flutter/src/material/theme_data.dart#MaterialBasedCupertinoThemeData');
 
 const visualDensityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/theme_data.dart#VisualDensity');
+    'package:flutter/src/material/theme_data.dart#VisualDensity');
 
-const dayPeriodType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/time.dart#DayPeriod');
+const dayPeriodType =
+    TypeChecker.fromUrl('package:flutter/src/material/time.dart#DayPeriod');
 
-const timeOfDayType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/time.dart#TimeOfDay');
+const timeOfDayType =
+    TypeChecker.fromUrl('package:flutter/src/material/time.dart#TimeOfDay');
 
 const restorableTimeOfDayType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/time.dart#RestorableTimeOfDay');
+    'package:flutter/src/material/time.dart#RestorableTimeOfDay');
 
 const timeOfDayFormatType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/time.dart#TimeOfDayFormat');
+    'package:flutter/src/material/time.dart#TimeOfDayFormat');
 
-const hourFormatType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/time.dart#HourFormat');
+const hourFormatType =
+    TypeChecker.fromUrl('package:flutter/src/material/time.dart#HourFormat');
 
 const timePickerEntryModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/time_picker.dart#TimePickerEntryMode');
+    'package:flutter/src/material/time_picker.dart#TimePickerEntryMode');
 
 const timePickerDialogType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/time_picker.dart#TimePickerDialog');
+    'package:flutter/src/material/time_picker.dart#TimePickerDialog');
 
 const timePickerThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/time_picker_theme.dart#TimePickerThemeData');
+    'package:flutter/src/material/time_picker_theme.dart#TimePickerThemeData');
 
 const timePickerThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/time_picker_theme.dart#TimePickerTheme');
+    'package:flutter/src/material/time_picker_theme.dart#TimePickerTheme');
 
 const toggleButtonsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/toggle_buttons.dart#ToggleButtons');
+    'package:flutter/src/material/toggle_buttons.dart#ToggleButtons');
 
 const toggleButtonsThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/toggle_buttons_theme.dart#ToggleButtonsThemeData');
+    'package:flutter/src/material/toggle_buttons_theme.dart#ToggleButtonsThemeData');
 
 const toggleButtonsThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/toggle_buttons_theme.dart#ToggleButtonsTheme');
+    'package:flutter/src/material/toggle_buttons_theme.dart#ToggleButtonsTheme');
 
 const toggleableStateMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/toggleable.dart#ToggleableStateMixin');
+    'package:flutter/src/material/toggleable.dart#ToggleableStateMixin');
 
 const toggleablePainterType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/toggleable.dart#ToggleablePainter');
+    'package:flutter/src/material/toggleable.dart#ToggleablePainter');
 
-const tooltipType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tooltip.dart#Tooltip');
+const tooltipType =
+    TypeChecker.fromUrl('package:flutter/src/material/tooltip.dart#Tooltip');
+
+const tooltipStateType = TypeChecker.fromUrl(
+    'package:flutter/src/material/tooltip.dart#TooltipState');
 
 const tooltipThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tooltip_theme.dart#TooltipThemeData');
+    'package:flutter/src/material/tooltip_theme.dart#TooltipThemeData');
 
 const tooltipThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tooltip_theme.dart#TooltipTheme');
+    'package:flutter/src/material/tooltip_theme.dart#TooltipTheme');
 
 const tooltipTriggerModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tooltip_theme.dart#TooltipTriggerMode');
+    'package:flutter/src/material/tooltip_theme.dart#TooltipTriggerMode');
 
 const tooltipVisibilityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/tooltip_visibility.dart#TooltipVisibility');
+    'package:flutter/src/material/tooltip_visibility.dart#TooltipVisibility');
 
 const scriptCategoryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/typography.dart#ScriptCategory');
+    'package:flutter/src/material/typography.dart#ScriptCategory');
 
 const typographyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/typography.dart#Typography');
+    'package:flutter/src/material/typography.dart#Typography');
 
 const userAccountsDrawerHeaderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/material/user_accounts_drawer_header.dart#UserAccountsDrawerHeader');
+    'package:flutter/src/material/user_accounts_drawer_header.dart#UserAccountsDrawerHeader');
 
-const intentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#Intent');
+const charactersType =
+    TypeChecker.fromUrl('package:characters/src/characters.dart#Characters');
 
-const actionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#Action');
+const characterRangeType = TypeChecker.fromUrl(
+    'package:characters/src/characters.dart#CharacterRange');
+
+const matrix4Type = TypeChecker.fromUrl(
+    'package:vector_math/src/vector_math_64/matrix4.dart#Matrix4');
+
+const uniqueKeyType =
+    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#UniqueKey');
+
+const intentType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/actions.dart#Intent');
+
+const actionType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/actions.dart#Action');
 
 const actionListenerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#ActionListener');
+    'package:flutter/src/widgets/actions.dart#ActionListener');
 
 const contextActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#ContextAction');
+    'package:flutter/src/widgets/actions.dart#ContextAction');
 
 const callbackActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#CallbackAction');
+    'package:flutter/src/widgets/actions.dart#CallbackAction');
 
 const actionDispatcherType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#ActionDispatcher');
+    'package:flutter/src/widgets/actions.dart#ActionDispatcher');
 
-const actionsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#Actions');
+const actionsType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/actions.dart#Actions');
 
 const focusableActionDetectorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#FocusableActionDetector');
+    'package:flutter/src/widgets/actions.dart#FocusableActionDetector');
 
 const doNothingIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#DoNothingIntent');
+    'package:flutter/src/widgets/actions.dart#DoNothingIntent');
 
 const doNothingAndStopPropagationIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#DoNothingAndStopPropagationIntent');
+    'package:flutter/src/widgets/actions.dart#DoNothingAndStopPropagationIntent');
 
 const doNothingActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#DoNothingAction');
+    'package:flutter/src/widgets/actions.dart#DoNothingAction');
 
 const activateIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#ActivateIntent');
+    'package:flutter/src/widgets/actions.dart#ActivateIntent');
 
 const buttonActivateIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#ButtonActivateIntent');
+    'package:flutter/src/widgets/actions.dart#ButtonActivateIntent');
 
 const activateActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#ActivateAction');
+    'package:flutter/src/widgets/actions.dart#ActivateAction');
 
 const selectIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#SelectIntent');
+    'package:flutter/src/widgets/actions.dart#SelectIntent');
 
 const selectActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#SelectAction');
+    'package:flutter/src/widgets/actions.dart#SelectAction');
 
 const dismissIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#DismissIntent');
+    'package:flutter/src/widgets/actions.dart#DismissIntent');
 
 const dismissActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#DismissAction');
+    'package:flutter/src/widgets/actions.dart#DismissAction');
 
 const prioritizedIntentsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#PrioritizedIntents');
+    'package:flutter/src/widgets/actions.dart#PrioritizedIntents');
 
 const prioritizedActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/actions.dart#PrioritizedAction');
+    'package:flutter/src/widgets/actions.dart#PrioritizedAction');
 
 const crossFadeStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/animated_cross_fade.dart#CrossFadeState');
+    'package:flutter/src/widgets/animated_cross_fade.dart#CrossFadeState');
 
 const animatedCrossFadeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/animated_cross_fade.dart#AnimatedCrossFade');
+    'package:flutter/src/widgets/animated_cross_fade.dart#AnimatedCrossFade');
 
 const animatedListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/animated_list.dart#AnimatedList');
+    'package:flutter/src/widgets/animated_list.dart#AnimatedList');
 
 const animatedListStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/animated_list.dart#AnimatedListState');
+    'package:flutter/src/widgets/animated_list.dart#AnimatedListState');
 
 const sliverAnimatedListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/animated_list.dart#SliverAnimatedList');
+    'package:flutter/src/widgets/animated_list.dart#SliverAnimatedList');
 
 const sliverAnimatedListStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/animated_list.dart#SliverAnimatedListState');
+    'package:flutter/src/widgets/animated_list.dart#SliverAnimatedListState');
 
 const animatedSizeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/animated_size.dart#AnimatedSize');
+    'package:flutter/src/widgets/animated_size.dart#AnimatedSize');
 
 const animatedSwitcherType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/animated_switcher.dart#AnimatedSwitcher');
+    'package:flutter/src/widgets/animated_switcher.dart#AnimatedSwitcher');
 
 const annotatedRegionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/annotated_region.dart#AnnotatedRegion');
+    'package:flutter/src/widgets/annotated_region.dart#AnnotatedRegion');
 
-const widgetsAppType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/app.dart#WidgetsApp');
+const widgetsAppType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/app.dart#WidgetsApp');
+
+const localeType =
+    TypeChecker.fromUrl('dart:ui/platform_dispatcher.dart#Locale');
 
 const streamBuilderBaseType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/async.dart#StreamBuilderBase');
+    'package:flutter/src/widgets/async.dart#StreamBuilderBase');
 
 const connectionStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/async.dart#ConnectionState');
+    'package:flutter/src/widgets/async.dart#ConnectionState');
 
-const asyncSnapshotType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/async.dart#AsyncSnapshot');
+const asyncSnapshotType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/async.dart#AsyncSnapshot');
 
-const streamBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/async.dart#StreamBuilder');
+const streamBuilderType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/async.dart#StreamBuilder');
 
-const futureBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/async.dart#FutureBuilder');
+const futureBuilderType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/async.dart#FutureBuilder');
 
 const rawAutocompleteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/autocomplete.dart#RawAutocomplete');
+    'package:flutter/src/widgets/autocomplete.dart#RawAutocomplete');
 
 const autocompletePreviousOptionIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/autocomplete.dart#AutocompletePreviousOptionIntent');
+    'package:flutter/src/widgets/autocomplete.dart#AutocompletePreviousOptionIntent');
 
 const autocompleteNextOptionIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/autocomplete.dart#AutocompleteNextOptionIntent');
+    'package:flutter/src/widgets/autocomplete.dart#AutocompleteNextOptionIntent');
 
 const autocompleteHighlightedOptionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/autocomplete.dart#AutocompleteHighlightedOption');
+    'package:flutter/src/widgets/autocomplete.dart#AutocompleteHighlightedOption');
 
 const autofillContextActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/autofill.dart#AutofillContextAction');
+    'package:flutter/src/widgets/autofill.dart#AutofillContextAction');
 
 const autofillGroupType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/autofill.dart#AutofillGroup');
+    'package:flutter/src/widgets/autofill.dart#AutofillGroup');
 
 const autofillGroupStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/autofill.dart#AutofillGroupState');
+    'package:flutter/src/widgets/autofill.dart#AutofillGroupState');
+
+const autofillHintsType = TypeChecker.fromUrl(
+    'package:flutter/src/services/autofill.dart#AutofillHints');
 
 const automaticKeepAliveType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/automatic_keep_alive.dart#AutomaticKeepAlive');
+    'package:flutter/src/widgets/automatic_keep_alive.dart#AutomaticKeepAlive');
 
 const keepAliveNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/automatic_keep_alive.dart#KeepAliveNotification');
+    'package:flutter/src/widgets/automatic_keep_alive.dart#KeepAliveNotification');
 
 const keepAliveHandleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/automatic_keep_alive.dart#KeepAliveHandle');
+    'package:flutter/src/widgets/automatic_keep_alive.dart#KeepAliveHandle');
 
 const automaticKeepAliveClientMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/automatic_keep_alive.dart#AutomaticKeepAliveClientMixin');
+    'package:flutter/src/widgets/automatic_keep_alive.dart#AutomaticKeepAliveClientMixin');
 
 const bannerLocationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/banner.dart#BannerLocation');
+    'package:flutter/src/widgets/banner.dart#BannerLocation');
 
 const bannerPainterType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/banner.dart#BannerPainter');
+    'package:flutter/src/widgets/banner.dart#BannerPainter');
 
-const bannerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/banner.dart#Banner');
+const bannerType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/banner.dart#Banner');
 
 const checkedModeBannerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/banner.dart#CheckedModeBanner');
+    'package:flutter/src/widgets/banner.dart#CheckedModeBanner');
 
 const directionalityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Directionality');
+    'package:flutter/src/widgets/basic.dart#Directionality');
 
-const opacityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Opacity');
+const opacityType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Opacity');
 
-const shaderMaskType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ShaderMask');
+const shaderMaskType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#ShaderMask');
 
 const backdropFilterType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#BackdropFilter');
+    'package:flutter/src/widgets/basic.dart#BackdropFilter');
 
-const customPaintType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#CustomPaint');
+const customPaintType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#CustomPaint');
 
-const clipRectType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ClipRect');
+const clipRectType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#ClipRect');
 
-const clipRRectType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ClipRRect');
+const clipRRectType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#ClipRRect');
 
-const clipOvalType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ClipOval');
+const clipOvalType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#ClipOval');
 
-const clipPathType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ClipPath');
+const clipPathType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#ClipPath');
 
-const physicalModelType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#PhysicalModel');
+const physicalModelType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#PhysicalModel');
 
-const physicalShapeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#PhysicalShape');
+const physicalShapeType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#PhysicalShape');
 
-const transformType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Transform');
+const transformType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Transform');
 
 const compositedTransformTargetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#CompositedTransformTarget');
+    'package:flutter/src/widgets/basic.dart#CompositedTransformTarget');
 
 const compositedTransformFollowerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#CompositedTransformFollower');
+    'package:flutter/src/widgets/basic.dart#CompositedTransformFollower');
 
-const fittedBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#FittedBox');
+const fittedBoxType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#FittedBox');
 
 const fractionalTranslationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#FractionalTranslation');
+    'package:flutter/src/widgets/basic.dart#FractionalTranslation');
 
-const rotatedBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#RotatedBox');
+const rotatedBoxType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#RotatedBox');
 
-const paddingType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Padding');
+const paddingType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Padding');
 
-const alignType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Align');
+const alignType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Align');
 
-const centerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Center');
+const centerType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Center');
 
 const customSingleChildLayoutType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#CustomSingleChildLayout');
+    'package:flutter/src/widgets/basic.dart#CustomSingleChildLayout');
 
-const layoutIdType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#LayoutId');
+const layoutIdType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#LayoutId');
 
 const customMultiChildLayoutType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#CustomMultiChildLayout');
+    'package:flutter/src/widgets/basic.dart#CustomMultiChildLayout');
 
-const sizedBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#SizedBox');
+const sizedBoxType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#SizedBox');
 
 const constrainedBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ConstrainedBox');
+    'package:flutter/src/widgets/basic.dart#ConstrainedBox');
 
 const constraintsTransformBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ConstraintsTransformBox');
+    'package:flutter/src/widgets/basic.dart#ConstraintsTransformBox');
 
 const unconstrainedBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#UnconstrainedBox');
+    'package:flutter/src/widgets/basic.dart#UnconstrainedBox');
 
 const fractionallySizedBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#FractionallySizedBox');
+    'package:flutter/src/widgets/basic.dart#FractionallySizedBox');
 
-const limitedBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#LimitedBox');
+const limitedBoxType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#LimitedBox');
 
-const overflowBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#OverflowBox');
+const overflowBoxType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#OverflowBox');
 
 const sizedOverflowBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#SizedOverflowBox');
+    'package:flutter/src/widgets/basic.dart#SizedOverflowBox');
 
-const offstageType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Offstage');
+const offstageType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Offstage');
 
-const aspectRatioType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#AspectRatio');
+const aspectRatioType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#AspectRatio');
 
 const intrinsicWidthType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#IntrinsicWidth');
+    'package:flutter/src/widgets/basic.dart#IntrinsicWidth');
 
 const intrinsicHeightType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#IntrinsicHeight');
+    'package:flutter/src/widgets/basic.dart#IntrinsicHeight');
 
-const baselineType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Baseline');
+const baselineType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Baseline');
 
 const sliverToBoxAdapterType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#SliverToBoxAdapter');
+    'package:flutter/src/widgets/basic.dart#SliverToBoxAdapter');
 
-const sliverPaddingType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#SliverPadding');
+const sliverPaddingType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#SliverPadding');
 
-const listBodyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ListBody');
+const listBodyType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#ListBody');
 
-const stackType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Stack');
+const stackType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Stack');
 
-const indexedStackType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#IndexedStack');
+const indexedStackType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#IndexedStack');
 
-const positionedType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Positioned');
+const positionedType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Positioned');
 
 const positionedDirectionalType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#PositionedDirectional');
+    'package:flutter/src/widgets/basic.dart#PositionedDirectional');
 
-const flexType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Flex');
+const flexType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Flex');
 
-const rowType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Row');
+const rowType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Row');
 
-const columnType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Column');
+const columnType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Column');
 
-const flexibleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Flexible');
+const flexibleType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Flexible');
 
-const expandedType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Expanded');
+const expandedType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Expanded');
 
-const wrapType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Wrap');
+const wrapType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Wrap');
 
-const flowType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Flow');
+const flowType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Flow');
 
-const richTextType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#RichText');
+const richTextType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#RichText');
 
-const rawImageType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#RawImage');
+const rawImageType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#RawImage');
 
 const defaultAssetBundleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#DefaultAssetBundle');
+    'package:flutter/src/widgets/basic.dart#DefaultAssetBundle');
 
 const widgetToRenderBoxAdapterType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#WidgetToRenderBoxAdapter');
+    'package:flutter/src/widgets/basic.dart#WidgetToRenderBoxAdapter');
 
-const listenerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Listener');
+const listenerType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Listener');
 
-const mouseRegionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#MouseRegion');
+const mouseRegionType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#MouseRegion');
 
 const repaintBoundaryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#RepaintBoundary');
+    'package:flutter/src/widgets/basic.dart#RepaintBoundary');
 
-const ignorePointerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#IgnorePointer');
+const ignorePointerType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#IgnorePointer');
 
-const absorbPointerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#AbsorbPointer');
+const absorbPointerType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#AbsorbPointer');
 
-const metaDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#MetaData');
+const metaDataType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#MetaData');
 
-const semanticsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Semantics');
+const semanticsType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Semantics');
 
 const mergeSemanticsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#MergeSemantics');
+    'package:flutter/src/widgets/basic.dart#MergeSemantics');
 
 const blockSemanticsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#BlockSemantics');
+    'package:flutter/src/widgets/basic.dart#BlockSemantics');
 
 const excludeSemanticsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ExcludeSemantics');
+    'package:flutter/src/widgets/basic.dart#ExcludeSemantics');
 
 const indexedSemanticsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#IndexedSemantics');
+    'package:flutter/src/widgets/basic.dart#IndexedSemantics');
 
-const keyedSubtreeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#KeyedSubtree');
+const keyedSubtreeType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#KeyedSubtree');
 
-const builderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#Builder');
+const builderType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#Builder');
 
 const statefulBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#StatefulBuilder');
+    'package:flutter/src/widgets/basic.dart#StatefulBuilder');
 
-const coloredBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/basic.dart#ColoredBox');
+const coloredBoxType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#ColoredBox');
+
+const animationStatusType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animation.dart#AnimationStatus');
+
+const animationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animation.dart#Animation');
+
+const animationBehaviorType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animation_controller.dart#AnimationBehavior');
+
+const animationControllerType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animation_controller.dart#AnimationController');
+
+const tickerFutureType = TypeChecker.fromUrl(
+    'package:flutter/src/scheduler/ticker.dart#TickerFuture');
+
+const tickerCanceledType = TypeChecker.fromUrl(
+    'package:flutter/src/scheduler/ticker.dart#TickerCanceled');
+
+const alwaysStoppedAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AlwaysStoppedAnimation');
+
+const animationWithParentMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AnimationWithParentMixin');
+
+const proxyAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#ProxyAnimation');
+
+const reverseAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#ReverseAnimation');
+
+const curvedAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#CurvedAnimation');
+
+const trainHoppingAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#TrainHoppingAnimation');
+
+const compoundAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#CompoundAnimation');
+
+const animationMeanType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AnimationMean');
+
+const animationMaxType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AnimationMax');
+
+const animationMinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AnimationMin');
+
+const parametricCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ParametricCurve');
+
+const curveType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Curve');
+
+const sawToothType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#SawTooth');
+
+const intervalType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Interval');
+
+const thresholdType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Threshold');
+
+const cubicType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Cubic');
+
+const threePointCubicType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ThreePointCubic');
+
+const curve2DType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Curve2D');
+
+const curve2DSampleType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#Curve2DSample');
+
+const catmullRomSplineType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#CatmullRomSpline');
+
+const catmullRomCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#CatmullRomCurve');
+
+const flippedCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#FlippedCurve');
+
+const elasticInCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ElasticInCurve');
+
+const elasticOutCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ElasticOutCurve');
+
+const elasticInOutCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ElasticInOutCurve');
+
+const curvesType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Curves');
+
+const animationLazyListenerMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/listener_helpers.dart#AnimationLazyListenerMixin');
+
+const animationEagerListenerMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/listener_helpers.dart#AnimationEagerListenerMixin');
+
+const animationLocalListenersMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/listener_helpers.dart#AnimationLocalListenersMixin');
+
+const animationLocalStatusListenersMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/listener_helpers.dart#AnimationLocalStatusListenersMixin');
+
+const animatableType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#Animatable');
+
+const tweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#Tween');
+
+const reverseTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween.dart#ReverseTween');
+
+const colorTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#ColorTween');
+
+const sizeTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#SizeTween');
+
+const rectTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#RectTween');
+
+const intTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#IntTween');
+
+const stepTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#StepTween');
+
+const constantTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween.dart#ConstantTween');
+
+const curveTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#CurveTween');
+
+const tweenSequenceType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween_sequence.dart#TweenSequence');
+
+const flippedTweenSequenceType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween_sequence.dart#FlippedTweenSequence');
+
+const tweenSequenceItemType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween_sequence.dart#TweenSequenceItem');
+
+const flutterErrorDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#FlutterErrorDetails');
+
+const listenableType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/change_notifier.dart#Listenable');
+
+const changeNotifierType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/change_notifier.dart#ChangeNotifier');
+
+const valueNotifierType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/change_notifier.dart#ValueNotifier');
+
+const targetPlatformType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/platform.dart#TargetPlatform');
+
+const shadowType = TypeChecker.fromUrl('dart:ui/painting.dart#Shadow');
+
+const textLeadingDistributionType =
+    TypeChecker.fromUrl('dart:ui/text.dart#TextLeadingDistribution');
+
+const textHeightBehaviorType =
+    TypeChecker.fromUrl('dart:ui/text.dart#TextHeightBehavior');
+
+const placeholderAlignmentType =
+    TypeChecker.fromUrl('dart:ui/text.dart#PlaceholderAlignment');
+
+const alignmentGeometryType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/alignment.dart#AlignmentGeometry');
+
+const alignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/alignment.dart#Alignment');
+
+const alignmentDirectionalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/alignment.dart#AlignmentDirectional');
+
+const textAlignVerticalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/alignment.dart#TextAlignVertical');
+
+const renderComparisonType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/basic_types.dart#RenderComparison');
+
+const axisType =
+    TypeChecker.fromUrl('package:flutter/src/painting/basic_types.dart#Axis');
+
+const verticalDirectionType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/basic_types.dart#VerticalDirection');
+
+const axisDirectionType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/basic_types.dart#AxisDirection');
+
+const offsetType = TypeChecker.fromUrl('dart:ui/geometry.dart#Offset');
+
+const sizeType = TypeChecker.fromUrl('dart:ui/geometry.dart#Size');
+
+const rectType = TypeChecker.fromUrl('dart:ui/geometry.dart#Rect');
+
+const radiusType = TypeChecker.fromUrl('dart:ui/geometry.dart#Radius');
+
+const rRectType = TypeChecker.fromUrl('dart:ui/geometry.dart#RRect');
+
+const rSTransformType =
+    TypeChecker.fromUrl('dart:ui/geometry.dart#RSTransform');
+
+const colorType = TypeChecker.fromUrl('dart:ui/painting.dart#Color');
+
+const blendModeType = TypeChecker.fromUrl('dart:ui/painting.dart#BlendMode');
+
+const filterQualityType =
+    TypeChecker.fromUrl('dart:ui/painting.dart#FilterQuality');
+
+const strokeCapType = TypeChecker.fromUrl('dart:ui/painting.dart#StrokeCap');
+
+const strokeJoinType = TypeChecker.fromUrl('dart:ui/painting.dart#StrokeJoin');
+
+const paintingStyleType =
+    TypeChecker.fromUrl('dart:ui/painting.dart#PaintingStyle');
+
+const clipType = TypeChecker.fromUrl('dart:ui/painting.dart#Clip');
+
+const paintType = TypeChecker.fromUrl('dart:ui/painting.dart#Paint');
+
+const pathFillTypeType =
+    TypeChecker.fromUrl('dart:ui/painting.dart#PathFillType');
+
+const pathOperationType =
+    TypeChecker.fromUrl('dart:ui/painting.dart#PathOperation');
+
+const pathType = TypeChecker.fromUrl('dart:ui/painting.dart#Path');
+
+const blurStyleType = TypeChecker.fromUrl('dart:ui/painting.dart#BlurStyle');
+
+const maskFilterType = TypeChecker.fromUrl('dart:ui/painting.dart#MaskFilter');
+
+const colorFilterType =
+    TypeChecker.fromUrl('dart:ui/painting.dart#ColorFilter');
+
+const shaderType = TypeChecker.fromUrl('dart:ui/painting.dart#Shader');
+
+const tileModeType = TypeChecker.fromUrl('dart:ui/painting.dart#TileMode');
+
+const imageShaderType =
+    TypeChecker.fromUrl('dart:ui/painting.dart#ImageShader');
+
+const vertexModeType = TypeChecker.fromUrl('dart:ui/painting.dart#VertexMode');
+
+const canvasType = TypeChecker.fromUrl('dart:ui/painting.dart#Canvas');
+
+const fontStyleType = TypeChecker.fromUrl('dart:ui/text.dart#FontStyle');
+
+const fontWeightType = TypeChecker.fromUrl('dart:ui/text.dart#FontWeight');
+
+const textAlignType = TypeChecker.fromUrl('dart:ui/text.dart#TextAlign');
+
+const textBaselineType = TypeChecker.fromUrl('dart:ui/text.dart#TextBaseline');
+
+const textDecorationType =
+    TypeChecker.fromUrl('dart:ui/text.dart#TextDecoration');
+
+const textDecorationStyleType =
+    TypeChecker.fromUrl('dart:ui/text.dart#TextDecorationStyle');
+
+const textDirectionType =
+    TypeChecker.fromUrl('dart:ui/text.dart#TextDirection');
+
+const textBoxType = TypeChecker.fromUrl('dart:ui/text.dart#TextBox');
+
+const textAffinityType = TypeChecker.fromUrl('dart:ui/text.dart#TextAffinity');
+
+const textPositionType = TypeChecker.fromUrl('dart:ui/text.dart#TextPosition');
+
+const beveledRectangleBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/beveled_rectangle_border.dart#BeveledRectangleBorder');
+
+const paintingBindingType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/binding.dart#PaintingBinding');
+
+const borderRadiusGeometryType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/border_radius.dart#BorderRadiusGeometry');
+
+const borderRadiusType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/border_radius.dart#BorderRadius');
+
+const borderRadiusDirectionalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/border_radius.dart#BorderRadiusDirectional');
+
+const borderStyleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/borders.dart#BorderStyle');
+
+const borderSideType =
+    TypeChecker.fromUrl('package:flutter/src/painting/borders.dart#BorderSide');
+
+const shapeBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/borders.dart#ShapeBorder');
+
+const outlinedBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/borders.dart#OutlinedBorder');
+
+const boxShapeType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_border.dart#BoxShape');
+
+const boxBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_border.dart#BoxBorder');
+
+const borderType =
+    TypeChecker.fromUrl('package:flutter/src/painting/box_border.dart#Border');
+
+const borderDirectionalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_border.dart#BorderDirectional');
+
+const boxDecorationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_decoration.dart#BoxDecoration');
+
+const boxFitType =
+    TypeChecker.fromUrl('package:flutter/src/painting/box_fit.dart#BoxFit');
+
+const fittedSizesType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_fit.dart#FittedSizes');
+
+const boxShadowType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_shadow.dart#BoxShadow');
+
+const circleBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/circle_border.dart#CircleBorder');
+
+const clipContextType =
+    TypeChecker.fromUrl('package:flutter/src/painting/clip.dart#ClipContext');
+
+const hSVColorType =
+    TypeChecker.fromUrl('package:flutter/src/painting/colors.dart#HSVColor');
+
+const hSLColorType =
+    TypeChecker.fromUrl('package:flutter/src/painting/colors.dart#HSLColor');
+
+const colorSwatchType =
+    TypeChecker.fromUrl('package:flutter/src/painting/colors.dart#ColorSwatch');
+
+const colorPropertyType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/colors.dart#ColorProperty');
+
+const continuousRectangleBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/continuous_rectangle_border.dart#ContinuousRectangleBorder');
+
+const imageSizeInfoType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/debug.dart#ImageSizeInfo');
+
+const decorationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration.dart#Decoration');
+
+const boxPainterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration.dart#BoxPainter');
+
+const imageRepeatType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration_image.dart#ImageRepeat');
+
+const decorationImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration_image.dart#DecorationImage');
+
+const decorationImagePainterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration_image.dart#DecorationImagePainter');
+
+const edgeInsetsGeometryType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/edge_insets.dart#EdgeInsetsGeometry');
+
+const edgeInsetsType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/edge_insets.dart#EdgeInsets');
+
+const edgeInsetsDirectionalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/edge_insets.dart#EdgeInsetsDirectional');
+
+const flutterLogoStyleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/flutter_logo.dart#FlutterLogoStyle');
+
+const flutterLogoDecorationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/flutter_logo.dart#FlutterLogoDecoration');
+
+const fractionalOffsetType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/fractional_offset.dart#FractionalOffset');
+
+const gradientTransformType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#GradientTransform');
+
+const gradientRotationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#GradientRotation');
+
+const gradientType =
+    TypeChecker.fromUrl('package:flutter/src/painting/gradient.dart#Gradient');
+
+const linearGradientType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#LinearGradient');
+
+const radialGradientType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#RadialGradient');
+
+const sweepGradientType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#SweepGradient');
+
+const imageCacheType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_cache.dart#ImageCache');
+
+const imageCacheStatusType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_cache.dart#ImageCacheStatus');
+
+const imageConfigurationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ImageConfiguration');
+
+const imageProviderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ImageProvider');
+
+const assetBundleImageKeyType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#AssetBundleImageKey');
+
+const assetBundleImageProviderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#AssetBundleImageProvider');
+
+const resizeImageKeyType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ResizeImageKey');
+
+const resizeImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ResizeImage');
+
+const networkImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#NetworkImage');
+
+const fileImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#FileImage');
+
+const memoryImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#MemoryImage');
+
+const exactAssetImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ExactAssetImage');
+
+const networkImageLoadExceptionType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#NetworkImageLoadException');
+
+const assetImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_resolution.dart#AssetImage');
+
+const imageInfoType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageInfo');
+
+const imageStreamListenerType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageStreamListener');
+
+const imageChunkEventType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageChunkEvent');
+
+const imageStreamType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageStream');
+
+const imageStreamCompleterHandleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageStreamCompleterHandle');
+
+const imageStreamCompleterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageStreamCompleter');
+
+const oneFrameImageStreamCompleterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#OneFrameImageStreamCompleter');
+
+const multiFrameImageStreamCompleterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#MultiFrameImageStreamCompleter');
+
+const accumulatorType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/inline_span.dart#Accumulator');
+
+const inlineSpanSemanticsInformationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/inline_span.dart#InlineSpanSemanticsInformation');
+
+const inlineSpanType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/inline_span.dart#InlineSpan');
+
+const matrixUtilsType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/matrix_utils.dart#MatrixUtils');
+
+const transformPropertyType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/matrix_utils.dart#TransformProperty');
+
+const notchedShapeType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/notched_shapes.dart#NotchedShape');
+
+const circularNotchedRectangleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/notched_shapes.dart#CircularNotchedRectangle');
+
+const automaticNotchedShapeType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/notched_shapes.dart#AutomaticNotchedShape');
+
+const placeholderSpanType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/placeholder_span.dart#PlaceholderSpan');
+
+const roundedRectangleBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/rounded_rectangle_border.dart#RoundedRectangleBorder');
+
+const shaderWarmUpType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/shader_warm_up.dart#ShaderWarmUp');
+
+const shapeDecorationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/shape_decoration.dart#ShapeDecoration');
+
+const stadiumBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/stadium_border.dart#StadiumBorder');
+
+const strutStyleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/strut_style.dart#StrutStyle');
+
+const textOverflowType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_painter.dart#TextOverflow');
+
+const placeholderDimensionsType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_painter.dart#PlaceholderDimensions');
+
+const textWidthBasisType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_painter.dart#TextWidthBasis');
+
+const textPainterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_painter.dart#TextPainter');
+
+const textSelectionType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_editing.dart#TextSelection');
+
+const textRangeType = TypeChecker.fromUrl('dart:ui/text.dart#TextRange');
+
+const textSpanType =
+    TypeChecker.fromUrl('package:flutter/src/painting/text_span.dart#TextSpan');
+
+const textStyleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_style.dart#TextStyle');
+
+const boxConstraintsType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/box.dart#BoxConstraints');
+
+const multiChildLayoutDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/custom_layout.dart#MultiChildLayoutDelegate');
+
+const customPainterType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/custom_paint.dart#CustomPainter');
+
+const customPainterSemanticsType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/custom_paint.dart#CustomPainterSemantics');
+
+const flexFitType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/flex.dart#FlexFit');
+
+const mainAxisSizeType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/flex.dart#MainAxisSize');
+
+const mainAxisAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/flex.dart#MainAxisAlignment');
+
+const crossAxisAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/flex.dart#CrossAxisAlignment');
+
+const flowPaintingContextType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/flow.dart#FlowPaintingContext');
+
+const flowDelegateType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/flow.dart#FlowDelegate');
+
+const layerLinkType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/layer.dart#LayerLink');
+
+const mouseCursorType = TypeChecker.fromUrl(
+    'package:flutter/src/services/mouse_cursor.dart#MouseCursor');
+
+const systemMouseCursorsType = TypeChecker.fromUrl(
+    'package:flutter/src/services/mouse_cursor.dart#SystemMouseCursors');
+
+const paintingContextType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/object.dart#PaintingContext');
+
+const hitTestBehaviorType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#HitTestBehavior');
+
+const customClipperType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#CustomClipper');
+
+const shapeBorderClipperType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#ShapeBorderClipper');
+
+const decorationPositionType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#DecorationPosition');
+
+const pointerEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerEvent');
+
+const pointerDownEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerDownEvent');
+
+const pointerMoveEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerMoveEvent');
+
+const pointerUpEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerUpEvent');
+
+const pointerCancelEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerCancelEvent');
+
+const singleChildLayoutDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/shifted_box.dart#SingleChildLayoutDelegate');
+
+const relativeRectType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/stack.dart#RelativeRect');
+
+const stackFitType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/stack.dart#StackFit');
+
+const fractionalOffsetTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/tweens.dart#FractionalOffsetTween');
+
+const alignmentTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/tweens.dart#AlignmentTween');
+
+const alignmentGeometryTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/tweens.dart#AlignmentGeometryTween');
+
+const wrapAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/wrap.dart#WrapAlignment');
+
+const wrapCrossAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/wrap.dart#WrapCrossAlignment');
+
+const assetBundleType = TypeChecker.fromUrl(
+    'package:flutter/src/services/asset_bundle.dart#AssetBundle');
 
 const widgetsBindingObserverType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/binding.dart#WidgetsBindingObserver');
+    'package:flutter/src/widgets/binding.dart#WidgetsBindingObserver');
 
 const widgetsBindingType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/binding.dart#WidgetsBinding');
+    'package:flutter/src/widgets/binding.dart#WidgetsBinding');
 
 const renderObjectToWidgetAdapterType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/binding.dart#RenderObjectToWidgetAdapter');
+    'package:flutter/src/widgets/binding.dart#RenderObjectToWidgetAdapter');
 
 const renderObjectToWidgetElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/binding.dart#RenderObjectToWidgetElement');
+    'package:flutter/src/widgets/binding.dart#RenderObjectToWidgetElement');
 
 const widgetsFlutterBindingType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/binding.dart#WidgetsFlutterBinding');
+    'package:flutter/src/widgets/binding.dart#WidgetsFlutterBinding');
+
+const appLifecycleStateType =
+    TypeChecker.fromUrl('dart:ui/platform_dispatcher.dart#AppLifecycleState');
 
 const bottomNavigationBarItemType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/bottom_navigation_bar_item.dart#BottomNavigationBarItem');
+    'package:flutter/src/widgets/bottom_navigation_bar_item.dart#BottomNavigationBarItem');
 
 const colorFilteredType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/color_filter.dart#ColorFiltered');
+    'package:flutter/src/widgets/color_filter.dart#ColorFiltered');
 
 const decoratedBoxType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/container.dart#DecoratedBox');
+    'package:flutter/src/widgets/container.dart#DecoratedBox');
 
-const containerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/container.dart#Container');
+const containerType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/container.dart#Container');
 
 const defaultTextEditingShortcutsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/default_text_editing_shortcuts.dart#DefaultTextEditingShortcuts');
+    'package:flutter/src/widgets/default_text_editing_shortcuts.dart#DefaultTextEditingShortcuts');
 
 const desktopTextSelectionToolbarLayoutDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/desktop_text_selection_toolbar_layout_delegate.dart#DesktopTextSelectionToolbarLayoutDelegate');
+    'package:flutter/src/widgets/desktop_text_selection_toolbar_layout_delegate.dart#DesktopTextSelectionToolbarLayoutDelegate');
 
 const dismissDirectionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/dismissible.dart#DismissDirection');
+    'package:flutter/src/widgets/dismissible.dart#DismissDirection');
 
 const dismissibleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/dismissible.dart#Dismissible');
+    'package:flutter/src/widgets/dismissible.dart#Dismissible');
 
 const dismissUpdateDetailsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/dismissible.dart#DismissUpdateDetails');
+    'package:flutter/src/widgets/dismissible.dart#DismissUpdateDetails');
+
+const displayFeatureSubScreenType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/display_feature_sub_screen.dart#DisplayFeatureSubScreen');
 
 const disposableBuildContextType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/disposable_build_context.dart#DisposableBuildContext');
+    'package:flutter/src/widgets/disposable_build_context.dart#DisposableBuildContext');
 
 const dragAnchorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/drag_target.dart#DragAnchor');
+    'package:flutter/src/widgets/drag_target.dart#DragAnchor');
 
 const draggableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/drag_target.dart#Draggable');
+    'package:flutter/src/widgets/drag_target.dart#Draggable');
 
 const longPressDraggableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/drag_target.dart#LongPressDraggable');
+    'package:flutter/src/widgets/drag_target.dart#LongPressDraggable');
 
 const draggableDetailsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/drag_target.dart#DraggableDetails');
+    'package:flutter/src/widgets/drag_target.dart#DraggableDetails');
 
 const dragTargetDetailsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/drag_target.dart#DragTargetDetails');
+    'package:flutter/src/widgets/drag_target.dart#DragTargetDetails');
 
 const dragTargetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/drag_target.dart#DragTarget');
+    'package:flutter/src/widgets/drag_target.dart#DragTarget');
 
 const draggableScrollableControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/draggable_scrollable_sheet.dart#DraggableScrollableController');
+    'package:flutter/src/widgets/draggable_scrollable_sheet.dart#DraggableScrollableController');
 
 const draggableScrollableSheetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/draggable_scrollable_sheet.dart#DraggableScrollableSheet');
+    'package:flutter/src/widgets/draggable_scrollable_sheet.dart#DraggableScrollableSheet');
 
 const draggableScrollableNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/draggable_scrollable_sheet.dart#DraggableScrollableNotification');
+    'package:flutter/src/widgets/draggable_scrollable_sheet.dart#DraggableScrollableNotification');
 
 const draggableScrollableActuatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/draggable_scrollable_sheet.dart#DraggableScrollableActuator');
+    'package:flutter/src/widgets/draggable_scrollable_sheet.dart#DraggableScrollableActuator');
 
 const dualTransitionBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/dual_transition_builder.dart#DualTransitionBuilder');
+    'package:flutter/src/widgets/dual_transition_builder.dart#DualTransitionBuilder');
 
 const textEditingControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/editable_text.dart#TextEditingController');
+    'package:flutter/src/widgets/editable_text.dart#TextEditingController');
 
 const toolbarOptionsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/editable_text.dart#ToolbarOptions');
+    'package:flutter/src/widgets/editable_text.dart#ToolbarOptions');
 
 const editableTextType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/editable_text.dart#EditableText');
+    'package:flutter/src/widgets/editable_text.dart#EditableText');
 
 const editableTextStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/editable_text.dart#EditableTextState');
+    'package:flutter/src/widgets/editable_text.dart#EditableTextState');
+
+const textEditingValueType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextEditingValue');
+
+const selectionChangedCauseType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#SelectionChangedCause');
 
 const fadeInImageType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/fade_in_image.dart#FadeInImage');
+    'package:flutter/src/widgets/fade_in_image.dart#FadeInImage');
 
 const keyEventResultType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_manager.dart#KeyEventResult');
+    'package:flutter/src/widgets/focus_manager.dart#KeyEventResult');
 
 const focusAttachmentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_manager.dart#FocusAttachment');
+    'package:flutter/src/widgets/focus_manager.dart#FocusAttachment');
 
 const unfocusDispositionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_manager.dart#UnfocusDisposition');
+    'package:flutter/src/widgets/focus_manager.dart#UnfocusDisposition');
 
 const focusNodeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_manager.dart#FocusNode');
+    'package:flutter/src/widgets/focus_manager.dart#FocusNode');
 
 const focusScopeNodeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_manager.dart#FocusScopeNode');
+    'package:flutter/src/widgets/focus_manager.dart#FocusScopeNode');
 
 const focusHighlightModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_manager.dart#FocusHighlightMode');
+    'package:flutter/src/widgets/focus_manager.dart#FocusHighlightMode');
 
 const focusHighlightStrategyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_manager.dart#FocusHighlightStrategy');
+    'package:flutter/src/widgets/focus_manager.dart#FocusHighlightStrategy');
 
 const focusManagerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_manager.dart#FocusManager');
+    'package:flutter/src/widgets/focus_manager.dart#FocusManager');
 
-const focusType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_scope.dart#Focus');
+const focusType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/focus_scope.dart#Focus');
 
 const focusScopeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_scope.dart#FocusScope');
+    'package:flutter/src/widgets/focus_scope.dart#FocusScope');
 
 const excludeFocusType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_scope.dart#ExcludeFocus');
+    'package:flutter/src/widgets/focus_scope.dart#ExcludeFocus');
 
 const traversalDirectionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#TraversalDirection');
+    'package:flutter/src/widgets/focus_traversal.dart#TraversalDirection');
 
 const focusTraversalPolicyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#FocusTraversalPolicy');
+    'package:flutter/src/widgets/focus_traversal.dart#FocusTraversalPolicy');
 
 const directionalFocusTraversalPolicyMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#DirectionalFocusTraversalPolicyMixin');
+    'package:flutter/src/widgets/focus_traversal.dart#DirectionalFocusTraversalPolicyMixin');
 
 const widgetOrderTraversalPolicyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#WidgetOrderTraversalPolicy');
+    'package:flutter/src/widgets/focus_traversal.dart#WidgetOrderTraversalPolicy');
 
 const readingOrderTraversalPolicyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#ReadingOrderTraversalPolicy');
+    'package:flutter/src/widgets/focus_traversal.dart#ReadingOrderTraversalPolicy');
 
 const focusOrderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#FocusOrder');
+    'package:flutter/src/widgets/focus_traversal.dart#FocusOrder');
 
 const numericFocusOrderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#NumericFocusOrder');
+    'package:flutter/src/widgets/focus_traversal.dart#NumericFocusOrder');
 
 const lexicalFocusOrderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#LexicalFocusOrder');
+    'package:flutter/src/widgets/focus_traversal.dart#LexicalFocusOrder');
 
 const orderedTraversalPolicyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#OrderedTraversalPolicy');
+    'package:flutter/src/widgets/focus_traversal.dart#OrderedTraversalPolicy');
 
 const focusTraversalOrderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#FocusTraversalOrder');
+    'package:flutter/src/widgets/focus_traversal.dart#FocusTraversalOrder');
 
 const focusTraversalGroupType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#FocusTraversalGroup');
+    'package:flutter/src/widgets/focus_traversal.dart#FocusTraversalGroup');
 
 const requestFocusIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#RequestFocusIntent');
+    'package:flutter/src/widgets/focus_traversal.dart#RequestFocusIntent');
 
 const requestFocusActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#RequestFocusAction');
+    'package:flutter/src/widgets/focus_traversal.dart#RequestFocusAction');
 
 const nextFocusIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#NextFocusIntent');
+    'package:flutter/src/widgets/focus_traversal.dart#NextFocusIntent');
 
 const nextFocusActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#NextFocusAction');
+    'package:flutter/src/widgets/focus_traversal.dart#NextFocusAction');
 
 const previousFocusIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#PreviousFocusIntent');
+    'package:flutter/src/widgets/focus_traversal.dart#PreviousFocusIntent');
 
 const previousFocusActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#PreviousFocusAction');
+    'package:flutter/src/widgets/focus_traversal.dart#PreviousFocusAction');
 
 const directionalFocusIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#DirectionalFocusIntent');
+    'package:flutter/src/widgets/focus_traversal.dart#DirectionalFocusIntent');
 
 const directionalFocusActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/focus_traversal.dart#DirectionalFocusAction');
+    'package:flutter/src/widgets/focus_traversal.dart#DirectionalFocusAction');
 
-const formType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/form.dart#Form');
+const excludeFocusTraversalType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/focus_traversal.dart#ExcludeFocusTraversal');
 
-const formStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/form.dart#FormState');
+const formType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/form.dart#Form');
 
-const formFieldType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/form.dart#FormField');
+const formStateType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/form.dart#FormState');
 
-const formFieldStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/form.dart#FormFieldState');
+const formFieldType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/form.dart#FormField');
+
+const formFieldStateType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/form.dart#FormFieldState');
 
 const autovalidateModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/form.dart#AutovalidateMode');
+    'package:flutter/src/widgets/form.dart#AutovalidateMode');
 
-const uniqueKeyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#UniqueKey');
+const objectKeyType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/framework.dart#ObjectKey');
 
-const objectKeyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#ObjectKey');
-
-const globalKeyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#GlobalKey');
+const globalKeyType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/framework.dart#GlobalKey');
 
 const labeledGlobalKeyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#LabeledGlobalKey');
+    'package:flutter/src/widgets/framework.dart#LabeledGlobalKey');
 
 const globalObjectKeyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#GlobalObjectKey');
+    'package:flutter/src/widgets/framework.dart#GlobalObjectKey');
 
-const widgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#Widget');
+const widgetType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/framework.dart#Widget');
 
 const statelessWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#StatelessWidget');
+    'package:flutter/src/widgets/framework.dart#StatelessWidget');
 
 const statefulWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#StatefulWidget');
+    'package:flutter/src/widgets/framework.dart#StatefulWidget');
 
-const stateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#State');
+const stateType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/framework.dart#State');
 
 const proxyWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#ProxyWidget');
+    'package:flutter/src/widgets/framework.dart#ProxyWidget');
 
 const parentDataWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#ParentDataWidget');
+    'package:flutter/src/widgets/framework.dart#ParentDataWidget');
 
 const inheritedWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#InheritedWidget');
+    'package:flutter/src/widgets/framework.dart#InheritedWidget');
 
 const renderObjectWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#RenderObjectWidget');
+    'package:flutter/src/widgets/framework.dart#RenderObjectWidget');
 
 const leafRenderObjectWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#LeafRenderObjectWidget');
+    'package:flutter/src/widgets/framework.dart#LeafRenderObjectWidget');
 
 const singleChildRenderObjectWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#SingleChildRenderObjectWidget');
+    'package:flutter/src/widgets/framework.dart#SingleChildRenderObjectWidget');
 
 const multiChildRenderObjectWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#MultiChildRenderObjectWidget');
+    'package:flutter/src/widgets/framework.dart#MultiChildRenderObjectWidget');
 
 const buildContextType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#BuildContext');
+    'package:flutter/src/widgets/framework.dart#BuildContext');
 
 const buildOwnerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#BuildOwner');
+    'package:flutter/src/widgets/framework.dart#BuildOwner');
 
-const elementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#Element');
+const notifiableElementMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/framework.dart#NotifiableElementMixin');
+
+const elementType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/framework.dart#Element');
 
 const errorWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#ErrorWidget');
+    'package:flutter/src/widgets/framework.dart#ErrorWidget');
 
 const componentElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#ComponentElement');
+    'package:flutter/src/widgets/framework.dart#ComponentElement');
 
 const statelessElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#StatelessElement');
+    'package:flutter/src/widgets/framework.dart#StatelessElement');
 
 const statefulElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#StatefulElement');
+    'package:flutter/src/widgets/framework.dart#StatefulElement');
 
 const proxyElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#ProxyElement');
+    'package:flutter/src/widgets/framework.dart#ProxyElement');
 
 const parentDataElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#ParentDataElement');
+    'package:flutter/src/widgets/framework.dart#ParentDataElement');
 
 const inheritedElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#InheritedElement');
+    'package:flutter/src/widgets/framework.dart#InheritedElement');
 
 const renderObjectElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#RenderObjectElement');
+    'package:flutter/src/widgets/framework.dart#RenderObjectElement');
 
 const rootRenderObjectElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#RootRenderObjectElement');
+    'package:flutter/src/widgets/framework.dart#RootRenderObjectElement');
 
 const leafRenderObjectElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#LeafRenderObjectElement');
+    'package:flutter/src/widgets/framework.dart#LeafRenderObjectElement');
 
 const singleChildRenderObjectElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#SingleChildRenderObjectElement');
+    'package:flutter/src/widgets/framework.dart#SingleChildRenderObjectElement');
 
 const multiChildRenderObjectElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#MultiChildRenderObjectElement');
+    'package:flutter/src/widgets/framework.dart#MultiChildRenderObjectElement');
 
 const debugCreatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#DebugCreator');
+    'package:flutter/src/widgets/framework.dart#DebugCreator');
 
 const indexedSlotType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/framework.dart#IndexedSlot');
+    'package:flutter/src/widgets/framework.dart#IndexedSlot');
+
+const errorDescriptionType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#ErrorDescription');
+
+const errorSummaryType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#ErrorSummary');
+
+const errorHintType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#ErrorHint');
+
+const flutterErrorType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#FlutterError');
+
+const diagnosticLevelType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticLevel');
+
+const diagnosticsNodeType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticsNode');
+
+const keyType =
+    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#Key');
+
+const localKeyType =
+    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#LocalKey');
+
+const valueKeyType =
+    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#ValueKey');
+
+const renderBoxType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/box.dart#RenderBox');
+
+const renderObjectType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/object.dart#RenderObject');
 
 const gestureRecognizerFactoryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/gesture_detector.dart#GestureRecognizerFactory');
+    'package:flutter/src/widgets/gesture_detector.dart#GestureRecognizerFactory');
 
 const gestureRecognizerFactoryWithHandlersType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/gesture_detector.dart#GestureRecognizerFactoryWithHandlers');
+    'package:flutter/src/widgets/gesture_detector.dart#GestureRecognizerFactoryWithHandlers');
 
 const gestureDetectorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/gesture_detector.dart#GestureDetector');
+    'package:flutter/src/widgets/gesture_detector.dart#GestureDetector');
 
 const rawGestureDetectorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/gesture_detector.dart#RawGestureDetector');
+    'package:flutter/src/widgets/gesture_detector.dart#RawGestureDetector');
 
 const rawGestureDetectorStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/gesture_detector.dart#RawGestureDetectorState');
+    'package:flutter/src/widgets/gesture_detector.dart#RawGestureDetectorState');
 
 const semanticsGestureDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/gesture_detector.dart#SemanticsGestureDelegate');
+    'package:flutter/src/widgets/gesture_detector.dart#SemanticsGestureDelegate');
+
+const dragDownDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/drag_details.dart#DragDownDetails');
+
+const dragStartDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/drag_details.dart#DragStartDetails');
+
+const dragUpdateDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/drag_details.dart#DragUpdateDetails');
+
+const dragEndDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/drag_details.dart#DragEndDetails');
+
+const forcePressDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/force_press.dart#ForcePressDetails');
+
+const longPressStartDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/long_press.dart#LongPressStartDetails');
+
+const longPressMoveUpdateDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/long_press.dart#LongPressMoveUpdateDetails');
+
+const longPressEndDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/long_press.dart#LongPressEndDetails');
+
+const scaleStartDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/scale.dart#ScaleStartDetails');
+
+const scaleUpdateDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/scale.dart#ScaleUpdateDetails');
+
+const scaleEndDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/scale.dart#ScaleEndDetails');
+
+const tapDownDetailsType =
+    TypeChecker.fromUrl('package:flutter/src/gestures/tap.dart#TapDownDetails');
+
+const tapUpDetailsType =
+    TypeChecker.fromUrl('package:flutter/src/gestures/tap.dart#TapUpDetails');
+
+const velocityType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/velocity_tracker.dart#Velocity');
+
+const renderSemanticsGestureHandlerType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#RenderSemanticsGestureHandler');
 
 const gridPaperType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/grid_paper.dart#GridPaper');
+    'package:flutter/src/widgets/grid_paper.dart#GridPaper');
 
 const heroFlightDirectionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/heroes.dart#HeroFlightDirection');
+    'package:flutter/src/widgets/heroes.dart#HeroFlightDirection');
 
-const heroType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/heroes.dart#Hero');
+const heroType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/heroes.dart#Hero');
 
 const heroControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/heroes.dart#HeroController');
+    'package:flutter/src/widgets/heroes.dart#HeroController');
 
-const heroModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/heroes.dart#HeroMode');
+const heroModeType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/heroes.dart#HeroMode');
 
-const iconType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/icon.dart#Icon');
+const iconType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/icon.dart#Icon');
 
-const iconDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/icon_data.dart#IconData');
+const iconDataType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/icon_data.dart#IconData');
 
 const iconDataPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/icon_data.dart#IconDataProperty');
+    'package:flutter/src/widgets/icon_data.dart#IconDataProperty');
 
 const iconThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/icon_theme.dart#IconTheme');
+    'package:flutter/src/widgets/icon_theme.dart#IconTheme');
 
 const iconThemeDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/icon_theme_data.dart#IconThemeData');
+    'package:flutter/src/widgets/icon_theme_data.dart#IconThemeData');
 
-const imageType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/image.dart#Image');
+const imageType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/image.dart#Image');
 
 const imageFilteredType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/image_filter.dart#ImageFiltered');
+    'package:flutter/src/widgets/image_filter.dart#ImageFiltered');
 
 const imageIconType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/image_icon.dart#ImageIcon');
+    'package:flutter/src/widgets/image_icon.dart#ImageIcon');
 
 const boxConstraintsTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#BoxConstraintsTween');
+    'package:flutter/src/widgets/implicit_animations.dart#BoxConstraintsTween');
 
 const decorationTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#DecorationTween');
+    'package:flutter/src/widgets/implicit_animations.dart#DecorationTween');
 
 const edgeInsetsTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#EdgeInsetsTween');
+    'package:flutter/src/widgets/implicit_animations.dart#EdgeInsetsTween');
 
 const edgeInsetsGeometryTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#EdgeInsetsGeometryTween');
+    'package:flutter/src/widgets/implicit_animations.dart#EdgeInsetsGeometryTween');
 
 const borderRadiusTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#BorderRadiusTween');
+    'package:flutter/src/widgets/implicit_animations.dart#BorderRadiusTween');
 
 const borderTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#BorderTween');
+    'package:flutter/src/widgets/implicit_animations.dart#BorderTween');
 
 const matrix4TweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#Matrix4Tween');
+    'package:flutter/src/widgets/implicit_animations.dart#Matrix4Tween');
 
 const textStyleTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#TextStyleTween');
+    'package:flutter/src/widgets/implicit_animations.dart#TextStyleTween');
 
 const implicitlyAnimatedWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#ImplicitlyAnimatedWidget');
+    'package:flutter/src/widgets/implicit_animations.dart#ImplicitlyAnimatedWidget');
 
 const implicitlyAnimatedWidgetStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#ImplicitlyAnimatedWidgetState');
+    'package:flutter/src/widgets/implicit_animations.dart#ImplicitlyAnimatedWidgetState');
 
 const animatedWidgetBaseStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedWidgetBaseState');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedWidgetBaseState');
 
 const animatedContainerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedContainer');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedContainer');
 
 const animatedPaddingType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedPadding');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedPadding');
 
 const animatedAlignType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedAlign');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedAlign');
 
 const animatedPositionedType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedPositioned');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedPositioned');
 
 const animatedPositionedDirectionalType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedPositionedDirectional');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedPositionedDirectional');
 
 const animatedScaleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedScale');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedScale');
 
 const animatedRotationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedRotation');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedRotation');
 
 const animatedSlideType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedSlide');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedSlide');
 
 const animatedOpacityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedOpacity');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedOpacity');
 
 const sliverAnimatedOpacityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#SliverAnimatedOpacity');
+    'package:flutter/src/widgets/implicit_animations.dart#SliverAnimatedOpacity');
 
 const animatedDefaultTextStyleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedDefaultTextStyle');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedDefaultTextStyle');
 
 const animatedPhysicalModelType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/implicit_animations.dart#AnimatedPhysicalModel');
+    'package:flutter/src/widgets/implicit_animations.dart#AnimatedPhysicalModel');
 
 const inheritedModelType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/inherited_model.dart#InheritedModel');
+    'package:flutter/src/widgets/inherited_model.dart#InheritedModel');
 
 const inheritedModelElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/inherited_model.dart#InheritedModelElement');
+    'package:flutter/src/widgets/inherited_model.dart#InheritedModelElement');
 
 const inheritedNotifierType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/inherited_notifier.dart#InheritedNotifier');
+    'package:flutter/src/widgets/inherited_notifier.dart#InheritedNotifier');
 
 const inheritedThemeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/inherited_theme.dart#InheritedTheme');
+    'package:flutter/src/widgets/inherited_theme.dart#InheritedTheme');
 
 const capturedThemesType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/inherited_theme.dart#CapturedThemes');
+    'package:flutter/src/widgets/inherited_theme.dart#CapturedThemes');
 
 const interactiveViewerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/interactive_viewer.dart#InteractiveViewer');
+    'package:flutter/src/widgets/interactive_viewer.dart#InteractiveViewer');
 
 const transformationControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/interactive_viewer.dart#TransformationController');
+    'package:flutter/src/widgets/interactive_viewer.dart#TransformationController');
 
 const keyboardListenerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/keyboard_listener.dart#KeyboardListener');
+    'package:flutter/src/widgets/keyboard_listener.dart#KeyboardListener');
+
+const keyEventType = TypeChecker.fromUrl(
+    'package:flutter/src/services/hardware_keyboard.dart#KeyEvent');
 
 const constrainedLayoutBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/layout_builder.dart#ConstrainedLayoutBuilder');
+    'package:flutter/src/widgets/layout_builder.dart#ConstrainedLayoutBuilder');
 
 const renderConstrainedLayoutBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/layout_builder.dart#RenderConstrainedLayoutBuilder');
+    'package:flutter/src/widgets/layout_builder.dart#RenderConstrainedLayoutBuilder');
 
 const layoutBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/layout_builder.dart#LayoutBuilder');
+    'package:flutter/src/widgets/layout_builder.dart#LayoutBuilder');
 
 const listWheelChildDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#ListWheelChildDelegate');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#ListWheelChildDelegate');
 
 const listWheelChildListDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#ListWheelChildListDelegate');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#ListWheelChildListDelegate');
 
 const listWheelChildLoopingListDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#ListWheelChildLoopingListDelegate');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#ListWheelChildLoopingListDelegate');
 
 const listWheelChildBuilderDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#ListWheelChildBuilderDelegate');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#ListWheelChildBuilderDelegate');
 
 const fixedExtentScrollControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#FixedExtentScrollController');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#FixedExtentScrollController');
 
 const fixedExtentMetricsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#FixedExtentMetrics');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#FixedExtentMetrics');
 
 const fixedExtentScrollPhysicsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#FixedExtentScrollPhysics');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#FixedExtentScrollPhysics');
 
 const listWheelScrollViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#ListWheelScrollView');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#ListWheelScrollView');
 
 const listWheelElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#ListWheelElement');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#ListWheelElement');
 
 const listWheelViewportType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/list_wheel_scroll_view.dart#ListWheelViewport');
+    'package:flutter/src/widgets/list_wheel_scroll_view.dart#ListWheelViewport');
 
 const localizationsDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/localizations.dart#LocalizationsDelegate');
+    'package:flutter/src/widgets/localizations.dart#LocalizationsDelegate');
 
 const widgetsLocalizationsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/localizations.dart#WidgetsLocalizations');
+    'package:flutter/src/widgets/localizations.dart#WidgetsLocalizations');
 
 const defaultWidgetsLocalizationsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/localizations.dart#DefaultWidgetsLocalizations');
+    'package:flutter/src/widgets/localizations.dart#DefaultWidgetsLocalizations');
 
 const localizationsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/localizations.dart#Localizations');
+    'package:flutter/src/widgets/localizations.dart#Localizations');
 
 const orientationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/media_query.dart#Orientation');
+    'package:flutter/src/widgets/media_query.dart#Orientation');
 
 const mediaQueryDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/media_query.dart#MediaQueryData');
+    'package:flutter/src/widgets/media_query.dart#MediaQueryData');
 
 const mediaQueryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/media_query.dart#MediaQuery');
+    'package:flutter/src/widgets/media_query.dart#MediaQuery');
 
 const navigationModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/media_query.dart#NavigationMode');
+    'package:flutter/src/widgets/media_query.dart#NavigationMode');
 
 const modalBarrierType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/modal_barrier.dart#ModalBarrier');
+    'package:flutter/src/widgets/modal_barrier.dart#ModalBarrier');
 
 const animatedModalBarrierType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/modal_barrier.dart#AnimatedModalBarrier');
+    'package:flutter/src/widgets/modal_barrier.dart#AnimatedModalBarrier');
 
 const navigationToolbarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigation_toolbar.dart#NavigationToolbar');
+    'package:flutter/src/widgets/navigation_toolbar.dart#NavigationToolbar');
 
 const routePopDispositionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#RoutePopDisposition');
+    'package:flutter/src/widgets/navigator.dart#RoutePopDisposition');
 
-const routeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#Route');
+const routeType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/navigator.dart#Route');
 
 const routeSettingsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#RouteSettings');
+    'package:flutter/src/widgets/navigator.dart#RouteSettings');
 
-const pageType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#Page');
+const pageType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/navigator.dart#Page');
 
 const navigatorObserverType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#NavigatorObserver');
+    'package:flutter/src/widgets/navigator.dart#NavigatorObserver');
 
 const heroControllerScopeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#HeroControllerScope');
+    'package:flutter/src/widgets/navigator.dart#HeroControllerScope');
 
 const routeTransitionRecordType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#RouteTransitionRecord');
+    'package:flutter/src/widgets/navigator.dart#RouteTransitionRecord');
 
 const transitionDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#TransitionDelegate');
+    'package:flutter/src/widgets/navigator.dart#TransitionDelegate');
 
 const defaultTransitionDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#DefaultTransitionDelegate');
+    'package:flutter/src/widgets/navigator.dart#DefaultTransitionDelegate');
 
-const navigatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#Navigator');
+const navigatorType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/navigator.dart#Navigator');
 
 const navigatorStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#NavigatorState');
+    'package:flutter/src/widgets/navigator.dart#NavigatorState');
 
 const restorableRouteFutureType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/navigator.dart#RestorableRouteFuture');
+    'package:flutter/src/widgets/navigator.dart#RestorableRouteFuture');
 
 const nestedScrollViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/nested_scroll_view.dart#NestedScrollView');
+    'package:flutter/src/widgets/nested_scroll_view.dart#NestedScrollView');
 
 const nestedScrollViewStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/nested_scroll_view.dart#NestedScrollViewState');
+    'package:flutter/src/widgets/nested_scroll_view.dart#NestedScrollViewState');
 
 const sliverOverlapAbsorberHandleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/nested_scroll_view.dart#SliverOverlapAbsorberHandle');
+    'package:flutter/src/widgets/nested_scroll_view.dart#SliverOverlapAbsorberHandle');
 
 const sliverOverlapAbsorberType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/nested_scroll_view.dart#SliverOverlapAbsorber');
+    'package:flutter/src/widgets/nested_scroll_view.dart#SliverOverlapAbsorber');
 
 const renderSliverOverlapAbsorberType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/nested_scroll_view.dart#RenderSliverOverlapAbsorber');
+    'package:flutter/src/widgets/nested_scroll_view.dart#RenderSliverOverlapAbsorber');
 
 const sliverOverlapInjectorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/nested_scroll_view.dart#SliverOverlapInjector');
+    'package:flutter/src/widgets/nested_scroll_view.dart#SliverOverlapInjector');
 
 const renderSliverOverlapInjectorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/nested_scroll_view.dart#RenderSliverOverlapInjector');
+    'package:flutter/src/widgets/nested_scroll_view.dart#RenderSliverOverlapInjector');
 
 const nestedScrollViewViewportType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/nested_scroll_view.dart#NestedScrollViewViewport');
+    'package:flutter/src/widgets/nested_scroll_view.dart#NestedScrollViewViewport');
 
 const renderNestedScrollViewViewportType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/nested_scroll_view.dart#RenderNestedScrollViewViewport');
+    'package:flutter/src/widgets/nested_scroll_view.dart#RenderNestedScrollViewViewport');
 
 const notificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/notification_listener.dart#Notification');
+    'package:flutter/src/widgets/notification_listener.dart#Notification');
 
 const notificationListenerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/notification_listener.dart#NotificationListener');
+    'package:flutter/src/widgets/notification_listener.dart#NotificationListener');
 
 const layoutChangedNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/notification_listener.dart#LayoutChangedNotification');
+    'package:flutter/src/widgets/notification_listener.dart#LayoutChangedNotification');
 
 const orientationBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/orientation_builder.dart#OrientationBuilder');
+    'package:flutter/src/widgets/orientation_builder.dart#OrientationBuilder');
 
 const overflowBarAlignmentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/overflow_bar.dart#OverflowBarAlignment');
+    'package:flutter/src/widgets/overflow_bar.dart#OverflowBarAlignment');
 
 const overflowBarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/overflow_bar.dart#OverflowBar');
+    'package:flutter/src/widgets/overflow_bar.dart#OverflowBar');
 
 const overlayEntryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/overlay.dart#OverlayEntry');
+    'package:flutter/src/widgets/overlay.dart#OverlayEntry');
 
-const overlayType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/overlay.dart#Overlay');
+const overlayType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/overlay.dart#Overlay');
 
 const overlayStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/overlay.dart#OverlayState');
+    'package:flutter/src/widgets/overlay.dart#OverlayState');
 
 const glowingOverscrollIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/overscroll_indicator.dart#GlowingOverscrollIndicator');
+    'package:flutter/src/widgets/overscroll_indicator.dart#GlowingOverscrollIndicator');
 
 const stretchingOverscrollIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/overscroll_indicator.dart#StretchingOverscrollIndicator');
+    'package:flutter/src/widgets/overscroll_indicator.dart#StretchingOverscrollIndicator');
 
 const overscrollIndicatorNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/overscroll_indicator.dart#OverscrollIndicatorNotification');
+    'package:flutter/src/widgets/overscroll_indicator.dart#OverscrollIndicatorNotification');
 
 const pageStorageKeyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/page_storage.dart#PageStorageKey');
+    'package:flutter/src/widgets/page_storage.dart#PageStorageKey');
 
 const pageStorageBucketType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/page_storage.dart#PageStorageBucket');
+    'package:flutter/src/widgets/page_storage.dart#PageStorageBucket');
 
 const pageStorageType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/page_storage.dart#PageStorage');
+    'package:flutter/src/widgets/page_storage.dart#PageStorage');
 
 const pageControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/page_view.dart#PageController');
+    'package:flutter/src/widgets/page_view.dart#PageController');
 
 const pageMetricsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/page_view.dart#PageMetrics');
+    'package:flutter/src/widgets/page_view.dart#PageMetrics');
 
 const pageScrollPhysicsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/page_view.dart#PageScrollPhysics');
+    'package:flutter/src/widgets/page_view.dart#PageScrollPhysics');
 
-const pageViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/page_view.dart#PageView');
+const pageViewType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/page_view.dart#PageView');
 
-const pageRouteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/pages.dart#PageRoute');
+const pageRouteType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/pages.dart#PageRoute');
 
 const pageRouteBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/pages.dart#PageRouteBuilder');
+    'package:flutter/src/widgets/pages.dart#PageRouteBuilder');
 
 const performanceOverlayType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/performance_overlay.dart#PerformanceOverlay');
+    'package:flutter/src/widgets/performance_overlay.dart#PerformanceOverlay');
 
 const placeholderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/placeholder.dart#Placeholder');
+    'package:flutter/src/widgets/placeholder.dart#Placeholder');
+
+const shortcutSerializationType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#ShortcutSerialization');
+
+const menuSerializableShortcutType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#MenuSerializableShortcut');
+
+const menuItemType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#MenuItem');
+
+const platformMenuDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#PlatformMenuDelegate');
+
+const defaultPlatformMenuDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#DefaultPlatformMenuDelegate');
+
+const platformMenuBarType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#PlatformMenuBar');
+
+const platformMenuType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#PlatformMenu');
+
+const platformMenuItemGroupType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#PlatformMenuItemGroup');
+
+const platformMenuItemType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#PlatformMenuItem');
+
+const platformProvidedMenuItemType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#PlatformProvidedMenuItem');
+
+const platformProvidedMenuItemTypeType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/platform_menu_bar.dart#PlatformProvidedMenuItemType');
 
 const androidViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/platform_view.dart#AndroidView');
+    'package:flutter/src/widgets/platform_view.dart#AndroidView');
 
 const uiKitViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/platform_view.dart#UiKitView');
+    'package:flutter/src/widgets/platform_view.dart#UiKitView');
 
 const htmlElementViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/platform_view.dart#HtmlElementView');
+    'package:flutter/src/widgets/platform_view.dart#HtmlElementView');
 
 const platformViewCreationParamsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/platform_view.dart#PlatformViewCreationParams');
+    'package:flutter/src/widgets/platform_view.dart#PlatformViewCreationParams');
 
 const platformViewLinkType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/platform_view.dart#PlatformViewLink');
+    'package:flutter/src/widgets/platform_view.dart#PlatformViewLink');
 
 const platformViewSurfaceType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/platform_view.dart#PlatformViewSurface');
+    'package:flutter/src/widgets/platform_view.dart#PlatformViewSurface');
 
 const androidViewSurfaceType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/platform_view.dart#AndroidViewSurface');
+    'package:flutter/src/widgets/platform_view.dart#AndroidViewSurface');
 
 const preferredSizeWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/preferred_size.dart#PreferredSizeWidget');
+    'package:flutter/src/widgets/preferred_size.dart#PreferredSizeWidget');
 
 const preferredSizeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/preferred_size.dart#PreferredSize');
+    'package:flutter/src/widgets/preferred_size.dart#PreferredSize');
 
 const primaryScrollControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/primary_scroll_controller.dart#PrimaryScrollController');
+    'package:flutter/src/widgets/primary_scroll_controller.dart#PrimaryScrollController');
 
 const rawKeyboardListenerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/raw_keyboard_listener.dart#RawKeyboardListener');
+    'package:flutter/src/widgets/raw_keyboard_listener.dart#RawKeyboardListener');
+
+const rawKeyEventType = TypeChecker.fromUrl(
+    'package:flutter/src/services/raw_keyboard.dart#RawKeyEvent');
 
 const reorderableListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/reorderable_list.dart#ReorderableList');
+    'package:flutter/src/widgets/reorderable_list.dart#ReorderableList');
 
 const reorderableListStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/reorderable_list.dart#ReorderableListState');
+    'package:flutter/src/widgets/reorderable_list.dart#ReorderableListState');
 
 const sliverReorderableListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/reorderable_list.dart#SliverReorderableList');
+    'package:flutter/src/widgets/reorderable_list.dart#SliverReorderableList');
 
 const sliverReorderableListStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/reorderable_list.dart#SliverReorderableListState');
+    'package:flutter/src/widgets/reorderable_list.dart#SliverReorderableListState');
 
 const reorderableDragStartListenerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/reorderable_list.dart#ReorderableDragStartListener');
+    'package:flutter/src/widgets/reorderable_list.dart#ReorderableDragStartListener');
 
 const reorderableDelayedDragStartListenerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/reorderable_list.dart#ReorderableDelayedDragStartListener');
+    'package:flutter/src/widgets/reorderable_list.dart#ReorderableDelayedDragStartListener');
 
 const restorationScopeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration.dart#RestorationScope');
+    'package:flutter/src/widgets/restoration.dart#RestorationScope');
 
 const unmanagedRestorationScopeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration.dart#UnmanagedRestorationScope');
+    'package:flutter/src/widgets/restoration.dart#UnmanagedRestorationScope');
 
 const rootRestorationScopeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration.dart#RootRestorationScope');
+    'package:flutter/src/widgets/restoration.dart#RootRestorationScope');
 
 const restorablePropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration.dart#RestorableProperty');
+    'package:flutter/src/widgets/restoration.dart#RestorableProperty');
 
 const restorationMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration.dart#RestorationMixin');
+    'package:flutter/src/widgets/restoration.dart#RestorationMixin');
+
+const restorationBucketType = TypeChecker.fromUrl(
+    'package:flutter/src/services/restoration.dart#RestorationBucket');
 
 const restorableValueType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableValue');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableValue');
 
 const restorableNumType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableNum');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableNum');
 
 const restorableDoubleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableDouble');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableDouble');
 
 const restorableIntType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableInt');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableInt');
 
 const restorableStringType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableString');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableString');
 
 const restorableBoolType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableBool');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableBool');
 
 const restorableBoolNType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableBoolN');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableBoolN');
 
 const restorableNumNType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableNumN');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableNumN');
 
 const restorableDoubleNType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableDoubleN');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableDoubleN');
 
 const restorableIntNType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableIntN');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableIntN');
 
 const restorableStringNType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableStringN');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableStringN');
 
 const restorableDateTimeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableDateTime');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableDateTime');
 
 const restorableDateTimeNType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableDateTimeN');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableDateTimeN');
 
 const restorableListenableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableListenable');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableListenable');
 
 const restorableChangeNotifierType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableChangeNotifier');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableChangeNotifier');
 
 const restorableTextEditingControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/restoration_properties.dart#RestorableTextEditingController');
+    'package:flutter/src/widgets/restoration_properties.dart#RestorableTextEditingController');
 
 const routeInformationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#RouteInformation');
+    'package:flutter/src/widgets/router.dart#RouteInformation');
 
-const routerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#Router');
+const routerType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/router.dart#Router');
 
 const routeInformationReportingTypeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#RouteInformationReportingType');
+    'package:flutter/src/widgets/router.dart#RouteInformationReportingType');
 
 const backButtonDispatcherType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#BackButtonDispatcher');
+    'package:flutter/src/widgets/router.dart#BackButtonDispatcher');
 
 const rootBackButtonDispatcherType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#RootBackButtonDispatcher');
+    'package:flutter/src/widgets/router.dart#RootBackButtonDispatcher');
 
 const childBackButtonDispatcherType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#ChildBackButtonDispatcher');
+    'package:flutter/src/widgets/router.dart#ChildBackButtonDispatcher');
 
 const backButtonListenerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#BackButtonListener');
+    'package:flutter/src/widgets/router.dart#BackButtonListener');
 
 const routeInformationParserType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#RouteInformationParser');
+    'package:flutter/src/widgets/router.dart#RouteInformationParser');
 
 const routerDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#RouterDelegate');
+    'package:flutter/src/widgets/router.dart#RouterDelegate');
 
 const routeInformationProviderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#RouteInformationProvider');
+    'package:flutter/src/widgets/router.dart#RouteInformationProvider');
 
 const platformRouteInformationProviderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#PlatformRouteInformationProvider');
+    'package:flutter/src/widgets/router.dart#PlatformRouteInformationProvider');
 
 const popNavigatorRouterDelegateMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/router.dart#PopNavigatorRouterDelegateMixin');
+    'package:flutter/src/widgets/router.dart#PopNavigatorRouterDelegateMixin');
 
-const overlayRouteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#OverlayRoute');
+const overlayRouteType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/routes.dart#OverlayRoute');
 
 const transitionRouteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#TransitionRoute');
+    'package:flutter/src/widgets/routes.dart#TransitionRoute');
 
 const localHistoryEntryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#LocalHistoryEntry');
+    'package:flutter/src/widgets/routes.dart#LocalHistoryEntry');
 
 const localHistoryRouteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#LocalHistoryRoute');
+    'package:flutter/src/widgets/routes.dart#LocalHistoryRoute');
 
-const modalRouteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#ModalRoute');
+const modalRouteType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/routes.dart#ModalRoute');
 
-const popupRouteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#PopupRoute');
+const popupRouteType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/routes.dart#PopupRoute');
 
 const routeObserverType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#RouteObserver');
+    'package:flutter/src/widgets/routes.dart#RouteObserver');
 
-const routeAwareType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#RouteAware');
+const routeAwareType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/routes.dart#RouteAware');
 
 const rawDialogRouteType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#RawDialogRoute');
+    'package:flutter/src/widgets/routes.dart#RawDialogRoute');
 
-const focusTrapType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#FocusTrap');
+const focusTrapType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/routes.dart#FocusTrap');
 
 const focusTrapAreaType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/routes.dart#FocusTrapArea');
+    'package:flutter/src/widgets/routes.dart#FocusTrapArea');
 
-const safeAreaType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/safe_area.dart#SafeArea');
+const safeAreaType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/safe_area.dart#SafeArea');
 
 const sliverSafeAreaType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/safe_area.dart#SliverSafeArea');
+    'package:flutter/src/widgets/safe_area.dart#SliverSafeArea');
 
 const scrollActivityDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_activity.dart#ScrollActivityDelegate');
+    'package:flutter/src/widgets/scroll_activity.dart#ScrollActivityDelegate');
 
 const scrollActivityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_activity.dart#ScrollActivity');
+    'package:flutter/src/widgets/scroll_activity.dart#ScrollActivity');
 
 const idleScrollActivityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_activity.dart#IdleScrollActivity');
+    'package:flutter/src/widgets/scroll_activity.dart#IdleScrollActivity');
 
 const scrollHoldControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_activity.dart#ScrollHoldController');
+    'package:flutter/src/widgets/scroll_activity.dart#ScrollHoldController');
 
 const holdScrollActivityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_activity.dart#HoldScrollActivity');
+    'package:flutter/src/widgets/scroll_activity.dart#HoldScrollActivity');
 
 const scrollDragControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_activity.dart#ScrollDragController');
+    'package:flutter/src/widgets/scroll_activity.dart#ScrollDragController');
 
 const dragScrollActivityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_activity.dart#DragScrollActivity');
+    'package:flutter/src/widgets/scroll_activity.dart#DragScrollActivity');
 
 const ballisticScrollActivityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_activity.dart#BallisticScrollActivity');
+    'package:flutter/src/widgets/scroll_activity.dart#BallisticScrollActivity');
 
 const drivenScrollActivityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_activity.dart#DrivenScrollActivity');
+    'package:flutter/src/widgets/scroll_activity.dart#DrivenScrollActivity');
 
 const scrollAwareImageProviderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_aware_image_provider.dart#ScrollAwareImageProvider');
+    'package:flutter/src/widgets/scroll_aware_image_provider.dart#ScrollAwareImageProvider');
 
 const androidOverscrollIndicatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_configuration.dart#AndroidOverscrollIndicator');
+    'package:flutter/src/widgets/scroll_configuration.dart#AndroidOverscrollIndicator');
 
 const scrollBehaviorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_configuration.dart#ScrollBehavior');
+    'package:flutter/src/widgets/scroll_configuration.dart#ScrollBehavior');
 
 const scrollConfigurationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_configuration.dart#ScrollConfiguration');
+    'package:flutter/src/widgets/scroll_configuration.dart#ScrollConfiguration');
 
 const scrollContextType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_context.dart#ScrollContext');
+    'package:flutter/src/widgets/scroll_context.dart#ScrollContext');
 
 const scrollControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_controller.dart#ScrollController');
+    'package:flutter/src/widgets/scroll_controller.dart#ScrollController');
 
 const trackingScrollControllerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_controller.dart#TrackingScrollController');
+    'package:flutter/src/widgets/scroll_controller.dart#TrackingScrollController');
 
 const scrollMetricsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_metrics.dart#ScrollMetrics');
+    'package:flutter/src/widgets/scroll_metrics.dart#ScrollMetrics');
 
 const fixedScrollMetricsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_metrics.dart#FixedScrollMetrics');
+    'package:flutter/src/widgets/scroll_metrics.dart#FixedScrollMetrics');
 
 const viewportNotificationMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_notification.dart#ViewportNotificationMixin');
+    'package:flutter/src/widgets/scroll_notification.dart#ViewportNotificationMixin');
+
+const viewportElementMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/scroll_notification.dart#ViewportElementMixin');
 
 const scrollNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_notification.dart#ScrollNotification');
+    'package:flutter/src/widgets/scroll_notification.dart#ScrollNotification');
 
 const scrollStartNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_notification.dart#ScrollStartNotification');
+    'package:flutter/src/widgets/scroll_notification.dart#ScrollStartNotification');
 
 const scrollUpdateNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_notification.dart#ScrollUpdateNotification');
+    'package:flutter/src/widgets/scroll_notification.dart#ScrollUpdateNotification');
 
 const overscrollNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_notification.dart#OverscrollNotification');
+    'package:flutter/src/widgets/scroll_notification.dart#OverscrollNotification');
 
 const scrollEndNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_notification.dart#ScrollEndNotification');
+    'package:flutter/src/widgets/scroll_notification.dart#ScrollEndNotification');
 
 const userScrollNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_notification.dart#UserScrollNotification');
+    'package:flutter/src/widgets/scroll_notification.dart#UserScrollNotification');
 
 const scrollNotificationObserverType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_notification_observer.dart#ScrollNotificationObserver');
+    'package:flutter/src/widgets/scroll_notification_observer.dart#ScrollNotificationObserver');
 
 const scrollNotificationObserverStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_notification_observer.dart#ScrollNotificationObserverState');
+    'package:flutter/src/widgets/scroll_notification_observer.dart#ScrollNotificationObserverState');
 
 const scrollPhysicsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_physics.dart#ScrollPhysics');
+    'package:flutter/src/widgets/scroll_physics.dart#ScrollPhysics');
 
 const rangeMaintainingScrollPhysicsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_physics.dart#RangeMaintainingScrollPhysics');
+    'package:flutter/src/widgets/scroll_physics.dart#RangeMaintainingScrollPhysics');
 
 const bouncingScrollPhysicsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_physics.dart#BouncingScrollPhysics');
+    'package:flutter/src/widgets/scroll_physics.dart#BouncingScrollPhysics');
 
 const clampingScrollPhysicsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_physics.dart#ClampingScrollPhysics');
+    'package:flutter/src/widgets/scroll_physics.dart#ClampingScrollPhysics');
 
 const alwaysScrollableScrollPhysicsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_physics.dart#AlwaysScrollableScrollPhysics');
+    'package:flutter/src/widgets/scroll_physics.dart#AlwaysScrollableScrollPhysics');
 
 const neverScrollableScrollPhysicsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_physics.dart#NeverScrollableScrollPhysics');
+    'package:flutter/src/widgets/scroll_physics.dart#NeverScrollableScrollPhysics');
+
+const simulationType = TypeChecker.fromUrl(
+    'package:flutter/src/physics/simulation.dart#Simulation');
+
+const scrollSpringSimulationType = TypeChecker.fromUrl(
+    'package:flutter/src/physics/spring_simulation.dart#ScrollSpringSimulation');
+
+const toleranceType =
+    TypeChecker.fromUrl('package:flutter/src/physics/tolerance.dart#Tolerance');
 
 const scrollPositionAlignmentPolicyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_position.dart#ScrollPositionAlignmentPolicy');
+    'package:flutter/src/widgets/scroll_position.dart#ScrollPositionAlignmentPolicy');
 
 const scrollPositionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_position.dart#ScrollPosition');
+    'package:flutter/src/widgets/scroll_position.dart#ScrollPosition');
 
 const scrollMetricsNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_position.dart#ScrollMetricsNotification');
+    'package:flutter/src/widgets/scroll_position.dart#ScrollMetricsNotification');
 
 const scrollPositionWithSingleContextType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_position_with_single_context.dart#ScrollPositionWithSingleContext');
+    'package:flutter/src/widgets/scroll_position_with_single_context.dart#ScrollPositionWithSingleContext');
 
 const bouncingScrollSimulationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_simulation.dart#BouncingScrollSimulation');
+    'package:flutter/src/widgets/scroll_simulation.dart#BouncingScrollSimulation');
 
 const clampingScrollSimulationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_simulation.dart#ClampingScrollSimulation');
+    'package:flutter/src/widgets/scroll_simulation.dart#ClampingScrollSimulation');
 
 const scrollViewKeyboardDismissBehaviorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_view.dart#ScrollViewKeyboardDismissBehavior');
+    'package:flutter/src/widgets/scroll_view.dart#ScrollViewKeyboardDismissBehavior');
 
 const scrollViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_view.dart#ScrollView');
+    'package:flutter/src/widgets/scroll_view.dart#ScrollView');
 
 const customScrollViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_view.dart#CustomScrollView');
+    'package:flutter/src/widgets/scroll_view.dart#CustomScrollView');
 
 const boxScrollViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_view.dart#BoxScrollView');
+    'package:flutter/src/widgets/scroll_view.dart#BoxScrollView');
 
 const listViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_view.dart#ListView');
+    'package:flutter/src/widgets/scroll_view.dart#ListView');
 
 const gridViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scroll_view.dart#GridView');
+    'package:flutter/src/widgets/scroll_view.dart#GridView');
 
 const scrollableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollable.dart#Scrollable');
+    'package:flutter/src/widgets/scrollable.dart#Scrollable');
 
 const scrollableStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollable.dart#ScrollableState');
+    'package:flutter/src/widgets/scrollable.dart#ScrollableState');
 
 const scrollableDetailsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollable.dart#ScrollableDetails');
+    'package:flutter/src/widgets/scrollable.dart#ScrollableDetails');
 
 const scrollIncrementTypeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollable.dart#ScrollIncrementType');
+    'package:flutter/src/widgets/scrollable.dart#ScrollIncrementType');
 
 const scrollIncrementDetailsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollable.dart#ScrollIncrementDetails');
+    'package:flutter/src/widgets/scrollable.dart#ScrollIncrementDetails');
 
 const scrollIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollable.dart#ScrollIntent');
+    'package:flutter/src/widgets/scrollable.dart#ScrollIntent');
 
 const scrollActionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollable.dart#ScrollAction');
+    'package:flutter/src/widgets/scrollable.dart#ScrollAction');
 
 const scrollbarOrientationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollbar.dart#ScrollbarOrientation');
+    'package:flutter/src/widgets/scrollbar.dart#ScrollbarOrientation');
 
 const scrollbarPainterType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollbar.dart#ScrollbarPainter');
+    'package:flutter/src/widgets/scrollbar.dart#ScrollbarPainter');
 
 const rawScrollbarType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollbar.dart#RawScrollbar');
+    'package:flutter/src/widgets/scrollbar.dart#RawScrollbar');
 
 const rawScrollbarStateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/scrollbar.dart#RawScrollbarState');
+    'package:flutter/src/widgets/scrollbar.dart#RawScrollbarState');
 
 const semanticsDebuggerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/semantics_debugger.dart#SemanticsDebugger');
+    'package:flutter/src/widgets/semantics_debugger.dart#SemanticsDebugger');
 
 const sharedAppDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shared_app_data.dart#SharedAppData');
+    'package:flutter/src/widgets/shared_app_data.dart#SharedAppData');
 
-const keySetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shortcuts.dart#KeySet');
+const keySetType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/shortcuts.dart#KeySet');
 
 const shortcutActivatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shortcuts.dart#ShortcutActivator');
+    'package:flutter/src/widgets/shortcuts.dart#ShortcutActivator');
 
 const logicalKeySetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shortcuts.dart#LogicalKeySet');
+    'package:flutter/src/widgets/shortcuts.dart#LogicalKeySet');
 
 const shortcutMapPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shortcuts.dart#ShortcutMapProperty');
+    'package:flutter/src/widgets/shortcuts.dart#ShortcutMapProperty');
 
 const singleActivatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shortcuts.dart#SingleActivator');
+    'package:flutter/src/widgets/shortcuts.dart#SingleActivator');
 
 const characterActivatorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shortcuts.dart#CharacterActivator');
+    'package:flutter/src/widgets/shortcuts.dart#CharacterActivator');
 
 const shortcutManagerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shortcuts.dart#ShortcutManager');
+    'package:flutter/src/widgets/shortcuts.dart#ShortcutManager');
 
-const shortcutsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shortcuts.dart#Shortcuts');
+const shortcutsType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/shortcuts.dart#Shortcuts');
 
 const callbackShortcutsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/shortcuts.dart#CallbackShortcuts');
+    'package:flutter/src/widgets/shortcuts.dart#CallbackShortcuts');
 
 const singleChildScrollViewType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/single_child_scroll_view.dart#SingleChildScrollView');
+    'package:flutter/src/widgets/single_child_scroll_view.dart#SingleChildScrollView');
 
 const sizeChangedLayoutNotificationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/size_changed_layout_notifier.dart#SizeChangedLayoutNotification');
+    'package:flutter/src/widgets/size_changed_layout_notifier.dart#SizeChangedLayoutNotification');
 
 const sizeChangedLayoutNotifierType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/size_changed_layout_notifier.dart#SizeChangedLayoutNotifier');
+    'package:flutter/src/widgets/size_changed_layout_notifier.dart#SizeChangedLayoutNotifier');
 
 const sliverChildDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverChildDelegate');
+    'package:flutter/src/widgets/sliver.dart#SliverChildDelegate');
 
 const sliverChildBuilderDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverChildBuilderDelegate');
+    'package:flutter/src/widgets/sliver.dart#SliverChildBuilderDelegate');
 
 const sliverChildListDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverChildListDelegate');
+    'package:flutter/src/widgets/sliver.dart#SliverChildListDelegate');
 
 const sliverWithKeepAliveWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverWithKeepAliveWidget');
+    'package:flutter/src/widgets/sliver.dart#SliverWithKeepAliveWidget');
 
 const sliverMultiBoxAdaptorWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverMultiBoxAdaptorWidget');
+    'package:flutter/src/widgets/sliver.dart#SliverMultiBoxAdaptorWidget');
 
-const sliverListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverList');
+const sliverListType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/sliver.dart#SliverList');
 
 const sliverFixedExtentListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverFixedExtentList');
+    'package:flutter/src/widgets/sliver.dart#SliverFixedExtentList');
 
-const sliverGridType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverGrid');
+const sliverGridType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/sliver.dart#SliverGrid');
 
 const sliverMultiBoxAdaptorElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverMultiBoxAdaptorElement');
+    'package:flutter/src/widgets/sliver.dart#SliverMultiBoxAdaptorElement');
 
 const sliverOpacityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverOpacity');
+    'package:flutter/src/widgets/sliver.dart#SliverOpacity');
 
 const sliverIgnorePointerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverIgnorePointer');
+    'package:flutter/src/widgets/sliver.dart#SliverIgnorePointer');
 
 const sliverOffstageType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#SliverOffstage');
+    'package:flutter/src/widgets/sliver.dart#SliverOffstage');
 
-const keepAliveType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver.dart#KeepAlive');
+const keepAliveType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/sliver.dart#KeepAlive');
+
+const sliverGridDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/sliver_grid.dart#SliverGridDelegate');
+
+const sliverGridDelegateWithFixedCrossAxisCountType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/sliver_grid.dart#SliverGridDelegateWithFixedCrossAxisCount');
+
+const sliverGridDelegateWithMaxCrossAxisExtentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/sliver_grid.dart#SliverGridDelegateWithMaxCrossAxisExtent');
 
 const sliverFillViewportType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver_fill.dart#SliverFillViewport');
+    'package:flutter/src/widgets/sliver_fill.dart#SliverFillViewport');
 
 const sliverFillRemainingType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver_fill.dart#SliverFillRemaining');
+    'package:flutter/src/widgets/sliver_fill.dart#SliverFillRemaining');
 
 const sliverLayoutBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver_layout_builder.dart#SliverLayoutBuilder');
+    'package:flutter/src/widgets/sliver_layout_builder.dart#SliverLayoutBuilder');
 
 const sliverPersistentHeaderDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver_persistent_header.dart#SliverPersistentHeaderDelegate');
+    'package:flutter/src/widgets/sliver_persistent_header.dart#SliverPersistentHeaderDelegate');
 
 const sliverPersistentHeaderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver_persistent_header.dart#SliverPersistentHeader');
+    'package:flutter/src/widgets/sliver_persistent_header.dart#SliverPersistentHeader');
 
 const sliverPrototypeExtentListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/sliver_prototype_extent_list.dart#SliverPrototypeExtentList');
+    'package:flutter/src/widgets/sliver_prototype_extent_list.dart#SliverPrototypeExtentList');
 
 const slottedMultiChildRenderObjectWidgetMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/slotted_render_object_widget.dart#SlottedMultiChildRenderObjectWidgetMixin');
+    'package:flutter/src/widgets/slotted_render_object_widget.dart#SlottedMultiChildRenderObjectWidgetMixin');
 
 const slottedContainerRenderObjectMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/slotted_render_object_widget.dart#SlottedContainerRenderObjectMixin');
+    'package:flutter/src/widgets/slotted_render_object_widget.dart#SlottedContainerRenderObjectMixin');
 
 const slottedRenderObjectElementType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/slotted_render_object_widget.dart#SlottedRenderObjectElement');
+    'package:flutter/src/widgets/slotted_render_object_widget.dart#SlottedRenderObjectElement');
 
-const spacerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/spacer.dart#Spacer');
+const spacerType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/spacer.dart#Spacer');
 
 const statusTransitionWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/status_transitions.dart#StatusTransitionWidget');
+    'package:flutter/src/widgets/status_transitions.dart#StatusTransitionWidget');
 
-const tableRowType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/table.dart#TableRow');
+const tableRowType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/table.dart#TableRow');
 
-const tableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/table.dart#Table');
+const tableType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/table.dart#Table');
 
-const tableCellType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/table.dart#TableCell');
+const tableCellType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/table.dart#TableCell');
+
+const tableColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#TableColumnWidth');
+
+const intrinsicColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#IntrinsicColumnWidth');
+
+const fixedColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#FixedColumnWidth');
+
+const fractionColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#FractionColumnWidth');
+
+const flexColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#FlexColumnWidth');
+
+const maxColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#MaxColumnWidth');
+
+const minColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#MinColumnWidth');
+
+const tableCellVerticalAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#TableCellVerticalAlignment');
+
+const tableBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table_border.dart#TableBorder');
 
 const defaultTextStyleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text.dart#DefaultTextStyle');
+    'package:flutter/src/widgets/text.dart#DefaultTextStyle');
 
 const defaultTextHeightBehaviorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text.dart#DefaultTextHeightBehavior');
+    'package:flutter/src/widgets/text.dart#DefaultTextHeightBehavior');
 
-const textType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text.dart#Text');
+const textType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/text.dart#Text');
 
 const doNothingAndStopPropagationTextIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#DoNothingAndStopPropagationTextIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#DoNothingAndStopPropagationTextIntent');
 
 const directionalTextEditingIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#DirectionalTextEditingIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#DirectionalTextEditingIntent');
 
 const deleteCharacterIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#DeleteCharacterIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#DeleteCharacterIntent');
 
 const deleteToNextWordBoundaryIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#DeleteToNextWordBoundaryIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#DeleteToNextWordBoundaryIntent');
 
 const deleteToLineBreakIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#DeleteToLineBreakIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#DeleteToLineBreakIntent');
 
 const directionalCaretMovementIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#DirectionalCaretMovementIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#DirectionalCaretMovementIntent');
 
 const extendSelectionByCharacterIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#ExtendSelectionByCharacterIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#ExtendSelectionByCharacterIntent');
 
 const extendSelectionToNextWordBoundaryIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#ExtendSelectionToNextWordBoundaryIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#ExtendSelectionToNextWordBoundaryIntent');
 
 const extendSelectionToNextWordBoundaryOrCaretLocationIntentType =
     TypeChecker.fromUrl(
-        'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#ExtendSelectionToNextWordBoundaryOrCaretLocationIntent');
+        'package:flutter/src/widgets/text_editing_intents.dart#ExtendSelectionToNextWordBoundaryOrCaretLocationIntent');
+
+const expandSelectionToDocumentBoundaryIntentType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/text_editing_intents.dart#ExpandSelectionToDocumentBoundaryIntent');
+
+const expandSelectionToLineBreakIntentType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/text_editing_intents.dart#ExpandSelectionToLineBreakIntent');
 
 const extendSelectionToLineBreakIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#ExtendSelectionToLineBreakIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#ExtendSelectionToLineBreakIntent');
 
 const extendSelectionVerticallyToAdjacentLineIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#ExtendSelectionVerticallyToAdjacentLineIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#ExtendSelectionVerticallyToAdjacentLineIntent');
 
 const extendSelectionToDocumentBoundaryIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#ExtendSelectionToDocumentBoundaryIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#ExtendSelectionToDocumentBoundaryIntent');
+
+const scrollToDocumentBoundaryIntentType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/text_editing_intents.dart#ScrollToDocumentBoundaryIntent');
 
 const selectAllTextIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#SelectAllTextIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#SelectAllTextIntent');
 
 const copySelectionTextIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#CopySelectionTextIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#CopySelectionTextIntent');
 
 const pasteTextIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#PasteTextIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#PasteTextIntent');
+
+const redoTextIntentType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/text_editing_intents.dart#RedoTextIntent');
 
 const replaceTextIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#ReplaceTextIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#ReplaceTextIntent');
+
+const undoTextIntentType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/text_editing_intents.dart#UndoTextIntent');
 
 const updateSelectionIntentType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_editing_intents.dart#UpdateSelectionIntent');
+    'package:flutter/src/widgets/text_editing_intents.dart#UpdateSelectionIntent');
 
 const textSelectionHandleTypeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection.dart#TextSelectionHandleType');
+    'package:flutter/src/widgets/text_selection.dart#TextSelectionHandleType');
 
 const toolbarItemsParentDataType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection.dart#ToolbarItemsParentData');
+    'package:flutter/src/widgets/text_selection.dart#ToolbarItemsParentData');
 
 const textSelectionControlsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection.dart#TextSelectionControls');
+    'package:flutter/src/widgets/text_selection.dart#TextSelectionControls');
 
 const textSelectionOverlayType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection.dart#TextSelectionOverlay');
+    'package:flutter/src/widgets/text_selection.dart#TextSelectionOverlay');
+
+const selectionOverlayType = TypeChecker.fromUrl(
+    'package:flutter/src/widgets/text_selection.dart#SelectionOverlay');
 
 const textSelectionGestureDetectorBuilderDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection.dart#TextSelectionGestureDetectorBuilderDelegate');
+    'package:flutter/src/widgets/text_selection.dart#TextSelectionGestureDetectorBuilderDelegate');
 
 const textSelectionGestureDetectorBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection.dart#TextSelectionGestureDetectorBuilder');
+    'package:flutter/src/widgets/text_selection.dart#TextSelectionGestureDetectorBuilder');
 
 const textSelectionGestureDetectorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection.dart#TextSelectionGestureDetector');
+    'package:flutter/src/widgets/text_selection.dart#TextSelectionGestureDetector');
 
 const clipboardStatusNotifierType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection.dart#ClipboardStatusNotifier');
+    'package:flutter/src/widgets/text_selection.dart#ClipboardStatusNotifier');
 
 const clipboardStatusType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection.dart#ClipboardStatus');
+    'package:flutter/src/widgets/text_selection.dart#ClipboardStatus');
+
+const textSelectionDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextSelectionDelegate');
 
 const textSelectionToolbarLayoutDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/text_selection_toolbar_layout_delegate.dart#TextSelectionToolbarLayoutDelegate');
+    'package:flutter/src/widgets/text_selection_toolbar_layout_delegate.dart#TextSelectionToolbarLayoutDelegate');
 
-const textureType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/texture.dart#Texture');
+const textureType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/texture.dart#Texture');
 
 const tickerModeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/ticker_provider.dart#TickerMode');
+    'package:flutter/src/widgets/ticker_provider.dart#TickerMode');
 
 const singleTickerProviderStateMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/ticker_provider.dart#SingleTickerProviderStateMixin');
+    'package:flutter/src/widgets/ticker_provider.dart#SingleTickerProviderStateMixin');
 
 const tickerProviderStateMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/ticker_provider.dart#TickerProviderStateMixin');
+    'package:flutter/src/widgets/ticker_provider.dart#TickerProviderStateMixin');
 
-const titleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/title.dart#Title');
+const tickerProviderType = TypeChecker.fromUrl(
+    'package:flutter/src/scheduler/ticker.dart#TickerProvider');
+
+const titleType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/title.dart#Title');
 
 const animatedWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#AnimatedWidget');
+    'package:flutter/src/widgets/transitions.dart#AnimatedWidget');
 
 const slideTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#SlideTransition');
+    'package:flutter/src/widgets/transitions.dart#SlideTransition');
 
 const scaleTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#ScaleTransition');
+    'package:flutter/src/widgets/transitions.dart#ScaleTransition');
 
 const rotationTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#RotationTransition');
+    'package:flutter/src/widgets/transitions.dart#RotationTransition');
 
 const sizeTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#SizeTransition');
+    'package:flutter/src/widgets/transitions.dart#SizeTransition');
 
 const fadeTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#FadeTransition');
+    'package:flutter/src/widgets/transitions.dart#FadeTransition');
 
 const sliverFadeTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#SliverFadeTransition');
+    'package:flutter/src/widgets/transitions.dart#SliverFadeTransition');
 
 const relativeRectTweenType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#RelativeRectTween');
+    'package:flutter/src/widgets/transitions.dart#RelativeRectTween');
 
 const positionedTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#PositionedTransition');
+    'package:flutter/src/widgets/transitions.dart#PositionedTransition');
 
 const relativePositionedTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#RelativePositionedTransition');
+    'package:flutter/src/widgets/transitions.dart#RelativePositionedTransition');
 
 const decoratedBoxTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#DecoratedBoxTransition');
+    'package:flutter/src/widgets/transitions.dart#DecoratedBoxTransition');
 
 const alignTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#AlignTransition');
+    'package:flutter/src/widgets/transitions.dart#AlignTransition');
 
 const defaultTextStyleTransitionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#DefaultTextStyleTransition');
+    'package:flutter/src/widgets/transitions.dart#DefaultTextStyleTransition');
 
 const animatedBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/transitions.dart#AnimatedBuilder');
+    'package:flutter/src/widgets/transitions.dart#AnimatedBuilder');
 
 const tweenAnimationBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/tween_animation_builder.dart#TweenAnimationBuilder');
+    'package:flutter/src/widgets/tween_animation_builder.dart#TweenAnimationBuilder');
 
 const uniqueWidgetType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/unique_widget.dart#UniqueWidget');
+    'package:flutter/src/widgets/unique_widget.dart#UniqueWidget');
 
 const valueListenableBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/value_listenable_builder.dart#ValueListenableBuilder');
+    'package:flutter/src/widgets/value_listenable_builder.dart#ValueListenableBuilder');
 
-const viewportType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/viewport.dart#Viewport');
+const viewportType =
+    TypeChecker.fromUrl('package:flutter/src/widgets/viewport.dart#Viewport');
 
 const shrinkWrappingViewportType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/viewport.dart#ShrinkWrappingViewport');
+    'package:flutter/src/widgets/viewport.dart#ShrinkWrappingViewport');
+
+const growthDirectionType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/sliver.dart#GrowthDirection');
 
 const visibilityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/visibility.dart#Visibility');
+    'package:flutter/src/widgets/visibility.dart#Visibility');
 
 const sliverVisibilityType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/visibility.dart#SliverVisibility');
+    'package:flutter/src/widgets/visibility.dart#SliverVisibility');
 
 const widgetInspectorServiceType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/widget_inspector.dart#WidgetInspectorService');
+    'package:flutter/src/widgets/widget_inspector.dart#WidgetInspectorService');
 
 const widgetInspectorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/widget_inspector.dart#WidgetInspector');
+    'package:flutter/src/widgets/widget_inspector.dart#WidgetInspector');
 
 const inspectorSelectionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/widget_inspector.dart#InspectorSelection');
+    'package:flutter/src/widgets/widget_inspector.dart#InspectorSelection');
 
 const devToolsDeepLinkPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/widget_inspector.dart#DevToolsDeepLinkProperty');
+    'package:flutter/src/widgets/widget_inspector.dart#DevToolsDeepLinkProperty');
 
 const inspectorSerializationDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/widget_inspector.dart#InspectorSerializationDelegate');
+    'package:flutter/src/widgets/widget_inspector.dart#InspectorSerializationDelegate');
 
 const widgetSpanType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/widget_span.dart#WidgetSpan');
+    'package:flutter/src/widgets/widget_span.dart#WidgetSpan');
 
 const willPopScopeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/widgets/will_pop_scope.dart#WillPopScope');
+    'package:flutter/src/widgets/will_pop_scope.dart#WillPopScope');
 
 const categoryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/annotations.dart#Category');
+    'package:flutter/src/foundation/annotations.dart#Category');
 
 const documentationIconType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/annotations.dart#DocumentationIcon');
+    'package:flutter/src/foundation/annotations.dart#DocumentationIcon');
 
 const summaryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/annotations.dart#Summary');
+    'package:flutter/src/foundation/annotations.dart#Summary');
 
 const partialStackFrameType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#PartialStackFrame');
+    'package:flutter/src/foundation/assertions.dart#PartialStackFrame');
 
 const stackFilterType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#StackFilter');
+    'package:flutter/src/foundation/assertions.dart#StackFilter');
 
 const repetitiveStackFrameFilterType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#RepetitiveStackFrameFilter');
-
-const errorDescriptionType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#ErrorDescription');
-
-const errorSummaryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#ErrorSummary');
-
-const errorHintType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#ErrorHint');
+    'package:flutter/src/foundation/assertions.dart#RepetitiveStackFrameFilter');
 
 const errorSpacerType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#ErrorSpacer');
-
-const flutterErrorDetailsType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#FlutterErrorDetails');
-
-const flutterErrorType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#FlutterError');
+    'package:flutter/src/foundation/assertions.dart#ErrorSpacer');
 
 const diagnosticsStackTraceType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/assertions.dart#DiagnosticsStackTrace');
+    'package:flutter/src/foundation/assertions.dart#DiagnosticsStackTrace');
 
 const cachingIterableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/basic_types.dart#CachingIterable');
+    'package:flutter/src/foundation/basic_types.dart#CachingIterable');
 
 const factoryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/basic_types.dart#Factory');
+    'package:flutter/src/foundation/basic_types.dart#Factory');
 
 const bindingBaseType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/binding.dart#BindingBase');
+    'package:flutter/src/foundation/binding.dart#BindingBase');
 
 const debugReassembleConfigType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/binding.dart#DebugReassembleConfig');
+    'package:flutter/src/foundation/binding.dart#DebugReassembleConfig');
 
 const bitFieldType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/bitfield.dart#BitField');
-
-const listenableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/change_notifier.dart#Listenable');
+    'package:flutter/src/foundation/bitfield.dart#BitField');
 
 const valueListenableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/change_notifier.dart#ValueListenable');
-
-const changeNotifierType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/change_notifier.dart#ChangeNotifier');
-
-const valueNotifierType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/change_notifier.dart#ValueNotifier');
-
-const diagnosticLevelType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticLevel');
+    'package:flutter/src/foundation/change_notifier.dart#ValueListenable');
 
 const diagnosticsTreeStyleType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticsTreeStyle');
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticsTreeStyle');
 
 const textTreeConfigurationType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#TextTreeConfiguration');
+    'package:flutter/src/foundation/diagnostics.dart#TextTreeConfiguration');
 
 const textTreeRendererType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#TextTreeRenderer');
-
-const diagnosticsNodeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticsNode');
+    'package:flutter/src/foundation/diagnostics.dart#TextTreeRenderer');
 
 const messagePropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#MessageProperty');
+    'package:flutter/src/foundation/diagnostics.dart#MessageProperty');
 
 const stringPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#StringProperty');
+    'package:flutter/src/foundation/diagnostics.dart#StringProperty');
 
 const doublePropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DoubleProperty');
+    'package:flutter/src/foundation/diagnostics.dart#DoubleProperty');
 
 const intPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#IntProperty');
+    'package:flutter/src/foundation/diagnostics.dart#IntProperty');
 
 const percentPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#PercentProperty');
+    'package:flutter/src/foundation/diagnostics.dart#PercentProperty');
 
 const flagPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#FlagProperty');
+    'package:flutter/src/foundation/diagnostics.dart#FlagProperty');
 
 const iterablePropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#IterableProperty');
+    'package:flutter/src/foundation/diagnostics.dart#IterableProperty');
 
 const enumPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#EnumProperty');
+    'package:flutter/src/foundation/diagnostics.dart#EnumProperty');
 
 const objectFlagPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#ObjectFlagProperty');
+    'package:flutter/src/foundation/diagnostics.dart#ObjectFlagProperty');
 
 const flagsSummaryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#FlagsSummary');
+    'package:flutter/src/foundation/diagnostics.dart#FlagsSummary');
 
 const diagnosticsPropertyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticsProperty');
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticsProperty');
 
 const diagnosticableNodeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticableNode');
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticableNode');
 
 const diagnosticableTreeNodeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticableTreeNode');
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticableTreeNode');
 
 const diagnosticPropertiesBuilderType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticPropertiesBuilder');
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticPropertiesBuilder');
 
 const diagnosticableType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#Diagnosticable');
+    'package:flutter/src/foundation/diagnostics.dart#Diagnosticable');
 
 const diagnosticableTreeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticableTree');
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticableTree');
 
 const diagnosticableTreeMixinType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticableTreeMixin');
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticableTreeMixin');
 
 const diagnosticsBlockType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticsBlock');
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticsBlock');
 
 const diagnosticsSerializationDelegateType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/diagnostics.dart#DiagnosticsSerializationDelegate');
-
-const keyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/key.dart#Key');
-
-const localKeyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/key.dart#LocalKey');
-
-const valueKeyType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/key.dart#ValueKey');
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticsSerializationDelegate');
 
 const licenseParagraphType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/licenses.dart#LicenseParagraph');
+    'package:flutter/src/foundation/licenses.dart#LicenseParagraph');
 
 const licenseEntryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/licenses.dart#LicenseEntry');
+    'package:flutter/src/foundation/licenses.dart#LicenseEntry');
 
 const licenseEntryWithLineBreaksType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/licenses.dart#LicenseEntryWithLineBreaks');
+    'package:flutter/src/foundation/licenses.dart#LicenseEntryWithLineBreaks');
 
 const licenseRegistryType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/licenses.dart#LicenseRegistry');
+    'package:flutter/src/foundation/licenses.dart#LicenseRegistry');
 
 const abstractNodeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/node.dart#AbstractNode');
+    'package:flutter/src/foundation/node.dart#AbstractNode');
 
 const observerListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/observer_list.dart#ObserverList');
+    'package:flutter/src/foundation/observer_list.dart#ObserverList');
 
 const hashedObserverListType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/observer_list.dart#HashedObserverList');
-
-const targetPlatformType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/platform.dart#TargetPlatform');
+    'package:flutter/src/foundation/observer_list.dart#HashedObserverList');
 
 const writeBufferType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/serialization.dart#WriteBuffer');
+    'package:flutter/src/foundation/serialization.dart#WriteBuffer');
 
 const readBufferType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/serialization.dart#ReadBuffer');
+    'package:flutter/src/foundation/serialization.dart#ReadBuffer');
 
 const stackFrameType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/stack_frame.dart#StackFrame');
+    'package:flutter/src/foundation/stack_frame.dart#StackFrame');
 
 const synchronousFutureType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/synchronous_future.dart#SynchronousFuture');
+    'package:flutter/src/foundation/synchronous_future.dart#SynchronousFuture');
 
-const unicodeType = TypeChecker.fromUrl(
-    'file:/Users/pattobrien/fvm/versions/2.10.5/packages/flutter/lib/src/foundation/unicode.dart#Unicode');
+const unicodeType =
+    TypeChecker.fromUrl('package:flutter/src/foundation/unicode.dart#Unicode');
