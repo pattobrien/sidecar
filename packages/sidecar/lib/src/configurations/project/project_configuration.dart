@@ -38,13 +38,7 @@ class ProjectConfiguration {
               assistPackages:
                   _parseAssistPackages(contentMap['edits'] as YamlMap?),
               includes: includesResult.item1,
-              sourceErrors: [
-                ...includesResult.item2,
-                // SidecarLintException(
-                //   (contentMap.nodes.entries.first.key as YamlScalar?)!,
-                //   message: 'test',
-                // ),
-              ],
+              sourceErrors: includesResult.item2,
             );
           } catch (e, stackTrace) {
             ref?.read(logDelegateProvider).sidecarVerboseMessage(
