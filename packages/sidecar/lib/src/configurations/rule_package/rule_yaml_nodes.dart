@@ -10,9 +10,9 @@ abstract class SidecarBaseNode {
 }
 
 class LintNode extends SidecarBaseNode {
-  LintNode(super.node);
+  LintNode(YamlNode node) : super(node);
 }
 
 class AssistNode extends SidecarBaseNode {
-  AssistNode(super.node);
+  AssistNode(YamlNode node) : super(node);
 }

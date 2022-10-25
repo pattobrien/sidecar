@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/ast/ast.dart';
-// import 'package:flutter_analyzer/flutter_analyzer.dart';
-import 'package:flutter_analyzer/material.dart';
+import 'package:flutter_analyzer_utils/painting.dart';
 // import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 // import 'package:sidecar_package_utilities/sidecar_package_utilities.dart';

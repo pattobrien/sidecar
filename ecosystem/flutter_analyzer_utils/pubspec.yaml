@@ -1,16 +1,16 @@
 name: flutter_analyzer_utils
 description: A utility package for analyzing the Flutter SDK.
-version: 0.1.0-dev.2
+version: 0.2.0-dev.3
 repository: https://www.github.com/pattobrien/sidecar
 homepage: https://www.github.com/pattobrien/sidecar
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
-  flutter: ">=2.10.5"
+  sdk: ">=2.17.6 <3.0.0"
+  flutter: ">=3.0.5"
 
 dependencies:
   flutter:
     sdk: flutter
-  sidecar_package_utilities: ^0.1.0-dev.2
+  sidecar_package_utilities: ^0.1.0-dev.1
 
 sidecar_package: flutter

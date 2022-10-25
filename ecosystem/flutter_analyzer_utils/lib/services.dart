@@ -14,13 +14,13 @@ const licensePageType =
     TypeChecker.fromUrl('package:flutter/src/material/about.dart#LicensePage');
 
 const animatedIconType = TypeChecker.fromUrl(
-    'package:flutter/src/material/animated_icons/animated_icons.dart#AnimatedIcon');
+    'package:flutter/src/material/animated_icons.dart#AnimatedIcon');
 
 const animatedIconsType = TypeChecker.fromUrl(
-    'package:flutter/src/material/animated_icons/animated_icons_data.dart#AnimatedIcons');
+    'package:flutter/src/material/animated_icons.dart#AnimatedIcons');
 
 const animatedIconDataType = TypeChecker.fromUrl(
-    'package:flutter/src/material/animated_icons/animated_icons_data.dart#AnimatedIconData');
+    'package:flutter/src/material/animated_icons.dart#AnimatedIconData');
 
 const themeModeType =
     TypeChecker.fromUrl('package:flutter/src/material/app.dart#ThemeMode');
@@ -928,21 +928,6 @@ const textButtonThemeType = TypeChecker.fromUrl(
 const textFieldType = TypeChecker.fromUrl(
     'package:flutter/src/material/text_field.dart#TextField');
 
-const smartDashesTypeType = TypeChecker.fromUrl(
-    'package:flutter/src/services/text_input.dart#SmartDashesType');
-
-const smartQuotesTypeType = TypeChecker.fromUrl(
-    'package:flutter/src/services/text_input.dart#SmartQuotesType');
-
-const textInputTypeType = TypeChecker.fromUrl(
-    'package:flutter/src/services/text_input.dart#TextInputType');
-
-const textInputActionType = TypeChecker.fromUrl(
-    'package:flutter/src/services/text_input.dart#TextInputAction');
-
-const textCapitalizationType = TypeChecker.fromUrl(
-    'package:flutter/src/services/text_input.dart#TextCapitalization');
-
 const textFormFieldType = TypeChecker.fromUrl(
     'package:flutter/src/material/text_form_field.dart#TextFormField');
 
@@ -975,8 +960,6 @@ const animatedThemeType = TypeChecker.fromUrl(
 
 const themeDataType = TypeChecker.fromUrl(
     'package:flutter/src/material/theme_data.dart#ThemeData');
-
-const brightnessType = TypeChecker.fromUrl('dart:ui/window.dart#Brightness');
 
 const themeExtensionType = TypeChecker.fromUrl(
     'package:flutter/src/material/theme_data.dart#ThemeExtension');
@@ -1058,15 +1041,6 @@ const typographyType = TypeChecker.fromUrl(
 
 const userAccountsDrawerHeaderType = TypeChecker.fromUrl(
     'package:flutter/src/material/user_accounts_drawer_header.dart#UserAccountsDrawerHeader');
-
-const charactersType =
-    TypeChecker.fromUrl('package:characters/src/characters.dart#Characters');
-
-const characterRangeType = TypeChecker.fromUrl(
-    'package:characters/src/characters.dart#CharacterRange');
-
-const matrix4Type = TypeChecker.fromUrl(
-    'package:vector_math/src/vector_math_64/matrix4.dart#Matrix4');
 
 const uniqueKeyType =
     TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#UniqueKey');
@@ -1161,9 +1135,6 @@ const annotatedRegionType = TypeChecker.fromUrl(
 const widgetsAppType =
     TypeChecker.fromUrl('package:flutter/src/widgets/app.dart#WidgetsApp');
 
-const localeType =
-    TypeChecker.fromUrl('dart:ui/platform_dispatcher.dart#Locale');
-
 const streamBuilderBaseType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/async.dart#StreamBuilderBase');
 
@@ -1199,9 +1170,6 @@ const autofillGroupType = TypeChecker.fromUrl(
 
 const autofillGroupStateType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/autofill.dart#AutofillGroupState');
-
-const autofillHintsType = TypeChecker.fromUrl(
-    'package:flutter/src/services/autofill.dart#AutofillHints');
 
 const automaticKeepAliveType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/automatic_keep_alive.dart#AutomaticKeepAlive');
@@ -1434,636 +1402,6 @@ const statefulBuilderType = TypeChecker.fromUrl(
 const coloredBoxType =
     TypeChecker.fromUrl('package:flutter/src/widgets/basic.dart#ColoredBox');
 
-const animationStatusType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animation.dart#AnimationStatus');
-
-const animationType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animation.dart#Animation');
-
-const animationBehaviorType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animation_controller.dart#AnimationBehavior');
-
-const animationControllerType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animation_controller.dart#AnimationController');
-
-const tickerFutureType = TypeChecker.fromUrl(
-    'package:flutter/src/scheduler/ticker.dart#TickerFuture');
-
-const tickerCanceledType = TypeChecker.fromUrl(
-    'package:flutter/src/scheduler/ticker.dart#TickerCanceled');
-
-const alwaysStoppedAnimationType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#AlwaysStoppedAnimation');
-
-const animationWithParentMixinType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#AnimationWithParentMixin');
-
-const proxyAnimationType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#ProxyAnimation');
-
-const reverseAnimationType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#ReverseAnimation');
-
-const curvedAnimationType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#CurvedAnimation');
-
-const trainHoppingAnimationType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#TrainHoppingAnimation');
-
-const compoundAnimationType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#CompoundAnimation');
-
-const animationMeanType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#AnimationMean');
-
-const animationMaxType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#AnimationMax');
-
-const animationMinType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/animations.dart#AnimationMin');
-
-const parametricCurveType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/curves.dart#ParametricCurve');
-
-const curveType =
-    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Curve');
-
-const sawToothType =
-    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#SawTooth');
-
-const intervalType =
-    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Interval');
-
-const thresholdType =
-    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Threshold');
-
-const cubicType =
-    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Cubic');
-
-const threePointCubicType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/curves.dart#ThreePointCubic');
-
-const curve2DType =
-    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Curve2D');
-
-const curve2DSampleType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/curves.dart#Curve2DSample');
-
-const catmullRomSplineType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/curves.dart#CatmullRomSpline');
-
-const catmullRomCurveType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/curves.dart#CatmullRomCurve');
-
-const flippedCurveType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/curves.dart#FlippedCurve');
-
-const elasticInCurveType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/curves.dart#ElasticInCurve');
-
-const elasticOutCurveType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/curves.dart#ElasticOutCurve');
-
-const elasticInOutCurveType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/curves.dart#ElasticInOutCurve');
-
-const curvesType =
-    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Curves');
-
-const animationLazyListenerMixinType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/listener_helpers.dart#AnimationLazyListenerMixin');
-
-const animationEagerListenerMixinType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/listener_helpers.dart#AnimationEagerListenerMixin');
-
-const animationLocalListenersMixinType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/listener_helpers.dart#AnimationLocalListenersMixin');
-
-const animationLocalStatusListenersMixinType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/listener_helpers.dart#AnimationLocalStatusListenersMixin');
-
-const animatableType =
-    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#Animatable');
-
-const tweenType =
-    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#Tween');
-
-const reverseTweenType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/tween.dart#ReverseTween');
-
-const colorTweenType =
-    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#ColorTween');
-
-const sizeTweenType =
-    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#SizeTween');
-
-const rectTweenType =
-    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#RectTween');
-
-const intTweenType =
-    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#IntTween');
-
-const stepTweenType =
-    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#StepTween');
-
-const constantTweenType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/tween.dart#ConstantTween');
-
-const curveTweenType =
-    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#CurveTween');
-
-const tweenSequenceType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/tween_sequence.dart#TweenSequence');
-
-const flippedTweenSequenceType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/tween_sequence.dart#FlippedTweenSequence');
-
-const tweenSequenceItemType = TypeChecker.fromUrl(
-    'package:flutter/src/animation/tween_sequence.dart#TweenSequenceItem');
-
-const flutterErrorDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/assertions.dart#FlutterErrorDetails');
-
-const listenableType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/change_notifier.dart#Listenable');
-
-const changeNotifierType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/change_notifier.dart#ChangeNotifier');
-
-const valueNotifierType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/change_notifier.dart#ValueNotifier');
-
-const targetPlatformType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/platform.dart#TargetPlatform');
-
-const shadowType = TypeChecker.fromUrl('dart:ui/painting.dart#Shadow');
-
-const textLeadingDistributionType =
-    TypeChecker.fromUrl('dart:ui/text.dart#TextLeadingDistribution');
-
-const textHeightBehaviorType =
-    TypeChecker.fromUrl('dart:ui/text.dart#TextHeightBehavior');
-
-const placeholderAlignmentType =
-    TypeChecker.fromUrl('dart:ui/text.dart#PlaceholderAlignment');
-
-const alignmentGeometryType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/alignment.dart#AlignmentGeometry');
-
-const alignmentType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/alignment.dart#Alignment');
-
-const alignmentDirectionalType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/alignment.dart#AlignmentDirectional');
-
-const textAlignVerticalType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/alignment.dart#TextAlignVertical');
-
-const renderComparisonType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/basic_types.dart#RenderComparison');
-
-const axisType =
-    TypeChecker.fromUrl('package:flutter/src/painting/basic_types.dart#Axis');
-
-const verticalDirectionType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/basic_types.dart#VerticalDirection');
-
-const axisDirectionType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/basic_types.dart#AxisDirection');
-
-const offsetType = TypeChecker.fromUrl('dart:ui/geometry.dart#Offset');
-
-const sizeType = TypeChecker.fromUrl('dart:ui/geometry.dart#Size');
-
-const rectType = TypeChecker.fromUrl('dart:ui/geometry.dart#Rect');
-
-const radiusType = TypeChecker.fromUrl('dart:ui/geometry.dart#Radius');
-
-const rRectType = TypeChecker.fromUrl('dart:ui/geometry.dart#RRect');
-
-const rSTransformType =
-    TypeChecker.fromUrl('dart:ui/geometry.dart#RSTransform');
-
-const colorType = TypeChecker.fromUrl('dart:ui/painting.dart#Color');
-
-const blendModeType = TypeChecker.fromUrl('dart:ui/painting.dart#BlendMode');
-
-const filterQualityType =
-    TypeChecker.fromUrl('dart:ui/painting.dart#FilterQuality');
-
-const strokeCapType = TypeChecker.fromUrl('dart:ui/painting.dart#StrokeCap');
-
-const strokeJoinType = TypeChecker.fromUrl('dart:ui/painting.dart#StrokeJoin');
-
-const paintingStyleType =
-    TypeChecker.fromUrl('dart:ui/painting.dart#PaintingStyle');
-
-const clipType = TypeChecker.fromUrl('dart:ui/painting.dart#Clip');
-
-const paintType = TypeChecker.fromUrl('dart:ui/painting.dart#Paint');
-
-const pathFillTypeType =
-    TypeChecker.fromUrl('dart:ui/painting.dart#PathFillType');
-
-const pathOperationType =
-    TypeChecker.fromUrl('dart:ui/painting.dart#PathOperation');
-
-const pathType = TypeChecker.fromUrl('dart:ui/painting.dart#Path');
-
-const blurStyleType = TypeChecker.fromUrl('dart:ui/painting.dart#BlurStyle');
-
-const maskFilterType = TypeChecker.fromUrl('dart:ui/painting.dart#MaskFilter');
-
-const colorFilterType =
-    TypeChecker.fromUrl('dart:ui/painting.dart#ColorFilter');
-
-const shaderType = TypeChecker.fromUrl('dart:ui/painting.dart#Shader');
-
-const tileModeType = TypeChecker.fromUrl('dart:ui/painting.dart#TileMode');
-
-const imageShaderType =
-    TypeChecker.fromUrl('dart:ui/painting.dart#ImageShader');
-
-const vertexModeType = TypeChecker.fromUrl('dart:ui/painting.dart#VertexMode');
-
-const canvasType = TypeChecker.fromUrl('dart:ui/painting.dart#Canvas');
-
-const fontStyleType = TypeChecker.fromUrl('dart:ui/text.dart#FontStyle');
-
-const fontWeightType = TypeChecker.fromUrl('dart:ui/text.dart#FontWeight');
-
-const textAlignType = TypeChecker.fromUrl('dart:ui/text.dart#TextAlign');
-
-const textBaselineType = TypeChecker.fromUrl('dart:ui/text.dart#TextBaseline');
-
-const textDecorationType =
-    TypeChecker.fromUrl('dart:ui/text.dart#TextDecoration');
-
-const textDecorationStyleType =
-    TypeChecker.fromUrl('dart:ui/text.dart#TextDecorationStyle');
-
-const textDirectionType =
-    TypeChecker.fromUrl('dart:ui/text.dart#TextDirection');
-
-const textBoxType = TypeChecker.fromUrl('dart:ui/text.dart#TextBox');
-
-const textAffinityType = TypeChecker.fromUrl('dart:ui/text.dart#TextAffinity');
-
-const textPositionType = TypeChecker.fromUrl('dart:ui/text.dart#TextPosition');
-
-const beveledRectangleBorderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/beveled_rectangle_border.dart#BeveledRectangleBorder');
-
-const paintingBindingType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/binding.dart#PaintingBinding');
-
-const borderRadiusGeometryType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/border_radius.dart#BorderRadiusGeometry');
-
-const borderRadiusType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/border_radius.dart#BorderRadius');
-
-const borderRadiusDirectionalType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/border_radius.dart#BorderRadiusDirectional');
-
-const borderStyleType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/borders.dart#BorderStyle');
-
-const borderSideType =
-    TypeChecker.fromUrl('package:flutter/src/painting/borders.dart#BorderSide');
-
-const shapeBorderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/borders.dart#ShapeBorder');
-
-const outlinedBorderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/borders.dart#OutlinedBorder');
-
-const boxShapeType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/box_border.dart#BoxShape');
-
-const boxBorderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/box_border.dart#BoxBorder');
-
-const borderType =
-    TypeChecker.fromUrl('package:flutter/src/painting/box_border.dart#Border');
-
-const borderDirectionalType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/box_border.dart#BorderDirectional');
-
-const boxDecorationType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/box_decoration.dart#BoxDecoration');
-
-const boxFitType =
-    TypeChecker.fromUrl('package:flutter/src/painting/box_fit.dart#BoxFit');
-
-const fittedSizesType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/box_fit.dart#FittedSizes');
-
-const boxShadowType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/box_shadow.dart#BoxShadow');
-
-const circleBorderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/circle_border.dart#CircleBorder');
-
-const clipContextType =
-    TypeChecker.fromUrl('package:flutter/src/painting/clip.dart#ClipContext');
-
-const hSVColorType =
-    TypeChecker.fromUrl('package:flutter/src/painting/colors.dart#HSVColor');
-
-const hSLColorType =
-    TypeChecker.fromUrl('package:flutter/src/painting/colors.dart#HSLColor');
-
-const colorSwatchType =
-    TypeChecker.fromUrl('package:flutter/src/painting/colors.dart#ColorSwatch');
-
-const colorPropertyType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/colors.dart#ColorProperty');
-
-const continuousRectangleBorderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/continuous_rectangle_border.dart#ContinuousRectangleBorder');
-
-const imageSizeInfoType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/debug.dart#ImageSizeInfo');
-
-const decorationType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/decoration.dart#Decoration');
-
-const boxPainterType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/decoration.dart#BoxPainter');
-
-const imageRepeatType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/decoration_image.dart#ImageRepeat');
-
-const decorationImageType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/decoration_image.dart#DecorationImage');
-
-const decorationImagePainterType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/decoration_image.dart#DecorationImagePainter');
-
-const edgeInsetsGeometryType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/edge_insets.dart#EdgeInsetsGeometry');
-
-const edgeInsetsType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/edge_insets.dart#EdgeInsets');
-
-const edgeInsetsDirectionalType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/edge_insets.dart#EdgeInsetsDirectional');
-
-const flutterLogoStyleType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/flutter_logo.dart#FlutterLogoStyle');
-
-const flutterLogoDecorationType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/flutter_logo.dart#FlutterLogoDecoration');
-
-const fractionalOffsetType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/fractional_offset.dart#FractionalOffset');
-
-const gradientTransformType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/gradient.dart#GradientTransform');
-
-const gradientRotationType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/gradient.dart#GradientRotation');
-
-const gradientType =
-    TypeChecker.fromUrl('package:flutter/src/painting/gradient.dart#Gradient');
-
-const linearGradientType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/gradient.dart#LinearGradient');
-
-const radialGradientType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/gradient.dart#RadialGradient');
-
-const sweepGradientType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/gradient.dart#SweepGradient');
-
-const imageCacheType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_cache.dart#ImageCache');
-
-const imageCacheStatusType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_cache.dart#ImageCacheStatus');
-
-const imageConfigurationType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#ImageConfiguration');
-
-const imageProviderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#ImageProvider');
-
-const assetBundleImageKeyType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#AssetBundleImageKey');
-
-const assetBundleImageProviderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#AssetBundleImageProvider');
-
-const resizeImageKeyType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#ResizeImageKey');
-
-const resizeImageType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#ResizeImage');
-
-const networkImageType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#NetworkImage');
-
-const fileImageType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#FileImage');
-
-const memoryImageType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#MemoryImage');
-
-const exactAssetImageType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#ExactAssetImage');
-
-const networkImageLoadExceptionType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_provider.dart#NetworkImageLoadException');
-
-const assetImageType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_resolution.dart#AssetImage');
-
-const imageInfoType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_stream.dart#ImageInfo');
-
-const imageStreamListenerType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_stream.dart#ImageStreamListener');
-
-const imageChunkEventType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_stream.dart#ImageChunkEvent');
-
-const imageStreamType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_stream.dart#ImageStream');
-
-const imageStreamCompleterHandleType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_stream.dart#ImageStreamCompleterHandle');
-
-const imageStreamCompleterType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_stream.dart#ImageStreamCompleter');
-
-const oneFrameImageStreamCompleterType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_stream.dart#OneFrameImageStreamCompleter');
-
-const multiFrameImageStreamCompleterType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/image_stream.dart#MultiFrameImageStreamCompleter');
-
-const accumulatorType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/inline_span.dart#Accumulator');
-
-const inlineSpanSemanticsInformationType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/inline_span.dart#InlineSpanSemanticsInformation');
-
-const inlineSpanType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/inline_span.dart#InlineSpan');
-
-const matrixUtilsType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/matrix_utils.dart#MatrixUtils');
-
-const transformPropertyType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/matrix_utils.dart#TransformProperty');
-
-const notchedShapeType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/notched_shapes.dart#NotchedShape');
-
-const circularNotchedRectangleType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/notched_shapes.dart#CircularNotchedRectangle');
-
-const automaticNotchedShapeType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/notched_shapes.dart#AutomaticNotchedShape');
-
-const placeholderSpanType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/placeholder_span.dart#PlaceholderSpan');
-
-const roundedRectangleBorderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/rounded_rectangle_border.dart#RoundedRectangleBorder');
-
-const shaderWarmUpType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/shader_warm_up.dart#ShaderWarmUp');
-
-const shapeDecorationType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/shape_decoration.dart#ShapeDecoration');
-
-const stadiumBorderType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/stadium_border.dart#StadiumBorder');
-
-const strutStyleType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/strut_style.dart#StrutStyle');
-
-const textOverflowType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/text_painter.dart#TextOverflow');
-
-const placeholderDimensionsType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/text_painter.dart#PlaceholderDimensions');
-
-const textWidthBasisType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/text_painter.dart#TextWidthBasis');
-
-const textPainterType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/text_painter.dart#TextPainter');
-
-const textSelectionType = TypeChecker.fromUrl(
-    'package:flutter/src/services/text_editing.dart#TextSelection');
-
-const textRangeType = TypeChecker.fromUrl('dart:ui/text.dart#TextRange');
-
-const textSpanType =
-    TypeChecker.fromUrl('package:flutter/src/painting/text_span.dart#TextSpan');
-
-const textStyleType = TypeChecker.fromUrl(
-    'package:flutter/src/painting/text_style.dart#TextStyle');
-
-const boxConstraintsType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/box.dart#BoxConstraints');
-
-const multiChildLayoutDelegateType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/custom_layout.dart#MultiChildLayoutDelegate');
-
-const customPainterType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/custom_paint.dart#CustomPainter');
-
-const customPainterSemanticsType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/custom_paint.dart#CustomPainterSemantics');
-
-const flexFitType =
-    TypeChecker.fromUrl('package:flutter/src/rendering/flex.dart#FlexFit');
-
-const mainAxisSizeType =
-    TypeChecker.fromUrl('package:flutter/src/rendering/flex.dart#MainAxisSize');
-
-const mainAxisAlignmentType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/flex.dart#MainAxisAlignment');
-
-const crossAxisAlignmentType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/flex.dart#CrossAxisAlignment');
-
-const flowPaintingContextType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/flow.dart#FlowPaintingContext');
-
-const flowDelegateType =
-    TypeChecker.fromUrl('package:flutter/src/rendering/flow.dart#FlowDelegate');
-
-const layerLinkType =
-    TypeChecker.fromUrl('package:flutter/src/rendering/layer.dart#LayerLink');
-
-const mouseCursorType = TypeChecker.fromUrl(
-    'package:flutter/src/services/mouse_cursor.dart#MouseCursor');
-
-const systemMouseCursorsType = TypeChecker.fromUrl(
-    'package:flutter/src/services/mouse_cursor.dart#SystemMouseCursors');
-
-const paintingContextType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/object.dart#PaintingContext');
-
-const hitTestBehaviorType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/proxy_box.dart#HitTestBehavior');
-
-const customClipperType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/proxy_box.dart#CustomClipper');
-
-const shapeBorderClipperType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/proxy_box.dart#ShapeBorderClipper');
-
-const decorationPositionType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/proxy_box.dart#DecorationPosition');
-
-const pointerEventType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/events.dart#PointerEvent');
-
-const pointerDownEventType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/events.dart#PointerDownEvent');
-
-const pointerMoveEventType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/events.dart#PointerMoveEvent');
-
-const pointerUpEventType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/events.dart#PointerUpEvent');
-
-const pointerCancelEventType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/events.dart#PointerCancelEvent');
-
-const singleChildLayoutDelegateType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/shifted_box.dart#SingleChildLayoutDelegate');
-
-const relativeRectType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/stack.dart#RelativeRect');
-
-const stackFitType =
-    TypeChecker.fromUrl('package:flutter/src/rendering/stack.dart#StackFit');
-
-const fractionalOffsetTweenType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/tweens.dart#FractionalOffsetTween');
-
-const alignmentTweenType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/tweens.dart#AlignmentTween');
-
-const alignmentGeometryTweenType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/tweens.dart#AlignmentGeometryTween');
-
-const wrapAlignmentType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/wrap.dart#WrapAlignment');
-
-const wrapCrossAlignmentType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/wrap.dart#WrapCrossAlignment');
-
-const assetBundleType = TypeChecker.fromUrl(
-    'package:flutter/src/services/asset_bundle.dart#AssetBundle');
-
 const widgetsBindingObserverType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/binding.dart#WidgetsBindingObserver');
 
@@ -2078,9 +1416,6 @@ const renderObjectToWidgetElementType = TypeChecker.fromUrl(
 
 const widgetsFlutterBindingType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/binding.dart#WidgetsFlutterBinding');
-
-const appLifecycleStateType =
-    TypeChecker.fromUrl('dart:ui/platform_dispatcher.dart#AppLifecycleState');
 
 const bottomNavigationBarItemType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/bottom_navigation_bar_item.dart#BottomNavigationBarItem');
@@ -2159,12 +1494,6 @@ const editableTextType = TypeChecker.fromUrl(
 
 const editableTextStateType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/editable_text.dart#EditableTextState');
-
-const textEditingValueType = TypeChecker.fromUrl(
-    'package:flutter/src/services/text_input.dart#TextEditingValue');
-
-const selectionChangedCauseType = TypeChecker.fromUrl(
-    'package:flutter/src/services/text_input.dart#SelectionChangedCause');
 
 const fadeInImageType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/fade_in_image.dart#FadeInImage');
@@ -2376,39 +1705,6 @@ const debugCreatorType = TypeChecker.fromUrl(
 const indexedSlotType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/framework.dart#IndexedSlot');
 
-const errorDescriptionType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/assertions.dart#ErrorDescription');
-
-const errorSummaryType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/assertions.dart#ErrorSummary');
-
-const errorHintType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/assertions.dart#ErrorHint');
-
-const flutterErrorType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/assertions.dart#FlutterError');
-
-const diagnosticLevelType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/diagnostics.dart#DiagnosticLevel');
-
-const diagnosticsNodeType = TypeChecker.fromUrl(
-    'package:flutter/src/foundation/diagnostics.dart#DiagnosticsNode');
-
-const keyType =
-    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#Key');
-
-const localKeyType =
-    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#LocalKey');
-
-const valueKeyType =
-    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#ValueKey');
-
-const renderBoxType =
-    TypeChecker.fromUrl('package:flutter/src/rendering/box.dart#RenderBox');
-
-const renderObjectType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/object.dart#RenderObject');
-
 const gestureRecognizerFactoryType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/gesture_detector.dart#GestureRecognizerFactory');
 
@@ -2426,51 +1722,6 @@ const rawGestureDetectorStateType = TypeChecker.fromUrl(
 
 const semanticsGestureDelegateType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/gesture_detector.dart#SemanticsGestureDelegate');
-
-const dragDownDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/drag_details.dart#DragDownDetails');
-
-const dragStartDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/drag_details.dart#DragStartDetails');
-
-const dragUpdateDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/drag_details.dart#DragUpdateDetails');
-
-const dragEndDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/drag_details.dart#DragEndDetails');
-
-const forcePressDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/force_press.dart#ForcePressDetails');
-
-const longPressStartDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/long_press.dart#LongPressStartDetails');
-
-const longPressMoveUpdateDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/long_press.dart#LongPressMoveUpdateDetails');
-
-const longPressEndDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/long_press.dart#LongPressEndDetails');
-
-const scaleStartDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/scale.dart#ScaleStartDetails');
-
-const scaleUpdateDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/scale.dart#ScaleUpdateDetails');
-
-const scaleEndDetailsType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/scale.dart#ScaleEndDetails');
-
-const tapDownDetailsType =
-    TypeChecker.fromUrl('package:flutter/src/gestures/tap.dart#TapDownDetails');
-
-const tapUpDetailsType =
-    TypeChecker.fromUrl('package:flutter/src/gestures/tap.dart#TapUpDetails');
-
-const velocityType = TypeChecker.fromUrl(
-    'package:flutter/src/gestures/velocity_tracker.dart#Velocity');
-
-const renderSemanticsGestureHandlerType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/proxy_box.dart#RenderSemanticsGestureHandler');
 
 const gridPaperType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/grid_paper.dart#GridPaper');
@@ -2603,9 +1854,6 @@ const transformationControllerType = TypeChecker.fromUrl(
 
 const keyboardListenerType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/keyboard_listener.dart#KeyboardListener');
-
-const keyEventType = TypeChecker.fromUrl(
-    'package:flutter/src/services/hardware_keyboard.dart#KeyEvent');
 
 const constrainedLayoutBuilderType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/layout_builder.dart#ConstrainedLayoutBuilder');
@@ -2877,9 +2125,6 @@ const primaryScrollControllerType = TypeChecker.fromUrl(
 const rawKeyboardListenerType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/raw_keyboard_listener.dart#RawKeyboardListener');
 
-const rawKeyEventType = TypeChecker.fromUrl(
-    'package:flutter/src/services/raw_keyboard.dart#RawKeyEvent');
-
 const reorderableListType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/reorderable_list.dart#ReorderableList');
 
@@ -2912,9 +2157,6 @@ const restorablePropertyType = TypeChecker.fromUrl(
 
 const restorationMixinType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/restoration.dart#RestorationMixin');
-
-const restorationBucketType = TypeChecker.fromUrl(
-    'package:flutter/src/services/restoration.dart#RestorationBucket');
 
 const restorableValueType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/restoration_properties.dart#RestorableValue');
@@ -3141,15 +2383,6 @@ const alwaysScrollableScrollPhysicsType = TypeChecker.fromUrl(
 const neverScrollableScrollPhysicsType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/scroll_physics.dart#NeverScrollableScrollPhysics');
 
-const simulationType = TypeChecker.fromUrl(
-    'package:flutter/src/physics/simulation.dart#Simulation');
-
-const scrollSpringSimulationType = TypeChecker.fromUrl(
-    'package:flutter/src/physics/spring_simulation.dart#ScrollSpringSimulation');
-
-const toleranceType =
-    TypeChecker.fromUrl('package:flutter/src/physics/tolerance.dart#Tolerance');
-
 const scrollPositionAlignmentPolicyType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/scroll_position.dart#ScrollPositionAlignmentPolicy');
 
@@ -3300,15 +2533,6 @@ const sliverOffstageType = TypeChecker.fromUrl(
 const keepAliveType =
     TypeChecker.fromUrl('package:flutter/src/widgets/sliver.dart#KeepAlive');
 
-const sliverGridDelegateType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/sliver_grid.dart#SliverGridDelegate');
-
-const sliverGridDelegateWithFixedCrossAxisCountType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/sliver_grid.dart#SliverGridDelegateWithFixedCrossAxisCount');
-
-const sliverGridDelegateWithMaxCrossAxisExtentType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/sliver_grid.dart#SliverGridDelegateWithMaxCrossAxisExtent');
-
 const sliverFillViewportType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/sliver_fill.dart#SliverFillViewport');
 
@@ -3350,33 +2574,6 @@ const tableType =
 
 const tableCellType =
     TypeChecker.fromUrl('package:flutter/src/widgets/table.dart#TableCell');
-
-const tableColumnWidthType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/table.dart#TableColumnWidth');
-
-const intrinsicColumnWidthType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/table.dart#IntrinsicColumnWidth');
-
-const fixedColumnWidthType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/table.dart#FixedColumnWidth');
-
-const fractionColumnWidthType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/table.dart#FractionColumnWidth');
-
-const flexColumnWidthType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/table.dart#FlexColumnWidth');
-
-const maxColumnWidthType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/table.dart#MaxColumnWidth');
-
-const minColumnWidthType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/table.dart#MinColumnWidth');
-
-const tableCellVerticalAlignmentType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/table.dart#TableCellVerticalAlignment');
-
-const tableBorderType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/table_border.dart#TableBorder');
 
 const defaultTextStyleType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/text.dart#DefaultTextStyle');
@@ -3484,9 +2681,6 @@ const clipboardStatusNotifierType = TypeChecker.fromUrl(
 const clipboardStatusType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/text_selection.dart#ClipboardStatus');
 
-const textSelectionDelegateType = TypeChecker.fromUrl(
-    'package:flutter/src/services/text_input.dart#TextSelectionDelegate');
-
 const textSelectionToolbarLayoutDelegateType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/text_selection_toolbar_layout_delegate.dart#TextSelectionToolbarLayoutDelegate');
 
@@ -3501,9 +2695,6 @@ const singleTickerProviderStateMixinType = TypeChecker.fromUrl(
 
 const tickerProviderStateMixinType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/ticker_provider.dart#TickerProviderStateMixin');
-
-const tickerProviderType = TypeChecker.fromUrl(
-    'package:flutter/src/scheduler/ticker.dart#TickerProvider');
 
 const titleType =
     TypeChecker.fromUrl('package:flutter/src/widgets/title.dart#Title');
@@ -3565,9 +2756,6 @@ const viewportType =
 const shrinkWrappingViewportType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/viewport.dart#ShrinkWrappingViewport');
 
-const growthDirectionType = TypeChecker.fromUrl(
-    'package:flutter/src/rendering/sliver.dart#GrowthDirection');
-
 const visibilityType = TypeChecker.fromUrl(
     'package:flutter/src/widgets/visibility.dart#Visibility');
 
@@ -3613,8 +2801,23 @@ const stackFilterType = TypeChecker.fromUrl(
 const repetitiveStackFrameFilterType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/assertions.dart#RepetitiveStackFrameFilter');
 
+const errorDescriptionType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#ErrorDescription');
+
+const errorSummaryType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#ErrorSummary');
+
+const errorHintType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#ErrorHint');
+
 const errorSpacerType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/assertions.dart#ErrorSpacer');
+
+const flutterErrorDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#FlutterErrorDetails');
+
+const flutterErrorType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/assertions.dart#FlutterError');
 
 const diagnosticsStackTraceType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/assertions.dart#DiagnosticsStackTrace');
@@ -3634,8 +2837,20 @@ const debugReassembleConfigType = TypeChecker.fromUrl(
 const bitFieldType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/bitfield.dart#BitField');
 
+const listenableType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/change_notifier.dart#Listenable');
+
 const valueListenableType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/change_notifier.dart#ValueListenable');
+
+const changeNotifierType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/change_notifier.dart#ChangeNotifier');
+
+const valueNotifierType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/change_notifier.dart#ValueNotifier');
+
+const diagnosticLevelType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticLevel');
 
 const diagnosticsTreeStyleType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/diagnostics.dart#DiagnosticsTreeStyle');
@@ -3645,6 +2860,9 @@ const textTreeConfigurationType = TypeChecker.fromUrl(
 
 const textTreeRendererType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/diagnostics.dart#TextTreeRenderer');
+
+const diagnosticsNodeType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/diagnostics.dart#DiagnosticsNode');
 
 const messagePropertyType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/diagnostics.dart#MessageProperty');
@@ -3703,6 +2921,15 @@ const diagnosticsBlockType = TypeChecker.fromUrl(
 const diagnosticsSerializationDelegateType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/diagnostics.dart#DiagnosticsSerializationDelegate');
 
+const keyType =
+    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#Key');
+
+const localKeyType =
+    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#LocalKey');
+
+const valueKeyType =
+    TypeChecker.fromUrl('package:flutter/src/foundation/key.dart#ValueKey');
+
 const licenseParagraphType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/licenses.dart#LicenseParagraph');
 
@@ -3723,6 +2950,9 @@ const observerListType = TypeChecker.fromUrl(
 
 const hashedObserverListType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/observer_list.dart#HashedObserverList');
+
+const targetPlatformType = TypeChecker.fromUrl(
+    'package:flutter/src/foundation/platform.dart#TargetPlatform');
 
 const writeBufferType = TypeChecker.fromUrl(
     'package:flutter/src/foundation/serialization.dart#WriteBuffer');
@@ -3766,8 +2996,23 @@ const pointerEventConverterType = TypeChecker.fromUrl(
 const dragType =
     TypeChecker.fromUrl('package:flutter/src/gestures/drag.dart#Drag');
 
+const dragDownDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/drag_details.dart#DragDownDetails');
+
+const dragStartDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/drag_details.dart#DragStartDetails');
+
+const dragUpdateDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/drag_details.dart#DragUpdateDetails');
+
+const dragEndDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/drag_details.dart#DragEndDetails');
+
 const eagerGestureRecognizerType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/eager.dart#EagerGestureRecognizer');
+
+const pointerEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerEvent');
 
 const pointerAddedEventType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/events.dart#PointerAddedEvent');
@@ -3784,14 +3029,26 @@ const pointerEnterEventType = TypeChecker.fromUrl(
 const pointerExitEventType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/events.dart#PointerExitEvent');
 
+const pointerDownEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerDownEvent');
+
+const pointerMoveEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerMoveEvent');
+
+const pointerUpEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerUpEvent');
+
 const pointerSignalEventType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/events.dart#PointerSignalEvent');
 
 const pointerScrollEventType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/events.dart#PointerScrollEvent');
 
-const pointerDeviceKindType =
-    TypeChecker.fromUrl('dart:ui/pointer.dart#PointerDeviceKind');
+const pointerCancelEventType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/events.dart#PointerCancelEvent');
+
+const forcePressDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/force_press.dart#ForcePressDetails');
 
 const forcePressGestureRecognizerType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/force_press.dart#ForcePressGestureRecognizer');
@@ -3816,6 +3073,15 @@ const hitTestResultType = TypeChecker.fromUrl(
 
 const longPressDownDetailsType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/long_press.dart#LongPressDownDetails');
+
+const longPressStartDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/long_press.dart#LongPressStartDetails');
+
+const longPressMoveUpdateDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/long_press.dart#LongPressMoveUpdateDetails');
+
+const longPressEndDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/long_press.dart#LongPressEndDetails');
 
 const longPressGestureRecognizerType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/long_press.dart#LongPressGestureRecognizer');
@@ -3901,8 +3167,23 @@ const offsetPairType = TypeChecker.fromUrl(
 const pointerEventResamplerType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/resampler.dart#PointerEventResampler');
 
+const scaleStartDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/scale.dart#ScaleStartDetails');
+
+const scaleUpdateDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/scale.dart#ScaleUpdateDetails');
+
+const scaleEndDetailsType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/scale.dart#ScaleEndDetails');
+
 const scaleGestureRecognizerType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/scale.dart#ScaleGestureRecognizer');
+
+const tapDownDetailsType =
+    TypeChecker.fromUrl('package:flutter/src/gestures/tap.dart#TapDownDetails');
+
+const tapUpDetailsType =
+    TypeChecker.fromUrl('package:flutter/src/gestures/tap.dart#TapUpDetails');
 
 const baseTapGestureRecognizerType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/tap.dart#BaseTapGestureRecognizer');
@@ -3913,6 +3194,9 @@ const tapGestureRecognizerType = TypeChecker.fromUrl(
 const gestureArenaTeamType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/team.dart#GestureArenaTeam');
 
+const velocityType = TypeChecker.fromUrl(
+    'package:flutter/src/gestures/velocity_tracker.dart#Velocity');
+
 const velocityEstimateType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/velocity_tracker.dart#VelocityEstimate');
 
@@ -3921,6 +3205,282 @@ const velocityTrackerType = TypeChecker.fromUrl(
 
 const iOSScrollViewFlingVelocityTrackerType = TypeChecker.fromUrl(
     'package:flutter/src/gestures/velocity_tracker.dart#IOSScrollViewFlingVelocityTracker');
+
+const alignmentGeometryType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/alignment.dart#AlignmentGeometry');
+
+const alignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/alignment.dart#Alignment');
+
+const alignmentDirectionalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/alignment.dart#AlignmentDirectional');
+
+const textAlignVerticalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/alignment.dart#TextAlignVertical');
+
+const renderComparisonType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/basic_types.dart#RenderComparison');
+
+const axisType =
+    TypeChecker.fromUrl('package:flutter/src/painting/basic_types.dart#Axis');
+
+const verticalDirectionType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/basic_types.dart#VerticalDirection');
+
+const axisDirectionType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/basic_types.dart#AxisDirection');
+
+const beveledRectangleBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/beveled_rectangle_border.dart#BeveledRectangleBorder');
+
+const paintingBindingType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/binding.dart#PaintingBinding');
+
+const borderRadiusGeometryType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/border_radius.dart#BorderRadiusGeometry');
+
+const borderRadiusType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/border_radius.dart#BorderRadius');
+
+const borderRadiusDirectionalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/border_radius.dart#BorderRadiusDirectional');
+
+const borderStyleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/borders.dart#BorderStyle');
+
+const borderSideType =
+    TypeChecker.fromUrl('package:flutter/src/painting/borders.dart#BorderSide');
+
+const shapeBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/borders.dart#ShapeBorder');
+
+const outlinedBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/borders.dart#OutlinedBorder');
+
+const boxShapeType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_border.dart#BoxShape');
+
+const boxBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_border.dart#BoxBorder');
+
+const borderType =
+    TypeChecker.fromUrl('package:flutter/src/painting/box_border.dart#Border');
+
+const borderDirectionalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_border.dart#BorderDirectional');
+
+const boxDecorationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_decoration.dart#BoxDecoration');
+
+const boxFitType =
+    TypeChecker.fromUrl('package:flutter/src/painting/box_fit.dart#BoxFit');
+
+const fittedSizesType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_fit.dart#FittedSizes');
+
+const boxShadowType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/box_shadow.dart#BoxShadow');
+
+const circleBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/circle_border.dart#CircleBorder');
+
+const clipContextType =
+    TypeChecker.fromUrl('package:flutter/src/painting/clip.dart#ClipContext');
+
+const hSVColorType =
+    TypeChecker.fromUrl('package:flutter/src/painting/colors.dart#HSVColor');
+
+const hSLColorType =
+    TypeChecker.fromUrl('package:flutter/src/painting/colors.dart#HSLColor');
+
+const colorSwatchType =
+    TypeChecker.fromUrl('package:flutter/src/painting/colors.dart#ColorSwatch');
+
+const colorPropertyType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/colors.dart#ColorProperty');
+
+const continuousRectangleBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/continuous_rectangle_border.dart#ContinuousRectangleBorder');
+
+const imageSizeInfoType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/debug.dart#ImageSizeInfo');
+
+const decorationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration.dart#Decoration');
+
+const boxPainterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration.dart#BoxPainter');
+
+const imageRepeatType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration_image.dart#ImageRepeat');
+
+const decorationImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration_image.dart#DecorationImage');
+
+const decorationImagePainterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/decoration_image.dart#DecorationImagePainter');
+
+const edgeInsetsGeometryType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/edge_insets.dart#EdgeInsetsGeometry');
+
+const edgeInsetsType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/edge_insets.dart#EdgeInsets');
+
+const edgeInsetsDirectionalType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/edge_insets.dart#EdgeInsetsDirectional');
+
+const flutterLogoStyleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/flutter_logo.dart#FlutterLogoStyle');
+
+const flutterLogoDecorationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/flutter_logo.dart#FlutterLogoDecoration');
+
+const fractionalOffsetType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/fractional_offset.dart#FractionalOffset');
+
+const gradientTransformType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#GradientTransform');
+
+const gradientRotationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#GradientRotation');
+
+const gradientType =
+    TypeChecker.fromUrl('package:flutter/src/painting/gradient.dart#Gradient');
+
+const linearGradientType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#LinearGradient');
+
+const radialGradientType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#RadialGradient');
+
+const sweepGradientType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/gradient.dart#SweepGradient');
+
+const imageCacheType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_cache.dart#ImageCache');
+
+const imageCacheStatusType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_cache.dart#ImageCacheStatus');
+
+const imageConfigurationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ImageConfiguration');
+
+const imageProviderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ImageProvider');
+
+const assetBundleImageKeyType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#AssetBundleImageKey');
+
+const assetBundleImageProviderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#AssetBundleImageProvider');
+
+const resizeImageKeyType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ResizeImageKey');
+
+const resizeImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ResizeImage');
+
+const networkImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#NetworkImage');
+
+const fileImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#FileImage');
+
+const memoryImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#MemoryImage');
+
+const exactAssetImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#ExactAssetImage');
+
+const networkImageLoadExceptionType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_provider.dart#NetworkImageLoadException');
+
+const assetImageType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_resolution.dart#AssetImage');
+
+const imageInfoType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageInfo');
+
+const imageStreamListenerType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageStreamListener');
+
+const imageChunkEventType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageChunkEvent');
+
+const imageStreamType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageStream');
+
+const imageStreamCompleterHandleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageStreamCompleterHandle');
+
+const imageStreamCompleterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#ImageStreamCompleter');
+
+const oneFrameImageStreamCompleterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#OneFrameImageStreamCompleter');
+
+const multiFrameImageStreamCompleterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/image_stream.dart#MultiFrameImageStreamCompleter');
+
+const accumulatorType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/inline_span.dart#Accumulator');
+
+const inlineSpanSemanticsInformationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/inline_span.dart#InlineSpanSemanticsInformation');
+
+const inlineSpanType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/inline_span.dart#InlineSpan');
+
+const matrixUtilsType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/matrix_utils.dart#MatrixUtils');
+
+const transformPropertyType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/matrix_utils.dart#TransformProperty');
+
+const notchedShapeType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/notched_shapes.dart#NotchedShape');
+
+const circularNotchedRectangleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/notched_shapes.dart#CircularNotchedRectangle');
+
+const automaticNotchedShapeType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/notched_shapes.dart#AutomaticNotchedShape');
+
+const placeholderSpanType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/placeholder_span.dart#PlaceholderSpan');
+
+const roundedRectangleBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/rounded_rectangle_border.dart#RoundedRectangleBorder');
+
+const shaderWarmUpType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/shader_warm_up.dart#ShaderWarmUp');
+
+const shapeDecorationType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/shape_decoration.dart#ShapeDecoration');
+
+const stadiumBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/stadium_border.dart#StadiumBorder');
+
+const strutStyleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/strut_style.dart#StrutStyle');
+
+const textOverflowType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_painter.dart#TextOverflow');
+
+const placeholderDimensionsType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_painter.dart#PlaceholderDimensions');
+
+const textWidthBasisType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_painter.dart#TextWidthBasis');
+
+const textPainterType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_painter.dart#TextPainter');
+
+const textSpanType =
+    TypeChecker.fromUrl('package:flutter/src/painting/text_span.dart#TextSpan');
+
+const textStyleType = TypeChecker.fromUrl(
+    'package:flutter/src/painting/text_style.dart#TextStyle');
 
 const clampedSimulationType = TypeChecker.fromUrl(
     'package:flutter/src/physics/clamped_simulation.dart#ClampedSimulation');
@@ -3934,6 +3494,9 @@ const boundedFrictionSimulationType = TypeChecker.fromUrl(
 const gravitySimulationType = TypeChecker.fromUrl(
     'package:flutter/src/physics/gravity_simulation.dart#GravitySimulation');
 
+const simulationType = TypeChecker.fromUrl(
+    'package:flutter/src/physics/simulation.dart#Simulation');
+
 const springDescriptionType = TypeChecker.fromUrl(
     'package:flutter/src/physics/spring_simulation.dart#SpringDescription');
 
@@ -3942,6 +3505,12 @@ const springTypeType = TypeChecker.fromUrl(
 
 const springSimulationType = TypeChecker.fromUrl(
     'package:flutter/src/physics/spring_simulation.dart#SpringSimulation');
+
+const scrollSpringSimulationType = TypeChecker.fromUrl(
+    'package:flutter/src/physics/spring_simulation.dart#ScrollSpringSimulation');
+
+const toleranceType =
+    TypeChecker.fromUrl('package:flutter/src/physics/tolerance.dart#Tolerance');
 
 const cupertinoActivityIndicatorType = TypeChecker.fromUrl(
     'package:flutter/src/cupertino/activity_indicator.dart#CupertinoActivityIndicator');
@@ -4141,9 +3710,6 @@ const cupertinoThumbPainterType = TypeChecker.fromUrl(
 const semanticsBindingType = TypeChecker.fromUrl(
     'package:flutter/src/semantics/binding.dart#SemanticsBinding');
 
-const accessibilityFeaturesType =
-    TypeChecker.fromUrl('dart:ui/window.dart#AccessibilityFeatures');
-
 const semanticsTagType = TypeChecker.fromUrl(
     'package:flutter/src/semantics/semantics.dart#SemanticsTag');
 
@@ -4183,18 +3749,6 @@ const semanticsSortKeyType = TypeChecker.fromUrl(
 const ordinalSortKeyType = TypeChecker.fromUrl(
     'package:flutter/src/semantics/semantics.dart#OrdinalSortKey');
 
-const semanticsActionType =
-    TypeChecker.fromUrl('dart:ui/semantics.dart#SemanticsAction');
-
-const stringAttributeType =
-    TypeChecker.fromUrl('dart:ui/semantics.dart#StringAttribute');
-
-const spellOutStringAttributeType =
-    TypeChecker.fromUrl('dart:ui/semantics.dart#SpellOutStringAttribute');
-
-const localeStringAttributeType =
-    TypeChecker.fromUrl('dart:ui/semantics.dart#LocaleStringAttribute');
-
 const semanticsEventType = TypeChecker.fromUrl(
     'package:flutter/src/semantics/semantics_event.dart#SemanticsEvent');
 
@@ -4225,6 +3779,9 @@ const rendererBindingType = TypeChecker.fromUrl(
 const renderingFlutterBindingType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/binding.dart#RenderingFlutterBinding');
 
+const boxConstraintsType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/box.dart#BoxConstraints');
+
 const boxHitTestResultType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/box.dart#BoxHitTestResult');
 
@@ -4237,14 +3794,26 @@ const boxParentDataType =
 const containerBoxParentDataType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/box.dart#ContainerBoxParentData');
 
+const renderBoxType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/box.dart#RenderBox');
+
 const renderBoxContainerDefaultsMixinType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/box.dart#RenderBoxContainerDefaultsMixin');
 
 const multiChildLayoutParentDataType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/custom_layout.dart#MultiChildLayoutParentData');
 
+const multiChildLayoutDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/custom_layout.dart#MultiChildLayoutDelegate');
+
 const renderCustomMultiChildLayoutBoxType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/custom_layout.dart#RenderCustomMultiChildLayoutBox');
+
+const customPainterType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/custom_paint.dart#CustomPainter');
+
+const customPainterSemanticsType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/custom_paint.dart#CustomPainterSemantics');
 
 const renderCustomPaintType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/custom_paint.dart#RenderCustomPaint');
@@ -4267,11 +3836,29 @@ const renderEditablePainterType = TypeChecker.fromUrl(
 const renderErrorBoxType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/error.dart#RenderErrorBox');
 
+const flexFitType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/flex.dart#FlexFit');
+
 const flexParentDataType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/flex.dart#FlexParentData');
 
+const mainAxisSizeType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/flex.dart#MainAxisSize');
+
+const mainAxisAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/flex.dart#MainAxisAlignment');
+
+const crossAxisAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/flex.dart#CrossAxisAlignment');
+
 const renderFlexType =
     TypeChecker.fromUrl('package:flutter/src/rendering/flex.dart#RenderFlex');
+
+const flowPaintingContextType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/flow.dart#FlowPaintingContext');
+
+const flowDelegateType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/flow.dart#FlowDelegate');
 
 const flowParentDataType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/flow.dart#FlowParentData');
@@ -4342,6 +3929,9 @@ const backdropFilterLayerType = TypeChecker.fromUrl(
 const physicalModelLayerType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/layer.dart#PhysicalModelLayer');
 
+const layerLinkType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/layer.dart#LayerLink');
+
 const leaderLayerType =
     TypeChecker.fromUrl('package:flutter/src/rendering/layer.dart#LeaderLayer');
 
@@ -4375,6 +3965,9 @@ const mouseTrackerType = TypeChecker.fromUrl(
 const parentDataType =
     TypeChecker.fromUrl('package:flutter/src/rendering/object.dart#ParentData');
 
+const paintingContextType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/object.dart#PaintingContext');
+
 const constraintsType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/object.dart#Constraints');
 
@@ -4383,6 +3976,9 @@ const semanticsHandleType = TypeChecker.fromUrl(
 
 const pipelineOwnerType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/object.dart#PipelineOwner');
+
+const renderObjectType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/object.dart#RenderObject');
 
 const renderObjectWithChildMixinType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/object.dart#RenderObjectWithChildMixin');
@@ -4432,6 +4028,9 @@ const renderProxyBoxType = TypeChecker.fromUrl(
 const renderProxyBoxMixinType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/proxy_box.dart#RenderProxyBoxMixin');
 
+const hitTestBehaviorType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#HitTestBehavior');
+
 const renderProxyBoxWithHitTestBehaviorType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/proxy_box.dart#RenderProxyBoxWithHitTestBehavior');
 
@@ -4465,6 +4064,12 @@ const renderShaderMaskType = TypeChecker.fromUrl(
 const renderBackdropFilterType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/proxy_box.dart#RenderBackdropFilter');
 
+const customClipperType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#CustomClipper');
+
+const shapeBorderClipperType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#ShapeBorderClipper');
+
 const renderClipRectType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/proxy_box.dart#RenderClipRect');
 
@@ -4482,6 +4087,9 @@ const renderPhysicalModelType = TypeChecker.fromUrl(
 
 const renderPhysicalShapeType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/proxy_box.dart#RenderPhysicalShape');
+
+const decorationPositionType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#DecorationPosition');
 
 const renderDecoratedBoxType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/proxy_box.dart#RenderDecoratedBox');
@@ -4515,6 +4123,9 @@ const renderAbsorbPointerType = TypeChecker.fromUrl(
 
 const renderMetaDataType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/proxy_box.dart#RenderMetaData');
+
+const renderSemanticsGestureHandlerType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/proxy_box.dart#RenderSemanticsGestureHandler');
 
 const renderSemanticsAnnotationsType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/proxy_box.dart#RenderSemanticsAnnotations');
@@ -4585,11 +4196,17 @@ const renderSizedOverflowBoxType = TypeChecker.fromUrl(
 const renderFractionallySizedOverflowBoxType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/shifted_box.dart#RenderFractionallySizedOverflowBox');
 
+const singleChildLayoutDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/shifted_box.dart#SingleChildLayoutDelegate');
+
 const renderCustomSingleChildLayoutBoxType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/shifted_box.dart#RenderCustomSingleChildLayoutBox');
 
 const renderBaselineType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/shifted_box.dart#RenderBaseline');
+
+const growthDirectionType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/sliver.dart#GrowthDirection');
 
 const sliverConstraintsType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/sliver.dart#SliverConstraints');
@@ -4654,6 +4271,15 @@ const sliverGridLayoutType = TypeChecker.fromUrl(
 const sliverGridRegularTileLayoutType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/sliver_grid.dart#SliverGridRegularTileLayout');
 
+const sliverGridDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/sliver_grid.dart#SliverGridDelegate');
+
+const sliverGridDelegateWithFixedCrossAxisCountType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/sliver_grid.dart#SliverGridDelegateWithFixedCrossAxisCount');
+
+const sliverGridDelegateWithMaxCrossAxisExtentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/sliver_grid.dart#SliverGridDelegateWithMaxCrossAxisExtent');
+
 const sliverGridParentDataType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/sliver_grid.dart#SliverGridParentData');
 
@@ -4708,8 +4334,14 @@ const renderSliverFloatingPersistentHeaderType = TypeChecker.fromUrl(
 const renderSliverFloatingPinnedPersistentHeaderType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/sliver_persistent_header.dart#RenderSliverFloatingPinnedPersistentHeader');
 
+const relativeRectType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/stack.dart#RelativeRect');
+
 const stackParentDataType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/stack.dart#StackParentData');
+
+const stackFitType =
+    TypeChecker.fromUrl('package:flutter/src/rendering/stack.dart#StackFit');
 
 const renderStackType =
     TypeChecker.fromUrl('package:flutter/src/rendering/stack.dart#RenderStack');
@@ -4720,11 +4352,47 @@ const renderIndexedStackType = TypeChecker.fromUrl(
 const tableCellParentDataType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/table.dart#TableCellParentData');
 
+const tableColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#TableColumnWidth');
+
+const intrinsicColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#IntrinsicColumnWidth');
+
+const fixedColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#FixedColumnWidth');
+
+const fractionColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#FractionColumnWidth');
+
+const flexColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#FlexColumnWidth');
+
+const maxColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#MaxColumnWidth');
+
+const minColumnWidthType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#MinColumnWidth');
+
+const tableCellVerticalAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table.dart#TableCellVerticalAlignment');
+
 const renderTableType =
     TypeChecker.fromUrl('package:flutter/src/rendering/table.dart#RenderTable');
 
+const tableBorderType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/table_border.dart#TableBorder');
+
 const textureBoxType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/texture.dart#TextureBox');
+
+const fractionalOffsetTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/tweens.dart#FractionalOffsetTween');
+
+const alignmentTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/tweens.dart#AlignmentTween');
+
+const alignmentGeometryTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/tweens.dart#AlignmentGeometryTween');
 
 const viewConfigurationType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/view.dart#ViewConfiguration');
@@ -4756,6 +4424,12 @@ const scrollDirectionType = TypeChecker.fromUrl(
 const viewportOffsetType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/viewport_offset.dart#ViewportOffset');
 
+const wrapAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/wrap.dart#WrapAlignment');
+
+const wrapCrossAlignmentType = TypeChecker.fromUrl(
+    'package:flutter/src/rendering/wrap.dart#WrapCrossAlignment');
+
 const wrapParentDataType = TypeChecker.fromUrl(
     'package:flutter/src/rendering/wrap.dart#WrapParentData');
 
@@ -4768,14 +4442,164 @@ const schedulerPhaseType = TypeChecker.fromUrl(
 const schedulerBindingType = TypeChecker.fromUrl(
     'package:flutter/src/scheduler/binding.dart#SchedulerBinding');
 
-const frameTimingType =
-    TypeChecker.fromUrl('dart:ui/platform_dispatcher.dart#FrameTiming');
-
 const priorityType =
     TypeChecker.fromUrl('package:flutter/src/scheduler/priority.dart#Priority');
 
+const tickerProviderType = TypeChecker.fromUrl(
+    'package:flutter/src/scheduler/ticker.dart#TickerProvider');
+
 const tickerType =
     TypeChecker.fromUrl('package:flutter/src/scheduler/ticker.dart#Ticker');
+
+const tickerFutureType = TypeChecker.fromUrl(
+    'package:flutter/src/scheduler/ticker.dart#TickerFuture');
+
+const tickerCanceledType = TypeChecker.fromUrl(
+    'package:flutter/src/scheduler/ticker.dart#TickerCanceled');
+
+const animationStatusType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animation.dart#AnimationStatus');
+
+const animationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animation.dart#Animation');
+
+const animationBehaviorType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animation_controller.dart#AnimationBehavior');
+
+const animationControllerType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animation_controller.dart#AnimationController');
+
+const alwaysStoppedAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AlwaysStoppedAnimation');
+
+const animationWithParentMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AnimationWithParentMixin');
+
+const proxyAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#ProxyAnimation');
+
+const reverseAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#ReverseAnimation');
+
+const curvedAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#CurvedAnimation');
+
+const trainHoppingAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#TrainHoppingAnimation');
+
+const compoundAnimationType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#CompoundAnimation');
+
+const animationMeanType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AnimationMean');
+
+const animationMaxType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AnimationMax');
+
+const animationMinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/animations.dart#AnimationMin');
+
+const parametricCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ParametricCurve');
+
+const curveType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Curve');
+
+const sawToothType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#SawTooth');
+
+const intervalType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Interval');
+
+const thresholdType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Threshold');
+
+const cubicType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Cubic');
+
+const threePointCubicType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ThreePointCubic');
+
+const curve2DType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Curve2D');
+
+const curve2DSampleType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#Curve2DSample');
+
+const catmullRomSplineType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#CatmullRomSpline');
+
+const catmullRomCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#CatmullRomCurve');
+
+const flippedCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#FlippedCurve');
+
+const elasticInCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ElasticInCurve');
+
+const elasticOutCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ElasticOutCurve');
+
+const elasticInOutCurveType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/curves.dart#ElasticInOutCurve');
+
+const curvesType =
+    TypeChecker.fromUrl('package:flutter/src/animation/curves.dart#Curves');
+
+const animationLazyListenerMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/listener_helpers.dart#AnimationLazyListenerMixin');
+
+const animationEagerListenerMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/listener_helpers.dart#AnimationEagerListenerMixin');
+
+const animationLocalListenersMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/listener_helpers.dart#AnimationLocalListenersMixin');
+
+const animationLocalStatusListenersMixinType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/listener_helpers.dart#AnimationLocalStatusListenersMixin');
+
+const animatableType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#Animatable');
+
+const tweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#Tween');
+
+const reverseTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween.dart#ReverseTween');
+
+const colorTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#ColorTween');
+
+const sizeTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#SizeTween');
+
+const rectTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#RectTween');
+
+const intTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#IntTween');
+
+const stepTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#StepTween');
+
+const constantTweenType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween.dart#ConstantTween');
+
+const curveTweenType =
+    TypeChecker.fromUrl('package:flutter/src/animation/tween.dart#CurveTween');
+
+const tweenSequenceType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween_sequence.dart#TweenSequence');
+
+const flippedTweenSequenceType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween_sequence.dart#FlippedTweenSequence');
+
+const tweenSequenceItemType = TypeChecker.fromUrl(
+    'package:flutter/src/animation/tween_sequence.dart#TweenSequenceItem');
+
+const assetBundleType = TypeChecker.fromUrl(
+    'package:flutter/src/services/asset_bundle.dart#AssetBundle');
 
 const networkAssetBundleType = TypeChecker.fromUrl(
     'package:flutter/src/services/asset_bundle.dart#NetworkAssetBundle');
@@ -4809,6 +4633,9 @@ const hapticFeedbackType = TypeChecker.fromUrl(
 
 const keyboardLockModeType = TypeChecker.fromUrl(
     'package:flutter/src/services/hardware_keyboard.dart#KeyboardLockMode');
+
+const keyEventType = TypeChecker.fromUrl(
+    'package:flutter/src/services/hardware_keyboard.dart#KeyEvent');
 
 const keyDownEventType = TypeChecker.fromUrl(
     'package:flutter/src/services/hardware_keyboard.dart#KeyDownEvent');
@@ -4855,7 +4682,8 @@ const platformExceptionType = TypeChecker.fromUrl(
 const missingPluginExceptionType = TypeChecker.fromUrl(
     'package:flutter/src/services/message_codec.dart#MissingPluginException');
 
-const byteDataType = TypeChecker.fromUrl('dart:typed_data#ByteData');
+const byteDataType = TypeChecker.fromUrl(
+    'package:flutter/../../../../../../Development/sidecar/ecosystem/flutter_analyzer_utils/typed_data#ByteData');
 
 const binaryCodecType = TypeChecker.fromUrl(
     'package:flutter/src/services/message_codecs.dart#BinaryCodec');
@@ -4881,8 +4709,14 @@ const mouseCursorManagerType = TypeChecker.fromUrl(
 const mouseCursorSessionType = TypeChecker.fromUrl(
     'package:flutter/src/services/mouse_cursor.dart#MouseCursorSession');
 
+const mouseCursorType = TypeChecker.fromUrl(
+    'package:flutter/src/services/mouse_cursor.dart#MouseCursor');
+
 const systemMouseCursorType = TypeChecker.fromUrl(
     'package:flutter/src/services/mouse_cursor.dart#SystemMouseCursor');
+
+const systemMouseCursorsType = TypeChecker.fromUrl(
+    'package:flutter/src/services/mouse_cursor.dart#SystemMouseCursors');
 
 const mouseTrackerAnnotationType = TypeChecker.fromUrl(
     'package:flutter/src/services/mouse_tracking.dart#MouseTrackerAnnotation');
@@ -4941,6 +4775,9 @@ const modifierKeyType = TypeChecker.fromUrl(
 const rawKeyEventDataType = TypeChecker.fromUrl(
     'package:flutter/src/services/raw_keyboard.dart#RawKeyEventData');
 
+const rawKeyEventType = TypeChecker.fromUrl(
+    'package:flutter/src/services/raw_keyboard.dart#RawKeyEvent');
+
 const rawKeyDownEventType = TypeChecker.fromUrl(
     'package:flutter/src/services/raw_keyboard.dart#RawKeyDownEvent');
 
@@ -4983,6 +4820,9 @@ const rawKeyEventDataWindowsType = TypeChecker.fromUrl(
 const restorationManagerType = TypeChecker.fromUrl(
     'package:flutter/src/services/restoration.dart#RestorationManager');
 
+const restorationBucketType = TypeChecker.fromUrl(
+    'package:flutter/src/services/restoration.dart#RestorationBucket');
+
 const systemChannelsType = TypeChecker.fromUrl(
     'package:flutter/src/services/system_channels.dart#SystemChannels');
 
@@ -5013,8 +4853,14 @@ const systemSoundTypeType = TypeChecker.fromUrl(
 const systemSoundType = TypeChecker.fromUrl(
     'package:flutter/src/services/system_sound.dart#SystemSound');
 
+const textSelectionType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_editing.dart#TextSelection');
+
 const textLayoutMetricsType = TypeChecker.fromUrl(
     'package:flutter/src/services/text_layout_metrics.dart#TextLayoutMetrics');
+
+const autofillHintsType = TypeChecker.fromUrl(
+    'package:flutter/src/services/autofill.dart#AutofillHints');
 
 const autofillConfigurationType = TypeChecker.fromUrl(
     'package:flutter/src/services/autofill.dart#AutofillConfiguration');
@@ -5055,6 +4901,21 @@ const filteringTextInputFormatterType = TypeChecker.fromUrl(
 const lengthLimitingTextInputFormatterType = TypeChecker.fromUrl(
     'package:flutter/src/services/text_formatter.dart#LengthLimitingTextInputFormatter');
 
+const smartDashesTypeType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#SmartDashesType');
+
+const smartQuotesTypeType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#SmartQuotesType');
+
+const textInputTypeType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextInputType');
+
+const textInputActionType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextInputAction');
+
+const textCapitalizationType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextCapitalization');
+
 const textInputConfigurationType = TypeChecker.fromUrl(
     'package:flutter/src/services/text_input.dart#TextInputConfiguration');
 
@@ -5063,6 +4924,15 @@ const floatingCursorDragStateType = TypeChecker.fromUrl(
 
 const rawFloatingCursorPointType = TypeChecker.fromUrl(
     'package:flutter/src/services/text_input.dart#RawFloatingCursorPoint');
+
+const textEditingValueType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextEditingValue');
+
+const selectionChangedCauseType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#SelectionChangedCause');
+
+const textSelectionDelegateType = TypeChecker.fromUrl(
+    'package:flutter/src/services/text_input.dart#TextSelectionDelegate');
 
 const textInputClientType = TypeChecker.fromUrl(
     'package:flutter/src/services/text_input.dart#TextInputClient');

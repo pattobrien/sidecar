@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:analyzer/dart/ast/ast.dart';
 // import 'package:analyzer/dart/element/element.dart';
-import 'package:flutter_analyzer/material.dart';
+import 'package:flutter_analyzer_utils/material.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'constants.dart';

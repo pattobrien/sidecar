@@ -39,7 +39,8 @@ class PackageGenerator {
 
     final package = packageConfig.packages
         .firstWhere((element) => element.name == packageName);
-    print(package.name);
+    print(
+        '${package.name} // ${package.root} // ${package.packageUriRoot} //  ${package.relativeRoot} //  ');
     return package;
   }
 
@@ -88,8 +89,11 @@ class PackageGenerator {
           if (element.value is! InterfaceElement) return false;
           return true;
         })) {
-          final packageUri =
-              '${exportEntry.value.source!.uri.scheme}:${exportEntry.value.source!.uri.path}';
+          // final packageTypeUri = exportEntry.value.librarySource!.uri.resolve(reference);
+          final relativeUri = p.relative(
+              exportEntry.value.librarySource!.uri.path,
+              from: package.packageUriRoot.path);
+          final packageUri = 'package:${package.name}/$relativeUri';
           final sidecarType = SidecarType(
             typeName: exportEntry.key,
             packageName: rootPackage.name,
