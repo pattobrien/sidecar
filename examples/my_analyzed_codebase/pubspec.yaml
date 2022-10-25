@@ -18,11 +18,8 @@ dependencies:
 
 dev_dependencies:
   auto_route_generator: ^5.0.2
+  design_system_lints: ^0.1.0-dev.1
   lints: ^2.0.0
-  design_system_lints:
-    path: /Users/pattobrien/Development/sidecar/repositories/design_system_lints/
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
   test: ^1.16.0
 
 flutter:

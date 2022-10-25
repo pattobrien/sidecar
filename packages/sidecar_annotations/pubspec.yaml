@@ -1,8 +1,8 @@
 name: sidecar_annotations
-description: A starting point for Dart libraries or applications.
-version: 0.1.18
-publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_annotations/
+description: Annotations to guide sidecar lint and edit rules.
+version: 0.1.0-dev.1
 repository: https://github.com/pattobrien/sidecar/
+homepage: https://github.com/pattobrien/sidecar/
 
 environment:
-  sdk: ">=2.17.5 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"

@@ -1,44 +1,27 @@
 name: design_system_lints
-description: A starting point for Dart libraries or applications.
+description: A collection of lints and code edits to enforce UI standards within a codebase.
 version: 0.1.0-dev.1
-publish_to: none
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/design_system_lints
 homepage: https://github.com/pattobrien/sidecar/tree/master/repositories/design_system_lints
 
 environment:
-  sdk: ">=2.17.5 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  analyzer: ^4.7.0
-  code_builder: ^4.2.0
-  collection: ^1.16.0
+  analyzer: ^4.2.0
   flutter_analyzer_utils: ^0.2.0-dev.4
-  freezed_annotation: ^2.2.0
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
-  source_span: ^1.8.2
+  sidecar: ^0.1.0-dev.1
 
 dev_dependencies:
   build_runner: ^2.3.0
-  freezed: ^2.2.0
   lints: ^2.0.0
-  sidecar_generator:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar_generator/
   test: ^1.16.0
-
-dependency_overrides:
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar
-  sidecar_package_utilities:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar_package_utilities
-  flutter_analyzer_utils:
-    path: /Users/pattobrien/Development/sidecar/ecosystem/flutter_analyzer_utils
 
 micropub: sidecar
 
 sidecar:
   lints:
-    - avoid_color_literal
+    # - avoid_color_literal
     - avoid_edge_insets_literal
     - avoid_icon_literal
     - avoid_box_shadow_literal

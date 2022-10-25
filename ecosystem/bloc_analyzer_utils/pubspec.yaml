@@ -1,15 +1,14 @@
-name: bloc_analyzer
+name: bloc_analyzer_utils
 description: A sample command-line application.
-version: 1.0.0
+version: 0.1.0-dev.1
 # homepage: https://www.example.com
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  sidecar_package_utilities:
-    path: ../../packages/sidecar_package_utilities
-  bloc: ^1.0.0
+  bloc: ^7.0.0
+  sidecar_package_utilities: ^0.1.0-dev.1
 #   path: ^1.8.0
 
 dev_dependencies:

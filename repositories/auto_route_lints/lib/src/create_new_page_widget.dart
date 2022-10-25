@@ -1,13 +1,16 @@
 import 'package:analyzer/dart/analysis/session.dart';
-import 'package:sidecar/builder.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:sidecar/sidecar.dart';
 import 'package:auto_route_utilities/auto_route_utilities.dart';
 
-class CreateNewPageWidget extends CodeEdit {
+import 'constants.dart';
+
+class CreateNewPageWidget extends AssistRule {
   @override
   String get code => 'create_new_page_widget';
 
   @override
-  String get packageName => 'auto_route_lints';
+  String get packageName => kPackageId;
 
   @override
   CreateNewPageWidgetConfiguration get configuration =>
@@ -48,6 +51,7 @@ class CreateNewPageWidget extends CodeEdit {
 
     return [
       EditResult(
+        analysisResult: result,
         message: 'Add new AdaptiveRoute',
         sourceChanges: changeBuilder.sourceChange.edits,
       )

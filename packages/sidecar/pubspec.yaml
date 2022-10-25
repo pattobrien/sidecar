@@ -1,14 +1,14 @@
 name: sidecar
 description: Core package for the sidecar ecosystem.
-version: 0.1.25-dev.1
-publish_to: https://dart.cloudsmith.io/fine-designs/sidecar/
+version: 0.1.0-dev.1
 repository: https://github.com/pattobrien/sidecar/
+homepage: https://github.com/pattobrien/sidecar/
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  analyzer: ^4.7.0
+  analyzer: ^4.2.0
   analyzer_plugin: ^0.11.1
   args: ^2.3.1
   characters: ^1.2.0
@@ -26,9 +26,7 @@ dependencies:
   pubspec_parse: ^1.2.1
   recase: ^4.0.0 # non-dart official package
   riverpod: ^2.0.0 # non-dart official package
-  sidecar_annotations:
-    hosted: https://dart.cloudsmith.io/fine-designs/sidecar_annotations/
-    version: ^0.1.18
+  sidecar_annotations: ^0.1.0-dev.1
   source_gen: ^1.2.2
   source_span: ^1.8.0
   tuple: ^2.0.1
@@ -39,14 +37,8 @@ dependencies:
 dev_dependencies:
   benchmark_harness: ^2.2.0
   build_runner: ^2.2.0
-  # custom_lint: ^0.0.12
   freezed: ^2.1.0
   json_serializable: ^6.3.1
-  # lints: ^2.0.0
-  # riverpod_lint:
-  #   git:
-  #     url: https://github.com/rrousselGit/riverpod.git
-  #     path: packages/riverpod_lint
   test: ^1.16.0
 
 # dependency_overrides:

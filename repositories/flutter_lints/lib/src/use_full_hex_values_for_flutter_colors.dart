@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:flutter_utilities/flutter_utilities.dart';
+import 'package:flutter_analyzer_utils/material.dart';
 import 'package:sidecar/sidecar.dart';
 
 const _desc =
@@ -34,20 +34,20 @@ class _Visitor extends SidecarAstVisitor {
 
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
-    final element = node.constructorName.staticElement;
-    if (element != null &&
-        element.isSameAs(uri: 'dart.ui', className: 'Color')) {
-      final arguments = node.argumentList.arguments;
-      if (arguments.isNotEmpty) {
-        final argument = arguments.first;
-        if (argument is IntegerLiteral) {
-          final value = argument.literal.lexeme.toLowerCase();
-          if (!value.startsWith('0x') || value.length != 10) {
-            reportAstNode(argument, message: _desc);
-          }
-        }
-      }
-    }
+    // final element = node.constructorName.staticElement;
+    // if (element != null &&
+    //     element.isSameAs(uri: 'dart.ui', className: 'Color')) {
+    //   final arguments = node.argumentList.arguments;
+    //   if (arguments.isNotEmpty) {
+    //     final argument = arguments.first;
+    //     if (argument is IntegerLiteral) {
+    //       final value = argument.literal.lexeme.toLowerCase();
+    //       if (!value.startsWith('0x') || value.length != 10) {
+    //         reportAstNode(argument, message: _desc);
+    //       }
+    //     }
+    //   }
+    // }
     super.visitInstanceCreationExpression(node);
   }
 }
