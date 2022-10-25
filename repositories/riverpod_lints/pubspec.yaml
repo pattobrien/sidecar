@@ -11,16 +11,23 @@ dependencies:
   analyzer: ^4.7.0
   analyzer_plugin: ^0.11.1
   collection: ^1.16.0
-  path: ^1.8.0
-  riverpod_utilities:
-    hosted: https://dart.cloudsmith.io/fine-designs/riverpod_utilities/
-    version: ^0.1.5
+  path: ^1.8.02
+  riverpod_analyzer:
+    hosted: https://micropub-3qduh.ondigitalocean.app/riverpod_analyzer
+    version: ^2.0.0
+  # riverpod_utilities:
+  #   hosted: https://dart.cloudsmith.io/fine-designs/riverpod_utilities/
+  #   version: ^0.1.5
   sidecar:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
     version: ^0.1.23-dev.3
 
 dev_dependencies:
   lints: ^2.0.0
+
+dependency_overrides:
+  riverpod_analyzer:
+    path: ../riverpod_analyzer
 
 micropub: sidecar
 

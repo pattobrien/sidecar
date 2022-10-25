@@ -12,13 +12,13 @@ import 'package:source_span/source_span.dart';
 
 extension SourceSpanX on SourceSpan {
   plugin.Location get location {
-    final fileExt = p.extension(sourceUrl!.path);
-    final isYaml = fileExt == '.yaml' || fileExt == '.yml';
     final url = sourceUrl;
     if (url == null) {
       throw UnimplementedError(
           'SourceSpanX extension expects the source url to be non-null.');
     } else {
+      final fileExt = p.extension(url.path);
+      final isYaml = fileExt == '.yaml' || fileExt == '.yml';
       return plugin.Location(
         url.path,
         start.offset,

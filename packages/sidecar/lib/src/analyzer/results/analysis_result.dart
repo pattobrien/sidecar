@@ -2,7 +2,7 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:source_span/source_span.dart';
 
-import '../../configurations/configurations.dart';
+import '../../rules/lint_error_type.dart';
 import '../../rules/rules.dart';
 import '../../utils/utils.dart';
 import 'edit_result.dart';
@@ -11,15 +11,6 @@ part 'analysis_result.freezed.dart';
 
 @freezed
 class AnalysisResult with _$AnalysisResult {
-  const factory AnalysisResult.generic({
-    required SidecarBase rule,
-    required SourceSpan sourceSpan,
-    required String message,
-    String? correction,
-    SourceSpan? highlightedSpan,
-    @Default(<EditResult>[]) List<EditResult> edits,
-  }) = GenericAnalysisResult;
-
   const factory AnalysisResult.dart({
     required SidecarBase rule,
     required SourceSpan sourceSpan,

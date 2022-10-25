@@ -24,10 +24,6 @@ class ActiveProjectService {
   void _logError(Object e, StackTrace stackTrace) =>
       _ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
-  // is this needed for any external functions ?
-  // bool isValidDartProject(Uri root) =>
-  //     File(p.join(root.toFilePath(), 'pubspec.yaml')).existsSync();
-
   ActiveContext? initializeContext(AnalysisContext analysisContext) {
     try {
       final root = analysisContext.contextRoot;

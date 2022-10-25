@@ -30,3 +30,7 @@ sidecar:
     avoid_flutter_in_application_layer:
       class: AvoidFlutterInApplicationLayer
       import: various_lints/various_lints.dart
+
+dependency_overrides:
+  flutter_utilities:
+    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

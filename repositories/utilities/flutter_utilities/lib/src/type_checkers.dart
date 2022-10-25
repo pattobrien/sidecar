@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 
-import 'package:sidecar/utilities.dart';
+import 'package:sidecar_package_utilities/sidecar_package_utilities.dart';
 
 class FlutterTypeChecker {
   const FlutterTypeChecker._();
@@ -106,9 +106,9 @@ class FlutterTypeChecker {
     bool checkSuperInterfaces = true,
   }) {
     return checkSuperInterfaces
-        ? TypeChecker.isThisOrSuperMatch(interfaceType?.element2,
+        ? TypeChecker.isThisOrSuperMatch(interfaceType?.element,
             type: type, sourcePath: 'flutter/$sourcePath', isFromFile: false)
-        : TypeChecker.isMatch(interfaceType?.element2,
+        : TypeChecker.isMatch(interfaceType?.element,
             type: type, sourcePath: 'flutter/$sourcePath', isFromFile: false);
   }
 }

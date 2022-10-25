@@ -9,4 +9,4 @@ export 'src/configurations/builders/builders.dart';
 export 'src/configurations/yaml_parsers/yaml_parsers.dart';
 export 'src/protocol/protocol.dart';
 export 'src/rules/rules.dart';
-export 'src/utils/utils.dart';
+export 'src/utils/utils.dart' hide TypeChecker;

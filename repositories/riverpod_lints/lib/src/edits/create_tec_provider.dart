@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:analyzer/dart/analysis/session.dart';
 import 'package:sidecar/builder.dart';
-import 'package:riverpod_utilities/riverpod_utilities.dart';
+// import 'package:riverpod_utilities/riverpod_utilities.dart';
 
 class CreateTextEditControllerProvider extends CodeEdit {
   @override
@@ -39,23 +39,23 @@ class CreateTextEditControllerProvider extends CodeEdit {
 
           final argumentOffset = parentNode.expression.beginToken.offset - 1;
 
-          await changeBuilder.addDartFileEdit(
-            unit.path,
-            (builder) {
-              builder.addInsertion(unit.unit.length, (builder) {
-                builder.writeChangeNotifierProvider(
-                  changeNotifier: 'TextEditingController()',
-                  variableName: 'myTextControllerProvider',
-                );
-              });
-              builder.addInsertion(argumentOffset, (builder) {
-                builder.write('ref.watch(');
-                builder.write('myTextControllerProvider');
-                builder.write('), ');
-              });
-              builder.importFlutterRiverpod();
-            },
-          );
+          // await changeBuilder.addDartFileEdit(
+          //   unit.path,
+          //   (builder) {
+          //     builder.addInsertion(unit.unit.length, (builder) {
+          //       builder.writeChangeNotifierProvider(
+          //         changeNotifier: 'TextEditingController()',
+          //         variableName: 'myTextControllerProvider',
+          //       );
+          //     });
+          //     builder.addInsertion(argumentOffset, (builder) {
+          //       builder.write('ref.watch(');
+          //       builder.write('myTextControllerProvider');
+          //       builder.write('), ');
+          //     });
+          //     builder.importFlutterRiverpod();
+          //   },
+          // );
 
           return [
             EditResult(

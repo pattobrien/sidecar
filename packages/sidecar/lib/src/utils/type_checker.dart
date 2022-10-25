@@ -14,6 +14,8 @@ import 'package:meta/meta.dart';
 import 'package:source_span/source_span.dart';
 
 /// An abstraction around doing static type checking at compile/build time.
+
+@internal
 abstract class TypeChecker {
   const TypeChecker._();
 

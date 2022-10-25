@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:flutter_utilities/flutter_utilities.dart';
+import 'package:flutter_analyzer_utils/painting.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'constants.dart';
@@ -12,6 +12,9 @@ class AvoidBoxShadowLiteral extends LintRule {
 
   @override
   String get packageName => kDesignSystemPackageId;
+
+  @override
+  String? get url => kUrl;
 
   @override
   Future<List<DartAnalysisResult>> computeDartAnalysisResults(
@@ -28,10 +31,12 @@ class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-
-    if (FlutterTypeChecker.isBoxShadow(element?.returnType)) {
+    if (element == null) return;
+    if (boxShadowType.isAssignableFromType(element.returnType)) {
       reportAstNode(node, message: 'Avoid BoxShadow literal');
     }
     super.visitInstanceCreationExpression(node);
   }
 }
+
+// const boxShadow = SidecarType('BoxShadow', 'src/painting/box_shadow.dart');

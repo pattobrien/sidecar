@@ -12,17 +12,17 @@ extension YamlMapSeverity on YamlMap {
           ? LintRuleTypeX.fromString(value[key] as String)
           : null;
       return SidecarExceptionTuple<LintRuleType?>(severityValue, []);
-    } on InvalidSeverityException {
-      final invalidNode = nodes.keys
-          .cast<YamlScalar>()
-          .firstWhere((element) => element.value == key);
-      return SidecarExceptionTuple<LintRuleType?>(null, [
-        SidecarLintException(
-          invalidNode,
-          message:
-              'Invalid value. Severity values are: warning, error, or info.',
-        )
-      ]);
+      // } on InvalidSeverityException {
+      //   final invalidNode = nodes.keys
+      //       .cast<YamlScalar>()
+      //       .firstWhere((element) => element.value == key);
+      //   return SidecarExceptionTuple<LintRuleType?>(null, [
+      //     SidecarLintException(
+      //       invalidNode,
+      //       message:
+      //           'Invalid value. Severity values are: warning, error, or info.',
+      //     )
+      //   ]);
     } catch (e) {
       return SidecarExceptionTuple<LintRuleType?>(null, [
         SidecarLintException(

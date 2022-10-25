@@ -31,7 +31,7 @@ extension YamlMapIncludeGlobs on YamlMap {
           // some value is not valid
           lintConfigurationErrors.add(
             SidecarFieldException(
-              node.value as YamlScalar,
+              node as YamlScalar,
               message: 'Invalid glob.',
             ),
           );

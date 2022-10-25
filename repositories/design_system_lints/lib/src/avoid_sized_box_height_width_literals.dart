@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:flutter_analyzer_utils/material.dart';
 import 'package:design_system_lints/src/constants.dart';
-import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 class AvoidSizedBoxHeightWidthLiterals extends LintRule {
@@ -11,6 +11,9 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
 
   @override
   String get packageName => kDesignSystemPackageId;
+
+  @override
+  String? get url => kUrl;
 
   @override
   Future<List<DartAnalysisResult>> computeDartAnalysisResults(
@@ -28,9 +31,9 @@ class _Visitor extends SidecarAstVisitor {
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
 
-    final isSizedBox = FlutterTypeChecker.isSizedBox(element?.returnType);
+    if (element == null) return;
 
-    if (isSizedBox) {
+    if (sizedBoxType.isAssignableFromType(element.returnType)) {
       final args = node.argumentList.arguments
           .whereType<NamedExpression>()
           .where((e) =>

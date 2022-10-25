@@ -1,11 +1,11 @@
 class SidecarInput {
   const SidecarInput({
-    required this.packageName,
+    this.packageName,
     this.lintName,
-    required this.configuration,
+    this.configuration = const <dynamic, dynamic>{},
   });
 
-  final String packageName;
+  final String? packageName;
   final String? lintName;
   final Map<dynamic, dynamic> configuration;
 }

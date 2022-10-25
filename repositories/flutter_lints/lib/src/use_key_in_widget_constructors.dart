@@ -6,10 +6,9 @@ import 'dart:async';
 
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
+import 'package:flutter_analyzer_utils/foundation.dart';
 
 import 'package:sidecar/sidecar.dart';
-import 'package:flutter_utilities/flutter_utilities.dart';
 
 const _desc = r'Use key in widget constructors.';
 
@@ -44,7 +43,7 @@ class _Visitor extends SidecarAstVisitor {
     if (classElement != null &&
         classElement.isPublic &&
         // FlutterUtils().hasWidgetAsAscendant(classElement) &&
-        FlutterTypeChecker.isWidget(classElement.thisType) &&
+        widgetType.isAssignableFromType(classElement.thisType) &&
         classElement.constructors.where((e) => !e.isSynthetic).isEmpty) {
       reportAstNode(node.name, message: _desc);
     }
@@ -64,7 +63,7 @@ class _Visitor extends SidecarAstVisitor {
         classElement is ClassElement &&
         // FlutterUtils().hasWidgetAsAscendant(classElement) &&
         // !FlutterUtils().isExactWidget(classElement) &&
-        FlutterTypeChecker.isWidget(classElement.thisType) &&
+        widgetType.isAssignableFromType(classElement.thisType) &&
         !_hasKeySuperParameterInitializerArg(node) &&
         !node.initializers.any((initializer) {
           if (initializer is SuperConstructorInvocation) {
@@ -90,9 +89,8 @@ class _Visitor extends SidecarAstVisitor {
       .any((a) => a.staticParameterElement?.name == 'key');
 
   bool _defineKeyParameter(ConstructorElement element) =>
-      element.parameters.any((e) => e.name == 'key' && _isKeyType(e.type));
-
-  bool _isKeyType(DartType type) => type.implementsInterface('Key', '');
+      // element.parameters.any((e) => e.name == 'key' && _isKeyType(e.type));
+      element.parameters.any((e) => keyType.isAssignableFrom(e));
 
   bool _hasKeySuperParameterInitializerArg(ConstructorDeclaration node) {
     for (var parameter in node.parameters.parameters) {

@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:path/path.dart' as p;
-import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
+
+import 'rule_yaml_nodes.dart';
 
 class RulePackageConfiguration {
   factory RulePackageConfiguration.fromYamlMap(
@@ -36,23 +37,7 @@ class RulePackageConfiguration {
   final Uri uri;
 
   List<LintNode>? get lints => _lints?.nodes.map(LintNode.new).toList();
-  List<EditNode>? get edits => _edits?.nodes.map(EditNode.new).toList();
-}
-
-abstract class SidecarBaseNode {
-  SidecarBaseNode(this.node) : name = node.value as String;
-  final String name;
-  final YamlNode node;
-
-  String get className => ReCase(name).pascalCase;
-}
-
-class LintNode extends SidecarBaseNode {
-  LintNode(super.node);
-}
-
-class EditNode extends SidecarBaseNode {
-  EditNode(super.node);
+  List<AssistNode>? get edits => _edits?.nodes.map(AssistNode.new).toList();
 }
 
 RulePackageConfiguration? parseLintPackage(String name, Uri root) {
@@ -60,20 +45,16 @@ RulePackageConfiguration? parseLintPackage(String name, Uri root) {
   final pubspecPath = p.join(rootPath, 'pubspec.yaml');
   final pubspecContent = File(pubspecPath).readAsStringSync();
   try {
-    return checkedYamlDecode<RulePackageConfiguration>(pubspecContent,
+    return checkedYamlDecode<RulePackageConfiguration?>(pubspecContent,
         (yamlMap) {
-      if (yamlMap?['sidecar'] == null) throw PackageMissingSidecarDefinition();
+      if (yamlMap?['sidecar'] == null) return null;
       return RulePackageConfiguration.fromYamlMap(
         yamlMap!['sidecar']! as YamlMap,
         uri: root,
         packageName: name,
       );
     });
-  } on PackageMissingSidecarDefinition {
-    return null;
-  } catch (e) {
+  } catch (e, stackTrace) {
     rethrow;
   }
 }
-
-class PackageMissingSidecarDefinition implements Exception {}

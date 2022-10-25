@@ -1,6 +1,6 @@
 name: my_analyzed_codebase
 description: An example of a project analyzed by Sidecar.
-version: 1.0.0
+version: 1.0.0+1
 publish_to: none
 
 environment:
@@ -8,8 +8,6 @@ environment:
 
 dependencies:
   auto_route: ^5.0.1
-  # design_system_annotations:
-  #   path: /Users/pattobrien/Development/sidecar/repositories/design_system_annotations/
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -20,26 +18,10 @@ dependencies:
 
 dev_dependencies:
   auto_route_generator: ^5.0.2
+  design_system_lints: ^0.1.0-dev.1
   lints: ^2.0.0
-  design_system_lints:
-    path: /Users/pattobrien/Development/sidecar/repositories/design_system_lints/
-  # sidecar_lints:
-  #   path: /Users/pattobrien/Development/sidecar/repositories/sidecar_lints/
-  # l10n_lints:
-  #   path: /Users/pattobrien/Development/sidecar/repositories/l10n_lints/
-  # riverpod_lints:
-  #   path: /Users/pattobrien/Development/sidecar/repositories/riverpod_lints/
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
-  # sidecar:
-  #   hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-  #   version: ^0.1.24
   test: ^1.16.0
 
 flutter:
   uses-material-design: true
   generate: true
-
-dependency_overrides:
-  flutter_utilities:
-    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

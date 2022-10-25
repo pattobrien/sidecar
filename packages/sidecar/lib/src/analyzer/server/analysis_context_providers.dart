@@ -12,7 +12,8 @@ final allContextsProvider = StateProvider<List<AnalysisContext>>(
 final allContextRootsProvider = Provider<List<ContextRoot>>(
   (ref) {
     return ref.watch(allContextsProvider.select(
-        (value) => value.map((context) => context.contextRoot).toList()));
+      (contexts) => contexts.map((context) => context.contextRoot).toList(),
+    ));
   },
   name: 'allContextRootsProvider',
   dependencies: [
