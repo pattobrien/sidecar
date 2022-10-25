@@ -15,10 +15,11 @@ class MyApp extends ConsumerWidget {
     final icon = Icon(Icons.abc);
     return MaterialApp(
       theme: ThemeData(
-          primaryColor: Colors.amber,
-          textTheme: TextTheme(
-            bodyText1: TextStyle(),
-          )),
+        primaryColor: Colors.amber,
+        textTheme: TextTheme(
+          bodyText1: TextStyle(),
+        ),
+      ),
     );
   }
 }

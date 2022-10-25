@@ -11,19 +11,19 @@ lints:
   #     # configuration:
   #     #   abc: 123
 
-  riverpod_lints:
-    prefer_consumer_widget:
-      # severity: warning
-      # enabled: true
-      # configuration:
-      #   123
-      # some_property:
+  # riverpod_lints:
+  #   prefer_consumer_widget:
+  # severity: warning
+  # enabled: true
+  # configuration:
+  #   123
+  # some_property:
 
-  l10n_lints:
-    avoid_string_literals:
-      enabled: true
-      configuration:
-        prefix: "AppLocalizations.of(context)"
+  # l10n_lints:
+  #   avoid_string_literals:
+  #     enabled: true
+  #     configuration:
+  #       prefix: "AppLocalizations.of(context)"
 
   # project_lints:
   #   avoid_icon_literal:
@@ -32,11 +32,11 @@ lints:
 
   design_system_lints:
     avoid_color_literal:
-      severity: error
-    avoid_icon_literal:
-      enabled: true
-      severity: warning
-    # avoid_sized_box_height_width_literals:
+    # severity: error
+    # avoid_icon_literal:
+    # enabled: true
+    # severity: warning
+    avoid_sized_box_height_width_literals:
     # avoid_text_style_literal:
     # avoid_border_radius_literal:
     # avoid_box_shadow_literal:

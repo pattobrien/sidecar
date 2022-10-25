@@ -55,6 +55,7 @@ class IsolateCommunicationService {
   }
 
   void dumpRequests() {
+    _log('dumpRequests = ${queuedRequests.length}');
     for (final request in queuedRequests..sort()) {
       _addNewMessage(MultiIsolateMessage(
         originalRequest: request,
@@ -129,6 +130,7 @@ class IsolateCommunicationService {
     // analysis.setSubscriptions
     // analysis.updateContent
     // analysis.setPriorityFiles
+    _log('_handlePluginInitialization');
     const uuid = Uuid();
 
     final setRootRequest =

@@ -12,6 +12,8 @@ import 'package:analyzer/dart/element/type.dart';
 
 import 'package:source_span/source_span.dart';
 
+import 'utils.dart';
+
 /// An abstraction around doing static type checking at compile/build time.
 
 abstract class TypeChecker {
@@ -149,7 +151,7 @@ abstract class TypeChecker {
   /// `export` directives). You should ideally only use `fromUrl` when you know
   /// the full path (likely you own/control the package) or it is in a stable
   /// package like in the `dart:` SDK.
-  // const factory TypeChecker.fromUrl(dynamic url) = _UriTypeChecker;
+  const factory TypeChecker.fromUrl(dynamic url) = _UriTypeChecker;
 
   /// Returns the first constant annotating [element] assignable to this type.
   ///
@@ -299,18 +301,18 @@ abstract class TypeChecker {
 }
 
 // Checks a static type against another static type;
-// class _LibraryTypeChecker extends TypeChecker {
-//   final DartType _type;
+class _LibraryTypeChecker extends TypeChecker {
+  final DartType _type;
 
-//   const _LibraryTypeChecker(this._type) : super._();
+  const _LibraryTypeChecker(this._type) : super._();
 
-//   @override
-//   bool isExactly(Element element) =>
-//       element is ClassElement && element == _type.element2;
+  @override
+  bool isExactly(Element element) =>
+      element is ClassElement && element == _type.element;
 
-//   @override
-//   String toString() => urlOfElement(_type.element2!);
-// }
+  @override
+  String toString() => urlOfElement(_type.element!);
+}
 
 class _NamedChecker extends TypeChecker {
   const _NamedChecker(this._name, {required this.packageName}) : super._();
@@ -367,36 +369,36 @@ class _NamedChecker extends TypeChecker {
 // }
 
 // Checks a runtime type against an Uri and Symbol.
-// class _UriTypeChecker extends TypeChecker {
-//   final String _url;
+class _UriTypeChecker extends TypeChecker {
+  final String _url;
 
-//   // Precomputed cache of String --> Uri.
-//   static final _cache = Expando<Uri>();
+  // Precomputed cache of String --> Uri.
+  static final _cache = Expando<Uri>();
 
-//   const _UriTypeChecker(dynamic url)
-//       : _url = '$url',
-//         super._();
+  const _UriTypeChecker(dynamic url)
+      : _url = '$url',
+        super._();
 
-//   @override
-//   bool operator ==(Object o) => o is _UriTypeChecker && o._url == _url;
+  @override
+  bool operator ==(Object o) => o is _UriTypeChecker && o._url == _url;
 
-//   @override
-//   int get hashCode => _url.hashCode;
+  @override
+  int get hashCode => _url.hashCode;
 
-//   /// Url as a [Uri] object, lazily constructed.
-//   Uri get uri => _cache[this] ??= normalizeUrl(Uri.parse(_url));
+  /// Url as a [Uri] object, lazily constructed.
+  Uri get uri => _cache[this] ??= normalizeUrl(Uri.parse(_url));
 
-//   /// Returns whether this type represents the same as [url].
-//   bool hasSameUrl(dynamic url) =>
-//       uri.toString() ==
-//       (url is String ? url : normalizeUrl(url as Uri).toString());
+  /// Returns whether this type represents the same as [url].
+  bool hasSameUrl(dynamic url) =>
+      uri.toString() ==
+      (url is String ? url : normalizeUrl(url as Uri).toString());
 
-//   @override
-//   bool isExactly(Element element) => hasSameUrl(urlOfElement(element));
+  @override
+  bool isExactly(Element element) => hasSameUrl(urlOfElement(element));
 
-//   @override
-//   String toString() => '$uri';
-// }
+  @override
+  String toString() => '$uri';
+}
 
 class _AnyChecker extends TypeChecker {
   final Iterable<TypeChecker> _checkers;

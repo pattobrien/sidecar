@@ -2,8 +2,9 @@ import 'dart:async';
 // import 'dart:';
 
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:flutter_analyzer/material.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:flutter_utilities/flutter_utilities.dart';
+// import 'package:flutter_utilities/flutter_utilities.dart';
 
 import 'constants.dart';
 
@@ -28,11 +29,17 @@ class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
+    if (element != null) {
+      if (colorType.isAssignableFromType(element.returnType)) {
+        reportAstNode(node, message: 'Avoid Color literal');
+      }
+    }
     // final x = isNonFlutterMatch(element);
     // if (element != null &&
     //     element.isSameAs(sourcePath: 'dart.ui', className: 'Color')) {
     //   reportAstNode(node, message: 'Avoid color literal.');
     // }
+
     super.visitInstanceCreationExpression(node);
   }
 }

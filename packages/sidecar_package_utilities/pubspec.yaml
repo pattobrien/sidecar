@@ -1,11 +1,14 @@
 name: sidecar_package_utilities
-description: A starting point for Dart libraries or applications.
-version: 0.1.6
-publish_to: https://dart.cloudsmith.io/fine-designs/sidecar_package_utilities/
+description: Utilities for creating sidecar packages.
+version: 0.1.0-dev.2
+repository: https://www.github.com/pattobrien/sidecar
+homepage: https://www.github.com/pattobrien/sidecar
 
 environment:
-  sdk: ">=2.17.5 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  analyzer: ^4.0.0
+  analyzer: ^4.1.0
+  path: ^1.8.2
   source_span: ^1.8.0
+  yaml: ^3.1.1
