@@ -8,9 +8,7 @@ import '../rules/rules.dart';
 import '../utils/utils.dart';
 
 final fileAnalyzerServiceProvider = Provider(
-  (ref) {
-    return FileAnalyzerService(ref);
-  },
+  FileAnalyzerService.new,
   name: 'fileAnalyzerServiceProvider',
   dependencies: [
     logDelegateProvider,

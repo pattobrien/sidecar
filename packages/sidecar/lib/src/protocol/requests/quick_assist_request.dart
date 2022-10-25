@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../analyzer/context/analyzed_file.dart';
+import '../../analyzer/context/analyzed_file.dart';
 
 part 'quick_assist_request.freezed.dart';
 
