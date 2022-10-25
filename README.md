@@ -1,7 +1,8 @@
 # Sidecar Analyzer
+*Enable a more personalized experience within your IDE.*
 
-![IDE Screenshot](/docs/ide_screenshot.png "Title")
 
+<img src="/docs/ide_screenshot.png" alt="ide lint" width="600"/>
 
 ## Table of Contents
 
