@@ -45,20 +45,16 @@ RulePackageConfiguration? parseLintPackage(String name, Uri root) {
   final pubspecPath = p.join(rootPath, 'pubspec.yaml');
   final pubspecContent = File(pubspecPath).readAsStringSync();
   try {
-    return checkedYamlDecode<RulePackageConfiguration>(pubspecContent,
+    return checkedYamlDecode<RulePackageConfiguration?>(pubspecContent,
         (yamlMap) {
-      if (yamlMap?['sidecar'] == null) throw PackageMissingSidecarDefinition();
+      if (yamlMap?['sidecar'] == null) return null;
       return RulePackageConfiguration.fromYamlMap(
         yamlMap!['sidecar']! as YamlMap,
         uri: root,
         packageName: name,
       );
     });
-  } on PackageMissingSidecarDefinition {
-    return null;
-  } catch (e) {
+  } catch (e, stackTrace) {
     rethrow;
   }
 }
-
-class PackageMissingSidecarDefinition implements Exception {}

@@ -1,0 +1,8 @@
+includes:
+  - "bin/**"
+  - "lib/**"
+lints:
+  design_system_lints:
+    avoid_icon_literal:
+      enabled: true
+      severity: warning

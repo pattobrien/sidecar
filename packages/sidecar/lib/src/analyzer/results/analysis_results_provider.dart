@@ -60,7 +60,8 @@ final analysisResultsCompletedForContextProvider =
     Provider.family<bool, ActiveContextRoot>(
   (ref, root) {
     return root.typedAnalyzedFiles().every(
-        (file) => ref.watch(analysisResultsForFileProvider(file)).hasValue);
+          (file) => ref.watch(analysisResultsForFileProvider(file)).hasValue,
+        );
   },
   name: 'analysisResultsCompletedForContextProvider',
   dependencies: [

@@ -60,21 +60,6 @@ extension AstNodeX on AstNode {
     return ElementLocator.locate(node);
   }
 
-  AnalysisResult toAnalysisResult(
-    SidecarBase rule, {
-    required SourceSpan sourceSpan,
-    required String message,
-    String? correction,
-    SourceSpan? highlightedSpan,
-  }) =>
-      AnalysisResult.generic(
-        rule: rule,
-        sourceSpan: sourceSpan,
-        message: message,
-        correction: correction,
-        highlightedSpan: highlightedSpan,
-      );
-
   DartAnalysisResult toDartAnalysisResult(
     SidecarBase rule, {
     required ResolvedUnitResult unit,
