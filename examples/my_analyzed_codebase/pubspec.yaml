@@ -1,6 +1,6 @@
 name: my_analyzed_codebase
 description: An example of a project analyzed by Sidecar.
-version: 1.0.0
+version: 1.0.0+1
 publish_to: none
 
 environment:
