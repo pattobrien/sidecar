@@ -5,17 +5,17 @@ publish_to: https://dart.cloudsmith.io/fine-designs/sidecar/
 repository: https://github.com/pattobrien/sidecar/
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  analyzer: ^4.2.0
+  analyzer: ^4.7.0
   analyzer_plugin: ^0.11.1
   args: ^2.3.1
   characters: ^1.2.0
   checked_yaml: ^2.0.1
   cli_util: ^0.3.5
   collection: ^1.16.0
-  dart_style: ^2.2.4
+  dart_style: ^2.2.3
   freezed_annotation: ^2.1.0 # non-dart official package
   glob: ^2.1.0
   hotreloader: ^3.0.5 # non-dart official package
@@ -29,7 +29,7 @@ dependencies:
   sidecar_annotations:
     hosted: https://dart.cloudsmith.io/fine-designs/sidecar_annotations/
     version: ^0.1.18
-  source_gen: ^1.2.6
+  source_gen: ^1.2.2
   source_span: ^1.8.0
   tuple: ^2.0.1
   uuid: ^3.0.6 # non-dart official package
@@ -42,7 +42,7 @@ dev_dependencies:
   # custom_lint: ^0.0.12
   freezed: ^2.1.0
   json_serializable: ^6.3.1
-  lints: ^2.0.0
+  # lints: ^2.0.0
   # riverpod_lint:
   #   git:
   #     url: https://github.com/rrousselGit/riverpod.git

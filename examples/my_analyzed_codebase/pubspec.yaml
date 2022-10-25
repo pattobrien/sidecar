@@ -39,7 +39,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
-
-dependency_overrides:
-  flutter_utilities:
-    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
+# dependency_overrides:
+#   flutter_utilities:
+#     path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/

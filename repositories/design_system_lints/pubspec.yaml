@@ -1,9 +1,9 @@
 name: design_system_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.12
-# publish_to: https://micropub-3qduh.ondigitalocean.app/
+version: 0.1.0-dev.1
 publish_to: none
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/design_system_lints
+homepage: https://github.com/pattobrien/sidecar/tree/master/repositories/design_system_lints
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
@@ -12,10 +12,7 @@ dependencies:
   analyzer: ^4.7.0
   code_builder: ^4.2.0
   collection: ^1.16.0
-  # flutter_utilities:
-  #   hosted: https://dart.cloudsmith.io/fine-designs/flutter_utilities/
-  #   version: ^0.1.12
-  flutter_analyzer_utils: ^0.2.0-dev.1
+  flutter_analyzer_utils: ^0.2.0-dev.4
   freezed_annotation: ^2.2.0
   sidecar:
     path: /Users/pattobrien/Development/sidecar/packages/sidecar
@@ -34,8 +31,6 @@ dependency_overrides:
     path: /Users/pattobrien/Development/sidecar/packages/sidecar
   sidecar_package_utilities:
     path: /Users/pattobrien/Development/sidecar/packages/sidecar_package_utilities
-  flutter_utilities:
-    path: /Users/pattobrien/Development/sidecar/repositories/utilities/flutter_utilities/
   flutter_analyzer_utils:
     path: /Users/pattobrien/Development/sidecar/ecosystem/flutter_analyzer_utils
 

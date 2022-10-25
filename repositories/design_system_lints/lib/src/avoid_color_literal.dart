@@ -34,11 +34,6 @@ class _Visitor extends SidecarAstVisitor {
       //   reportAstNode(node, message: 'Avoid Color literal');
       // }
     }
-    // final x = isNonFlutterMatch(element);
-    // if (element != null &&
-    //     element.isSameAs(sourcePath: 'dart.ui', className: 'Color')) {
-    //   reportAstNode(node, message: 'Avoid color literal.');
-    // }
 
     super.visitInstanceCreationExpression(node);
   }

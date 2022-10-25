@@ -1,3 +1,7 @@
+## 0.3.0-dev.1
+
+- Upgrade to Flutter v3.3.5.
+
 ## 0.2.0-dev.3
 
 - Fixed generated files from referencing local paths to package: uris

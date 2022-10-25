@@ -31,12 +31,6 @@ class _Visitor extends SidecarAstVisitor {
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
     if (element == null) return;
-    // if (element?.returnType.matchesType(boxShadow) ?? false) {
-    //   reportAstNode(node, message: 'Avoid BoxShadow literal');
-    // }
-    // if (FlutterTypeChecker.isBoxShadow(element.returnType)) {
-    //   reportAstNode(node, message: 'Avoid BoxShadow literal');
-    // }
     if (boxShadowType.isAssignableFromType(element.returnType)) {
       reportAstNode(node, message: 'Avoid BoxShadow literal');
     }

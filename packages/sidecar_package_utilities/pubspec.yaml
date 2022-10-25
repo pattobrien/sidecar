@@ -1,6 +1,6 @@
 name: sidecar_package_utilities
 description: Utilities for creating sidecar packages.
-version: 0.1.0-dev.2
+version: 0.1.0-dev.3
 repository: https://www.github.com/pattobrien/sidecar
 homepage: https://www.github.com/pattobrien/sidecar
 
@@ -9,6 +9,6 @@ environment:
 
 dependencies:
   analyzer: ^4.1.0
-  path: ^1.8.2
+  path: ^1.8.1
   source_span: ^1.8.0
   yaml: ^3.1.1

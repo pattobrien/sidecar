@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/ast/ast.dart';
-// import 'package:analyzer/dart/element/element.dart';
 import 'package:flutter_analyzer_utils/material.dart';
 import 'package:sidecar/sidecar.dart';
 
@@ -29,7 +28,7 @@ class _Visitor extends SidecarAstVisitor {
   @override
   void visitPrefixedIdentifier(PrefixedIdentifier node) {
     // final isIconData = _isIconData(node.prefix.staticElement);
-    final type = node.prefix.staticType;
+    final type = node.identifier.staticType;
     if (type != null) {
       if (iconDataType.isAssignableFromType(type)) {
         final matchingAnnotation = node.thisOrAncestorMatching((astNode) {
@@ -56,16 +55,4 @@ class _Visitor extends SidecarAstVisitor {
     }
     return super.visitPrefixedIdentifier(node);
   }
-
-  // bool _isIconData(Element? element) {
-  //   if (element != null) {
-  //     final iconDataPath = 'flutter/src/material/icons.dart';
-  //     final uri = element.librarySource?.uri;
-  //     if (uri == null) return false;
-  //     if (uri.isScheme('package') && uri.path == iconDataPath) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
 }

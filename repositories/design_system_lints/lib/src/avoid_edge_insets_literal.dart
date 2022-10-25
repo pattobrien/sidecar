@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:flutter_utilities/flutter_utilities.dart';
+import 'package:flutter_analyzer_utils/painting.dart';
+// import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'constants.dart';
@@ -28,8 +29,9 @@ class AvoidEdgeInsetsLiteralVisitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final type = node.constructorName.staticElement?.returnType;
+    if (type == null) return;
 
-    if (FlutterTypeChecker.isEdgeInsets(type)) {
+    if (edgeInsetsType.isAssignableFromType(type)) {
       final args = node.argumentList.arguments
           .whereType<NamedExpression>()
           .where((e) =>
