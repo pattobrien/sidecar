@@ -5,10 +5,11 @@ import 'package:analyzer/dart/ast/visitor.dart';
 
 import '../analyzer/results/results.dart';
 import '../utils/utils.dart';
+import 'analysis_source.dart';
 import 'lint_rule.dart';
 
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
-  final List<LintAnalysisResult> lints = [];
+  final List<LintResult> lints = [];
   late LintRule rule;
   late ResolvedUnitResult unit;
   late List<SidecarAnnotatedNode> annotatedNodes;
@@ -28,9 +29,12 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     required String message,
     String? correction,
   }) {
-    final result = LintAnalysisResult(
+    final result = LintResult(
       rule: rule,
-      sourceSpan: node.toSourceSpan(unit),
+      source: AnalysisSource(
+        path: unit.path,
+        span: node.toSourceSpan(unit),
+      ),
       message: message,
       correction: correction,
       severity: rule.defaultSeverity,
@@ -43,9 +47,12 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     required String message,
     String? correction,
   }) {
-    final result = LintAnalysisResult(
+    final result = LintResult(
       rule: rule,
-      sourceSpan: token.toSourceSpan(unit),
+      source: AnalysisSource(
+        path: unit.path,
+        span: token.toSourceSpan(unit),
+      ),
       message: message,
       correction: correction,
       severity: rule.defaultSeverity,

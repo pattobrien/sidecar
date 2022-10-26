@@ -52,7 +52,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
   }
 
   @override
-  void analysisResults(String path, List<LintAnalysisResult> results) {
+  void analysisResults(String path, List<LintResult> results) {
     if (results.isEmpty) return;
     final stringBuffer = StringBuffer();
 
@@ -61,7 +61,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
     for (final result in results) {
       final ansi = Ansi(true);
       final location =
-          '$relativePath:${result.sourceSpan.start.line}:${result.sourceSpan.start.column}';
+          '$relativePath:${result.source.span.start.line}:${result.source.span.start.column}';
       final lintErrorType = result.severity.ansi.padLeft(7);
       final packageId = '${ansi.green}${result.rule.packageName}${ansi.none}';
       final lintCode = '${ansi.green}${result.rule.code}${ansi.none}';

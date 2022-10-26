@@ -1,16 +1,10 @@
-import 'dart:async';
-
-import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
-import 'package:analyzer/dart/analysis/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../analyzer/ast/ast.dart';
 import '../analyzer/context/active_context_root.dart';
 import '../analyzer/results/results.dart';
-import '../configurations/builders/exceptions.dart';
 import '../configurations/configurations.dart';
 import 'typedefs.dart';
 
@@ -62,16 +56,4 @@ abstract class BaseRule {
       }
     }
   }
-
-  //TODO: can we remove the future here?
-  Future<List<AnalysisResult>> computeDartAnalysisResults(
-    ResolvedUnitResult unit,
-  ) =>
-      Future.value([]);
-
-  Future<List<EditResult>> computeSourceChanges(
-    AnalysisSession session,
-    AnalysisResult result,
-  ) =>
-      Future.value(<EditResult>[]);
 }

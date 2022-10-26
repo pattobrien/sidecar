@@ -22,9 +22,7 @@ class _Visitor extends SidecarAstVisitor {
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
 
-    if (element == null) return;
-
-    if (sizedBoxType.isAssignableFromType(element.returnType)) {
+    if (sizedBoxType.isAssignableFromType(element?.returnType)) {
       final args = node.argumentList.arguments
           .whereType<NamedExpression>()
           .where((e) =>

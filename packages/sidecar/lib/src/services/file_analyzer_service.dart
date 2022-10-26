@@ -22,7 +22,7 @@ class FileAnalyzerService {
   void _logError(Object e, StackTrace stackTrace) =>
       _ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
-  Future<List<LintAnalysisResult>> computeLintResults({
+  Future<List<LintResult>> computeLintResults({
     required AnalyzedFile file,
     required List<LintRule> rules,
     required ResolvedUnitResult? unitResult,
@@ -31,10 +31,10 @@ class FileAnalyzerService {
     if (file.isDartFile) {
       if (unitResult == null) return [];
 
-      final results = await Future.wait(
-          rules.map<Future<List<LintAnalysisResult>>>((rule) async {
+      final results =
+          await Future.wait(rules.map<Future<List<LintResult>>>((rule) async {
         try {
-          final results = await rule.computeDartAnalysisResults(unitResult);
+          final results = await rule.generateAnalysisResults(unitResult);
           return results
               .map((result) => result.copyWith(
                     severity: rule.analysisConfiguration.map(
@@ -51,28 +51,29 @@ class FileAnalyzerService {
       }));
 
       return results.expand((e) => e).toList()
-        ..sort((a, b) => a.sourceSpan.location.startLine
-            .compareTo(b.sourceSpan.location.startLine));
+        ..sort((a, b) => a.source.span.location.startLine
+            .compareTo(b.source.span.location.startLine));
     } else {
       // TODO: handle non-Dart files
       return Future.value([]);
     }
   }
 
-  Iterable<LintAnalysisResult> getAnalysisResultsAtOffset(
-    Iterable<LintAnalysisResult> analysisResults,
+  Iterable<LintResult> getAnalysisResultsAtOffset(
+    Iterable<LintResult> analysisResults,
     String path,
     int offset,
   ) =>
       analysisResults.where((result) => result.isWithinOffset(path, offset));
 
-  // Future<Iterable<EditResult>> calculateEditResultsForAnalysisResult(
-  //   ActiveContext context,
-  //   AnalysisResult analysisResult,
-  // ) async {
-  //   return analysisResult.rule
-  //       .computeSourceChanges(context.currentSession, analysisResult);
-  // }
+  Future<LintResult> calculateEditResultsForAnalysisResult(
+    ActiveContext context,
+    LintResult analysisResult,
+  ) async {
+    final editResults = await analysisResult.rule
+        .computeSourceChanges(context.currentSession, analysisResult.source);
+    return analysisResult.copyWith(edits: editResults);
+  }
 
   // Future<Iterable<EditResult>> calculateAssistEdits(
   //   ActiveContext context,

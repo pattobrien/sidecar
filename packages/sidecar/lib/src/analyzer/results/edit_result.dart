@@ -2,14 +2,11 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'analysis_result.dart';
-
 part 'edit_result.freezed.dart';
 
 @freezed
 class EditResult with _$EditResult {
   const factory EditResult({
-    required AnalysisResult analysisResult,
     required String message,
     required List<SourceFileEdit> sourceChanges,
   }) = _EditResult;

@@ -1,3 +1,4 @@
+export 'analysis_source.dart';
 export 'assist_rule.dart';
 export 'base_rule.dart';
 export 'lint_rule.dart';

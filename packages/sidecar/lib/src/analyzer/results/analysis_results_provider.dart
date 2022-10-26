@@ -57,10 +57,9 @@ final analysisResultsForFileProvider =
 );
 
 final lintResultsForFileProvider =
-    FutureProvider.family<List<LintAnalysisResult>, AnalyzedFile>(
-        (ref, file) async {
+    FutureProvider.family<List<LintResult>, AnalyzedFile>((ref, file) async {
   final results = await ref.watch(analysisResultsForFileProvider(file).future);
-  return results.whereType<LintAnalysisResult>().toList();
+  return results.whereType<LintResult>().toList();
 });
 
 final analysisResultsCompletedForContextProvider =

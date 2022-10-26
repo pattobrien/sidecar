@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_analyzer_utils/material.dart';
+import 'package:flutter_lints/src/constants.dart';
 import 'package:sidecar/sidecar.dart';
 
 const _desc =
@@ -10,11 +11,10 @@ class UseFullHexValuesForFlutterColors extends LintRule with LintVisitor {
   String get code => 'use_full_hex_values_for_flutter_colors';
 
   @override
-  String get packageName => 'flutter_lints';
+  String get packageName => kPackageName;
 
   @override
-  String get url =>
-      'https://dart-lang.github.io/linter/lints/use_full_hex_values_for_flutter_colors.html';
+  String get url => '$kUrlBase/use_full_hex_values_for_flutter_colors.html';
 
   @override
   SidecarAstVisitor get visitor => _Visitor();

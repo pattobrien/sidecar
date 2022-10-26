@@ -21,8 +21,7 @@ class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-    if (element == null) return;
-    if (textStyleType.isAssignableFromType(element.returnType)) {
+    if (textStyleType.isAssignableFromType(element?.returnType)) {
       reportAstNode(node, message: r'Avoid TextStyle literal.');
     }
     super.visitInstanceCreationExpression(node);

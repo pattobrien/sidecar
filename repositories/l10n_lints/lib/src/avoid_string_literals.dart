@@ -30,15 +30,13 @@ class AvoidStringLiterals extends LintRule with LintVisitor {
   @override
   Future<List<EditResult>> computeSourceChanges(
     AnalysisSession session,
-    AnalysisResult result,
+    AnalysisSource source,
   ) async {
-    result as LintAnalysisResult;
-
     final changeBuilder = ChangeBuilder(session: session);
     final unit =
-        await session.getResolvedUnit(result.path) as ResolvedUnitResult;
+        await session.getResolvedUnit(source.path) as ResolvedUnitResult;
 
-    final stringNode = result.sourceSpan.toAstNode(unit);
+    final stringNode = source.span.toAstNode(unit);
 
     if (stringNode == null) return [];
 

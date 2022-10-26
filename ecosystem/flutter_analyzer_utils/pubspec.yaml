@@ -11,6 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sidecar_package_utilities: ^0.1.0-dev.1
+  sidecar_package_utilities: ^0.1.0-dev.5
 
 sidecar_package: flutter

@@ -20,8 +20,7 @@ class UseKeyInWidgetConstructors extends LintRule with LintVisitor {
   String get packageName => kPackageName;
 
   @override
-  String get url =>
-      'https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html';
+  String get url => '$kUrlBase/use_key_in_widget_constructors.html';
 
   @override
   SidecarAstVisitor get visitor => _Visitor();

@@ -23,17 +23,14 @@ class CreateNewPageWidget extends AssistRule {
   @override
   Future<List<EditResult>> computeSourceChanges(
     AnalysisSession session,
-    AnalysisResult result,
+    AnalysisSource source,
   ) async {
-    // prepare change builder
-    result as LintAnalysisResult;
     final unit =
-        await session.getResolvedUnit(result.path) as ResolvedUnitResult;
+        await session.getResolvedUnit(source.path) as ResolvedUnitResult;
     final changeBuilder = AutoRouteChangeBuilder(session: session);
 
-    final node = result.sourceSpan
-        .toAstNode(unit)
-        ?.thisOrAncestorOfType<ClassDeclaration>();
+    final node =
+        source.span.toAstNode(unit)?.thisOrAncestorOfType<ClassDeclaration>();
 
     final pageClass = node?.name2.value().toString();
 
@@ -51,7 +48,6 @@ class CreateNewPageWidget extends AssistRule {
 
     return [
       EditResult(
-        analysisResult: result,
         message: 'Add new AdaptiveRoute',
         sourceChanges: changeBuilder.sourceChange.edits,
       )

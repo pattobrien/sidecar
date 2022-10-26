@@ -22,10 +22,7 @@ class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-
-    if (element == null) return;
-
-    if (borderRadiusType.isAssignableFromType(element.returnType)) {
+    if (borderRadiusType.isAssignableFromType(element?.returnType)) {
       reportAstNode(node, message: 'Avoid BorderRadius literal.');
     }
     super.visitInstanceCreationExpression(node);

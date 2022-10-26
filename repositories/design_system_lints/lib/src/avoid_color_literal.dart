@@ -21,11 +21,9 @@ class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-    if (element != null) {
-      // if (colorType.isAssignableFromType(element.returnType)) {
-      //   reportAstNode(node, message: 'Avoid Color literal');
-      // }
-    }
+    // if (colorType.isAssignableFromType(element.returnType)) {
+    //   reportAstNode(node, message: 'Avoid Color literal');
+    // }
 
     super.visitInstanceCreationExpression(node);
   }

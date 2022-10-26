@@ -22,8 +22,6 @@ class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final type = node.constructorName.staticElement?.returnType;
-    if (type == null) return;
-
     if (edgeInsetsType.isAssignableFromType(type)) {
       final args = node.argumentList.arguments
           .whereType<NamedExpression>()

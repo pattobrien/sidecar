@@ -22,8 +22,7 @@ class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-    if (element == null) return;
-    if (boxShadowType.isAssignableFromType(element.returnType)) {
+    if (boxShadowType.isAssignableFromType(element?.returnType)) {
       reportAstNode(node, message: 'Avoid BoxShadow literal');
     }
     super.visitInstanceCreationExpression(node);
