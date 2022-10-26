@@ -26,7 +26,7 @@ class CreateNewPageWidget extends AssistRule {
     AnalysisResult result,
   ) async {
     // prepare change builder
-    result as DartAnalysisResult;
+    result as LintAnalysisResult;
     final unit =
         await session.getResolvedUnit(result.path) as ResolvedUnitResult;
     final changeBuilder = AutoRouteChangeBuilder(session: session);

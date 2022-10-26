@@ -2,36 +2,29 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:async';
-
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:flutter_analyzer_utils/foundation.dart';
 
 import 'package:sidecar/sidecar.dart';
 
+import 'constants.dart';
+
 const _desc = r'Use key in widget constructors.';
 
-class UseKeyInWidgetConstructors extends LintRule {
+class UseKeyInWidgetConstructors extends LintRule with LintVisitor {
   @override
   String get code => 'use_key_in_widget_constructors';
 
   @override
-  String get packageName => 'flutter_lints';
+  String get packageName => kPackageName;
 
   @override
-  String? get url =>
+  String get url =>
       'https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html';
 
   @override
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
-    ResolvedUnitResult unit,
-  ) {
-    final visitor = _Visitor();
-    visitor.initializeVisitor(this, unit);
-    unit.unit.accept(visitor);
-    return Future.value(visitor.lints);
-  }
+  SidecarAstVisitor get visitor => _Visitor();
 }
 
 class _Visitor extends SidecarAstVisitor {
