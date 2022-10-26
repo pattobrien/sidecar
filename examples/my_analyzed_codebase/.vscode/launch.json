@@ -20,17 +20,6 @@
                 "--cli",
             ],
         },
-        // {
-        //     "name": "Sidecar with DevTools",
-        //     "program": ".dart_tool/sidecar/debug.dart",
-        //     "request": "launch",
-        //     "type": "dart",
-        //     "args": [
-        //         "--observe",
-        //         "--enable-vm-service",
-        //         "--cli",
-        //     ],
-        // },
         {
             "name": "Sidecar Debugger from Path",
             "program": "${userHome}/Development/sidecar/packages/sidecar/bin/debug.dart",
