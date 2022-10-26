@@ -20,7 +20,7 @@ class PluginChannelDelegate implements LogDelegateBase {
 
   @override
   void analysisResultError(
-      AnalysisResult result, Object err, StackTrace stackTrace) {
+      LintAnalysisResult result, Object err, StackTrace stackTrace) {
     channel.sendError(
         'analysisResultError: ${result.rule.code} $err', stackTrace);
   }
@@ -52,7 +52,7 @@ class PluginChannelDelegate implements LogDelegateBase {
   }
 
   @override
-  void analysisResults(String path, List<AnalysisResult> results) {
+  void analysisResults(String path, List<LintAnalysisResult> results) {
     final errors = results
         .map((result) => result.toAnalysisError())
         .whereType<plugin.AnalysisError>()

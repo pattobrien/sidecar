@@ -22,15 +22,12 @@ abstract class LogDelegateBase {
     StackTrace stackTrace,
   );
 
-  void analysisResults(
-    String path,
-    List<AnalysisResult> results,
-  );
+  void analysisResults(String path, List<LintAnalysisResult> results);
 
   void pluginRestart();
 
   void analysisResultError(
-    AnalysisResult result,
+    LintAnalysisResult result,
     Object err,
     StackTrace stackTrace,
   );

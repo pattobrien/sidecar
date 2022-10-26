@@ -31,24 +31,22 @@ abstract class BaseRule {
   late ActiveContextRoot _activeRoot;
 
   @internal
-  late AnalysisConfiguration? analysisConfiguration;
+  late AnalysisConfiguration analysisConfiguration;
 
   List<SidecarAnnotatedNode> get annotatedNodes =>
       _ref.read(annotationsProvider(_activeRoot));
-
-  void registerNodeProcessors(NodeLintRegistry registry) {}
 
   @internal
   void initialize({
     required Ref ref,
     required ActiveContextRoot activeRoot,
-    required AnalysisConfiguration? configuration,
+    required AnalysisConfiguration configuration,
   }) {
     _ref = ref;
     _activeRoot = activeRoot;
     analysisConfiguration = configuration;
     if (jsonDecoder != null) {
-      if (configuration == null) {
+      if (configuration.configuration == null) {
         //TODO: need to handle this
       } else {
         // try {
@@ -66,7 +64,7 @@ abstract class BaseRule {
   }
 
   //TODO: can we remove the future here?
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<AnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) =>
       Future.value([]);

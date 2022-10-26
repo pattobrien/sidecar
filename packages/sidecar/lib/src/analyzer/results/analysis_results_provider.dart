@@ -34,8 +34,8 @@ final analysisResultsForFileProvider =
           'analysisResults computed in $countS.${countMs}s - ${file.relativePath}');
       return errors;
     } else {
-      final results = await fileService.computeAnalysisResults(
-          file: file, activatedRules: activatedRules, unitResult: unit);
+      final results = await fileService.computeLintResults(
+          file: file, rules: activatedRules, unitResult: unit);
       final countMs = '${watch.elapsed.inMilliseconds.remainder(1000)}';
       final countUs = watch.elapsed.inMicroseconds
           .remainder(1000)
@@ -55,6 +55,13 @@ final analysisResultsForFileProvider =
     resolvedUnitProvider,
   ],
 );
+
+final lintResultsForFileProvider =
+    FutureProvider.family<List<LintAnalysisResult>, AnalyzedFile>(
+        (ref, file) async {
+  final results = await ref.watch(analysisResultsForFileProvider(file).future);
+  return results.whereType<LintAnalysisResult>().toList();
+});
 
 final analysisResultsCompletedForContextProvider =
     Provider.family<bool, ActiveContextRoot>(

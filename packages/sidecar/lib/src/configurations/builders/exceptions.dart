@@ -38,7 +38,7 @@ class SidecarFieldException implements SidecarConfigException {
   final String? _message;
   final String? _correction;
 
-  BaseRule get rule => SidecarFieldLintRule();
+  SidecarFieldLintRule get rule => SidecarFieldLintRule();
 
   @override
   SourceSpan get sourceSpan => _packageNode.span;
@@ -65,8 +65,12 @@ class SidecarFieldException implements SidecarConfigException {
   }
 
   @override
-  AnalysisResult toAnalysisResult() =>
-      AnalysisResult.dart(rule: rule, sourceSpan: sourceSpan, message: message);
+  AnalysisResult toAnalysisResult() => AnalysisResult.lint(
+        rule: rule,
+        sourceSpan: sourceSpan,
+        message: message,
+        severity: LintSeverity.warning,
+      );
 }
 
 class SidecarLintException implements SidecarConfigException {
@@ -82,7 +86,7 @@ class SidecarLintException implements SidecarConfigException {
   final String? _message;
   final String? _correction;
 
-  BaseRule get rule => SidecarLintRule();
+  LintRule get rule => SidecarLintRule();
 
   @override
   SourceSpan get sourceSpan => _packageNode.span;
@@ -110,11 +114,13 @@ class SidecarLintException implements SidecarConfigException {
 
   @override
   AnalysisResult toAnalysisResult() {
-    return AnalysisResult.dart(
-        sourceSpan: sourceSpan,
-        rule: rule,
-        message: message,
-        correction: correction);
+    return AnalysisResult.lint(
+      sourceSpan: sourceSpan,
+      rule: rule,
+      message: message,
+      correction: correction,
+      severity: LintSeverity.warning,
+    );
   }
 }
 
@@ -125,7 +131,7 @@ class SidecarLintPackageException implements SidecarConfigException {
 
   final YamlScalar _packageNode;
 
-  BaseRule get rule => SidecarFieldLintRule();
+  LintRule get rule => SidecarFieldLintRule();
 
   @override
   SourceSpan get sourceSpan => _packageNode.span;
@@ -152,11 +158,13 @@ class SidecarLintPackageException implements SidecarConfigException {
 
   @override
   AnalysisResult toAnalysisResult() {
-    return AnalysisResult.dart(
-        sourceSpan: sourceSpan,
-        rule: rule,
-        message: message,
-        correction: correction);
+    return AnalysisResult.lint(
+      sourceSpan: sourceSpan,
+      rule: rule,
+      message: message,
+      correction: correction,
+      severity: LintSeverity.warning,
+    );
   }
 }
 

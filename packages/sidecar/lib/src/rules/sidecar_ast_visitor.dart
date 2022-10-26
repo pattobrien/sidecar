@@ -1,20 +1,20 @@
-import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
 import '../analyzer/results/results.dart';
 import '../utils/utils.dart';
-import 'base_rule.dart';
+import 'lint_rule.dart';
 
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
-  final List<DartAnalysisResult> nodes = [];
-  late BaseRule rule;
+  final List<LintAnalysisResult> lints = [];
+  late LintRule rule;
   late ResolvedUnitResult unit;
   late List<SidecarAnnotatedNode> annotatedNodes;
 
   void initializeVisitor(
-    BaseRule rule,
+    LintRule rule,
     ResolvedUnitResult unit, [
     List<SidecarAnnotatedNode> annotatedNodes = const [],
   ]) {
@@ -28,13 +28,14 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     required String message,
     String? correction,
   }) {
-    final result = DartAnalysisResult(
+    final result = LintAnalysisResult(
       rule: rule,
       sourceSpan: node.toSourceSpan(unit),
       message: message,
       correction: correction,
+      severity: rule.defaultSeverity,
     );
-    nodes.add(result);
+    lints.add(result);
   }
 
   void reportToken(
@@ -42,12 +43,13 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     required String message,
     String? correction,
   }) {
-    final result = DartAnalysisResult(
+    final result = LintAnalysisResult(
       rule: rule,
       sourceSpan: token.toSourceSpan(unit),
       message: message,
       correction: correction,
+      severity: rule.defaultSeverity,
     );
-    nodes.add(result);
+    lints.add(result);
   }
 }

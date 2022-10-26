@@ -77,7 +77,7 @@ class ConfiguredRule {
     }
   }
 
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
+  Future<List<AnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
   ) =>
       rule.computeDartAnalysisResults(unit);
@@ -89,36 +89,36 @@ class ConfiguredRule {
       rule.computeSourceChanges(session, result);
 }
 
-class ConfiguredLintRule extends ConfiguredRule {
-  ConfiguredLintRule(
-    super.ref, {
-    required super.activeRoot,
-    required LintRule rule,
-    required LintConfiguration ruleConfig,
-    required AnalysisPackageConfiguration packageConfig,
-  }) : super(rule: rule, ruleConfig: ruleConfig, packageConfig: packageConfig);
+// class ConfiguredLintRule extends ConfiguredRule {
+//   ConfiguredLintRule(
+//     super.ref, {
+//     required super.activeRoot,
+//     required LintRule rule,
+//     required LintConfiguration ruleConfig,
+//     required AnalysisPackageConfiguration packageConfig,
+//   }) : super(rule: rule, ruleConfig: ruleConfig, packageConfig: packageConfig);
 
-  LintSeverity get defaultType =>
-      (ruleConfig as LintConfiguration).severity ??
-      (rule as LintRule).defaultType;
+//   LintSeverity get defaultType =>
+//       (ruleConfig as LintConfiguration).severity ??
+//       (rule as LintRule).defaultSeverity;
 
-  String? get url => (rule as LintRule).url;
+//   String? get url => (rule as LintRule).url;
 
-  @override
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
-    ResolvedUnitResult unit,
-  ) async {
-    final results = await rule.computeDartAnalysisResults(unit);
-    return results.map((e) => e.copyWith(severity: defaultType)).toList();
-  }
-}
+//   @override
+//   Future<List<LintAnalysisResult>> computeDartAnalysisResults(
+//     ResolvedUnitResult unit,
+//   ) async {
+//     final results = await rule.computeDartAnalysisResults(unit);
+//     return results.map((e) => e.copyWith(severity: defaultType)).toList();
+//   }
+// }
 
-class ConfiguredAssistRule extends ConfiguredRule {
-  ConfiguredAssistRule(
-    super.ref, {
-    required super.rule,
-    required super.activeRoot,
-    required super.ruleConfig,
-    required super.packageConfig,
-  });
-}
+// class ConfiguredAssistRule extends ConfiguredRule {
+//   ConfiguredAssistRule(
+//     super.ref, {
+//     required super.rule,
+//     required super.activeRoot,
+//     required super.ruleConfig,
+//     required super.packageConfig,
+//   });
+// }

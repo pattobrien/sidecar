@@ -10,15 +10,24 @@ part 'analysis_result.freezed.dart';
 
 @freezed
 class AnalysisResult with _$AnalysisResult {
-  const factory AnalysisResult.dart({
-    required BaseRule rule,
+  const factory AnalysisResult.lint({
+    required LintRule rule,
     required SourceSpan sourceSpan,
     required String message,
-    LintSeverity? severity,
+    required LintSeverity severity,
     String? correction,
     SourceSpan? highlightedSpan,
     @Default(<EditResult>[]) List<EditResult> edits,
-  }) = DartAnalysisResult;
+  }) = LintAnalysisResult;
+
+  const factory AnalysisResult.assist({
+    required AssistRule rule,
+    required SourceSpan sourceSpan,
+    required String message,
+    String? correction,
+    SourceSpan? highlightedSpan,
+    @Default(<EditResult>[]) List<EditResult> edits,
+  }) = AssistAnalysisResult;
 
   const AnalysisResult._();
 
@@ -30,18 +39,18 @@ class AnalysisResult with _$AnalysisResult {
         sourceSpan.start.offset <= offset &&
         offset <= sourceSpan.start.offset + sourceSpan.length;
   }
+}
 
+extension DartAnalysisResultX on LintAnalysisResult {
   AnalysisError? toAnalysisError() {
-    if (rule is AssistRule) return null;
-    final lintRule = rule as LintRule;
-    final concatenatedLintCode = '${lintRule.packageName}.${lintRule.code}';
+    final concatenatedLintCode = '${rule.packageName}.${rule.code}';
     return AnalysisError(
-      severity?.analysisError ?? lintRule.defaultType.analysisError,
+      severity.analysisError,
       AnalysisErrorType.HINT,
       sourceSpan.location,
       message,
       concatenatedLintCode,
-      url: lintRule.url,
+      url: rule.url,
       correction: correction,
       //TODO: hasFix does not seem to work properly
       hasFix: edits.isNotEmpty,

@@ -8,7 +8,7 @@ class SidecarLintRule extends LintRule {
   LintPackageId get packageName => 'sidecar';
 
   @override
-  LintSeverity get defaultType => LintSeverity.warning;
+  LintSeverity get defaultSeverity => LintSeverity.warning;
 }
 
 class SidecarFieldLintRule extends LintRule {
@@ -19,7 +19,7 @@ class SidecarFieldLintRule extends LintRule {
   LintPackageId get packageName => 'sidecar';
 
   @override
-  LintSeverity get defaultType => LintSeverity.warning;
+  LintSeverity get defaultSeverity => LintSeverity.warning;
 }
 
 class SidecarPackageRule extends LintRule {
@@ -30,5 +30,5 @@ class SidecarPackageRule extends LintRule {
   LintPackageId get packageName => 'sidecar';
 
   @override
-  LintSeverity get defaultType => LintSeverity.warning;
+  LintSeverity get defaultSeverity => LintSeverity.warning;
 }

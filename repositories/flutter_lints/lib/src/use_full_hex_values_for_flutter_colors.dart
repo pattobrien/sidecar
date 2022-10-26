@@ -25,7 +25,7 @@ class UseFullHexValuesForFlutterColors extends LintRule {
     final visitor = _Visitor();
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
-    return Future.value(visitor.nodes);
+    return Future.value(visitor.lints);
   }
 }
 

@@ -16,19 +16,15 @@ final fileAnalyzerServiceProvider = Provider(
 );
 
 class FileAnalyzerService {
-  const FileAnalyzerService(this.ref);
-
-  final Ref ref;
-
-  void _log(String message) =>
-      ref.read(logDelegateProvider).sidecarVerboseMessage(message);
+  const FileAnalyzerService(Ref ref) : _ref = ref;
+  final Ref _ref;
 
   void _logError(Object e, StackTrace stackTrace) =>
-      ref.read(logDelegateProvider).sidecarError(e, stackTrace);
+      _ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
-  Future<List<AnalysisResult>> computeAnalysisResults({
+  Future<List<LintAnalysisResult>> computeLintResults({
     required AnalyzedFile file,
-    required List<BaseRule> activatedRules,
+    required List<LintRule> rules,
     required ResolvedUnitResult? unitResult,
   }) async {
     //TODO: allow analysis of other file extensions
@@ -36,14 +32,15 @@ class FileAnalyzerService {
       if (unitResult == null) return [];
 
       final results = await Future.wait(
-          activatedRules.map<Future<List<DartAnalysisResult>>>((rule) async {
+          rules.map<Future<List<LintAnalysisResult>>>((rule) async {
         try {
           final results = await rule.computeDartAnalysisResults(unitResult);
           return results
-              .map((e) => e.copyWith(
-                    severity: rule.analysisConfiguration?.map(
-                      lint: (lint) => lint.severity,
-                      assist: (assist) => throw UnimplementedError(),
+              .map((result) => result.copyWith(
+                    severity: rule.analysisConfiguration.map(
+                      lint: (lintConfig) =>
+                          lintConfig.severity ?? rule.defaultSeverity,
+                      assist: (assistConfig) => throw UnimplementedError(),
                     ),
                   ))
               .toList();
@@ -62,31 +59,28 @@ class FileAnalyzerService {
     }
   }
 
-  Iterable<AnalysisResult> getAnalysisResultsAtOffset(
-    Iterable<AnalysisResult> analysisResults,
+  Iterable<LintAnalysisResult> getAnalysisResultsAtOffset(
+    Iterable<LintAnalysisResult> analysisResults,
     String path,
     int offset,
-  ) {
-    return analysisResults.where((analysisResult) =>
-        analysisResult.isWithinOffset(path, offset) &&
-        analysisResult.rule is LintRule);
-  }
+  ) =>
+      analysisResults.where((result) => result.isWithinOffset(path, offset));
 
-  Future<Iterable<EditResult>> calculateEditResultsForAnalysisResult(
-    ActiveContext context,
-    AnalysisResult analysisResult,
-  ) async {
-    return analysisResult.rule
-        .computeSourceChanges(context.currentSession, analysisResult);
-  }
+  // Future<Iterable<EditResult>> calculateEditResultsForAnalysisResult(
+  //   ActiveContext context,
+  //   AnalysisResult analysisResult,
+  // ) async {
+  //   return analysisResult.rule
+  //       .computeSourceChanges(context.currentSession, analysisResult);
+  // }
 
-  Future<Iterable<EditResult>> calculateAssistEdits(
-    ActiveContext context,
-    AnalysisResult analysisResult,
-  ) async {
-    return analysisResult.rule
-        .computeSourceChanges(context.currentSession, analysisResult);
-  }
+  // Future<Iterable<EditResult>> calculateAssistEdits(
+  //   ActiveContext context,
+  //   AnalysisResult analysisResult,
+  // ) async {
+  //   return analysisResult.rule
+  //       .computeSourceChanges(context.currentSession, analysisResult);
+  // }
 
   // Future<Iterable<EditResult>> calculateEditResults(
   //   ActiveContext context,

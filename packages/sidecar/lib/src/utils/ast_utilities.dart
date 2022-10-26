@@ -60,20 +60,21 @@ extension AstNodeX on AstNode {
     return ElementLocator.locate(node);
   }
 
-  DartAnalysisResult toDartAnalysisResult(
-    BaseRule rule, {
-    required ResolvedUnitResult unit,
-    required String message,
-    String? correction,
-    SourceSpan? highlightedSpan,
-  }) =>
-      AnalysisResult.dart(
-        rule: rule,
-        sourceSpan: toSourceSpan(unit),
-        message: message,
-        correction: correction,
-        highlightedSpan: highlightedSpan,
-      ) as DartAnalysisResult;
+  // LintAnalysisResult toDartAnalysisResult(
+  //   LintRule rule, {
+  //   required ResolvedUnitResult unit,
+  //   required String message,
+  //   String? correction,
+  //   SourceSpan? highlightedSpan,
+  // }) =>
+  //     LintAnalysisResult(
+  //       rule: rule,
+  //       sourceSpan: toSourceSpan(unit),
+  //       message: message,
+  //       correction: correction,
+  //       highlightedSpan: highlightedSpan,
+  //       severity:
+  //     );
 
 //   DetectedLint toDetectedLint(
 //     ResolvedUnitResult unit,

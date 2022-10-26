@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:design_system_lints/src/constants.dart';
 import 'package:flutter_analyzer_utils/painting.dart';
 import 'package:sidecar/sidecar.dart';
 
-class AvoidTextStyleLiteral extends LintRule {
+class AvoidTextStyleLiteral extends LintRule with LintVisitor {
   @override
   String get code => 'avoid_text_style_literal';
 
@@ -13,17 +11,10 @@ class AvoidTextStyleLiteral extends LintRule {
   String get packageName => kDesignSystemPackageId;
 
   @override
-  String? get url => kUrl;
+  String get url => kUrl;
 
   @override
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
-    ResolvedUnitResult unit,
-  ) {
-    final visitor = _Visitor();
-    visitor.initializeVisitor(this, unit);
-    unit.unit.accept(visitor);
-    return Future.value(visitor.nodes);
-  }
+  SidecarAstVisitor get visitor => _Visitor();
 }
 
 class _Visitor extends SidecarAstVisitor {

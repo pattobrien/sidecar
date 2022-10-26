@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_analyzer_utils/painting.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'constants.dart';
 
-class AvoidEdgeInsetsLiteral extends LintRule {
+class AvoidEdgeInsetsLiteral extends LintRule with LintVisitor {
   @override
   String get code => 'avoid_edge_insets_literal';
 
@@ -14,20 +12,13 @@ class AvoidEdgeInsetsLiteral extends LintRule {
   String get packageName => kDesignSystemPackageId;
 
   @override
-  String? get url => kUrl;
+  String get url => kUrl;
 
   @override
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
-    ResolvedUnitResult unit,
-  ) {
-    final visitor = AvoidEdgeInsetsLiteralVisitor();
-    visitor.initializeVisitor(this, unit);
-    unit.unit.accept(visitor);
-    return Future.value(visitor.nodes);
-  }
+  SidecarAstVisitor get visitor => _Visitor();
 }
 
-class AvoidEdgeInsetsLiteralVisitor extends SidecarAstVisitor {
+class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final type = node.constructorName.staticElement?.returnType;

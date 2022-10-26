@@ -16,66 +16,91 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnalysisResult {
-  BaseRule get rule => throw _privateConstructorUsedError;
   SourceSpan get sourceSpan => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  LintSeverity? get severity => throw _privateConstructorUsedError;
   String? get correction => throw _privateConstructorUsedError;
   SourceSpan? get highlightedSpan => throw _privateConstructorUsedError;
   List<EditResult> get edits => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            BaseRule rule,
+            LintRule rule,
             SourceSpan sourceSpan,
             String message,
-            LintSeverity? severity,
+            LintSeverity severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)
-        dart,
+        lint,
+    required TResult Function(
+            AssistRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
+        assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(
-            BaseRule rule,
+            LintRule rule,
             SourceSpan sourceSpan,
             String message,
-            LintSeverity? severity,
+            LintSeverity severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)?
-        dart,
+        lint,
+    TResult Function(
+            AssistRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
+        assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            BaseRule rule,
+            LintRule rule,
             SourceSpan sourceSpan,
             String message,
-            LintSeverity? severity,
+            LintSeverity severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)?
-        dart,
+        lint,
+    TResult Function(
+            AssistRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
+        assist,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(DartAnalysisResult value) dart,
+    required TResult Function(LintAnalysisResult value) lint,
+    required TResult Function(AssistAnalysisResult value) assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(DartAnalysisResult value)? dart,
+    TResult Function(LintAnalysisResult value)? lint,
+    TResult Function(AssistAnalysisResult value)? assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(DartAnalysisResult value)? dart,
+    TResult Function(LintAnalysisResult value)? lint,
+    TResult Function(AssistAnalysisResult value)? assist,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -91,10 +116,8 @@ abstract class $AnalysisResultCopyWith<$Res> {
           AnalysisResult value, $Res Function(AnalysisResult) then) =
       _$AnalysisResultCopyWithImpl<$Res>;
   $Res call(
-      {BaseRule rule,
-      SourceSpan sourceSpan,
+      {SourceSpan sourceSpan,
       String message,
-      LintSeverity? severity,
       String? correction,
       SourceSpan? highlightedSpan,
       List<EditResult> edits});
@@ -111,19 +134,13 @@ class _$AnalysisResultCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? rule = freezed,
     Object? sourceSpan = freezed,
     Object? message = freezed,
-    Object? severity = freezed,
     Object? correction = freezed,
     Object? highlightedSpan = freezed,
     Object? edits = freezed,
   }) {
     return _then(_value.copyWith(
-      rule: rule == freezed
-          ? _value.rule
-          : rule // ignore: cast_nullable_to_non_nullable
-              as BaseRule,
       sourceSpan: sourceSpan == freezed
           ? _value.sourceSpan
           : sourceSpan // ignore: cast_nullable_to_non_nullable
@@ -132,10 +149,6 @@ class _$AnalysisResultCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      severity: severity == freezed
-          ? _value.severity
-          : severity // ignore: cast_nullable_to_non_nullable
-              as LintSeverity?,
       correction: correction == freezed
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
@@ -153,32 +166,32 @@ class _$AnalysisResultCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$$DartAnalysisResultCopyWith<$Res>
+abstract class _$$LintAnalysisResultCopyWith<$Res>
     implements $AnalysisResultCopyWith<$Res> {
-  factory _$$DartAnalysisResultCopyWith(_$DartAnalysisResult value,
-          $Res Function(_$DartAnalysisResult) then) =
-      __$$DartAnalysisResultCopyWithImpl<$Res>;
+  factory _$$LintAnalysisResultCopyWith(_$LintAnalysisResult value,
+          $Res Function(_$LintAnalysisResult) then) =
+      __$$LintAnalysisResultCopyWithImpl<$Res>;
   @override
   $Res call(
-      {BaseRule rule,
+      {LintRule rule,
       SourceSpan sourceSpan,
       String message,
-      LintSeverity? severity,
+      LintSeverity severity,
       String? correction,
       SourceSpan? highlightedSpan,
       List<EditResult> edits});
 }
 
 /// @nodoc
-class __$$DartAnalysisResultCopyWithImpl<$Res>
+class __$$LintAnalysisResultCopyWithImpl<$Res>
     extends _$AnalysisResultCopyWithImpl<$Res>
-    implements _$$DartAnalysisResultCopyWith<$Res> {
-  __$$DartAnalysisResultCopyWithImpl(
-      _$DartAnalysisResult _value, $Res Function(_$DartAnalysisResult) _then)
-      : super(_value, (v) => _then(v as _$DartAnalysisResult));
+    implements _$$LintAnalysisResultCopyWith<$Res> {
+  __$$LintAnalysisResultCopyWithImpl(
+      _$LintAnalysisResult _value, $Res Function(_$LintAnalysisResult) _then)
+      : super(_value, (v) => _then(v as _$LintAnalysisResult));
 
   @override
-  _$DartAnalysisResult get _value => super._value as _$DartAnalysisResult;
+  _$LintAnalysisResult get _value => super._value as _$LintAnalysisResult;
 
   @override
   $Res call({
@@ -190,11 +203,11 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
     Object? highlightedSpan = freezed,
     Object? edits = freezed,
   }) {
-    return _then(_$DartAnalysisResult(
+    return _then(_$LintAnalysisResult(
       rule: rule == freezed
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
-              as BaseRule,
+              as LintRule,
       sourceSpan: sourceSpan == freezed
           ? _value.sourceSpan
           : sourceSpan // ignore: cast_nullable_to_non_nullable
@@ -206,7 +219,7 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
       severity: severity == freezed
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
-              as LintSeverity?,
+              as LintSeverity,
       correction: correction == freezed
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
@@ -225,12 +238,12 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DartAnalysisResult extends DartAnalysisResult {
-  const _$DartAnalysisResult(
+class _$LintAnalysisResult extends LintAnalysisResult {
+  const _$LintAnalysisResult(
       {required this.rule,
       required this.sourceSpan,
       required this.message,
-      this.severity,
+      required this.severity,
       this.correction,
       this.highlightedSpan,
       final List<EditResult> edits = const <EditResult>[]})
@@ -238,13 +251,13 @@ class _$DartAnalysisResult extends DartAnalysisResult {
         super._();
 
   @override
-  final BaseRule rule;
+  final LintRule rule;
   @override
   final SourceSpan sourceSpan;
   @override
   final String message;
   @override
-  final LintSeverity? severity;
+  final LintSeverity severity;
   @override
   final String? correction;
   @override
@@ -259,14 +272,14 @@ class _$DartAnalysisResult extends DartAnalysisResult {
 
   @override
   String toString() {
-    return 'AnalysisResult.dart(rule: $rule, sourceSpan: $sourceSpan, message: $message, severity: $severity, correction: $correction, highlightedSpan: $highlightedSpan, edits: $edits)';
+    return 'AnalysisResult.lint(rule: $rule, sourceSpan: $sourceSpan, message: $message, severity: $severity, correction: $correction, highlightedSpan: $highlightedSpan, edits: $edits)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DartAnalysisResult &&
+            other is _$LintAnalysisResult &&
             const DeepCollectionEquality().equals(other.rule, rule) &&
             const DeepCollectionEquality()
                 .equals(other.sourceSpan, sourceSpan) &&
@@ -292,24 +305,32 @@ class _$DartAnalysisResult extends DartAnalysisResult {
 
   @JsonKey(ignore: true)
   @override
-  _$$DartAnalysisResultCopyWith<_$DartAnalysisResult> get copyWith =>
-      __$$DartAnalysisResultCopyWithImpl<_$DartAnalysisResult>(
+  _$$LintAnalysisResultCopyWith<_$LintAnalysisResult> get copyWith =>
+      __$$LintAnalysisResultCopyWithImpl<_$LintAnalysisResult>(
           this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            BaseRule rule,
+            LintRule rule,
             SourceSpan sourceSpan,
             String message,
-            LintSeverity? severity,
+            LintSeverity severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)
-        dart,
+        lint,
+    required TResult Function(
+            AssistRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
+        assist,
   }) {
-    return dart(rule, sourceSpan, message, severity, correction,
+    return lint(rule, sourceSpan, message, severity, correction,
         highlightedSpan, edits);
   }
 
@@ -317,16 +338,24 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(
-            BaseRule rule,
+            LintRule rule,
             SourceSpan sourceSpan,
             String message,
-            LintSeverity? severity,
+            LintSeverity severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)?
-        dart,
+        lint,
+    TResult Function(
+            AssistRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
+        assist,
   }) {
-    return dart?.call(rule, sourceSpan, message, severity, correction,
+    return lint?.call(rule, sourceSpan, message, severity, correction,
         highlightedSpan, edits);
   }
 
@@ -334,18 +363,26 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            BaseRule rule,
+            LintRule rule,
             SourceSpan sourceSpan,
             String message,
-            LintSeverity? severity,
+            LintSeverity severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)?
-        dart,
+        lint,
+    TResult Function(
+            AssistRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
+        assist,
     required TResult orElse(),
   }) {
-    if (dart != null) {
-      return dart(rule, sourceSpan, message, severity, correction,
+    if (lint != null) {
+      return lint(rule, sourceSpan, message, severity, correction,
           highlightedSpan, edits);
     }
     return orElse();
@@ -354,51 +391,52 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(DartAnalysisResult value) dart,
+    required TResult Function(LintAnalysisResult value) lint,
+    required TResult Function(AssistAnalysisResult value) assist,
   }) {
-    return dart(this);
+    return lint(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(DartAnalysisResult value)? dart,
+    TResult Function(LintAnalysisResult value)? lint,
+    TResult Function(AssistAnalysisResult value)? assist,
   }) {
-    return dart?.call(this);
+    return lint?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(DartAnalysisResult value)? dart,
+    TResult Function(LintAnalysisResult value)? lint,
+    TResult Function(AssistAnalysisResult value)? assist,
     required TResult orElse(),
   }) {
-    if (dart != null) {
-      return dart(this);
+    if (lint != null) {
+      return lint(this);
     }
     return orElse();
   }
 }
 
-abstract class DartAnalysisResult extends AnalysisResult {
-  const factory DartAnalysisResult(
-      {required final BaseRule rule,
+abstract class LintAnalysisResult extends AnalysisResult {
+  const factory LintAnalysisResult(
+      {required final LintRule rule,
       required final SourceSpan sourceSpan,
       required final String message,
-      final LintSeverity? severity,
+      required final LintSeverity severity,
       final String? correction,
       final SourceSpan? highlightedSpan,
-      final List<EditResult> edits}) = _$DartAnalysisResult;
-  const DartAnalysisResult._() : super._();
+      final List<EditResult> edits}) = _$LintAnalysisResult;
+  const LintAnalysisResult._() : super._();
 
-  @override
-  BaseRule get rule;
+  LintRule get rule;
   @override
   SourceSpan get sourceSpan;
   @override
   String get message;
-  @override
-  LintSeverity? get severity;
+  LintSeverity get severity;
   @override
   String? get correction;
   @override
@@ -407,6 +445,277 @@ abstract class DartAnalysisResult extends AnalysisResult {
   List<EditResult> get edits;
   @override
   @JsonKey(ignore: true)
-  _$$DartAnalysisResultCopyWith<_$DartAnalysisResult> get copyWith =>
+  _$$LintAnalysisResultCopyWith<_$LintAnalysisResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AssistAnalysisResultCopyWith<$Res>
+    implements $AnalysisResultCopyWith<$Res> {
+  factory _$$AssistAnalysisResultCopyWith(_$AssistAnalysisResult value,
+          $Res Function(_$AssistAnalysisResult) then) =
+      __$$AssistAnalysisResultCopyWithImpl<$Res>;
+  @override
+  $Res call(
+      {AssistRule rule,
+      SourceSpan sourceSpan,
+      String message,
+      String? correction,
+      SourceSpan? highlightedSpan,
+      List<EditResult> edits});
+}
+
+/// @nodoc
+class __$$AssistAnalysisResultCopyWithImpl<$Res>
+    extends _$AnalysisResultCopyWithImpl<$Res>
+    implements _$$AssistAnalysisResultCopyWith<$Res> {
+  __$$AssistAnalysisResultCopyWithImpl(_$AssistAnalysisResult _value,
+      $Res Function(_$AssistAnalysisResult) _then)
+      : super(_value, (v) => _then(v as _$AssistAnalysisResult));
+
+  @override
+  _$AssistAnalysisResult get _value => super._value as _$AssistAnalysisResult;
+
+  @override
+  $Res call({
+    Object? rule = freezed,
+    Object? sourceSpan = freezed,
+    Object? message = freezed,
+    Object? correction = freezed,
+    Object? highlightedSpan = freezed,
+    Object? edits = freezed,
+  }) {
+    return _then(_$AssistAnalysisResult(
+      rule: rule == freezed
+          ? _value.rule
+          : rule // ignore: cast_nullable_to_non_nullable
+              as AssistRule,
+      sourceSpan: sourceSpan == freezed
+          ? _value.sourceSpan
+          : sourceSpan // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
+      message: message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      correction: correction == freezed
+          ? _value.correction
+          : correction // ignore: cast_nullable_to_non_nullable
+              as String?,
+      highlightedSpan: highlightedSpan == freezed
+          ? _value.highlightedSpan
+          : highlightedSpan // ignore: cast_nullable_to_non_nullable
+              as SourceSpan?,
+      edits: edits == freezed
+          ? _value._edits
+          : edits // ignore: cast_nullable_to_non_nullable
+              as List<EditResult>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AssistAnalysisResult extends AssistAnalysisResult {
+  const _$AssistAnalysisResult(
+      {required this.rule,
+      required this.sourceSpan,
+      required this.message,
+      this.correction,
+      this.highlightedSpan,
+      final List<EditResult> edits = const <EditResult>[]})
+      : _edits = edits,
+        super._();
+
+  @override
+  final AssistRule rule;
+  @override
+  final SourceSpan sourceSpan;
+  @override
+  final String message;
+  @override
+  final String? correction;
+  @override
+  final SourceSpan? highlightedSpan;
+  final List<EditResult> _edits;
+  @override
+  @JsonKey()
+  List<EditResult> get edits {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_edits);
+  }
+
+  @override
+  String toString() {
+    return 'AnalysisResult.assist(rule: $rule, sourceSpan: $sourceSpan, message: $message, correction: $correction, highlightedSpan: $highlightedSpan, edits: $edits)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AssistAnalysisResult &&
+            const DeepCollectionEquality().equals(other.rule, rule) &&
+            const DeepCollectionEquality()
+                .equals(other.sourceSpan, sourceSpan) &&
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality()
+                .equals(other.correction, correction) &&
+            const DeepCollectionEquality()
+                .equals(other.highlightedSpan, highlightedSpan) &&
+            const DeepCollectionEquality().equals(other._edits, _edits));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(rule),
+      const DeepCollectionEquality().hash(sourceSpan),
+      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(correction),
+      const DeepCollectionEquality().hash(highlightedSpan),
+      const DeepCollectionEquality().hash(_edits));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$AssistAnalysisResultCopyWith<_$AssistAnalysisResult> get copyWith =>
+      __$$AssistAnalysisResultCopyWithImpl<_$AssistAnalysisResult>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            LintRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
+        lint,
+    required TResult Function(
+            AssistRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)
+        assist,
+  }) {
+    return assist(
+        rule, sourceSpan, message, correction, highlightedSpan, edits);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(
+            LintRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
+        lint,
+    TResult Function(
+            AssistRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
+        assist,
+  }) {
+    return assist?.call(
+        rule, sourceSpan, message, correction, highlightedSpan, edits);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            LintRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
+        lint,
+    TResult Function(
+            AssistRule rule,
+            SourceSpan sourceSpan,
+            String message,
+            String? correction,
+            SourceSpan? highlightedSpan,
+            List<EditResult> edits)?
+        assist,
+    required TResult orElse(),
+  }) {
+    if (assist != null) {
+      return assist(
+          rule, sourceSpan, message, correction, highlightedSpan, edits);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LintAnalysisResult value) lint,
+    required TResult Function(AssistAnalysisResult value) assist,
+  }) {
+    return assist(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LintAnalysisResult value)? lint,
+    TResult Function(AssistAnalysisResult value)? assist,
+  }) {
+    return assist?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LintAnalysisResult value)? lint,
+    TResult Function(AssistAnalysisResult value)? assist,
+    required TResult orElse(),
+  }) {
+    if (assist != null) {
+      return assist(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AssistAnalysisResult extends AnalysisResult {
+  const factory AssistAnalysisResult(
+      {required final AssistRule rule,
+      required final SourceSpan sourceSpan,
+      required final String message,
+      final String? correction,
+      final SourceSpan? highlightedSpan,
+      final List<EditResult> edits}) = _$AssistAnalysisResult;
+  const AssistAnalysisResult._() : super._();
+
+  AssistRule get rule;
+  @override
+  SourceSpan get sourceSpan;
+  @override
+  String get message;
+  @override
+  String? get correction;
+  @override
+  SourceSpan? get highlightedSpan;
+  @override
+  List<EditResult> get edits;
+  @override
+  @JsonKey(ignore: true)
+  _$$AssistAnalysisResultCopyWith<_$AssistAnalysisResult> get copyWith =>
       throw _privateConstructorUsedError;
 }

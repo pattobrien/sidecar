@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_analyzer_utils/material.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'constants.dart';
 
-class AvoidIconLiteral extends LintRule {
+class AvoidIconLiteral extends LintRule with LintVisitor {
   @override
   String get code => 'avoid_icon_literal';
 
@@ -14,17 +12,10 @@ class AvoidIconLiteral extends LintRule {
   String get packageName => kDesignSystemPackageId;
 
   @override
-  String? get url => kUrl;
+  String get url => kUrl;
 
   @override
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
-    ResolvedUnitResult unit,
-  ) {
-    final visitor = _Visitor();
-    visitor.initializeVisitor(this, unit, annotatedNodes);
-    unit.unit.accept(visitor);
-    return Future.value(visitor.nodes);
-  }
+  SidecarAstVisitor get visitor => _Visitor();
 }
 
 class _Visitor extends SidecarAstVisitor {
