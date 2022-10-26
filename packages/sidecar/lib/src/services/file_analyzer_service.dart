@@ -36,9 +36,17 @@ class FileAnalyzerService {
       if (unitResult == null) return [];
 
       final results = await Future.wait(
-          activatedRules.map<Future<List<DartAnalysisResult>>>((rule) {
+          activatedRules.map<Future<List<DartAnalysisResult>>>((rule) async {
         try {
-          return rule.computeDartAnalysisResults(unitResult);
+          final results = await rule.computeDartAnalysisResults(unitResult);
+          return results
+              .map((e) => e.copyWith(
+                    severity: rule.analysisConfiguration?.map(
+                      lint: (lint) => lint.severity,
+                      assist: (assist) => throw UnimplementedError(),
+                    ),
+                  ))
+              .toList();
         } catch (e, stackTrace) {
           _logError('LintRule Error: ${e.toString()}', stackTrace);
           return Future.value([]);

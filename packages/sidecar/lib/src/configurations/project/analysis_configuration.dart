@@ -18,7 +18,7 @@ class AnalysisConfiguration with _$AnalysisConfiguration {
     required String id,
     required String packageName,
     required SourceSpan lintNameSpan,
-    LintRuleType? severity,
+    LintSeverity? severity,
     List<Glob>? includes,
     YamlMap? configuration,
     bool? enabled,

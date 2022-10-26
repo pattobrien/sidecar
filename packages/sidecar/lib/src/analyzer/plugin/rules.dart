@@ -33,15 +33,15 @@ final assistRulesForFileProvider =
 
 final _activatedRulesProvider =
     Provider.family<List<BaseRule>, ActiveContextRoot>(
-  (ref, root) {
-    final context = ref.watch(activeContextForRootProvider(root));
+  (ref, activeRoot) {
+    final context = ref.watch(activeContextForRootProvider(activeRoot));
     final ruleConstructors = ref.watch(ruleConstructorProvider);
     final ruleService = ref.watch(ruleInitializationServiceProvider);
 
     return ruleService.initializeRules(
-      [], // annotations,
       context.sidecarOptions,
       ruleConstructors,
+      activeRoot,
     );
   },
   name: '_activatedRulesProvider',

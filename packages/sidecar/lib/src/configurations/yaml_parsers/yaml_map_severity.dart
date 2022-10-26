@@ -5,13 +5,13 @@ import '../builders/builders.dart';
 import '../project/errors.dart';
 
 extension YamlMapSeverity on YamlMap {
-  SidecarExceptionTuple<LintRuleType?> parseSeverity() {
+  SidecarExceptionTuple<LintSeverity?> parseSeverity() {
     const key = 'severity';
     try {
       final severityValue = containsKey(key)
-          ? LintRuleTypeX.fromString(value[key] as String)
+          ? LintSeverityX.fromString(value[key] as String)
           : null;
-      return SidecarExceptionTuple<LintRuleType?>(severityValue, []);
+      return SidecarExceptionTuple<LintSeverity?>(severityValue, []);
       // } on InvalidSeverityException {
       //   final invalidNode = nodes.keys
       //       .cast<YamlScalar>()
@@ -24,7 +24,7 @@ extension YamlMapSeverity on YamlMap {
       //     )
       //   ]);
     } catch (e) {
-      return SidecarExceptionTuple<LintRuleType?>(null, [
+      return SidecarExceptionTuple<LintSeverity?>(null, [
         SidecarLintException(
           nodes.keys
               .cast<YamlScalar>()

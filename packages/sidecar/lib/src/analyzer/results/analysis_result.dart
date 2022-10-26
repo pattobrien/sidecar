@@ -2,7 +2,6 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:source_span/source_span.dart';
 
-import '../../rules/lint_error_type.dart';
 import '../../rules/rules.dart';
 import '../../utils/utils.dart';
 import 'edit_result.dart';
@@ -15,6 +14,7 @@ class AnalysisResult with _$AnalysisResult {
     required BaseRule rule,
     required SourceSpan sourceSpan,
     required String message,
+    LintSeverity? severity,
     String? correction,
     SourceSpan? highlightedSpan,
     @Default(<EditResult>[]) List<EditResult> edits,
@@ -36,7 +36,7 @@ class AnalysisResult with _$AnalysisResult {
     final lintRule = rule as LintRule;
     final concatenatedLintCode = '${lintRule.packageName}.${lintRule.code}';
     return AnalysisError(
-      lintRule.defaultType.analysisError,
+      severity?.analysisError ?? lintRule.defaultType.analysisError,
       AnalysisErrorType.HINT,
       sourceSpan.location,
       message,

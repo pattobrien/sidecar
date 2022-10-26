@@ -62,8 +62,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
       final ansi = Ansi(true);
       final location =
           '$relativePath:${result.sourceSpan.start.line}:${result.sourceSpan.start.column}';
-      final lintErrorType =
-          (result.rule as LintRule).defaultType.ansi.padLeft(7);
+      final lintErrorType = result.severity!.ansi.padLeft(7);
       final packageId = '${ansi.green}${result.rule.packageName}${ansi.none}';
       final lintCode = '${ansi.green}${result.rule.code}${ansi.none}';
       final message = '${ansi.bold}${result.message}${ansi.none}';

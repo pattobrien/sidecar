@@ -62,7 +62,7 @@ class AvoidStringLiterals extends LintRule {
     if (parentNode is VariableDeclaration) {
       final element = parentNode.declaredElement2;
       if (element != null) {
-        final analysisUtils = ref.read(analysisContextUtilitiesProvider);
+        final analysisUtils = _ref.read(analysisContextUtilitiesProvider);
         references = await analysisUtils.getReferences(unit, element);
       }
     }

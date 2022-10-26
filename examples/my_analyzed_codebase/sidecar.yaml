@@ -20,7 +20,6 @@ lints:
     # severity: error
     avoid_icon_literal:
     # enabled: true
-    # severity: warning
     avoid_sized_box_height_width_literals:
     avoid_text_style_literal:
     avoid_border_radius_literal:

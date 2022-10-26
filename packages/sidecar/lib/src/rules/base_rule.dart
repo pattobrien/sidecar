@@ -1,20 +1,17 @@
-// ignore_for_file: use_setters_to_change_properties
-
 import 'dart:async';
 
-import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer/dart/analysis/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:source_span/source_span.dart';
-import 'package:yaml/yaml.dart';
 
 import '../analyzer/ast/ast.dart';
+import '../analyzer/context/active_context_root.dart';
 import '../analyzer/results/results.dart';
-import '../configurations/builders/builders.dart';
+import '../configurations/builders/exceptions.dart';
+import '../configurations/configurations.dart';
 import 'typedefs.dart';
 
 enum RuleType { lint, assist }
@@ -23,58 +20,47 @@ abstract class BaseRule {
   String get code;
   LintPackageId get packageName;
 
+  List<Glob>? get includes => null;
   MapDecoder? get jsonDecoder => null;
-
-  @mustCallSuper
-  List<SidecarConfigException>? get errors => _errors;
 
   @mustCallSuper
   Object get configuration => _configuration;
 
-  late Ref ref;
+  late Ref _ref;
   late Object _configuration;
-  final List<SidecarConfigException> _errors = [];
+  late ActiveContextRoot _activeRoot;
 
-  late List<SidecarAnnotatedNode> _annotatedNodes;
-  List<SidecarAnnotatedNode> get annotatedNodes => _annotatedNodes;
+  @internal
+  late AnalysisConfiguration? analysisConfiguration;
 
-  List<Glob>? get includes => null;
+  List<SidecarAnnotatedNode> get annotatedNodes =>
+      _ref.read(annotationsProvider(_activeRoot));
 
   void registerNodeProcessors(NodeLintRegistry registry) {}
 
-  void update({
-    List<SidecarAnnotatedNode> annotatedNodes = const [],
-  }) {
-    _annotatedNodes = annotatedNodes;
-  }
-
+  @internal
   void initialize({
     required Ref ref,
-    required SourceSpan lintNameSpan,
-    required YamlMap? configurationContent,
-    List<SidecarAnnotatedNode> annotatedNodes = const [],
+    required ActiveContextRoot activeRoot,
+    required AnalysisConfiguration? configuration,
   }) {
-    this.ref = ref;
-    _annotatedNodes = annotatedNodes;
+    _ref = ref;
+    _activeRoot = activeRoot;
+    analysisConfiguration = configuration;
     if (jsonDecoder != null) {
-      if (configurationContent == null) {
+      if (configuration == null) {
         //TODO: need to handle this
-        // final error = SidecarLintPackageException(
-        //   sourceSpan: lintNameSpan,
-        //   message: '$code error: empty configuration',
-        // );
-        // _errors.add(error);
       } else {
-        try {
-          _configuration = jsonDecoder!(configurationContent);
-        } on SidecarAggregateException catch (e) {
-          _errors.addAll(e.exceptions);
-        } catch (e, stackTrace) {
-          rethrow;
-          // final error = SidecarLintPackageException(
-          // );
-          // _errors.add(error);
-        }
+        // try {
+        //   _configuration = jsonDecoder!(configuration.configuration!);
+        // } on SidecarAggregateException catch (e) {
+        //   _errors.addAll(e.exceptions);
+        // } catch (e, stackTrace) {
+        //   rethrow;
+        //   // final error = SidecarLintPackageException(
+        //   // );
+        //   // _errors.add(error);
+        // }
       }
     }
   }
@@ -82,18 +68,6 @@ abstract class BaseRule {
   //TODO: can we remove the future here?
   Future<List<DartAnalysisResult>> computeDartAnalysisResults(
     ResolvedUnitResult unit,
-  ) =>
-      Future.value([]);
-
-  //TODO: can we remove the future here?
-  Future<List<AnalysisResult>> computeYamlAnalysisResults(
-    YamlMap yamlMap,
-  ) =>
-      Future.value([]);
-
-  Future<List<AnalysisResult>> computeGenericAnalysisResults(
-    AnalysisContext analysisContext,
-    String path,
   ) =>
       Future.value([]);
 

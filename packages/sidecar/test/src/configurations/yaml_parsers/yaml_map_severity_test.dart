@@ -9,7 +9,7 @@ void main() {
       });
       final value = yamlContent.parseSeverity();
 
-      expect(value.item1, LintRuleType.warning);
+      expect(value.item1, LintSeverity.warning);
       expect(value.item2.isEmpty, true);
     });
     test('invalid severity', () {

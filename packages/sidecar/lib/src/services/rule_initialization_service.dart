@@ -1,5 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../analyzer/context/active_context_root.dart';
 import '../analyzer/results/results.dart';
 import '../analyzer/server/log_delegate.dart';
 import '../configurations/project/project.dart';
@@ -13,9 +14,9 @@ class RuleInitializationService {
       ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
 
   List<BaseRule> initializeRules(
-    List<SidecarAnnotatedNode> annotatedNodes,
     ProjectConfiguration projectConfiguration,
     List<SidecarBaseConstructor> ruleConstructors,
+    ActiveContextRoot activeRoot,
   ) {
     _log(
         'initializing ${projectConfiguration.lintPackages?.length ?? 0} lint packages');
@@ -32,17 +33,13 @@ class RuleInitializationService {
           _log('activating ${rule.code}');
 
           rule.initialize(
-            ref: ref,
-            configurationContent: ruleConfig.configuration,
-            lintNameSpan: ruleConfig.lintNameSpan,
-            annotatedNodes: annotatedNodes,
-          );
-          if (rule.errors?.isNotEmpty ?? false) {
-            // errorComposer.addErrors(rule.errors!);
-            return null;
-          } else {
-            return rule;
-          }
+              ref: ref, activeRoot: activeRoot, configuration: ruleConfig);
+          // if (rule.errors?.isNotEmpty ?? false) {
+          //   // errorComposer.addErrors(rule.errors!);
+          //   return null;
+          // } else {
+          return rule;
+          // }
         })
         .whereType<BaseRule>()
         .toList();

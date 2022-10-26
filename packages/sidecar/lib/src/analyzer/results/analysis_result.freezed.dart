@@ -19,6 +19,7 @@ mixin _$AnalysisResult {
   BaseRule get rule => throw _privateConstructorUsedError;
   SourceSpan get sourceSpan => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
+  LintSeverity? get severity => throw _privateConstructorUsedError;
   String? get correction => throw _privateConstructorUsedError;
   SourceSpan? get highlightedSpan => throw _privateConstructorUsedError;
   List<EditResult> get edits => throw _privateConstructorUsedError;
@@ -28,6 +29,7 @@ mixin _$AnalysisResult {
             BaseRule rule,
             SourceSpan sourceSpan,
             String message,
+            LintSeverity? severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)
@@ -40,6 +42,7 @@ mixin _$AnalysisResult {
             BaseRule rule,
             SourceSpan sourceSpan,
             String message,
+            LintSeverity? severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)?
@@ -52,6 +55,7 @@ mixin _$AnalysisResult {
             BaseRule rule,
             SourceSpan sourceSpan,
             String message,
+            LintSeverity? severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)?
@@ -90,6 +94,7 @@ abstract class $AnalysisResultCopyWith<$Res> {
       {BaseRule rule,
       SourceSpan sourceSpan,
       String message,
+      LintSeverity? severity,
       String? correction,
       SourceSpan? highlightedSpan,
       List<EditResult> edits});
@@ -109,6 +114,7 @@ class _$AnalysisResultCopyWithImpl<$Res>
     Object? rule = freezed,
     Object? sourceSpan = freezed,
     Object? message = freezed,
+    Object? severity = freezed,
     Object? correction = freezed,
     Object? highlightedSpan = freezed,
     Object? edits = freezed,
@@ -126,6 +132,10 @@ class _$AnalysisResultCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      severity: severity == freezed
+          ? _value.severity
+          : severity // ignore: cast_nullable_to_non_nullable
+              as LintSeverity?,
       correction: correction == freezed
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
@@ -153,6 +163,7 @@ abstract class _$$DartAnalysisResultCopyWith<$Res>
       {BaseRule rule,
       SourceSpan sourceSpan,
       String message,
+      LintSeverity? severity,
       String? correction,
       SourceSpan? highlightedSpan,
       List<EditResult> edits});
@@ -174,6 +185,7 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
     Object? rule = freezed,
     Object? sourceSpan = freezed,
     Object? message = freezed,
+    Object? severity = freezed,
     Object? correction = freezed,
     Object? highlightedSpan = freezed,
     Object? edits = freezed,
@@ -191,6 +203,10 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      severity: severity == freezed
+          ? _value.severity
+          : severity // ignore: cast_nullable_to_non_nullable
+              as LintSeverity?,
       correction: correction == freezed
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
@@ -214,6 +230,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
       {required this.rule,
       required this.sourceSpan,
       required this.message,
+      this.severity,
       this.correction,
       this.highlightedSpan,
       final List<EditResult> edits = const <EditResult>[]})
@@ -226,6 +243,8 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   final SourceSpan sourceSpan;
   @override
   final String message;
+  @override
+  final LintSeverity? severity;
   @override
   final String? correction;
   @override
@@ -240,7 +259,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
 
   @override
   String toString() {
-    return 'AnalysisResult.dart(rule: $rule, sourceSpan: $sourceSpan, message: $message, correction: $correction, highlightedSpan: $highlightedSpan, edits: $edits)';
+    return 'AnalysisResult.dart(rule: $rule, sourceSpan: $sourceSpan, message: $message, severity: $severity, correction: $correction, highlightedSpan: $highlightedSpan, edits: $edits)';
   }
 
   @override
@@ -252,6 +271,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
             const DeepCollectionEquality()
                 .equals(other.sourceSpan, sourceSpan) &&
             const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.severity, severity) &&
             const DeepCollectionEquality()
                 .equals(other.correction, correction) &&
             const DeepCollectionEquality()
@@ -265,6 +285,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
       const DeepCollectionEquality().hash(rule),
       const DeepCollectionEquality().hash(sourceSpan),
       const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(severity),
       const DeepCollectionEquality().hash(correction),
       const DeepCollectionEquality().hash(highlightedSpan),
       const DeepCollectionEquality().hash(_edits));
@@ -282,12 +303,14 @@ class _$DartAnalysisResult extends DartAnalysisResult {
             BaseRule rule,
             SourceSpan sourceSpan,
             String message,
+            LintSeverity? severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)
         dart,
   }) {
-    return dart(rule, sourceSpan, message, correction, highlightedSpan, edits);
+    return dart(rule, sourceSpan, message, severity, correction,
+        highlightedSpan, edits);
   }
 
   @override
@@ -297,13 +320,14 @@ class _$DartAnalysisResult extends DartAnalysisResult {
             BaseRule rule,
             SourceSpan sourceSpan,
             String message,
+            LintSeverity? severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)?
         dart,
   }) {
-    return dart?.call(
-        rule, sourceSpan, message, correction, highlightedSpan, edits);
+    return dart?.call(rule, sourceSpan, message, severity, correction,
+        highlightedSpan, edits);
   }
 
   @override
@@ -313,6 +337,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
             BaseRule rule,
             SourceSpan sourceSpan,
             String message,
+            LintSeverity? severity,
             String? correction,
             SourceSpan? highlightedSpan,
             List<EditResult> edits)?
@@ -320,8 +345,8 @@ class _$DartAnalysisResult extends DartAnalysisResult {
     required TResult orElse(),
   }) {
     if (dart != null) {
-      return dart(
-          rule, sourceSpan, message, correction, highlightedSpan, edits);
+      return dart(rule, sourceSpan, message, severity, correction,
+          highlightedSpan, edits);
     }
     return orElse();
   }
@@ -360,6 +385,7 @@ abstract class DartAnalysisResult extends AnalysisResult {
       {required final BaseRule rule,
       required final SourceSpan sourceSpan,
       required final String message,
+      final LintSeverity? severity,
       final String? correction,
       final SourceSpan? highlightedSpan,
       final List<EditResult> edits}) = _$DartAnalysisResult;
@@ -371,6 +397,8 @@ abstract class DartAnalysisResult extends AnalysisResult {
   SourceSpan get sourceSpan;
   @override
   String get message;
+  @override
+  LintSeverity? get severity;
   @override
   String? get correction;
   @override

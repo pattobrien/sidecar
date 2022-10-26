@@ -30,7 +30,7 @@ mixin _$AnalysisConfiguration {
             String id,
             String packageName,
             SourceSpan lintNameSpan,
-            LintRuleType? severity,
+            LintSeverity? severity,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -53,7 +53,7 @@ mixin _$AnalysisConfiguration {
             String id,
             String packageName,
             SourceSpan lintNameSpan,
-            LintRuleType? severity,
+            LintSeverity? severity,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -76,7 +76,7 @@ mixin _$AnalysisConfiguration {
             String id,
             String packageName,
             SourceSpan lintNameSpan,
-            LintRuleType? severity,
+            LintSeverity? severity,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -197,7 +197,7 @@ abstract class _$$LintConfigurationCopyWith<$Res>
       {String id,
       String packageName,
       SourceSpan lintNameSpan,
-      LintRuleType? severity,
+      LintSeverity? severity,
       List<Glob>? includes,
       YamlMap? configuration,
       bool? enabled,
@@ -242,7 +242,7 @@ class __$$LintConfigurationCopyWithImpl<$Res>
       severity: severity == freezed
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
-              as LintRuleType?,
+              as LintSeverity?,
       includes: includes == freezed
           ? _value._includes
           : includes // ignore: cast_nullable_to_non_nullable
@@ -287,7 +287,7 @@ class _$LintConfiguration extends LintConfiguration {
   @override
   final SourceSpan lintNameSpan;
   @override
-  final LintRuleType? severity;
+  final LintSeverity? severity;
   final List<Glob>? _includes;
   @override
   List<Glob>? get includes {
@@ -357,7 +357,7 @@ class _$LintConfiguration extends LintConfiguration {
             String id,
             String packageName,
             SourceSpan lintNameSpan,
-            LintRuleType? severity,
+            LintSeverity? severity,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -384,7 +384,7 @@ class _$LintConfiguration extends LintConfiguration {
             String id,
             String packageName,
             SourceSpan lintNameSpan,
-            LintRuleType? severity,
+            LintSeverity? severity,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -411,7 +411,7 @@ class _$LintConfiguration extends LintConfiguration {
             String id,
             String packageName,
             SourceSpan lintNameSpan,
-            LintRuleType? severity,
+            LintSeverity? severity,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -472,7 +472,7 @@ abstract class LintConfiguration extends AnalysisConfiguration {
       {required final String id,
       required final String packageName,
       required final SourceSpan lintNameSpan,
-      final LintRuleType? severity,
+      final LintSeverity? severity,
       final List<Glob>? includes,
       final YamlMap? configuration,
       final bool? enabled,
@@ -485,7 +485,7 @@ abstract class LintConfiguration extends AnalysisConfiguration {
   String get packageName;
   @override
   SourceSpan get lintNameSpan;
-  LintRuleType? get severity;
+  LintSeverity? get severity;
   @override
   List<Glob>? get includes;
   @override
@@ -661,7 +661,7 @@ class _$AssistConfiguration extends AssistConfiguration {
             String id,
             String packageName,
             SourceSpan lintNameSpan,
-            LintRuleType? severity,
+            LintSeverity? severity,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -688,7 +688,7 @@ class _$AssistConfiguration extends AssistConfiguration {
             String id,
             String packageName,
             SourceSpan lintNameSpan,
-            LintRuleType? severity,
+            LintSeverity? severity,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
@@ -715,7 +715,7 @@ class _$AssistConfiguration extends AssistConfiguration {
             String id,
             String packageName,
             SourceSpan lintNameSpan,
-            LintRuleType? severity,
+            LintSeverity? severity,
             List<Glob>? includes,
             YamlMap? configuration,
             bool? enabled,
