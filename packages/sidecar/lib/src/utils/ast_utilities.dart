@@ -61,7 +61,7 @@ extension AstNodeX on AstNode {
   }
 
   DartAnalysisResult toDartAnalysisResult(
-    SidecarBase rule, {
+    BaseRule rule, {
     required ResolvedUnitResult unit,
     required String message,
     String? correction,

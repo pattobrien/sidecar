@@ -32,7 +32,7 @@ final assistRulesForFileProvider =
 );
 
 final _activatedRulesProvider =
-    Provider.family<List<SidecarBase>, ActiveContextRoot>(
+    Provider.family<List<BaseRule>, ActiveContextRoot>(
   (ref, root) {
     final context = ref.watch(activeContextForRootProvider(root));
     final ruleConstructors = ref.watch(ruleConstructorProvider);
@@ -53,7 +53,7 @@ final _activatedRulesProvider =
 );
 
 /// Filter rules based on globs defined in project configuration
-final _filteredRulesProvider = Provider.family<List<SidecarBase>, AnalyzedFile>(
+final _filteredRulesProvider = Provider.family<List<BaseRule>, AnalyzedFile>(
   (ref, analyzedFile) {
     final allRules = ref.watch(_activatedRulesProvider(analyzedFile.root));
     final context = ref.watch(activeContextsProvider).contextFor(analyzedFile)!;
@@ -74,7 +74,7 @@ final _filteredRulesProvider = Provider.family<List<SidecarBase>, AnalyzedFile>(
 
 bool _isPathIncludedForRule({
   required AnalyzedFile file,
-  required SidecarBase rule,
+  required BaseRule rule,
   required ProjectConfiguration projectConfiguration,
 }) {
   final relativePath = p.relative(file.path, from: file.root.root.path);

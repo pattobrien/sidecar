@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnalysisResult {
-  SidecarBase get rule => throw _privateConstructorUsedError;
+  BaseRule get rule => throw _privateConstructorUsedError;
   SourceSpan get sourceSpan => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   String? get correction => throw _privateConstructorUsedError;
@@ -25,15 +25,7 @@ mixin _$AnalysisResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)
-        generic,
-    required TResult Function(
-            SidecarBase rule,
+            BaseRule rule,
             SourceSpan sourceSpan,
             String message,
             String? correction,
@@ -45,15 +37,7 @@ mixin _$AnalysisResult {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)?
-        generic,
-    TResult Function(
-            SidecarBase rule,
+            BaseRule rule,
             SourceSpan sourceSpan,
             String message,
             String? correction,
@@ -65,15 +49,7 @@ mixin _$AnalysisResult {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)?
-        generic,
-    TResult Function(
-            SidecarBase rule,
+            BaseRule rule,
             SourceSpan sourceSpan,
             String message,
             String? correction,
@@ -85,19 +61,16 @@ mixin _$AnalysisResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(GenericAnalysisResult value) generic,
     required TResult Function(DartAnalysisResult value) dart,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GenericAnalysisResult value)? generic,
     TResult Function(DartAnalysisResult value)? dart,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(GenericAnalysisResult value)? generic,
     TResult Function(DartAnalysisResult value)? dart,
     required TResult orElse(),
   }) =>
@@ -114,7 +87,7 @@ abstract class $AnalysisResultCopyWith<$Res> {
           AnalysisResult value, $Res Function(AnalysisResult) then) =
       _$AnalysisResultCopyWithImpl<$Res>;
   $Res call(
-      {SidecarBase rule,
+      {BaseRule rule,
       SourceSpan sourceSpan,
       String message,
       String? correction,
@@ -144,7 +117,7 @@ class _$AnalysisResultCopyWithImpl<$Res>
       rule: rule == freezed
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
-              as SidecarBase,
+              as BaseRule,
       sourceSpan: sourceSpan == freezed
           ? _value.sourceSpan
           : sourceSpan // ignore: cast_nullable_to_non_nullable
@@ -170,275 +143,6 @@ class _$AnalysisResultCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$$GenericAnalysisResultCopyWith<$Res>
-    implements $AnalysisResultCopyWith<$Res> {
-  factory _$$GenericAnalysisResultCopyWith(_$GenericAnalysisResult value,
-          $Res Function(_$GenericAnalysisResult) then) =
-      __$$GenericAnalysisResultCopyWithImpl<$Res>;
-  @override
-  $Res call(
-      {SidecarBase rule,
-      SourceSpan sourceSpan,
-      String message,
-      String? correction,
-      SourceSpan? highlightedSpan,
-      List<EditResult> edits});
-}
-
-/// @nodoc
-class __$$GenericAnalysisResultCopyWithImpl<$Res>
-    extends _$AnalysisResultCopyWithImpl<$Res>
-    implements _$$GenericAnalysisResultCopyWith<$Res> {
-  __$$GenericAnalysisResultCopyWithImpl(_$GenericAnalysisResult _value,
-      $Res Function(_$GenericAnalysisResult) _then)
-      : super(_value, (v) => _then(v as _$GenericAnalysisResult));
-
-  @override
-  _$GenericAnalysisResult get _value => super._value as _$GenericAnalysisResult;
-
-  @override
-  $Res call({
-    Object? rule = freezed,
-    Object? sourceSpan = freezed,
-    Object? message = freezed,
-    Object? correction = freezed,
-    Object? highlightedSpan = freezed,
-    Object? edits = freezed,
-  }) {
-    return _then(_$GenericAnalysisResult(
-      rule: rule == freezed
-          ? _value.rule
-          : rule // ignore: cast_nullable_to_non_nullable
-              as SidecarBase,
-      sourceSpan: sourceSpan == freezed
-          ? _value.sourceSpan
-          : sourceSpan // ignore: cast_nullable_to_non_nullable
-              as SourceSpan,
-      message: message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      correction: correction == freezed
-          ? _value.correction
-          : correction // ignore: cast_nullable_to_non_nullable
-              as String?,
-      highlightedSpan: highlightedSpan == freezed
-          ? _value.highlightedSpan
-          : highlightedSpan // ignore: cast_nullable_to_non_nullable
-              as SourceSpan?,
-      edits: edits == freezed
-          ? _value._edits
-          : edits // ignore: cast_nullable_to_non_nullable
-              as List<EditResult>,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$GenericAnalysisResult extends GenericAnalysisResult {
-  const _$GenericAnalysisResult(
-      {required this.rule,
-      required this.sourceSpan,
-      required this.message,
-      this.correction,
-      this.highlightedSpan,
-      final List<EditResult> edits = const <EditResult>[]})
-      : _edits = edits,
-        super._();
-
-  @override
-  final SidecarBase rule;
-  @override
-  final SourceSpan sourceSpan;
-  @override
-  final String message;
-  @override
-  final String? correction;
-  @override
-  final SourceSpan? highlightedSpan;
-  final List<EditResult> _edits;
-  @override
-  @JsonKey()
-  List<EditResult> get edits {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_edits);
-  }
-
-  @override
-  String toString() {
-    return 'AnalysisResult.generic(rule: $rule, sourceSpan: $sourceSpan, message: $message, correction: $correction, highlightedSpan: $highlightedSpan, edits: $edits)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GenericAnalysisResult &&
-            const DeepCollectionEquality().equals(other.rule, rule) &&
-            const DeepCollectionEquality()
-                .equals(other.sourceSpan, sourceSpan) &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality()
-                .equals(other.correction, correction) &&
-            const DeepCollectionEquality()
-                .equals(other.highlightedSpan, highlightedSpan) &&
-            const DeepCollectionEquality().equals(other._edits, _edits));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(rule),
-      const DeepCollectionEquality().hash(sourceSpan),
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(correction),
-      const DeepCollectionEquality().hash(highlightedSpan),
-      const DeepCollectionEquality().hash(_edits));
-
-  @JsonKey(ignore: true)
-  @override
-  _$$GenericAnalysisResultCopyWith<_$GenericAnalysisResult> get copyWith =>
-      __$$GenericAnalysisResultCopyWithImpl<_$GenericAnalysisResult>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)
-        generic,
-    required TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)
-        dart,
-  }) {
-    return generic(
-        rule, sourceSpan, message, correction, highlightedSpan, edits);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)?
-        generic,
-    TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)?
-        dart,
-  }) {
-    return generic?.call(
-        rule, sourceSpan, message, correction, highlightedSpan, edits);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)?
-        generic,
-    TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)?
-        dart,
-    required TResult orElse(),
-  }) {
-    if (generic != null) {
-      return generic(
-          rule, sourceSpan, message, correction, highlightedSpan, edits);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GenericAnalysisResult value) generic,
-    required TResult Function(DartAnalysisResult value) dart,
-  }) {
-    return generic(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GenericAnalysisResult value)? generic,
-    TResult Function(DartAnalysisResult value)? dart,
-  }) {
-    return generic?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GenericAnalysisResult value)? generic,
-    TResult Function(DartAnalysisResult value)? dart,
-    required TResult orElse(),
-  }) {
-    if (generic != null) {
-      return generic(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class GenericAnalysisResult extends AnalysisResult {
-  const factory GenericAnalysisResult(
-      {required final SidecarBase rule,
-      required final SourceSpan sourceSpan,
-      required final String message,
-      final String? correction,
-      final SourceSpan? highlightedSpan,
-      final List<EditResult> edits}) = _$GenericAnalysisResult;
-  const GenericAnalysisResult._() : super._();
-
-  @override
-  SidecarBase get rule;
-  @override
-  SourceSpan get sourceSpan;
-  @override
-  String get message;
-  @override
-  String? get correction;
-  @override
-  SourceSpan? get highlightedSpan;
-  @override
-  List<EditResult> get edits;
-  @override
-  @JsonKey(ignore: true)
-  _$$GenericAnalysisResultCopyWith<_$GenericAnalysisResult> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
 abstract class _$$DartAnalysisResultCopyWith<$Res>
     implements $AnalysisResultCopyWith<$Res> {
   factory _$$DartAnalysisResultCopyWith(_$DartAnalysisResult value,
@@ -446,7 +150,7 @@ abstract class _$$DartAnalysisResultCopyWith<$Res>
       __$$DartAnalysisResultCopyWithImpl<$Res>;
   @override
   $Res call(
-      {SidecarBase rule,
+      {BaseRule rule,
       SourceSpan sourceSpan,
       String message,
       String? correction,
@@ -478,7 +182,7 @@ class __$$DartAnalysisResultCopyWithImpl<$Res>
       rule: rule == freezed
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
-              as SidecarBase,
+              as BaseRule,
       sourceSpan: sourceSpan == freezed
           ? _value.sourceSpan
           : sourceSpan // ignore: cast_nullable_to_non_nullable
@@ -517,7 +221,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
         super._();
 
   @override
-  final SidecarBase rule;
+  final BaseRule rule;
   @override
   final SourceSpan sourceSpan;
   @override
@@ -575,15 +279,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)
-        generic,
-    required TResult Function(
-            SidecarBase rule,
+            BaseRule rule,
             SourceSpan sourceSpan,
             String message,
             String? correction,
@@ -598,15 +294,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)?
-        generic,
-    TResult Function(
-            SidecarBase rule,
+            BaseRule rule,
             SourceSpan sourceSpan,
             String message,
             String? correction,
@@ -622,15 +310,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            SidecarBase rule,
-            SourceSpan sourceSpan,
-            String message,
-            String? correction,
-            SourceSpan? highlightedSpan,
-            List<EditResult> edits)?
-        generic,
-    TResult Function(
-            SidecarBase rule,
+            BaseRule rule,
             SourceSpan sourceSpan,
             String message,
             String? correction,
@@ -649,7 +329,6 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(GenericAnalysisResult value) generic,
     required TResult Function(DartAnalysisResult value) dart,
   }) {
     return dart(this);
@@ -658,7 +337,6 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GenericAnalysisResult value)? generic,
     TResult Function(DartAnalysisResult value)? dart,
   }) {
     return dart?.call(this);
@@ -667,7 +345,6 @@ class _$DartAnalysisResult extends DartAnalysisResult {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(GenericAnalysisResult value)? generic,
     TResult Function(DartAnalysisResult value)? dart,
     required TResult orElse(),
   }) {
@@ -680,7 +357,7 @@ class _$DartAnalysisResult extends DartAnalysisResult {
 
 abstract class DartAnalysisResult extends AnalysisResult {
   const factory DartAnalysisResult(
-      {required final SidecarBase rule,
+      {required final BaseRule rule,
       required final SourceSpan sourceSpan,
       required final String message,
       final String? correction,
@@ -689,7 +366,7 @@ abstract class DartAnalysisResult extends AnalysisResult {
   const DartAnalysisResult._() : super._();
 
   @override
-  SidecarBase get rule;
+  BaseRule get rule;
   @override
   SourceSpan get sourceSpan;
   @override

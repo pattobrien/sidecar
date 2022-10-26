@@ -1,7 +1,7 @@
-import 'sidecar_base.dart';
+import 'base_rule.dart';
 
 typedef LintPackageId = String;
 
 typedef MapDecoder = Object Function(Map json);
 
-typedef SidecarBaseConstructor = SidecarBase Function();
+typedef SidecarBaseConstructor = BaseRule Function();

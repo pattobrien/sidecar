@@ -5,16 +5,16 @@ import 'package:analyzer/dart/ast/visitor.dart';
 
 import '../analyzer/results/results.dart';
 import '../utils/utils.dart';
-import 'sidecar_base.dart';
+import 'base_rule.dart';
 
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
   final List<DartAnalysisResult> nodes = [];
-  late SidecarBase rule;
+  late BaseRule rule;
   late ResolvedUnitResult unit;
   late List<SidecarAnnotatedNode> annotatedNodes;
 
   void initializeVisitor(
-    SidecarBase rule,
+    BaseRule rule,
     ResolvedUnitResult unit, [
     List<SidecarAnnotatedNode> annotatedNodes = const [],
   ]) {

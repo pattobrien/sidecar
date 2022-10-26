@@ -77,7 +77,7 @@ class ProjectConfiguration {
 
   static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(
     YamlMap? map, {
-    required SidecarBaseType type,
+    required RuleType type,
   }) {
     try {
       return map?.nodes.map((dynamic key, dynamic value) {
@@ -107,13 +107,13 @@ class ProjectConfiguration {
   static Map<PackageName, AssistPackageConfiguration>? _parseAssistPackages(
     YamlMap? map,
   ) =>
-      _parsePackages(map, type: SidecarBaseType.assist)?.map(
+      _parsePackages(map, type: RuleType.assist)?.map(
           (key, value) => MapEntry(key, value as AssistPackageConfiguration));
 
   static Map<PackageName, LintPackageConfiguration>? _parseLintPackages(
     YamlMap? map,
   ) =>
-      _parsePackages(map, type: SidecarBaseType.lint)?.map(
+      _parsePackages(map, type: RuleType.lint)?.map(
           (key, value) => MapEntry(key, value as LintPackageConfiguration));
 
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
@@ -127,7 +127,7 @@ class ProjectConfiguration {
   bool includes(String relativePath) =>
       includeGlobs.any((glob) => glob.matches(relativePath));
 
-  AnalysisConfiguration? getConfigurationForRule(SidecarBase rule) {
+  AnalysisConfiguration? getConfigurationForRule(BaseRule rule) {
     if (rule is AssistRule) {
       return assistPackages?[rule.packageName]?.assists[rule.code];
     } else if (rule is LintRule) {

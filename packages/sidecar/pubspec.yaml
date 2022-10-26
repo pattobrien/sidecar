@@ -1,6 +1,6 @@
 name: sidecar
 description: Core package for the sidecar ecosystem.
-version: 0.1.0-dev.1
+version: 0.1.0-dev.2
 repository: https://github.com/pattobrien/sidecar/
 homepage: https://github.com/pattobrien/sidecar/
 

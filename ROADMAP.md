@@ -38,7 +38,6 @@ Benchmarks against Linter package
 ## Out of Scope Tasks
 
 - [ ] Ignore statments
-- [ ] Arb File Parse / Builder
 - [ ] Import inheritence
 - [ ] Multi-Import inheritence
 - [ ] Automated Lint URL documentation

@@ -12,7 +12,7 @@ class RuleInitializationService {
   void _log(String msg) =>
       ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
 
-  List<SidecarBase> initializeRules(
+  List<BaseRule> initializeRules(
     List<SidecarAnnotatedNode> annotatedNodes,
     ProjectConfiguration projectConfiguration,
     List<SidecarBaseConstructor> ruleConstructors,
@@ -22,7 +22,7 @@ class RuleInitializationService {
     _log(
         'initializing ${projectConfiguration.assistPackages?.length ?? 0} assist packages');
     return ruleConstructors
-        .map<SidecarBase?>((ruleConstructor) {
+        .map<BaseRule?>((ruleConstructor) {
           final rule = ruleConstructor();
           final ruleConfig = projectConfiguration.getConfigurationForRule(rule);
 
@@ -44,7 +44,7 @@ class RuleInitializationService {
             return rule;
           }
         })
-        .whereType<SidecarBase>()
+        .whereType<BaseRule>()
         .toList();
   }
 }

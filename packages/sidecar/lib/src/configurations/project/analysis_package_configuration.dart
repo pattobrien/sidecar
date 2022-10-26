@@ -14,12 +14,12 @@ part 'analysis_package_configuration.freezed.dart';
 class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
   factory AnalysisPackageConfiguration.fromYamlMap(
     YamlMap yamlMap, {
-    required SidecarBaseType type,
+    required RuleType type,
     required String packageName,
     required SourceSpan packageNameSpan,
   }) {
     switch (type) {
-      case SidecarBaseType.lint:
+      case RuleType.lint:
         return AnalysisPackageConfiguration.lint(
           packageNameSpan: packageNameSpan,
           packageName: packageName,
@@ -91,7 +91,7 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
             );
           }),
         );
-      case SidecarBaseType.assist:
+      case RuleType.assist:
         return AnalysisPackageConfiguration.assist(
           packageNameSpan: packageNameSpan,
           packageName: packageName,

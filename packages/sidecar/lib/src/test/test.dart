@@ -3,7 +3,7 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
-import '../rules/sidecar_base.dart';
+import '../rules/base_rule.dart';
 
 String src = """
   Dynamism d = new Dynamism(expert:true);
@@ -15,7 +15,7 @@ main(){
 
 CompilationUnit testUnit(
   LintTestVisitor visitor,
-  SidecarBase rule,
+  BaseRule rule,
   String content,
 ) {
   final ast = parseString(content: content);
@@ -24,7 +24,7 @@ CompilationUnit testUnit(
 
 List<AstNode> testSidecarVisitor(
   LintTestVisitor visitor,
-  SidecarBase rule,
+  BaseRule rule,
   String content,
   // List<AnalysisResult> expectedResults,
 ) {

@@ -17,9 +17,9 @@ import '../analyzer/results/results.dart';
 import '../configurations/builders/builders.dart';
 import 'typedefs.dart';
 
-enum SidecarBaseType { lint, assist }
+enum RuleType { lint, assist }
 
-abstract class SidecarBase {
+abstract class BaseRule {
   String get code;
   LintPackageId get packageName;
 

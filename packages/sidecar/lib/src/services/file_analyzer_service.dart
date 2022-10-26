@@ -28,7 +28,7 @@ class FileAnalyzerService {
 
   Future<List<AnalysisResult>> computeAnalysisResults({
     required AnalyzedFile file,
-    required List<SidecarBase> activatedRules,
+    required List<BaseRule> activatedRules,
     required ResolvedUnitResult? unitResult,
   }) async {
     //TODO: allow analysis of other file extensions

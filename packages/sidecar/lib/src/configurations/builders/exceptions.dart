@@ -38,7 +38,7 @@ class SidecarFieldException implements SidecarConfigException {
   final String? _message;
   final String? _correction;
 
-  SidecarBase get rule => SidecarFieldLintRule();
+  BaseRule get rule => SidecarFieldLintRule();
 
   @override
   SourceSpan get sourceSpan => _packageNode.span;
@@ -82,7 +82,7 @@ class SidecarLintException implements SidecarConfigException {
   final String? _message;
   final String? _correction;
 
-  SidecarBase get rule => SidecarLintRule();
+  BaseRule get rule => SidecarLintRule();
 
   @override
   SourceSpan get sourceSpan => _packageNode.span;
@@ -125,7 +125,7 @@ class SidecarLintPackageException implements SidecarConfigException {
 
   final YamlScalar _packageNode;
 
-  SidecarBase get rule => SidecarFieldLintRule();
+  BaseRule get rule => SidecarFieldLintRule();
 
   @override
   SourceSpan get sourceSpan => _packageNode.span;

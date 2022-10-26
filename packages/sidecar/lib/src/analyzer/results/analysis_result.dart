@@ -12,7 +12,7 @@ part 'analysis_result.freezed.dart';
 @freezed
 class AnalysisResult with _$AnalysisResult {
   const factory AnalysisResult.dart({
-    required SidecarBase rule,
+    required BaseRule rule,
     required SourceSpan sourceSpan,
     required String message,
     String? correction,

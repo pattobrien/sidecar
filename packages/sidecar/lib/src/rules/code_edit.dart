@@ -1,3 +1,3 @@
-import 'sidecar_base.dart';
+import 'base_rule.dart';
 
-abstract class AssistRule extends SidecarBase {}
+abstract class AssistRule extends BaseRule {}

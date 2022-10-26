@@ -11,6 +11,7 @@ import '../analyzer/context/context.dart';
 import '../analyzer/server/log_delegate.dart';
 import '../configurations/project/project_configuration.dart';
 import '../protocol/constants/constants.dart';
+import '../protocol/constants/default_sidecar_yaml.dart';
 import '../protocol/protocol.dart';
 import '../utils/utils.dart';
 
@@ -55,6 +56,17 @@ class ActiveProjectService {
     }
   }
 
+  Future<bool> createDefaultSidecarYaml(Uri root) async {
+    const contents = defaultSidecarContent;
+    final file = File(p.join(root.path, kSidecarYaml));
+    if (file.existsSync()) {
+      return false;
+    } else {
+      await file.writeAsString(contents);
+    }
+    return true;
+  }
+
   // is this needed for any external functions ?
   PackageConfig _getPackageConfig(Uri root) {
     final path = p.join(root.toFilePath(), '.dart_tool', 'package_config.json');
@@ -91,7 +103,7 @@ class ActiveProjectService {
     _log('_parseProjectConfiguration started');
     // final file = contextRoot.optionsFile;
     final rootPath = contextRoot.root.path;
-    final sidecarYamlPath = p.join(rootPath, kSidecarOptionsYaml);
+    final sidecarYamlPath = p.join(rootPath, kSidecarYaml);
     final sidecarYamlFile = File(sidecarYamlPath);
     if (!sidecarYamlFile.existsSync()) return null;
     // if (file == null) return null;

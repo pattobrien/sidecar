@@ -151,3 +151,40 @@ In order for the community to really flourish, the APIs behind defining LintRule
 
 - TODO: Roadmap
 - TODO: Contributions / ways others can help by giving feedback on their use cases
+
+
+## Feature Overview
+
+### creating lint rules
+
+- define a default severity for a lint
+- documentation URLs in lint IDE window
+- SidecarAstVisitor for simpler lint reporting (AstNodes and Tokens)
+
+### creating code edits
+
+- TODO: quick fixes for lints
+- TODO: code assists
+- TODO: code completion
+
+### ```sidecar.yaml``` configuration
+
+- TODO: define package or lint-specific includes paths
+- TODO: rule configurations and configuration errors
+- TODO: override a rule's default severity
+
+
+### cli
+
+- output report of entire codebase
+- TODO: output different formats
+
+### benchmarks and testing
+
+- TODO: Register visitors for better analysis performance
+- TODO: lint unit test tools
+- TODO: how can we benchmark against Dart official analysis server?
+### extras
+- TODO: ignore statements
+- TODO: Import inheritance
+- TODO: Multi-Import inheritence

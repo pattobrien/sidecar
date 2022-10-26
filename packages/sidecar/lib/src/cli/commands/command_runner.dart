@@ -3,6 +3,7 @@ import 'package:args/command_runner.dart';
 import 'analyze/analyze.dart';
 import 'exit_codes.dart';
 import 'generate/generate.dart';
+import 'init/init.dart';
 
 const kExecutableName = 'Sidecar CLI';
 
@@ -13,6 +14,7 @@ class PlatformCommandRunner extends CommandRunner<int> {
     // All CLI commands are listed below
     addCommand(AnalyzeCommand());
     addCommand(GenerateCommand());
+    addCommand(InitCommand());
   }
 
   @override
