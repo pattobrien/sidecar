@@ -12,7 +12,7 @@ import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
-import 'sidecar_type.dart';
+import '../protocol/sidecar_type.dart';
 
 class PackageGenerator {
   PackageGenerator();

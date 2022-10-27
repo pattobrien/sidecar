@@ -171,9 +171,10 @@ In order for the community to really flourish, the APIs behind defining LintRule
 
 ### ```sidecar.yaml``` configuration
 
-- TODO: define package or lint-specific includes paths
+- define package or lint-specific includes paths
+- explicitly enable or disable a lint
+- override a rule's default severity
 - TODO: rule configurations and configuration errors
-- TODO: override a rule's default severity
 
 
 ### cli

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 
-import '../../../packages/package_generator.dart';
+import '../../../services/package_generator.dart';
 import '../exit_codes.dart';
 
 class GenerateCommand extends Command<int> {
