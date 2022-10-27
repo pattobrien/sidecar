@@ -194,7 +194,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required List<String> paths,
   }) async {
     final allContexts = ref.read(activeContextsProvider);
-    ref.read(logDelegateProvider).sidecarMessage(
+    ref.read(logDelegateProvider).sidecarVerboseMessage(
         'CHANGEDFILES1 = ${paths.length} ${paths.toList().toString()}');
     if (allContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
