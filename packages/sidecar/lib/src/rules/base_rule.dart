@@ -8,20 +8,16 @@ import '../analyzer/results/results.dart';
 import '../configurations/configurations.dart';
 import 'typedefs.dart';
 
+@Deprecated('switch to type-checking BaseRule type (e.g. LintRule, AssistRule)')
 enum RuleType { lint, assist }
 
 abstract class BaseRule {
   String get code;
   LintPackageId get packageName;
-
   List<Glob>? get includes => null;
   MapDecoder? get jsonDecoder => null;
 
-  // @mustCallSuper
-  // Object get configuration => _configuration;
-
   late Ref _ref;
-  // late Object _configuration;
   late ActiveContextRoot _activeRoot;
 
   @internal
