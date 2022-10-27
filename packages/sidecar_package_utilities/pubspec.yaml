@@ -3,6 +3,7 @@ description: Utilities for creating sidecar packages.
 version: 0.1.0-dev.5
 repository: https://www.github.com/pattobrien/sidecar
 homepage: https://www.github.com/pattobrien/sidecar
+issue_tracker: https://github.com/pattobrien/sidecar/issues
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

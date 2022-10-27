@@ -17,8 +17,8 @@ class MyApp extends ConsumerWidget {
         primaryColor: Colors.amber,
         textTheme: TextTheme(
           bodyText1: TextStyle(
-            fontFamily: '',
-          ),
+              // color: Color(123),
+              ),
         ),
       ),
     );
