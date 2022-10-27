@@ -10,7 +10,9 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
+import 'package:watcher/watcher.dart';
 
+import '../../../sidecar.dart';
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
 import '../../utils/logger/logger.dart';
@@ -151,7 +153,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         }
         final affected = await analysisContext.applyPendingFileChanges();
 
-        // custom implementation
+        // sidecar custom implementation to analyze all non-dart files
         final nonDartPathsInContext = paths
             .where((e) => analysisContext.contextRoot.isAnalyzed(e))
             .where((path) => p.extension(path) != '.dart');
@@ -162,6 +164,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
       });
     }
+  }
+
+  bool _isSaved(String path) {
+    final savedFile = resourceProvider.baseProvider.getFile(path);
+    final overlayFile = resourceProvider.getFile(path);
+    return savedFile.readAsStringSync() == overlayFile.readAsStringSync();
   }
 
   Future<void> _forAnalysisContexts(

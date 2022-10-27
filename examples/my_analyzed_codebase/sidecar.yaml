@@ -21,7 +21,9 @@ lints:
       severity: error
       enabled: true
     avoid_sized_box_height_width_literals:
+      severity: error
     avoid_text_style_literal:
+      severity: error
     avoid_border_radius_literal:
     avoid_box_shadow_literal:
     avoid_edge_insets_literal:
