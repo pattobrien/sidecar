@@ -6,22 +6,28 @@ lints:
     # use_full_hex_values_for_flutter_colors:
     use_key_in_widget_constructors:
 
-  # l10n_lints:
-  #   avoid_string_literals:
-  #     enabled: true
-  #     configuration:
-  #       prefix: "AppLocalizations.of(context)"
+  l10n_lints:
+    avoid_string_literals:
+      severity: info
+      enabled: true
+      configuration:
+        prefix: "AppLocalizations.of(context)"
 
   auto_route_lints:
     create_new_page_widget:
 
   design_system_lints:
     # avoid_color_literal:
-    # severity: error
     avoid_icon_literal:
-    # enabled: true
+      severity: info
+      enabled: true
     avoid_sized_box_height_width_literals:
+      severity: info
     avoid_text_style_literal:
+      severity: info
+      enabled: true
+      includes:
+        - "lib/**"
     avoid_border_radius_literal:
     avoid_box_shadow_literal:
     avoid_edge_insets_literal:

@@ -21,19 +21,20 @@ final quickFixForRequestProvider =
         (element) => element.isWithinOffset(request.file.path, request.offset));
     ref.read(logDelegateProvider).sidecarVerboseMessage(
         'RESULTS FOR OFFSET: ${analysisResultsForOffset.length}');
-    return Future.wait(analysisResultsForOffset.map((e) async {
-      final edits =
-          await fileService.calculateEditResultsForAnalysisResult(context, e);
-      ref
-          .read(logDelegateProvider)
-          .sidecarVerboseMessage('RESULTS FOR OFFSET - EDITS: ${edits.length}');
-      return AnalysisErrorFixes(e.toAnalysisError()!,
-          fixes: edits.map((e) {
-            ref.read(logDelegateProvider).sidecarVerboseMessage(
-                'RESULTS FOR OFFSET - EDITS - SOURCE EDITS: ${e.sourceChanges.length}');
-            return e.toPrioritizedSourceChange();
-          }).toList());
-    }));
+    return [];
+    // return Future.wait(analysisResultsForOffset.map((e) async {
+    //   final edits =
+    //       await fileService.calculateEditResultsForAnalysisResult(context, e);
+    //   ref
+    //       .read(logDelegateProvider)
+    //       .sidecarVerboseMessage('RESULTS FOR OFFSET - EDITS: ${edits.length}');
+    //   return AnalysisErrorFixes(e.toAnalysisError()!,
+    //       fixes: edits.map((e) {
+    //         ref.read(logDelegateProvider).sidecarVerboseMessage(
+    //             'RESULTS FOR OFFSET - EDITS - SOURCE EDITS: ${e.sourceChanges.length}');
+    //         return e.toPrioritizedSourceChange();
+    //       }).toList());
+    // }));
   },
   name: 'quickFixForRequestProvider',
   dependencies: [
@@ -56,11 +57,12 @@ final analysisQuickFixResultsProvider =
 
     final results = ref.watch(analysisResultsForContextProvider(root));
 
-    final edits = await Future.wait(results.map((e) async {
-      return fileService.calculateEditResultsForAnalysisResult(context, e);
-    }));
+    // final edits = await Future.wait(results.map((e) async {
+    //   return fileService.calculateEditResultsForAnalysisResult(context, e);
+    // }));
 
-    return edits.expand((e) => e).toList();
+    // return edits.expand((e) => e).toList();
+    return [];
   },
   name: 'analysisQuickFixResultsProvider',
   dependencies: [

@@ -55,6 +55,7 @@ RulePackageConfiguration? parseLintPackage(String name, Uri root) {
       );
     });
   } catch (e, stackTrace) {
-    rethrow;
+    // do nothing
+    return null;
   }
 }

@@ -29,6 +29,8 @@ class RuleInitializationService {
 
           // rule was not included in yaml, so it shouldnt be initialized
           if (ruleConfig == null) return null;
+          // rule is marked as disabled
+          if (ruleConfig.enabled == false) return null;
 
           _log('activating ${rule.code}');
 

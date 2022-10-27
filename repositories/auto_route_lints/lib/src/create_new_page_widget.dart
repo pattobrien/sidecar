@@ -12,9 +12,9 @@ class CreateNewPageWidget extends AssistRule {
   @override
   String get packageName => kPackageId;
 
-  @override
-  CreateNewPageWidgetConfiguration get configuration =>
-      super.configuration as CreateNewPageWidgetConfiguration;
+  // @override
+  // CreateNewPageWidgetConfiguration get configuration =>
+  //     super.configuration as CreateNewPageWidgetConfiguration;
 
   @override
   CreateNewPageWidgetConfiguration Function(Map json) get jsonDecoder =>
@@ -23,35 +23,31 @@ class CreateNewPageWidget extends AssistRule {
   @override
   Future<List<EditResult>> computeSourceChanges(
     AnalysisSession session,
-    AnalysisResult result,
+    AnalysisSource source,
   ) async {
-    // prepare change builder
-    result as DartAnalysisResult;
     final unit =
-        await session.getResolvedUnit(result.path) as ResolvedUnitResult;
+        await session.getResolvedUnit(source.path) as ResolvedUnitResult;
     final changeBuilder = AutoRouteChangeBuilder(session: session);
 
-    final node = result.sourceSpan
-        .toAstNode(unit)
-        ?.thisOrAncestorOfType<ClassDeclaration>();
+    final node =
+        source.span.toAstNode(unit)?.thisOrAncestorOfType<ClassDeclaration>();
 
     final pageClass = node?.name2.value().toString();
 
     if (node == null || pageClass == null) return [];
 
-    final workspacePath = unit.session.analysisContext.contextRoot.root
-        .canonicalizePath(configuration.routePath);
+    // final workspacePath = unit.session.analysisContext.contextRoot.root
+    //     .canonicalizePath(configuration.routePath);
 
-    await changeBuilder.addAutoRouteFileEdit(workspacePath, (builder) {
-      builder.importLibrary(unit.uri);
-      builder.addRouteInsertion(null, (builder) {
-        builder.writeAdaptiveRoute(pageClass);
-      });
-    });
+    // await changeBuilder.addAutoRouteFileEdit(workspacePath, (builder) {
+    //   builder.importLibrary(unit.uri);
+    //   builder.addRouteInsertion(null, (builder) {
+    //     builder.writeAdaptiveRoute(pageClass);
+    //   });
+    // });
 
     return [
       EditResult(
-        analysisResult: result,
         message: 'Add new AdaptiveRoute',
         sourceChanges: changeBuilder.sourceChange.edits,
       )

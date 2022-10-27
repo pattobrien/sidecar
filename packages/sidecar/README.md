@@ -11,4 +11,4 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-Core package for the Sidecar ecosystem.
+Sidecar is an analyzer tool that provides more control over your IDE and developer experience.

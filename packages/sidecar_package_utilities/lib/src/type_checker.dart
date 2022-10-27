@@ -259,19 +259,19 @@ abstract class TypeChecker {
       );
 
   /// Returns `true` if the type of [element] can be assigned to this type.
-  bool isAssignableFrom(Element element) =>
+  bool isAssignableFrom(Element? element) =>
       isExactly(element) ||
       (element is ClassElement && element.allSupertypes.any(isExactlyType));
 
   /// Returns `true` if [staticType] can be assigned to this type.
-  bool isAssignableFromType(DartType staticType) =>
-      isAssignableFrom(staticType.element!);
+  bool isAssignableFromType(DartType? staticType) =>
+      isAssignableFrom(staticType?.element);
 
   /// Returns `true` if representing the exact same class as [element].
-  bool isExactly(Element element);
+  bool isExactly(Element? element);
 
   /// Returns `true` if representing the exact same type as [staticType].
-  bool isExactlyType(DartType staticType) => isExactly(staticType.element!);
+  bool isExactlyType(DartType? staticType) => isExactly(staticType?.element);
 
   /// Returns `true` if representing a super class of [element].
   ///
@@ -307,8 +307,8 @@ class _LibraryTypeChecker extends TypeChecker {
   const _LibraryTypeChecker(this._type) : super._();
 
   @override
-  bool isExactly(Element element) =>
-      element is ClassElement && element == _type.element;
+  bool isExactly(Element? element) =>
+      element != null && element is ClassElement && element == _type.element;
 
   @override
   String toString() => urlOfElement(_type.element!);
@@ -321,7 +321,8 @@ class _NamedChecker extends TypeChecker {
   final String packageName;
 
   @override
-  bool isExactly(Element element) {
+  bool isExactly(Element? element) {
+    if (element == null) return false;
     if (element.name != _name) return false;
 
     final elementUri = element.librarySource?.uri;
@@ -394,7 +395,8 @@ class _UriTypeChecker extends TypeChecker {
       (url is String ? url : normalizeUrl(url as Uri).toString());
 
   @override
-  bool isExactly(Element element) => hasSameUrl(urlOfElement(element));
+  bool isExactly(Element? element) =>
+      element != null && hasSameUrl(urlOfElement(element));
 
   @override
   String toString() => '$uri';
@@ -406,7 +408,8 @@ class _AnyChecker extends TypeChecker {
   const _AnyChecker(this._checkers) : super._();
 
   @override
-  bool isExactly(Element element) => _checkers.any((c) => c.isExactly(element));
+  bool isExactly(Element? element) =>
+      _checkers.any((c) => c.isExactly(element));
 }
 
 /// Exception thrown when [TypeChecker] fails to resolve a metadata annotation.

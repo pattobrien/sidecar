@@ -1,26 +1,30 @@
-import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
+import 'package:meta/meta.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/results/results.dart';
 import '../utils/utils.dart';
-import 'base_rule.dart';
+import 'analysis_source.dart';
+import 'lint_rule.dart';
 
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
-  final List<DartAnalysisResult> nodes = [];
-  late BaseRule rule;
+  final List<LintResult> lints = [];
+  late LintRule rule;
   late ResolvedUnitResult unit;
-  late List<SidecarAnnotatedNode> annotatedNodes;
+  // late final Ref _ref;
 
+  @internal
   void initializeVisitor(
-    BaseRule rule,
-    ResolvedUnitResult unit, [
-    List<SidecarAnnotatedNode> annotatedNodes = const [],
-  ]) {
-    this.unit = unit;
+    LintRule rule,
+    ResolvedUnitResult unit,
+    // Ref ref,
+  ) {
     this.rule = rule;
-    this.annotatedNodes = annotatedNodes;
+    this.unit = unit;
+    // _ref = ref;
   }
 
   void reportAstNode(
@@ -28,13 +32,17 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     required String message,
     String? correction,
   }) {
-    final result = DartAnalysisResult(
+    final result = LintResult(
       rule: rule,
-      sourceSpan: node.toSourceSpan(unit),
+      source: AnalysisSource(
+        path: unit.path,
+        span: node.toSourceSpan(unit),
+      ),
       message: message,
       correction: correction,
+      severity: rule.defaultSeverity,
     );
-    nodes.add(result);
+    lints.add(result);
   }
 
   void reportToken(
@@ -42,12 +50,16 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     required String message,
     String? correction,
   }) {
-    final result = DartAnalysisResult(
+    final result = LintResult(
       rule: rule,
-      sourceSpan: token.toSourceSpan(unit),
+      source: AnalysisSource(
+        path: unit.path,
+        span: token.toSourceSpan(unit),
+      ),
       message: message,
       correction: correction,
+      severity: rule.defaultSeverity,
     );
-    nodes.add(result);
+    lints.add(result);
   }
 }

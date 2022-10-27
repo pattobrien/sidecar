@@ -1,8 +1,9 @@
 name: sidecar
-description: Core package for the sidecar ecosystem.
+description: An analyzer tool that provides more control over your IDE and developer experience.
 version: 0.1.0-dev.2
 repository: https://github.com/pattobrien/sidecar/
 homepage: https://github.com/pattobrien/sidecar/
+issue_tracker: https://github.com/pattobrien/sidecar/issues
 
 environment:
   sdk: ">=2.17.0 <3.0.0"

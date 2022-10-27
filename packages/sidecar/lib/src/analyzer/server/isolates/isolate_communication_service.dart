@@ -21,6 +21,7 @@ class IsolateCommunicationService {
   final contentFiles = <String>{};
   final isolates = <IsolateDetails>[];
   final queuedRequests = <Request>[];
+  final isIsolateInitialized = <IsolateDetails, bool>{};
 
   final Ref ref;
 
@@ -43,6 +44,7 @@ class IsolateCommunicationService {
       onDone: () => handlePluginDone(isolate),
     );
     isolates.add(isolate);
+    isIsolateInitialized[isolate] = false;
   }
 
   void _addNewMessage(MultiIsolateMessage message) {
@@ -56,7 +58,8 @@ class IsolateCommunicationService {
 
   void dumpRequests() {
     _log('dumpRequests = ${queuedRequests.length}');
-    for (final request in queuedRequests..sort()) {
+    for (final request in queuedRequests
+      ..sort((a, b) => a.id.compareTo(b.id))) {
       _addNewMessage(MultiIsolateMessage(
         originalRequest: request,
         requests: _parseRequestType(request),
@@ -68,7 +71,9 @@ class IsolateCommunicationService {
   void handleServerRequest(
     Request request,
   ) {
-    final isIntialized = ref.read(middlemanPluginIsInitializedProvider);
+    // final isIntialized = ref.read(middlemanPluginIsInitializedProvider);
+    final isIntialized =
+        isIsolateInitialized.entries.every((entry) => entry.value == true);
     if (isIntialized) {
       _addNewMessage(MultiIsolateMessage(
         originalRequest: request,
@@ -130,40 +135,24 @@ class IsolateCommunicationService {
     // analysis.setSubscriptions
     // analysis.updateContent
     // analysis.setPriorityFiles
-    _log('_handlePluginInitialization');
     const uuid = Uuid();
 
     final setRootRequest =
         AnalysisSetContextRootsParams([isolate.activeRoot.toPluginContextRoot])
             .toRequest(uuid.v4());
-    _addNewMessage(MultiIsolateMessage(
-      originalRequest: setRootRequest,
-      requests: [
-        IsolateRequest(request: setRootRequest, root: isolate.activeRoot)
-      ],
-      initialTimestamp: DateTime.now(),
-    ));
-    dumpRequests();
-    // final updateContentMap = Map.fromEntries(contentFiles.map(
-    //   (e) => MapEntry(e, _getContentForFile(e)),
-    // ));
-    // final updateContentRequest =
-    //     AnalysisUpdateContentParams(updateContentMap).toRequest(uuid.v4());
-    // _addNewMessage(MultiIsolateMessage(
-    //   originalRequest: updateContentRequest,
-    //   requests: [
-    //     IsolateRequest(request: updateContentRequest, root: isolate.activeRoot)
-    //   ],
-    //   initialTimestamp: DateTime.now(),
-    // ));
-    // resourceProvider;
-  }
 
-  // AddContentOverlay _getContentForFile(String path) {
-  //   final file = resourceProvider.getFile(path);
-  //   final content = file.readAsStringSync();
-  //   return AddContentOverlay(content);
-  // }
+    _addNewMessage(
+      MultiIsolateMessage(
+        originalRequest: setRootRequest,
+        initialTimestamp: DateTime.now(),
+        requests: [
+          IsolateRequest(request: setRootRequest, root: isolate.activeRoot),
+        ],
+      ),
+    );
+    dumpRequests();
+    isIsolateInitialized[isolate] = true;
+  }
 
   void handlePluginError(
     IsolateDetails details,

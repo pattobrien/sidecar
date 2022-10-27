@@ -6,13 +6,12 @@
     "configurations": [
         {
             "name": "Sidecar Lint Debugger",
-            "program": "examples/my_analyzed_codebase/bin/debug.dart",
-            // "program": ".sidecar/sidecar_analyzer_plugin/bin/debug.dart",
+            "program": "examples/my_analyzed_codebase/.dart_tool/sidecar/debug.dart",
             "request": "launch",
             "type": "dart",
             "args": [
                 "--enable-vm-service",
-                "--test-arg"
+                "--debug",
             ]
         },
         {

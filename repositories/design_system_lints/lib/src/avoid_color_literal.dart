@@ -1,12 +1,9 @@
-import 'dart:async';
-// import 'dart:';
-
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'constants.dart';
 
-class AvoidColorLiteral extends LintRule {
+class AvoidColorLiteral extends LintRule with LintVisitor {
   @override
   String get code => 'avoid_color_literal';
 
@@ -14,28 +11,23 @@ class AvoidColorLiteral extends LintRule {
   String get packageName => kDesignSystemPackageId;
 
   @override
-  String? get url => kUrl;
+  String get url => kUrl;
 
   @override
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
-    ResolvedUnitResult unit,
-  ) {
-    final visitor = _Visitor();
-    visitor.initializeVisitor(this, unit);
-    unit.unit.accept(visitor);
-    return Future.value(visitor.nodes);
-  }
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 }
 
 class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-    if (element != null) {
-      // if (colorType.isAssignableFromType(element.returnType)) {
-      //   reportAstNode(node, message: 'Avoid Color literal');
-      // }
-    }
+    // if (colorType.isAssignableFromType(element?.returnType)) {
+    //   reportAstNode(
+    //     node,
+    //     message: 'Avoid Color literal',
+    //     correction: 'Use design system spec instead.',
+    //   );
+    // }
 
     super.visitInstanceCreationExpression(node);
   }

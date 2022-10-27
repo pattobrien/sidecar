@@ -52,17 +52,17 @@ class DebuggerLogDelegate implements LogDelegateBase {
   }
 
   @override
-  void analysisResults(String path, List<AnalysisResult> results) {
+  void analysisResults(String path, List<LintResult> results) {
     if (results.isEmpty) return;
     final stringBuffer = StringBuffer();
 
     final relativePath = p.relative(path, from: Directory.current.path);
 
-    for (final result in results.where((result) => result.rule is LintRule)) {
+    for (final result in results) {
       final ansi = Ansi(true);
       final location =
-          '$relativePath:${result.sourceSpan.start.line}:${result.sourceSpan.start.column}';
-      final lintErrorType = result.severity!.ansi.padLeft(7);
+          '$relativePath:${result.source.span.start.line}:${result.source.span.start.column}';
+      final lintErrorType = result.severity.ansi.padLeft(7);
       final packageId = '${ansi.green}${result.rule.packageName}${ansi.none}';
       final lintCode = '${ansi.green}${result.rule.code}${ansi.none}';
       final message = '${ansi.bold}${result.message}${ansi.none}';

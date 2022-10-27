@@ -13,9 +13,9 @@ final assistResultsProvider =
 
     final unitResult = await ref.watch(resolvedUnitProvider(file).future);
 
-    final results = await fileService.computeAnalysisResults(
+    final results = await fileService.computeLintResults(
       file: file,
-      activatedRules: activatedRules,
+      rules: activatedRules,
       unitResult: unitResult,
     );
     return [];

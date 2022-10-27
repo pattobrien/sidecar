@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_analyzer_utils/material.dart';
 import 'package:design_system_lints/src/constants.dart';
 import 'package:sidecar/sidecar.dart';
 
-class AvoidSizedBoxHeightWidthLiterals extends LintRule {
+class AvoidSizedBoxHeightWidthLiterals extends LintRule with LintVisitor {
   @override
   String get code => 'avoid_sized_box_height_width_literals';
 
@@ -13,17 +11,10 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule {
   String get packageName => kDesignSystemPackageId;
 
   @override
-  String? get url => kUrl;
+  String get url => kUrl;
 
   @override
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
-    ResolvedUnitResult unit,
-  ) {
-    final visitor = _Visitor();
-    visitor.initializeVisitor(this, unit);
-    unit.unit.accept(visitor);
-    return Future.value(visitor.nodes);
-  }
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 }
 
 class _Visitor extends SidecarAstVisitor {
@@ -31,9 +22,7 @@ class _Visitor extends SidecarAstVisitor {
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
 
-    if (element == null) return;
-
-    if (sizedBoxType.isAssignableFromType(element.returnType)) {
+    if (sizedBoxType.isAssignableFromType(element?.returnType)) {
       final args = node.argumentList.arguments
           .whereType<NamedExpression>()
           .where((e) =>
@@ -46,6 +35,7 @@ class _Visitor extends SidecarAstVisitor {
             exp,
             message:
                 'Avoid using height or width literals in SizedBox widgets.',
+            correction: 'Use design system spec instead.',
           );
         }
         if (exp is PrefixedIdentifier) {

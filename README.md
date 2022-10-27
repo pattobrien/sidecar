@@ -27,14 +27,14 @@ The Dart team maintains analysis servers that run in IDEs like VSCode. In Server
 
 To enable Sidecar to display lints and code actions within your IDE, perform the following the setup steps:
 
-1. Using the example project, a new Dart project, or a Dart project of your own that you'd like to be analyzed, depend on any ```sidecar``` lint packages such as ```design_system_lints```.
+1. Depend on any ```sidecar``` lint packages such as ```design_system_lints```.
 
 ```yaml
 dev_dependencies:
   design_system_lints: ^0.1.0-dev.1
 ```
 
-2. Create a ```sidecar.yaml``` file at the project's root directory and declare any/all lints from the lint package.
+2. Create a ```sidecar.yaml``` file at the project's root directory and declare any or all lints from the lint package.
 
 ```yaml
 # sidecar.yaml
@@ -59,10 +59,10 @@ analyzer:
     - sidecar
 ```
 
-After several seconds of start-up (and potentially a reboot of your IDE), the lints should begin appearing in your editor.
+After several seconds of start-up (and potentially a restart of your IDE), the lints should begin appearing in your editor.
 ### CLI Mode
 
-CLI Mode is useful for running lint rules from a CI/CD pipeline. To use the CLI mode, run the following command in your terminal:
+CLI Mode is useful for running lint rules from a CI/CD pipeline. To use Sidecar in CLI mode, run the following command in your terminal:
 
 ```sh
 sidecar analyze
@@ -95,14 +95,16 @@ The notable ways that Sidecar accomplishes this architecture is by doing the fol
 import 'package:sidecar/sidecar.dart';
 
 import 'package:design_system_lints/design_system_lints.dart' as design_system_lints;
+import 'package:l10n_lints/l10n_lints.dart' as l10n_lints;
 
 List<SidecarBaseConstructor> constructors = [
-	design_system_lints.AvoidEdgeInsetsLiteral.new,
-	design_system_lints.AvoidIconLiteral.new,
-	design_system_lints.AvoidBoxShadowLiteral.new,
-	design_system_lints.AvoidTextStyleLiteral.new,
-	design_system_lints.AvoidBorderRadiusLiteral.new,
-	design_system_lints.AvoidSizedBoxHeightWidthLiterals.new,
+  design_system_lints.AvoidEdgeInsetsLiteral.new,
+  design_system_lints.AvoidIconLiteral.new,
+  design_system_lints.AvoidBoxShadowLiteral.new,
+  design_system_lints.AvoidTextStyleLiteral.new,
+  design_system_lints.AvoidBorderRadiusLiteral.new,
+  design_system_lints.AvoidSizedBoxHeightWidthLiterals.new,
+  l10n_lints.AvoidStringLiterals.new,
 ];
 ```
 

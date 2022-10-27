@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:flutter_analyzer_utils/painting.dart';
 import 'package:sidecar/sidecar.dart';
 
 import 'constants.dart';
 
-class AvoidBorderRadiusLiteral extends LintRule {
+class AvoidBorderRadiusLiteral extends LintRule with LintVisitor {
   @override
   String get code => 'avoid_border_radius_literal';
 
@@ -14,28 +12,22 @@ class AvoidBorderRadiusLiteral extends LintRule {
   String get packageName => kDesignSystemPackageId;
 
   @override
-  String? get url => kUrl;
+  String get url => kUrl;
 
   @override
-  Future<List<DartAnalysisResult>> computeDartAnalysisResults(
-    ResolvedUnitResult unit,
-  ) {
-    final visitor = _Visitor();
-    visitor.initializeVisitor(this, unit);
-    unit.unit.accept(visitor);
-    return Future.value(visitor.nodes);
-  }
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 }
 
 class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-
-    if (element == null) return;
-
-    if (borderRadiusType.isAssignableFromType(element.returnType)) {
-      reportAstNode(node, message: 'Avoid BorderRadius literal.');
+    if (borderRadiusType.isAssignableFromType(element?.returnType)) {
+      reportAstNode(
+        node,
+        message: 'Avoid BorderRadius literal.',
+        correction: 'Use design system spec instead.',
+      );
     }
     super.visitInstanceCreationExpression(node);
   }
