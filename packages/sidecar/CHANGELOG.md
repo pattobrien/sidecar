@@ -1,4 +1,8 @@
 
+## 0.1.0-dev.4
+
+- fix: Verbose log removed from CLI output
+
 ## 0.1.0-dev.3
 
 - fix: Missing import file, Sidecar CLI could not access hidden PackageGenerator in packages/ folder

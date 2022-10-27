@@ -62,7 +62,22 @@ class DebuggerLogDelegate implements LogDelegateBase {
       final ansi = Ansi(true);
       final location =
           '$relativePath:${result.source.span.start.line}:${result.source.span.start.column}';
-      final lintErrorType = result.severity.ansi.padLeft(7);
+
+      // pad error type string so that it aligns in the terminal nicely
+      // we need to do this manually (as opposed to using String.padLeft()),
+      // because of the extra characters introduced by ansi
+      var lintErrorType = '';
+      switch (result.severity) {
+        case LintSeverity.info:
+          lintErrorType = '   ${result.severity.ansi}';
+          break;
+        case LintSeverity.warning:
+          lintErrorType = result.severity.ansi;
+          break;
+        case LintSeverity.error:
+          lintErrorType = '  ${result.severity.ansi}';
+          break;
+      }
       final packageId = '${ansi.green}${result.rule.packageName}${ansi.none}';
       final lintCode = '${ansi.green}${result.rule.code}${ansi.none}';
       final message = '${ansi.bold}${result.message}${ansi.none}';
