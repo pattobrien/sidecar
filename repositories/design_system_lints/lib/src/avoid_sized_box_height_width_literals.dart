@@ -14,7 +14,7 @@ class AvoidSizedBoxHeightWidthLiterals extends LintRule with LintVisitor {
   String get url => kUrl;
 
   @override
-  SidecarAstVisitor get visitor => _Visitor();
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 }
 
 class _Visitor extends SidecarAstVisitor {
@@ -35,6 +35,7 @@ class _Visitor extends SidecarAstVisitor {
             exp,
             message:
                 'Avoid using height or width literals in SizedBox widgets.',
+            correction: 'Use design system spec instead.',
           );
         }
         if (exp is PrefixedIdentifier) {

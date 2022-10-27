@@ -12,16 +12,14 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
   final List<LintResult> lints = [];
   late LintRule rule;
   late ResolvedUnitResult unit;
-  late List<SidecarAnnotatedNode> annotatedNodes;
+  // late List<SidecarAnnotatedNode> annotatedNodes;
 
   void initializeVisitor(
     LintRule rule,
-    ResolvedUnitResult unit, [
-    List<SidecarAnnotatedNode> annotatedNodes = const [],
-  ]) {
-    this.unit = unit;
+    ResolvedUnitResult unit,
+  ) {
     this.rule = rule;
-    this.annotatedNodes = annotatedNodes;
+    this.unit = unit;
   }
 
   void reportAstNode(

@@ -33,17 +33,33 @@ class FileAnalyzerService {
 
       final results =
           await Future.wait(rules.map<Future<List<LintResult>>>((rule) async {
+          final ruleHasVisitor = rule is LintVisitor;
         try {
-          final results = await rule.generateAnalysisResults(unitResult);
-          return results
-              .map((result) => result.copyWith(
-                    severity: rule.analysisConfiguration.map(
-                      lint: (lintConfig) =>
-                          lintConfig.severity ?? rule.defaultSeverity,
-                      assist: (assistConfig) => throw UnimplementedError(),
-                    ),
-                  ))
-              .toList();
+          // print('computeLintResults: ${file.path}');
+          // TODO:
+          if (ruleHasVisitor) {
+            final results = await rule.generateAnalysisResults(unitResult);
+            return results
+                .map((result) => result.copyWith(
+                      severity: rule.analysisConfiguration.map(
+                        lint: (lintConfig) =>
+                            lintConfig.severity ?? rule.defaultSeverity,
+                        assist: (assistConfig) => throw UnimplementedError(),
+                      ),
+                    ))
+                .toList();
+          } else {
+            final results = await rule.generateAnalysisResults(unitResult);
+            return results
+                .map((result) => result.copyWith(
+                      severity: rule.analysisConfiguration.map(
+                        lint: (lintConfig) =>
+                            lintConfig.severity ?? rule.defaultSeverity,
+                        assist: (assistConfig) => throw UnimplementedError(),
+                      ),
+                    ))
+                .toList();
+          }
         } catch (e, stackTrace) {
           _logError('LintRule Error: ${e.toString()}', stackTrace);
           return Future.value([]);

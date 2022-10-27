@@ -17,11 +17,11 @@ abstract class BaseRule {
   List<Glob>? get includes => null;
   MapDecoder? get jsonDecoder => null;
 
-  @mustCallSuper
-  Object get configuration => _configuration;
+  // @mustCallSuper
+  // Object get configuration => _configuration;
 
   late Ref _ref;
-  late Object _configuration;
+  // late Object _configuration;
   late ActiveContextRoot _activeRoot;
 
   @internal

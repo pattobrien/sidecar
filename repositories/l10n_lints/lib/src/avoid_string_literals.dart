@@ -25,7 +25,7 @@ class AvoidStringLiterals extends LintRule with LintVisitor {
   MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
 
   @override
-  SidecarAstVisitor get visitor => _Visitor();
+  SidecarAstVisitor get visitorCreator => _Visitor();
 
   @override
   Future<List<EditResult>> computeSourceChanges(

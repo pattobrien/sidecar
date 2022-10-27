@@ -14,15 +14,19 @@ class AvoidColorLiteral extends LintRule with LintVisitor {
   String get url => kUrl;
 
   @override
-  SidecarAstVisitor get visitor => _Visitor();
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 }
 
 class _Visitor extends SidecarAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
-    // if (colorType.isAssignableFromType(element.returnType)) {
-    //   reportAstNode(node, message: 'Avoid Color literal');
+    // if (colorType.isAssignableFromType(element?.returnType)) {
+    //   reportAstNode(
+    //     node,
+    //     message: 'Avoid Color literal',
+    //     correction: 'Use design system spec instead.',
+    //   );
     // }
 
     super.visitInstanceCreationExpression(node);

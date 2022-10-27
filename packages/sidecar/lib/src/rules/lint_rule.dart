@@ -29,12 +29,13 @@ mixin LintMixin on BaseRule {
 }
 
 mixin LintVisitor on LintRule {
-  SidecarAstVisitor get visitor;
+  SidecarAstVisitor Function() get visitorCreator;
 
   @override
   Future<List<LintResult>> generateAnalysisResults(
     ResolvedUnitResult unit,
   ) {
+    final visitor = visitorCreator();
     visitor.initializeVisitor(this, unit);
     unit.unit.accept(visitor);
     return Future.value(visitor.lints);
@@ -42,5 +43,3 @@ mixin LintVisitor on LintRule {
 
   void registerNodeProcessors(NodeLintRegistry registry) {}
 }
-
-abstract class LintRuleWithVisitor = LintRule with LintVisitor;

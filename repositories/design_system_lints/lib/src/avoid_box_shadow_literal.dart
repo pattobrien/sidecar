@@ -15,7 +15,7 @@ class AvoidBoxShadowLiteral extends LintRule with LintVisitor {
   String get url => kUrl;
 
   @override
-  SidecarAstVisitor get visitor => _Visitor();
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 }
 
 class _Visitor extends SidecarAstVisitor {
@@ -23,7 +23,11 @@ class _Visitor extends SidecarAstVisitor {
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final element = node.constructorName.staticElement;
     if (boxShadowType.isAssignableFromType(element?.returnType)) {
-      reportAstNode(node, message: 'Avoid BoxShadow literal');
+      reportAstNode(
+        node,
+        message: 'Avoid BoxShadow literal',
+        correction: 'Use design system spec instead.',
+      );
     }
     super.visitInstanceCreationExpression(node);
   }

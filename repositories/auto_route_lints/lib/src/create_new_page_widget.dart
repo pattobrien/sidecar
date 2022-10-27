@@ -12,9 +12,9 @@ class CreateNewPageWidget extends AssistRule {
   @override
   String get packageName => kPackageId;
 
-  @override
-  CreateNewPageWidgetConfiguration get configuration =>
-      super.configuration as CreateNewPageWidgetConfiguration;
+  // @override
+  // CreateNewPageWidgetConfiguration get configuration =>
+  //     super.configuration as CreateNewPageWidgetConfiguration;
 
   @override
   CreateNewPageWidgetConfiguration Function(Map json) get jsonDecoder =>
@@ -36,15 +36,15 @@ class CreateNewPageWidget extends AssistRule {
 
     if (node == null || pageClass == null) return [];
 
-    final workspacePath = unit.session.analysisContext.contextRoot.root
-        .canonicalizePath(configuration.routePath);
+    // final workspacePath = unit.session.analysisContext.contextRoot.root
+    //     .canonicalizePath(configuration.routePath);
 
-    await changeBuilder.addAutoRouteFileEdit(workspacePath, (builder) {
-      builder.importLibrary(unit.uri);
-      builder.addRouteInsertion(null, (builder) {
-        builder.writeAdaptiveRoute(pageClass);
-      });
-    });
+    // await changeBuilder.addAutoRouteFileEdit(workspacePath, (builder) {
+    //   builder.importLibrary(unit.uri);
+    //   builder.addRouteInsertion(null, (builder) {
+    //     builder.writeAdaptiveRoute(pageClass);
+    //   });
+    // });
 
     return [
       EditResult(

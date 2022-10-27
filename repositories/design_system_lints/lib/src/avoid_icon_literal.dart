@@ -15,36 +15,36 @@ class AvoidIconLiteral extends LintRule with LintVisitor {
   String get url => kUrl;
 
   @override
-  SidecarAstVisitor get visitor => _Visitor();
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 }
 
 class _Visitor extends SidecarAstVisitor {
   @override
   void visitPrefixedIdentifier(PrefixedIdentifier node) {
     // final isIconData = _isIconData(node.prefix.staticElement);
-    final type = node.identifier.staticType;
-    if (iconDataType.isAssignableFromType(type)) {
-      final matchingAnnotation = node.thisOrAncestorMatching((astNode) {
-        final isMatch = astNode is AnnotatedNode &&
-            astNode.metadata.isNotEmpty &&
-            annotatedNodes.any((annotation) {
-              final isSameSource =
-                  annotation.annotatedNode.toSourceSpan(unit) ==
-                      astNode.toSourceSpan(unit);
-              return isSameSource &&
-                  annotation.input.packageName == kDesignSystemPackageId;
-            });
-        return isMatch;
-      });
+    // final type = node.identifier.staticType;
+    // if (iconDataType.isAssignableFromType(type)) {
+    //   final matchingAnnotation = node.thisOrAncestorMatching((astNode) {
+    //     final isMatch = astNode is AnnotatedNode &&
+    //         astNode.metadata.isNotEmpty &&
+    //         annotatedNodes.any((annotation) {
+    //           final isSameSource =
+    //               annotation.annotatedNode.toSourceSpan(unit) ==
+    //                   astNode.toSourceSpan(unit);
+    //           return isSameSource &&
+    //               annotation.input.packageName == kDesignSystemPackageId;
+    //         });
+    //     return isMatch;
+    //   });
 
-      if (matchingAnnotation == null) {
-        reportAstNode(
-          node,
-          message: 'Avoid IconData literal.',
-          correction: 'Use design system spec instead.',
-        );
-      }
-    }
+    //   if (matchingAnnotation == null) {
+    //     reportAstNode(
+    //       node,
+    //       message: 'Avoid IconData literal.',
+    //       correction: 'Use design system spec instead.',
+    //     );
+    //   }
+    // }
 
     return super.visitPrefixedIdentifier(node);
   }
