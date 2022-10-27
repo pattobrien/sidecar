@@ -166,12 +166,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     }
   }
 
-  bool _isSaved(String path) {
-    final savedFile = resourceProvider.baseProvider.getFile(path);
-    final overlayFile = resourceProvider.getFile(path);
-    return savedFile.readAsStringSync() == overlayFile.readAsStringSync();
-  }
-
   Future<void> _forAnalysisContexts(
     AnalysisContextCollection contextCollection,
     Future<void> Function(AnalysisContext analysisContext) f,
@@ -200,7 +194,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required List<String> paths,
   }) async {
     final allContexts = ref.read(activeContextsProvider);
-    ref.read(logDelegateProvider).sidecarVerboseMessage(
+    ref.read(logDelegateProvider).sidecarMessage(
         'CHANGEDFILES1 = ${paths.length} ${paths.toList().toString()}');
     if (allContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
@@ -211,11 +205,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       await Future.wait(paths.map((path) async {
         try {
           final file = ref.read(analyzedFileFromPath(path));
-          if (file.relativePath == 'sidecar.yaml') {
+          if (file.relativePath == kSidecarYaml) {
             ref
                 .read(logDelegateProvider)
                 .sidecarVerboseMessage('SIDECAR YAML CHANGED');
-            // ref.invalidate(provider)
           }
           ref.refresh(resolvedUnitProvider(file));
           ref.refresh(analysisResultsForFileProvider(file));

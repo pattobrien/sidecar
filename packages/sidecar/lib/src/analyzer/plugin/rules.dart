@@ -10,8 +10,9 @@ import 'rule_constructors_provider.dart';
 
 final lintRulesForFileProvider = Provider.family<List<LintRule>, AnalyzedFile>(
   (ref, analyzedFile) {
-    return ref.watch(_filteredRulesProvider(analyzedFile)
-        .select((value) => value.whereType<LintRule>().toList()));
+    return ref.watch(_filteredRulesProvider(analyzedFile).select(
+      (rules) => rules.whereType<LintRule>().toList(),
+    ));
   },
   name: 'lintRulesForFileProvider',
   dependencies: [

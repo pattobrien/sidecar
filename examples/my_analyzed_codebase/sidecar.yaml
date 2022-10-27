@@ -8,6 +8,7 @@ lints:
 
   l10n_lints:
     avoid_string_literals:
+      severity: info
       enabled: true
       configuration:
         prefix: "AppLocalizations.of(context)"
@@ -18,12 +19,12 @@ lints:
   design_system_lints:
     # avoid_color_literal:
     avoid_icon_literal:
-      severity: error
+      severity: info
       enabled: true
     avoid_sized_box_height_width_literals:
-      severity: error
+      severity: info
     avoid_text_style_literal:
-      severity: warning
+      severity: info
       enabled: true
       includes:
         - "lib/**"

@@ -5,12 +5,7 @@ import 'plugin.dart';
 
 final analyzedFilesProvider =
     Provider.family<List<AnalyzedFile>, ActiveContextRoot>(
-  (ref, root) {
-    return ref
-        .watch(_unfilteredAnalyzedFilesProvider(root))
-        // .where((analyzedFile) => !analyzedFile.isSidecarYamlFile)
-        .toList();
-  },
+  (ref, root) => ref.watch(_unfilteredAnalyzedFilesProvider(root)).toList(),
   name: 'analyzedFilesProvider',
   dependencies: [
     _unfilteredAnalyzedFilesProvider,
@@ -23,7 +18,7 @@ final analyzedFileFromPath = Provider.family<AnalyzedFile, String>(
     final context = activeContexts.firstWhere((activeContext) =>
         activeContext.activeRoot.analyzedFiles().any((file) => file == path));
     final analyzedFiles = ref.watch(analyzedFilesProvider(context.activeRoot));
-    return analyzedFiles.firstWhere((element) => element.path == path);
+    return analyzedFiles.firstWhere((file) => file.path == path);
   },
   name: 'analyzedFileFromPath',
   dependencies: [
@@ -32,24 +27,9 @@ final analyzedFileFromPath = Provider.family<AnalyzedFile, String>(
   ],
 );
 
-final sidecarYamlFileProvider =
-    Provider.family<AnalyzedFile, ActiveContextRoot>(
-  (ref, root) {
-    return ref.watch(_unfilteredAnalyzedFilesProvider(root).select((files) =>
-        files.singleWhere(
-            (analyzedFile) => analyzedFile.isAnalysisOptionsFile)));
-  },
-  name: 'sidecarYamlFileProvider',
-  dependencies: [
-    _unfilteredAnalyzedFilesProvider,
-  ],
-);
-
 final _unfilteredAnalyzedFilesProvider =
     Provider.family<List<AnalyzedFile>, ActiveContextRoot>(
-  (ref, root) {
-    return root.typedAnalyzedFiles().toList();
-  },
+  (ref, root) => root.typedAnalyzedFiles().toList(),
   name: '_unfilteredAnalyzedFilesProvider',
   dependencies: [],
 );
