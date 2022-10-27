@@ -17,6 +17,9 @@ class AvoidStringLiterals extends LintRule with LintVisitor {
   @override
   String? get url => l10nLintsUrl;
 
+  @override
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
+
   // @override
   // AvoidStringLiteralsConfig get configuration =>
   //     super.configuration as AvoidStringLiteralsConfig;
@@ -24,92 +27,87 @@ class AvoidStringLiterals extends LintRule with LintVisitor {
   // @override
   // MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
 
-  @override
-  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
+  // @override
+  // Future<List<EditResult>> computeSourceChanges(
+  //   AnalysisSession session,
+  //   AnalysisSource source,
+  // ) async {
+  //   final changeBuilder = ChangeBuilder(session: session);
+  //   final unit =
+  //       await session.getResolvedUnit(source.path) as ResolvedUnitResult;
 
-  @override
-  Future<List<EditResult>> computeSourceChanges(
-    AnalysisSession session,
-    AnalysisSource source,
-  ) async {
-    final changeBuilder = ChangeBuilder(session: session);
-    final unit =
-        await session.getResolvedUnit(source.path) as ResolvedUnitResult;
+  //   final stringNode = source.span.toAstNode(unit);
 
-    final stringNode = source.span.toAstNode(unit);
+  //   if (stringNode == null) return [];
 
-    if (stringNode == null) return [];
+  //   //TODO: dynamically compute stringId value
+  //   final computedStringId = 'string123';
 
-    //TODO: dynamically compute stringId value
-    // final computedStringId = 'string123';
+  //   final arbClassPrefix = '${configuration.prefix}.$computedStringId';
 
-    // final arbClassPrefix = '${configuration.prefix}.$computedStringId';
+  //   var references = <SourceSpan>[];
+  //   final parentNode = stringNode.parent;
 
-    // var references = <SourceSpan>[];
-    // final parentNode = stringNode.parent;
+  //   if (parentNode is VariableDeclaration) {
+  //     final element = parentNode.declaredElement2;
+  //     if (element != null) {
+  //       final analysisUtils = _ref.read(analysisContextUtilitiesProvider);
+  //       references = await analysisUtils.getReferences(unit, element);
+  //     }
+  //   }
 
-    //   if (parentNode is VariableDeclaration) {
-    //     final element = parentNode.declaredElement2;
-    //     if (element != null) {
-    //       final analysisUtils = _ref.read(analysisContextUtilitiesProvider);
-    //       references = await analysisUtils.getReferences(unit, element);
-    //     }
-    //   }
+  //   // we dont want to replace a string if not every variable reference
+  //   // will have access to it
+  //   final areAllReferencesWithinBuildMethods = references.every((reference) {
+  //     final node = reference.toAstNode(unit);
+  //     return node!.isInsideBuildMethod();
+  //   });
 
-    //   // we dont want to replace a string if not every variable reference
-    //   // will have access to it
-    //   final areAllReferencesWithinBuildMethods = references.every((reference) {
-    //     final node = reference.toAstNode(unit);
-    //     return node!.isInsideBuildMethod();
-    //   });
+  //   if (areAllReferencesWithinBuildMethods && references.isNotEmpty) {
+  //     final expression = stringNode.parent?.parent?.parent;
+  //     await changeBuilder.addDartFileEdit(unit.path, (builder) {
+  //       builder.importFlutterGenAppLocalizations();
+  //       builder.addDeletion(expression!.toSourceRange(unit));
+  //     });
 
-    //   if (areAllReferencesWithinBuildMethods && references.isNotEmpty) {
-    //     final expression = stringNode.parent?.parent?.parent;
-    //     await changeBuilder.addDartFileEdit(unit.path, (builder) {
-    //       builder.importFlutterGenAppLocalizations();
-    //       builder.addDeletion(expression!.toSourceRange(unit));
-    //     });
+  //     await Future.wait(references.map((reference) async {
+  //       final node = reference.toAstNode(unit);
+  //       if (node!.isInsideBuildMethod()) {
+  //         await changeBuilder.addDartFileEdit(
+  //           reference.sourceUrl!.path,
+  //           (fileBuilder) => fileBuilder.addReplacement(
+  //             reference.toSourceRange(),
+  //             (editBuilder) => editBuilder.write(arbClassPrefix),
+  //           ),
+  //         );
+  //       }
+  //     }));
+  //   }
 
-    //     await Future.wait(references.map((reference) async {
-    //       final node = reference.toAstNode(unit);
-    //       if (node!.isInsideBuildMethod()) {
-    //         await changeBuilder.addDartFileEdit(
-    //           reference.sourceUrl!.path,
-    //           (fileBuilder) => fileBuilder.addReplacement(
-    //             reference.toSourceRange(),
-    //             (editBuilder) => editBuilder.write(arbClassPrefix),
-    //           ),
-    //         );
-    //       }
-    //     }));
-    //   }
-
-    //   if (parentNode is ArgumentList) {
-    //     await changeBuilder.addDartFileEdit(unit.path, (builder) {
-    //       if (stringNode.isInsideBuildMethod()) {
-    //         builder.importFlutterGenAppLocalizations();
-    //         builder.addReplacement(
-    //           stringNode.toSourceRange(unit),
-    //           (editBuilder) => editBuilder.write(arbClassPrefix),
-    //         );
-    //       }
-    //     });
-    //   }
-    //   if (changeBuilder.sourceChange.edits.isNotEmpty) {
-    //     final errorFixes = [
-    //       EditResult(
-    //         analysisResult: result,
-    //         message: 'Extract string declaration',
-    //         sourceChanges: changeBuilder.sourceChange.edits,
-    //       ),
-    //     ];
-    //     return errorFixes;
-    //   } else {
-    //     return [];
-    //   }
-    // }
-    return [];
-  }
+  //   if (parentNode is ArgumentList) {
+  //     await changeBuilder.addDartFileEdit(unit.path, (builder) {
+  //       if (stringNode.isInsideBuildMethod()) {
+  //         builder.importFlutterGenAppLocalizations();
+  //         builder.addReplacement(
+  //           stringNode.toSourceRange(unit),
+  //           (editBuilder) => editBuilder.write(arbClassPrefix),
+  //         );
+  //       }
+  //     });
+  //   }
+  //   if (changeBuilder.sourceChange.edits.isNotEmpty) {
+  //     final errorFixes = [
+  //       EditResult(
+  //         analysisResult: result,
+  //         message: 'Extract string declaration',
+  //         sourceChanges: changeBuilder.sourceChange.edits,
+  //       ),
+  //     ];
+  //     return errorFixes;
+  //   } else {
+  //     return [];
+  //   }
+  // }
 }
 
 class _Visitor extends SidecarAstVisitor {
@@ -120,7 +118,8 @@ class _Visitor extends SidecarAstVisitor {
         node is! PartOfDirective) {
       reportAstNode(
         node,
-        message: 'Strings should be extracted to an ARB or ENV file.',
+        message: 'Avoid hardcoding strings.',
+        correction: 'Extract string into an .arb file instead.',
       );
     }
 

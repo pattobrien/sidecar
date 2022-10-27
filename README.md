@@ -95,6 +95,7 @@ The notable ways that Sidecar accomplishes this architecture is by doing the fol
 import 'package:sidecar/sidecar.dart';
 
 import 'package:design_system_lints/design_system_lints.dart' as design_system_lints;
+import 'package:l10n_lints/l10n_lints.dart' as l10n_lints;
 
 List<SidecarBaseConstructor> constructors = [
   design_system_lints.AvoidEdgeInsetsLiteral.new,
@@ -103,6 +104,7 @@ List<SidecarBaseConstructor> constructors = [
   design_system_lints.AvoidTextStyleLiteral.new,
   design_system_lints.AvoidBorderRadiusLiteral.new,
   design_system_lints.AvoidSizedBoxHeightWidthLiterals.new,
+  l10n_lints.AvoidStringLiterals.new,
 ];
 ```
 
