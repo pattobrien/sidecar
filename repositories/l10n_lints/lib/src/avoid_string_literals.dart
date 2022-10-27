@@ -17,15 +17,15 @@ class AvoidStringLiterals extends LintRule with LintVisitor {
   @override
   String? get url => l10nLintsUrl;
 
-  @override
-  AvoidStringLiteralsConfig get configuration =>
-      super.configuration as AvoidStringLiteralsConfig;
+  // @override
+  // AvoidStringLiteralsConfig get configuration =>
+  //     super.configuration as AvoidStringLiteralsConfig;
+
+  // @override
+  // MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
 
   @override
-  MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
-
-  @override
-  SidecarAstVisitor get visitorCreator => _Visitor();
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 
   @override
   Future<List<EditResult>> computeSourceChanges(
@@ -41,12 +41,12 @@ class AvoidStringLiterals extends LintRule with LintVisitor {
     if (stringNode == null) return [];
 
     //TODO: dynamically compute stringId value
-    final computedStringId = 'string123';
+    // final computedStringId = 'string123';
 
-    final arbClassPrefix = '${configuration.prefix}.$computedStringId';
+    // final arbClassPrefix = '${configuration.prefix}.$computedStringId';
 
-    var references = <SourceSpan>[];
-    final parentNode = stringNode.parent;
+    // var references = <SourceSpan>[];
+    // final parentNode = stringNode.parent;
 
     //   if (parentNode is VariableDeclaration) {
     //     final element = parentNode.declaredElement2;

@@ -17,7 +17,7 @@ class UseFullHexValuesForFlutterColors extends LintRule with LintVisitor {
   String get url => '$kUrlBase/use_full_hex_values_for_flutter_colors.html';
 
   @override
-  SidecarAstVisitor get visitorCreator => _Visitor();
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 }
 
 class _Visitor extends SidecarAstVisitor {

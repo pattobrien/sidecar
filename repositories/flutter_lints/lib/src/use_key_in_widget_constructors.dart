@@ -23,7 +23,7 @@ class UseKeyInWidgetConstructors extends LintRule with LintVisitor {
   String get url => '$kUrlBase/use_key_in_widget_constructors.html';
 
   @override
-  SidecarAstVisitor get visitorCreator => _Visitor();
+  SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 }
 
 class _Visitor extends SidecarAstVisitor {
