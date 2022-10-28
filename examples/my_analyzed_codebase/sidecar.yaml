@@ -2,19 +2,19 @@ includes:
   - "bin/**"
   - "lib/**"
 lints:
-  flutter_lints:
-    # use_full_hex_values_for_flutter_colors:
-    use_key_in_widget_constructors:
+  # flutter_lints:
+  #   # use_full_hex_values_for_flutter_colors:
+  #   use_key_in_widget_constructors:
 
-  l10n_lints:
-    avoid_string_literals:
-      severity: info
-      enabled: true
-      configuration:
-        prefix: "AppLocalizations.of(context)"
+  # l10n_lints:
+  #   avoid_string_literals:
+  #     severity: info
+  #     enabled: true
+  #     configuration:
+  #       prefix: "AppLocalizations.of(context)"
 
-  auto_route_lints:
-    create_new_page_widget:
+  # auto_route_lints:
+  #   create_new_page_widget:
 
   design_system_lints:
     # avoid_color_literal:
@@ -22,21 +22,21 @@ lints:
       severity: info
       enabled: true
     avoid_sized_box_height_width_literals:
-      severity: warning
+      severity: info
     avoid_text_style_literal:
-      severity: warning
+      severity: info
       enabled: true
       includes:
         - "lib/**"
     avoid_border_radius_literal:
-      severity: error
+      severity: info
     avoid_box_shadow_literal:
     # avoid_edge_insets_literal:
 #
-assists:
-  auto_route_lints:
-    create_new_page_widget:
-      enabled: true
+# assists:
+#   auto_route_lints:
+#     create_new_page_widget:
+#       enabled: true
 #   riverpod_lints:
 #     create_text_edit_controller_provider:
 #   sidecar_lints:

@@ -16,7 +16,11 @@
 
 # Getting Started
 
-Some things are easier 
+Some things are easier with the CLI tool. To install, simply run:
+
+```sh
+dart pub global activate sidecar
+```
 
 ## Using Sidecar within a Dart or Flutter Project
 

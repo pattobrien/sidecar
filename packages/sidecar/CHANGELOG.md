@@ -1,4 +1,11 @@
 
+## 0.1.0-dev.5
+
+- feat: quick fixes
+- feat: quick assists
+- fix: Memory leak due to duplicated isolates following ```pub get```
+- docs: added example.md to show how to enable plugin
+
 ## 0.1.0-dev.4
 
 - fix: Verbose log removed from CLI output
