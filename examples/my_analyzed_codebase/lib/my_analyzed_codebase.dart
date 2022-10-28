@@ -39,6 +39,8 @@ class SomePage extends ConsumerWidget {
             someIconData,
             color: x,
           ),
+          //
+          //
           SizedBox(width: 10.0),
           Icon(
             someIconData,

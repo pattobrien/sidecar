@@ -67,6 +67,9 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
       final params = AnalysisSetContextRootsParams.fromRequest(request);
       handleAnalysisSetContextRoots(params);
       isolateService.handleServerRequest(request);
+    } else if (request.method == plugin.PLUGIN_REQUEST_SHUTDOWN) {
+      isolateService.handleServerRequest(request);
+      isolateService.shutdownAllPlugins();
     } else {
       isolateService.handleServerRequest(request);
     }

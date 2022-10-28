@@ -85,6 +85,12 @@ class IsolateCommunicationService {
     }
   }
 
+  void shutdownAllPlugins() {
+    for (final isolate in isolates) {
+      isolate.channel.kill();
+    }
+  }
+
   void handlePluginResponse(
     ActiveContextRoot root,
     Response response,

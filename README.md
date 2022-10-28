@@ -122,6 +122,7 @@ sidecar analyze --debug
 
 - output report of entire codebase
 - TODO: output to different formats (e.g. csv)
+- TODO: capture project metrics
 
 ### benchmarks and testing
 
