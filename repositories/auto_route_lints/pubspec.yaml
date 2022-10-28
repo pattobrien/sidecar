@@ -1,7 +1,8 @@
 name: auto_route_lints
 description: A starting point for Dart libraries or applications.
 version: 0.1.9
-publish_to: https://micropub-3qduh.ondigitalocean.app/
+# publish_to: https://micropub-3qduh.ondigitalocean.app/
+publish_to: none
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/auto_route_lints/
 
 environment:
@@ -14,23 +15,20 @@ dependencies:
     version: ^0.1.0
   code_builder: ^4.2.0
   collection: ^1.16.0
+  flutter_analyzer_utils: ^0.2.0-dev.4
   path: ^1.8.0
-  # sidecar:
-  #   hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-  #   version: ^0.1.20-dev.3
+  sidecar:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
   source_span: ^1.8.2
 
 dev_dependencies:
   lints: ^2.0.0
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
   test: ^1.16.0
 
 dependency_overrides:
   sidecar:
     path: /Users/pattobrien/Development/sidecar/packages/sidecar/
 
-micropub: sidecar
 sidecar:
-  edits:
-    create_new_page_widget:
+  assists:
+    - create_new_page_widget

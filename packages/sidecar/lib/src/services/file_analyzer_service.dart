@@ -96,7 +96,7 @@ class FileAnalyzerService {
     return analysisResult.copyWith(edits: editResults);
   }
 
-  Future<Iterable<AssistResult>> computeAssistResults({
+  Future<List<AssistResult>> computeAssistResults({
     required AnalyzedFile file,
     required List<AssistRule> rules,
     required ResolvedUnitResult? unitResult,
@@ -121,16 +121,18 @@ class FileAnalyzerService {
     }
   }
 
-  Iterable<AssistResult> getAssistResultsAtOffset(
+  List<AssistResult> getAssistResultsAtOffset(
     Iterable<AssistResult> analysisResults,
     QuickAssistRequest request,
-  ) =>
-      analysisResults.where(
-        (result) => result.isWithinOffset(request.file.path, request.offset),
-      );
+  ) {
+    return analysisResults
+        .where(
+          (result) => result.isWithinOffset(request.file.path, request.offset),
+        )
+        .toList();
+  }
 
   Future<AssistResult> calculateAssistResultEdits(
-    ActiveContext context,
     AssistResult result,
   ) async {
     final rule = result.rule;

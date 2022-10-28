@@ -17,8 +17,9 @@ class AnalysisSource with _$AnalysisSource {
 
   const AnalysisSource._();
 
-  Uri get sourceUrl =>
-      map(span: (span) => span.sourceUrl, cursor: (cursor) => cursor.sourceUrl);
+  Uri get sourceUrl => map(
+      span: (span) => span.source.sourceUrl!,
+      cursor: (cursor) => cursor.source.sourceUrl);
 }
 
 class SourceCursor {

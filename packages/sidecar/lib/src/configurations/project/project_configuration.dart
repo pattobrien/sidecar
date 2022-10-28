@@ -36,7 +36,7 @@ class ProjectConfiguration {
               rawContent: contents,
               lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
               assistPackages:
-                  _parseAssistPackages(contentMap['edits'] as YamlMap?),
+                  _parseAssistPackages(contentMap['assists'] as YamlMap?),
               includes: includesResult.item1,
               sourceErrors: includesResult.item2,
             );
@@ -95,7 +95,7 @@ class ProjectConfiguration {
 
           //TODO: replace with a better error that we can catch
           throw UnimplementedError(
-              'expected one or more edits for package $key in analysis_options.yaml');
+              'expected one or more assists for package $key in analysis_options.yaml');
         }
       });
     } catch (e) {

@@ -253,19 +253,22 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     try {
       final analyzedFile = ref.read(analyzedFileFromPath(parameters.file));
       final quickAssistRequest = QuickAssistRequest(
-          file: analyzedFile,
-          offset: parameters.offset,
-          length: parameters.length);
-      // final context = ref
-      //     .read(analysisContextCollectionServiceProvider)
-      //     .getContextFromPath(path);
+        file: analyzedFile,
+        offset: parameters.offset,
+        length: parameters.length,
+      );
 
-      // final results = await ref
-      //     .read(analysisContextServiceProvider(context))
-      //     .getCodeAssists(path, offset, length);
-      final results = <plugin.PrioritizedSourceChange>[];
+      ref.refresh(assistResultsForFileProvider(analyzedFile));
+      ref.refresh(assistResultsWithEditsForFileProvider(analyzedFile));
+      final results = await ref
+          .read(assistResultsForRequestProvider(quickAssistRequest).future);
 
-      return plugin.EditGetAssistsResult(results.toList());
+      final changes = results
+          .map((e) => e.toPrioritizedSourceChanges())
+          .expand((e) => e)
+          .toList();
+
+      return plugin.EditGetAssistsResult(changes);
     } catch (e, stackTrace) {
       _logError('handleEditGetAssists ${parameters.file} -- $e', stackTrace);
       rethrow;

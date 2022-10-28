@@ -33,7 +33,10 @@ lints:
     avoid_box_shadow_literal:
     avoid_edge_insets_literal:
 #
-# edits:
+assists:
+  auto_route_lints:
+    create_new_page_widget:
+      enabled: true
 #   riverpod_lints:
 #     create_text_edit_controller_provider:
 #   sidecar_lints:

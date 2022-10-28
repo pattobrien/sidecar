@@ -14,7 +14,7 @@ class RulePackageConfiguration {
   }) {
     return RulePackageConfiguration._(
       map['lints'] as YamlList?,
-      map['edits'] as YamlList?,
+      map['assists'] as YamlList?,
       source: map,
       uri: uri,
       packageName: packageName,
@@ -23,21 +23,21 @@ class RulePackageConfiguration {
 
   RulePackageConfiguration._(
     this._lints,
-    this._edits, {
+    this._assists, {
     required this.source,
     required this.packageName,
     required this.uri,
   });
 
   final YamlList? _lints;
-  final YamlList? _edits;
+  final YamlList? _assists;
   final YamlMap source;
 
   final String packageName;
   final Uri uri;
 
   List<LintNode>? get lints => _lints?.nodes.map(LintNode.new).toList();
-  List<AssistNode>? get edits => _edits?.nodes.map(AssistNode.new).toList();
+  List<AssistNode>? get assists => _assists?.nodes.map(AssistNode.new).toList();
 }
 
 RulePackageConfiguration? parseLintPackage(String name, Uri root) {
@@ -54,7 +54,7 @@ RulePackageConfiguration? parseLintPackage(String name, Uri root) {
         packageName: name,
       );
     });
-  } catch (e, stackTrace) {
+  } catch (e) {
     // do nothing
     return null;
   }

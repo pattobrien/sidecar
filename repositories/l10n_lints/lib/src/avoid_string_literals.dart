@@ -20,13 +20,13 @@ class AvoidStringLiterals extends LintRule with LintVisitor, QuickFix {
   SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 
   @override
-  Future<List<EditResult>> computeQuickFixes(AnalysisSource source) async {
+  Future<List<EditResult>> computeQuickFixes(AnalysisSourceSpan source) async {
     final session = context.currentSession;
     final changeBuilder = ChangeBuilder(session: session);
     final unit =
         await session.getResolvedUnit(source.path) as ResolvedUnitResult;
 
-    final stringNode = source.span.toAstNode(unit);
+    final stringNode = source.source.toAstNode(unit);
 
     if (stringNode == null) return [];
 

@@ -1,4 +1,5 @@
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
+import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../rules/rules.dart';
@@ -21,7 +22,6 @@ class AnalysisResult with _$AnalysisResult {
   const factory AnalysisResult.assist({
     required AssistRule rule,
     required AnalysisSourceSpan span,
-    required String message,
     @Default(<EditResult>[]) List<EditResult> edits,
   }) = AssistResult;
 
@@ -54,5 +54,11 @@ extension LintResultX on LintResult {
       //TODO: hasFix does not seem to work properly
       hasFix: edits.isNotEmpty,
     );
+  }
+}
+
+extension AssistResultX on AssistResult {
+  List<PrioritizedSourceChange> toPrioritizedSourceChanges() {
+    return edits.map((e) => e.toPrioritizedSourceChange()).toList();
   }
 }

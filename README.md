@@ -100,9 +100,9 @@ sidecar analyze --debug
 - documentation URLs in lint IDE window
 - SidecarAstVisitor for simpler lint reporting (AstNodes and Tokens)
 
-### creating code edits
+### rules with code changes
 
-- TODO: quick fixes for lints
+- quick fixes for lints
 - TODO: code assists
 - TODO: code completion
 
@@ -125,6 +125,7 @@ sidecar analyze --debug
 
 ### benchmarks and testing
 
+- TODO: fix memory leaks
 - TODO: Register visitors for better analysis performance
 - TODO: lint unit test toolchain
 - TODO: how can we benchmark against Dart official analysis server?

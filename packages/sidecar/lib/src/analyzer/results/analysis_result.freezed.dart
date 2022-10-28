@@ -17,7 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AnalysisResult {
   AnalysisSourceSpan get span => throw _privateConstructorUsedError;
-  String get message => throw _privateConstructorUsedError;
   List<EditResult> get edits => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -29,8 +28,8 @@ mixin _$AnalysisResult {
             String? correction,
             List<EditResult> edits)
         lint,
-    required TResult Function(AssistRule rule, AnalysisSourceSpan span,
-            String message, List<EditResult> edits)
+    required TResult Function(
+            AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits)
         assist,
   }) =>
       throw _privateConstructorUsedError;
@@ -39,8 +38,8 @@ mixin _$AnalysisResult {
     TResult Function(LintRule rule, AnalysisSourceSpan span, String message,
             LintSeverity severity, String? correction, List<EditResult> edits)?
         lint,
-    TResult Function(AssistRule rule, AnalysisSourceSpan span, String message,
-            List<EditResult> edits)?
+    TResult Function(
+            AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits)?
         assist,
   }) =>
       throw _privateConstructorUsedError;
@@ -49,8 +48,8 @@ mixin _$AnalysisResult {
     TResult Function(LintRule rule, AnalysisSourceSpan span, String message,
             LintSeverity severity, String? correction, List<EditResult> edits)?
         lint,
-    TResult Function(AssistRule rule, AnalysisSourceSpan span, String message,
-            List<EditResult> edits)?
+    TResult Function(
+            AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits)?
         assist,
     required TResult orElse(),
   }) =>
@@ -85,7 +84,7 @@ abstract class $AnalysisResultCopyWith<$Res> {
   factory $AnalysisResultCopyWith(
           AnalysisResult value, $Res Function(AnalysisResult) then) =
       _$AnalysisResultCopyWithImpl<$Res>;
-  $Res call({AnalysisSourceSpan span, String message, List<EditResult> edits});
+  $Res call({AnalysisSourceSpan span, List<EditResult> edits});
 }
 
 /// @nodoc
@@ -100,7 +99,6 @@ class _$AnalysisResultCopyWithImpl<$Res>
   @override
   $Res call({
     Object? span = freezed,
-    Object? message = freezed,
     Object? edits = freezed,
   }) {
     return _then(_value.copyWith(
@@ -108,10 +106,6 @@ class _$AnalysisResultCopyWithImpl<$Res>
           ? _value.span
           : span // ignore: cast_nullable_to_non_nullable
               as AnalysisSourceSpan,
-      message: message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
       edits: edits == freezed
           ? _value.edits
           : edits // ignore: cast_nullable_to_non_nullable
@@ -261,8 +255,8 @@ class _$LintResult extends LintResult {
             String? correction,
             List<EditResult> edits)
         lint,
-    required TResult Function(AssistRule rule, AnalysisSourceSpan span,
-            String message, List<EditResult> edits)
+    required TResult Function(
+            AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits)
         assist,
   }) {
     return lint(rule, span, message, severity, correction, edits);
@@ -274,8 +268,8 @@ class _$LintResult extends LintResult {
     TResult Function(LintRule rule, AnalysisSourceSpan span, String message,
             LintSeverity severity, String? correction, List<EditResult> edits)?
         lint,
-    TResult Function(AssistRule rule, AnalysisSourceSpan span, String message,
-            List<EditResult> edits)?
+    TResult Function(
+            AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits)?
         assist,
   }) {
     return lint?.call(rule, span, message, severity, correction, edits);
@@ -287,8 +281,8 @@ class _$LintResult extends LintResult {
     TResult Function(LintRule rule, AnalysisSourceSpan span, String message,
             LintSeverity severity, String? correction, List<EditResult> edits)?
         lint,
-    TResult Function(AssistRule rule, AnalysisSourceSpan span, String message,
-            List<EditResult> edits)?
+    TResult Function(
+            AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits)?
         assist,
     required TResult orElse(),
   }) {
@@ -343,7 +337,6 @@ abstract class LintResult extends AnalysisResult {
   LintRule get rule;
   @override
   AnalysisSourceSpan get span;
-  @override
   String get message;
   LintSeverity get severity;
   String? get correction;
@@ -362,11 +355,7 @@ abstract class _$$AssistResultCopyWith<$Res>
           _$AssistResult value, $Res Function(_$AssistResult) then) =
       __$$AssistResultCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {AssistRule rule,
-      AnalysisSourceSpan span,
-      String message,
-      List<EditResult> edits});
+  $Res call({AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits});
 }
 
 /// @nodoc
@@ -384,7 +373,6 @@ class __$$AssistResultCopyWithImpl<$Res>
   $Res call({
     Object? rule = freezed,
     Object? span = freezed,
-    Object? message = freezed,
     Object? edits = freezed,
   }) {
     return _then(_$AssistResult(
@@ -396,10 +384,6 @@ class __$$AssistResultCopyWithImpl<$Res>
           ? _value.span
           : span // ignore: cast_nullable_to_non_nullable
               as AnalysisSourceSpan,
-      message: message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
       edits: edits == freezed
           ? _value._edits
           : edits // ignore: cast_nullable_to_non_nullable
@@ -414,7 +398,6 @@ class _$AssistResult extends AssistResult {
   const _$AssistResult(
       {required this.rule,
       required this.span,
-      required this.message,
       final List<EditResult> edits = const <EditResult>[]})
       : _edits = edits,
         super._();
@@ -423,8 +406,6 @@ class _$AssistResult extends AssistResult {
   final AssistRule rule;
   @override
   final AnalysisSourceSpan span;
-  @override
-  final String message;
   final List<EditResult> _edits;
   @override
   @JsonKey()
@@ -435,7 +416,7 @@ class _$AssistResult extends AssistResult {
 
   @override
   String toString() {
-    return 'AnalysisResult.assist(rule: $rule, span: $span, message: $message, edits: $edits)';
+    return 'AnalysisResult.assist(rule: $rule, span: $span, edits: $edits)';
   }
 
   @override
@@ -445,7 +426,6 @@ class _$AssistResult extends AssistResult {
             other is _$AssistResult &&
             const DeepCollectionEquality().equals(other.rule, rule) &&
             const DeepCollectionEquality().equals(other.span, span) &&
-            const DeepCollectionEquality().equals(other.message, message) &&
             const DeepCollectionEquality().equals(other._edits, _edits));
   }
 
@@ -454,7 +434,6 @@ class _$AssistResult extends AssistResult {
       runtimeType,
       const DeepCollectionEquality().hash(rule),
       const DeepCollectionEquality().hash(span),
-      const DeepCollectionEquality().hash(message),
       const DeepCollectionEquality().hash(_edits));
 
   @JsonKey(ignore: true)
@@ -473,11 +452,11 @@ class _$AssistResult extends AssistResult {
             String? correction,
             List<EditResult> edits)
         lint,
-    required TResult Function(AssistRule rule, AnalysisSourceSpan span,
-            String message, List<EditResult> edits)
+    required TResult Function(
+            AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits)
         assist,
   }) {
-    return assist(rule, span, message, edits);
+    return assist(rule, span, edits);
   }
 
   @override
@@ -486,11 +465,11 @@ class _$AssistResult extends AssistResult {
     TResult Function(LintRule rule, AnalysisSourceSpan span, String message,
             LintSeverity severity, String? correction, List<EditResult> edits)?
         lint,
-    TResult Function(AssistRule rule, AnalysisSourceSpan span, String message,
-            List<EditResult> edits)?
+    TResult Function(
+            AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits)?
         assist,
   }) {
-    return assist?.call(rule, span, message, edits);
+    return assist?.call(rule, span, edits);
   }
 
   @override
@@ -499,13 +478,13 @@ class _$AssistResult extends AssistResult {
     TResult Function(LintRule rule, AnalysisSourceSpan span, String message,
             LintSeverity severity, String? correction, List<EditResult> edits)?
         lint,
-    TResult Function(AssistRule rule, AnalysisSourceSpan span, String message,
-            List<EditResult> edits)?
+    TResult Function(
+            AssistRule rule, AnalysisSourceSpan span, List<EditResult> edits)?
         assist,
     required TResult orElse(),
   }) {
     if (assist != null) {
-      return assist(rule, span, message, edits);
+      return assist(rule, span, edits);
     }
     return orElse();
   }
@@ -546,15 +525,12 @@ abstract class AssistResult extends AnalysisResult {
   const factory AssistResult(
       {required final AssistRule rule,
       required final AnalysisSourceSpan span,
-      required final String message,
       final List<EditResult> edits}) = _$AssistResult;
   const AssistResult._() : super._();
 
   AssistRule get rule;
   @override
   AnalysisSourceSpan get span;
-  @override
-  String get message;
   @override
   List<EditResult> get edits;
   @override

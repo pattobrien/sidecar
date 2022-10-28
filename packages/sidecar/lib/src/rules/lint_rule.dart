@@ -1,5 +1,4 @@
 import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/analysis/session.dart';
 
 import '../analyzer/ast/general_visitor.dart';
 import '../analyzer/results/analysis_result.dart';
@@ -23,7 +22,7 @@ mixin LintMixin on BaseRule {
 }
 
 mixin QuickFix on LintRule {
-  Future<List<EditResult>> computeQuickFixes(AnalysisSource source);
+  Future<List<EditResult>> computeQuickFixes(AnalysisSourceSpan source);
 }
 
 mixin LintVisitor on LintRule {

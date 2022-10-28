@@ -9,6 +9,7 @@ import '../analyzer/results/results.dart';
 import '../utils/utils.dart';
 import 'analysis_source.dart';
 import 'lint_rule.dart';
+import 'rules.dart';
 
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
   final List<LintResult> lints = [];
@@ -61,5 +62,42 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
       severity: rule.defaultSeverity,
     );
     lints.add(result);
+  }
+}
+
+abstract class SidecarAssistVisitor extends GeneralizingAstVisitor<void> {
+  final List<AssistResult> assists = [];
+  late AssistRule rule;
+  late ResolvedUnitResult unit;
+
+  @internal
+  void initializeVisitor(
+    AssistRule rule,
+    ResolvedUnitResult unit,
+  ) {
+    this.rule = rule;
+    this.unit = unit;
+  }
+
+  void reportAstNode(AstNode node) {
+    final result = AssistResult(
+      rule: rule,
+      span: AnalysisSourceSpan(
+        path: unit.path,
+        source: node.toSourceSpan(unit),
+      ),
+    );
+    assists.add(result);
+  }
+
+  void reportToken(Token token) {
+    final result = AssistResult(
+      rule: rule,
+      span: AnalysisSourceSpan(
+        path: unit.path,
+        source: token.toSourceSpan(unit),
+      ),
+    );
+    assists.add(result);
   }
 }
