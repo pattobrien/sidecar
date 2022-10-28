@@ -15,14 +15,20 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
   (ref) {
     final activePackageService = ref.watch(activeProjectServiceProvider);
     final allContexts = ref.watch(allAnalysisContextsProvider);
-    // final log = ref.watch(logDelegateProvider);
-    final activeContexts = allContexts.map(
-      (context) => activePackageService.initializeContext(
-          context, allContexts.map((e) => e.contextRoot).toList()),
-    );
-    // log.sidecarMessage(
-    //     '# of active contexts = ${activeContexts.length} // ${activeContexts.first?.activeRoot.root.path} => ${activeContexts.first?.localDependencies.length} dependency contexts in workspace');
-    return activeContexts.whereType<ActiveContext>().toList();
+    final log = ref.watch(logDelegateProvider);
+    final activeContexts = allContexts
+        .map(
+          (context) => activePackageService.initializeContext(
+              context, allContexts.map((e) => e.contextRoot).toList()),
+        )
+        .whereType<ActiveContext>()
+        .toList();
+    log.sidecarMessage('# of active contexts => ${activeContexts.length} ');
+    for (final activeContext in activeContexts) {
+      log.sidecarMessage(
+          'active context => ${activeContext.activeRoot.root.path} => ${activeContext.localDependencies.length} dependency contexts in workspace');
+    }
+    return activeContexts;
   },
   name: 'activeContextsProvider',
   dependencies: [
