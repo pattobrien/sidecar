@@ -7,7 +7,7 @@ import 'package:sidecar/sidecar.dart';
 import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
 import 'package:source_span/source_span.dart';
 
-class AvoidStringLiterals extends LintRule with LintVisitor {
+class AvoidStringLiterals extends LintRule with LintVisitor, QuickFixMixin {
   @override
   String get code => 'avoid_string_literals';
 
@@ -19,6 +19,86 @@ class AvoidStringLiterals extends LintRule with LintVisitor {
 
   @override
   SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
+
+  @override
+  Future<List<EditResult>> computeSourceChanges(AnalysisSource source) async {
+    final session = context.currentSession;
+    final changeBuilder = ChangeBuilder(session: session);
+    final unit =
+        await session.getResolvedUnit(source.path) as ResolvedUnitResult;
+
+    final stringNode = source.span.toAstNode(unit);
+
+    if (stringNode == null) return [];
+
+    //TODO: dynamically compute stringId value
+    final computedStringId = 'string123';
+
+    // final arbClassPrefix = '${configuration.prefix}.$computedStringId';
+    final arbClassPrefix = 'examplePrefix';
+
+    var references = <SourceSpan>[];
+    final parentNode = stringNode.parent;
+
+    // if (parentNode is VariableDeclaration) {
+    //   final element = parentNode.declaredElement2;
+    //   if (element != null) {
+    //     final analysisUtils = _ref.read(analysisContextUtilitiesProvider);
+    //     references = await analysisUtils.getReferences(unit, element);
+    //   }
+    // }
+
+    // we dont want to replace a string if not every variable reference
+    // will have access to it
+    // final areAllReferencesWithinBuildMethods = references.every((reference) {
+    //   final node = reference.toAstNode(unit);
+    //   return node!.isInsideBuildMethod();
+    // });
+
+    // if (areAllReferencesWithinBuildMethods && references.isNotEmpty) {
+    //   final expression = stringNode.parent?.parent?.parent;
+    //   await changeBuilder.addDartFileEdit(unit.path, (builder) {
+    //     builder.importFlutterGenAppLocalizations();
+    //     builder.addDeletion(expression!.toSourceRange(unit));
+    //   });
+
+    //   await Future.wait(references.map((reference) async {
+    //     final node = reference.toAstNode(unit);
+    //     if (node!.isInsideBuildMethod()) {
+    //       await changeBuilder.addDartFileEdit(
+    //         reference.sourceUrl!.path,
+    //         (fileBuilder) => fileBuilder.addReplacement(
+    //           reference.toSourceRange(),
+    //           (editBuilder) => editBuilder.write(arbClassPrefix),
+    //         ),
+    //       );
+    //     }
+    //   }));
+    // }
+
+    // if (parentNode is ArgumentList) {
+    await changeBuilder.addDartFileEdit(unit.path, (builder) {
+      // if (stringNode.isInsideBuildMethod()) {
+      //   builder.importFlutterGenAppLocalizations();
+      builder.addReplacement(
+        stringNode.toSourceRange(unit),
+        (editBuilder) => editBuilder.write(arbClassPrefix),
+      );
+      // }
+    });
+    // }
+    // if (changeBuilder.sourceChange.edits.isNotEmpty) {
+    final errorFixes = [
+      EditResult(
+        message: 'Extract string declaration',
+        sourceChanges: changeBuilder.sourceChange.edits,
+      ),
+    ];
+    return errorFixes;
+    // } else {
+    //   return [];
+    // }
+  }
 
   // @override
   // AvoidStringLiteralsConfig get configuration =>
@@ -32,81 +112,7 @@ class AvoidStringLiterals extends LintRule with LintVisitor {
   //   AnalysisSession session,
   //   AnalysisSource source,
   // ) async {
-  //   final changeBuilder = ChangeBuilder(session: session);
-  //   final unit =
-  //       await session.getResolvedUnit(source.path) as ResolvedUnitResult;
 
-  //   final stringNode = source.span.toAstNode(unit);
-
-  //   if (stringNode == null) return [];
-
-  //   //TODO: dynamically compute stringId value
-  //   final computedStringId = 'string123';
-
-  //   final arbClassPrefix = '${configuration.prefix}.$computedStringId';
-
-  //   var references = <SourceSpan>[];
-  //   final parentNode = stringNode.parent;
-
-  //   if (parentNode is VariableDeclaration) {
-  //     final element = parentNode.declaredElement2;
-  //     if (element != null) {
-  //       final analysisUtils = _ref.read(analysisContextUtilitiesProvider);
-  //       references = await analysisUtils.getReferences(unit, element);
-  //     }
-  //   }
-
-  //   // we dont want to replace a string if not every variable reference
-  //   // will have access to it
-  //   final areAllReferencesWithinBuildMethods = references.every((reference) {
-  //     final node = reference.toAstNode(unit);
-  //     return node!.isInsideBuildMethod();
-  //   });
-
-  //   if (areAllReferencesWithinBuildMethods && references.isNotEmpty) {
-  //     final expression = stringNode.parent?.parent?.parent;
-  //     await changeBuilder.addDartFileEdit(unit.path, (builder) {
-  //       builder.importFlutterGenAppLocalizations();
-  //       builder.addDeletion(expression!.toSourceRange(unit));
-  //     });
-
-  //     await Future.wait(references.map((reference) async {
-  //       final node = reference.toAstNode(unit);
-  //       if (node!.isInsideBuildMethod()) {
-  //         await changeBuilder.addDartFileEdit(
-  //           reference.sourceUrl!.path,
-  //           (fileBuilder) => fileBuilder.addReplacement(
-  //             reference.toSourceRange(),
-  //             (editBuilder) => editBuilder.write(arbClassPrefix),
-  //           ),
-  //         );
-  //       }
-  //     }));
-  //   }
-
-  //   if (parentNode is ArgumentList) {
-  //     await changeBuilder.addDartFileEdit(unit.path, (builder) {
-  //       if (stringNode.isInsideBuildMethod()) {
-  //         builder.importFlutterGenAppLocalizations();
-  //         builder.addReplacement(
-  //           stringNode.toSourceRange(unit),
-  //           (editBuilder) => editBuilder.write(arbClassPrefix),
-  //         );
-  //       }
-  //     });
-  //   }
-  //   if (changeBuilder.sourceChange.edits.isNotEmpty) {
-  //     final errorFixes = [
-  //       EditResult(
-  //         analysisResult: result,
-  //         message: 'Extract string declaration',
-  //         sourceChanges: changeBuilder.sourceChange.edits,
-  //       ),
-  //     ];
-  //     return errorFixes;
-  //   } else {
-  //     return [];
-  //   }
   // }
 }
 

@@ -62,6 +62,16 @@ final lintResultsForFileProvider =
   return results.whereType<LintResult>().toList();
 });
 
+final lintResultsForContextProvider =
+    FutureProvider.family<List<LintResult>, ActiveContextRoot>(
+  (ref, root) async {
+    final results = await Future.wait(root.typedAnalyzedFiles().map(
+          (file) async => ref.watch(lintResultsForFileProvider(file).future),
+        ));
+    return results.expand((e) => e).toList();
+  },
+);
+
 final analysisResultsCompletedForContextProvider =
     Provider.family<bool, ActiveContextRoot>(
   (ref, root) {

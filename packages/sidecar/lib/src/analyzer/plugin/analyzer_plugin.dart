@@ -10,11 +10,10 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-import 'package:watcher/watcher.dart';
 
-import '../../../sidecar.dart';
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
+import '../../utils/file_paths.dart';
 import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
 import '../results/analysis_results_reporter.dart';

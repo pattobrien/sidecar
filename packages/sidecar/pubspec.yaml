@@ -1,6 +1,6 @@
 name: sidecar
 description: An analyzer tool that provides more control over your IDE and developer experience.
-version: 0.1.0-dev.3
+version: 0.1.0-dev.4
 repository: https://github.com/pattobrien/sidecar/
 homepage: https://github.com/pattobrien/sidecar/
 issue_tracker: https://github.com/pattobrien/sidecar/issues

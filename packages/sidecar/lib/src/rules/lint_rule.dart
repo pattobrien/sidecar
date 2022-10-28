@@ -20,12 +20,10 @@ mixin LintMixin on BaseRule {
     ResolvedUnitResult unit,
   ) =>
       Future.value([]);
+}
 
-  Future<List<EditResult>> computeSourceChanges(
-    AnalysisSession session,
-    AnalysisSource source,
-  ) =>
-      Future.value(<EditResult>[]);
+mixin QuickFixMixin on LintRule {
+  Future<List<EditResult>> computeSourceChanges(AnalysisSource source);
 }
 
 mixin LintVisitor on LintRule {

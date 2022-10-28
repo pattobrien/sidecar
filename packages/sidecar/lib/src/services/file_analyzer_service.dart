@@ -33,7 +33,7 @@ class FileAnalyzerService {
 
       final results =
           await Future.wait(rules.map<Future<List<LintResult>>>((rule) async {
-          final ruleHasVisitor = rule is LintVisitor;
+        final ruleHasVisitor = rule is LintVisitor;
         try {
           // print('computeLintResults: ${file.path}');
           // TODO:
@@ -86,8 +86,11 @@ class FileAnalyzerService {
     ActiveContext context,
     LintResult analysisResult,
   ) async {
-    final editResults = await analysisResult.rule
-        .computeSourceChanges(context.currentSession, analysisResult.source);
+    final rule = analysisResult.rule;
+
+    if (rule is! QuickFixMixin) return analysisResult;
+
+    final editResults = await rule.computeSourceChanges(analysisResult.source);
     return analysisResult.copyWith(edits: editResults);
   }
 

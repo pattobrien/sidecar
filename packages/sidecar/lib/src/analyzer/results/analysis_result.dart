@@ -38,7 +38,7 @@ class AnalysisResult with _$AnalysisResult {
 }
 
 extension LintResultX on LintResult {
-  AnalysisError? toAnalysisError() {
+  AnalysisError toAnalysisError() {
     final concatenatedLintCode = '${rule.packageName}.${rule.code}';
     return AnalysisError(
       severity.analysisError,
