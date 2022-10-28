@@ -8,7 +8,6 @@
 
 - Motivations
 - Getting Started
-- Architecture
 - Next steps
 
 # Motivations and Objective
@@ -17,6 +16,7 @@
 
 # Getting Started
 
+Some things are easier 
 
 ## Using Sidecar within a Dart or Flutter Project
 
@@ -38,6 +38,7 @@ dev_dependencies:
 
 ```yaml
 # sidecar.yaml
+# file can also be created by running 'sidecar init' (sidecar cli needs to be installed)
 includes:
   - "bin/**"
   - "lib/**"
@@ -65,8 +66,14 @@ After several seconds of start-up (and potentially a restart of your IDE), the l
 CLI Mode is useful for running lint rules from a CI/CD pipeline. To use Sidecar in CLI mode, run the following command in your terminal:
 
 ```sh
+# activate sidecar
+dart pub global activate sidecar
+
+# run sidecar analyzer in CLI mode
 sidecar analyze
 ```
+
+- TODO: elicit feedback for cli use cases
 
 ### Debug Mode
 
@@ -77,76 +84,6 @@ To enable debug mode, run:
 ```sh
 sidecar analyze --debug
 ```
-
-## Architecture
-
-In comparison to the ```analyzer_plugin``` package, what makes Sidecar extremely powerful is that lints from any number of packages are designed to work together within one isolate / process. This means that they share RAM and CPU resources, which means each directory should only be analyzed once, resulting in Dart-tier performance. Therefore, Sidecar enables developers to utilize diverse collections of IDE tools, with the performance that is expected of the entire Dart toolchain.
-
-The notable ways that Sidecar accomplishes this architecture is by doing the following:
-
-1. When ```sidecar``` is enabled in ```analysis_options.yaml```, a "middleman" plugin is booted up from the transitive ```sidecar``` package dependency, which checks the root package's dependency graph for all packages that both a) depend on ```sidecar``` and b) define ```LintRules``` (more on what this means later).
-
-2. The middleman plugin generates a series of files within ```.dart_tool/sidecar``` at the root directory. This includes a concatenation of all of the ```LintRules``` found from process 1.
-
-```dart
-// .dart_tool/sidecar/constructors.dart
-// generated array of lint rules
-
-import 'package:sidecar/sidecar.dart';
-
-import 'package:design_system_lints/design_system_lints.dart' as design_system_lints;
-import 'package:l10n_lints/l10n_lints.dart' as l10n_lints;
-
-List<SidecarBaseConstructor> constructors = [
-  design_system_lints.AvoidEdgeInsetsLiteral.new,
-  design_system_lints.AvoidIconLiteral.new,
-  design_system_lints.AvoidBoxShadowLiteral.new,
-  design_system_lints.AvoidTextStyleLiteral.new,
-  design_system_lints.AvoidBorderRadiusLiteral.new,
-  design_system_lints.AvoidSizedBoxHeightWidthLiterals.new,
-  l10n_lints.AvoidStringLiterals.new,
-];
-```
-
-
-```dart
-// .dart_tool/sidecar/sidecar.dart
-// generated executable file
-
-import 'dart:isolate';
-
-import 'package:sidecar/sidecar.dart';
-
-import 'constructors.dart';
-
-Future<void> main(List<String> args, SendPort sendPort) async {
-  await startSidecarPlugin(
-    sendPort, 
-    args,
-    constructors: constructors,  // takes lint rule constructors as input
-    isMiddleman: false,
-  );
-}
-
-```
-
-3. Once the files are generated, the middleman plugin then launches an isolate from this executable, which launches the Sidecar analyzer plugin together with the array of ```LintRules```. This step is required, because in order to run all lint packages within one isolate, we need to dynamically aggregate the multiple packages into one single ```main()``` function.
-
-4. The middleman plugin passes all requests (lint, quick assist, etc.) to/from the IDE & analysis server to the Sidecar analyzer plugin where the requests are then processed.
-
-Additional notes:
-
-- Both the middleman plugin and the Sidecar analyzer plugin utilize the same package_config.json as the root project - this gaurantees that, as long as ```pub get``` resolves for the root project, so will all of the lints regardless of the dependencies that they're analyzing
-
-
-## Proposal: Analyzer Ecosystem
-
-While the current Analyzer "ecosystem" comprises of not much more than a few projects (```dart_custom_metrics``` and ```custom_lints```, to name a few), the trends of the Dart ecosystem - in terms of popularity, and hyperfocus on toolchains (re: metaprogramming) - will lower the barrier of entry for developers to be "more in control" of their IDE and developer experience. This is where Sidecar thinks it can help as well.
-
-In order for the community to really flourish, the APIs behind defining LintRules and code edits need be as intutive as possible. Therefore, the biggest recommendation is: for package maintainers to offer a number of lint-based utilities for the community to used. 
-
-- TODO: explain role of utility packages, like ```flutter_analyzer_utils```
-- 
 
 
 ## Next Steps
@@ -174,20 +111,26 @@ In order for the community to really flourish, the APIs behind defining LintRule
 - define package or lint-specific includes paths
 - explicitly enable or disable a lint
 - override a rule's default severity
-- TODO: rule configurations and configuration errors
+- lints update on ```sidecar.yaml``` changes, without plugin needing to restart (within milliseconds)
+
+### rule configurations
+- TODO: allow rules to declare configurations
+- TODO: display rule configuration errors in ```sidecar.yaml``` file
 
 
 ### cli
 
 - output report of entire codebase
-- TODO: output different formats
+- TODO: output to different formats (e.g. csv)
 
 ### benchmarks and testing
 
 - TODO: Register visitors for better analysis performance
-- TODO: lint unit test tools
+- TODO: lint unit test toolchain
 - TODO: how can we benchmark against Dart official analysis server?
+- TODO: cli takes ~12 seconds to complete
+
 ### extras
 - TODO: ignore statements
-- TODO: Import inheritance
-- TODO: Multi-Import inheritence
+- TODO: import inheritance
+- TODO: multi-import inheritence

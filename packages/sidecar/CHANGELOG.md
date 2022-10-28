@@ -2,6 +2,7 @@
 ## 0.1.0-dev.4
 
 - fix: Verbose log removed from CLI output
+- fix: Align error type in CLI output
 
 ## 0.1.0-dev.3
 
