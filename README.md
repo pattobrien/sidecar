@@ -103,7 +103,7 @@ sidecar analyze --debug
 ### rules with code changes
 
 - quick fixes for lints
-- TODO: code assists
+- code assists
 - TODO: code completion
 
 ### ```sidecar.yaml``` configuration

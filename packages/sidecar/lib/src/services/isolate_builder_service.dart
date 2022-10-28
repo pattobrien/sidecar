@@ -115,8 +115,6 @@ class IsolateBuilderService {
     for (final sidecarPackage in sidecarPackages) {
       final name = sidecarPackage.packageName;
       importsBuffer.writeln("import 'package:$name/$name.dart' as $name;");
-      importsBuffer.writeln(
-          '// # of assist packages: ${sidecarPackage.assists?.length.toString() ?? 'no assists key found'}');
       final rules = [
         ...?sidecarPackage.lints,
         ...?sidecarPackage.assists,

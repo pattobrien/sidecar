@@ -6,6 +6,7 @@ import 'package:analyzer/file_system/overlay_file_system.dart';
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
 import 'package:path/path.dart' as p;
@@ -28,7 +29,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       : resourceProvider = ref.read(pluginResourceProvider),
         super(resourceProvider: ref.read(pluginResourceProvider));
 
-  HotReloader? _reloader;
+  // HotReloader? _reloader;
   final initializationCompleter = Completer<void>();
   final Ref ref;
 
@@ -49,6 +50,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   void _log(String msg) =>
       ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
+
   void _logError(Object e, StackTrace stackTrace) =>
       ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
@@ -70,7 +72,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> _startWithHotReload(
     plugin.PluginCommunicationChannel channel,
   ) async {
-    _reloader = await HotReloader.create(onAfterReload: (c) {
+    // _reloader = await HotReloader.create(onAfterReload: (c) {
+    await HotReloader.create(onAfterReload: (c) {
       final time = DateTime.now();
       final isos = c.reloadReports.keys;
       ref
@@ -111,10 +114,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     });
   }
 
-  // Future<void> reload() async {
-  //   await _reloader?.reloadCode(); /
-  // }
-
   AnalysisContextCollection? _contextCollection;
 
   @override
@@ -124,7 +123,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     _contextCollection = contextCollection;
     try {
       _log('ISOLATE: afterNewContextCollection');
-      // ref.invalidate(activeContextsProvider);
+
       ref
           .read(allAnalysisContextsProvider.state)
           .update((_) => contextCollection.contexts);
@@ -273,6 +272,22 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       _logError('handleEditGetAssists ${parameters.file} -- $e', stackTrace);
       rethrow;
     }
+  }
+
+  /// Handle a 'completion.getSuggestions' request.
+  ///
+  /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  @override
+  Future<plugin.CompletionGetSuggestionsResult> handleCompletionGetSuggestions(
+    plugin.CompletionGetSuggestionsParams parameters,
+  ) async {
+    final filePath = parameters.file;
+    final offset = parameters.offset;
+    return plugin.CompletionGetSuggestionsResult(
+      -1,
+      -1,
+      const <plugin.CompletionSuggestion>[],
+    );
   }
 }
 
