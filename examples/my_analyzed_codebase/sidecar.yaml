@@ -24,7 +24,7 @@ lints:
     avoid_sized_box_height_width_literals:
       severity: info
     avoid_text_style_literal:
-      severity: info
+      severity: warning
       enabled: true
       includes:
         - "lib/**"
@@ -33,12 +33,13 @@ lints:
     avoid_box_shadow_literal:
     # avoid_edge_insets_literal:
 #
-# assists:
-#   auto_route_lints:
-#     create_new_page_widget:
-#       enabled: true
-#   riverpod_lints:
-#     create_text_edit_controller_provider:
-#   sidecar_lints:
-#     output_ast_node_tree:
-#       enabled: true
+assists:
+  # auto_route_lints:
+  #   create_new_page_widget:
+  #     enabled: true
+  # riverpod_lints:
+  #   create_text_edit_controller_provider:
+  sidecar_lints:
+    output_ast_node_tree:
+      enabled: true
+    output_source_span:

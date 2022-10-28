@@ -1,7 +1,6 @@
 name: sidecar_lints
 description: A starting point for Dart libraries or applications.
-version: 0.1.13
-publish_to: https://micropub-3qduh.ondigitalocean.app/
+version: 0.1.0-dev.1
 repository: https://github.com/pattobrien/sidecar/tree/master/repositories/sidecar_lints/
 
 environment:
@@ -12,9 +11,7 @@ dependencies:
   analyzer_plugin: ^0.11.1
   collection: ^1.16.0
   path: ^1.8.0
-  sidecar:
-    hosted: https://dart.cloudsmith.io/fine-designs/sidecar/
-    version: ^0.1.23-dev.3
+  sidecar: ^0.1.0-dev.5
 
 dev_dependencies:
   lints: ^2.0.0
@@ -23,5 +20,6 @@ dev_dependencies:
 micropub: sidecar
 
 sidecar:
-  edits:
+  assists:
     - output_ast_node_tree
+    - output_source_span

@@ -4,9 +4,9 @@ import 'package:sidecar/sidecar.dart';
 
 import 'constants.dart';
 
-class OutputAstNodeTree extends AssistRule with AssistVisitor {
+class OutputSourceSpan extends AssistRule with AssistVisitor {
   @override
-  String get code => 'output_ast_node_tree';
+  String get code => 'output_source_span';
 
   @override
   String get packageName => kPackageName;
@@ -22,22 +22,20 @@ class OutputAstNodeTree extends AssistRule with AssistVisitor {
 
     final node = source.mapOrNull(span: (span) => span.source)?.toAstNode(unit);
     if (node == null) return [];
+    final sourceSpanString =
+        '// span(${node.offset}, ${node.offset + node.length}, \'${node.toSource()}\');';
 
     await changeBuilder.addDartFileEdit(
       unit.path,
-      (builder) {
-        builder.addInsertion(
-          unit.unit.length,
-          (builder) {
-            builder.write(
-                '\n// ${node.beginToken} (node => parents): ${node.runtimeType} => ${node.parent.runtimeType} => ${node.parent?.parent.runtimeType} => ${node.parent?.parent?.parent.runtimeType}\n');
-          },
-        );
-      },
+      (builder) => builder.addInsertion(
+        unit.unit.length,
+        (builder) => builder.writeln(sourceSpanString),
+      ),
     );
+
     return [
       EditResult(
-        message: 'Output AstNode info into a comment',
+        message: 'Output SourceSpan into a comment',
         sourceChanges: changeBuilder.sourceChange.edits,
       ),
     ];
