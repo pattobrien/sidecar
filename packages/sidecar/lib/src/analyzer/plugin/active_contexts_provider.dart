@@ -15,6 +15,7 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
     final activePackageService = ref.watch(activeProjectServiceProvider);
     final allContexts = ref.watch(allAnalysisContextsProvider);
     final results = allContexts.map(activePackageService.initializeContext);
+    // print('# of active roots = ${results.length}');
     return results.whereType<ActiveContext>().toList();
   },
   name: 'activeContextsProvider',
@@ -26,7 +27,10 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
 
 final activeContextRootsProvider = Provider<List<ActiveContextRoot>>(
   (ref) {
-    return ref.watch(activeContextsProvider).map((e) => e.activeRoot).toList();
+    final activeRoots =
+        ref.watch(activeContextsProvider).map((e) => e.activeRoot).toList();
+    // print('# of active roots = ${activeRoots.length}');
+    return activeRoots;
   },
   name: 'activeContextRootsProvider',
   dependencies: [

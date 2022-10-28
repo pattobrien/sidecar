@@ -39,8 +39,8 @@ class PackageGenerator {
 
     final package = packageConfig.packages
         .firstWhere((element) => element.name == packageName);
-    print(
-        '${package.name} // ${package.root} // ${package.packageUriRoot} //  ${package.relativeRoot} //  ');
+    // print(
+    //     '${package.name} // ${package.root} // ${package.packageUriRoot} //  ${package.relativeRoot} //  ');
     return package;
   }
 
@@ -105,7 +105,7 @@ class PackageGenerator {
         final buffer = StringBuffer();
 
         for (final t in types) {
-          print('generating checker for type: ${t.typeName}');
+          // print('generating checker for type: ${t.typeName}');
           buffer.writeln(generateTypeChecker(t.typeName, t.packagePath));
         }
 

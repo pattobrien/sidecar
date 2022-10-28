@@ -10,25 +10,25 @@ import 'rule_constructors_provider.dart';
 
 final lintRulesForFileProvider = Provider.family<List<LintRule>, AnalyzedFile>(
   (ref, analyzedFile) {
-    return ref.watch(_filteredRulesProvider(analyzedFile).select(
+    return ref.watch(filteredRulesProvider(analyzedFile).select(
       (rules) => rules.whereType<LintRule>().toList(),
     ));
   },
   name: 'lintRulesForFileProvider',
   dependencies: [
-    _filteredRulesProvider,
+    filteredRulesProvider,
   ],
 );
 
 final assistRulesForFileProvider =
     Provider.family<List<AssistRule>, AnalyzedFile>(
   (ref, analyzedFile) {
-    return ref.watch(_filteredRulesProvider(analyzedFile)
+    return ref.watch(filteredRulesProvider(analyzedFile)
         .select((value) => value.whereType<AssistRule>().toList()));
   },
   name: 'assistRulesForFileProvider',
   dependencies: [
-    _filteredRulesProvider,
+    filteredRulesProvider,
   ],
 );
 
@@ -54,7 +54,7 @@ final activatedRulesProvider =
 );
 
 /// Filter rules based on globs defined in project configuration
-final _filteredRulesProvider = Provider.family<List<BaseRule>, AnalyzedFile>(
+final filteredRulesProvider = Provider.family<List<BaseRule>, AnalyzedFile>(
   (ref, analyzedFile) {
     final allRules = ref.watch(activatedRulesProvider(analyzedFile.root));
     final context = ref.watch(activeContextsProvider).contextFor(analyzedFile)!;
@@ -66,7 +66,7 @@ final _filteredRulesProvider = Provider.family<List<BaseRule>, AnalyzedFile>(
             projectConfiguration: context.sidecarOptions))
         .toList();
   },
-  name: '_filteredRulesProvider',
+  name: 'filteredRulesProvider',
   dependencies: [
     activeContextsProvider,
     activatedRulesProvider,

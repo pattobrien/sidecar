@@ -6,4 +6,5 @@ import '../../rules/rules.dart';
 final ruleConstructorProvider = Provider<List<SidecarBaseConstructor>>(
   (ref) => throw UnimplementedError(),
   name: 'ruleConstructorProvider',
+  dependencies: const [],
 );

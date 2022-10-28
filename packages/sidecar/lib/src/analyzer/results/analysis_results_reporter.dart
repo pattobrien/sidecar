@@ -17,5 +17,6 @@ final analysisResultsReporterProvider =
   dependencies: [
     logDelegateProvider,
     analysisResultsForFileProvider,
+    lintResultsForFileProvider,
   ],
 );

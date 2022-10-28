@@ -20,6 +20,7 @@ final assistResultsForFileProvider =
       unitResult: unitResult,
     );
   },
+  name: 'assistResultsForFileProvider',
   dependencies: [
     lintRulesForFileProvider,
     fileAnalyzerServiceProvider,
@@ -37,6 +38,7 @@ final assistResultsWithEditsForFileProvider =
         .map((e) async => fileService.calculateAssistResultEdits(e)));
     return assistResultsWithEdits;
   },
+  name: 'assistResultsWithEditsForFileProvider',
   dependencies: [
     lintRulesForFileProvider,
     fileAnalyzerServiceProvider,
@@ -52,6 +54,7 @@ final assistResultsForRequestProvider =
         .watch(assistResultsWithEditsForFileProvider(request.file).future);
     return fileService.getAssistResultsAtOffset(assistResults, request);
   },
+  name: 'assistResultsForRequestProvider',
   dependencies: [
     lintRulesForFileProvider,
     fileAnalyzerServiceProvider,
