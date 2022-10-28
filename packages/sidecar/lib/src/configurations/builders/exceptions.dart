@@ -67,9 +67,9 @@ class SidecarFieldException implements SidecarConfigException {
   @override
   AnalysisResult toAnalysisResult() => AnalysisResult.lint(
         rule: rule,
-        source: AnalysisSource(
+        span: AnalysisSourceSpan(
           path: sourceSpan.sourceUrl!.path,
-          span: sourceSpan,
+          source: sourceSpan,
         ),
         message: message,
         severity: LintSeverity.warning,
@@ -118,9 +118,9 @@ class SidecarLintException implements SidecarConfigException {
   @override
   LintResult toAnalysisResult() {
     return LintResult(
-      source: AnalysisSource(
+      span: AnalysisSourceSpan(
         path: sourceSpan.sourceUrl!.path,
-        span: sourceSpan,
+        source: sourceSpan,
       ),
       rule: rule,
       message: message,
@@ -165,9 +165,9 @@ class SidecarLintPackageException implements SidecarConfigException {
   @override
   AnalysisResult toAnalysisResult() {
     return AnalysisResult.lint(
-      source: AnalysisSource(
+      span: AnalysisSourceSpan(
         path: sourceSpan.sourceUrl!.path,
-        span: sourceSpan,
+        source: sourceSpan,
       ),
       rule: rule,
       message: message,

@@ -61,7 +61,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
     for (final result in results) {
       final ansi = Ansi(true);
       final location =
-          '$relativePath:${result.source.span.start.line}:${result.source.span.start.column}';
+          '$relativePath:${result.span.source.start.line}:${result.span.source.start.column}';
 
       // pad error type string so that it aligns in the terminal nicely
       // we need to do this manually (as opposed to using String.padLeft()),

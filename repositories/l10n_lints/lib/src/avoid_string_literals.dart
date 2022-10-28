@@ -1,13 +1,12 @@
 import 'dart:async';
 
-import 'package:analyzer/dart/analysis/session.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:l10n_lints/src/constants.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
 import 'package:source_span/source_span.dart';
 
-class AvoidStringLiterals extends LintRule with LintVisitor, QuickFixMixin {
+class AvoidStringLiterals extends LintRule with LintVisitor, QuickFix {
   @override
   String get code => 'avoid_string_literals';
 
@@ -21,7 +20,7 @@ class AvoidStringLiterals extends LintRule with LintVisitor, QuickFixMixin {
   SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 
   @override
-  Future<List<EditResult>> computeSourceChanges(AnalysisSource source) async {
+  Future<List<EditResult>> computeQuickFixes(AnalysisSource source) async {
     final session = context.currentSession;
     final changeBuilder = ChangeBuilder(session: session);
     final unit =

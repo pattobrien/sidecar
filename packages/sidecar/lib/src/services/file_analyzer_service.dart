@@ -1,9 +1,11 @@
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
+import 'package:analyzer_plugin/utilities/assist/assist.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
 import '../analyzer/results/results.dart';
 import '../analyzer/server/log_delegate.dart';
+import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 import '../utils/utils.dart';
 
@@ -33,33 +35,33 @@ class FileAnalyzerService {
 
       final results =
           await Future.wait(rules.map<Future<List<LintResult>>>((rule) async {
-        final ruleHasVisitor = rule is LintVisitor;
+        // final ruleHasVisitor = rule is LintVisitor;
         try {
           // print('computeLintResults: ${file.path}');
           // TODO:
-          if (ruleHasVisitor) {
-            final results = await rule.generateAnalysisResults(unitResult);
-            return results
-                .map((result) => result.copyWith(
-                      severity: rule.analysisConfiguration.map(
-                        lint: (lintConfig) =>
-                            lintConfig.severity ?? rule.defaultSeverity,
-                        assist: (assistConfig) => throw UnimplementedError(),
-                      ),
-                    ))
-                .toList();
-          } else {
-            final results = await rule.generateAnalysisResults(unitResult);
-            return results
-                .map((result) => result.copyWith(
-                      severity: rule.analysisConfiguration.map(
-                        lint: (lintConfig) =>
-                            lintConfig.severity ?? rule.defaultSeverity,
-                        assist: (assistConfig) => throw UnimplementedError(),
-                      ),
-                    ))
-                .toList();
-          }
+          // if (ruleHasVisitor) {
+          final results = await rule.generateAnalysisResults(unitResult);
+          return results
+              .map((result) => result.copyWith(
+                    severity: rule.analysisConfiguration.map(
+                      lint: (lintConfig) =>
+                          lintConfig.severity ?? rule.defaultSeverity,
+                      assist: (assistConfig) => throw UnimplementedError(),
+                    ),
+                  ))
+              .toList();
+          // } else {
+          //   final results = await rule.generateAnalysisResults(unitResult);
+          //   return results
+          //       .map((result) => result.copyWith(
+          //             severity: rule.analysisConfiguration.map(
+          //               lint: (lintConfig) =>
+          //                   lintConfig.severity ?? rule.defaultSeverity,
+          //               assist: (assistConfig) => throw UnimplementedError(),
+          //             ),
+          //           ))
+          //       .toList();
+          // }
         } catch (e, stackTrace) {
           _logError('LintRule Error: ${e.toString()}', stackTrace);
           return Future.value([]);
@@ -67,8 +69,8 @@ class FileAnalyzerService {
       }));
 
       return results.expand((e) => e).toList()
-        ..sort((a, b) => a.source.span.location.startLine
-            .compareTo(b.source.span.location.startLine));
+        ..sort((a, b) => a.span.source.location.startLine
+            .compareTo(b.span.source.location.startLine));
     } else {
       // TODO: handle non-Dart files
       return Future.value([]);
@@ -88,28 +90,51 @@ class FileAnalyzerService {
   ) async {
     final rule = analysisResult.rule;
 
-    if (rule is! QuickFixMixin) return analysisResult;
+    if (rule is! QuickFix) return analysisResult;
 
-    final editResults = await rule.computeSourceChanges(analysisResult.source);
+    final editResults = await rule.computeQuickFixes(analysisResult.span);
     return analysisResult.copyWith(edits: editResults);
   }
 
-  // Future<Iterable<EditResult>> calculateAssistEdits(
-  //   ActiveContext context,
-  //   AnalysisResult analysisResult,
-  // ) async {
-  //   return analysisResult.rule
-  //       .computeSourceChanges(context.currentSession, analysisResult);
-  // }
+  Future<Iterable<AssistResult>> computeAssistResults({
+    required AnalyzedFile file,
+    required List<AssistRule> rules,
+    required ResolvedUnitResult? unitResult,
+  }) async {
+    //TODO: allow analysis of other file extensions
+    if (file.isDartFile) {
+      if (unitResult == null) return [];
+      final results =
+          await Future.wait(rules.map<Future<List<AssistResult>>>((rule) async {
+        try {
+          final assistResults = await rule.filterResults(unitResult);
+          return assistResults;
+        } catch (e, stackTrace) {
+          _logError('LintRule Error: ${e.toString()}', stackTrace);
+          return Future.value([]);
+        }
+      }));
+      return results.expand((e) => e).toList();
+    } else {
+      // TODO: handle non-Dart files
+      return Future.value([]);
+    }
+  }
 
-  // Future<Iterable<EditResult>> calculateEditResults(
-  //   ActiveContext context,
-  //   Iterable<AnalysisResult> analysisResults,
-  //   String path,
-  //   int offset,
-  // ) async {
-  //   final results = await Future.wait<List<EditResult>>(analysisResults
-  //       .map((e) => e.rule.computeSourceChanges(context.currentSession, e)));
-  //   return results.expand((element) => element);
-  // }
+  Iterable<AssistResult> getAssistResultsAtOffset(
+    Iterable<AssistResult> analysisResults,
+    QuickAssistRequest request,
+  ) =>
+      analysisResults.where(
+        (result) => result.isWithinOffset(request.file.path, request.offset),
+      );
+
+  Future<AssistResult> calculateAssistResultEdits(
+    ActiveContext context,
+    AssistResult result,
+  ) async {
+    final rule = result.rule;
+    final editResults = await rule.computeSourceChanges(result.span);
+    return result.copyWith(edits: editResults);
+  }
 }

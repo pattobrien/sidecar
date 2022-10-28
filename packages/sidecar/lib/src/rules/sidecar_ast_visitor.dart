@@ -34,9 +34,9 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
   }) {
     final result = LintResult(
       rule: rule,
-      source: AnalysisSource(
+      span: AnalysisSourceSpan(
         path: unit.path,
-        span: node.toSourceSpan(unit),
+        source: node.toSourceSpan(unit),
       ),
       message: message,
       correction: correction,
@@ -52,9 +52,9 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
   }) {
     final result = LintResult(
       rule: rule,
-      source: AnalysisSource(
+      span: AnalysisSourceSpan(
         path: unit.path,
-        span: token.toSourceSpan(unit),
+        source: token.toSourceSpan(unit),
       ),
       message: message,
       correction: correction,

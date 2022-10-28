@@ -16,8 +16,45 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnalysisSource {
-  SourceSpan get span => throw _privateConstructorUsedError;
   String get path => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(SourceSpan source, String path) span,
+    required TResult Function(SourceCursor source, String path) cursor,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(SourceSpan source, String path)? span,
+    TResult Function(SourceCursor source, String path)? cursor,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(SourceSpan source, String path)? span,
+    TResult Function(SourceCursor source, String path)? cursor,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AnalysisSourceSpan value) span,
+    required TResult Function(AnalysisSourceCursor value) cursor,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(AnalysisSourceSpan value)? span,
+    TResult Function(AnalysisSourceCursor value)? cursor,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AnalysisSourceSpan value)? span,
+    TResult Function(AnalysisSourceCursor value)? cursor,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AnalysisSourceCopyWith<AnalysisSource> get copyWith =>
@@ -29,7 +66,7 @@ abstract class $AnalysisSourceCopyWith<$Res> {
   factory $AnalysisSourceCopyWith(
           AnalysisSource value, $Res Function(AnalysisSource) then) =
       _$AnalysisSourceCopyWithImpl<$Res>;
-  $Res call({SourceSpan span, String path});
+  $Res call({String path});
 }
 
 /// @nodoc
@@ -43,14 +80,9 @@ class _$AnalysisSourceCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? span = freezed,
     Object? path = freezed,
   }) {
     return _then(_value.copyWith(
-      span: span == freezed
-          ? _value.span
-          : span // ignore: cast_nullable_to_non_nullable
-              as SourceSpan,
       path: path == freezed
           ? _value.path
           : path // ignore: cast_nullable_to_non_nullable
@@ -60,35 +92,35 @@ class _$AnalysisSourceCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$$_AnalysisSourceCopyWith<$Res>
+abstract class _$$AnalysisSourceSpanCopyWith<$Res>
     implements $AnalysisSourceCopyWith<$Res> {
-  factory _$$_AnalysisSourceCopyWith(
-          _$_AnalysisSource value, $Res Function(_$_AnalysisSource) then) =
-      __$$_AnalysisSourceCopyWithImpl<$Res>;
+  factory _$$AnalysisSourceSpanCopyWith(_$AnalysisSourceSpan value,
+          $Res Function(_$AnalysisSourceSpan) then) =
+      __$$AnalysisSourceSpanCopyWithImpl<$Res>;
   @override
-  $Res call({SourceSpan span, String path});
+  $Res call({SourceSpan source, String path});
 }
 
 /// @nodoc
-class __$$_AnalysisSourceCopyWithImpl<$Res>
+class __$$AnalysisSourceSpanCopyWithImpl<$Res>
     extends _$AnalysisSourceCopyWithImpl<$Res>
-    implements _$$_AnalysisSourceCopyWith<$Res> {
-  __$$_AnalysisSourceCopyWithImpl(
-      _$_AnalysisSource _value, $Res Function(_$_AnalysisSource) _then)
-      : super(_value, (v) => _then(v as _$_AnalysisSource));
+    implements _$$AnalysisSourceSpanCopyWith<$Res> {
+  __$$AnalysisSourceSpanCopyWithImpl(
+      _$AnalysisSourceSpan _value, $Res Function(_$AnalysisSourceSpan) _then)
+      : super(_value, (v) => _then(v as _$AnalysisSourceSpan));
 
   @override
-  _$_AnalysisSource get _value => super._value as _$_AnalysisSource;
+  _$AnalysisSourceSpan get _value => super._value as _$AnalysisSourceSpan;
 
   @override
   $Res call({
-    Object? span = freezed,
+    Object? source = freezed,
     Object? path = freezed,
   }) {
-    return _then(_$_AnalysisSource(
-      span: span == freezed
-          ? _value.span
-          : span // ignore: cast_nullable_to_non_nullable
+    return _then(_$AnalysisSourceSpan(
+      source: source == freezed
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
       path: path == freezed
           ? _value.path
@@ -100,52 +132,269 @@ class __$$_AnalysisSourceCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AnalysisSource extends _AnalysisSource {
-  const _$_AnalysisSource({required this.span, required this.path}) : super._();
+class _$AnalysisSourceSpan extends AnalysisSourceSpan {
+  const _$AnalysisSourceSpan({required this.source, required this.path})
+      : super._();
 
   @override
-  final SourceSpan span;
+  final SourceSpan source;
   @override
   final String path;
 
   @override
   String toString() {
-    return 'AnalysisSource(span: $span, path: $path)';
+    return 'AnalysisSource.span(source: $source, path: $path)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AnalysisSource &&
-            const DeepCollectionEquality().equals(other.span, span) &&
+            other is _$AnalysisSourceSpan &&
+            const DeepCollectionEquality().equals(other.source, source) &&
             const DeepCollectionEquality().equals(other.path, path));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(span),
+      const DeepCollectionEquality().hash(source),
       const DeepCollectionEquality().hash(path));
 
   @JsonKey(ignore: true)
   @override
-  _$$_AnalysisSourceCopyWith<_$_AnalysisSource> get copyWith =>
-      __$$_AnalysisSourceCopyWithImpl<_$_AnalysisSource>(this, _$identity);
-}
-
-abstract class _AnalysisSource extends AnalysisSource {
-  const factory _AnalysisSource(
-      {required final SourceSpan span,
-      required final String path}) = _$_AnalysisSource;
-  const _AnalysisSource._() : super._();
+  _$$AnalysisSourceSpanCopyWith<_$AnalysisSourceSpan> get copyWith =>
+      __$$AnalysisSourceSpanCopyWithImpl<_$AnalysisSourceSpan>(
+          this, _$identity);
 
   @override
-  SourceSpan get span;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(SourceSpan source, String path) span,
+    required TResult Function(SourceCursor source, String path) cursor,
+  }) {
+    return span(source, path);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(SourceSpan source, String path)? span,
+    TResult Function(SourceCursor source, String path)? cursor,
+  }) {
+    return span?.call(source, path);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(SourceSpan source, String path)? span,
+    TResult Function(SourceCursor source, String path)? cursor,
+    required TResult orElse(),
+  }) {
+    if (span != null) {
+      return span(source, path);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AnalysisSourceSpan value) span,
+    required TResult Function(AnalysisSourceCursor value) cursor,
+  }) {
+    return span(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(AnalysisSourceSpan value)? span,
+    TResult Function(AnalysisSourceCursor value)? cursor,
+  }) {
+    return span?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AnalysisSourceSpan value)? span,
+    TResult Function(AnalysisSourceCursor value)? cursor,
+    required TResult orElse(),
+  }) {
+    if (span != null) {
+      return span(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AnalysisSourceSpan extends AnalysisSource {
+  const factory AnalysisSourceSpan(
+      {required final SourceSpan source,
+      required final String path}) = _$AnalysisSourceSpan;
+  const AnalysisSourceSpan._() : super._();
+
+  SourceSpan get source;
   @override
   String get path;
   @override
   @JsonKey(ignore: true)
-  _$$_AnalysisSourceCopyWith<_$_AnalysisSource> get copyWith =>
+  _$$AnalysisSourceSpanCopyWith<_$AnalysisSourceSpan> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AnalysisSourceCursorCopyWith<$Res>
+    implements $AnalysisSourceCopyWith<$Res> {
+  factory _$$AnalysisSourceCursorCopyWith(_$AnalysisSourceCursor value,
+          $Res Function(_$AnalysisSourceCursor) then) =
+      __$$AnalysisSourceCursorCopyWithImpl<$Res>;
+  @override
+  $Res call({SourceCursor source, String path});
+}
+
+/// @nodoc
+class __$$AnalysisSourceCursorCopyWithImpl<$Res>
+    extends _$AnalysisSourceCopyWithImpl<$Res>
+    implements _$$AnalysisSourceCursorCopyWith<$Res> {
+  __$$AnalysisSourceCursorCopyWithImpl(_$AnalysisSourceCursor _value,
+      $Res Function(_$AnalysisSourceCursor) _then)
+      : super(_value, (v) => _then(v as _$AnalysisSourceCursor));
+
+  @override
+  _$AnalysisSourceCursor get _value => super._value as _$AnalysisSourceCursor;
+
+  @override
+  $Res call({
+    Object? source = freezed,
+    Object? path = freezed,
+  }) {
+    return _then(_$AnalysisSourceCursor(
+      source: source == freezed
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as SourceCursor,
+      path: path == freezed
+          ? _value.path
+          : path // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AnalysisSourceCursor extends AnalysisSourceCursor {
+  const _$AnalysisSourceCursor({required this.source, required this.path})
+      : super._();
+
+  @override
+  final SourceCursor source;
+  @override
+  final String path;
+
+  @override
+  String toString() {
+    return 'AnalysisSource.cursor(source: $source, path: $path)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AnalysisSourceCursor &&
+            const DeepCollectionEquality().equals(other.source, source) &&
+            const DeepCollectionEquality().equals(other.path, path));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(source),
+      const DeepCollectionEquality().hash(path));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$AnalysisSourceCursorCopyWith<_$AnalysisSourceCursor> get copyWith =>
+      __$$AnalysisSourceCursorCopyWithImpl<_$AnalysisSourceCursor>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(SourceSpan source, String path) span,
+    required TResult Function(SourceCursor source, String path) cursor,
+  }) {
+    return cursor(source, path);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(SourceSpan source, String path)? span,
+    TResult Function(SourceCursor source, String path)? cursor,
+  }) {
+    return cursor?.call(source, path);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(SourceSpan source, String path)? span,
+    TResult Function(SourceCursor source, String path)? cursor,
+    required TResult orElse(),
+  }) {
+    if (cursor != null) {
+      return cursor(source, path);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AnalysisSourceSpan value) span,
+    required TResult Function(AnalysisSourceCursor value) cursor,
+  }) {
+    return cursor(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(AnalysisSourceSpan value)? span,
+    TResult Function(AnalysisSourceCursor value)? cursor,
+  }) {
+    return cursor?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AnalysisSourceSpan value)? span,
+    TResult Function(AnalysisSourceCursor value)? cursor,
+    required TResult orElse(),
+  }) {
+    if (cursor != null) {
+      return cursor(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AnalysisSourceCursor extends AnalysisSource {
+  const factory AnalysisSourceCursor(
+      {required final SourceCursor source,
+      required final String path}) = _$AnalysisSourceCursor;
+  const AnalysisSourceCursor._() : super._();
+
+  SourceCursor get source;
+  @override
+  String get path;
+  @override
+  @JsonKey(ignore: true)
+  _$$AnalysisSourceCursorCopyWith<_$AnalysisSourceCursor> get copyWith =>
       throw _privateConstructorUsedError;
 }

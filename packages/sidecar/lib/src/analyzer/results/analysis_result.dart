@@ -11,7 +11,7 @@ part 'analysis_result.freezed.dart';
 class AnalysisResult with _$AnalysisResult {
   const factory AnalysisResult.lint({
     required LintRule rule,
-    required AnalysisSource source,
+    required AnalysisSourceSpan span,
     required String message,
     required LintSeverity severity,
     String? correction,
@@ -20,20 +20,23 @@ class AnalysisResult with _$AnalysisResult {
 
   const factory AnalysisResult.assist({
     required AssistRule rule,
-    required AnalysisSource source,
+    required AnalysisSourceSpan span,
     required String message,
     @Default(<EditResult>[]) List<EditResult> edits,
-  }) = AssistAnalysisResult;
+  }) = AssistResult;
 
   const AnalysisResult._();
 
-  Uri get sourceUrl => source.span.sourceUrl!;
-  String get path => source.span.sourceUrl!.path;
+  Uri get sourceUrl => map(
+        lint: (lint) => lint.span.sourceUrl,
+        assist: (assist) => assist.span.sourceUrl,
+      );
+  // String get path => source.span.sourceUrl!.path;
 
   bool isWithinOffset(String filePath, int offset) {
-    return source.span.location.file == filePath &&
-        source.span.start.offset <= offset &&
-        offset <= source.span.start.offset + source.span.length;
+    return sourceUrl.path == filePath &&
+        span.source.start.offset <= offset &&
+        offset <= span.source.start.offset + span.source.length;
   }
 }
 
@@ -43,7 +46,7 @@ extension LintResultX on LintResult {
     return AnalysisError(
       severity.analysisError,
       AnalysisErrorType.HINT,
-      source.span.location,
+      span.source.location,
       message,
       concatenatedLintCode,
       url: rule.url,

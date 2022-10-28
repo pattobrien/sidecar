@@ -22,8 +22,8 @@ mixin LintMixin on BaseRule {
       Future.value([]);
 }
 
-mixin QuickFixMixin on LintRule {
-  Future<List<EditResult>> computeSourceChanges(AnalysisSource source);
+mixin QuickFix on LintRule {
+  Future<List<EditResult>> computeQuickFixes(AnalysisSource source);
 }
 
 mixin LintVisitor on LintRule {
