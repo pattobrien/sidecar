@@ -15,7 +15,10 @@ final activeContextsMiddlemanProvider = Provider<List<ActiveContext>>(
     final allContexts = ref.watch(allContextsProvider);
     final service = ref.watch(activeProjectServiceProvider);
     return allContexts
-        .map<ActiveContext?>(service.initializeContext)
+        .map<ActiveContext?>(
+          (context) => service.initializeContext(
+              context, allContexts.map((e) => e.contextRoot).toList()),
+        )
         .whereType<ActiveContext>()
         .toList();
   },

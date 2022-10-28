@@ -8,15 +8,21 @@ import '../../utils/file_paths.dart';
 import '../context/context.dart';
 import '../results/analysis_results_provider.dart';
 import '../results/analysis_results_reporter.dart';
+import '../server/log_delegate.dart';
 import 'plugin.dart';
 
 final activeContextsProvider = Provider<List<ActiveContext>>(
   (ref) {
     final activePackageService = ref.watch(activeProjectServiceProvider);
     final allContexts = ref.watch(allAnalysisContextsProvider);
-    final results = allContexts.map(activePackageService.initializeContext);
-    // print('# of active roots = ${results.length}');
-    return results.whereType<ActiveContext>().toList();
+    // final log = ref.watch(logDelegateProvider);
+    final activeContexts = allContexts.map(
+      (context) => activePackageService.initializeContext(
+          context, allContexts.map((e) => e.contextRoot).toList()),
+    );
+    // log.sidecarMessage(
+    //     '# of active contexts = ${activeContexts.length} // ${activeContexts.first?.activeRoot.root.path} => ${activeContexts.first?.localDependencies.length} dependency contexts in workspace');
+    return activeContexts.whereType<ActiveContext>().toList();
   },
   name: 'activeContextsProvider',
   dependencies: [

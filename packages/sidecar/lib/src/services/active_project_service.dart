@@ -20,12 +20,14 @@ class ActiveProjectService {
 
   final Ref _ref;
 
-  void _log(String msg) =>
-      _ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
+  void _log(String msg) => _ref.read(logDelegateProvider).sidecarMessage(msg);
   void _logError(Object e, StackTrace stackTrace) =>
       _ref.read(logDelegateProvider).sidecarError(e, stackTrace);
 
-  ActiveContext? initializeContext(AnalysisContext analysisContext) {
+  ActiveContext? initializeContext(
+    AnalysisContext analysisContext,
+    List<ContextRoot> allContextRoots,
+  ) {
     try {
       final root = analysisContext.contextRoot;
       final contextUri = root.root.toUri();
@@ -44,16 +46,40 @@ class ActiveProjectService {
           !hasLintPackages) {
         return null;
       }
+      // this context is an active context
+      // now lets find every dependency that is also in the local workspace,
+      // as we want to lint those packages indirectly
+      final localDependencies =
+          getLocalDependencies(contextUri, allContextRoots);
+
       return ActiveContext(
         analysisContext,
         sidecarOptions: projectConfig,
         sidecarPluginPackage: pluginUri,
         sidecarPackages: packages,
+        localDependencies: localDependencies,
       );
     } catch (e, stackTrace) {
       _logError('ActivePackageService ERROR: ${e.toString()}', stackTrace);
       rethrow;
     }
+  }
+
+  /// Find what dependencies are in the local workspace directory
+  List<ContextRoot> getLocalDependencies(
+    Uri activeRoot,
+    List<ContextRoot> allContextRoots,
+  ) {
+    final config = _getPackageConfig(activeRoot);
+    return allContextRoots.where((contextRoot) {
+      return config.packages.where((package) => package.root != activeRoot).any(
+        (package) {
+          // _log('abc package root: ${package.root.normalizePath().path}');
+          return package.root.normalizePath().path ==
+              contextRoot.root.toUri().normalizePath().path;
+        },
+      );
+    }).toList();
   }
 
   Future<bool> createDefaultSidecarYaml(Uri root) async {
@@ -70,18 +96,19 @@ class ActiveProjectService {
   // is this needed for any external functions ?
   PackageConfig _getPackageConfig(Uri root) {
     final path = p.join(root.toFilePath(), '.dart_tool', 'package_config.json');
-    final contents = File(path).readAsBytesSync();
-    return PackageConfig.parseBytes(contents, root);
+    final file = File(path);
+    final contents = file.readAsBytesSync();
+    return PackageConfig.parseBytes(contents, file.uri);
   }
 
   List<RulePackageConfiguration> getSidecarDependencies(Uri root) {
-    _log('findAllSidecarDeps for ${root.toFilePath()} // ${root.path}');
+    // _log('findAllSidecarDeps for ${root.toFilePath()} // ${root.path}');
     return _getPackageConfig(root)
         .packages
         .map<RulePackageConfiguration?>((package) {
           try {
             // TODO: allow relative roots; right now, there seems to be a bug with how the relative uri is generated
-            if (package.relativeRoot) return null;
+            // if (package.relativeRoot) return null;
             return parseLintPackage(package.name, package.root);
           } catch (e, stackTrace) {
             _logError('NON-FATAL ERROR: findAllSidecarDeps $e', stackTrace);

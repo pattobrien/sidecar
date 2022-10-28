@@ -1,19 +1,27 @@
+// ignore_for_file: implementation_imports
+
 import 'dart:async';
+import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
+import 'package:analyzer/file_system/physical_file_system.dart';
+import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
+import 'package:analyzer/src/dart/analysis/byte_store.dart';
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:cli_util/cli_util.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
+import '../../utils/byte_store_ext.dart';
 import '../../utils/file_paths.dart';
 import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
@@ -43,6 +51,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   List<String> get fileGlobsToAnalyze => kPluginGlobs;
 
   SidecarAnalyzerMode get mode => ref.read(cliOptionsProvider).mode;
+
+  late final ByteStore _byteStore =
+      resourceProvider.createByteStore(kSidecarPluginName);
 
   @override
   // ignore: overridden_fields
@@ -116,6 +127,44 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   AnalysisContextCollection? _contextCollection;
 
+  /// Handle an 'analysis.setContextRoots' request.
+  ///
+  /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  @override
+  Future<plugin.AnalysisSetContextRootsResult> handleAnalysisSetContextRoots(
+    plugin.AnalysisSetContextRootsParams parameters,
+  ) async {
+    if (mode.isCli || mode.isDebug) {
+      // create our own set context handler
+      final includedPaths = parameters.roots.map((e) => e.root).toList();
+      AnalysisContextCollection? contextCollection;
+      runZonedGuarded(
+        () {
+          contextCollection = AnalysisContextCollectionImpl(
+            includedPaths: includedPaths,
+            byteStore: _byteStore,
+            // resourceProvider:  PhysicalResourceProvider.INSTANCE,
+            // sdkPath: sdkPath,
+            // fileContentCache: FileContentCache(resourceProvider),
+          );
+        },
+        (e, s) {},
+        zoneSpecification: ZoneSpecification(
+          print: (self, parent, zone, line) {},
+        ),
+      );
+
+      _contextCollection = contextCollection;
+
+      await afterNewContextCollection(
+        contextCollection: contextCollection!,
+      );
+      return plugin.AnalysisSetContextRootsResult();
+    } else {
+      return super.handleAnalysisSetContextRoots(parameters);
+    }
+  }
+
   @override
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
@@ -159,6 +208,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         await handleAffectedFiles(
           analysisContext: analysisContext,
           paths: [...affected, ...nonDartPathsInContext],
+          // paths: affected,
         );
       });
     }
