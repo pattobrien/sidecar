@@ -7,8 +7,6 @@ import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/results/results.dart';
 import '../utils/utils.dart';
-import 'analysis_source.dart';
-import 'lint_rule.dart';
 import 'rules.dart';
 
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {

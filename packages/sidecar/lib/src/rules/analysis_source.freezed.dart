@@ -20,19 +20,19 @@ mixin _$AnalysisSource {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(SourceSpan source, String path) span,
-    required TResult Function(SourceCursor source, String path) cursor,
+    required TResult Function(SourceLocation source, String path) cursor,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(SourceSpan source, String path)? span,
-    TResult Function(SourceCursor source, String path)? cursor,
+    TResult Function(SourceLocation source, String path)? cursor,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(SourceSpan source, String path)? span,
-    TResult Function(SourceCursor source, String path)? cursor,
+    TResult Function(SourceLocation source, String path)? cursor,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -171,7 +171,7 @@ class _$AnalysisSourceSpan extends AnalysisSourceSpan {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(SourceSpan source, String path) span,
-    required TResult Function(SourceCursor source, String path) cursor,
+    required TResult Function(SourceLocation source, String path) cursor,
   }) {
     return span(source, path);
   }
@@ -180,7 +180,7 @@ class _$AnalysisSourceSpan extends AnalysisSourceSpan {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(SourceSpan source, String path)? span,
-    TResult Function(SourceCursor source, String path)? cursor,
+    TResult Function(SourceLocation source, String path)? cursor,
   }) {
     return span?.call(source, path);
   }
@@ -189,7 +189,7 @@ class _$AnalysisSourceSpan extends AnalysisSourceSpan {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(SourceSpan source, String path)? span,
-    TResult Function(SourceCursor source, String path)? cursor,
+    TResult Function(SourceLocation source, String path)? cursor,
     required TResult orElse(),
   }) {
     if (span != null) {
@@ -252,7 +252,7 @@ abstract class _$$AnalysisSourceCursorCopyWith<$Res>
           $Res Function(_$AnalysisSourceCursor) then) =
       __$$AnalysisSourceCursorCopyWithImpl<$Res>;
   @override
-  $Res call({SourceCursor source, String path});
+  $Res call({SourceLocation source, String path});
 }
 
 /// @nodoc
@@ -275,7 +275,7 @@ class __$$AnalysisSourceCursorCopyWithImpl<$Res>
       source: source == freezed
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
-              as SourceCursor,
+              as SourceLocation,
       path: path == freezed
           ? _value.path
           : path // ignore: cast_nullable_to_non_nullable
@@ -291,7 +291,7 @@ class _$AnalysisSourceCursor extends AnalysisSourceCursor {
       : super._();
 
   @override
-  final SourceCursor source;
+  final SourceLocation source;
   @override
   final String path;
 
@@ -325,7 +325,7 @@ class _$AnalysisSourceCursor extends AnalysisSourceCursor {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(SourceSpan source, String path) span,
-    required TResult Function(SourceCursor source, String path) cursor,
+    required TResult Function(SourceLocation source, String path) cursor,
   }) {
     return cursor(source, path);
   }
@@ -334,7 +334,7 @@ class _$AnalysisSourceCursor extends AnalysisSourceCursor {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(SourceSpan source, String path)? span,
-    TResult Function(SourceCursor source, String path)? cursor,
+    TResult Function(SourceLocation source, String path)? cursor,
   }) {
     return cursor?.call(source, path);
   }
@@ -343,7 +343,7 @@ class _$AnalysisSourceCursor extends AnalysisSourceCursor {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(SourceSpan source, String path)? span,
-    TResult Function(SourceCursor source, String path)? cursor,
+    TResult Function(SourceLocation source, String path)? cursor,
     required TResult orElse(),
   }) {
     if (cursor != null) {
@@ -386,11 +386,11 @@ class _$AnalysisSourceCursor extends AnalysisSourceCursor {
 
 abstract class AnalysisSourceCursor extends AnalysisSource {
   const factory AnalysisSourceCursor(
-      {required final SourceCursor source,
+      {required final SourceLocation source,
       required final String path}) = _$AnalysisSourceCursor;
   const AnalysisSourceCursor._() : super._();
 
-  SourceCursor get source;
+  SourceLocation get source;
   @override
   String get path;
   @override

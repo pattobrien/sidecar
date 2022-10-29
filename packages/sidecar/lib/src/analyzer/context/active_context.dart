@@ -16,16 +16,24 @@ class ActiveContext implements AnalysisContext {
     required this.sidecarOptions,
     required this.sidecarPluginPackage,
     required this.sidecarPackages,
-    required this.localDependencies,
+    // required this.localDependencyContexts,
+
+    required this.isMainRoot,
   });
 
   final AnalysisContext _context;
   final ProjectConfiguration sidecarOptions;
   final Package sidecarPluginPackage;
   final List<RulePackageConfiguration> sidecarPackages;
-  final List<ContextRoot> localDependencies;
+  // final List<AnalysisContext> localDependencyContexts;
 
-  ActiveContextRoot get activeRoot => ActiveContextRoot(_context.contextRoot);
+  /// Indicates the package that explicitly activates Sidecar as a plugin.
+  final bool isMainRoot;
+
+  ActiveContextRoot get activeRoot => ActiveContextRoot(
+        _context.contextRoot,
+        isMainRoot: isMainRoot,
+      );
 
   @override
   AnalysisOptions get analysisOptions => _context.analysisOptions;

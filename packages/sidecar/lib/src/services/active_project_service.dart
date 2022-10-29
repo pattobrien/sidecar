@@ -26,7 +26,7 @@ class ActiveProjectService {
 
   ActiveContext? initializeContext(
     AnalysisContext analysisContext,
-    List<ContextRoot> allContextRoots,
+    // List<AnalysisContext> allContexts,
   ) {
     try {
       final root = analysisContext.contextRoot;
@@ -49,15 +49,14 @@ class ActiveProjectService {
       // this context is an active context
       // now lets find every dependency that is also in the local workspace,
       // as we want to lint those packages indirectly
-      final localDependencies =
-          getLocalDependencies(contextUri, allContextRoots);
+      // final localDependencies = getLocalDependencies(contextUri, allContexts);
 
       return ActiveContext(
         analysisContext,
         sidecarOptions: projectConfig,
         sidecarPluginPackage: pluginUri,
         sidecarPackages: packages,
-        localDependencies: localDependencies,
+        isMainRoot: true,
       );
     } catch (e, stackTrace) {
       _logError('ActivePackageService ERROR: ${e.toString()}', stackTrace);
@@ -65,18 +64,63 @@ class ActiveProjectService {
     }
   }
 
+  /// Finds any contexts that
+  List<ActiveContext> getActiveDependencies(
+      ActiveContext mainActiveContext, List<AnalysisContext> allContexts) {
+    final config = _getPackageConfig(mainActiveContext.activeRoot.root.toUri());
+    // get all contexts that are within the working directory and
+    // are dependencies of the main active root
+    final contexts = allContexts.where((context) {
+      return config.packages
+          .where((package) =>
+              package.root != mainActiveContext.activeRoot.root.toUri())
+          .any(
+        (package) {
+          // _log('abc package root: ${package.root.normalizePath().path}');
+          return package.root.normalizePath().path ==
+              context.contextRoot.root.toUri().normalizePath().path;
+        },
+      );
+    }).toList();
+    // check for any options files, etc. if none are available,
+    // inherit the details from main root
+
+    return contexts.map(
+      (analysisContext) {
+        final root = analysisContext.contextRoot;
+        final contextUri = root.root.toUri();
+        final pluginUri = getSidecarPluginUriForPackage(contextUri);
+        if (pluginUri != null) {
+          assert(pluginUri != mainActiveContext.sidecarPluginPackage,
+              'plugin package must be identical between any active roots within the same isolate.');
+        }
+        final packages = getSidecarDependencies(contextUri);
+        final projectConfig = getSidecarOptions(root);
+        return ActiveContext(
+          analysisContext,
+          sidecarOptions: projectConfig ?? mainActiveContext.sidecarOptions,
+          sidecarPluginPackage:
+              pluginUri ?? mainActiveContext.sidecarPluginPackage,
+          sidecarPackages:
+              packages, //TODO: do we need to inherit packages of main root?
+          isMainRoot: false,
+        );
+      },
+    ).toList();
+  }
+
   /// Find what dependencies are in the local workspace directory
-  List<ContextRoot> getLocalDependencies(
+  List<AnalysisContext> getLocalDependencies(
     Uri activeRoot,
-    List<ContextRoot> allContextRoots,
+    List<AnalysisContext> allContextRoots,
   ) {
     final config = _getPackageConfig(activeRoot);
-    return allContextRoots.where((contextRoot) {
+    return allContextRoots.where((context) {
       return config.packages.where((package) => package.root != activeRoot).any(
         (package) {
           // _log('abc package root: ${package.root.normalizePath().path}');
           return package.root.normalizePath().path ==
-              contextRoot.root.toUri().normalizePath().path;
+              context.contextRoot.root.toUri().normalizePath().path;
         },
       );
     }).toList();

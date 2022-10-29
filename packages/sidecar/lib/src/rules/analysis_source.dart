@@ -11,23 +11,14 @@ class AnalysisSource with _$AnalysisSource {
   }) = AnalysisSourceSpan;
 
   const factory AnalysisSource.cursor({
-    required SourceCursor source,
+    required SourceLocation source,
     required String path,
   }) = AnalysisSourceCursor;
 
   const AnalysisSource._();
 
   Uri get sourceUrl => map(
-      span: (span) => span.source.sourceUrl!,
-      cursor: (cursor) => cursor.source.sourceUrl);
-}
-
-class SourceCursor {
-  const SourceCursor({
-    required this.sourceUrl,
-    required this.location,
-  });
-
-  final Uri sourceUrl;
-  final SourceLocation location;
+        span: (span) => span.source.sourceUrl!,
+        cursor: (cursor) => cursor.source.sourceUrl!,
+      );
 }

@@ -13,22 +13,24 @@ import 'plugin.dart';
 
 final activeContextsProvider = Provider<List<ActiveContext>>(
   (ref) {
-    final activePackageService = ref.watch(activeProjectServiceProvider);
+    final service = ref.watch(activeProjectServiceProvider);
     final allContexts = ref.watch(allAnalysisContextsProvider);
     final log = ref.watch(logDelegateProvider);
     final activeContexts = allContexts
-        .map(
-          (context) => activePackageService.initializeContext(
-              context, allContexts.map((e) => e.contextRoot).toList()),
-        )
+        .map(service.initializeContext)
         .whereType<ActiveContext>()
         .toList();
+    final dependencies = activeContexts
+        .map((e) => service.getActiveDependencies(e, allContexts))
+        .expand((e) => e);
+
+    log.sidecarMessage('# of all contexts => ${allContexts.length} ');
     log.sidecarMessage('# of active contexts => ${activeContexts.length} ');
     for (final activeContext in activeContexts) {
       log.sidecarMessage(
-          'active context => ${activeContext.activeRoot.root.path} => ${activeContext.localDependencies.length} dependency contexts in workspace');
+          'active context => ${activeContext.activeRoot.root.path}');
     }
-    return activeContexts;
+    return [...activeContexts, ...dependencies];
   },
   name: 'activeContextsProvider',
   dependencies: [

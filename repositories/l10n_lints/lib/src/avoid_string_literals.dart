@@ -20,7 +20,9 @@ class AvoidStringLiterals extends LintRule with LintVisitor, QuickFix {
   SidecarAstVisitor Function() get visitorCreator => _Visitor.new;
 
   @override
-  Future<List<EditResult>> computeQuickFixes(AnalysisSourceSpan source) async {
+  Future<List<EditResult>> computeQuickFixes(
+    AnalysisSourceSpan source,
+  ) async {
     final session = context.currentSession;
     final changeBuilder = ChangeBuilder(session: session);
     final unit =
@@ -75,18 +77,13 @@ class AvoidStringLiterals extends LintRule with LintVisitor, QuickFix {
     //   }));
     // }
 
-    // if (parentNode is ArgumentList) {
     await changeBuilder.addDartFileEdit(unit.path, (builder) {
-      // if (stringNode.isInsideBuildMethod()) {
-      //   builder.importFlutterGenAppLocalizations();
       builder.addReplacement(
         stringNode.toSourceRange(unit),
         (editBuilder) => editBuilder.write(arbClassPrefix),
       );
-      // }
     });
-    // }
-    // if (changeBuilder.sourceChange.edits.isNotEmpty) {
+
     final errorFixes = [
       EditResult(
         message: 'Extract string declaration',
@@ -94,25 +91,7 @@ class AvoidStringLiterals extends LintRule with LintVisitor, QuickFix {
       ),
     ];
     return errorFixes;
-    // } else {
-    //   return [];
-    // }
   }
-
-  // @override
-  // AvoidStringLiteralsConfig get configuration =>
-  //     super.configuration as AvoidStringLiteralsConfig;
-
-  // @override
-  // MapDecoder get jsonDecoder => AvoidStringLiteralsConfig.fromJson;
-
-  // @override
-  // Future<List<EditResult>> computeSourceChanges(
-  //   AnalysisSession session,
-  //   AnalysisSource source,
-  // ) async {
-
-  // }
 }
 
 class _Visitor extends SidecarAstVisitor {

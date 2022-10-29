@@ -12,6 +12,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final icon = Icon(Icons.abc);
+    //
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Colors.amber,
@@ -24,3 +25,5 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+// span(157, 162, 'MyApp');
+// span(171, 185, 'ConsumerWidget');

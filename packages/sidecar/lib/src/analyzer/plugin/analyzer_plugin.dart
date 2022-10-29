@@ -98,6 +98,12 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           analysisContext: analysisContext,
           paths: events.map((e) => e.path).toList(),
         );
+        // for (final localContexts in analysisContext.localDependencyContexts) {
+        //   handleAffectedFiles(
+        //     analysisContext: localContexts,
+        //     paths: events.map((e) => e.path).toList(),
+        //   );
+        // }
       }
 
       // for (final event in events) {
@@ -241,10 +247,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
-    final allContexts = ref.read(activeContextsProvider);
+    final activeContexts = ref.read(activeContextsProvider);
     ref.read(logDelegateProvider).sidecarVerboseMessage(
         'CHANGEDFILES1 = ${paths.length} ${paths.toList().toString()}');
-    if (allContexts.any((activeContext) =>
+    if (activeContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
         analysisContext.contextRoot.root.path)) {
       // context is valid

@@ -2,6 +2,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../../services/services.dart';
 import '../../context/context.dart';
+import '../log_delegate.dart';
 import '../server.dart';
 
 /// All contexts properly enabled for Sidecar
@@ -10,17 +11,20 @@ import '../server.dart';
 /// - initialized sidecar.yaml configuration
 /// - list of all sidecar dependencies
 /// - sidecar_analyzer_plugin package information
+/// - local dependencies of a package that has explicitly enabled Sidecar
 final activeContextsMiddlemanProvider = Provider<List<ActiveContext>>(
   (ref) {
     final allContexts = ref.watch(allContextsProvider);
+    final log = ref.watch(logDelegateProvider);
+    log.sidecarMessage('MM # of all contexts => ${allContexts.length} ');
     final service = ref.watch(activeProjectServiceProvider);
-    return allContexts
-        .map<ActiveContext?>(
-          (context) => service.initializeContext(
-              context, allContexts.map((e) => e.contextRoot).toList()),
-        )
+    final mainActiveContexts = allContexts
+        .map<ActiveContext?>(service.initializeContext)
         .whereType<ActiveContext>()
         .toList();
+    final dependencyContexts = mainActiveContexts
+        .map((e) => service.getActiveDependencies(e, allContexts));
+    return [...mainActiveContexts, ...dependencyContexts.expand((e) => e)];
   },
   name: 'activeContextsProvider',
   dependencies: [
@@ -44,7 +48,7 @@ final activeContextForContextRootProvider =
 final activeContextRootsProvider = Provider<List<ActiveContextRoot>>(
   (ref) {
     final activeContexts = ref.watch(activeContextsMiddlemanProvider);
-    return activeContexts.map((e) => ActiveContextRoot(e.contextRoot)).toList();
+    return activeContexts.map((context) => context.activeRoot).toList();
   },
   name: 'activeContextRootsProvider',
   dependencies: [
