@@ -20,6 +20,15 @@ class ProjectConfiguration {
     required this.rawContent,
   }) : _includes = includes;
 
+  // factory ProjectConfiguration.fromDart(
+  //   String contents, {
+  //   required Uri sourceUrl,
+  //   Ref? ref,
+  // }) {
+
+  //   return ProjectConfiguration(rawContent: rawContent);
+  // }
+
   factory ProjectConfiguration.parseFromSidecarYaml(
     String contents, {
     required Uri sourceUrl,

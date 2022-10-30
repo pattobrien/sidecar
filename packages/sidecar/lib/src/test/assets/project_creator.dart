@@ -34,16 +34,23 @@ class ProjectCreator with ResourceProviderMixin {
   Folder get projectFolder => getFolder(join(parentDirectoryPath, projectName));
 
   void build() {
-    final analysisOptionsContents = createAnalysisOptionsContents();
+    final analysisOptionsContents = createAnalysisOptionsContents(
+      isSidecarPluginEnabled: isSidecarEnabled,
+    );
     newAnalysisOptionsYamlFile(directoryPath, analysisOptionsContents);
 
     final sidecarYamlContents = createSidecarYamlContents();
     newSidecarOptionsFile(directoryPath, sidecarYamlContents);
+    _createMainFile();
   }
 
   File newSidecarOptionsFile(String directoryPath, String content) {
     final path = join(directoryPath, sidecarYamlPath);
     return newFile(path, content);
+  }
+
+  void _createMainFile() {
+    newFile(join('lib', 'main.dart'), mainContent);
   }
 
   @override
@@ -56,6 +63,12 @@ class ProjectCreator with ResourceProviderMixin {
     return super.newFile(join(directoryPath, path), content);
   }
 }
+
+const mainContent = '''
+void main() {
+  final abc = 'string value';
+}
+''';
 
 class WorkspaceCreator {
   WorkspaceCreator({

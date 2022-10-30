@@ -1,30 +1,21 @@
-// import 'package:freezed_annotation/freezed_annotation.dart';
-// import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:analyzer/file_system/file_system.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:package_config/package_config_types.dart';
 
-// part 'project.freezed.dart';
-// part 'project.g.dart';
+import '../configurations/configurations.dart';
 
-// @riverpod
-// class ProjectNotifier extends _$ProjectNotifier {
-//   @override
-//   Future<Project> build(
-//     String name, {
-//     bool isFlutter = true,
-//   }) async {
-//     // run flutter create
-//     ref.watch();
-//     return Project();
-//   }
+part 'project.freezed.dart';
 
-//   void addDependency() {
-//     // state++;
-//   }
-// }
-
-// @freezed
-// class Project with _$Project {
-//   const factory Project({
-//     required Uri root,
-//   }) = _Project;
-//   const Project._();
-// }
+@freezed
+class Project with _$Project {
+  const factory Project({
+    required Uri root,
+    @Default(<File>[]) List<File> files,
+    @Default(<Package>[]) List<Package> dependencies,
+    @Default(<LintPackageConfiguration>[])
+        List<LintPackageConfiguration> lintPackages,
+    @Default(<AssistPackageConfiguration>[])
+        List<AssistPackageConfiguration> assistPackages,
+  }) = _Project;
+  const Project._();
+}
