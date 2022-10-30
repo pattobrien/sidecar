@@ -15,7 +15,7 @@ import 'errors.dart';
 
 part 'project_configuration.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ProjectConfiguration {
   const ProjectConfiguration({
     this.lintPackages,
@@ -69,7 +69,7 @@ class ProjectConfiguration {
   Map<dynamic, dynamic> toJson() => _$ProjectConfigurationToJson(this);
 
   String toYamlContent() {
-    final yamlWriter = YamlWriter();
+    const yamlWriter = YamlWriter();
     return yamlWriter.write(toJson());
   }
 

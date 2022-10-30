@@ -18,7 +18,7 @@ abstract class AnalysisConfiguration {
   List<Glob>? get includes;
 }
 
-@JsonSerializable(anyMap: true, explicitToJson: true)
+@JsonSerializable(anyMap: true, explicitToJson: true, includeIfNull: false)
 class LintConfiguration extends AnalysisConfiguration {
   const LintConfiguration({
     this.severity,
@@ -51,7 +51,7 @@ class LintConfiguration extends AnalysisConfiguration {
   final List<Glob>? includes;
 }
 
-@JsonSerializable(anyMap: true, explicitToJson: true)
+@JsonSerializable(anyMap: true, explicitToJson: true, includeIfNull: false)
 class AssistConfiguration extends AnalysisConfiguration {
   const AssistConfiguration({
     this.includes,

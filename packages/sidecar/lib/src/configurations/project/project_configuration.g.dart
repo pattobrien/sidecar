@@ -18,9 +18,18 @@ ProjectConfiguration _$ProjectConfigurationFromJson(
     );
 
 Map<String, dynamic> _$ProjectConfigurationToJson(
-        ProjectConfiguration instance) =>
-    <String, dynamic>{
-      'lints': instance.lintPackages?.map((k, e) => MapEntry(k, e.toJson())),
-      'assists':
-          instance.assistPackages?.map((k, e) => MapEntry(k, e.toJson())),
-    };
+    ProjectConfiguration instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'lints', instance.lintPackages?.map((k, e) => MapEntry(k, e.toJson())));
+  writeNotNull('assists',
+      instance.assistPackages?.map((k, e) => MapEntry(k, e.toJson())));
+  return val;
+}

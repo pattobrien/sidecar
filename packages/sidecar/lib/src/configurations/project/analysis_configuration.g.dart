@@ -13,13 +13,21 @@ LintConfiguration _$LintConfigurationFromJson(Map json) => LintConfiguration(
       enabled: json['enabled'] as bool?,
     );
 
-Map<String, dynamic> _$LintConfigurationToJson(LintConfiguration instance) =>
-    <String, dynamic>{
-      'severity': _$LintSeverityEnumMap[instance.severity],
-      'configuration': instance.configuration,
-      'enabled': instance.enabled,
-      'includes': globsToString(instance.includes),
-    };
+Map<String, dynamic> _$LintConfigurationToJson(LintConfiguration instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('severity', _$LintSeverityEnumMap[instance.severity]);
+  writeNotNull('configuration', instance.configuration);
+  writeNotNull('enabled', instance.enabled);
+  writeNotNull('includes', globsToString(instance.includes));
+  return val;
+}
 
 const _$LintSeverityEnumMap = {
   LintSeverity.info: 'info',
@@ -34,10 +42,17 @@ AssistConfiguration _$AssistConfigurationFromJson(Map json) =>
       enabled: json['enabled'] as bool?,
     );
 
-Map<String, dynamic> _$AssistConfigurationToJson(
-        AssistConfiguration instance) =>
-    <String, dynamic>{
-      'configuration': instance.configuration,
-      'enabled': instance.enabled,
-      'includes': globsToString(instance.includes),
-    };
+Map<String, dynamic> _$AssistConfigurationToJson(AssistConfiguration instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('configuration', instance.configuration);
+  writeNotNull('enabled', instance.enabled);
+  writeNotNull('includes', globsToString(instance.includes));
+  return val;
+}

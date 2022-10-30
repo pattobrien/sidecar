@@ -12,7 +12,7 @@ abstract class AnalysisPackageConfiguration {
   const AnalysisPackageConfiguration();
 }
 
-@JsonSerializable(anyMap: true, explicitToJson: true)
+@JsonSerializable(anyMap: true, explicitToJson: true, includeIfNull: false)
 class LintPackageConfiguration extends AnalysisPackageConfiguration {
   //
   const LintPackageConfiguration({
@@ -60,7 +60,7 @@ class LintPackageConfiguration extends AnalysisPackageConfiguration {
   final List<SidecarNewException> errors;
 }
 
-@JsonSerializable(anyMap: true, explicitToJson: true)
+@JsonSerializable(anyMap: true, explicitToJson: true, includeIfNull: false)
 class AssistPackageConfiguration extends AnalysisPackageConfiguration {
   //
   const AssistPackageConfiguration({
