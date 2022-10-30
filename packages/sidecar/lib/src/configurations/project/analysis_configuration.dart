@@ -1,54 +1,88 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:glob/glob.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
 import '../../utils/json_utils/glob_json_util.dart';
-import '../builders/exceptions.dart';
 import '../builders/new_exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 
-part 'analysis_configuration.freezed.dart';
 part 'analysis_configuration.g.dart';
 
-@freezed
-class AnalysisConfiguration with _$AnalysisConfiguration {
-  const AnalysisConfiguration._();
+abstract class AnalysisConfiguration {
+  const AnalysisConfiguration();
 
-  @JsonSerializable(anyMap: true)
-  const factory AnalysisConfiguration.lint({
-    LintSeverity? severity,
-    @JsonKey(toJson: globsToString, fromJson: globsFromString)
-        List<Glob>? includes,
-    Map<dynamic, dynamic>? configuration,
-    bool? enabled,
-    @Default(<SidecarNewException>[]) List<SidecarNewException> errors,
-  }) = LintConfiguration;
-
-  @JsonSerializable(anyMap: true)
-  const factory AnalysisConfiguration.assist({
-    @JsonKey(toJson: globsToString, fromJson: globsFromString)
-        List<Glob>? includes,
-    Map<dynamic, dynamic>? configuration,
-    bool? enabled,
-    @Default(<SidecarNewException>[]) List<SidecarNewException> errors,
-  }) = AssistConfiguration;
-
-  factory AnalysisConfiguration.fromYaml(YamlNode yamlNode, RuleType ruleType) {
-    switch (ruleType) {
-      case RuleType.lint:
-        return parseLintFromYaml(yamlNode);
-      case RuleType.assist:
-        return parseAssistFromYaml(yamlNode);
-
-      default:
-        throw UnimplementedError('AnalysisConfiguration invalid yaml');
-    }
-  }
+  Map<dynamic, dynamic>? get configuration;
+  bool? get enabled;
+  List<SidecarNewException> get errors;
+  List<Glob>? get includes;
 }
 
-LintConfiguration parseLintFromYaml(YamlNode yaml) {
+@JsonSerializable(anyMap: true, explicitToJson: true)
+class LintConfiguration extends AnalysisConfiguration {
+  const LintConfiguration({
+    this.severity,
+    this.includes,
+    this.configuration,
+    this.enabled,
+  }) : errors = const [];
+
+  const LintConfiguration._({
+    this.severity,
+    this.includes,
+    this.configuration,
+    this.enabled,
+    this.errors = const [],
+  });
+
+  factory LintConfiguration.fromJson(Object? json) => parseLintFromYaml(json);
+  Map<dynamic, dynamic> toJson() => _$LintConfigurationToJson(this);
+
+  final LintSeverity? severity;
+  @override
+  final Map<dynamic, dynamic>? configuration;
+  @override
+  final bool? enabled;
+  @override
+  final List<SidecarNewException> errors;
+
+  @override
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
+  final List<Glob>? includes;
+}
+
+@JsonSerializable(anyMap: true, explicitToJson: true)
+class AssistConfiguration extends AnalysisConfiguration {
+  const AssistConfiguration({
+    this.includes,
+    this.configuration,
+    this.enabled,
+  }) : errors = const [];
+
+  factory AssistConfiguration.fromJson(Object? json) =>
+      parseAssistFromYaml(json);
+
+  const AssistConfiguration._({
+    this.includes,
+    this.configuration,
+    this.enabled,
+    this.errors = const [],
+  });
+  Map<dynamic, dynamic> toJson() => _$AssistConfigurationToJson(this);
+
+  @override
+  final Map<dynamic, dynamic>? configuration;
+  @override
+  final bool? enabled;
+  @override
+  final List<SidecarNewException> errors;
+
+  @override
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
+  final List<Glob>? includes;
+}
+
+LintConfiguration parseLintFromYaml(Object? yaml) {
   final value = yaml;
   if (value is YamlMap) {
     final configuration = value.parseConfiguration();
@@ -56,7 +90,7 @@ LintConfiguration parseLintFromYaml(YamlNode yaml) {
     final includes = value.parseGlobIncludes();
     final enabled = value.parseEnabled();
 
-    return LintConfiguration(
+    return LintConfiguration._(
       includes: includes.item1,
       severity: severity.item1,
       enabled: enabled.item1,
@@ -81,38 +115,36 @@ LintConfiguration parseLintFromYaml(YamlNode yaml) {
   }
   // return MapEntry(
   //   yamlKey.value as String,
-  return LintConfiguration(
+  return LintConfiguration._(
     // lintNameSpan: yamlKey.span,
     // packageName: packageName,
     // id: yamlKey.value as String,
     errors: <SidecarNewException>[
-      SidecarNewException.rule(
-        sourceSpan: value.span,
-        message: 'Lint definition should be of type null, bool, or map',
-      ),
+      // SidecarNewException.rule(
+      //   sourceSpan: value.span,
+      //   message: 'Lint definition should be of type null, bool, or map',
+      // ),
     ],
     // ),
   );
 }
 
-AssistConfiguration parseAssistFromYaml(YamlNode yaml) {
+AssistConfiguration parseAssistFromYaml(Object? yaml) {
   final value = yaml;
   if (value is YamlMap) {
     final configuration = value.parseConfiguration();
     final includes = value.parseGlobIncludes();
     final enabled = value.parseEnabled();
 
-    return AssistConfiguration(
+    return AssistConfiguration._(
       includes: includes.item1,
-      // severity: severity.item1,
       enabled: enabled.item1,
       configuration: configuration.item1,
-      // sourceErrors: [
-      //   ...includes.item2,
-      //   ...severity.item2,
-      //   ...configuration.item2,
-      //   ...enabled.item2,
-      // ],
+      errors: [
+        ...includes.item2,
+        ...configuration.item2,
+        ...enabled.item2,
+      ],
     );
   } else if (value is YamlScalar) {
     final dynamic scalarValue = value.value;
@@ -127,7 +159,7 @@ AssistConfiguration parseAssistFromYaml(YamlNode yaml) {
   }
   // return MapEntry(
   //   yamlKey.value as String,
-  return AssistConfiguration(
+  return const AssistConfiguration._(
       // lintNameSpan: yamlKey.span,
       // packageName: packageName,
       // id: yamlKey.value as String,

@@ -1,20 +1,21 @@
-import 'dart:developer';
-
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../analyzer/server/log_delegate.dart';
 import '../../rules/rules.dart';
+import '../../utils/json_utils/glob_json_util.dart';
 import '../../utils/logger/logger.dart';
-import '../builders/builders.dart';
+import '../../utils/yaml_writer.dart';
 import '../builders/new_exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 import 'analysis_package_configuration.dart';
 import 'errors.dart';
 
+part 'project_configuration.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class ProjectConfiguration {
   const ProjectConfiguration({
     this.lintPackages,
@@ -62,18 +63,32 @@ class ProjectConfiguration {
     }
   }
 
+  factory ProjectConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$ProjectConfigurationFromJson(json);
+
+  Map<dynamic, dynamic> toJson() => _$ProjectConfigurationToJson(this);
+
+  String toYamlContent() {
+    final yamlWriter = YamlWriter();
+    return yamlWriter.write(toJson());
+  }
+
   List<SidecarNewException> get combinedSourceErrors => [
         ...errors,
         ...?lintPackages?.values
             .map((e) => [
                   ...e.errors,
-                  ...e.lints.values.map((e) => e.errors).expand((f) => f),
+                  ...?e.lints?.values
+                      .map((e) => e?.errors ?? [])
+                      .expand((f) => f),
                 ])
             .expand((e) => e),
         ...?assistPackages?.values
             .map((e) => [
                   ...e.errors,
-                  ...e.assists.values.map((e) => e.errors).expand((f) => f),
+                  ...?e.assists?.values
+                      .map((e) => e?.errors ?? [])
+                      .expand((f) => f),
                 ])
             .expand((e) => e),
       ];
@@ -86,8 +101,9 @@ class ProjectConfiguration {
       return map?.nodes.map((dynamic key, dynamic value) {
         if (value is YamlMap) {
           key as YamlScalar;
-          final config =
-              AnalysisPackageConfiguration.fromYamlMap(value, type: type);
+          final config = type == RuleType.lint
+              ? LintPackageConfiguration.fromJson(value)
+              : AssistPackageConfiguration.fromJson(value);
           return MapEntry(key.value as String, config);
         } else {
           // we want to throw an error if the package doesnt have a single lint declared
@@ -115,9 +131,16 @@ class ProjectConfiguration {
       _parsePackages(map, type: RuleType.lint)?.map(
           (key, value) => MapEntry(key, value as LintPackageConfiguration));
 
+  @JsonKey(name: 'lints')
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
+
+  @JsonKey(name: 'assists')
   final Map<PackageName, AssistPackageConfiguration>? assistPackages;
+
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
   final List<Glob>? _includes;
+
+  @JsonKey(defaultValue: <SidecarNewException>[])
   final List<SidecarNewException> errors;
 
   List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];
@@ -127,9 +150,9 @@ class ProjectConfiguration {
 
   AnalysisConfiguration? getConfigurationForRule(BaseRule rule) {
     if (rule is AssistRule) {
-      return assistPackages?[rule.packageName]?.assists[rule.code];
+      return assistPackages?[rule.packageName]?.assists?[rule.code];
     } else if (rule is LintRule) {
-      return lintPackages?[rule.packageName]?.lints[rule.code];
+      return lintPackages?[rule.packageName]?.lints?[rule.code];
     } else {
       throw UnimplementedError('getConfigurationForRule: unknown base type');
     }

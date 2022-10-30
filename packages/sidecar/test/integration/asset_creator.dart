@@ -12,8 +12,10 @@ Future<void> main() async {
   final resourceProvider = MemoryResourceProvider();
   final workspaceCreator = WorkspaceCreator(resourceProvider: resourceProvider);
 
-  const l10nPackage = LintPackageConfiguration(
-      lints: {kL10nAvoidStringLiteralsLintId: LintConfiguration()});
+  const l10nPackage = LintPackageConfiguration(lints: {
+    kL10nAvoidStringLiteralsLintId:
+        LintConfiguration(severity: LintSeverity.error),
+  });
 
   const projectConfig =
       ProjectConfiguration(lintPackages: {kL10nPackageName: l10nPackage});
@@ -24,6 +26,8 @@ Future<void> main() async {
     projectName: 'my_app',
     sidecarProjectConfiguration: projectConfig,
   );
+
+  print(projectConfig.toYamlContent());
 
   final packagesSubfolder = projectCreator.newFolder('packages');
 
