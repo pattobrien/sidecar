@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:yaml/yaml.dart';
 
 import '../../analyzer/server/log_delegate.dart';
 import '../../rules/rules.dart';
+import '../../utils/logger/logger.dart';
 import '../builders/builders.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
@@ -32,7 +35,6 @@ class ProjectConfiguration {
   factory ProjectConfiguration.parseFromSidecarYaml(
     String contents, {
     required Uri sourceUrl,
-    Ref? ref,
   }) {
     try {
       return checkedYamlDecode(
@@ -50,17 +52,14 @@ class ProjectConfiguration {
               sourceErrors: includesResult.item2,
             );
           } catch (e, stackTrace) {
-            ref?.read(logDelegateProvider).sidecarVerboseMessage(
-                  'PROJCONFIG = project config error: $e $stackTrace',
-                );
+            logger.severe('PROJCONFIG', e, stackTrace);
             throw const MissingSidecarYamlConfiguration();
           }
         },
         sourceUrl: sourceUrl,
       );
     } catch (e, stackTrace) {
-      ref?.read(logDelegateProvider).sidecarVerboseMessage(
-          'PROJCONFIG = unexpected project config error: $e $stackTrace');
+      logger.severe('PROJCONFIG unexpected error', e, stackTrace);
       throw UnimplementedError(
           'unexpected project config error: $e $stackTrace');
     }

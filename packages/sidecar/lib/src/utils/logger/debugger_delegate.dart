@@ -9,6 +9,7 @@ import '../../cli/options/cli_options.dart';
 import '../../cli/reports/file_stats.dart';
 import '../../rules/rules.dart';
 import 'log_delegate_base.dart';
+import 'logger.dart';
 
 class DebuggerLogDelegate implements LogDelegateBase {
   DebuggerLogDelegate(this.cliOptions)

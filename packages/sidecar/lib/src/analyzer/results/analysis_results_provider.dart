@@ -21,7 +21,7 @@ final analysisResultsForFileProvider =
       final content = resourceProvider.getFile(file.path).readAsStringSync();
 
       final config = ProjectConfiguration.parseFromSidecarYaml(content,
-          ref: ref, sourceUrl: unit!.uri);
+          sourceUrl: unit!.uri);
 
       final errors =
           config.combinedSourceErrors.map((e) => e.toAnalysisResult()).toList();
