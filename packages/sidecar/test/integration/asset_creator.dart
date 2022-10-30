@@ -26,21 +26,13 @@ Future<void> main() async {
   );
 
   final packagesSubfolder = projectCreator.newFolder('packages');
+
   final subProjectCreator = ProjectCreator(
     parentDirectoryPath: packagesSubfolder.path,
     resourceProvider: resourceProvider,
     projectName: 'my_backend_client',
     isSidecarEnabled: false,
   );
-
-  // final lintPackages = LintPackageConfiguration(
-  //     packageName: 'packageName',
-  //     packageNameSpan: packageNameSpan,
-  //     lints: lints);
-  // final lintConfiguration1 = LintConfiguration(
-  //     id: 'avoid_edge_insets_literals',
-  //     packageName: packageName,
-  //     lintNameSpan: lintNameSpan);
 
   final collection = createTestContextForPath(
     projectCreator.projectFolder.path,

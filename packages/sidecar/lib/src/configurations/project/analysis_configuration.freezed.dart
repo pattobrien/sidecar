@@ -21,6 +21,7 @@ mixin _$AnalysisConfiguration {
   Map<dynamic, dynamic>? get configuration =>
       throw _privateConstructorUsedError;
   bool? get enabled => throw _privateConstructorUsedError;
+  List<SidecarNewException> get errors => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -28,13 +29,15 @@ mixin _$AnalysisConfiguration {
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)
+            bool? enabled,
+            List<SidecarNewException> errors)
         lint,
     required TResult Function(
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)
+            bool? enabled,
+            List<SidecarNewException> errors)
         assist,
   }) =>
       throw _privateConstructorUsedError;
@@ -45,13 +48,15 @@ mixin _$AnalysisConfiguration {
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         assist,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,13 +67,15 @@ mixin _$AnalysisConfiguration {
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         assist,
     required TResult orElse(),
   }) =>
@@ -107,7 +114,8 @@ abstract class $AnalysisConfigurationCopyWith<$Res> {
       {@JsonKey(toJson: globsToString, fromJson: globsFromString)
           List<Glob>? includes,
       Map<dynamic, dynamic>? configuration,
-      bool? enabled});
+      bool? enabled,
+      List<SidecarNewException> errors});
 }
 
 /// @nodoc
@@ -124,6 +132,7 @@ class _$AnalysisConfigurationCopyWithImpl<$Res>
     Object? includes = freezed,
     Object? configuration = freezed,
     Object? enabled = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_value.copyWith(
       includes: includes == freezed
@@ -138,6 +147,10 @@ class _$AnalysisConfigurationCopyWithImpl<$Res>
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool?,
+      errors: errors == freezed
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as List<SidecarNewException>,
     ));
   }
 }
@@ -154,7 +167,8 @@ abstract class _$$LintConfigurationCopyWith<$Res>
       @JsonKey(toJson: globsToString, fromJson: globsFromString)
           List<Glob>? includes,
       Map<dynamic, dynamic>? configuration,
-      bool? enabled});
+      bool? enabled,
+      List<SidecarNewException> errors});
 }
 
 /// @nodoc
@@ -174,6 +188,7 @@ class __$$LintConfigurationCopyWithImpl<$Res>
     Object? includes = freezed,
     Object? configuration = freezed,
     Object? enabled = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_$LintConfiguration(
       severity: severity == freezed
@@ -192,6 +207,10 @@ class __$$LintConfigurationCopyWithImpl<$Res>
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool?,
+      errors: errors == freezed
+          ? _value._errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as List<SidecarNewException>,
     ));
   }
 }
@@ -205,9 +224,11 @@ class _$LintConfiguration extends LintConfiguration {
       @JsonKey(toJson: globsToString, fromJson: globsFromString)
           final List<Glob>? includes,
       final Map<dynamic, dynamic>? configuration,
-      this.enabled})
+      this.enabled,
+      final List<SidecarNewException> errors = const <SidecarNewException>[]})
       : _includes = includes,
         _configuration = configuration,
+        _errors = errors,
         super._();
 
   @override
@@ -233,10 +254,17 @@ class _$LintConfiguration extends LintConfiguration {
 
   @override
   final bool? enabled;
+  final List<SidecarNewException> _errors;
+  @override
+  @JsonKey()
+  List<SidecarNewException> get errors {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_errors);
+  }
 
   @override
   String toString() {
-    return 'AnalysisConfiguration.lint(severity: $severity, includes: $includes, configuration: $configuration, enabled: $enabled)';
+    return 'AnalysisConfiguration.lint(severity: $severity, includes: $includes, configuration: $configuration, enabled: $enabled, errors: $errors)';
   }
 
   @override
@@ -248,7 +276,8 @@ class _$LintConfiguration extends LintConfiguration {
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality()
                 .equals(other._configuration, _configuration) &&
-            const DeepCollectionEquality().equals(other.enabled, enabled));
+            const DeepCollectionEquality().equals(other.enabled, enabled) &&
+            const DeepCollectionEquality().equals(other._errors, _errors));
   }
 
   @override
@@ -257,7 +286,8 @@ class _$LintConfiguration extends LintConfiguration {
       const DeepCollectionEquality().hash(severity),
       const DeepCollectionEquality().hash(_includes),
       const DeepCollectionEquality().hash(_configuration),
-      const DeepCollectionEquality().hash(enabled));
+      const DeepCollectionEquality().hash(enabled),
+      const DeepCollectionEquality().hash(_errors));
 
   @JsonKey(ignore: true)
   @override
@@ -272,16 +302,18 @@ class _$LintConfiguration extends LintConfiguration {
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)
+            bool? enabled,
+            List<SidecarNewException> errors)
         lint,
     required TResult Function(
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)
+            bool? enabled,
+            List<SidecarNewException> errors)
         assist,
   }) {
-    return lint(severity, includes, configuration, enabled);
+    return lint(severity, includes, configuration, enabled, errors);
   }
 
   @override
@@ -292,16 +324,18 @@ class _$LintConfiguration extends LintConfiguration {
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         assist,
   }) {
-    return lint?.call(severity, includes, configuration, enabled);
+    return lint?.call(severity, includes, configuration, enabled, errors);
   }
 
   @override
@@ -312,18 +346,20 @@ class _$LintConfiguration extends LintConfiguration {
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         assist,
     required TResult orElse(),
   }) {
     if (lint != null) {
-      return lint(severity, includes, configuration, enabled);
+      return lint(severity, includes, configuration, enabled, errors);
     }
     return orElse();
   }
@@ -366,7 +402,8 @@ abstract class LintConfiguration extends AnalysisConfiguration {
       @JsonKey(toJson: globsToString, fromJson: globsFromString)
           final List<Glob>? includes,
       final Map<dynamic, dynamic>? configuration,
-      final bool? enabled}) = _$LintConfiguration;
+      final bool? enabled,
+      final List<SidecarNewException> errors}) = _$LintConfiguration;
   const LintConfiguration._() : super._();
 
   LintSeverity? get severity;
@@ -377,6 +414,8 @@ abstract class LintConfiguration extends AnalysisConfiguration {
   Map<dynamic, dynamic>? get configuration;
   @override
   bool? get enabled;
+  @override
+  List<SidecarNewException> get errors;
   @override
   @JsonKey(ignore: true)
   _$$LintConfigurationCopyWith<_$LintConfiguration> get copyWith =>
@@ -394,7 +433,8 @@ abstract class _$$AssistConfigurationCopyWith<$Res>
       {@JsonKey(toJson: globsToString, fromJson: globsFromString)
           List<Glob>? includes,
       Map<dynamic, dynamic>? configuration,
-      bool? enabled});
+      bool? enabled,
+      List<SidecarNewException> errors});
 }
 
 /// @nodoc
@@ -413,6 +453,7 @@ class __$$AssistConfigurationCopyWithImpl<$Res>
     Object? includes = freezed,
     Object? configuration = freezed,
     Object? enabled = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_$AssistConfiguration(
       includes: includes == freezed
@@ -427,6 +468,10 @@ class __$$AssistConfigurationCopyWithImpl<$Res>
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool?,
+      errors: errors == freezed
+          ? _value._errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as List<SidecarNewException>,
     ));
   }
 }
@@ -439,9 +484,11 @@ class _$AssistConfiguration extends AssistConfiguration {
       {@JsonKey(toJson: globsToString, fromJson: globsFromString)
           final List<Glob>? includes,
       final Map<dynamic, dynamic>? configuration,
-      this.enabled})
+      this.enabled,
+      final List<SidecarNewException> errors = const <SidecarNewException>[]})
       : _includes = includes,
         _configuration = configuration,
+        _errors = errors,
         super._();
 
   final List<Glob>? _includes;
@@ -465,10 +512,17 @@ class _$AssistConfiguration extends AssistConfiguration {
 
   @override
   final bool? enabled;
+  final List<SidecarNewException> _errors;
+  @override
+  @JsonKey()
+  List<SidecarNewException> get errors {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_errors);
+  }
 
   @override
   String toString() {
-    return 'AnalysisConfiguration.assist(includes: $includes, configuration: $configuration, enabled: $enabled)';
+    return 'AnalysisConfiguration.assist(includes: $includes, configuration: $configuration, enabled: $enabled, errors: $errors)';
   }
 
   @override
@@ -479,7 +533,8 @@ class _$AssistConfiguration extends AssistConfiguration {
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality()
                 .equals(other._configuration, _configuration) &&
-            const DeepCollectionEquality().equals(other.enabled, enabled));
+            const DeepCollectionEquality().equals(other.enabled, enabled) &&
+            const DeepCollectionEquality().equals(other._errors, _errors));
   }
 
   @override
@@ -487,7 +542,8 @@ class _$AssistConfiguration extends AssistConfiguration {
       runtimeType,
       const DeepCollectionEquality().hash(_includes),
       const DeepCollectionEquality().hash(_configuration),
-      const DeepCollectionEquality().hash(enabled));
+      const DeepCollectionEquality().hash(enabled),
+      const DeepCollectionEquality().hash(_errors));
 
   @JsonKey(ignore: true)
   @override
@@ -503,16 +559,18 @@ class _$AssistConfiguration extends AssistConfiguration {
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)
+            bool? enabled,
+            List<SidecarNewException> errors)
         lint,
     required TResult Function(
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)
+            bool? enabled,
+            List<SidecarNewException> errors)
         assist,
   }) {
-    return assist(includes, configuration, enabled);
+    return assist(includes, configuration, enabled, errors);
   }
 
   @override
@@ -523,16 +581,18 @@ class _$AssistConfiguration extends AssistConfiguration {
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         assist,
   }) {
-    return assist?.call(includes, configuration, enabled);
+    return assist?.call(includes, configuration, enabled, errors);
   }
 
   @override
@@ -543,18 +603,20 @@ class _$AssistConfiguration extends AssistConfiguration {
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(
             @JsonKey(toJson: globsToString, fromJson: globsFromString)
                 List<Glob>? includes,
             Map<dynamic, dynamic>? configuration,
-            bool? enabled)?
+            bool? enabled,
+            List<SidecarNewException> errors)?
         assist,
     required TResult orElse(),
   }) {
     if (assist != null) {
-      return assist(includes, configuration, enabled);
+      return assist(includes, configuration, enabled, errors);
     }
     return orElse();
   }
@@ -596,7 +658,8 @@ abstract class AssistConfiguration extends AnalysisConfiguration {
       {@JsonKey(toJson: globsToString, fromJson: globsFromString)
           final List<Glob>? includes,
       final Map<dynamic, dynamic>? configuration,
-      final bool? enabled}) = _$AssistConfiguration;
+      final bool? enabled,
+      final List<SidecarNewException> errors}) = _$AssistConfiguration;
   const AssistConfiguration._() : super._();
 
   @override
@@ -606,6 +669,8 @@ abstract class AssistConfiguration extends AnalysisConfiguration {
   Map<dynamic, dynamic>? get configuration;
   @override
   bool? get enabled;
+  @override
+  List<SidecarNewException> get errors;
   @override
   @JsonKey(ignore: true)
   _$$AssistConfigurationCopyWith<_$AssistConfiguration> get copyWith =>

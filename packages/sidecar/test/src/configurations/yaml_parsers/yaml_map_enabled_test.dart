@@ -1,4 +1,5 @@
 import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/src/configurations/builders/new_exceptions.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -11,7 +12,7 @@ void main() {
       final value = yamlContent.parseEnabled();
 
       expect(value.item1, true);
-      expect(value.item2, <SidecarConfigException>[]);
+      expect(value.item2, <SidecarNewException>[]);
     });
     test('set to false', () {
       final yamlContent = YamlMap.wrap(<dynamic, dynamic>{
@@ -21,7 +22,7 @@ void main() {
       final value = yamlContent.parseEnabled();
 
       expect(value.item1, false);
-      expect(value.item2, <SidecarConfigException>[]);
+      expect(value.item2, <SidecarNewException>[]);
     });
 
     test('set to an invalid value', () {

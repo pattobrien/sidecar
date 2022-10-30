@@ -5,6 +5,8 @@ import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
 import '../../utils/json_utils/glob_json_util.dart';
+import '../builders/exceptions.dart';
+import '../builders/new_exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 
 part 'analysis_configuration.freezed.dart';
@@ -21,6 +23,7 @@ class AnalysisConfiguration with _$AnalysisConfiguration {
         List<Glob>? includes,
     Map<dynamic, dynamic>? configuration,
     bool? enabled,
+    @Default(<SidecarNewException>[]) List<SidecarNewException> errors,
   }) = LintConfiguration;
 
   @JsonSerializable(anyMap: true)
@@ -29,6 +32,7 @@ class AnalysisConfiguration with _$AnalysisConfiguration {
         List<Glob>? includes,
     Map<dynamic, dynamic>? configuration,
     bool? enabled,
+    @Default(<SidecarNewException>[]) List<SidecarNewException> errors,
   }) = AssistConfiguration;
 
   factory AnalysisConfiguration.fromYaml(YamlNode yamlNode, RuleType ruleType) {
@@ -40,11 +44,6 @@ class AnalysisConfiguration with _$AnalysisConfiguration {
 
       default:
         throw UnimplementedError('AnalysisConfiguration invalid yaml');
-      // throw CheckedFromJsonException(
-      //     yamlNode.value,
-      //     'runtimeType',
-      //     'AnalysisConfiguration',
-      //     'Invalid union type "${json['runtimeType']}"!');
     }
   }
 }
@@ -62,12 +61,12 @@ LintConfiguration parseLintFromYaml(YamlNode yaml) {
       severity: severity.item1,
       enabled: enabled.item1,
       configuration: configuration.item1,
-      // sourceErrors: [
-      //   ...includes.item2,
-      //   ...severity.item2,
-      //   ...configuration.item2,
-      //   ...enabled.item2,
-      // ],
+      errors: [
+        ...includes.item2,
+        ...severity.item2,
+        ...configuration.item2,
+        ...enabled.item2,
+      ],
     );
   } else if (value is YamlScalar) {
     final dynamic scalarValue = value.value;
@@ -83,17 +82,17 @@ LintConfiguration parseLintFromYaml(YamlNode yaml) {
   // return MapEntry(
   //   yamlKey.value as String,
   return LintConfiguration(
-      // lintNameSpan: yamlKey.span,
-      // packageName: packageName,
-      // id: yamlKey.value as String,
-      //   sourceErrors: <SidecarConfigException>[
-      //     SidecarLintException(
-      //       yamlKey,
-      //       message: 'Lint definition should be of type null, bool, or map',
-      //     ),
-      //   ],
-      // ),
-      );
+    // lintNameSpan: yamlKey.span,
+    // packageName: packageName,
+    // id: yamlKey.value as String,
+    errors: <SidecarNewException>[
+      SidecarNewException.rule(
+        sourceSpan: value.span,
+        message: 'Lint definition should be of type null, bool, or map',
+      ),
+    ],
+    // ),
+  );
 }
 
 AssistConfiguration parseAssistFromYaml(YamlNode yaml) {

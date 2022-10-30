@@ -1,6 +1,7 @@
 import 'package:yaml/yaml.dart';
 
 import '../builders/builders.dart';
+import '../builders/new_exceptions.dart';
 import '../configurations.dart';
 
 extension YamlMapEnabled on YamlMap {
@@ -11,10 +12,12 @@ extension YamlMapEnabled on YamlMap {
       return SidecarExceptionTuple<bool?>(enabledValue, []);
     } catch (e) {
       return SidecarExceptionTuple<bool?>(null, [
-        SidecarLintException(
-          nodes.keys
+        SidecarNewException.lintField(
+          sourceSpan: nodes.keys
               .cast<YamlScalar>()
-              .firstWhere((element) => element.value == key),
+              .firstWhere((element) => element.value == key)
+              .span,
+          correction: '',
           message: "Invalid value. Must be 'true' or 'false'",
         )
       ]);

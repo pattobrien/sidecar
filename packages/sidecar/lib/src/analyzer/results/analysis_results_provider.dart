@@ -22,7 +22,7 @@ final analysisResultsForFileProvider =
 
       final config = ProjectConfiguration.parseFromSidecarYaml(
         content,
-        // sourceUrl: unit!.uri,
+        sourceUrl: unit!.uri,
       );
 
       final errors =

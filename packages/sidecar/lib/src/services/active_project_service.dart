@@ -182,7 +182,7 @@ class ActiveProjectService {
       final contents = sidecarYamlFile.readAsStringSync();
       return ProjectConfiguration.parseFromSidecarYaml(
         contents,
-        // sourceUrl: sidecarYamlFile.uri,
+        sourceUrl: sidecarYamlFile.uri,
       );
     } catch (e, stackTrace) {
       _logError(

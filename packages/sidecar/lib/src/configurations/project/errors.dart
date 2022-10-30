@@ -1,8 +1,10 @@
 import 'package:tuple/tuple.dart';
 
-import '../builders/builders.dart';
+import '../builders/new_exceptions.dart';
 
-typedef SidecarExceptionTuple<T> = Tuple2<T, List<SidecarConfigException>>;
+typedef SidecarExceptionTuple<T> = Tuple2<T, List<SidecarNewException>>;
+
+class SidecarException implements Exception {}
 
 class MissingSidecarYamlConfiguration implements SidecarException {
   const MissingSidecarYamlConfiguration();

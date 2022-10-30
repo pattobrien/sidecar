@@ -17,35 +17,34 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AnalysisPackageConfiguration {
   List<Glob> get includes => throw _privateConstructorUsedError;
-  List<SidecarConfigException> get sourceErrors =>
-      throw _privateConstructorUsedError;
+  List<SidecarNewException> get errors => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Map<String, LintConfiguration> lints,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)
+            List<Glob> includes, List<SidecarNewException> errors)
         lint,
     required TResult Function(Map<String, AssistConfiguration> assists,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)
+            List<Glob> includes, List<SidecarNewException> errors)
         assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Map<String, LintConfiguration> lints, List<Glob> includes,
-            List<SidecarConfigException> sourceErrors)?
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(Map<String, AssistConfiguration> assists,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)?
+            List<Glob> includes, List<SidecarNewException> errors)?
         assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, LintConfiguration> lints, List<Glob> includes,
-            List<SidecarConfigException> sourceErrors)?
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(Map<String, AssistConfiguration> assists,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)?
+            List<Glob> includes, List<SidecarNewException> errors)?
         assist,
     required TResult orElse(),
   }) =>
@@ -81,7 +80,7 @@ abstract class $AnalysisPackageConfigurationCopyWith<$Res> {
           AnalysisPackageConfiguration value,
           $Res Function(AnalysisPackageConfiguration) then) =
       _$AnalysisPackageConfigurationCopyWithImpl<$Res>;
-  $Res call({List<Glob> includes, List<SidecarConfigException> sourceErrors});
+  $Res call({List<Glob> includes, List<SidecarNewException> errors});
 }
 
 /// @nodoc
@@ -96,17 +95,17 @@ class _$AnalysisPackageConfigurationCopyWithImpl<$Res>
   @override
   $Res call({
     Object? includes = freezed,
-    Object? sourceErrors = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_value.copyWith(
       includes: includes == freezed
           ? _value.includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>,
-      sourceErrors: sourceErrors == freezed
-          ? _value.sourceErrors
-          : sourceErrors // ignore: cast_nullable_to_non_nullable
-              as List<SidecarConfigException>,
+      errors: errors == freezed
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as List<SidecarNewException>,
     ));
   }
 }
@@ -121,7 +120,7 @@ abstract class _$$LintPackageConfigurationCopyWith<$Res>
   $Res call(
       {Map<String, LintConfiguration> lints,
       List<Glob> includes,
-      List<SidecarConfigException> sourceErrors});
+      List<SidecarNewException> errors});
 }
 
 /// @nodoc
@@ -140,7 +139,7 @@ class __$$LintPackageConfigurationCopyWithImpl<$Res>
   $Res call({
     Object? lints = freezed,
     Object? includes = freezed,
-    Object? sourceErrors = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_$LintPackageConfiguration(
       lints: lints == freezed
@@ -151,10 +150,10 @@ class __$$LintPackageConfigurationCopyWithImpl<$Res>
           ? _value._includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>,
-      sourceErrors: sourceErrors == freezed
-          ? _value._sourceErrors
-          : sourceErrors // ignore: cast_nullable_to_non_nullable
-              as List<SidecarConfigException>,
+      errors: errors == freezed
+          ? _value._errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as List<SidecarNewException>,
     ));
   }
 }
@@ -165,11 +164,10 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
   const _$LintPackageConfiguration(
       {required final Map<String, LintConfiguration> lints,
       final List<Glob> includes = const <Glob>[],
-      final List<SidecarConfigException> sourceErrors =
-          const <SidecarConfigException>[]})
+      final List<SidecarNewException> errors = const <SidecarNewException>[]})
       : _lints = lints,
         _includes = includes,
-        _sourceErrors = sourceErrors,
+        _errors = errors,
         super._();
 
   final Map<String, LintConfiguration> _lints;
@@ -187,17 +185,17 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
     return EqualUnmodifiableListView(_includes);
   }
 
-  final List<SidecarConfigException> _sourceErrors;
+  final List<SidecarNewException> _errors;
   @override
   @JsonKey()
-  List<SidecarConfigException> get sourceErrors {
+  List<SidecarNewException> get errors {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_sourceErrors);
+    return EqualUnmodifiableListView(_errors);
   }
 
   @override
   String toString() {
-    return 'AnalysisPackageConfiguration.lint(lints: $lints, includes: $includes, sourceErrors: $sourceErrors)';
+    return 'AnalysisPackageConfiguration.lint(lints: $lints, includes: $includes, errors: $errors)';
   }
 
   @override
@@ -207,8 +205,7 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
             other is _$LintPackageConfiguration &&
             const DeepCollectionEquality().equals(other._lints, _lints) &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
-            const DeepCollectionEquality()
-                .equals(other._sourceErrors, _sourceErrors));
+            const DeepCollectionEquality().equals(other._errors, _errors));
   }
 
   @override
@@ -216,7 +213,7 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
       runtimeType,
       const DeepCollectionEquality().hash(_lints),
       const DeepCollectionEquality().hash(_includes),
-      const DeepCollectionEquality().hash(_sourceErrors));
+      const DeepCollectionEquality().hash(_errors));
 
   @JsonKey(ignore: true)
   @override
@@ -229,41 +226,41 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Map<String, LintConfiguration> lints,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)
+            List<Glob> includes, List<SidecarNewException> errors)
         lint,
     required TResult Function(Map<String, AssistConfiguration> assists,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)
+            List<Glob> includes, List<SidecarNewException> errors)
         assist,
   }) {
-    return lint(lints, includes, sourceErrors);
+    return lint(lints, includes, errors);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Map<String, LintConfiguration> lints, List<Glob> includes,
-            List<SidecarConfigException> sourceErrors)?
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(Map<String, AssistConfiguration> assists,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)?
+            List<Glob> includes, List<SidecarNewException> errors)?
         assist,
   }) {
-    return lint?.call(lints, includes, sourceErrors);
+    return lint?.call(lints, includes, errors);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, LintConfiguration> lints, List<Glob> includes,
-            List<SidecarConfigException> sourceErrors)?
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(Map<String, AssistConfiguration> assists,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)?
+            List<Glob> includes, List<SidecarNewException> errors)?
         assist,
     required TResult orElse(),
   }) {
     if (lint != null) {
-      return lint(lints, includes, sourceErrors);
+      return lint(lints, includes, errors);
     }
     return orElse();
   }
@@ -302,17 +299,16 @@ class _$LintPackageConfiguration extends LintPackageConfiguration {
 
 abstract class LintPackageConfiguration extends AnalysisPackageConfiguration {
   const factory LintPackageConfiguration(
-          {required final Map<String, LintConfiguration> lints,
-          final List<Glob> includes,
-          final List<SidecarConfigException> sourceErrors}) =
-      _$LintPackageConfiguration;
+      {required final Map<String, LintConfiguration> lints,
+      final List<Glob> includes,
+      final List<SidecarNewException> errors}) = _$LintPackageConfiguration;
   const LintPackageConfiguration._() : super._();
 
   Map<String, LintConfiguration> get lints;
   @override
   List<Glob> get includes;
   @override
-  List<SidecarConfigException> get sourceErrors;
+  List<SidecarNewException> get errors;
   @override
   @JsonKey(ignore: true)
   _$$LintPackageConfigurationCopyWith<_$LintPackageConfiguration>
@@ -330,7 +326,7 @@ abstract class _$$AssistPackageConfigurationCopyWith<$Res>
   $Res call(
       {Map<String, AssistConfiguration> assists,
       List<Glob> includes,
-      List<SidecarConfigException> sourceErrors});
+      List<SidecarNewException> errors});
 }
 
 /// @nodoc
@@ -350,7 +346,7 @@ class __$$AssistPackageConfigurationCopyWithImpl<$Res>
   $Res call({
     Object? assists = freezed,
     Object? includes = freezed,
-    Object? sourceErrors = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_$AssistPackageConfiguration(
       assists: assists == freezed
@@ -361,10 +357,10 @@ class __$$AssistPackageConfigurationCopyWithImpl<$Res>
           ? _value._includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>,
-      sourceErrors: sourceErrors == freezed
-          ? _value._sourceErrors
-          : sourceErrors // ignore: cast_nullable_to_non_nullable
-              as List<SidecarConfigException>,
+      errors: errors == freezed
+          ? _value._errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as List<SidecarNewException>,
     ));
   }
 }
@@ -375,11 +371,10 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
   const _$AssistPackageConfiguration(
       {required final Map<String, AssistConfiguration> assists,
       final List<Glob> includes = const <Glob>[],
-      final List<SidecarConfigException> sourceErrors =
-          const <SidecarConfigException>[]})
+      final List<SidecarNewException> errors = const <SidecarNewException>[]})
       : _assists = assists,
         _includes = includes,
-        _sourceErrors = sourceErrors,
+        _errors = errors,
         super._();
 
   final Map<String, AssistConfiguration> _assists;
@@ -397,17 +392,17 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
     return EqualUnmodifiableListView(_includes);
   }
 
-  final List<SidecarConfigException> _sourceErrors;
+  final List<SidecarNewException> _errors;
   @override
   @JsonKey()
-  List<SidecarConfigException> get sourceErrors {
+  List<SidecarNewException> get errors {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_sourceErrors);
+    return EqualUnmodifiableListView(_errors);
   }
 
   @override
   String toString() {
-    return 'AnalysisPackageConfiguration.assist(assists: $assists, includes: $includes, sourceErrors: $sourceErrors)';
+    return 'AnalysisPackageConfiguration.assist(assists: $assists, includes: $includes, errors: $errors)';
   }
 
   @override
@@ -417,8 +412,7 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
             other is _$AssistPackageConfiguration &&
             const DeepCollectionEquality().equals(other._assists, _assists) &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
-            const DeepCollectionEquality()
-                .equals(other._sourceErrors, _sourceErrors));
+            const DeepCollectionEquality().equals(other._errors, _errors));
   }
 
   @override
@@ -426,7 +420,7 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
       runtimeType,
       const DeepCollectionEquality().hash(_assists),
       const DeepCollectionEquality().hash(_includes),
-      const DeepCollectionEquality().hash(_sourceErrors));
+      const DeepCollectionEquality().hash(_errors));
 
   @JsonKey(ignore: true)
   @override
@@ -438,41 +432,41 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Map<String, LintConfiguration> lints,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)
+            List<Glob> includes, List<SidecarNewException> errors)
         lint,
     required TResult Function(Map<String, AssistConfiguration> assists,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)
+            List<Glob> includes, List<SidecarNewException> errors)
         assist,
   }) {
-    return assist(assists, includes, sourceErrors);
+    return assist(assists, includes, errors);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Map<String, LintConfiguration> lints, List<Glob> includes,
-            List<SidecarConfigException> sourceErrors)?
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(Map<String, AssistConfiguration> assists,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)?
+            List<Glob> includes, List<SidecarNewException> errors)?
         assist,
   }) {
-    return assist?.call(assists, includes, sourceErrors);
+    return assist?.call(assists, includes, errors);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, LintConfiguration> lints, List<Glob> includes,
-            List<SidecarConfigException> sourceErrors)?
+            List<SidecarNewException> errors)?
         lint,
     TResult Function(Map<String, AssistConfiguration> assists,
-            List<Glob> includes, List<SidecarConfigException> sourceErrors)?
+            List<Glob> includes, List<SidecarNewException> errors)?
         assist,
     required TResult orElse(),
   }) {
     if (assist != null) {
-      return assist(assists, includes, sourceErrors);
+      return assist(assists, includes, errors);
     }
     return orElse();
   }
@@ -511,17 +505,16 @@ class _$AssistPackageConfiguration extends AssistPackageConfiguration {
 
 abstract class AssistPackageConfiguration extends AnalysisPackageConfiguration {
   const factory AssistPackageConfiguration(
-          {required final Map<String, AssistConfiguration> assists,
-          final List<Glob> includes,
-          final List<SidecarConfigException> sourceErrors}) =
-      _$AssistPackageConfiguration;
+      {required final Map<String, AssistConfiguration> assists,
+      final List<Glob> includes,
+      final List<SidecarNewException> errors}) = _$AssistPackageConfiguration;
   const AssistPackageConfiguration._() : super._();
 
   Map<String, AssistConfiguration> get assists;
   @override
   List<Glob> get includes;
   @override
-  List<SidecarConfigException> get sourceErrors;
+  List<SidecarNewException> get errors;
   @override
   @JsonKey(ignore: true)
   _$$AssistPackageConfigurationCopyWith<_$AssistPackageConfiguration>

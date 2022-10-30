@@ -9,6 +9,7 @@ import '../../analyzer/server/log_delegate.dart';
 import '../../rules/rules.dart';
 import '../../utils/logger/logger.dart';
 import '../builders/builders.dart';
+import '../builders/new_exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 import 'analysis_package_configuration.dart';
@@ -19,26 +20,41 @@ class ProjectConfiguration {
     this.lintPackages,
     this.assistPackages,
     List<Glob>? includes,
-    // this.sourceErrors = const <SidecarConfigException>[],
+  })  : _includes = includes,
+        errors = const <SidecarNewException>[];
+
+  const ProjectConfiguration._({
+    this.lintPackages,
+    this.assistPackages,
+    List<Glob>? includes,
+    this.errors = const <SidecarNewException>[],
   }) : _includes = includes;
 
-  factory ProjectConfiguration.parseFromSidecarYaml(String contents) {
+  factory ProjectConfiguration.parseFromSidecarYaml(
+    String contents, {
+    Uri? sourceUrl,
+  }) {
     try {
-      return checkedYamlDecode(contents, (m) {
-        try {
-          final contentMap = m as YamlMap?;
-          final includesResult = contentMap!.parseGlobIncludes();
-          return ProjectConfiguration(
-            lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
-            assistPackages:
-                _parseAssistPackages(contentMap['assists'] as YamlMap?),
-            includes: includesResult.item1,
-          );
-        } catch (e, stackTrace) {
-          logger.severe('PROJCONFIG', e, stackTrace);
-          throw const MissingSidecarYamlConfiguration();
-        }
-      });
+      return checkedYamlDecode(
+        contents,
+        (m) {
+          try {
+            final contentMap = m as YamlMap?;
+            final includesResult = contentMap!.parseGlobIncludes();
+            return ProjectConfiguration._(
+              lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
+              assistPackages:
+                  _parseAssistPackages(contentMap['assists'] as YamlMap?),
+              includes: includesResult.item1,
+              errors: includesResult.item2,
+            );
+          } catch (e, stackTrace) {
+            logger.severe('PROJCONFIG', e, stackTrace);
+            throw const MissingSidecarYamlConfiguration();
+          }
+        },
+        sourceUrl: sourceUrl,
+      );
     } catch (e, stackTrace) {
       logger.severe('PROJCONFIG unexpected error', e, stackTrace);
       throw UnimplementedError(
@@ -46,22 +62,20 @@ class ProjectConfiguration {
     }
   }
 
-  List<SidecarConfigException> get combinedSourceErrors => [
-        // ...sourceErrors,
-        // ...?lintPackages?.values
-        //     .map((e) => [
-        //           ...e.sourceErrors,
-        //           ...e.lints.values.map((e) => e.sourceErrors).expand((f) => f),
-        //         ])
-        //     .expand((e) => e),
-        // ...?assistPackages?.values
-        //     .map((e) => [
-        //           ...e.sourceErrors,
-        //           ...e.assists.values
-        //               .map((e) => e.sourceErrors)
-        //               .expand((f) => f),
-        //         ])
-        //     .expand((e) => e),
+  List<SidecarNewException> get combinedSourceErrors => [
+        ...errors,
+        ...?lintPackages?.values
+            .map((e) => [
+                  ...e.errors,
+                  ...e.lints.values.map((e) => e.errors).expand((f) => f),
+                ])
+            .expand((e) => e),
+        ...?assistPackages?.values
+            .map((e) => [
+                  ...e.errors,
+                  ...e.assists.values.map((e) => e.errors).expand((f) => f),
+                ])
+            .expand((e) => e),
       ];
 
   static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(
@@ -104,7 +118,7 @@ class ProjectConfiguration {
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
   final Map<PackageName, AssistPackageConfiguration>? assistPackages;
   final List<Glob>? _includes;
-  // final List<SidecarConfigException> sourceErrors;
+  final List<SidecarNewException> errors;
 
   List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];
 

@@ -12,6 +12,11 @@ _$LintConfiguration _$$LintConfigurationFromJson(Map json) =>
       includes: globsFromString(json['includes'] as List<String>?),
       configuration: json['configuration'] as Map?,
       enabled: json['enabled'] as bool?,
+      errors: (json['errors'] as List<dynamic>?)
+              ?.map((e) => SidecarNewException.fromJson(
+                  Map<String, dynamic>.from(e as Map)))
+              .toList() ??
+          const <SidecarNewException>[],
     );
 
 Map<String, dynamic> _$$LintConfigurationToJson(_$LintConfiguration instance) =>
@@ -20,6 +25,7 @@ Map<String, dynamic> _$$LintConfigurationToJson(_$LintConfiguration instance) =>
       'includes': globsToString(instance.includes),
       'configuration': instance.configuration,
       'enabled': instance.enabled,
+      'errors': instance.errors,
     };
 
 const _$LintSeverityEnumMap = {
@@ -33,6 +39,11 @@ _$AssistConfiguration _$$AssistConfigurationFromJson(Map json) =>
       includes: globsFromString(json['includes'] as List<String>?),
       configuration: json['configuration'] as Map?,
       enabled: json['enabled'] as bool?,
+      errors: (json['errors'] as List<dynamic>?)
+              ?.map((e) => SidecarNewException.fromJson(
+                  Map<String, dynamic>.from(e as Map)))
+              .toList() ??
+          const <SidecarNewException>[],
     );
 
 Map<String, dynamic> _$$AssistConfigurationToJson(
@@ -41,4 +52,5 @@ Map<String, dynamic> _$$AssistConfigurationToJson(
       'includes': globsToString(instance.includes),
       'configuration': instance.configuration,
       'enabled': instance.enabled,
+      'errors': instance.errors,
     };

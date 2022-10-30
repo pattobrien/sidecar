@@ -4,6 +4,7 @@ import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
 import '../builders/builders.dart';
+import '../builders/new_exceptions.dart';
 import 'analysis_configuration.dart';
 
 part 'analysis_package_configuration.freezed.dart';
@@ -15,15 +16,13 @@ class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
   const factory AnalysisPackageConfiguration.lint({
     required Map<String, LintConfiguration> lints,
     @Default(<Glob>[]) List<Glob> includes,
-    @Default(<SidecarConfigException>[])
-        List<SidecarConfigException> sourceErrors,
+    @Default(<SidecarNewException>[]) List<SidecarNewException> errors,
   }) = LintPackageConfiguration;
 
   const factory AnalysisPackageConfiguration.assist({
     required Map<String, AssistConfiguration> assists,
     @Default(<Glob>[]) List<Glob> includes,
-    @Default(<SidecarConfigException>[])
-        List<SidecarConfigException> sourceErrors,
+    @Default(<SidecarNewException>[]) List<SidecarNewException> errors,
   }) = AssistPackageConfiguration;
 
   factory AnalysisPackageConfiguration.fromYamlMap(
