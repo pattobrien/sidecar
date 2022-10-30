@@ -5,14 +5,24 @@ import 'package:sidecar/src/configurations/configurations.dart';
 import 'package:sidecar/src/test/assets/project_creator.dart';
 import 'package:sidecar/src/test/utils.dart';
 
+const kL10nPackageName = 'l10n_lints';
+const kL10nAvoidStringLiteralsLintId = 'avoid_string_literals';
+
 Future<void> main() async {
   final resourceProvider = MemoryResourceProvider();
   final workspaceCreator = WorkspaceCreator(resourceProvider: resourceProvider);
+
+  const l10nPackage = LintPackageConfiguration(
+      lints: {kL10nAvoidStringLiteralsLintId: LintConfiguration()});
+
+  const projectConfig =
+      ProjectConfiguration(lintPackages: {kL10nPackageName: l10nPackage});
 
   final projectCreator = ProjectCreator(
     resourceProvider: resourceProvider,
     parentDirectoryPath: workspaceCreator.workspaceFolder.path,
     projectName: 'my_app',
+    sidecarProjectConfiguration: projectConfig,
   );
 
   final packagesSubfolder = projectCreator.newFolder('packages');

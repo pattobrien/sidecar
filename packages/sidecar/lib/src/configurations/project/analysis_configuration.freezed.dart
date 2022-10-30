@@ -16,80 +16,59 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnalysisConfiguration {
-  String get id => throw _privateConstructorUsedError;
-  String get packageName => throw _privateConstructorUsedError;
-  SourceSpan get lintNameSpan => throw _privateConstructorUsedError;
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
   List<Glob>? get includes => throw _privateConstructorUsedError;
-  YamlMap? get configuration => throw _privateConstructorUsedError;
-  bool? get enabled => throw _privateConstructorUsedError;
-  List<SidecarConfigException> get sourceErrors =>
+  Map<dynamic, dynamic>? get configuration =>
       throw _privateConstructorUsedError;
+  bool? get enabled => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
             LintSeverity? severity,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)
         lint,
     required TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)
         assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
             LintSeverity? severity,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         lint,
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
             LintSeverity? severity,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         lint,
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         assist,
     required TResult orElse(),
   }) =>
@@ -125,13 +104,10 @@ abstract class $AnalysisConfigurationCopyWith<$Res> {
           $Res Function(AnalysisConfiguration) then) =
       _$AnalysisConfigurationCopyWithImpl<$Res>;
   $Res call(
-      {String id,
-      String packageName,
-      SourceSpan lintNameSpan,
-      List<Glob>? includes,
-      YamlMap? configuration,
-      bool? enabled,
-      List<SidecarConfigException> sourceErrors});
+      {@JsonKey(toJson: globsToString, fromJson: globsFromString)
+          List<Glob>? includes,
+      Map<dynamic, dynamic>? configuration,
+      bool? enabled});
 }
 
 /// @nodoc
@@ -145,27 +121,11 @@ class _$AnalysisConfigurationCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? id = freezed,
-    Object? packageName = freezed,
-    Object? lintNameSpan = freezed,
     Object? includes = freezed,
     Object? configuration = freezed,
     Object? enabled = freezed,
-    Object? sourceErrors = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      packageName: packageName == freezed
-          ? _value.packageName
-          : packageName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lintNameSpan: lintNameSpan == freezed
-          ? _value.lintNameSpan
-          : lintNameSpan // ignore: cast_nullable_to_non_nullable
-              as SourceSpan,
       includes: includes == freezed
           ? _value.includes
           : includes // ignore: cast_nullable_to_non_nullable
@@ -173,15 +133,11 @@ class _$AnalysisConfigurationCopyWithImpl<$Res>
       configuration: configuration == freezed
           ? _value.configuration
           : configuration // ignore: cast_nullable_to_non_nullable
-              as YamlMap?,
+              as Map<dynamic, dynamic>?,
       enabled: enabled == freezed
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool?,
-      sourceErrors: sourceErrors == freezed
-          ? _value.sourceErrors
-          : sourceErrors // ignore: cast_nullable_to_non_nullable
-              as List<SidecarConfigException>,
     ));
   }
 }
@@ -194,14 +150,11 @@ abstract class _$$LintConfigurationCopyWith<$Res>
       __$$LintConfigurationCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String id,
-      String packageName,
-      SourceSpan lintNameSpan,
-      LintSeverity? severity,
-      List<Glob>? includes,
-      YamlMap? configuration,
-      bool? enabled,
-      List<SidecarConfigException> sourceErrors});
+      {LintSeverity? severity,
+      @JsonKey(toJson: globsToString, fromJson: globsFromString)
+          List<Glob>? includes,
+      Map<dynamic, dynamic>? configuration,
+      bool? enabled});
 }
 
 /// @nodoc
@@ -217,28 +170,12 @@ class __$$LintConfigurationCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? id = freezed,
-    Object? packageName = freezed,
-    Object? lintNameSpan = freezed,
     Object? severity = freezed,
     Object? includes = freezed,
     Object? configuration = freezed,
     Object? enabled = freezed,
-    Object? sourceErrors = freezed,
   }) {
     return _then(_$LintConfiguration(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      packageName: packageName == freezed
-          ? _value.packageName
-          : packageName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lintNameSpan: lintNameSpan == freezed
-          ? _value.lintNameSpan
-          : lintNameSpan // ignore: cast_nullable_to_non_nullable
-              as SourceSpan,
       severity: severity == freezed
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
@@ -248,48 +185,36 @@ class __$$LintConfigurationCopyWithImpl<$Res>
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
       configuration: configuration == freezed
-          ? _value.configuration
+          ? _value._configuration
           : configuration // ignore: cast_nullable_to_non_nullable
-              as YamlMap?,
+              as Map<dynamic, dynamic>?,
       enabled: enabled == freezed
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool?,
-      sourceErrors: sourceErrors == freezed
-          ? _value._sourceErrors
-          : sourceErrors // ignore: cast_nullable_to_non_nullable
-              as List<SidecarConfigException>,
     ));
   }
 }
 
 /// @nodoc
 
+@JsonSerializable(anyMap: true)
 class _$LintConfiguration extends LintConfiguration {
   const _$LintConfiguration(
-      {required this.id,
-      required this.packageName,
-      required this.lintNameSpan,
-      this.severity,
-      final List<Glob>? includes,
-      this.configuration,
-      this.enabled,
-      final List<SidecarConfigException> sourceErrors =
-          const <SidecarConfigException>[]})
+      {this.severity,
+      @JsonKey(toJson: globsToString, fromJson: globsFromString)
+          final List<Glob>? includes,
+      final Map<dynamic, dynamic>? configuration,
+      this.enabled})
       : _includes = includes,
-        _sourceErrors = sourceErrors,
+        _configuration = configuration,
         super._();
 
-  @override
-  final String id;
-  @override
-  final String packageName;
-  @override
-  final SourceSpan lintNameSpan;
   @override
   final LintSeverity? severity;
   final List<Glob>? _includes;
   @override
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
   List<Glob>? get includes {
     final value = _includes;
     if (value == null) return null;
@@ -297,21 +222,21 @@ class _$LintConfiguration extends LintConfiguration {
     return EqualUnmodifiableListView(value);
   }
 
+  final Map<dynamic, dynamic>? _configuration;
   @override
-  final YamlMap? configuration;
-  @override
-  final bool? enabled;
-  final List<SidecarConfigException> _sourceErrors;
-  @override
-  @JsonKey()
-  List<SidecarConfigException> get sourceErrors {
+  Map<dynamic, dynamic>? get configuration {
+    final value = _configuration;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_sourceErrors);
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
+  final bool? enabled;
+
+  @override
   String toString() {
-    return 'AnalysisConfiguration.lint(id: $id, packageName: $packageName, lintNameSpan: $lintNameSpan, severity: $severity, includes: $includes, configuration: $configuration, enabled: $enabled, sourceErrors: $sourceErrors)';
+    return 'AnalysisConfiguration.lint(severity: $severity, includes: $includes, configuration: $configuration, enabled: $enabled)';
   }
 
   @override
@@ -319,31 +244,20 @@ class _$LintConfiguration extends LintConfiguration {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LintConfiguration &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality()
-                .equals(other.packageName, packageName) &&
-            const DeepCollectionEquality()
-                .equals(other.lintNameSpan, lintNameSpan) &&
             const DeepCollectionEquality().equals(other.severity, severity) &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality()
-                .equals(other.configuration, configuration) &&
-            const DeepCollectionEquality().equals(other.enabled, enabled) &&
-            const DeepCollectionEquality()
-                .equals(other._sourceErrors, _sourceErrors));
+                .equals(other._configuration, _configuration) &&
+            const DeepCollectionEquality().equals(other.enabled, enabled));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(packageName),
-      const DeepCollectionEquality().hash(lintNameSpan),
       const DeepCollectionEquality().hash(severity),
       const DeepCollectionEquality().hash(_includes),
-      const DeepCollectionEquality().hash(configuration),
-      const DeepCollectionEquality().hash(enabled),
-      const DeepCollectionEquality().hash(_sourceErrors));
+      const DeepCollectionEquality().hash(_configuration),
+      const DeepCollectionEquality().hash(enabled));
 
   @JsonKey(ignore: true)
   @override
@@ -354,83 +268,62 @@ class _$LintConfiguration extends LintConfiguration {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
             LintSeverity? severity,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)
         lint,
     required TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)
         assist,
   }) {
-    return lint(id, packageName, lintNameSpan, severity, includes,
-        configuration, enabled, sourceErrors);
+    return lint(severity, includes, configuration, enabled);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
             LintSeverity? severity,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         lint,
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         assist,
   }) {
-    return lint?.call(id, packageName, lintNameSpan, severity, includes,
-        configuration, enabled, sourceErrors);
+    return lint?.call(severity, includes, configuration, enabled);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
             LintSeverity? severity,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         lint,
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         assist,
     required TResult orElse(),
   }) {
     if (lint != null) {
-      return lint(id, packageName, lintNameSpan, severity, includes,
-          configuration, enabled, sourceErrors);
+      return lint(severity, includes, configuration, enabled);
     }
     return orElse();
   }
@@ -469,31 +362,21 @@ class _$LintConfiguration extends LintConfiguration {
 
 abstract class LintConfiguration extends AnalysisConfiguration {
   const factory LintConfiguration(
-      {required final String id,
-      required final String packageName,
-      required final SourceSpan lintNameSpan,
-      final LintSeverity? severity,
-      final List<Glob>? includes,
-      final YamlMap? configuration,
-      final bool? enabled,
-      final List<SidecarConfigException> sourceErrors}) = _$LintConfiguration;
+      {final LintSeverity? severity,
+      @JsonKey(toJson: globsToString, fromJson: globsFromString)
+          final List<Glob>? includes,
+      final Map<dynamic, dynamic>? configuration,
+      final bool? enabled}) = _$LintConfiguration;
   const LintConfiguration._() : super._();
 
-  @override
-  String get id;
-  @override
-  String get packageName;
-  @override
-  SourceSpan get lintNameSpan;
   LintSeverity? get severity;
   @override
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
   List<Glob>? get includes;
   @override
-  YamlMap? get configuration;
+  Map<dynamic, dynamic>? get configuration;
   @override
   bool? get enabled;
-  @override
-  List<SidecarConfigException> get sourceErrors;
   @override
   @JsonKey(ignore: true)
   _$$LintConfigurationCopyWith<_$LintConfiguration> get copyWith =>
@@ -508,13 +391,10 @@ abstract class _$$AssistConfigurationCopyWith<$Res>
       __$$AssistConfigurationCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String id,
-      String packageName,
-      SourceSpan lintNameSpan,
-      List<Glob>? includes,
-      YamlMap? configuration,
-      bool? enabled,
-      List<SidecarConfigException> sourceErrors});
+      {@JsonKey(toJson: globsToString, fromJson: globsFromString)
+          List<Glob>? includes,
+      Map<dynamic, dynamic>? configuration,
+      bool? enabled});
 }
 
 /// @nodoc
@@ -530,71 +410,43 @@ class __$$AssistConfigurationCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? id = freezed,
-    Object? packageName = freezed,
-    Object? lintNameSpan = freezed,
     Object? includes = freezed,
     Object? configuration = freezed,
     Object? enabled = freezed,
-    Object? sourceErrors = freezed,
   }) {
     return _then(_$AssistConfiguration(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      packageName: packageName == freezed
-          ? _value.packageName
-          : packageName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lintNameSpan: lintNameSpan == freezed
-          ? _value.lintNameSpan
-          : lintNameSpan // ignore: cast_nullable_to_non_nullable
-              as SourceSpan,
       includes: includes == freezed
           ? _value._includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
       configuration: configuration == freezed
-          ? _value.configuration
+          ? _value._configuration
           : configuration // ignore: cast_nullable_to_non_nullable
-              as YamlMap?,
+              as Map<dynamic, dynamic>?,
       enabled: enabled == freezed
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool?,
-      sourceErrors: sourceErrors == freezed
-          ? _value._sourceErrors
-          : sourceErrors // ignore: cast_nullable_to_non_nullable
-              as List<SidecarConfigException>,
     ));
   }
 }
 
 /// @nodoc
 
+@JsonSerializable(anyMap: true)
 class _$AssistConfiguration extends AssistConfiguration {
   const _$AssistConfiguration(
-      {required this.id,
-      required this.packageName,
-      required this.lintNameSpan,
-      final List<Glob>? includes,
-      this.configuration,
-      this.enabled,
-      final List<SidecarConfigException> sourceErrors =
-          const <SidecarConfigException>[]})
+      {@JsonKey(toJson: globsToString, fromJson: globsFromString)
+          final List<Glob>? includes,
+      final Map<dynamic, dynamic>? configuration,
+      this.enabled})
       : _includes = includes,
-        _sourceErrors = sourceErrors,
+        _configuration = configuration,
         super._();
 
-  @override
-  final String id;
-  @override
-  final String packageName;
-  @override
-  final SourceSpan lintNameSpan;
   final List<Glob>? _includes;
   @override
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
   List<Glob>? get includes {
     final value = _includes;
     if (value == null) return null;
@@ -602,21 +454,21 @@ class _$AssistConfiguration extends AssistConfiguration {
     return EqualUnmodifiableListView(value);
   }
 
+  final Map<dynamic, dynamic>? _configuration;
   @override
-  final YamlMap? configuration;
-  @override
-  final bool? enabled;
-  final List<SidecarConfigException> _sourceErrors;
-  @override
-  @JsonKey()
-  List<SidecarConfigException> get sourceErrors {
+  Map<dynamic, dynamic>? get configuration {
+    final value = _configuration;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_sourceErrors);
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
+  final bool? enabled;
+
+  @override
   String toString() {
-    return 'AnalysisConfiguration.assist(id: $id, packageName: $packageName, lintNameSpan: $lintNameSpan, includes: $includes, configuration: $configuration, enabled: $enabled, sourceErrors: $sourceErrors)';
+    return 'AnalysisConfiguration.assist(includes: $includes, configuration: $configuration, enabled: $enabled)';
   }
 
   @override
@@ -624,29 +476,18 @@ class _$AssistConfiguration extends AssistConfiguration {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AssistConfiguration &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality()
-                .equals(other.packageName, packageName) &&
-            const DeepCollectionEquality()
-                .equals(other.lintNameSpan, lintNameSpan) &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality()
-                .equals(other.configuration, configuration) &&
-            const DeepCollectionEquality().equals(other.enabled, enabled) &&
-            const DeepCollectionEquality()
-                .equals(other._sourceErrors, _sourceErrors));
+                .equals(other._configuration, _configuration) &&
+            const DeepCollectionEquality().equals(other.enabled, enabled));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(packageName),
-      const DeepCollectionEquality().hash(lintNameSpan),
       const DeepCollectionEquality().hash(_includes),
-      const DeepCollectionEquality().hash(configuration),
-      const DeepCollectionEquality().hash(enabled),
-      const DeepCollectionEquality().hash(_sourceErrors));
+      const DeepCollectionEquality().hash(_configuration),
+      const DeepCollectionEquality().hash(enabled));
 
   @JsonKey(ignore: true)
   @override
@@ -658,83 +499,62 @@ class _$AssistConfiguration extends AssistConfiguration {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
             LintSeverity? severity,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)
         lint,
     required TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)
         assist,
   }) {
-    return assist(id, packageName, lintNameSpan, includes, configuration,
-        enabled, sourceErrors);
+    return assist(includes, configuration, enabled);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
             LintSeverity? severity,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         lint,
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         assist,
   }) {
-    return assist?.call(id, packageName, lintNameSpan, includes, configuration,
-        enabled, sourceErrors);
+    return assist?.call(includes, configuration, enabled);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
             LintSeverity? severity,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         lint,
     TResult Function(
-            String id,
-            String packageName,
-            SourceSpan lintNameSpan,
-            List<Glob>? includes,
-            YamlMap? configuration,
-            bool? enabled,
-            List<SidecarConfigException> sourceErrors)?
+            @JsonKey(toJson: globsToString, fromJson: globsFromString)
+                List<Glob>? includes,
+            Map<dynamic, dynamic>? configuration,
+            bool? enabled)?
         assist,
     required TResult orElse(),
   }) {
     if (assist != null) {
-      return assist(id, packageName, lintNameSpan, includes, configuration,
-          enabled, sourceErrors);
+      return assist(includes, configuration, enabled);
     }
     return orElse();
   }
@@ -773,29 +593,19 @@ class _$AssistConfiguration extends AssistConfiguration {
 
 abstract class AssistConfiguration extends AnalysisConfiguration {
   const factory AssistConfiguration(
-      {required final String id,
-      required final String packageName,
-      required final SourceSpan lintNameSpan,
-      final List<Glob>? includes,
-      final YamlMap? configuration,
-      final bool? enabled,
-      final List<SidecarConfigException> sourceErrors}) = _$AssistConfiguration;
+      {@JsonKey(toJson: globsToString, fromJson: globsFromString)
+          final List<Glob>? includes,
+      final Map<dynamic, dynamic>? configuration,
+      final bool? enabled}) = _$AssistConfiguration;
   const AssistConfiguration._() : super._();
 
   @override
-  String get id;
-  @override
-  String get packageName;
-  @override
-  SourceSpan get lintNameSpan;
-  @override
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
   List<Glob>? get includes;
   @override
-  YamlMap? get configuration;
+  Map<dynamic, dynamic>? get configuration;
   @override
   bool? get enabled;
-  @override
-  List<SidecarConfigException> get sourceErrors;
   @override
   @JsonKey(ignore: true)
   _$$AssistConfigurationCopyWith<_$AssistConfiguration> get copyWith =>

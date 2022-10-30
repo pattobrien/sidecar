@@ -180,8 +180,10 @@ class ActiveProjectService {
     // if (file == null) return null;
     try {
       final contents = sidecarYamlFile.readAsStringSync();
-      return ProjectConfiguration.parseFromSidecarYaml(contents,
-          sourceUrl: sidecarYamlFile.uri);
+      return ProjectConfiguration.parseFromSidecarYaml(
+        contents,
+        // sourceUrl: sidecarYamlFile.uri,
+      );
     } catch (e, stackTrace) {
       _logError(
           'ISOLATE NON-FATAL: _parseProjectConfiguration || $e', stackTrace);

@@ -19,45 +19,26 @@ class ProjectConfiguration {
     this.lintPackages,
     this.assistPackages,
     List<Glob>? includes,
-    this.sourceErrors = const <SidecarConfigException>[],
-    required this.rawContent,
+    // this.sourceErrors = const <SidecarConfigException>[],
   }) : _includes = includes;
 
-  // factory ProjectConfiguration.fromDart(
-  //   String contents, {
-  //   required Uri sourceUrl,
-  //   Ref? ref,
-  // }) {
-
-  //   return ProjectConfiguration(rawContent: rawContent);
-  // }
-
-  factory ProjectConfiguration.parseFromSidecarYaml(
-    String contents, {
-    required Uri sourceUrl,
-  }) {
+  factory ProjectConfiguration.parseFromSidecarYaml(String contents) {
     try {
-      return checkedYamlDecode(
-        contents,
-        (m) {
-          try {
-            final contentMap = m as YamlMap?;
-            final includesResult = contentMap!.parseGlobIncludes();
-            return ProjectConfiguration(
-              rawContent: contents,
-              lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
-              assistPackages:
-                  _parseAssistPackages(contentMap['assists'] as YamlMap?),
-              includes: includesResult.item1,
-              sourceErrors: includesResult.item2,
-            );
-          } catch (e, stackTrace) {
-            logger.severe('PROJCONFIG', e, stackTrace);
-            throw const MissingSidecarYamlConfiguration();
-          }
-        },
-        sourceUrl: sourceUrl,
-      );
+      return checkedYamlDecode(contents, (m) {
+        try {
+          final contentMap = m as YamlMap?;
+          final includesResult = contentMap!.parseGlobIncludes();
+          return ProjectConfiguration(
+            lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
+            assistPackages:
+                _parseAssistPackages(contentMap['assists'] as YamlMap?),
+            includes: includesResult.item1,
+          );
+        } catch (e, stackTrace) {
+          logger.severe('PROJCONFIG', e, stackTrace);
+          throw const MissingSidecarYamlConfiguration();
+        }
+      });
     } catch (e, stackTrace) {
       logger.severe('PROJCONFIG unexpected error', e, stackTrace);
       throw UnimplementedError(
@@ -66,21 +47,21 @@ class ProjectConfiguration {
   }
 
   List<SidecarConfigException> get combinedSourceErrors => [
-        ...sourceErrors,
-        ...?lintPackages?.values
-            .map((e) => [
-                  ...e.sourceErrors,
-                  ...e.lints.values.map((e) => e.sourceErrors).expand((f) => f),
-                ])
-            .expand((e) => e),
-        ...?assistPackages?.values
-            .map((e) => [
-                  ...e.sourceErrors,
-                  ...e.assists.values
-                      .map((e) => e.sourceErrors)
-                      .expand((f) => f),
-                ])
-            .expand((e) => e),
+        // ...sourceErrors,
+        // ...?lintPackages?.values
+        //     .map((e) => [
+        //           ...e.sourceErrors,
+        //           ...e.lints.values.map((e) => e.sourceErrors).expand((f) => f),
+        //         ])
+        //     .expand((e) => e),
+        // ...?assistPackages?.values
+        //     .map((e) => [
+        //           ...e.sourceErrors,
+        //           ...e.assists.values
+        //               .map((e) => e.sourceErrors)
+        //               .expand((f) => f),
+        //         ])
+        //     .expand((e) => e),
       ];
 
   static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(
@@ -91,12 +72,8 @@ class ProjectConfiguration {
       return map?.nodes.map((dynamic key, dynamic value) {
         if (value is YamlMap) {
           key as YamlScalar;
-          final config = AnalysisPackageConfiguration.fromYamlMap(
-            value,
-            type: type,
-            packageName: key.value as String,
-            packageNameSpan: key.span,
-          );
+          final config =
+              AnalysisPackageConfiguration.fromYamlMap(value, type: type);
           return MapEntry(key.value as String, config);
         } else {
           // we want to throw an error if the package doesnt have a single lint declared
@@ -127,8 +104,7 @@ class ProjectConfiguration {
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
   final Map<PackageName, AssistPackageConfiguration>? assistPackages;
   final List<Glob>? _includes;
-  final List<SidecarConfigException> sourceErrors;
-  final String rawContent;
+  // final List<SidecarConfigException> sourceErrors;
 
   List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];
 

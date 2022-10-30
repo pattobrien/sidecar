@@ -15,8 +15,7 @@ class ProjectCreator with ResourceProviderMixin {
     required this.resourceProvider,
     required this.projectName,
     this.isSidecarEnabled = true,
-    this.lintPackages = const [],
-    this.assistPackages = const [],
+    this.sidecarProjectConfiguration,
   }) {
     build();
   }
@@ -27,8 +26,9 @@ class ProjectCreator with ResourceProviderMixin {
   final String projectName;
 
   final bool isSidecarEnabled;
-  final List<LintPackageConfiguration> lintPackages;
-  final List<AssistPackageConfiguration> assistPackages;
+  // final List<LintPackageConfiguration> lintPackages;
+  // final List<AssistPackageConfiguration> assistPackages;
+  final ProjectConfiguration? sidecarProjectConfiguration;
 
   String get directoryPath => join(parentDirectoryPath, projectName);
   Folder get projectFolder => getFolder(join(parentDirectoryPath, projectName));
@@ -38,9 +38,11 @@ class ProjectCreator with ResourceProviderMixin {
       isSidecarPluginEnabled: isSidecarEnabled,
     );
     newAnalysisOptionsYamlFile(directoryPath, analysisOptionsContents);
-
-    final sidecarYamlContents = createSidecarYamlContents();
-    newSidecarOptionsFile(directoryPath, sidecarYamlContents);
+    if (sidecarProjectConfiguration != null) {
+      final sidecarYamlContents =
+          createSidecarYamlContents(sidecarProjectConfiguration!);
+      newSidecarOptionsFile(directoryPath, sidecarYamlContents);
+    }
     _createMainFile();
   }
 

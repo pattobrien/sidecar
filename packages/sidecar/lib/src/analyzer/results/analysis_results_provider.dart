@@ -20,8 +20,10 @@ final analysisResultsForFileProvider =
       final resourceProvider = ref.watch(pluginResourceProvider);
       final content = resourceProvider.getFile(file.path).readAsStringSync();
 
-      final config = ProjectConfiguration.parseFromSidecarYaml(content,
-          sourceUrl: unit!.uri);
+      final config = ProjectConfiguration.parseFromSidecarYaml(
+        content,
+        // sourceUrl: unit!.uri,
+      );
 
       final errors =
           config.combinedSourceErrors.map((e) => e.toAnalysisResult()).toList();
