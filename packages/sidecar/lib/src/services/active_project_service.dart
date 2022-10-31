@@ -22,11 +22,10 @@ class ActiveProjectService {
     AnalysisContext analysisContext,
   ) {
     try {
-      final root = analysisContext.contextRoot;
-      final contextUri = root.root.toUri();
+      final contextUri = analysisContext.contextRoot.root.toUri();
       final pluginUri = getSidecarPluginUriForPackage(contextUri);
       final packages = getSidecarDependencies(contextUri);
-      final projectConfig = getSidecarOptions(root);
+      final projectConfig = getSidecarOptions(analysisContext.contextRoot);
 
       if (!analysisContext.isSidecarEnabled ||
           projectConfig == null ||
@@ -34,10 +33,6 @@ class ActiveProjectService {
           packages.isEmpty) {
         return null;
       }
-      // this context is an active context
-      // now lets find every dependency that is also in the local workspace,
-      // as we want to lint those packages indirectly
-      // final localDependencies = getLocalDependencies(contextUri, allContexts);
 
       return ActiveContext(
         analysisContext,
@@ -48,29 +43,27 @@ class ActiveProjectService {
       );
     } catch (e, stackTrace) {
       logger.severe('ActivePackageService initializeContext', e, stackTrace);
-      rethrow;
+      return null;
     }
   }
 
   /// Finds any contexts that
   List<ActiveContext> getActiveDependencies(
-    ActiveContext mainActiveContext,
+    ActiveContext mainContext,
     List<AnalysisContext> allContexts,
   ) {
-    final config = _getPackageConfig(mainActiveContext.activeRoot.root.toUri());
+    final config = _getPackageConfig(mainContext.activeRoot.root.toUri());
     // get all contexts that are within the working directory and
     // are dependencies of the main active root
-    final contexts = allContexts.where((context) {
-      return config.packages
-          .where((package) =>
-              package.root != mainActiveContext.activeRoot.root.toUri())
-          .any(
-        (package) {
-          return package.root.normalizePath().path ==
-              context.contextRoot.root.toUri().normalizePath().path;
-        },
-      );
-    }).toList();
+    final contexts = allContexts
+        .where((context) => config.packages
+            .where((pkg) => pkg.root != mainContext.activeRoot.root.toUri())
+            .any(
+              (package) =>
+                  package.root.normalizePath().path ==
+                  context.contextRoot.root.toUri().normalizePath().path,
+            ))
+        .toList();
 
     // check for any options files, etc. if none are available,
     // inherit the details from main root
@@ -80,18 +73,17 @@ class ActiveProjectService {
         final contextUri = root.root.toUri();
         final pluginUri = getSidecarPluginUriForPackage(contextUri);
         if (pluginUri != null) {
-          assert(pluginUri != mainActiveContext.sidecarPluginPackage,
+          assert(pluginUri != mainContext.sidecarPluginPackage,
               'plugin package must be identical between any active roots within the same isolate.');
         }
         final packages = getSidecarDependencies(contextUri);
         final projectConfig = getSidecarOptions(root);
         return ActiveContext(
           analysisContext,
-          sidecarOptions: projectConfig ?? mainActiveContext.sidecarOptions,
-          sidecarPluginPackage:
-              pluginUri ?? mainActiveContext.sidecarPluginPackage,
-          sidecarPackages:
-              packages, //TODO: do we need to inherit packages of main root?
+          sidecarOptions: projectConfig ?? mainContext.sidecarOptions,
+          sidecarPluginPackage: pluginUri ?? mainContext.sidecarPluginPackage,
+          //TODO: do we need to inherit packages of main root?
+          sidecarPackages: packages,
           isMainRoot: false,
         );
       },
@@ -147,7 +139,7 @@ class ActiveProjectService {
   }
 
   ProjectConfiguration? getSidecarOptions(ContextRoot contextRoot) {
-    logger.info('getSidecarOptions started');
+    logger.finer('getSidecarOptions started');
     try {
       final contents = _getSidecarFile(contextRoot);
       if (contents == null) return null;

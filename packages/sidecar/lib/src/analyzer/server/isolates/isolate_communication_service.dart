@@ -30,7 +30,7 @@ class IsolateCommunicationService {
       ref.read(masterPluginChannelProvider);
 
   void addIsolateListener(IsolateDetails isolate) {
-    logger.info(
+    logger.finer(
         'addIsolateListener: context=${isolate.activeRoot.root.shortName}');
     // setup listeners for isolate responses, middleman communication
     final root = isolate.activeRoot;
@@ -54,7 +54,7 @@ class IsolateCommunicationService {
   }
 
   void dumpRequests() {
-    logger.info('dumpRequests = ${queuedRequests.length}');
+    logger.finer('dumpRequests = ${queuedRequests.length}');
     for (final request in queuedRequests
       ..sort((a, b) => a.id.compareTo(b.id))) {
       _addNewMessage(MultiIsolateMessage(
@@ -92,7 +92,7 @@ class IsolateCommunicationService {
     ActiveContextRoot root,
     Response response,
   ) {
-    logger.info(
+    logger.finer(
         'ISOLATE RESPONSE || ${root.root.shortName} || ${response.toJson()} ');
     final isoResponse = IsolateResponse(response: response, root: root);
 
@@ -116,7 +116,7 @@ class IsolateCommunicationService {
     Notification notification,
   ) {
     //TODO: verify that notifications dont need to be aggregated like responses do
-    logger.info(
+    logger.finer(
         'ISOLATE NOTIFICATION || ${details.activeRoot.root.shortName} || ${notification.toJson()} ');
     _parsePluginNotification(details, notification);
   }
@@ -169,7 +169,7 @@ class IsolateCommunicationService {
   void handlePluginDone(
     IsolateDetails details,
   ) {
-    return logger.info('ISOLATE DONE || ${details.activeRoot.root.shortName}');
+    return logger.finer('ISOLATE DONE || ${details.activeRoot.root.shortName}');
   }
 
   List<IsolateRequest> _aggregateRequests(

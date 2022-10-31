@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../../services/package_generator.dart';
+import '../../../utils/logger/logger.dart';
 import '../exit_codes.dart';
 
 class GenerateCommand extends Command<int> {
@@ -18,11 +20,11 @@ class GenerateCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     try {
-      final generator = PackageGenerator();
-      await generator.generate(Directory.current);
+      final cont = ProviderContainer();
+      await cont.read(packageGeneratorProvider).generate(Directory.current);
       return ExitCode.success;
-    } catch (e) {
-      stdout.writeln('CLI ERROR: $e');
+    } catch (e, stackTrace) {
+      logger.severe('CLI ERROR', e, stackTrace);
       rethrow;
     }
   }

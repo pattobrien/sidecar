@@ -8,7 +8,6 @@ import '../../analyzer/server/analyzer_mode.dart';
 import '../../cli/options/cli_options.dart';
 import '../../cli/reports/file_stats.dart';
 import '../../rules/rules.dart';
-import 'log_delegate_base.dart';
 import 'logger.dart';
 
 class DebuggerLogDelegate implements LogDelegateBase {
@@ -96,7 +95,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
   }
 
   void dumpResults() {
-    stdout.write('\n\n${buffer.toString()}');
+    logger.info('\n\n${buffer.toString()}');
   }
 
   @override

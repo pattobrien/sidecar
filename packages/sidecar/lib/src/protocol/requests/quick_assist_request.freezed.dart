@@ -123,9 +123,10 @@ class __$$_FromPluginCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_FromPlugin implements _FromPlugin {
+class _$_FromPlugin extends _FromPlugin {
   const _$_FromPlugin(
-      {required this.file, required this.offset, required this.length});
+      {required this.file, required this.offset, required this.length})
+      : super._();
 
   @override
   final AnalyzedFile file;
@@ -162,11 +163,12 @@ class _$_FromPlugin implements _FromPlugin {
       __$$_FromPluginCopyWithImpl<_$_FromPlugin>(this, _$identity);
 }
 
-abstract class _FromPlugin implements QuickAssistRequest {
+abstract class _FromPlugin extends QuickAssistRequest {
   const factory _FromPlugin(
       {required final AnalyzedFile file,
       required final int offset,
       required final int length}) = _$_FromPlugin;
+  const _FromPlugin._() : super._();
 
   @override
   AnalyzedFile get file;

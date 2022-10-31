@@ -64,15 +64,15 @@ class FileAnalyzerService {
     Iterable<LintResult> analysisResults,
     String path,
     int offset,
-  ) =>
-      analysisResults.where((result) => result.isWithinOffset(path, offset));
+  ) {
+    return analysisResults.where((res) => res.isWithinOffset(path, offset));
+  }
 
   Future<LintResult> calculateEditResultsForAnalysisResult(
     ActiveContext context,
     LintResult analysisResult,
   ) async {
     final rule = analysisResult.rule;
-
     if (rule is! QuickFix) return analysisResult;
 
     final editResults = await rule.computeQuickFixes(analysisResult.span);
@@ -85,15 +85,13 @@ class FileAnalyzerService {
     required ResolvedUnitResult? unitResult,
   }) async {
     //TODO: allow analysis of other file extensions
-    if (file.isDartFile) {
-      if (unitResult == null) return [];
+    if (file.isDartFile && unitResult != null) {
       final results =
           await Future.wait(rules.map<Future<List<AssistResult>>>((rule) async {
         try {
-          final assistResults = await rule.filterResults(unitResult);
-          return assistResults;
+          return rule.filterResults(unitResult);
         } catch (e, stackTrace) {
-          logger.severe('computeAssistResults Error', e, stackTrace);
+          logger.severe('computeAssistResults', e, stackTrace);
           return Future.value([]);
         }
       }));
@@ -109,16 +107,14 @@ class FileAnalyzerService {
     QuickAssistRequest request,
   ) {
     return analysisResults
-        .where((result) =>
-            result.isWithinOffset(request.file.path, request.offset))
+        .where((result) => result.isWithinOffset(request.path, request.offset))
         .toList();
   }
 
   Future<AssistResult> calculateAssistResultEdits(
     AssistResult result,
   ) async {
-    final rule = result.rule;
-    final editResults = await rule.computeSourceChanges(result.span);
+    final editResults = await result.rule.computeSourceChanges(result.span);
     return result.copyWith(edits: editResults);
   }
 }

@@ -20,16 +20,16 @@ final quickFixForRequestProvider =
 
     final analysisResultsForOffset = lintResults.where(
         (element) => element.isWithinOffset(request.file.path, request.offset));
-    logger.info('RESULTS FOR OFFSET: ${analysisResultsForOffset.length}');
+    logger.finer('RESULTS FOR OFFSET: ${analysisResultsForOffset.length}');
     // return [];
     return Future.wait(analysisResultsForOffset.map((e) async {
       final lintResultsWithEdits =
           await fileService.calculateEditResultsForAnalysisResult(context, e);
-      logger.info(
+      logger.finer(
           'RESULTS FOR OFFSET - EDITS: ${lintResultsWithEdits.edits.length}');
       return AnalysisErrorFixes(e.toAnalysisError(),
           fixes: lintResultsWithEdits.edits.map((edit) {
-            logger.info(
+            logger.finer(
                 'RESULTS FOR OFFSET - SOURCE EDITS: ${edit.sourceChanges.length}');
             return edit.toPrioritizedSourceChange();
           }).toList());

@@ -36,7 +36,7 @@ final _isolateUpdateProvider = Provider<void>(
   (ref) {
     ref.listen<List<ActiveContext>>(activeContextsMiddlemanProvider,
         (oldContexts, newContexts) {
-      logger.info(
+      logger.finer(
           'LINT EQUALITY CHECK ||  ${oldContexts?.length ?? 0} old context || ${newContexts.length} new contexts');
       // for all new contexts
       if (oldContexts == null) {
@@ -55,7 +55,7 @@ final _isolateUpdateProvider = Provider<void>(
           final newLints = newContext.sidecarOptions.lintPackages;
           final areLintsEqual =
               const DeepCollectionEquality().equals(oldLints, newLints);
-          logger.info('LINT EQUALITY: $areLintsEqual');
+          logger.finer('LINT EQUALITY: $areLintsEqual');
         }
       }
     }, fireImmediately: true);

@@ -11,4 +11,8 @@ class QuickAssistRequest with _$QuickAssistRequest {
     required int offset,
     required int length,
   }) = _FromPlugin;
+
+  const QuickAssistRequest._();
+
+  String get path => file.path;
 }

@@ -25,10 +25,10 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
         .map((e) => service.getActiveDependencies(e, allContexts))
         .expand((e) => e);
 
-    logger.info('# of all contexts => ${allContexts.length} ');
-    logger.info('# of active contexts => ${activeContexts.length} ');
+    logger.finer('# of all contexts => ${allContexts.length} ');
+    logger.finer('# of active contexts => ${activeContexts.length} ');
     for (final activeContext in activeContexts) {
-      logger.info('active context => ${activeContext.activeRoot.root.path}');
+      logger.finer('active context => ${activeContext.activeRoot.root.path}');
     }
     return [...activeContexts, ...dependencies];
   },

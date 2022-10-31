@@ -14,9 +14,9 @@ class RuleInitializationService {
     List<SidecarBaseConstructor> ruleConstructors,
     ActiveContextRoot activeRoot,
   ) {
-    logger.info(
+    logger.finer(
         'initializing ${projectConfiguration.lintPackages?.length ?? 0} lint packages');
-    logger.info(
+    logger.finer(
         'initializing ${projectConfiguration.assistPackages?.length ?? 0} assist packages');
     return ruleConstructors
         .map<BaseRule?>((ruleConstructor) {
@@ -28,7 +28,7 @@ class RuleInitializationService {
           // rule is marked as disabled
           if (ruleConfig.enabled == false) return null;
 
-          logger.info('activating ${rule.code}');
+          logger.finer('activating ${rule.code}');
           //TODO: ref should not be provided like this
           rule.initialize(
               ref: ref, activeRoot: activeRoot, configuration: ruleConfig);

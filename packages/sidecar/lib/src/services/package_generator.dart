@@ -10,9 +10,12 @@ import 'package:package_config/package_config_types.dart';
 import 'package:path/path.dart' as p;
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:recase/recase.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:yaml/yaml.dart';
 
 import '../protocol/sidecar_type.dart';
+
+final packageGeneratorProvider = Provider((ref) => const PackageGenerator());
 
 class PackageGenerator {
   const PackageGenerator();

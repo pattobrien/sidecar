@@ -15,7 +15,7 @@ final allContextRootsProvider = Provider<List<ContextRoot>>(
     final contextRoots = ref.watch(allContextsProvider.select(
       (contexts) => contexts.map((context) => context.contextRoot).toList(),
     ));
-    logger.info('MM # of all contexts => ${contextRoots.length} ');
+    logger.finer('MM # of all contexts => ${contextRoots.length} ');
     return contextRoots;
   },
   name: 'allContextRootsProvider',

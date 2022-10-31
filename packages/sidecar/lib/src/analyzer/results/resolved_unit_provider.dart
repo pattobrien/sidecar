@@ -30,11 +30,11 @@ Future<void> report(
   String message,
 ) async {
   final watch = Stopwatch()..start();
-  logger.info(message);
+  logger.finer(message);
   await b();
   final countS = '${watch.elapsed.inSeconds.remainder(60)}';
   final countMs =
       watch.elapsed.inMilliseconds.remainder(1000).toString().padLeft(3, '0');
-  logger.info('$message completed in $countS.${countMs}s');
+  logger.finer('$message completed in $countS.${countMs}s');
   watch.stop();
 }

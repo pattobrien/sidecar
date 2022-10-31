@@ -44,7 +44,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    logger.info('MIDDLEMAN STARTING....');
+    logger.finer('MIDDLEMAN STARTING....');
     _start(channel);
   }
 
@@ -83,7 +83,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
-    logger.info(
+    logger.finer(
         'MIDDLEMAN afterNewContextCollection || ${contextCollection.contexts.length} contexts');
     ref
         .read(allContextsProvider.state)

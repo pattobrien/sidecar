@@ -27,10 +27,9 @@ Future<void> startSidecarCli(
   logger.onRecord.listen((event) {
     logDelegate.sidecarMessage(event.message);
   });
+
   final zoneSpec = ZoneSpecification(
-    print: (self, parent, zone, line) {
-      logDelegate.sidecarMessage(line);
-    },
+    print: (self, parent, zone, line) => logDelegate.sidecarMessage(line),
   );
 
   await runZonedGuarded<Future<void>>(

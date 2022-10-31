@@ -5,3 +5,7 @@ const kSidecarPluginName = 'sidecar';
 const kPluginVersion = '1.0.0-alpha.0';
 
 const kPluginGlobs = <String>['**/*.dart', '**/*.arb', '**/*.yaml'];
+
+const kSidecarCliName = 'Sidecar CLI';
+
+const kSidecarCliDescription = '\n\n';

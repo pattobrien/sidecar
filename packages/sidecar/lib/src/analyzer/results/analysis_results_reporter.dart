@@ -9,7 +9,7 @@ final analysisResultsReporterProvider =
     FutureProvider.family.autoDispose<bool, AnalyzedFile>(
   (ref, file) async {
     final results = await ref.watch(lintResultsForFileProvider(file).future);
-    logger.info('analysisResultsReporterProvider = ${file.relativePath}');
+    logger.finer('analysisResultsReporterProvider = ${file.relativePath}');
     ref.watch(logDelegateProvider).analysisResults(file.path, results);
     return true;
   },

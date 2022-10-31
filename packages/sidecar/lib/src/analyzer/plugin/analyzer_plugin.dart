@@ -58,11 +58,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   @override
   void start(plugin.PluginCommunicationChannel channel) {
     Expando();
-    logger.info('END PLUGIN STARTING....');
-    logger.info(
+    logger.finer('END PLUGIN STARTING....');
+    logger.finer(
         '# of rules to activate: ${ref.read(ruleConstructorProvider).length}');
     if (mode.isDebug) {
-      logger.info('STARTING WITH HOT RELOAD');
+      logger.finer('STARTING WITH HOT RELOAD');
       _startWithHotReload(channel);
     }
     super.start(channel);
@@ -165,7 +165,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     _contextCollection = contextCollection;
     try {
-      logger.info('ISOLATE: afterNewContextCollection');
+      logger.finer('ISOLATE: afterNewContextCollection');
 
       ref
           .read(allAnalysisContextsProvider.state)
@@ -177,7 +177,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         initializationCompleter.complete();
       }
     } catch (e, stackTrace) {
-      logger.info('afterNewContextCollection err -- $e', stackTrace);
+      logger.finer('afterNewContextCollection err -- $e', stackTrace);
       rethrow;
     }
   }
@@ -236,7 +236,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required List<String> paths,
   }) async {
     final activeContexts = ref.read(activeContextsProvider);
-    logger.info('CHANGEDFILES = ${paths.length} ${paths.toList().toString()}');
+    logger.finer('CHANGEDFILES = ${paths.length} ${paths.toList().toString()}');
     if (activeContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
         analysisContext.contextRoot.root.path)) {
@@ -247,7 +247,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         try {
           final file = ref.read(analyzedFileFromPath(path));
           if (file.relativePath == kSidecarYaml) {
-            logger.info('SIDECAR YAML CHANGED');
+            logger.finer('SIDECAR YAML CHANGED');
           }
           ref.refresh(resolvedUnitProvider(file));
           ref.refresh(analysisResultsForFileProvider(file));

@@ -21,8 +21,7 @@ class InitCommand extends Command<int> {
     try {
       final ref = ProviderContainer();
       final projectService = ref.read(activeProjectServiceProvider);
-      final directoryUri = Directory.current.uri;
-      await projectService.createDefaultSidecarYaml(directoryUri);
+      await projectService.createDefaultSidecarYaml(Directory.current.uri);
       return ExitCode.success;
     } catch (e) {
       stdout.writeln('CLI ERROR: $e');

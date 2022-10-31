@@ -19,7 +19,7 @@ class IsolateBuilderService {
   const IsolateBuilderService();
 
   IsolateDetails startIsolate(ActiveContext activeContext) {
-    logger.info('STARTING ISOLATE');
+    logger.finer('STARTING ISOLATE');
     return IsolateDetails(
       channel: _startNewIsolate(activeContext),
       activeRoot: activeContext.activeRoot,
@@ -40,7 +40,7 @@ class IsolateBuilderService {
     final packagesUri = _packagesUri(activeContext.activeRoot);
     final executableUri = _executableUri(activeContext.activeRoot);
 
-    logger.info(
+    logger.finer(
         'plugin isolate details: package_config.json=${packagesUri.path} || executable=${executableUri.path}');
     final pluginIsolateChannel = ServerIsolateChannel.discovered(
       executableUri,
@@ -108,8 +108,8 @@ class IsolateBuilderService {
     final listBuffer = StringBuffer()..writeln(constructorListBegin);
 
     final sidecarPackages = activeContext.sidecarPackages;
-    logger.info(
-        '_setupBootstrapper || adding ${sidecarPackages.length} packages');
+    logger.finer(
+        'setupBootstrapper || adding ${sidecarPackages.length} packages');
 
     for (final sidecarPackage in sidecarPackages) {
       final name = sidecarPackage.packageName;

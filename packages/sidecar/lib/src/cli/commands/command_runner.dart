@@ -1,17 +1,14 @@
 import 'package:args/command_runner.dart';
 
+import '../../protocol/constants/constants.dart';
+import '../../utils/logger/logger.dart';
 import 'analyze/analyze.dart';
 import 'exit_codes.dart';
 import 'generate/generate.dart';
 import 'init/init.dart';
 
-const kExecutableName = 'Sidecar CLI';
-
-const kExecutableDescription = '\n\n';
-
 class PlatformCommandRunner extends CommandRunner<int> {
-  PlatformCommandRunner() : super(kExecutableName, kExecutableDescription) {
-    // All CLI commands are listed below
+  PlatformCommandRunner() : super(kSidecarCliName, kSidecarCliDescription) {
     addCommand(AnalyzeCommand());
     addCommand(GenerateCommand());
     addCommand(InitCommand());
@@ -21,8 +18,8 @@ class PlatformCommandRunner extends CommandRunner<int> {
   Future<int> run(Iterable<String> args) async {
     try {
       return await runCommand(parse(args)) ?? ExitCode.success;
-    } catch (e) {
-      print('COMMAND RUNNER ERROR: $e');
+    } catch (e, stackTrace) {
+      logger.severe('COMMAND RUNNER ERROR', e, stackTrace);
       rethrow;
     }
   }
