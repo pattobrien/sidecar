@@ -1,9 +1,6 @@
 import '../../analyzer/results/analysis_result.dart';
-import '../../cli/reports/file_stats.dart';
 
 abstract class LogDelegateBase {
-  void generateReport(Iterable<FileStats> reports);
-
   void sidecarError(
     Object error,
     StackTrace stackTrace,

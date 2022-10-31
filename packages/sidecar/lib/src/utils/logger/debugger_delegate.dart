@@ -6,7 +6,6 @@ import 'package:path/path.dart' as p;
 import '../../analyzer/results/results.dart';
 import '../../analyzer/server/analyzer_mode.dart';
 import '../../cli/options/cli_options.dart';
-import '../../cli/reports/file_stats.dart';
 import '../../rules/rules.dart';
 import 'logger.dart';
 
@@ -96,12 +95,5 @@ class DebuggerLogDelegate implements LogDelegateBase {
 
   void dumpResults() {
     logger.info('\n\n${buffer.toString()}');
-  }
-
-  @override
-  void generateReport(Iterable<FileStats> reports) {
-    for (final report in reports) {
-      stdout.write('${report.toOutput()}\n');
-    }
   }
 }
