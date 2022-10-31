@@ -133,7 +133,7 @@ class IsolateBuilderService {
 
   Uri _executableUri(ActiveContextRoot projectRoot) => Uri.file(
       p.join(
-          projectRoot.root.path, kDartTool, kSidecarPluginName, kSidecarYaml),
+          projectRoot.root.path, kDartTool, kSidecarPluginName, 'sidecar.dart'),
       windows: Platform.isWindows);
 
   Uri _packageToolDirectory(ActiveContextRoot projectRoot) => Uri.directory(
