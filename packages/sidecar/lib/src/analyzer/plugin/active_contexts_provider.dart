@@ -19,6 +19,7 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
         .map(service.initializeContext)
         .whereType<ActiveContext>()
         .toList();
+
     final dependencies = activeContexts
         .map((e) => service.getActiveDependencies(e, allContexts))
         .expand((e) => e);

@@ -62,7 +62,7 @@ final analysisQuickFixResultsProvider =
 final _isContextAnalyzingFilesProvider =
     FutureProvider.family<void, ActiveContextRoot>(
   (ref, activeRoot) async {
-    final allContextFiles = ref.watch(analyzedFilesProvider(activeRoot));
+    final allContextFiles = ref.watch(analyzedFilesForRootProvider(activeRoot));
     await Future.wait(allContextFiles.map(
       (analyzedFile) async =>
           ref.watch(analysisResultsForFileProvider(analyzedFile).future),
@@ -70,7 +70,7 @@ final _isContextAnalyzingFilesProvider =
   },
   name: '_isContextAnalyzingFilesProvider',
   dependencies: [
-    analyzedFilesProvider,
+    analyzedFilesForRootProvider,
     analysisResultsForFileProvider,
   ],
 );

@@ -33,7 +33,7 @@ class ProjectConfiguration {
 
   factory ProjectConfiguration.fromYaml(
     String contents, {
-    Uri? sourceUrl,
+    Uri? fileUri,
   }) {
     try {
       return checkedYamlDecode(
@@ -54,7 +54,7 @@ class ProjectConfiguration {
             throw const MissingSidecarYamlConfiguration();
           }
         },
-        sourceUrl: sourceUrl,
+        sourceUrl: fileUri,
       );
     } catch (e, stackTrace) {
       logger.severe('PROJCONFIG unexpected error', e, stackTrace);
@@ -73,7 +73,7 @@ class ProjectConfiguration {
     return yamlWriter.write(toJson());
   }
 
-  List<SidecarNewException> get combinedSourceErrors => [
+  List<SidecarNewException> get allErrors => [
         ...errors,
         ...?lintPackages?.values
             .map((e) => [

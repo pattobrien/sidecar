@@ -30,20 +30,16 @@ class AnalysisResult with _$AnalysisResult {
   const AnalysisResult._();
 
   Uri get sourceUrl => map(
-        lint: (lint) => lint.span.sourceUrl,
-        assist: (assist) => assist.span.sourceUrl,
-      );
+      lint: (lint) => lint.span.sourceUrl,
+      assist: (assist) => assist.span.sourceUrl);
 
-  bool isWithinOffset(String filePath, int offset) {
-    return sourceUrl.path == filePath &&
-        span.source.start.offset <= offset &&
-        offset <= span.source.start.offset + span.source.length;
-  }
+  bool isWithinOffset(String filePath, int offset) =>
+      sourceUrl.path == filePath &&
+      span.source.start.offset <= offset &&
+      offset <= span.source.start.offset + span.source.length;
 
-  int compareTo(AnalysisResult other) {
-    return span.source.location.offset
-        .compareTo(other.span.source.location.offset);
-  }
+  int compareTo(AnalysisResult other) =>
+      span.source.location.offset.compareTo(other.span.source.location.offset);
 }
 
 extension LintResultX on LintResult {
@@ -57,14 +53,14 @@ extension LintResultX on LintResult {
       concatenatedLintCode,
       url: rule.url,
       correction: correction,
-      //TODO: hasFix does not seem to work properly
+      //TODO: hasFix does not seem to work properly (plugin bug?)
       hasFix: edits.isNotEmpty,
     );
   }
 
   AnalysisErrorFixes toAnalysisErrorFixes() {
-    final es = edits.map((e) => e.toPrioritizedSourceChange()).toList();
-    return AnalysisErrorFixes(toAnalysisError(), fixes: es);
+    final fixes = edits.map((e) => e.toPrioritizedSourceChange()).toList();
+    return AnalysisErrorFixes(toAnalysisError(), fixes: fixes);
   }
 }
 

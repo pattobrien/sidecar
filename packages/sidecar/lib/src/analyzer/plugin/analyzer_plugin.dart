@@ -19,7 +19,6 @@ import 'package:riverpod/riverpod.dart';
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
 import '../../utils/byte_store_ext.dart';
-import '../../utils/file_paths.dart';
 import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
 import '../results/results.dart';
@@ -47,6 +46,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   SidecarAnalyzerMode get mode => ref.read(cliOptionsProvider).mode;
 
+  AnalysisContextCollection? _contextCollection;
   late final ByteStore _byteStore =
       resourceProvider.createByteStore(kSidecarPluginName);
 
@@ -80,12 +80,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           analysisContext: analysisContext.context,
           paths: c.events?.map((e) => e.path).toList() ?? [],
         );
-        // for (final localContexts in analysisContext.localDependencyContexts) {
-        //   handleAffectedFiles(
-        //     analysisContext: localContexts,
-        //     paths: events.map((e) => e.path).toList(),
-        //   );
-        // }
       }
 
       // for (final event in events) {
@@ -113,11 +107,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     });
   }
 
-  AnalysisContextCollection? _contextCollection;
-
-  /// Handle an 'analysis.setContextRoots' request.
-  ///
-  /// Throw a [plugin.RequestFailure] if the request could not be handled.
   @override
   Future<plugin.AnalysisSetContextRootsResult> handleAnalysisSetContextRoots(
     plugin.AnalysisSetContextRootsParams parameters,

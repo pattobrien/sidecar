@@ -145,7 +145,7 @@ class ActiveProjectService {
       if (contents == null) return null;
       return ProjectConfiguration.fromYaml(
         contents,
-        sourceUrl: Uri.parse(contextRoot.root.canonicalizePath(kSidecarYaml)),
+        fileUri: Uri.parse(contextRoot.root.canonicalizePath(kSidecarYaml)),
       );
     } catch (e, stackTrace) {
       logger.shout('ISOLATE NON-FATAL: ', e, stackTrace);
