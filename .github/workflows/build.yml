@@ -1,0 +1,68 @@
+name: Build
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**.md"
+  # schedule:
+  #   # runs the CI everyday at 10AM
+  #   - cron: "0 10 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.package_path }}
+
+    strategy:
+      matrix:
+        channel:
+          - stable
+        package_path:
+          # - examples/my_analyzed_codebase
+          - packages/sidecar
+          # - website
+
+    steps:
+      - uses: actions/checkout@v3.1.0
+        with:
+          fetch-depth: 2
+      - uses: subosito/flutter-action@v2.7.1
+        with:
+          channel: ${{ matrix.channel }}
+      - name: Add pub cache bin to PATH
+        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      - name: Add pub cache to PATH
+        run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check format
+        run: flutter format --set-exit-if-changed .
+        if: matrix.package_path != 'website'
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: |
+          if test -d "test"; then
+            if grep -q flutter "pubspec.yaml"; then
+              flutter test --coverage
+            else
+              ${{github.workspace}}/scripts/coverage.sh
+            fi
+          fi
+
+      - name: Upload coverage to codecov
+        run: |
+          if test -d "test"; then
+            curl -s https://codecov.io/bash | bash
+          fi

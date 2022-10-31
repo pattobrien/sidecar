@@ -1,29 +1,39 @@
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:glob/glob.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../analyzer/server/log_delegate.dart';
 import '../../rules/rules.dart';
-import '../builders/builders.dart';
+import '../../utils/json_utils/glob_json_util.dart';
+import '../../utils/logger/logger.dart';
+import '../../utils/yaml_writer.dart';
+import '../builders/new_exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 import 'analysis_package_configuration.dart';
 import 'errors.dart';
 
+part 'project_configuration.g.dart';
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ProjectConfiguration {
   const ProjectConfiguration({
     this.lintPackages,
     this.assistPackages,
     List<Glob>? includes,
-    this.sourceErrors = const <SidecarConfigException>[],
-    required this.rawContent,
+  })  : _includes = includes,
+        errors = const <SidecarNewException>[];
+
+  const ProjectConfiguration._({
+    this.lintPackages,
+    this.assistPackages,
+    List<Glob>? includes,
+    this.errors = const <SidecarNewException>[],
   }) : _includes = includes;
 
   factory ProjectConfiguration.parseFromSidecarYaml(
     String contents, {
-    required Uri sourceUrl,
-    Ref? ref,
+    Uri? sourceUrl,
   }) {
     try {
       return checkedYamlDecode(
@@ -32,44 +42,52 @@ class ProjectConfiguration {
           try {
             final contentMap = m as YamlMap?;
             final includesResult = contentMap!.parseGlobIncludes();
-            return ProjectConfiguration(
-              rawContent: contents,
+            return ProjectConfiguration._(
               lintPackages: _parseLintPackages(contentMap['lints'] as YamlMap?),
               assistPackages:
                   _parseAssistPackages(contentMap['assists'] as YamlMap?),
               includes: includesResult.item1,
-              sourceErrors: includesResult.item2,
+              errors: includesResult.item2,
             );
           } catch (e, stackTrace) {
-            ref?.read(logDelegateProvider).sidecarVerboseMessage(
-                  'PROJCONFIG = project config error: $e $stackTrace',
-                );
+            logger.severe('PROJCONFIG', e, stackTrace);
             throw const MissingSidecarYamlConfiguration();
           }
         },
         sourceUrl: sourceUrl,
       );
     } catch (e, stackTrace) {
-      ref?.read(logDelegateProvider).sidecarVerboseMessage(
-          'PROJCONFIG = unexpected project config error: $e $stackTrace');
+      logger.severe('PROJCONFIG unexpected error', e, stackTrace);
       throw UnimplementedError(
           'unexpected project config error: $e $stackTrace');
     }
   }
 
-  List<SidecarConfigException> get combinedSourceErrors => [
-        ...sourceErrors,
+  factory ProjectConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$ProjectConfigurationFromJson(json);
+
+  Map<dynamic, dynamic> toJson() => _$ProjectConfigurationToJson(this);
+
+  String toYamlContent() {
+    const yamlWriter = YamlWriter();
+    return yamlWriter.write(toJson());
+  }
+
+  List<SidecarNewException> get combinedSourceErrors => [
+        ...errors,
         ...?lintPackages?.values
             .map((e) => [
-                  ...e.sourceErrors,
-                  ...e.lints.values.map((e) => e.sourceErrors).expand((f) => f),
+                  ...e.errors,
+                  ...?e.lints?.values
+                      .map((e) => e?.errors ?? [])
+                      .expand((f) => f),
                 ])
             .expand((e) => e),
         ...?assistPackages?.values
             .map((e) => [
-                  ...e.sourceErrors,
-                  ...e.assists.values
-                      .map((e) => e.sourceErrors)
+                  ...e.errors,
+                  ...?e.assists?.values
+                      .map((e) => e?.errors ?? [])
                       .expand((f) => f),
                 ])
             .expand((e) => e),
@@ -83,12 +101,9 @@ class ProjectConfiguration {
       return map?.nodes.map((dynamic key, dynamic value) {
         if (value is YamlMap) {
           key as YamlScalar;
-          final config = AnalysisPackageConfiguration.fromYamlMap(
-            value,
-            type: type,
-            packageName: key.value as String,
-            packageNameSpan: key.span,
-          );
+          final config = type == RuleType.lint
+              ? LintPackageConfiguration.fromJson(value)
+              : AssistPackageConfiguration.fromJson(value);
           return MapEntry(key.value as String, config);
         } else {
           // we want to throw an error if the package doesnt have a single lint declared
@@ -116,11 +131,17 @@ class ProjectConfiguration {
       _parsePackages(map, type: RuleType.lint)?.map(
           (key, value) => MapEntry(key, value as LintPackageConfiguration));
 
+  @JsonKey(name: 'lints')
   final Map<PackageName, LintPackageConfiguration>? lintPackages;
+
+  @JsonKey(name: 'assists')
   final Map<PackageName, AssistPackageConfiguration>? assistPackages;
+
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
   final List<Glob>? _includes;
-  final List<SidecarConfigException> sourceErrors;
-  final String rawContent;
+
+  @JsonKey(defaultValue: <SidecarNewException>[])
+  final List<SidecarNewException> errors;
 
   List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];
 
@@ -129,9 +150,9 @@ class ProjectConfiguration {
 
   AnalysisConfiguration? getConfigurationForRule(BaseRule rule) {
     if (rule is AssistRule) {
-      return assistPackages?[rule.packageName]?.assists[rule.code];
+      return assistPackages?[rule.packageName]?.assists?[rule.code];
     } else if (rule is LintRule) {
-      return lintPackages?[rule.packageName]?.lints[rule.code];
+      return lintPackages?[rule.packageName]?.lints?[rule.code];
     } else {
       throw UnimplementedError('getConfigurationForRule: unknown base type');
     }

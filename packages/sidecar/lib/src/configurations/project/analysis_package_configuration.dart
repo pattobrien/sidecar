@@ -1,184 +1,96 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
-import 'package:source_span/source_span.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../rules/rules.dart';
-import '../builders/builders.dart';
-import '../yaml_parsers/yaml_parsers.dart';
+import '../../utils/json_utils/glob_json_util.dart';
+import '../builders/new_exceptions.dart';
 import 'analysis_configuration.dart';
 
-part 'analysis_package_configuration.freezed.dart';
+part 'analysis_package_configuration.g.dart';
 
-@freezed
-class AnalysisPackageConfiguration with _$AnalysisPackageConfiguration {
-  factory AnalysisPackageConfiguration.fromYamlMap(
-    YamlMap yamlMap, {
-    required RuleType type,
-    required String packageName,
-    required SourceSpan packageNameSpan,
-  }) {
-    switch (type) {
-      case RuleType.lint:
-        return AnalysisPackageConfiguration.lint(
-          packageNameSpan: packageNameSpan,
-          packageName: packageName,
-          lints: yamlMap.nodes
-              .map<String, LintConfiguration>((dynamic key, value) {
-            final yamlKey = key as YamlScalar;
-            if (value is YamlMap) {
-              final configuration = value.parseConfiguration();
-              final severity = value.parseSeverity();
-              final includes = value.parseGlobIncludes();
-              final enabled = value.parseEnabled();
+abstract class AnalysisPackageConfiguration {
+  const AnalysisPackageConfiguration();
+}
 
-              return MapEntry(
-                yamlKey.value as String,
-                LintConfiguration(
-                  id: yamlKey.value as String,
-                  includes: includes.item1,
-                  severity: severity.item1,
-                  enabled: enabled.item1,
-                  configuration: configuration.item1,
-                  sourceErrors: [
-                    ...includes.item2,
-                    ...severity.item2,
-                    ...configuration.item2,
-                    ...enabled.item2,
-                  ],
-                  packageName: packageName,
-                  lintNameSpan: yamlKey.span,
-                ),
-              );
-            } else if (value is YamlScalar) {
-              final dynamic scalarValue = value.value;
-              if (scalarValue is bool) {
-                return MapEntry(
-                  yamlKey.value as String,
-                  LintConfiguration(
-                    lintNameSpan: yamlKey.span,
-                    packageName: packageName,
-                    id: yamlKey.value as String,
-                    enabled: scalarValue,
-                  ),
-                );
-              }
-              if (scalarValue == null) {
-                return MapEntry(
-                  yamlKey.value as String,
-                  LintConfiguration(
-                    lintNameSpan: yamlKey.span,
-                    packageName: packageName,
-                    id: yamlKey.value as String,
-                  ),
-                );
-              }
-            }
-            return MapEntry(
-              yamlKey.value as String,
-              LintConfiguration(
-                lintNameSpan: yamlKey.span,
-                packageName: packageName,
-                id: yamlKey.value as String,
-                sourceErrors: <SidecarConfigException>[
-                  SidecarLintException(
-                    yamlKey,
-                    message:
-                        'Lint definition should be of type null, bool, or map',
-                  ),
-                ],
-              ),
-            );
-          }),
-        );
-      case RuleType.assist:
-        return AnalysisPackageConfiguration.assist(
-          packageNameSpan: packageNameSpan,
-          packageName: packageName,
-          assists: yamlMap.nodes
-              .map<String, AssistConfiguration>((dynamic key, node) {
-            final yamlKey = key as YamlScalar;
-            if (node is YamlMap) {
-              final configuration = node.parseConfiguration();
-              final includes = node.parseGlobIncludes();
-              final enabled = node.parseEnabled();
+@JsonSerializable(anyMap: true, explicitToJson: true, includeIfNull: false)
+class LintPackageConfiguration extends AnalysisPackageConfiguration {
+  //
+  const LintPackageConfiguration({
+    this.lints,
+    this.includes,
+  }) : errors = const [];
 
-              return MapEntry(
-                yamlKey.value as String,
-                AssistConfiguration(
-                  lintNameSpan: yamlKey.span,
-                  packageName: packageName,
-                  id: yamlKey.value as String,
-                  configuration: configuration.item1,
-                  enabled: enabled.item1,
-                  includes: includes.item1,
-                  sourceErrors: [
-                    ...includes.item2,
-                    ...configuration.item2,
-                    ...enabled.item2,
-                  ],
-                ),
-              );
-            } else if (node is YamlScalar) {
-              final dynamic scalarValue = node.value;
-              if (scalarValue is bool) {
-                return MapEntry(
-                  yamlKey.value as String,
-                  AssistConfiguration(
-                    lintNameSpan: yamlKey.span,
-                    packageName: packageName,
-                    id: yamlKey.value as String,
-                    enabled: scalarValue,
-                  ),
-                );
-              }
-              if (scalarValue == null) {
-                return MapEntry(
-                  yamlKey.value as String,
-                  AssistConfiguration(
-                    lintNameSpan: yamlKey.span,
-                    packageName: packageName,
-                    id: yamlKey.value as String,
-                  ),
-                );
-              }
-            }
-            return MapEntry(
-              yamlKey.value as String,
-              AssistConfiguration(
-                packageName: packageName,
-                lintNameSpan: yamlKey.span,
-                id: yamlKey.value as String,
-                sourceErrors: <SidecarConfigException>[
-                  SidecarLintException(
-                    yamlKey,
-                    message:
-                        'CodeEdit definition should be of type null, bool, or map',
-                  ),
-                ],
-              ),
-            );
-          }),
-        );
+  factory LintPackageConfiguration.fromJson(Object? yamlMap) {
+    if (yamlMap is YamlMap?) {
+      return LintPackageConfiguration._(
+        lints: yamlMap?.nodes
+            .map<String, LintConfiguration?>((dynamic key, value) {
+          final yamlKey = key as YamlScalar;
+          if (value == null) return MapEntry(yamlKey.value.toString(), null);
+          final config = LintConfiguration.fromJson(value);
+          return MapEntry(yamlKey.value.toString(), config);
+        }),
+      );
     }
+    throw UnimplementedError();
   }
-  const AnalysisPackageConfiguration._();
 
-  const factory AnalysisPackageConfiguration.lint({
-    required String packageName,
-    required SourceSpan packageNameSpan,
-    required Map<String, LintConfiguration> lints,
-    @Default(<Glob>[]) List<Glob> includes,
-    @Default(<SidecarConfigException>[])
-        List<SidecarConfigException> sourceErrors,
-  }) = LintPackageConfiguration;
+  const LintPackageConfiguration._({
+    this.lints,
+    this.includes,
+    this.errors = const [],
+  });
 
-  const factory AnalysisPackageConfiguration.assist({
-    required String packageName,
-    required SourceSpan packageNameSpan,
-    required Map<String, AssistConfiguration> assists,
-    @Default(<Glob>[]) List<Glob> includes,
-    @Default(<SidecarConfigException>[])
-        List<SidecarConfigException> sourceErrors,
-  }) = AssistPackageConfiguration;
+  Map<dynamic, dynamic> toJson() {
+    final includesEntry =
+        includes != null ? MapEntry('includes', globsToString(includes)) : null;
+    final lintsEntries = lints != null ? lints!.map(MapEntry.new) : null;
+    final map = <dynamic, dynamic>{};
+    if (includesEntry != null) map.addEntries([includesEntry]);
+    if (lintsEntries != null) {
+      map.addAll(lints!.map<dynamic, dynamic>(
+          (key, value) => MapEntry<dynamic, dynamic>(key, value?.toJson())));
+    }
+    return map;
+  }
+
+  final Map<String, LintConfiguration?>? lints;
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
+  final List<Glob>? includes;
+  final List<SidecarNewException> errors;
+}
+
+@JsonSerializable(anyMap: true, explicitToJson: true, includeIfNull: false)
+class AssistPackageConfiguration extends AnalysisPackageConfiguration {
+  //
+  const AssistPackageConfiguration({
+    this.assists,
+    this.includes,
+  }) : errors = const [];
+
+  factory AssistPackageConfiguration.fromJson(Object? yamlMap) {
+    if (yamlMap is YamlMap?) {
+      return AssistPackageConfiguration._(
+        assists: yamlMap?.nodes
+            .map<String, AssistConfiguration>((dynamic key, value) {
+          final yamlKey = key as YamlScalar;
+          final config = AssistConfiguration.fromJson(value);
+          return MapEntry(yamlKey.value.toString(), config);
+        }),
+      );
+    }
+    throw UnimplementedError();
+  }
+  const AssistPackageConfiguration._({
+    this.assists,
+    this.includes,
+    this.errors = const [],
+  });
+
+  Map<dynamic, dynamic> toJson() => _$AssistPackageConfigurationToJson(this);
+
+  final Map<String, AssistConfiguration?>? assists;
+  @JsonKey(toJson: globsToString, fromJson: globsFromString)
+  final List<Glob>? includes;
+  final List<SidecarNewException> errors;
 }

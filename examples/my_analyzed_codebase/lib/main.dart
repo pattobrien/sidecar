@@ -18,12 +18,10 @@ class MyApp extends ConsumerWidget {
         primaryColor: Colors.amber,
         textTheme: TextTheme(
           bodyText1: TextStyle(
-              // color: Color(123),
+              //
               ),
         ),
       ),
     );
   }
 }
-// span(157, 162, 'MyApp');
-// span(171, 185, 'ConsumerWidget');

@@ -1,0 +1,1 @@
+const sidecarYamlPath = 'sidecar.yaml';

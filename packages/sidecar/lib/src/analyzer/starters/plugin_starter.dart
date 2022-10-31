@@ -1,5 +1,6 @@
 // ignore_for_file: implementation_imports
 
+import 'dart:async';
 import 'dart:isolate';
 
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
@@ -25,27 +26,37 @@ Future<void> startSidecarPlugin(
       CliOptions.fromArgs(args, isPlugin: true, isMiddleman: isMiddleman);
 
   final LogDelegateBase logger = PluginChannelDelegate(cliOptions, channel);
-
-  final container = ProviderContainer(
-    overrides: [
-      masterPluginChannelProvider.overrideWithValue(channel),
-      ruleConstructorProvider.overrideWithValue(constructors ?? []),
-      cliOptionsProvider.overrideWithValue(cliOptions),
-      logDelegateProvider.overrideWithValue(logger),
-    ],
-    observers: [PluginObserver(cliOptions, channel)],
+  final zoneSpec = ZoneSpecification(
+    print: (self, parent, zone, line) {
+      logger.sidecarMessage(line);
+    },
   );
+  await runZonedGuarded<Future<void>>(
+    () async {
+      final container = ProviderContainer(
+        overrides: [
+          masterPluginChannelProvider.overrideWithValue(channel),
+          ruleConstructorProvider.overrideWithValue(constructors ?? []),
+          cliOptionsProvider.overrideWithValue(cliOptions),
+          logDelegateProvider.overrideWithValue(logger),
+        ],
+        observers: [PluginObserver(cliOptions, channel)],
+      );
 
-  try {
-    logger.sidecarVerboseMessage('sidecar - plugin initialization....');
-    if (isMiddleman) {
-      final middlemanPlugin = container.read(middlemanPluginProvider);
-      middlemanPlugin.start(channel);
-    } else {
-      final plugin = container.read(pluginProvider);
-      plugin.start(channel);
-    }
-  } catch (error, stackTrace) {
-    logger.sidecarError(error, stackTrace);
-  }
+      try {
+        logger.sidecarVerboseMessage('sidecar - plugin initialization....');
+        if (isMiddleman) {
+          final middlemanPlugin = container.read(middlemanPluginProvider);
+          middlemanPlugin.start(channel);
+        } else {
+          final plugin = container.read(pluginProvider);
+          plugin.start(channel);
+        }
+      } catch (error, stackTrace) {
+        logger.sidecarError(error, stackTrace);
+      }
+    },
+    logger.sidecarError,
+    zoneSpecification: zoneSpec,
+  );
 }

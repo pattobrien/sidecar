@@ -2,6 +2,7 @@ import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
 import '../builders/builders.dart';
+import '../builders/new_exceptions.dart';
 import '../project/errors.dart';
 
 extension YamlMapSeverity on YamlMap {
@@ -12,23 +13,14 @@ extension YamlMapSeverity on YamlMap {
           ? LintSeverityX.fromString(value[key] as String)
           : null;
       return SidecarExceptionTuple<LintSeverity?>(severityValue, []);
-      // } on InvalidSeverityException {
-      //   final invalidNode = nodes.keys
-      //       .cast<YamlScalar>()
-      //       .firstWhere((element) => element.value == key);
-      //   return SidecarExceptionTuple<LintRuleType?>(null, [
-      //     SidecarLintException(
-      //       invalidNode,
-      //       message:
-      //           'Invalid value. Severity values are: warning, error, or info.',
-      //     )
-      //   ]);
     } catch (e) {
       return SidecarExceptionTuple<LintSeverity?>(null, [
-        SidecarLintException(
-          nodes.keys
+        SidecarNewException.lintField(
+          correction: '',
+          sourceSpan: nodes.keys
               .cast<YamlScalar>()
-              .firstWhere((element) => element.value == key),
+              .firstWhere((element) => element.value == key)
+              .span,
           message:
               'Invalid value. Severity values are: warning, error, or info.',
         )

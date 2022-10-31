@@ -5,6 +5,7 @@ import 'package:riverpod/riverpod.dart';
 import '../analyzer/context/context.dart';
 import '../analyzer/results/results.dart';
 import '../analyzer/server/log_delegate.dart';
+import '../configurations/configurations.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 import '../utils/utils.dart';
@@ -41,15 +42,16 @@ class FileAnalyzerService {
           // TODO:
           // if (ruleHasVisitor) {
           final results = await rule.generateAnalysisResults(unitResult);
-          return results
-              .map((result) => result.copyWith(
-                    severity: rule.analysisConfiguration.map(
-                      lint: (lintConfig) =>
-                          lintConfig.severity ?? rule.defaultSeverity,
-                      assist: (assistConfig) => throw UnimplementedError(),
-                    ),
-                  ))
-              .toList();
+          return results.map(
+            (result) {
+              final config = rule.analysisConfiguration;
+              return result.copyWith(
+                severity: config is LintConfiguration
+                    ? config.severity ?? rule.defaultSeverity
+                    : throw UnimplementedError(),
+              );
+            },
+          ).toList();
           // } else {
           //   final results = await rule.generateAnalysisResults(unitResult);
           //   return results

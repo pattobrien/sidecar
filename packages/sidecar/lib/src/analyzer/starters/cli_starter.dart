@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
@@ -23,24 +24,38 @@ Future<void> startSidecarCli(
 }) async {
   final cliOptions = CliOptions.fromArgs(args, isPlugin: false);
 
-  final logger = DebuggerLogDelegate(cliOptions);
-
-  final container = ProviderContainer(
-    overrides: [
-      // masterPluginChannelProvider.overrideWithValue(pluginChannel),
-      ruleConstructorProvider.overrideWithValue(constructors ?? []),
-      cliOptionsProvider.overrideWithValue(cliOptions),
-      logDelegateProvider.overrideWithValue(logger),
-    ],
-    observers: [CliObserver(cliOptions)],
+  final logDelegate = DebuggerLogDelegate(cliOptions);
+  logger.onRecord.listen((event) {
+    logDelegate.sidecarMessage(event.message);
+  });
+  final zoneSpec = ZoneSpecification(
+    print: (self, parent, zone, line) {
+      logDelegate.sidecarMessage(line);
+    },
   );
 
-  try {
-    final runner = container.read(runnerProvider);
-    await runner.initialize();
-    logger.dumpResults();
-    if (cliOptions.mode.isCli) exit(0);
-  } catch (error, stackTrace) {
-    logger.sidecarError(error, stackTrace);
-  }
+  await runZonedGuarded<Future<void>>(
+    () async {
+      final container = ProviderContainer(
+        overrides: [
+          // masterPluginChannelProvider.overrideWithValue(pluginChannel),
+          ruleConstructorProvider.overrideWithValue(constructors ?? []),
+          cliOptionsProvider.overrideWithValue(cliOptions),
+          logDelegateProvider.overrideWithValue(logDelegate),
+        ],
+        observers: [CliObserver(cliOptions)],
+      );
+
+      try {
+        final runner = container.read(runnerProvider);
+        await runner.initialize();
+        logDelegate.dumpResults();
+        if (cliOptions.mode.isCli) exit(0);
+      } catch (error, stackTrace) {
+        logDelegate.sidecarError(error, stackTrace);
+      }
+    },
+    logDelegate.sidecarError,
+    zoneSpecification: zoneSpec,
+  );
 }
