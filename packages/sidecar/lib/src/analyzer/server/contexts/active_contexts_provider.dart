@@ -1,6 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../../services/services.dart';
+import '../../../utils/logger/logger.dart';
 import '../../context/context.dart';
 import '../log_delegate.dart';
 import '../server.dart';
@@ -15,8 +16,7 @@ import '../server.dart';
 final activeContextsMiddlemanProvider = Provider<List<ActiveContext>>(
   (ref) {
     final allContexts = ref.watch(allContextsProvider);
-    final log = ref.watch(logDelegateProvider);
-    log.sidecarMessage('MM # of all contexts => ${allContexts.length} ');
+    logger.info('MM # of all contexts => ${allContexts.length} ');
     final service = ref.watch(activeProjectServiceProvider);
     final mainActiveContexts = allContexts
         .map<ActiveContext?>(service.initializeContext)

@@ -39,7 +39,7 @@ final activatedRulesProvider =
     final ruleConstructors = ref.watch(ruleConstructorProvider);
     final ruleService = ref.watch(ruleInitializationServiceProvider);
 
-    return ruleService.initializeRules(
+    return ruleService.constructRules(
       context.sidecarOptions,
       ruleConstructors,
       activeRoot,

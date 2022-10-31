@@ -1,29 +1,22 @@
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
-import 'package:analyzer_plugin/utilities/assist/assist.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
 import '../analyzer/results/results.dart';
-import '../analyzer/server/log_delegate.dart';
 import '../configurations/configurations.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
+import '../utils/logger/logger.dart';
 import '../utils/utils.dart';
 
 final fileAnalyzerServiceProvider = Provider(
-  FileAnalyzerService.new,
+  (ref) => const FileAnalyzerService(),
   name: 'fileAnalyzerServiceProvider',
-  dependencies: [
-    logDelegateProvider,
-  ],
+  dependencies: const [],
 );
 
 class FileAnalyzerService {
-  const FileAnalyzerService(Ref ref) : _ref = ref;
-  final Ref _ref;
-
-  void _logError(Object e, StackTrace stackTrace) =>
-      _ref.read(logDelegateProvider).sidecarError(e, stackTrace);
+  const FileAnalyzerService();
 
   Future<List<LintResult>> computeLintResults({
     required AnalyzedFile file,
@@ -52,20 +45,8 @@ class FileAnalyzerService {
               );
             },
           ).toList();
-          // } else {
-          //   final results = await rule.generateAnalysisResults(unitResult);
-          //   return results
-          //       .map((result) => result.copyWith(
-          //             severity: rule.analysisConfiguration.map(
-          //               lint: (lintConfig) =>
-          //                   lintConfig.severity ?? rule.defaultSeverity,
-          //               assist: (assistConfig) => throw UnimplementedError(),
-          //             ),
-          //           ))
-          //       .toList();
-          // }
         } catch (e, stackTrace) {
-          _logError('LintRule Error: ${e.toString()}', stackTrace);
+          logger.severe('LintRule Error', e, stackTrace);
           return Future.value([]);
         }
       }));
@@ -112,7 +93,7 @@ class FileAnalyzerService {
           final assistResults = await rule.filterResults(unitResult);
           return assistResults;
         } catch (e, stackTrace) {
-          _logError('LintRule Error: ${e.toString()}', stackTrace);
+          logger.severe('computeAssistResults Error', e, stackTrace);
           return Future.value([]);
         }
       }));
@@ -128,9 +109,8 @@ class FileAnalyzerService {
     QuickAssistRequest request,
   ) {
     return analysisResults
-        .where(
-          (result) => result.isWithinOffset(request.file.path, request.offset),
-        )
+        .where((result) =>
+            result.isWithinOffset(request.file.path, request.offset))
         .toList();
   }
 

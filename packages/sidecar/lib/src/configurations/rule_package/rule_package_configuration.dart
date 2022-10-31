@@ -55,7 +55,6 @@ RulePackageConfiguration? parseLintPackage(String name, Uri root) {
       );
     });
   } catch (e) {
-    // do nothing
     return null;
   }
 }

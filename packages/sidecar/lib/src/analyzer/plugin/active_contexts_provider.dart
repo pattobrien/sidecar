@@ -5,6 +5,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../services/services.dart';
 import '../../utils/file_paths.dart';
+import '../../utils/logger/logger.dart';
 import '../context/context.dart';
 import '../results/analysis_results_provider.dart';
 import '../results/analysis_results_reporter.dart';
@@ -15,7 +16,7 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
   (ref) {
     final service = ref.watch(activeProjectServiceProvider);
     final allContexts = ref.watch(allAnalysisContextsProvider);
-    final log = ref.watch(logDelegateProvider);
+
     final activeContexts = allContexts
         .map(service.initializeContext)
         .whereType<ActiveContext>()
@@ -24,11 +25,10 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
         .map((e) => service.getActiveDependencies(e, allContexts))
         .expand((e) => e);
 
-    log.sidecarMessage('# of all contexts => ${allContexts.length} ');
-    log.sidecarMessage('# of active contexts => ${activeContexts.length} ');
+    logger.info('# of all contexts => ${allContexts.length} ');
+    logger.info('# of active contexts => ${activeContexts.length} ');
     for (final activeContext in activeContexts) {
-      log.sidecarMessage(
-          'active context => ${activeContext.activeRoot.root.path}');
+      logger.info('active context => ${activeContext.activeRoot.root.path}');
     }
     return [...activeContexts, ...dependencies];
   },
@@ -40,12 +40,7 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
 );
 
 final activeContextRootsProvider = Provider<List<ActiveContextRoot>>(
-  (ref) {
-    final activeRoots =
-        ref.watch(activeContextsProvider).map((e) => e.activeRoot).toList();
-    // print('# of active roots = ${activeRoots.length}');
-    return activeRoots;
-  },
+  (ref) => ref.watch(activeContextsProvider).map((e) => e.activeRoot).toList(),
   name: 'activeContextRootsProvider',
   dependencies: [
     activeContextsProvider,

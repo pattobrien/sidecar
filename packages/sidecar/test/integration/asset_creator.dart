@@ -11,6 +11,7 @@ import 'package:sidecar/src/test/utils.dart';
 
 const kL10nPackageName = 'l10n_lints';
 const kL10nAvoidStringLiteralsLintId = 'avoid_string_literals';
+final l10nPackage = Package('l10n_lints', Uri.parse('file:///~/'));
 
 Future<void> main() async {
   final resourceProvider = MemoryResourceProvider();

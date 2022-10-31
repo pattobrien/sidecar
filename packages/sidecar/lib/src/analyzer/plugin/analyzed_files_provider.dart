@@ -31,5 +31,5 @@ final _unfilteredAnalyzedFilesProvider =
     Provider.family<List<AnalyzedFile>, ActiveContextRoot>(
   (ref, root) => root.typedAnalyzedFiles().toList(),
   name: '_unfilteredAnalyzedFilesProvider',
-  dependencies: [],
+  dependencies: const [],
 );

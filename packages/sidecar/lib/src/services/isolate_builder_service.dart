@@ -1,27 +1,25 @@
+// ignore_for_file: implementation_imports
+
 import 'dart:io';
 
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/instrumentation/noop_service.dart';
-// ignore: implementation_imports
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
-import '../analyzer/server/log_delegate.dart';
 import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/protocol.dart';
+import '../utils/logger/logger.dart';
 
 class IsolateBuilderService {
-  const IsolateBuilderService(this.ref);
-  final Ref ref;
+  const IsolateBuilderService();
 
-  void _log(String msg) =>
-      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
   IsolateDetails startIsolate(ActiveContext activeContext) {
-    _log('STARTING ISOLATE');
+    logger.info('STARTING ISOLATE');
     return IsolateDetails(
       channel: _startNewIsolate(activeContext),
       activeRoot: activeContext.activeRoot,
@@ -42,7 +40,7 @@ class IsolateBuilderService {
     final packagesUri = _packagesUri(activeContext.activeRoot);
     final executableUri = _executableUri(activeContext.activeRoot);
 
-    _log(
+    logger.info(
         'plugin isolate details: package_config.json=${packagesUri.path} || executable=${executableUri.path}');
     final pluginIsolateChannel = ServerIsolateChannel.discovered(
       executableUri,
@@ -110,7 +108,8 @@ class IsolateBuilderService {
     final listBuffer = StringBuffer()..writeln(constructorListBegin);
 
     final sidecarPackages = activeContext.sidecarPackages;
-    _log('_setupBootstrapper || adding ${sidecarPackages.length} packages');
+    logger.info(
+        '_setupBootstrapper || adding ${sidecarPackages.length} packages');
 
     for (final sidecarPackage in sidecarPackages) {
       final name = sidecarPackage.packageName;
@@ -147,13 +146,9 @@ class IsolateBuilderService {
 }
 
 final isolateBuilderServiceProvider = Provider(
-  (ref) {
-    return IsolateBuilderService(ref);
-  },
+  (ref) => const IsolateBuilderService(),
   name: 'isolateBuilderServiceProvider',
-  dependencies: [
-    logDelegateProvider,
-  ],
+  dependencies: const [],
 );
 
 extension ActiveContextX on ActiveContext {

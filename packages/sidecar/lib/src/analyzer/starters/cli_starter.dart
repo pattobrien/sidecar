@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
@@ -38,7 +37,6 @@ Future<void> startSidecarCli(
     () async {
       final container = ProviderContainer(
         overrides: [
-          // masterPluginChannelProvider.overrideWithValue(pluginChannel),
           ruleConstructorProvider.overrideWithValue(constructors ?? []),
           cliOptionsProvider.overrideWithValue(cliOptions),
           logDelegateProvider.overrideWithValue(logDelegate),

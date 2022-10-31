@@ -3,6 +3,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../services/services.dart';
+import '../../utils/logger/logger.dart';
 import '../context/context.dart';
 import '../plugin/plugin.dart';
 import '../server/log_delegate.dart';
@@ -19,25 +20,23 @@ final quickFixForRequestProvider =
 
     final analysisResultsForOffset = lintResults.where(
         (element) => element.isWithinOffset(request.file.path, request.offset));
-    ref.read(logDelegateProvider).sidecarVerboseMessage(
-        'RESULTS FOR OFFSET: ${analysisResultsForOffset.length}');
+    logger.info('RESULTS FOR OFFSET: ${analysisResultsForOffset.length}');
     // return [];
     return Future.wait(analysisResultsForOffset.map((e) async {
       final lintResultsWithEdits =
           await fileService.calculateEditResultsForAnalysisResult(context, e);
-      ref.read(logDelegateProvider).sidecarVerboseMessage(
+      logger.info(
           'RESULTS FOR OFFSET - EDITS: ${lintResultsWithEdits.edits.length}');
       return AnalysisErrorFixes(e.toAnalysisError(),
           fixes: lintResultsWithEdits.edits.map((edit) {
-            ref.read(logDelegateProvider).sidecarVerboseMessage(
-                'RESULTS FOR OFFSET - EDITS - SOURCE EDITS: ${edit.sourceChanges.length}');
+            logger.info(
+                'RESULTS FOR OFFSET - SOURCE EDITS: ${edit.sourceChanges.length}');
             return edit.toPrioritizedSourceChange();
           }).toList());
     }));
   },
   name: 'quickFixForRequestProvider',
   dependencies: [
-    logDelegateProvider,
     activeContextForRootProvider,
     fileAnalyzerServiceProvider,
     analysisResultsForFileProvider,

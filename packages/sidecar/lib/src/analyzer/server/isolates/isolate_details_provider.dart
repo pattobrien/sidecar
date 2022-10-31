@@ -3,6 +3,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../../protocol/protocol.dart';
 import '../../../services/services.dart';
+import '../../../utils/logger/logger.dart';
 import '../../context/context.dart';
 import '../contexts/contexts.dart';
 import '../log_delegate.dart';
@@ -33,11 +34,9 @@ final isolateDetailsProvider = Provider<List<IsolateDetails>>(
 
 final _isolateUpdateProvider = Provider<void>(
   (ref) {
-    void _log(String msg) =>
-        ref.watch(logDelegateProvider).sidecarVerboseMessage(msg);
     ref.listen<List<ActiveContext>>(activeContextsMiddlemanProvider,
         (oldContexts, newContexts) {
-      _log(
+      logger.info(
           'LINT EQUALITY CHECK ||  ${oldContexts?.length ?? 0} old context || ${newContexts.length} new contexts');
       // for all new contexts
       if (oldContexts == null) {
@@ -56,14 +55,13 @@ final _isolateUpdateProvider = Provider<void>(
           final newLints = newContext.sidecarOptions.lintPackages;
           final areLintsEqual =
               const DeepCollectionEquality().equals(oldLints, newLints);
-          _log('LINT EQUALITY: $areLintsEqual');
+          logger.info('LINT EQUALITY: $areLintsEqual');
         }
       }
     }, fireImmediately: true);
   },
   name: '_isolateUpdateProvider',
   dependencies: [
-    logDelegateProvider,
     activeContextsMiddlemanProvider,
   ],
 );

@@ -8,6 +8,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/protocol.dart';
+import '../../../utils/logger/logger.dart';
 import '../../context/context.dart';
 import '../log_delegate.dart';
 import '../server.dart';
@@ -28,13 +29,9 @@ class IsolateCommunicationService {
   PluginCommunicationChannel get channel =>
       ref.read(masterPluginChannelProvider);
 
-  void _log(String msg) =>
-      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
-  void _logError(Object e, StackTrace stackTrace) =>
-      ref.read(logDelegateProvider).sidecarError(e, stackTrace);
-
   void addIsolateListener(IsolateDetails isolate) {
-    _log('addIsolateListener: context=${isolate.activeRoot.root.shortName}');
+    logger.info(
+        'addIsolateListener: context=${isolate.activeRoot.root.shortName}');
     // setup listeners for isolate responses, middleman communication
     final root = isolate.activeRoot;
     isolate.channel.listen(
@@ -57,7 +54,7 @@ class IsolateCommunicationService {
   }
 
   void dumpRequests() {
-    _log('dumpRequests = ${queuedRequests.length}');
+    logger.info('dumpRequests = ${queuedRequests.length}');
     for (final request in queuedRequests
       ..sort((a, b) => a.id.compareTo(b.id))) {
       _addNewMessage(MultiIsolateMessage(
@@ -95,7 +92,8 @@ class IsolateCommunicationService {
     ActiveContextRoot root,
     Response response,
   ) {
-    _log('ISOLATE RESPONSE || ${root.root.shortName} || ${response.toJson()} ');
+    logger.info(
+        'ISOLATE RESPONSE || ${root.root.shortName} || ${response.toJson()} ');
     final isoResponse = IsolateResponse(response: response, root: root);
 
     final cachedMessage = state[response.id];
@@ -118,7 +116,7 @@ class IsolateCommunicationService {
     Notification notification,
   ) {
     //TODO: verify that notifications dont need to be aggregated like responses do
-    _log(
+    logger.info(
         'ISOLATE NOTIFICATION || ${details.activeRoot.root.shortName} || ${notification.toJson()} ');
     _parsePluginNotification(details, notification);
   }
@@ -164,14 +162,14 @@ class IsolateCommunicationService {
     IsolateDetails details,
     dynamic error,
   ) {
-    return _log(
+    return logger.severe(
         'ISOLATE ERROR || ${details.activeRoot.root.shortName} || $error');
   }
 
   void handlePluginDone(
     IsolateDetails details,
   ) {
-    return _log('ISOLATE DONE || ${details.activeRoot.root.shortName}');
+    return logger.info('ISOLATE DONE || ${details.activeRoot.root.shortName}');
   }
 
   List<IsolateRequest> _aggregateRequests(
@@ -441,13 +439,10 @@ class IsolateCommunicationService {
 
 final isolateCommunicationServiceProvider =
     Provider<IsolateCommunicationService>(
-  (ref) {
-    return IsolateCommunicationService(ref);
-  },
+  IsolateCommunicationService.new,
   name: 'isolateCommunicationServiceProvider',
   dependencies: [
     masterPluginChannelProvider,
-    logDelegateProvider,
     middlemanPluginIsInitializedProvider,
   ],
 );

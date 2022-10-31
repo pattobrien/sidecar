@@ -14,6 +14,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
 import '../../protocol/constants/constants.dart';
+import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
 import 'analysis_context_providers.dart';
 import 'isolates/isolates.dart';
@@ -41,15 +42,9 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   IsolateCommunicationService get isolateService =>
       ref.read(isolateCommunicationServiceProvider);
 
-  // HotReloader? _reloader;
-  void _log(String msg) =>
-      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
-  void _logError(Object e, StackTrace stackTrace) =>
-      ref.read(logDelegateProvider).sidecarError(e, stackTrace);
-
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    _log('MIDDLEMAN STARTING....');
+    logger.info('MIDDLEMAN STARTING....');
     _start(channel);
   }
 
@@ -88,7 +83,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
-    _log(
+    logger.info(
         'MIDDLEMAN afterNewContextCollection || ${contextCollection.contexts.length} contexts');
     ref
         .read(allContextsProvider.state)
@@ -114,7 +109,6 @@ final middlemanPluginProvider = Provider<MiddlemanPlugin>(
     isolateDetailsProvider,
     masterPluginChannelProvider,
     allContextsProvider,
-    logDelegateProvider,
     isolateCommunicationServiceProvider,
     middlemanResourceProvider,
     middlemanPluginIsInitializedProvider,

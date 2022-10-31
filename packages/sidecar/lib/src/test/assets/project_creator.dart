@@ -20,8 +20,8 @@ class ProjectCreator with ResourceProviderMixin {
     required this.resourceProvider,
     required this.projectName,
     this.isSidecarEnabled = true,
-    this.sidecarProjectConfiguration,
-  }) {
+    ProjectConfiguration? sidecarProjectConfiguration,
+  }) : _sidecarProjectConfiguration = sidecarProjectConfiguration {
     build();
   }
 
@@ -30,8 +30,11 @@ class ProjectCreator with ResourceProviderMixin {
   final String parentDirectoryPath;
   final String projectName;
 
+  ProjectConfiguration? _sidecarProjectConfiguration;
+
   final bool isSidecarEnabled;
-  final ProjectConfiguration? sidecarProjectConfiguration;
+  ProjectConfiguration? get sidecarProjectConfiguration =>
+      _sidecarProjectConfiguration;
 
   String get directoryPath => join(parentDirectoryPath, projectName);
   Folder get projectFolder => getFolder(join(parentDirectoryPath, projectName));
@@ -57,7 +60,10 @@ class ProjectCreator with ResourceProviderMixin {
     newFile(join('lib', 'main.dart'), mainContent);
   }
 
-  void addPackages(List<Package> packages) {
+  void addPackages(
+    List<Package> packages, {
+    bool shouldBeEnabledInSidecarYaml = true,
+  }) {
     final packageConfigPath = join(
         directoryPath, file_paths.dotDartTool, file_paths.packageConfigJson);
     final packageConfigFile = getFile(packageConfigPath);
@@ -72,7 +78,12 @@ class ProjectCreator with ResourceProviderMixin {
         packageConfigFile.readAsStringSync(), packageConfigFile.toUri());
     final newPackageConfig = packageConfig.addPackages([]);
     final json = PackageConfig.toJson(newPackageConfig);
+
     newPackageConfigJsonFile(directoryPath, json.toString());
+    if (shouldBeEnabledInSidecarYaml) {
+      // TODO:
+      // _sidecarProjectConfiguration = _sidecarProjectConfiguration.copyWith();
+    }
   }
 
   @override

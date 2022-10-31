@@ -1,12 +1,10 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
-import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/src/dart/analysis/byte_store.dart';
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
@@ -14,7 +12,6 @@ import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:cli_util/cli_util.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
@@ -37,7 +34,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       : resourceProvider = ref.read(pluginResourceProvider),
         super(resourceProvider: ref.read(pluginResourceProvider));
 
-  // HotReloader? _reloader;
   final initializationCompleter = Completer<void>();
   final Ref ref;
 
@@ -59,19 +55,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   // ignore: overridden_fields
   final OverlayResourceProvider resourceProvider;
 
-  void _log(String msg) =>
-      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
-
-  void _logError(Object e, StackTrace stackTrace) =>
-      ref.read(logDelegateProvider).sidecarError(e, stackTrace);
-
   @override
   void start(plugin.PluginCommunicationChannel channel) {
     Expando();
-    _log('END PLUGIN STARTING....');
-    _log('# of rules to activate: ${ref.read(ruleConstructorProvider).length}');
+    logger.info('END PLUGIN STARTING....');
+    logger.info(
+        '# of rules to activate: ${ref.read(ruleConstructorProvider).length}');
     if (mode.isDebug) {
-      ref.read(logDelegateProvider).sidecarMessage('STARTING WITH HOT RELOAD');
+      logger.info('STARTING WITH HOT RELOAD');
       _startWithHotReload(channel);
     }
     super.start(channel);
@@ -83,13 +74,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> _startWithHotReload(
     plugin.PluginCommunicationChannel channel,
   ) async {
-    // _reloader = await HotReloader.create(onAfterReload: (c) {
     await HotReloader.create(onAfterReload: (c) {
       final time = DateTime.now();
       final isos = c.reloadReports.keys;
-      ref
-          .read(logDelegateProvider)
-          .sidecarMessage('\n${time.toIso8601String()} RELOADING...\n');
+      logger.info('\n${time.toIso8601String()} RELOADING...\n');
       final events = c.events ?? [];
 
       final analysisContexts = ref.read(activeContextsProvider);
@@ -177,7 +165,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }) async {
     _contextCollection = contextCollection;
     try {
-      _log('ISOLATE: afterNewContextCollection');
+      logger.info('ISOLATE: afterNewContextCollection');
 
       ref
           .read(allAnalysisContextsProvider.state)
@@ -189,7 +177,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         initializationCompleter.complete();
       }
     } catch (e, stackTrace) {
-      _logError('afterNewContextCollection err -- $e', stackTrace);
+      logger.info('afterNewContextCollection err -- $e', stackTrace);
       rethrow;
     }
   }
@@ -248,8 +236,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required List<String> paths,
   }) async {
     final activeContexts = ref.read(activeContextsProvider);
-    ref.read(logDelegateProvider).sidecarVerboseMessage(
-        'CHANGEDFILES1 = ${paths.length} ${paths.toList().toString()}');
+    logger.info('CHANGEDFILES = ${paths.length} ${paths.toList().toString()}');
     if (activeContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
         analysisContext.contextRoot.root.path)) {
@@ -260,16 +247,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         try {
           final file = ref.read(analyzedFileFromPath(path));
           if (file.relativePath == kSidecarYaml) {
-            ref
-                .read(logDelegateProvider)
-                .sidecarVerboseMessage('SIDECAR YAML CHANGED');
+            logger.info('SIDECAR YAML CHANGED');
           }
           ref.refresh(resolvedUnitProvider(file));
           ref.refresh(analysisResultsForFileProvider(file));
 
           await ref.refresh(analysisResultsReporterProvider(file).future);
         } catch (e, stackTrace) {
-          _logError('analyzeFiles ${e.toString()}', stackTrace);
+          logger.severe('analyzeFiles', e, stackTrace);
         }
       }));
     }
@@ -296,7 +281,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       return plugin.EditGetFixesResult(fixes);
     } catch (e, stackTrace) {
-      _logError('handleEditGetFixes $path -- $e', stackTrace);
+      logger.severe('handleEditGetFixes $path', e, stackTrace);
       rethrow;
     }
   }
@@ -325,7 +310,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       return plugin.EditGetAssistsResult(changes);
     } catch (e, stackTrace) {
-      _logError('handleEditGetAssists ${parameters.file} -- $e', stackTrace);
+      logger.severe('handleEditGetAssists ${parameters.file}', e, stackTrace);
       rethrow;
     }
   }
@@ -347,17 +332,24 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }
 }
 
-final pluginInitializationProvider =
-    FutureProvider.autoDispose<void>((ref) async {
-  final plugin = ref.watch(pluginProvider);
-  await plugin.initializationCompleter.future;
-  final logger = ref.watch(logDelegateProvider);
-  final cliOptions = ref.watch(cliOptionsProvider);
-  if (cliOptions.mode.isCli) {
-    logger as DebuggerLogDelegate;
-    logger.dumpResults();
-  }
-});
+final pluginInitializationProvider = FutureProvider.autoDispose<void>(
+  (ref) async {
+    final plugin = ref.watch(pluginProvider);
+    await plugin.initializationCompleter.future;
+    final logger = ref.watch(logDelegateProvider);
+    final cliOptions = ref.watch(cliOptionsProvider);
+    if (cliOptions.mode.isCli) {
+      logger as DebuggerLogDelegate;
+      logger.dumpResults();
+    }
+  },
+  name: 'pluginInitializationProvider',
+  dependencies: [
+    pluginProvider,
+    logDelegateProvider,
+    cliOptionsProvider,
+  ],
+);
 
 final pluginProvider = Provider.autoDispose<SidecarAnalyzerPlugin>(
   SidecarAnalyzerPlugin.new,

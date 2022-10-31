@@ -13,14 +13,12 @@ class ActiveContextRoot implements ContextRoot {
   const ActiveContextRoot(
     this._root, {
     required this.isMainRoot,
-    // required this.localDependencyRoots,
   });
 
   final ContextRoot _root;
 
   /// Indicates the package that explicitly activates Sidecar as a plugin.
   final bool isMainRoot;
-  // final List<ContextRoot> localDependencyRoots;
 
   List<AnalyzedFile> typedAnalyzedFiles() =>
       analyzedFiles().map((e) => AnalyzedFile(this, e)).toList();

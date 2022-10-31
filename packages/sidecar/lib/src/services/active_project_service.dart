@@ -8,25 +8,18 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
-import '../analyzer/server/log_delegate.dart';
 import '../configurations/project/project_configuration.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
 import '../protocol/protocol.dart';
+import '../utils/logger/logger.dart';
 import '../utils/utils.dart';
 
 class ActiveProjectService {
-  const ActiveProjectService(this._ref);
-
-  final Ref _ref;
-
-  void _log(String msg) => _ref.read(logDelegateProvider).sidecarMessage(msg);
-  void _logError(Object e, StackTrace stackTrace) =>
-      _ref.read(logDelegateProvider).sidecarError(e, stackTrace);
+  const ActiveProjectService();
 
   ActiveContext? initializeContext(
     AnalysisContext analysisContext,
-    // List<AnalysisContext> allContexts,
   ) {
     try {
       final root = analysisContext.contextRoot;
@@ -35,15 +28,10 @@ class ActiveProjectService {
       final packages = getSidecarDependencies(contextUri);
       final projectConfig = getSidecarOptions(root);
 
-      final isSidecarEnabled = analysisContext.isSidecarEnabled;
-      final hasProjectConfiguration = projectConfig != null;
-      final hasSidecarPlugin = pluginUri != null;
-      final hasLintPackages = packages.isNotEmpty;
-
-      if (!isSidecarEnabled ||
-          !hasProjectConfiguration ||
-          !hasSidecarPlugin ||
-          !hasLintPackages) {
+      if (!analysisContext.isSidecarEnabled ||
+          projectConfig == null ||
+          pluginUri == null ||
+          packages.isEmpty) {
         return null;
       }
       // this context is an active context
@@ -59,14 +47,16 @@ class ActiveProjectService {
         isMainRoot: true,
       );
     } catch (e, stackTrace) {
-      _logError('ActivePackageService ERROR: ${e.toString()}', stackTrace);
+      logger.severe('ActivePackageService initializeContext', e, stackTrace);
       rethrow;
     }
   }
 
   /// Finds any contexts that
   List<ActiveContext> getActiveDependencies(
-      ActiveContext mainActiveContext, List<AnalysisContext> allContexts) {
+    ActiveContext mainActiveContext,
+    List<AnalysisContext> allContexts,
+  ) {
     final config = _getPackageConfig(mainActiveContext.activeRoot.root.toUri());
     // get all contexts that are within the working directory and
     // are dependencies of the main active root
@@ -76,15 +66,14 @@ class ActiveProjectService {
               package.root != mainActiveContext.activeRoot.root.toUri())
           .any(
         (package) {
-          // _log('abc package root: ${package.root.normalizePath().path}');
           return package.root.normalizePath().path ==
               context.contextRoot.root.toUri().normalizePath().path;
         },
       );
     }).toList();
+
     // check for any options files, etc. if none are available,
     // inherit the details from main root
-
     return contexts.map(
       (analysisContext) {
         final root = analysisContext.contextRoot;
@@ -109,23 +98,6 @@ class ActiveProjectService {
     ).toList();
   }
 
-  /// Find what dependencies are in the local workspace directory
-  List<AnalysisContext> getLocalDependencies(
-    Uri activeRoot,
-    List<AnalysisContext> allContextRoots,
-  ) {
-    final config = _getPackageConfig(activeRoot);
-    return allContextRoots.where((context) {
-      return config.packages.where((package) => package.root != activeRoot).any(
-        (package) {
-          // _log('abc package root: ${package.root.normalizePath().path}');
-          return package.root.normalizePath().path ==
-              context.contextRoot.root.toUri().normalizePath().path;
-        },
-      );
-    }).toList();
-  }
-
   Future<bool> createDefaultSidecarYaml(Uri root) async {
     const contents = defaultSidecarContent;
     final file = File(p.join(root.path, kSidecarYaml));
@@ -146,16 +118,13 @@ class ActiveProjectService {
   }
 
   List<RulePackageConfiguration> getSidecarDependencies(Uri root) {
-    // _log('findAllSidecarDeps for ${root.toFilePath()} // ${root.path}');
     return _getPackageConfig(root)
         .packages
         .map<RulePackageConfiguration?>((package) {
           try {
-            // TODO: allow relative roots; right now, there seems to be a bug with how the relative uri is generated
-            // if (package.relativeRoot) return null;
             return parseLintPackage(package.name, package.root);
           } catch (e, stackTrace) {
-            _logError('NON-FATAL ERROR: findAllSidecarDeps $e', stackTrace);
+            logger.shout('ActivePackageService NON-FATAL', e, stackTrace);
             return null;
           }
         })
@@ -170,32 +139,31 @@ class ActiveProjectService {
     });
   }
 
-  ProjectConfiguration? getSidecarOptions(ContextRoot contextRoot) {
-    _log('_parseProjectConfiguration started');
-    // final file = contextRoot.optionsFile;
-    final rootPath = contextRoot.root.path;
-    final sidecarYamlPath = p.join(rootPath, kSidecarYaml);
+  String? _getSidecarFile(ContextRoot contextRoot) {
+    final sidecarYamlPath = p.join(contextRoot.root.path, kSidecarYaml);
     final sidecarYamlFile = File(sidecarYamlPath);
     if (!sidecarYamlFile.existsSync()) return null;
-    // if (file == null) return null;
+    return sidecarYamlFile.readAsStringSync();
+  }
+
+  ProjectConfiguration? getSidecarOptions(ContextRoot contextRoot) {
+    logger.info('getSidecarOptions started');
     try {
-      final contents = sidecarYamlFile.readAsStringSync();
+      final contents = _getSidecarFile(contextRoot);
+      if (contents == null) return null;
       return ProjectConfiguration.parseFromSidecarYaml(
         contents,
-        sourceUrl: sidecarYamlFile.uri,
+        sourceUrl: Uri.parse(contextRoot.root.canonicalizePath(kSidecarYaml)),
       );
     } catch (e, stackTrace) {
-      _logError(
-          'ISOLATE NON-FATAL: _parseProjectConfiguration || $e', stackTrace);
+      logger.shout('ISOLATE NON-FATAL: ', e, stackTrace);
       return null;
     }
   }
 }
 
 final activeProjectServiceProvider = Provider(
-  ActiveProjectService.new,
+  (ref) => const ActiveProjectService(),
   name: 'activePackageServiceProvider',
-  dependencies: [
-    logDelegateProvider,
-  ],
+  dependencies: const [],
 );

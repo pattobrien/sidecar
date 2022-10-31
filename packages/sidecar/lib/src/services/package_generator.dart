@@ -15,7 +15,7 @@ import 'package:yaml/yaml.dart';
 import '../protocol/sidecar_type.dart';
 
 class PackageGenerator {
-  PackageGenerator();
+  const PackageGenerator();
 
   Future<void> generate(Directory projectDirectory) async {
     // get the package we want to create a utility package from

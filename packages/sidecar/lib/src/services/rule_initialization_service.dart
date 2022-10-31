@@ -1,26 +1,22 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/active_context_root.dart';
-import '../analyzer/results/results.dart';
-import '../analyzer/server/log_delegate.dart';
 import '../configurations/project/project.dart';
 import '../rules/rules.dart';
+import '../utils/logger/logger.dart';
 
 class RuleInitializationService {
   const RuleInitializationService(this.ref);
   final Ref ref;
 
-  void _log(String msg) =>
-      ref.read(logDelegateProvider).sidecarVerboseMessage(msg);
-
-  List<BaseRule> initializeRules(
+  List<BaseRule> constructRules(
     ProjectConfiguration projectConfiguration,
     List<SidecarBaseConstructor> ruleConstructors,
     ActiveContextRoot activeRoot,
   ) {
-    _log(
+    logger.info(
         'initializing ${projectConfiguration.lintPackages?.length ?? 0} lint packages');
-    _log(
+    logger.info(
         'initializing ${projectConfiguration.assistPackages?.length ?? 0} assist packages');
     return ruleConstructors
         .map<BaseRule?>((ruleConstructor) {
@@ -32,8 +28,8 @@ class RuleInitializationService {
           // rule is marked as disabled
           if (ruleConfig.enabled == false) return null;
 
-          _log('activating ${rule.code}');
-
+          logger.info('activating ${rule.code}');
+          //TODO: ref should not be provided like this
           rule.initialize(
               ref: ref, activeRoot: activeRoot, configuration: ruleConfig);
           // if (rule.errors?.isNotEmpty ?? false) {
@@ -51,7 +47,5 @@ class RuleInitializationService {
 final ruleInitializationServiceProvider = Provider(
   RuleInitializationService.new,
   name: 'ruleInitializationServiceProvider',
-  dependencies: [
-    logDelegateProvider,
-  ],
+  dependencies: const [],
 );
