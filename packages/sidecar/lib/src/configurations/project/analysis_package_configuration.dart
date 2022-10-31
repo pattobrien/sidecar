@@ -42,8 +42,9 @@ class LintPackageConfiguration extends AnalysisPackageConfiguration {
   });
 
   Map<dynamic, dynamic> toJson() {
-    final includesEntry =
-        includes != null ? MapEntry('includes', globsToString(includes)) : null;
+    final includesEntry = includes != null
+        ? MapEntry('includes', globsToStrings(includes))
+        : null;
     final lintsEntries = lints != null ? lints!.map(MapEntry.new) : null;
     final map = <dynamic, dynamic>{};
     if (includesEntry != null) map.addEntries([includesEntry]);
@@ -55,7 +56,7 @@ class LintPackageConfiguration extends AnalysisPackageConfiguration {
   }
 
   final Map<String, LintConfiguration?>? lints;
-  @JsonKey(toJson: globsToString, fromJson: globsFromString)
+  @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   final List<Glob>? includes;
   final List<SidecarNewException> errors;
 }
@@ -90,7 +91,7 @@ class AssistPackageConfiguration extends AnalysisPackageConfiguration {
   Map<dynamic, dynamic> toJson() => _$AssistPackageConfigurationToJson(this);
 
   final Map<String, AssistConfiguration?>? assists;
-  @JsonKey(toJson: globsToString, fromJson: globsFromString)
+  @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   final List<Glob>? includes;
   final List<SidecarNewException> errors;
 }

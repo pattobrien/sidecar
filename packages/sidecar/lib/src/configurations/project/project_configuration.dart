@@ -137,7 +137,7 @@ class ProjectConfiguration {
   @JsonKey(name: 'assists')
   final Map<PackageName, AssistPackageConfiguration>? assistPackages;
 
-  @JsonKey(toJson: globsToString, fromJson: globsFromString)
+  @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   final List<Glob>? _includes;
 
   @JsonKey(defaultValue: <SidecarNewException>[])

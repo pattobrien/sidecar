@@ -47,7 +47,7 @@ class LintConfiguration extends AnalysisConfiguration {
   final List<SidecarNewException> errors;
 
   @override
-  @JsonKey(toJson: globsToString, fromJson: globsFromString)
+  @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   final List<Glob>? includes;
 }
 
@@ -78,7 +78,7 @@ class AssistConfiguration extends AnalysisConfiguration {
   final List<SidecarNewException> errors;
 
   @override
-  @JsonKey(toJson: globsToString, fromJson: globsFromString)
+  @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   final List<Glob>? includes;
 }
 
