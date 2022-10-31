@@ -45,15 +45,15 @@ class YamlWriter {
   /// Write a map to a YAML string.
   /// Pass the map in as [yaml] and indent it to the [indent] level.
   String _writeMap(Map yaml, {int indent = 0}) {
-    String str = '\n';
+    final buffer = StringBuffer()..write('\n');
 
     for (final key in yaml.keys) {
       final dynamic value = yaml[key];
-      str +=
-          "${_indent(indent)}${key.toString()}: ${_writeInternal(value, indent: indent + 1)}\n";
+      buffer.write(
+          "${_indent(indent)}${key.toString()}: ${_writeInternal(value, indent: indent + 1)}\n");
     }
 
-    return str;
+    return buffer.toString();
   }
 
   /// Create an indented string for the level with the spaces config.

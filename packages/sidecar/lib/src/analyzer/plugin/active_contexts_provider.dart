@@ -7,9 +7,7 @@ import '../../services/services.dart';
 import '../../utils/file_paths.dart';
 import '../../utils/logger/logger.dart';
 import '../context/context.dart';
-import '../results/analysis_results_provider.dart';
-import '../results/analysis_results_reporter.dart';
-import '../server/log_delegate.dart';
+import '../results/results.dart';
 import 'plugin.dart';
 
 final activeContextsProvider = Provider<List<ActiveContext>>(

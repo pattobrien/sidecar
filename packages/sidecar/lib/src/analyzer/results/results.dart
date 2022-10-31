@@ -1,5 +1,6 @@
 export 'analysis_result.dart';
 export 'analysis_results_provider.dart';
+export 'analysis_results_reporter.dart';
 export 'annotation_result.dart';
 export 'annotations_provider.dart';
 export 'assist_results.dart';

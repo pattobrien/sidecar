@@ -13,7 +13,7 @@ import 'source_span_utilities.dart';
 /// Used to translate a single AST node into a SourceSpan (i.e. start and end location within source code)
 extension AstNodeX on AstNode {
   SourceRange toSourceRange(ResolvedUnitResult unit) {
-    return toSourceSpan(unit).toSourceRange(); // SourceRange(offset, length);
+    return toSourceSpan(unit).toSourceRange();
   }
 
   SourceSpan toSourceSpan(ResolvedUnitResult unit) {
@@ -57,46 +57,4 @@ extension AstNodeX on AstNode {
 
     return ElementLocator.locate(node);
   }
-
-  // LintAnalysisResult toDartAnalysisResult(
-  //   LintRule rule, {
-  //   required ResolvedUnitResult unit,
-  //   required String message,
-  //   String? correction,
-  //   SourceSpan? highlightedSpan,
-  // }) =>
-  //     LintAnalysisResult(
-  //       rule: rule,
-  //       sourceSpan: toSourceSpan(unit),
-  //       message: message,
-  //       correction: correction,
-  //       highlightedSpan: highlightedSpan,
-  //       severity:
-  //     );
-
-//   DetectedLint toDetectedLint(
-//     ResolvedUnitResult unit,
-//     SidecarBase rule, {
-//     required DartAnalysisResult result,
-//   }) =>
-//       DetectedLint(
-//         rule: rule,
-//         unit: unit,
-//         result: result,
-//         lintType: rule.,
-//         message: message,
-//         correction: correction,
-//       );
-// }
-
-// extension ListAstNodeX on List<AstNode> {
-//   List<DetectedLint> toDetectedLints(
-//     ResolvedUnitResult unit,
-//     LintRule rule, {
-//     String message = '',
-//     String? correction,
-//   }) {
-//     return map((e) => e.toDetectedLint(unit, rule,
-//         correction: correction, message: message)).toList();
-//   }
 }
