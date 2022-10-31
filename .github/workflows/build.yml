@@ -9,9 +9,6 @@ on:
       - master
     paths-ignore:
       - "**.md"
-  # schedule:
-  #   # runs the CI everyday at 10AM
-  #   - cron: "0 10 * * *"
 
 jobs:
   build:
@@ -28,7 +25,6 @@ jobs:
         package_path:
           # - examples/my_analyzed_codebase
           - packages/sidecar
-          # - website
 
     steps:
       - uses: actions/checkout@v3.1.0
@@ -50,22 +46,9 @@ jobs:
 
       # - name: Analyze
       #   run: flutter analyze
+
       - name: Run tests
         run: flutter test --coverage
-      # - name: Run tests
-      #  run: |
-      #    if test -d "test"; then
-      #      if grep -q flutter "pubspec.yaml"; then
-      #        flutter test --coverage
-      #      else
-      #        ${{github.workspace}}/scripts/coverage.sh
-      #      fi
-      #    fi
+
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3.1.1
-
-      # - name: Upload coverage to codecov
-      #   run: |
-      #     if test -d "test"; then
-      #       curl -s https://codecov.io/bash | bash
-      #     fi

@@ -1,5 +1,5 @@
 name: sidecar_package_utilities
-description: Utilities for creating sidecar packages.
+description: Utilities for creating Sidecar packages.
 version: 0.1.0-dev.5
 repository: https://www.github.com/pattobrien/sidecar
 homepage: https://www.github.com/pattobrien/sidecar

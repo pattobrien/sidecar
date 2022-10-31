@@ -1,7 +1,9 @@
 name: sidecar_lints
 description: Lints to assist developers with creating their own Sidecar packages.
 version: 0.1.0-dev.1
-repository: https://github.com/pattobrien/sidecar/tree/master/packages/sidecar_lints/
+repository: https://github.com/pattobrien/sidecar/
+homepage: https://github.com/pattobrien/sidecar/
+issue_tracker: https://github.com/pattobrien/sidecar/issues
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
