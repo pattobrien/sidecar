@@ -5,19 +5,16 @@ import 'plugin.dart';
 
 final analyzedFilesProvider =
     Provider.family<List<AnalyzedFile>, ActiveContextRoot>(
-  (ref, root) => ref.watch(_unfilteredAnalyzedFilesProvider(root)).toList(),
+  (ref, root) => root.typedAnalyzedFiles().toList(),
   name: 'analyzedFilesProvider',
-  dependencies: [
-    _unfilteredAnalyzedFilesProvider,
-  ],
+  dependencies: const [],
 );
 
 final analyzedFileFromPath = Provider.family<AnalyzedFile, String>(
   (ref, path) {
     final activeContexts = ref.watch(activeContextsProvider);
-    final context = activeContexts.firstWhere((activeContext) =>
-        activeContext.activeRoot.analyzedFiles().any((file) => file == path));
-    final analyzedFiles = ref.watch(analyzedFilesProvider(context.activeRoot));
+    final context = activeContexts.contextForPath(path);
+    final analyzedFiles = ref.watch(analyzedFilesProvider(context!.activeRoot));
     return analyzedFiles.firstWhere((file) => file.path == path);
   },
   name: 'analyzedFileFromPath',
@@ -25,11 +22,4 @@ final analyzedFileFromPath = Provider.family<AnalyzedFile, String>(
     activeContextsProvider,
     analyzedFilesProvider,
   ],
-);
-
-final _unfilteredAnalyzedFilesProvider =
-    Provider.family<List<AnalyzedFile>, ActiveContextRoot>(
-  (ref, root) => root.typedAnalyzedFiles().toList(),
-  name: '_unfilteredAnalyzedFilesProvider',
-  dependencies: const [],
 );

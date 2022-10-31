@@ -22,7 +22,6 @@ import '../../utils/byte_store_ext.dart';
 import '../../utils/file_paths.dart';
 import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
-import '../results/analysis_results_reporter.dart';
 import '../results/results.dart';
 import '../server/analyzer_mode.dart';
 import '../server/log_delegate.dart';
@@ -73,15 +72,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     plugin.PluginCommunicationChannel channel,
   ) async {
     await HotReloader.create(onAfterReload: (c) {
-      final time = DateTime.now();
-      logger.info('\n${time.toIso8601String()} RELOADING...\n');
-      final events = c.events ?? [];
+      logger.info('\n${DateTime.now().toIso8601String()} RELOADING...\n');
 
       final analysisContexts = ref.read(activeContextsProvider);
       for (final analysisContext in analysisContexts) {
         handleAffectedFiles(
           analysisContext: analysisContext.context,
-          paths: events.map((e) => e.path).toList(),
+          paths: c.events?.map((e) => e.path).toList() ?? [],
         );
         // for (final localContexts in analysisContext.localDependencyContexts) {
         //   handleAffectedFiles(
@@ -128,21 +125,17 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     if (mode.isCli || mode.isDebug) {
       // create our own set context handler
       final includedPaths = parameters.roots.map((e) => e.root).toList();
-      AnalysisContextCollection? contextCollection;
-      runZonedGuarded(
-        () {
-          contextCollection = AnalysisContextCollectionImpl(
-            includedPaths: includedPaths,
-            byteStore: _byteStore,
-            // resourceProvider:  PhysicalResourceProvider.INSTANCE,
-            // sdkPath: sdkPath,
-            // fileContentCache: FileContentCache(resourceProvider),
-          );
-        },
-        (e, s) {},
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) {},
+
+      final contextCollection = runZonedGuarded(
+        () => AnalysisContextCollectionImpl(
+          includedPaths: includedPaths,
+          byteStore: _byteStore,
+          // resourceProvider:  PhysicalResourceProvider.INSTANCE,
+          // sdkPath: sdkPath,
+          // fileContentCache: FileContentCache(resourceProvider),
         ),
+        (e, s) {},
+        zoneSpecification: ZoneSpecification(print: (_, __, ___, ____) {}),
       );
 
       _contextCollection = contextCollection;
@@ -226,18 +219,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     if (activeContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
         analysisContext.contextRoot.root.path)) {
-      // context is valid
+      // context is valid => analyze all files
 
-      // analyze all files
       await Future.wait(paths.map((path) async {
         try {
           final file = ref.read(analyzedFileFromPath(path));
-          if (file.relativePath == kSidecarYaml) {
-            logger.finer('SIDECAR YAML CHANGED');
-          }
           ref.refresh(resolvedUnitProvider(file));
           ref.refresh(analysisResultsForFileProvider(file));
-
           await ref.refresh(analysisResultsReporterProvider(file).future);
         } catch (e, stackTrace) {
           logger.severe('analyzeFiles', e, stackTrace);

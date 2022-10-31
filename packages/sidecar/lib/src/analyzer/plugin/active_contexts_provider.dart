@@ -61,12 +61,12 @@ final activeContextForRootProvider =
 );
 
 StreamSubscription? _listenToConfigForChanges(Ref ref, ActiveContextRoot root) {
-  final path = p.join(root.root.path, kSidecarYaml);
-  final file = root.resourceProvider.getFile(path);
-  if (!file.exists) return null;
-  final resourceWatcher = file.watch();
+  final sidecarConfigPath = p.join(root.root.path, kSidecarYaml);
+  final sidecarConfigFile = root.resourceProvider.getFile(sidecarConfigPath);
+  if (!sidecarConfigFile.exists) return null;
+
+  final resourceWatcher = sidecarConfigFile.watch();
   return resourceWatcher.changes.listen((event) {
-    // if (event.type != ChangeType.REMOVE) {
     ref.invalidate(activeContextsProvider);
     ref.invalidate(activeContextForRootProvider(root));
     ref.invalidate(activatedRulesProvider);
@@ -74,6 +74,5 @@ StreamSubscription? _listenToConfigForChanges(Ref ref, ActiveContextRoot root) {
       ref.invalidate(analysisResultsForFileProvider(file));
       ref.refresh(analysisResultsReporterProvider(file));
     }
-    // }
   });
 }

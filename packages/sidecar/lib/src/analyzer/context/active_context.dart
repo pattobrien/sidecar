@@ -58,4 +58,10 @@ extension ContextsX on List<ActiveContext> {
         .analyzedFiles()
         .any((filePath) => filePath == analyzedFile.path));
   }
+
+  ActiveContext? contextForPath(String path) {
+    return firstWhereOrNull((activeContext) => activeContext.activeRoot
+        .analyzedFiles()
+        .any((filePath) => filePath == path));
+  }
 }
