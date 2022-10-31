@@ -15,29 +15,29 @@ class OutputAstNodeTree extends AssistRule with AssistVisitor {
   Future<List<EditResult>> computeSourceChanges(
     AnalysisSource source,
   ) async {
-    final unit = await getResolvedUnitResult(source.path);
-    final changeBuilder = ChangeBuilder(session: session);
+    // final unit = await getResolvedUnitResult(source.path);
+    // final changeBuilder = ChangeBuilder(session: session);
 
-    final node = source.mapOrNull(span: (span) => span.source)?.toAstNode(unit);
-    if (node == null) return [];
+    // final node = source.mapOrNull(span: (span) => span.source)?.toAstNode(unit);
+    // if (node == null) return [];
 
-    await changeBuilder.addDartFileEdit(
-      unit.path,
-      (builder) {
-        builder.addInsertion(
-          unit.unit.length,
-          (builder) {
-            builder.write(
-                '\n// ${node.beginToken} (node => parents): ${node.runtimeType} => ${node.parent.runtimeType} => ${node.parent?.parent.runtimeType} => ${node.parent?.parent?.parent.runtimeType}\n');
-          },
-        );
-      },
-    );
+    // await changeBuilder.addDartFileEdit(
+    //   unit.path,
+    //   (builder) {
+    //     builder.addInsertion(
+    //       unit.unit.length,
+    //       (builder) {
+    //         builder.write(
+    //             '\n// ${node.beginToken} (node => parents): ${node.runtimeType} => ${node.parent.runtimeType} => ${node.parent?.parent.runtimeType} => ${node.parent?.parent?.parent.runtimeType}\n');
+    //       },
+    //     );
+    //   },
+    // );
     return [
-      EditResult(
-        message: 'Output AstNode info into a comment',
-        sourceChanges: changeBuilder.sourceChange.edits,
-      ),
+      // EditResult(
+      //   message: 'Output AstNode info into a comment',
+      //   sourceChanges: changeBuilder.sourceChange.edits,
+      // ),
     ];
   }
 

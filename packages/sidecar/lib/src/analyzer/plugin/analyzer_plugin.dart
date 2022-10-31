@@ -57,10 +57,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    Expando();
     logger.finer('END PLUGIN STARTING....');
-    logger.finer(
-        '# of rules to activate: ${ref.read(ruleConstructorProvider).length}');
+    logger.finer('# of rules: ${ref.read(ruleConstructorProvider).length}');
     if (mode.isDebug) {
       logger.finer('STARTING WITH HOT RELOAD');
       _startWithHotReload(channel);
@@ -76,14 +74,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   ) async {
     await HotReloader.create(onAfterReload: (c) {
       final time = DateTime.now();
-      final isos = c.reloadReports.keys;
       logger.info('\n${time.toIso8601String()} RELOADING...\n');
       final events = c.events ?? [];
 
       final analysisContexts = ref.read(activeContextsProvider);
       for (final analysisContext in analysisContexts) {
         handleAffectedFiles(
-          analysisContext: analysisContext,
+          analysisContext: analysisContext.context,
           paths: events.map((e) => e.path).toList(),
         );
         // for (final localContexts in analysisContext.localDependencyContexts) {

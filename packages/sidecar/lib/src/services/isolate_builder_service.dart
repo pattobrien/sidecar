@@ -98,7 +98,7 @@ class IsolateBuilderService {
   @visibleForTesting
   void setupBootstrapper(ActiveContext activeContext) {
     final bootstrapperPath = p.join(
-        _packageToolDirectory(activeContext.contextRoot).path,
+        _packageToolDirectory(activeContext.activeRoot).path,
         'constructors.dart');
     final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
     final listBuffer = StringBuffer()..writeln(constructorListBegin);
@@ -127,16 +127,16 @@ class IsolateBuilderService {
     File(bootstrapperPath).writeAsStringSync(fullContents.toString());
   }
 
-  Uri _packagesUri(ContextRoot projectRoot) =>
+  Uri _packagesUri(ActiveContextRoot projectRoot) =>
       Uri.file(p.join(projectRoot.root.path, kDartTool, kPackageConfigJson),
           windows: Platform.isWindows);
 
-  Uri _executableUri(ContextRoot projectRoot) => Uri.file(
+  Uri _executableUri(ActiveContextRoot projectRoot) => Uri.file(
       p.join(
           projectRoot.root.path, kDartTool, kSidecarPluginName, kSidecarYaml),
       windows: Platform.isWindows);
 
-  Uri _packageToolDirectory(ContextRoot projectRoot) => Uri.directory(
+  Uri _packageToolDirectory(ActiveContextRoot projectRoot) => Uri.directory(
       p.join(projectRoot.root.path, kDartTool, kSidecarPluginName),
       windows: Platform.isWindows);
 }

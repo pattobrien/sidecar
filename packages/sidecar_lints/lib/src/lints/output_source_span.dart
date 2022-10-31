@@ -15,27 +15,27 @@ class OutputSourceSpan extends AssistRule with AssistVisitor {
   Future<List<EditResult>> computeSourceChanges(
     AnalysisSource source,
   ) async {
-    final unit = await getResolvedUnitResult(source.path);
-    final changeBuilder = ChangeBuilder(session: session);
+    // final unit = await getResolvedUnitResult(source.path);
+    // final changeBuilder = ChangeBuilder(session: session);
 
-    final node = source.mapOrNull(span: (span) => span.source)?.toAstNode(unit);
-    if (node == null) return [];
-    final sourceSpanString =
-        '// span(${node.offset}, ${node.offset + node.length}, \'${node.toSource()}\');';
+    // final node = source.mapOrNull(span: (span) => span.source)?.toAstNode(unit);
+    // if (node == null) return [];
+    // final sourceSpanString =
+    //     '// span(${node.offset}, ${node.offset + node.length}, \'${node.toSource()}\');';
 
-    await changeBuilder.addDartFileEdit(
-      unit.path,
-      (builder) => builder.addInsertion(
-        unit.unit.length,
-        (builder) => builder.writeln(sourceSpanString),
-      ),
-    );
+    // await changeBuilder.addDartFileEdit(
+    //   unit.path,
+    //   (builder) => builder.addInsertion(
+    //     unit.unit.length,
+    //     (builder) => builder.writeln(sourceSpanString),
+    //   ),
+    // );
 
     return [
-      EditResult(
-        message: 'Output SourceSpan into a comment',
-        sourceChanges: changeBuilder.sourceChange.edits,
-      ),
+      // EditResult(
+      //   message: 'Output SourceSpan into a comment',
+      //   sourceChanges: changeBuilder.sourceChange.edits,
+      // ),
     ];
   }
 

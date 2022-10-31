@@ -10,16 +10,16 @@ import '../../configurations/configurations.dart';
 import '../../protocol/protocol.dart';
 import 'context.dart';
 
-class ActiveContext implements AnalysisContext {
+class ActiveContext {
   ActiveContext(
-    this._context, {
+    this.context, {
     required this.sidecarOptions,
     required this.sidecarPluginPackage,
     required this.sidecarPackages,
     required this.isMainRoot,
   });
 
-  final AnalysisContext _context;
+  final AnalysisContext context;
   final ProjectConfiguration sidecarOptions;
   final Package sidecarPluginPackage;
   final List<RulePackageConfiguration> sidecarPackages;
@@ -28,28 +28,28 @@ class ActiveContext implements AnalysisContext {
   final bool isMainRoot;
 
   ActiveContextRoot get activeRoot => ActiveContextRoot(
-        _context.contextRoot,
+        context.contextRoot,
         isMainRoot: isMainRoot,
       );
 
-  @override
-  AnalysisOptions get analysisOptions => _context.analysisOptions;
+  // @override
+  AnalysisOptions get analysisOptions => context.analysisOptions;
 
-  @override
+  // @override
   Future<List<String>> applyPendingFileChanges() =>
-      _context.applyPendingFileChanges();
+      context.applyPendingFileChanges();
 
-  @override
-  void changeFile(String path) => _context.changeFile(path);
+  // @override
+  void changeFile(String path) => context.changeFile(path);
 
-  @override
-  ContextRoot get contextRoot => _context.contextRoot;
+  // @override
+  ContextRoot get contextRoot => context.contextRoot;
 
-  @override
-  AnalysisSession get currentSession => _context.currentSession;
+  // @override
+  AnalysisSession get currentSession => context.currentSession;
 
-  @override
-  Folder? get sdkRoot => _context.sdkRoot;
+  // @override
+  Folder? get sdkRoot => context.sdkRoot;
 }
 
 extension ContextsX on List<ActiveContext> {

@@ -7,7 +7,7 @@ abstract class Benchmark extends BenchmarkBase {
 
   @override
   void exercise() {
-    for (int i = 0; i < 100000; i++) {
+    for (var i = 0; i < 100000; i++) {
       run();
     }
   }
