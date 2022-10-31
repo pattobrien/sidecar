@@ -1,12 +1,17 @@
 // ignore_for_file: implementation_imports, overridden_fields
 
+import 'dart:convert';
+
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/memory_file_system.dart';
 import 'package:analyzer/src/test_utilities/mock_sdk.dart';
 import 'package:analyzer/src/test_utilities/resource_provider_mixin.dart';
+import 'package:analyzer/src/util/file_paths.dart' as file_paths;
+import 'package:package_config/package_config.dart';
 
 import '../../configurations/configurations.dart';
 import 'analysis_options.dart';
+import 'package_config_extensions.dart';
 import 'sidecar_yaml.dart';
 
 class ProjectCreator with ResourceProviderMixin {
@@ -26,8 +31,6 @@ class ProjectCreator with ResourceProviderMixin {
   final String projectName;
 
   final bool isSidecarEnabled;
-  // final List<LintPackageConfiguration> lintPackages;
-  // final List<AssistPackageConfiguration> assistPackages;
   final ProjectConfiguration? sidecarProjectConfiguration;
 
   String get directoryPath => join(parentDirectoryPath, projectName);
@@ -39,8 +42,7 @@ class ProjectCreator with ResourceProviderMixin {
     );
     newAnalysisOptionsYamlFile(directoryPath, analysisOptionsContents);
     if (sidecarProjectConfiguration != null) {
-      final sidecarYamlContents =
-          createSidecarYamlContents(sidecarProjectConfiguration!);
+      final sidecarYamlContents = sidecarProjectConfiguration!.toYamlContent();
       newSidecarOptionsFile(directoryPath, sidecarYamlContents);
     }
     _createMainFile();
@@ -53,6 +55,24 @@ class ProjectCreator with ResourceProviderMixin {
 
   void _createMainFile() {
     newFile(join('lib', 'main.dart'), mainContent);
+  }
+
+  void addPackages(List<Package> packages) {
+    final packageConfigPath = join(
+        directoryPath, file_paths.dotDartTool, file_paths.packageConfigJson);
+    final packageConfigFile = getFile(packageConfigPath);
+    if (!packageConfigFile.exists) {
+      final json = PackageConfig.toJson(PackageConfig.empty);
+      newFile(
+        packageConfigPath,
+        jsonEncode(json),
+      );
+    }
+    final packageConfig = PackageConfig.parseString(
+        packageConfigFile.readAsStringSync(), packageConfigFile.toUri());
+    final newPackageConfig = packageConfig.addPackages([]);
+    final json = PackageConfig.toJson(newPackageConfig);
+    newPackageConfigJsonFile(directoryPath, json.toString());
   }
 
   @override
