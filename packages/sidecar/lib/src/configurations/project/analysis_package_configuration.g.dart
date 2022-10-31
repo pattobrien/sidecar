@@ -12,7 +12,7 @@ LintPackageConfiguration _$LintPackageConfigurationFromJson(Map json) =>
         (k, e) => MapEntry(k as String,
             e == null ? null : LintConfiguration.fromJson(e as Object)),
       ),
-      includes: globsFromString(json['includes'] as List<String>?),
+      includes: globsFromStrings(json['includes'] as List<String>?),
     );
 
 Map<String, dynamic> _$LintPackageConfigurationToJson(
@@ -27,7 +27,7 @@ Map<String, dynamic> _$LintPackageConfigurationToJson(
 
   writeNotNull(
       'lints', instance.lints?.map((k, e) => MapEntry(k, e?.toJson())));
-  writeNotNull('includes', globsToString(instance.includes));
+  writeNotNull('includes', globsToStrings(instance.includes));
   return val;
 }
 
@@ -37,7 +37,7 @@ AssistPackageConfiguration _$AssistPackageConfigurationFromJson(Map json) =>
         (k, e) => MapEntry(k as String,
             e == null ? null : AssistConfiguration.fromJson(e as Object)),
       ),
-      includes: globsFromString(json['includes'] as List<String>?),
+      includes: globsFromStrings(json['includes'] as List<String>?),
     );
 
 Map<String, dynamic> _$AssistPackageConfigurationToJson(
@@ -52,6 +52,6 @@ Map<String, dynamic> _$AssistPackageConfigurationToJson(
 
   writeNotNull(
       'assists', instance.assists?.map((k, e) => MapEntry(k, e?.toJson())));
-  writeNotNull('includes', globsToString(instance.includes));
+  writeNotNull('includes', globsToStrings(instance.includes));
   return val;
 }

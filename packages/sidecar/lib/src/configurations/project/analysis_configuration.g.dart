@@ -8,7 +8,7 @@ part of 'analysis_configuration.dart';
 
 LintConfiguration _$LintConfigurationFromJson(Map json) => LintConfiguration(
       severity: $enumDecodeNullable(_$LintSeverityEnumMap, json['severity']),
-      includes: globsFromString(json['includes'] as List<String>?),
+      includes: globsFromStrings(json['includes'] as List<String>?),
       configuration: json['configuration'] as Map?,
       enabled: json['enabled'] as bool?,
     );
@@ -25,7 +25,7 @@ Map<String, dynamic> _$LintConfigurationToJson(LintConfiguration instance) {
   writeNotNull('severity', _$LintSeverityEnumMap[instance.severity]);
   writeNotNull('configuration', instance.configuration);
   writeNotNull('enabled', instance.enabled);
-  writeNotNull('includes', globsToString(instance.includes));
+  writeNotNull('includes', globsToStrings(instance.includes));
   return val;
 }
 
@@ -37,7 +37,7 @@ const _$LintSeverityEnumMap = {
 
 AssistConfiguration _$AssistConfigurationFromJson(Map json) =>
     AssistConfiguration(
-      includes: globsFromString(json['includes'] as List<String>?),
+      includes: globsFromStrings(json['includes'] as List<String>?),
       configuration: json['configuration'] as Map?,
       enabled: json['enabled'] as bool?,
     );
@@ -53,6 +53,6 @@ Map<String, dynamic> _$AssistConfigurationToJson(AssistConfiguration instance) {
 
   writeNotNull('configuration', instance.configuration);
   writeNotNull('enabled', instance.enabled);
-  writeNotNull('includes', globsToString(instance.includes));
+  writeNotNull('includes', globsToStrings(instance.includes));
   return val;
 }
