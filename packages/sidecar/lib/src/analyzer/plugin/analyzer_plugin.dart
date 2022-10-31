@@ -146,10 +146,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       );
 
       _contextCollection = contextCollection;
-
-      await afterNewContextCollection(
-        contextCollection: contextCollection!,
-      );
+      await afterNewContextCollection(contextCollection: contextCollection!);
       return plugin.AnalysisSetContextRootsResult();
     } else {
       return super.handleAnalysisSetContextRoots(parameters);
@@ -161,25 +158,17 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     _contextCollection = contextCollection;
-    try {
-      logger.finer('ISOLATE: afterNewContextCollection');
+    logger.finer('ISOLATE: afterNewContextCollection');
 
-      ref
-          .read(allAnalysisContextsProvider.state)
-          .update((_) => contextCollection.contexts);
+    ref
+        .read(allAnalysisContextsProvider.state)
+        .update((_) => contextCollection.contexts);
 
-      await super
-          .afterNewContextCollection(contextCollection: contextCollection);
-      if (mode.isCli) {
-        initializationCompleter.complete();
-      }
-    } catch (e, stackTrace) {
-      logger.finer('afterNewContextCollection err -- $e', stackTrace);
-      rethrow;
-    }
+    await super.afterNewContextCollection(contextCollection: contextCollection);
+    if (mode.isCli) initializationCompleter.complete();
   }
 
-  // overriden from analyzer_plugin to allow for non-Dart files to be analyzed for changes
+  // Overridden to allow for non-Dart files to be analyzed for changes
   @override
   Future<void> contentChanged(List<String> paths) async {
     final contextCollection = _contextCollection;

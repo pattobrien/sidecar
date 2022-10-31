@@ -8,7 +8,6 @@ class PluginObserver extends ProviderObserver {
 
   final CliOptions options;
   final PluginCommunicationChannel channel;
-  LogDelegateBase get logger => PluginChannelDelegate(options, channel);
 
   String get header => '[HEADER]'; // _isMiddleman ? 'MIDDLEMAN:' : 'ISOLATE:';
 
@@ -18,8 +17,7 @@ class PluginObserver extends ProviderObserver {
     Object? value,
     ProviderContainer container,
   ) {
-    logger.sidecarVerboseMessage(
-        '$header didAddProvider     ${provider.name} ${value.toString()}');
+    logger.info('$header didAddProvider     ${provider.name} $value');
   }
 
   /// A provider emitted an error, be it by throwing during initialization
@@ -31,8 +29,8 @@ class PluginObserver extends ProviderObserver {
     StackTrace stackTrace,
     ProviderContainer container,
   ) {
-    logger.sidecarVerboseMessage(
-        '$header providerDidFail    ${provider.name} ${error.toString()} ${stackTrace.toString()}');
+    logger.severe(
+        '$header providerDidFail    ${provider.name}', error, stackTrace);
   }
 
   /// Called my providers when they emit a notification.
@@ -46,8 +44,8 @@ class PluginObserver extends ProviderObserver {
     Object? newValue,
     ProviderContainer container,
   ) {
-    logger.sidecarVerboseMessage(
-        '$header didUpdateProvider ${provider.name} ${previousValue.toString()} || ${newValue.toString()}');
+    logger.info(
+        '$header didUpdateProvider ${provider.name} $previousValue || $newValue');
   }
 
   /// A provider was disposed
@@ -56,6 +54,6 @@ class PluginObserver extends ProviderObserver {
     ProviderBase provider,
     ProviderContainer container,
   ) {
-    logger.sidecarVerboseMessage('$header didDisposeProvider ${provider.name}');
+    logger.info('$header didDisposeProvider ${provider.name}');
   }
 }

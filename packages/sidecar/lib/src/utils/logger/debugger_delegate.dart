@@ -19,9 +19,8 @@ class DebuggerLogDelegate implements LogDelegateBase {
   final StringBuffer buffer;
 
   @override
-  void analysisResultError(
-      AnalysisResult result, Object err, StackTrace stackTrace) {
-    stderr.writeln('analysisResultError: $err \n$stackTrace');
+  void analysisResultError(LintResult result, Object err, StackTrace stack) {
+    stderr.writeln('analysisResultError: $err \n$stack');
   }
 
   @override

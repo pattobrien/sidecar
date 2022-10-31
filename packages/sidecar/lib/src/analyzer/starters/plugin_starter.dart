@@ -25,10 +25,10 @@ Future<void> startSidecarPlugin(
   final cliOptions =
       CliOptions.fromArgs(args, isPlugin: true, isMiddleman: isMiddleman);
 
-  final LogDelegateBase logger = PluginChannelDelegate(cliOptions, channel);
+  final LogDelegateBase delegate = PluginChannelDelegate(cliOptions, channel);
   final zoneSpec = ZoneSpecification(
     print: (self, parent, zone, line) {
-      logger.sidecarMessage(line);
+      delegate.sidecarMessage(line);
     },
   );
   await runZonedGuarded<Future<void>>(
@@ -38,13 +38,13 @@ Future<void> startSidecarPlugin(
           masterPluginChannelProvider.overrideWithValue(channel),
           ruleConstructorProvider.overrideWithValue(constructors ?? []),
           cliOptionsProvider.overrideWithValue(cliOptions),
-          logDelegateProvider.overrideWithValue(logger),
+          logDelegateProvider.overrideWithValue(delegate),
         ],
         observers: [PluginObserver(cliOptions, channel)],
       );
 
       try {
-        logger.sidecarVerboseMessage('sidecar - plugin initialization....');
+        delegate.sidecarVerboseMessage('sidecar - plugin initialization....');
         if (isMiddleman) {
           final middlemanPlugin = container.read(middlemanPluginProvider);
           middlemanPlugin.start(channel);
@@ -53,10 +53,10 @@ Future<void> startSidecarPlugin(
           plugin.start(channel);
         }
       } catch (error, stackTrace) {
-        logger.sidecarError(error, stackTrace);
+        delegate.sidecarError(error, stackTrace);
       }
     },
-    logger.sidecarError,
+    delegate.sidecarError,
     zoneSpecification: zoneSpec,
   );
 }

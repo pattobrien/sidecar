@@ -1,5 +1,4 @@
 import 'package:analyzer_plugin/channel/channel.dart';
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
 import '../../analyzer/results/analysis_result.dart';
@@ -14,10 +13,8 @@ class PluginChannelDelegate implements LogDelegateBase {
   final PluginCommunicationChannel channel;
 
   @override
-  void analysisResultError(
-      LintResult result, Object err, StackTrace stackTrace) {
-    channel.sendError(
-        'analysisResultError: ${result.rule.code} $err', stackTrace);
+  void analysisResultError(LintResult result, Object err, StackTrace stack) {
+    channel.sendError('analysisResultEr: ${result.rule.code} $err', stack);
   }
 
   @override
@@ -48,12 +45,8 @@ class PluginChannelDelegate implements LogDelegateBase {
 
   @override
   void analysisResults(String path, List<LintResult> results) {
-    final errors = results
-        .map((result) => result.toAnalysisError())
-        .whereType<plugin.AnalysisError>()
-        .toList();
-    channel.sendError(
-        'analysisResults delegate: $path - ${results.length} ERRORS');
+    final errors = results.map((r) => r.toAnalysisError()).toList();
+    channel.sendError('analysisResults: $path - ${results.length} ERRORS');
     final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
     channel.sendNotification(notif);
   }
