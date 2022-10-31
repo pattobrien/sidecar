@@ -3,7 +3,6 @@ import 'package:riverpod/riverpod.dart';
 import '../../../services/services.dart';
 import '../../../utils/logger/logger.dart';
 import '../../context/context.dart';
-import '../log_delegate.dart';
 import '../server.dart';
 
 /// All contexts properly enabled for Sidecar

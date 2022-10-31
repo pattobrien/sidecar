@@ -33,12 +33,12 @@ abstract class TypeChecker {
   /// ```
   const factory TypeChecker.any(Iterable<TypeChecker> checkers) = _AnyChecker;
 
-  /// Create a new [TypeChecker] backed by a runtime [type].
+  // /// Create a new [TypeChecker] backed by a runtime [type].
   ///
   /// This implementation uses `dart:mirrors` (runtime reflection).
   // const factory TypeChecker.fromRuntime(Type type) = _MirrorTypeChecker;
 
-  /// Create a new [TypeChecker] backed by a static [type].
+  // /// Create a new [TypeChecker] backed by a static [type].
   // const factory TypeChecker.fromStatic(DartType type) = _LibraryTypeChecker;
 
   /// Create a new [TypeChecker]

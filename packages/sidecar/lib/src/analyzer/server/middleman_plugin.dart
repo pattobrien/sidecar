@@ -18,7 +18,6 @@ import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
 import 'analysis_context_providers.dart';
 import 'isolates/isolates.dart';
-import 'log_delegate.dart';
 import 'middleman_resource_provider.dart';
 import 'plugin_channel_provider.dart';
 

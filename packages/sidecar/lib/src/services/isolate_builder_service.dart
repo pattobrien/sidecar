@@ -13,6 +13,7 @@ import '../analyzer/context/context.dart';
 import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/protocol.dart';
+import '../utils/file_paths.dart';
 import '../utils/logger/logger.dart';
 
 class IsolateBuilderService {
@@ -126,17 +127,17 @@ class IsolateBuilderService {
     File(bootstrapperPath).writeAsStringSync(fullContents.toString());
   }
 
-  Uri _packagesUri(ContextRoot projectRoot) => Uri.file(
-      p.join(projectRoot.root.path, '.dart_tool', 'package_config.json'),
-      windows: Platform.isWindows);
+  Uri _packagesUri(ContextRoot projectRoot) =>
+      Uri.file(p.join(projectRoot.root.path, kDartTool, kPackageConfigJson),
+          windows: Platform.isWindows);
 
   Uri _executableUri(ContextRoot projectRoot) => Uri.file(
-      p.join(projectRoot.root.path, '.dart_tool', kSidecarPluginName,
-          'sidecar.dart'),
+      p.join(
+          projectRoot.root.path, kDartTool, kSidecarPluginName, kSidecarYaml),
       windows: Platform.isWindows);
 
   Uri _packageToolDirectory(ContextRoot projectRoot) => Uri.directory(
-      p.join(projectRoot.root.path, '.dart_tool', kSidecarPluginName),
+      p.join(projectRoot.root.path, kDartTool, kSidecarPluginName),
       windows: Platform.isWindows);
 }
 

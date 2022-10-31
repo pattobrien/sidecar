@@ -9,6 +9,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:meta/meta.dart';
 
 import 'package:source_span/source_span.dart';
 
@@ -39,13 +40,29 @@ abstract class TypeChecker {
   // const factory TypeChecker.fromRuntime(Type type) = _MirrorTypeChecker;
 
   /// Create a new [TypeChecker] backed by a static [type].
-  // const factory TypeChecker.fromStatic(DartType type) = _LibraryTypeChecker;
+  const factory TypeChecker.fromStatic(DartType type) = _LibraryTypeChecker;
 
   /// Create a new [TypeChecker]
   const factory TypeChecker.fromName(
     String name, {
     required String packageName,
   }) = _NamedChecker;
+
+  /// Create a new [TypeChecker] backed by a library [url].
+  ///
+  /// Example of referring to a `LinkedHashMap` from `dart:collection`:
+  /// ```dart
+  /// const linkedHashMap = const TypeChecker.fromUrl(
+  ///   'dart:collection#LinkedHashMap',
+  /// );
+  /// ```
+  ///
+  /// **NOTE**: This is considered a more _brittle_ way of determining the type
+  /// because it relies on knowing the _absolute_ path (i.e. after resolved
+  /// `export` directives). You should ideally only use `fromUrl` when you know
+  /// the full path (likely you own/control the package) or it is in a stable
+  /// package like in the `dart:` SDK.
+  const factory TypeChecker.fromUrl(dynamic url) = _UriTypeChecker;
 
   /// Check if an element is declared within a specified package.
   ///
@@ -136,22 +153,6 @@ abstract class TypeChecker {
   //   final uri = Uri(scheme: isFromFile ? 'file' : 'package', path: sourcePath);
   //   return element.name == type && element.source?.uri == uri;
   // }
-
-  /// Create a new [TypeChecker] backed by a library [url].
-  ///
-  /// Example of referring to a `LinkedHashMap` from `dart:collection`:
-  /// ```dart
-  /// const linkedHashMap = const TypeChecker.fromUrl(
-  ///   'dart:collection#LinkedHashMap',
-  /// );
-  /// ```
-  ///
-  /// **NOTE**: This is considered a more _brittle_ way of determining the type
-  /// because it relies on knowing the _absolute_ path (i.e. after resolved
-  /// `export` directives). You should ideally only use `fromUrl` when you know
-  /// the full path (likely you own/control the package) or it is in a stable
-  /// package like in the `dart:` SDK.
-  const factory TypeChecker.fromUrl(dynamic url) = _UriTypeChecker;
 
   /// Returns the first constant annotating [element] assignable to this type.
   ///
@@ -301,10 +302,11 @@ abstract class TypeChecker {
 }
 
 // Checks a static type against another static type;
+@immutable
 class _LibraryTypeChecker extends TypeChecker {
-  final DartType _type;
-
   const _LibraryTypeChecker(this._type) : super._();
+
+  final DartType _type;
 
   @override
   bool isExactly(Element? element) =>
@@ -314,6 +316,7 @@ class _LibraryTypeChecker extends TypeChecker {
   String toString() => urlOfElement(_type.element!);
 }
 
+@immutable
 class _NamedChecker extends TypeChecker {
   const _NamedChecker(this._name, {required this.packageName}) : super._();
 
@@ -369,16 +372,17 @@ class _NamedChecker extends TypeChecker {
 //   String toString() => _computed.toString();
 // }
 
-// Checks a runtime type against an Uri and Symbol.
+/// Checks a runtime type against an Uri and Symbol.
+@immutable
 class _UriTypeChecker extends TypeChecker {
+  const _UriTypeChecker(dynamic url)
+      : _url = '$url',
+        super._();
+
   final String _url;
 
   // Precomputed cache of String --> Uri.
   static final _cache = Expando<Uri>();
-
-  const _UriTypeChecker(dynamic url)
-      : _url = '$url',
-        super._();
 
   @override
   bool operator ==(Object o) => o is _UriTypeChecker && o._url == _url;
@@ -402,10 +406,11 @@ class _UriTypeChecker extends TypeChecker {
   String toString() => '$uri';
 }
 
+@immutable
 class _AnyChecker extends TypeChecker {
-  final Iterable<TypeChecker> _checkers;
-
   const _AnyChecker(this._checkers) : super._();
+
+  final Iterable<TypeChecker> _checkers;
 
   @override
   bool isExactly(Element? element) =>
@@ -419,6 +424,21 @@ class _AnyChecker extends TypeChecker {
 /// something was misspelled, an import is missing, or a dependency was not
 /// defined (for build systems such as Bazel).
 class UnresolvedAnnotationException implements Exception {
+  /// Creates an exception from an annotation ([annotationIndex]) that was not
+  /// resolvable while traversing [Element.metadata] on [annotatedElement].
+  factory UnresolvedAnnotationException._from(
+    Element annotatedElement,
+    int annotationIndex,
+  ) {
+    final sourceSpan = _findSpan(annotatedElement, annotationIndex);
+    return UnresolvedAnnotationException._(annotatedElement, sourceSpan);
+  }
+
+  const UnresolvedAnnotationException._(
+    this.annotatedElement,
+    this.annotationSource,
+  );
+
   /// Element that was annotated with something we could not resolve.
   final Element annotatedElement;
 
@@ -459,7 +479,7 @@ class UnresolvedAnnotationException implements Exception {
         SourceLocation(end, sourceUrl: parsedUnit.uri),
         parsedUnit.content.substring(start, end),
       );
-    } catch (e, stack) {
+    } catch (e) {
       // Trying to get more information on https://github.com/dart-lang/sdk/issues/45127
 //       log.warning(
 //         '''
@@ -475,21 +495,6 @@ class UnresolvedAnnotationException implements Exception {
       return null;
     }
   }
-
-  /// Creates an exception from an annotation ([annotationIndex]) that was not
-  /// resolvable while traversing [Element.metadata] on [annotatedElement].
-  factory UnresolvedAnnotationException._from(
-    Element annotatedElement,
-    int annotationIndex,
-  ) {
-    final sourceSpan = _findSpan(annotatedElement, annotationIndex);
-    return UnresolvedAnnotationException._(annotatedElement, sourceSpan);
-  }
-
-  const UnresolvedAnnotationException._(
-    this.annotatedElement,
-    this.annotationSource,
-  );
 
   @override
   String toString() {

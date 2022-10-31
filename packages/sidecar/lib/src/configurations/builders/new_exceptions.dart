@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:source_span/source_span.dart';
 
 import '../../analyzer/results/analysis_result.dart';
-import '../../rules/analysis_source.dart';
 import '../../rules/rules.dart';
 import '../../utils/json_utils/source_span_utils.dart';
 
@@ -73,12 +72,8 @@ class SidecarNewException with _$SidecarNewException {
 }
 
 class SidecarLintRule extends LintRule {
-  SidecarLintRule({
-    required this.field,
-    // required this.package,
-  });
+  SidecarLintRule({required this.field});
   final String field;
-  // final String package;
 
   @override
   String get code => field;

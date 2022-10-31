@@ -823,13 +823,13 @@ class LintVisitor extends AstVisitor<void> {
 
   void _runSubscriptions<T extends AstNode>(
       T node, List<VisitorSubscription<T>> subscriptions) {
-    for (int i = 0; i < subscriptions.length; i++) {
-      var subscription = subscriptions[i];
-      var timer = subscription.timer;
+    for (var i = 0; i < subscriptions.length; i++) {
+      final subscription = subscriptions[i];
+      final timer = subscription.timer;
       timer?.start();
       try {
         node.accept<dynamic>(subscription.visitor);
-      } catch (exception, stackTrace) {
+      } catch (exception) {
         // if (!exceptionHandler(
         //     node, subscription.linter, exception, stackTrace)) {
         rethrow;

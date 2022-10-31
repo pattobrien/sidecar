@@ -4,7 +4,7 @@
 # Sidecar Analyzer
 *Enable a more personalized experience within your IDE.*
 
-<img src="/docs/ide_screenshot.png" alt="ide lint" width="600"/>
+<img src="docs/ide_screenshot.png" alt="sidecar lint in IDE" width="600"/>
 
 <a href="https://github.com/pattobrien/sidecar/actions"><img src="https://github.com/pattobrien/sidecar/workflows/Build/badge.svg" alt="Build Status"></a>
 <a href="https://codecov.io/gh/pattobrien/sidecar"><img src="https://codecov.io/gh/pattobrien/sidecar/branch/master/graph/badge.svg" alt="codecov"></a>
@@ -24,7 +24,9 @@
 
 # Getting Started
 
-Some things are easier with the CLI tool. To install, simply run:
+## Installing the CLI tool
+
+Some Sidecar tasks are easier with the CLI tool. To install, simply run:
 
 ```sh
 dart pub global activate sidecar
@@ -46,7 +48,7 @@ dev_dependencies:
   design_system_lints: ^0.1.0-dev.1
 ```
 
-2. Create a ```sidecar.yaml``` file at the project's root directory and declare any or all lints from the lint package.
+2. Create a ```sidecar.yaml``` file at the project's root directory and declare any or all lints from the lint package (or use ```sidecar init``` to generate from a template)
 
 ```yaml
 # sidecar.yaml
@@ -87,7 +89,7 @@ sidecar analyze
 
 - TODO: elicit feedback for cli use cases
 
-### Debug Mode
+### Debug Mode (Work in Progress)
 
 Debug Mode comes equipped with IDE debugger integration and hot reload, which is helpful for when you're developing your own lints. Currently, this functionality is a work-in-progress.
 
@@ -111,6 +113,7 @@ sidecar analyze --debug
 - define a default severity for a lint
 - documentation URLs in lint IDE window
 - SidecarAstVisitor for simpler lint reporting (AstNodes and Tokens)
+- TODO: ignore statements
 
 ### rules with code changes
 
@@ -123,12 +126,7 @@ sidecar analyze --debug
 - define package or lint-specific includes paths
 - explicitly enable or disable a lint
 - override a rule's default severity
-- lints update on ```sidecar.yaml``` changes, without plugin needing to restart (within milliseconds)
-
-### rule configurations
-- TODO: allow rules to declare configurations
-- TODO: display rule configuration errors in ```sidecar.yaml``` file
-
+- lints update on ```sidecar.yaml``` changes, without plugin needing to restart
 
 ### cli
 
@@ -136,15 +134,20 @@ sidecar analyze --debug
 - TODO: output to different formats (e.g. csv)
 - TODO: capture project metrics
 
+### rule configurations
+- TODO: allow rules to declare configurations
+- TODO: display rule configuration errors in ```sidecar.yaml``` file
+- TODO: rule annotations
+
+
 ### benchmarks and testing
 
-- TODO: fix memory leaks
+- DONE: fix memory leaks
 - TODO: Register visitors for better analysis performance
 - TODO: lint unit test toolchain
 - TODO: how can we benchmark against Dart official analysis server?
 - TODO: cli takes ~12 seconds to complete
 
-### extras
-- TODO: ignore statements
+### extra features
 - TODO: import inheritance
 - TODO: multi-import inheritence

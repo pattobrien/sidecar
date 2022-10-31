@@ -10,7 +10,6 @@ import 'package:uuid/uuid.dart';
 import '../../../protocol/protocol.dart';
 import '../../../utils/logger/logger.dart';
 import '../../context/context.dart';
-import '../log_delegate.dart';
 import '../server.dart';
 import 'isolate_message.dart';
 import 'multi_isolate_message.dart';
@@ -68,7 +67,6 @@ class IsolateCommunicationService {
   void handleServerRequest(
     Request request,
   ) {
-    // final isIntialized = ref.read(middlemanPluginIsInitializedProvider);
     final isIntialized =
         isIsolateInitialized.entries.every((entry) => entry.value == true);
     if (isIntialized) {
@@ -92,10 +90,9 @@ class IsolateCommunicationService {
     ActiveContextRoot root,
     Response response,
   ) {
-    logger.finer(
-        'ISOLATE RESPONSE || ${root.root.shortName} || ${response.toJson()} ');
+    logger
+        .finer('ISOLATE RESPONSE ${root.root.shortName} ${response.toJson()} ');
     final isoResponse = IsolateResponse(response: response, root: root);
-
     final cachedMessage = state[response.id];
 
     assert(
@@ -361,8 +358,8 @@ class IsolateCommunicationService {
           channel.sendResponse(response);
           break;
         case COMPLETION_REQUEST_GET_SUGGESTIONS:
-          final results = responses.map(
-              (e) => CompletionGetSuggestionsResult.fromResponse(e.response));
+          // final results = responses.map(
+          //     (e) => CompletionGetSuggestionsResult.fromResponse(e.response));
           //     .toResponse(id, requestTime);
           // TODO complete this request
           // final response =

@@ -14,6 +14,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:yaml/yaml.dart';
 
 import '../protocol/sidecar_type.dart';
+import '../utils/utils.dart';
 
 final packageGeneratorProvider = Provider((ref) => const PackageGenerator());
 
@@ -28,14 +29,14 @@ class PackageGenerator {
   }
 
   Future<Package> getPackage(String rootPath) async {
-    final uri = p.join(rootPath, 'pubspec.yaml');
+    final uri = p.join(rootPath, kPubspecYaml);
     final pubspecFile = File(uri);
     final pubspecContents = await pubspecFile.readAsString();
     final yaml = loadYaml(pubspecContents) as YamlMap;
     final packageName = yaml['sidecar_package'] as String;
 
     final packageConfigFile =
-        File(p.join(rootPath, '.dart_tool', 'package_config.json'));
+        File(p.join(rootPath, kDartTool, kPackageConfigJson));
     final packageConfigContents = await packageConfigFile.readAsString();
     final packageConfig =
         PackageConfig.parseString(packageConfigContents, packageConfigFile.uri);
@@ -58,7 +59,7 @@ class PackageGenerator {
       resourceProvider: PhysicalResourceProvider.INSTANCE,
     );
 
-    final pubspecFile = File(p.join(package.root.path, 'pubspec.yaml'));
+    final pubspecFile = File(p.join(package.root.path, kPubspecYaml));
     final pubspecContents = await pubspecFile.readAsString();
     final rootPackage =
         Pubspec.parse(pubspecContents, sourceUrl: pubspecFile.uri);

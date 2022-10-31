@@ -3,7 +3,6 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:meta/meta.dart';
-import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/results/results.dart';
 import '../utils/utils.dart';

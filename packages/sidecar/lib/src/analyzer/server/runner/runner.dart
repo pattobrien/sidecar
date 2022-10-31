@@ -1,7 +1,6 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
@@ -64,24 +63,24 @@ class SidecarRunner {
       .where((event) => event.containsKey(plugin.Notification.EVENT))
       .map(plugin.Notification.fromJson);
 
-  late final Stream<plugin.AnalysisErrorsParams> _lints = _notificationStream(
-      'analysis.errors', plugin.AnalysisErrorsParams.fromNotification);
+  // late final Stream<plugin.AnalysisErrorsParams> _lints = _notificationStream(
+  //     'analysis.errors', plugin.AnalysisErrorsParams.fromNotification);
 
   late final Stream<Map> _reloader = _notifications
       .where((e) => e.event == kSidecarHotReloadMethod)
       .map((e) => <dynamic, dynamic>{});
 
-  Stream<T> _notificationStream<T>(
-      String event, T Function(plugin.Notification notification) mapper) {
-    return _notifications.where((e) => e.event == event).map((e) => mapper(e));
-  }
+  // Stream<T> _notificationStream<T>(
+  //     String event, T Function(plugin.Notification notification) mapper) {
+  //   return _notifications.where((e) => e.event == event).map((e) => mapper(e));
+  // }
 
   // /// The [Notification]s emitted by the plugin
   // late final Stream<plugin.PrintNotification> messages = notifications
   //     .where((e) => e.event == PrintNotification.key)
   //     .map(plugin.PrintNotification.fromNotification);
 
-  /// The [Response]s emitted by the plugin
+  /// The [plugin.Response]s emitted by the plugin
   late final Stream<plugin.Response> _responses = _receivePortStream
       .where((event) => event is Map<String, Object?>)
       .map((event) => event! as Map<String, Object?>)
@@ -123,7 +122,7 @@ class SidecarRunner {
   //   }),
   // ]);
 
-  /// Errors for [Request]s that failed.
+  /// Errors for [plugin.Request]s that failed.
   late final Stream<plugin.RequestError> responseErrors =
       _responses.where((e) => e.error != null).map((e) => e.error!);
 
@@ -167,7 +166,7 @@ class SidecarRunner {
 
   void sendRequest(plugin.Request request) {
     final jsonData = request.toJson();
-    final encodedRequest = json.encode(jsonData);
+    // final encodedRequest = json.encode(jsonData);
     // delegate.sidecarVerboseMessage('>> $kSidecarPluginName $encodedRequest');
     _sendPort.send(jsonData);
   }
@@ -207,7 +206,7 @@ class SidecarRunner {
   //   }
   // }
 
-  /// Stop the command runner, sending a [PluginShutdownParams] request in the process.
+  /// Stop the command runner, sending a [plugin.PluginShutdownParams] request in the process.
   Future<void> close() async {
     if (_closed) return;
     _closed = true;

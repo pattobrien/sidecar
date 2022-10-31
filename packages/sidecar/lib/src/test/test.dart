@@ -30,7 +30,7 @@ List<AstNode> testSidecarVisitor(
 ) {
   final ast = parseString(content: content);
   ast.unit.accept<void>(visitor);
-  print(ast.unit.lineInfo.lineCount);
+  // print(ast.unit.lineInfo.lineCount);
 
   // var verifiedResults = <AnalysisResult>[];
   // for (var result in visitor.results) {

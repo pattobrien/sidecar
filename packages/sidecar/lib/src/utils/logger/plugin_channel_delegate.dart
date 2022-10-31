@@ -1,11 +1,8 @@
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:riverpod/riverpod.dart';
 
-import '../../analyzer/options_provider.dart';
 import '../../analyzer/results/analysis_result.dart';
-import '../../analyzer/server/server.dart';
 import '../../cli/options/cli_options.dart';
 import '../../cli/reports/file_stats.dart';
 import '../../utils/utils.dart';
@@ -14,7 +11,6 @@ import 'log_delegate_base.dart';
 class PluginChannelDelegate implements LogDelegateBase {
   PluginChannelDelegate(this.options, this.channel);
 
-  // final bool isVerboseEnabled;
   final CliOptions options;
   final PluginCommunicationChannel channel;
 
