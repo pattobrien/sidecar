@@ -324,7 +324,8 @@ class _$LintResult extends LintResult {
   }
 }
 
-abstract class LintResult extends AnalysisResult {
+abstract class LintResult extends AnalysisResult
+    implements Comparable<LintResult> {
   const factory LintResult(
       {required final LintRule rule,
       required final AnalysisSourceSpan span,
@@ -521,7 +522,8 @@ class _$AssistResult extends AssistResult {
   }
 }
 
-abstract class AssistResult extends AnalysisResult {
+abstract class AssistResult extends AnalysisResult
+    implements Comparable<AssistResult> {
   const factory AssistResult(
       {required final AssistRule rule,
       required final AnalysisSourceSpan span,

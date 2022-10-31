@@ -3,10 +3,8 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../services/services.dart';
-import '../../utils/logger/logger.dart';
 import '../context/context.dart';
 import '../plugin/plugin.dart';
-import '../server/log_delegate.dart';
 import 'analysis_result.dart';
 import 'analysis_results_provider.dart';
 
@@ -20,19 +18,10 @@ final quickFixForRequestProvider =
 
     final analysisResultsForOffset = lintResults.where(
         (element) => element.isWithinOffset(request.file.path, request.offset));
-    logger.finer('RESULTS FOR OFFSET: ${analysisResultsForOffset.length}');
-    // return [];
     return Future.wait(analysisResultsForOffset.map((e) async {
-      final lintResultsWithEdits =
-          await fileService.calculateEditResultsForAnalysisResult(context, e);
-      logger.finer(
-          'RESULTS FOR OFFSET - EDITS: ${lintResultsWithEdits.edits.length}');
-      return AnalysisErrorFixes(e.toAnalysisError(),
-          fixes: lintResultsWithEdits.edits.map((edit) {
-            logger.finer(
-                'RESULTS FOR OFFSET - SOURCE EDITS: ${edit.sourceChanges.length}');
-            return edit.toPrioritizedSourceChange();
-          }).toList());
+      final resultWithEdits =
+          await fileService.computeEditResultsForAnalysisResult(context, e);
+      return resultWithEdits.toAnalysisErrorFixes();
     }));
   },
   name: 'quickFixForRequestProvider',
@@ -47,7 +36,6 @@ final quickFixForRequestProvider =
 final analysisQuickFixResultsProvider =
     FutureProvider.family<List<LintResult>, ActiveContextRoot>(
   (ref, root) async {
-    // final file = ref.watch(analyzedFileFromPath(request.file.path));
     final fileService = ref.watch(fileAnalyzerServiceProvider);
 
     // wait for all analysis results to be computed before calculating quick fixes
@@ -56,11 +44,10 @@ final analysisQuickFixResultsProvider =
 
     final context = ref.watch(activeContextForRootProvider(root));
     final resultsWithEdits = await Future.wait(results.map((e) async {
-      return fileService.calculateEditResultsForAnalysisResult(context, e);
+      return fileService.computeEditResultsForAnalysisResult(context, e);
     }));
 
     return resultsWithEdits;
-    // return [];
   },
   name: 'analysisQuickFixResultsProvider',
   dependencies: [

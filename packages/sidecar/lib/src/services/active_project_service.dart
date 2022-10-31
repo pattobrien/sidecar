@@ -82,7 +82,7 @@ class ActiveProjectService {
           analysisContext,
           sidecarOptions: projectConfig ?? mainContext.sidecarOptions,
           sidecarPluginPackage: pluginUri ?? mainContext.sidecarPluginPackage,
-          //TODO: do we need to inherit packages of main root?
+          //TODO: do we need to inherit packages of main root below?
           sidecarPackages: packages,
           isMainRoot: false,
         );
@@ -143,7 +143,7 @@ class ActiveProjectService {
     try {
       final contents = _getSidecarFile(contextRoot);
       if (contents == null) return null;
-      return ProjectConfiguration.parseFromSidecarYaml(
+      return ProjectConfiguration.fromYaml(
         contents,
         sourceUrl: Uri.parse(contextRoot.root.canonicalizePath(kSidecarYaml)),
       );

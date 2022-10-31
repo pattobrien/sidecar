@@ -24,9 +24,7 @@ class CreateNewPageWidget extends AssistRule with AssistVisitor {
   Future<List<EditResult>> computeSourceChanges(
     AnalysisSource source,
   ) async {
-    final session = context.currentSession;
-    final unit =
-        await session.getResolvedUnit(source.path) as ResolvedUnitResult;
+    final unit = await getResolvedUnitResult(source.path);
     final changeBuilder = AutoRouteChangeBuilder(session: session);
 
     // final node =

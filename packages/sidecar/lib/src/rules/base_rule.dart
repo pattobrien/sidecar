@@ -1,3 +1,5 @@
+import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/dart/analysis/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:glob/glob.dart';
@@ -30,6 +32,17 @@ abstract class BaseRule {
 
   ActiveContext get context =>
       _ref.read(activeContextForRootProvider(_activeRoot));
+
+  AnalysisSession get session => context.currentSession;
+
+  Future<ResolvedUnitResult> getResolvedUnitResult(String path) async {
+    final analysisSession = session;
+    final unitResult = await analysisSession.getResolvedUnit(path);
+    if (unitResult is ResolvedUnitResult) {
+      return unitResult;
+    }
+    throw StateError('Failed to analyze $path');
+  }
 
   @internal
   void initialize({

@@ -31,7 +31,7 @@ class ProjectConfiguration {
     this.errors = const <SidecarNewException>[],
   }) : _includes = includes;
 
-  factory ProjectConfiguration.parseFromSidecarYaml(
+  factory ProjectConfiguration.fromYaml(
     String contents, {
     Uri? sourceUrl,
   }) {

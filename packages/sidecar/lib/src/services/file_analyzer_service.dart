@@ -7,13 +7,6 @@ import '../configurations/configurations.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
-import '../utils/utils.dart';
-
-final fileAnalyzerServiceProvider = Provider(
-  (ref) => const FileAnalyzerService(),
-  name: 'fileAnalyzerServiceProvider',
-  dependencies: const [],
-);
 
 class FileAnalyzerService {
   const FileAnalyzerService();
@@ -24,40 +17,26 @@ class FileAnalyzerService {
     required ResolvedUnitResult? unitResult,
   }) async {
     //TODO: allow analysis of other file extensions
-    if (file.isDartFile) {
-      if (unitResult == null) return [];
+    if (!file.isDartFile) return [];
+    if (unitResult == null) return [];
 
-      final results =
-          await Future.wait(rules.map<Future<List<LintResult>>>((rule) async {
-        // final ruleHasVisitor = rule is LintVisitor;
-        try {
-          // print('computeLintResults: ${file.path}');
-          // TODO:
-          // if (ruleHasVisitor) {
-          final results = await rule.generateAnalysisResults(unitResult);
-          return results.map(
-            (result) {
-              final config = rule.analysisConfiguration;
-              return result.copyWith(
-                severity: config is LintConfiguration
-                    ? config.severity ?? rule.defaultSeverity
-                    : throw UnimplementedError(),
-              );
-            },
-          ).toList();
-        } catch (e, stackTrace) {
-          logger.severe('LintRule Error', e, stackTrace);
-          return Future.value([]);
-        }
-      }));
+    final results = await Future.wait(rules.map((rule) async {
+      try {
+        final results = await rule.generateAnalysisResults(unitResult);
+        return results.map(
+          (result) {
+            final config = rule.analysisConfiguration as LintConfiguration;
+            return result.copyWith(
+                severity: config.severity ?? rule.defaultSeverity);
+          },
+        ).toList();
+      } catch (e, stackTrace) {
+        logger.severe('LintRule Error', e, stackTrace);
+        return Future.value(<LintResult>[]);
+      }
+    }));
 
-      return results.expand((e) => e).toList()
-        ..sort((a, b) => a.span.source.location.startLine
-            .compareTo(b.span.source.location.startLine));
-    } else {
-      // TODO: handle non-Dart files
-      return Future.value([]);
-    }
+    return results.expand((e) => e).toList()..sort();
   }
 
   Iterable<LintResult> getAnalysisResultsAtOffset(
@@ -68,13 +47,12 @@ class FileAnalyzerService {
     return analysisResults.where((res) => res.isWithinOffset(path, offset));
   }
 
-  Future<LintResult> calculateEditResultsForAnalysisResult(
+  Future<LintResult> computeEditResultsForAnalysisResult(
     ActiveContext context,
     LintResult analysisResult,
   ) async {
     final rule = analysisResult.rule;
     if (rule is! QuickFix) return analysisResult;
-
     final editResults = await rule.computeQuickFixes(analysisResult.span);
     return analysisResult.copyWith(edits: editResults);
   }
@@ -85,21 +63,18 @@ class FileAnalyzerService {
     required ResolvedUnitResult? unitResult,
   }) async {
     //TODO: allow analysis of other file extensions
-    if (file.isDartFile && unitResult != null) {
-      final results =
-          await Future.wait(rules.map<Future<List<AssistResult>>>((rule) async {
-        try {
-          return rule.filterResults(unitResult);
-        } catch (e, stackTrace) {
-          logger.severe('computeAssistResults', e, stackTrace);
-          return Future.value([]);
-        }
-      }));
-      return results.expand((e) => e).toList();
-    } else {
-      // TODO: handle non-Dart files
-      return Future.value([]);
-    }
+    if (!file.isDartFile || unitResult == null) return [];
+
+    final results =
+        await Future.wait(rules.map<Future<List<AssistResult>>>((rule) async {
+      try {
+        return rule.filterResults(unitResult);
+      } catch (e, stackTrace) {
+        logger.severe('computeAssistResults', e, stackTrace);
+        return Future.value([]);
+      }
+    }));
+    return results.expand((e) => e).toList()..sort();
   }
 
   List<AssistResult> getAssistResultsAtOffset(
@@ -118,3 +93,9 @@ class FileAnalyzerService {
     return result.copyWith(edits: editResults);
   }
 }
+
+final fileAnalyzerServiceProvider = Provider(
+  (ref) => const FileAnalyzerService(),
+  name: 'fileAnalyzerServiceProvider',
+  dependencies: const [],
+);

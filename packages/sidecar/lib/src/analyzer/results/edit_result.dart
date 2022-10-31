@@ -11,13 +11,13 @@ class EditResult with _$EditResult {
     required List<SourceFileEdit> sourceChanges,
   }) = _EditResult;
   const EditResult._();
+}
 
+extension EditResultX on EditResult {
   PrioritizedSourceChange toPrioritizedSourceChange() {
     return PrioritizedSourceChange(
-        0,
-        SourceChange(
-          message,
-          edits: sourceChanges,
-        ));
+      0,
+      SourceChange(message, edits: sourceChanges),
+    );
   }
 }

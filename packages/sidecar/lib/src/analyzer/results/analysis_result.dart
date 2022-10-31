@@ -10,6 +10,7 @@ part 'analysis_result.freezed.dart';
 
 @freezed
 class AnalysisResult with _$AnalysisResult {
+  @Implements<Comparable<LintResult>>()
   const factory AnalysisResult.lint({
     required LintRule rule,
     required AnalysisSourceSpan span,
@@ -19,6 +20,7 @@ class AnalysisResult with _$AnalysisResult {
     @Default(<EditResult>[]) List<EditResult> edits,
   }) = LintResult;
 
+  @Implements<Comparable<AssistResult>>()
   const factory AnalysisResult.assist({
     required AssistRule rule,
     required AnalysisSourceSpan span,
@@ -31,12 +33,16 @@ class AnalysisResult with _$AnalysisResult {
         lint: (lint) => lint.span.sourceUrl,
         assist: (assist) => assist.span.sourceUrl,
       );
-  // String get path => source.span.sourceUrl!.path;
 
   bool isWithinOffset(String filePath, int offset) {
     return sourceUrl.path == filePath &&
         span.source.start.offset <= offset &&
         offset <= span.source.start.offset + span.source.length;
+  }
+
+  int compareTo(AnalysisResult other) {
+    return span.source.location.offset
+        .compareTo(other.span.source.location.offset);
   }
 }
 
@@ -54,6 +60,11 @@ extension LintResultX on LintResult {
       //TODO: hasFix does not seem to work properly
       hasFix: edits.isNotEmpty,
     );
+  }
+
+  AnalysisErrorFixes toAnalysisErrorFixes() {
+    final es = edits.map((e) => e.toPrioritizedSourceChange()).toList();
+    return AnalysisErrorFixes(toAnalysisError(), fixes: es);
   }
 }
 

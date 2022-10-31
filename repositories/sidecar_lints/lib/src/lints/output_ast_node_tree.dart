@@ -15,9 +15,7 @@ class OutputAstNodeTree extends AssistRule with AssistVisitor {
   Future<List<EditResult>> computeSourceChanges(
     AnalysisSource source,
   ) async {
-    final session = context.currentSession;
-    final unit =
-        await session.getResolvedUnit(source.path) as ResolvedUnitResult;
+    final unit = await getResolvedUnitResult(source.path);
     final changeBuilder = ChangeBuilder(session: session);
 
     final node = source.mapOrNull(span: (span) => span.source)?.toAstNode(unit);

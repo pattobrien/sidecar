@@ -56,8 +56,6 @@ class IsolateBuilderService {
   }
 
   void _setupPluginSourceFiles(ActiveContext activeContext) {
-    // _log(
-    //     'getting source files for plugin: ${activeContext.pluginSourceUri.path}');
     final sourceExecutableDirectory = Directory(p.join(
         activeContext.pluginSourceUri.toFilePath(windows: Platform.isWindows),
         'tools',
@@ -73,19 +71,16 @@ class IsolateBuilderService {
     }
 
     pluginFileEntities.whereType<File>().forEach((sourceFileEntity) {
-      // _log('copying file.... ${sourceFileEntity.absolute.path}');
       Directory(_pluginPath(
         sourceFileEntity.absolute.parent.path,
         newDirectory: _packageToolDirectory(activeContext.activeRoot),
       )).createSync(recursive: true);
-      // _log('created directory: ${directory.path}');
       final newDirectory = _packageToolDirectory(activeContext.activeRoot);
       final newPath = _pluginPath(sourceFileEntity.absolute.path,
           newDirectory: newDirectory);
-      // _log('copying file to new path: $newPath in directory #{}');
+
       sourceFileEntity.copySync(newPath);
     });
-    // _log('created: ${pluginFileEntities.length} files');
   }
 
   IsolateDetails _restartIsolate(
