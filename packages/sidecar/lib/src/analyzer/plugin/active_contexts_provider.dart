@@ -14,11 +14,8 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
   (ref) {
     final service = ref.watch(activeProjectServiceProvider);
     final allContexts = ref.watch(allAnalysisContextsProvider);
-
-    final activeContexts = allContexts
-        .map(service.initializeContext)
-        .whereType<ActiveContext>()
-        .toList();
+    final activeContexts =
+        allContexts.map(service.initializeContext).whereType<ActiveContext>();
 
     final dependencies = activeContexts
         .map((e) => service.getActiveDependencies(e, allContexts))
@@ -29,7 +26,10 @@ final activeContextsProvider = Provider<List<ActiveContext>>(
     for (final activeContext in activeContexts) {
       logger.finer('active context => ${activeContext.activeRoot.root.path}');
     }
-    return [...activeContexts, ...dependencies];
+    final activeContextsAndDependencies = [...activeContexts, ...dependencies];
+    assert(activeContextsAndDependencies.where((c) => c.isMainRoot).length == 1,
+        'There should only ever be 1 main active context for each isolate.');
+    return activeContextsAndDependencies;
   },
   name: 'activeContextsProvider',
   dependencies: [
