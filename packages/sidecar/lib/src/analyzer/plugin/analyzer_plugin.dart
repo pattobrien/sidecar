@@ -76,43 +76,49 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     );
   }
 
+  /// Hot reload the plugin.
+  ///
+  /// This should occur in the following scenarios:
+  /// - a LintRule has been modified (and we want to reanalyze the codebase)
+  /// - ?
   Future<void> _startWithHotReload(
     plugin.PluginCommunicationChannel channel,
   ) async {
-    await HotReloader.create(onAfterReload: (c) {
-      pluginLogger.info('\n${DateTime.now().toIso8601String()} RELOADING...\n');
+    // await HotReloader.create(onAfterReload: (c) {
+    //   pluginLogger.info('\n${DateTime.now().toIso8601String()} RELOADING...\n');
+    //   final allContexts = ref.read(allAnalysisContextsNotifierProvider);
+    //   print(allContexts.length);
+    //   final analysisContexts = ref.refresh(activeContextsProvider);
+    //   for (final analysisContext in analysisContexts) {
+    //     handleAffectedFiles(
+    //       analysisContext: analysisContext.context,
+    //       paths: c.events?.map((e) => e.path).toList() ?? [],
+    //     );
+    //   }
 
-      final analysisContexts = ref.read(activeContextsProvider);
-      for (final analysisContext in analysisContexts) {
-        handleAffectedFiles(
-          analysisContext: analysisContext.context,
-          paths: c.events?.map((e) => e.path).toList() ?? [],
-        );
-      }
-
-      // for (final event in events) {
-      //   switch (event.type) {
-      //     case ChangeType.ADD:
-      //       // TODO Handle the event.
-      //       break;
-      //     case ChangeType.MODIFY:
-      //       // contentChanged([event.path]);
-      //       break;
-      //     case ChangeType.REMOVE:
-      //       // TODO Handle event.
-      //       break;
-      //     default:
-      //       // Ignore unhandled watch event types.
-      //       break;
-      //   }
-      // }
-      // c.events?.map((e) => e.path);
-      // if (c.result == HotReloadResult.Succeeded) {
-      //   channel.sendNotification(
-      //     plugin.Notification(kSidecarHotReloadMethod, {}),
-      //   );
-      // }
-    });
+    //   // for (final event in events) {
+    //   //   switch (event.type) {
+    //   //     case ChangeType.ADD:
+    //   //       // TODO Handle the event.
+    //   //       break;
+    //   //     case ChangeType.MODIFY:
+    //   //       // contentChanged([event.path]);
+    //   //       break;
+    //   //     case ChangeType.REMOVE:
+    //   //       // TODO Handle event.
+    //   //       break;
+    //   //     default:
+    //   //       // Ignore unhandled watch event types.
+    //   //       break;
+    //   //   }
+    //   // }
+    //   // c.events?.map((e) => e.path);
+    //   // if (c.result == HotReloadResult.Succeeded) {
+    //   //   channel.sendNotification(
+    //   //     plugin.Notification(kSidecarHotReloadMethod, {}),
+    //   //   );
+    //   // }
+    // });
   }
 
   @override
@@ -151,8 +157,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     pluginLogger.finer('ISOLATE: afterNewContextCollection');
 
     ref
-        .read(allAnalysisContextsProvider.state)
-        .update((_) => contextCollection.contexts);
+        .read(allAnalysisContextsNotifierProvider.notifier)
+        .update(contextCollection);
 
     await super.afterNewContextCollection(contextCollection: contextCollection);
     if (mode.isCli) initializationCompleter.complete();
@@ -222,9 +228,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       await Future.wait(paths.map((path) async {
         try {
           final file = ref.read(analyzedFileFromPath(path));
-          ref.refresh(resolvedUnitProvider(file));
-          ref.refresh(analysisResultsForFileProvider(file));
-          await ref.refresh(analysisResultsReporterProvider(file).future);
+          await ref.read(resolvedUnitProvider(file).future);
+          // ref.read(analysisResultsForFileProvider(file));
+          // ref.invalidate(analysisResultsReporterProvider(file));
+          await ref.read(createAnalysisReportProvider(file).future);
         } catch (e, stackTrace) {
           pluginLogger.severe('analyzeFiles', e, stackTrace);
         }
@@ -331,7 +338,7 @@ final pluginProvider = Provider.autoDispose<SidecarAnalyzerPlugin>(
     activeContextsProvider,
     quickFixForRequestProvider,
     analyzedFileFromPath,
-    allAnalysisContextsProvider,
+    allAnalysisContextsNotifierProvider,
     logDelegateProvider,
     ruleConstructorProvider,
     cliOptionsProvider,

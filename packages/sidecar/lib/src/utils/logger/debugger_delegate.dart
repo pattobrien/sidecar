@@ -35,7 +35,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
 
   @override
   void sidecarVerboseMessage(String message) {
-    if (!cliOptions.isVerboseEnabled) return;
+    // if (!cliOptions.isVerboseEnabled) return;
     stdout.writeln('${watch.elapsed} $message');
   }
 

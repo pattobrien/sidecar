@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../services/services.dart';
 import '../../utils/file_paths.dart';
@@ -10,33 +11,59 @@ import '../context/context.dart';
 import '../results/results.dart';
 import 'plugin.dart';
 
-final activeContextsProvider = Provider<List<ActiveContext>>(
-  (ref) {
-    final service = ref.watch(activeProjectServiceProvider);
-    final allContexts = ref.watch(allAnalysisContextsProvider);
-    final activeContexts =
-        allContexts.map(service.initializeContext).whereType<ActiveContext>();
+part 'active_contexts_provider.g.dart';
 
-    final dependencies = activeContexts
-        .map((e) => service.getActiveDependencies(e, allContexts))
-        .expand((e) => e);
+// final activeContextsProvider = Provider<List<ActiveContext>>(
+//   (ref) {
+//     final service = ref.watch(activeProjectServiceProvider);
+//     final allContexts = ref.watch(allAnalysisContextsProvider);
+//     final activeContexts =
+//         allContexts.map(service.initializeContext).whereType<ActiveContext>();
 
-    logger.finer('# of all contexts => ${allContexts.length} ');
-    logger.finer('# of active contexts => ${activeContexts.length} ');
-    for (final activeContext in activeContexts) {
-      logger.finer('active context => ${activeContext.activeRoot.root.path}');
-    }
-    final activeContextsAndDependencies = [...activeContexts, ...dependencies];
-    assert(activeContextsAndDependencies.where((c) => c.isMainRoot).length == 1,
-        'There should only ever be 1 main active context for each isolate.');
-    return activeContextsAndDependencies;
-  },
-  name: 'activeContextsProvider',
-  dependencies: [
-    activeProjectServiceProvider,
-    allAnalysisContextsProvider,
-  ],
-);
+//     final dependencies = activeContexts
+//         .map((e) => service.getActiveDependencies(e, allContexts))
+//         .expand((e) => e);
+
+//     logger.finer('# of all contexts => ${allContexts.length} ');
+//     logger.finer('# of active contexts => ${activeContexts.length} ');
+//     for (final activeContext in activeContexts) {
+//       logger.finer('active context => ${activeContext.activeRoot.root.path}');
+//     }
+//     final activeContextsAndDependencies = [...activeContexts, ...dependencies];
+//     assert(activeContextsAndDependencies.where((c) => c.isMainRoot).length == 1,
+//         'There should only ever be 1 main active context for each isolate.');
+
+//     return activeContextsAndDependencies;
+//   },
+//   name: 'activeContextsProvider',
+//   dependencies: [
+//     activeProjectServiceProvider,
+//     allAnalysisContextsProvider,
+//   ],
+// );
+
+@Riverpod(keepAlive: true)
+List<ActiveContext> activeContexts(ActiveContextsRef ref) {
+  final service = ref.watch(activeProjectServiceProvider);
+  final allContexts = ref.watch(allAnalysisContextsNotifierProvider);
+  final activeContexts =
+      allContexts.map(service.initializeContext).whereType<ActiveContext>();
+
+  final dependencies = activeContexts
+      .map((e) => service.getActiveDependencies(e, allContexts))
+      .expand((e) => e);
+
+  logger.finer('# of all contexts => ${allContexts.length} ');
+  logger.finer('# of active contexts => ${activeContexts.length} ');
+  for (final activeContext in activeContexts) {
+    logger.finer('active context => ${activeContext.activeRoot.root.path}');
+  }
+  final activeContextsAndDependencies = [...activeContexts, ...dependencies];
+  assert(activeContextsAndDependencies.where((c) => c.isMainRoot).length == 1,
+      'There should only ever be 1 main active context for each isolate.');
+
+  return activeContextsAndDependencies;
+}
 
 final activeContextRootsProvider = Provider<List<ActiveContextRoot>>(
   (ref) => ref.watch(activeContextsProvider).map((e) => e.activeRoot).toList(),
@@ -73,7 +100,7 @@ StreamSubscription? _listenToConfigForChanges(Ref ref, ActiveContextRoot root) {
     ref.invalidate(activatedRulesProvider);
     for (final file in root.typedAnalyzedFiles()) {
       ref.invalidate(analysisResultsForFileProvider(file));
-      ref.refresh(analysisResultsReporterProvider(file));
+      ref.refresh(createAnalysisReportProvider(file));
     }
   });
 }

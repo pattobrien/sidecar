@@ -9,7 +9,7 @@ class CliObserver extends ProviderObserver {
   final CliOptions options;
   LogDelegateBase get logger => DebuggerLogDelegate(options);
 
-  String get header => '[HEADER]'; // _isMiddleman ? 'MIDDLEMAN:' : 'ISOLATE:';
+  String get header => options.mode.name;
 
   @override
   void didAddProvider(

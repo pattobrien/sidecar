@@ -27,7 +27,11 @@ class CliOptions with _$CliOptions {
               ? SidecarAnalyzerMode.debug
               : isPlugin
                   ? SidecarAnalyzerMode.plugin
-                  : throw UnimplementedError('could not parse a mode'),
+                  : args.contains('--test')
+                      ?
+                      // TODO: need to make a test specific case here
+                      SidecarAnalyzerMode.debug
+                      : throw UnimplementedError('could not parse a mode'),
     );
   }
 }

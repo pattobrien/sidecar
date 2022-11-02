@@ -1,7 +1,7 @@
 // ignore_for_file: implementation_imports, unnecessary_lambdas
 
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/context_locator.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
@@ -31,7 +31,7 @@ class SidecarRunner {
 
   bool _closed = false;
 
-  Directory get root => ref.read(activeRunnerDirectory);
+  io.Directory get root => ref.read(activeRunnerDirectory);
 
   plugin.DiscoveredServerIsolateChannel get channel =>
       ref.read(masterServerChannel);
@@ -107,11 +107,11 @@ class SidecarRunner {
 
   final _initializationCompleter = Completer<void>();
 
-  Future<List<AnalysisError>> requestAnalysisForFile(File file) async {
+  Future<List<AnalysisError>> requestAnalysisForFile(String file) async {
     //
-    final content = file.readAsStringSync();
-    final req = plugin.AnalysisUpdateContentParams(
-        {file.path: AddContentOverlay(content)});
+    final content = io.File(file).readAsStringSync();
+    final req =
+        plugin.AnalysisUpdateContentParams({file: AddContentOverlay(content)});
     sendRequest(req.toRequest(_uuid.v4()));
     // final res = await server.handleAnalysisUpdateContent(req);
 
