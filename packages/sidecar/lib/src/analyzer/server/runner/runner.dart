@@ -1,178 +1,136 @@
-// ignore_for_file: implementation_imports
+// ignore_for_file: implementation_imports, unnecessary_lambdas
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/context_locator.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
-
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart' as plugin;
-
-import 'package:cli_util/cli_util.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../protocol/constants/constants.dart';
 import '../../../protocol/protocol.dart';
-import '../../../utils/byte_store_ext.dart';
-import '../../plugin/plugin.dart';
+import 'notification_providers.dart';
 
 const _uuid = Uuid();
 
-final runnerProvider = Provider((ref) {
-  return SidecarRunner(ref);
-});
-
-final activeRunnerDirectory = Provider<Directory>((ref) => Directory.current);
+final runnerProvider = Provider(
+  (ref) => SidecarRunner(ref),
+  name: 'runnerProvider',
+);
 
 class SidecarRunner {
-  SidecarRunner(this.ref)
-      : server = ref.read(pluginProvider),
-        root = ref.read(activeRunnerDirectory) {
-    server.start(_clientChannel);
-  }
+  SidecarRunner(this.ref);
+
   final Ref ref;
-  final SidecarAnalyzerPlugin server;
-  final Directory root;
   final completed = Completer<void>();
 
   bool _closed = false;
-  final _sdkPath = getSdkPath();
 
-  late final _clientChannel =
-      plugin.PluginIsolateChannel(_receivePort.sendPort);
+  Directory get root => ref.read(activeRunnerDirectory);
 
-  late final ResourceProvider _resourceProvider = server.resourceProvider;
+  plugin.DiscoveredServerIsolateChannel get channel =>
+      ref.read(masterServerChannel);
 
-  /// Used to send requests to sidecar_analyzer_plugin
-  late final SendPort _sendPort;
+  ResourceProvider get _resourceProvider =>
+      ref.read(runnerResourceProviderProvider);
 
-  /// Used to receive responses and notifications from sidecar_analyzer_plugin
-  late final ReceivePort _receivePort = ReceivePort();
+  Stream<plugin.Notification> get _notifications =>
+      ref.read(serverChannelNotificationStreamProvider.stream);
 
-  late final Stream<Object?> _receivePortStream =
-      _receivePort.asBroadcastStream();
+  Stream<plugin.Response> get _responses =>
+      ref.read(serverChannelResponseStreamProvider.stream);
 
-  late final Stream<plugin.Notification> _notifications = _receivePortStream
-      .where((event) => event is Map)
-      .map((event) => event! as Map)
-      .where((event) => event.containsKey(plugin.Notification.EVENT))
-      .map(plugin.Notification.fromJson);
+  Stream<plugin.Notification> get _reloader =>
+      _notifications.where((e) => e.event == kSidecarHotReloadMethod);
 
-  // late final Stream<plugin.AnalysisErrorsParams> _lints = _notificationStream(
-  //     'analysis.errors', plugin.AnalysisErrorsParams.fromNotification);
+  Stream<plugin.Notification> get _initizationNotification =>
+      _notifications.where((e) => e.event == kInitializationCompleteMethod);
 
-  late final Stream<Map> _reloader = _notifications
-      .where((e) => e.event == kSidecarHotReloadMethod)
-      .map((e) => <dynamic, dynamic>{});
-
-  // Stream<T> _notificationStream<T>(
-  //     String event, T Function(plugin.Notification notification) mapper) {
-  //   return _notifications.where((e) => e.event == event).map((e) => mapper(e));
-  // }
-
-  // /// The [Notification]s emitted by the plugin
-  // late final Stream<plugin.PrintNotification> messages = notifications
-  //     .where((e) => e.event == PrintNotification.key)
-  //     .map(plugin.PrintNotification.fromNotification);
-
-  /// The [plugin.Response]s emitted by the plugin
-  late final Stream<plugin.Response> _responses = _receivePortStream
-      .where((event) => event is Map<String, Object?>)
-      .map((event) => event! as Map<String, Object?>)
-      .where((e) => e.containsKey(plugin.Response.ID))
-      .map(plugin.Response.fromJson);
-
-  // final instrumentationService = InstrumentationService.NULL_SERVICE;
-
-  // This channel is where notifications are received from the plugin.
-  // If we wish to receive those notifications, we need to subscribe to the channel.
-  // late final plugin.BuiltInServerIsolateChannel channel =
-  //     plugin.BuiltInServerIsolateChannel(
-  //         (sPort) => sendPort = sPort, pluginName, instrumentationService);
+  Stream<plugin.AnalysisErrorsParams> get _analysisResultsNotification =>
+      _notifications
+          .where((e) => e.event == kAnalysisResultsMethod)
+          .map((event) => plugin.AnalysisErrorsParams.fromNotification(event));
 
   // /// Error [Notification]s.
-  // late final Stream<plugin.PluginErrorParams> pluginErrors =
-  //     StreamGroup.mergeBroadcast([
-  //   // Manual error notifications from the plugin
-  //   _notifications
-  //       .where((e) => e.event == 'plugin.error')
-  //       .map(plugin.PluginErrorParams.fromNotification),
-
-  //   // When the receivePort is passed to Isolate.onError, error events are
-  //   // received as ["error", "stackTrace"]
-  //   _receivePortStream
-  //       .where((event) => event is List)
-  //       .cast<List>()
-  //       .map((event) {
-  //     // The plugin had an uncaught error.
-  //     if (event.length != 2) {
-  //       throw UnsupportedError(
-  //         'Only ["error", "stackTrace"] list messages are supported',
-  //       );
-  //     }
-
-  //     final error = event.first.toString();
-  //     final stackTrace = event.last.toString();
-  //     return plugin.PluginErrorParams(false, error, stackTrace);
-  //   }),
-  // ]);
+  Stream<plugin.PluginErrorParams> get pluginErrors => _notifications
+      .where((e) => e.event == 'plugin.error')
+      .map(plugin.PluginErrorParams.fromNotification);
 
   /// Errors for [plugin.Request]s that failed.
-  late final Stream<plugin.RequestError> responseErrors =
+  Stream<plugin.RequestError> get responseErrors =>
       _responses.where((e) => e.error != null).map((e) => e.error!);
 
-  late final ContextLocator contextLocator =
+  ContextLocator get contextLocator =>
       ContextLocator(resourceProvider: _resourceProvider);
 
   List<ContextRoot> get allContextRoots =>
       contextLocator.locateRoots(includedPaths: [root.path]);
 
-  List<ContextRoot> get contextRoots =>
-      allContextRoots; //.where((element) => false)
+  List<ContextRoot> get contextRoots => allContextRoots;
 
   /// Starts the plugin and sends the necessary requests for initializing it.
   Future<void> initialize() async {
-    _notifications.listen((request) {
-      // delegate.sidecarVerboseMessage('>> ${request.event} ${request.params}');
+    print('initializing...');
+
+    _initizationNotification.listen((event) {
+      print('initialization completed');
+      _initializationCompleter.complete();
     });
 
+    responseErrors.listen((event) {
+      print(event.toJson().toString());
+    });
+
+    pluginErrors.listen((event) {
+      // print(event.toJson().toString());
+    });
+
+    _analysisResultsNotification.listen(
+        (event) => print('ANALYSISRESULT: ${event.toJson().toString()}'));
+
     _reloader.listen((event) {
-      // delegate.sidecarMessage('\n\nHOTRELOAD.......\n\n');
+      // TODO: replace set context with a simple update, based on the [event]
+      // and the updated contents
       _requestSetContext();
     });
 
-    _sendPort = await _receivePortStream
-        .where((event) => event is SendPort)
-        .cast<SendPort>()
-        .first;
+    _responses.listen((event) => print(event.toJson().toString()));
 
-    sendRequest(
-      plugin.PluginVersionCheckParams(
-        _resourceProvider.getByteStorePath(kSidecarPluginName),
-        _sdkPath,
-        kPluginVersion,
-      ).toRequest(_uuid.v4()),
-    );
+    await _initializationCompleter.future;
+    await _requestSetContext();
+  }
 
-    _requestSetContext();
+  final _initializationCompleter = Completer<void>();
 
-    return server.initializationCompleter.future;
+  Future<List<AnalysisError>> requestAnalysisForFile(File file) async {
+    //
+    final content = file.readAsStringSync();
+    final req = plugin.AnalysisUpdateContentParams(
+        {file.path: AddContentOverlay(content)});
+    sendRequest(req.toRequest(_uuid.v4()));
+    // final res = await server.handleAnalysisUpdateContent(req);
+
+    final notification = await _notifications.firstWhere(
+        (notification) => notification.event == kAnalysisResultsMethod);
+    final analysisErrors =
+        plugin.AnalysisErrorsParams.fromNotification(notification);
+    return analysisErrors.errors;
   }
 
   void sendRequest(plugin.Request request) {
-    final jsonData = request.toJson();
-    // final encodedRequest = json.encode(jsonData);
-    // delegate.sidecarVerboseMessage('>> $kSidecarPluginName $encodedRequest');
-    _sendPort.send(jsonData);
+    // final jsonData = request.toJson();
+    // print('from runner: ${jsonData.toString()}');
+    channel.sendRequest(request);
   }
 
-  void _requestSetContext() {
-    sendRequest(
+  Future<void> _requestSetContext() async {
+    // print('setting context');
+    await asyncRequest(
       plugin.AnalysisSetContextRootsParams([
         for (final contextRoot in contextRoots)
           plugin.ContextRoot(
@@ -182,40 +140,19 @@ class SidecarRunner {
           ),
       ]).toRequest(_uuid.v4()),
     );
+    print('setting context compelete');
   }
 
-  // Obtains the list of lints for the current workspace.
-  // Future<List<plugin.AnalysisErrorsParams>> getLints(
-  //     {required bool reload}) async {
-  //   final result = <String, plugin.AnalysisErrorsParams>{};
-
-  //   StreamSubscription? sub;
-  //   try {
-  //     channel.listen((response) {
-  //       print('notification: ${response.toString()}');
-  //     }, (notification) {
-  //       print('notification: ${notification.toString()}');
-  //     });
-  //     sub = _clientChannel.lints.listen((event) => result[event.file] = event);
-  //     // receivePortStream = receivePort.asBroadcastStream();
-  //     // channel.sendRequest(AwaitAnalysisDoneParams(reload: reload));
-  //     return result.values.toList()..sort((a, b) => a.file.compareTo(b.file));
-  //     return [];
-  //   } finally {
-  //     await sub?.cancel();
-  //   }
-  // }
+  Future<plugin.Response> asyncRequest(plugin.Request request) {
+    sendRequest(request);
+    return _responses.firstWhere((response) => response.id == request.id);
+  }
 
   /// Stop the command runner, sending a [plugin.PluginShutdownParams] request in the process.
   Future<void> close() async {
     if (_closed) return;
     _closed = true;
-
-    try {
-      sendRequest(plugin.PluginShutdownParams().toRequest(_uuid.v4()));
-    } finally {
-      _clientChannel.close();
-      _receivePort.close();
-    }
+    //TODO: this should be awaited
+    sendRequest(plugin.PluginShutdownParams().toRequest(_uuid.v4()));
   }
 }
