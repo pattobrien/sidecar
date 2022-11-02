@@ -13,19 +13,24 @@ import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:hotreloader/hotreloader.dart';
+import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
 import '../../utils/byte_store_ext.dart';
-import '../../utils/logger/logger.dart';
+// import '../../utils/logger/logger.dart';
+import '../../utils/channel_extension.dart';
+import '../../utils/logger/debugger_delegate.dart';
 import '../options_provider.dart';
 import '../results/results.dart';
 import '../server/analyzer_mode.dart';
 import '../server/log_delegate.dart';
 import 'plugin.dart';
 import 'plugin_resource_provider.dart';
+
+final pluginLogger = Logger('sidecar-plugin');
 
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin(this.ref)
@@ -56,10 +61,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    logger.finer('END PLUGIN STARTING....');
-    logger.finer('# of rules: ${ref.read(ruleConstructorProvider).length}');
+    pluginLogger.onRecord
+        .listen((event) => channel.sendError(event.toString()));
+    pluginLogger.finer('END PLUGIN STARTING....');
+    pluginLogger
+        .finer('# of rules: ${ref.read(ruleConstructorProvider).length}');
     if (mode.isDebug) {
-      logger.finer('STARTING WITH HOT RELOAD');
+      pluginLogger.finer('STARTING WITH HOT RELOAD');
       _startWithHotReload(channel);
     }
     super.start(channel);
@@ -72,7 +80,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     plugin.PluginCommunicationChannel channel,
   ) async {
     await HotReloader.create(onAfterReload: (c) {
-      logger.info('\n${DateTime.now().toIso8601String()} RELOADING...\n');
+      pluginLogger.info('\n${DateTime.now().toIso8601String()} RELOADING...\n');
 
       final analysisContexts = ref.read(activeContextsProvider);
       for (final analysisContext in analysisContexts) {
@@ -124,7 +132,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           // fileContentCache: FileContentCache(resourceProvider),
         ),
         (e, s) {},
-        zoneSpecification: ZoneSpecification(print: (_, __, ___, ____) {}),
+        zoneSpecification: ZoneSpecification(print: (_, __, ___, line) {}),
       );
 
       _contextCollection = contextCollection;
@@ -140,7 +148,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     _contextCollection = contextCollection;
-    logger.finer('ISOLATE: afterNewContextCollection');
+    pluginLogger.finer('ISOLATE: afterNewContextCollection');
 
     ref
         .read(allAnalysisContextsProvider.state)
@@ -204,7 +212,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     required List<String> paths,
   }) async {
     final activeContexts = ref.read(activeContextsProvider);
-    logger.finer('CHANGEDFILES = ${paths.length} ${paths.toList().toString()}');
+    pluginLogger
+        .finer('CHANGEDFILES = ${paths.length} ${paths.toList().toString()}');
     if (activeContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
         analysisContext.contextRoot.root.path)) {
@@ -217,7 +226,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           ref.refresh(analysisResultsForFileProvider(file));
           await ref.refresh(analysisResultsReporterProvider(file).future);
         } catch (e, stackTrace) {
-          logger.severe('analyzeFiles', e, stackTrace);
+          pluginLogger.severe('analyzeFiles', e, stackTrace);
         }
       }));
     }
@@ -244,7 +253,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       return plugin.EditGetFixesResult(fixes);
     } catch (e, stackTrace) {
-      logger.severe('handleEditGetFixes $path', e, stackTrace);
+      pluginLogger.severe('handleEditGetFixes $path', e, stackTrace);
       rethrow;
     }
   }
@@ -273,7 +282,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       return plugin.EditGetAssistsResult(changes);
     } catch (e, stackTrace) {
-      logger.severe('handleEditGetAssists ${parameters.file}', e, stackTrace);
+      pluginLogger.severe(
+          'handleEditGetAssists ${parameters.file}', e, stackTrace);
       rethrow;
     }
   }
@@ -299,11 +309,11 @@ final pluginInitializationProvider = FutureProvider.autoDispose<void>(
   (ref) async {
     final plugin = ref.watch(pluginProvider);
     await plugin.initializationCompleter.future;
-    final logger = ref.watch(logDelegateProvider);
+    final loggerDelegate = ref.watch(logDelegateProvider);
     final cliOptions = ref.watch(cliOptionsProvider);
     if (cliOptions.mode.isCli) {
-      logger as DebuggerLogDelegate;
-      logger.dumpResults();
+      loggerDelegate as DebuggerLogDelegate;
+      loggerDelegate.dumpResults();
     }
   },
   name: 'pluginInitializationProvider',
