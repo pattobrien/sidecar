@@ -6,9 +6,8 @@ import 'dart:io';
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../../protocol/protocol.dart';
-import '../../../services/active_project_service.dart';
-import '../../context/active_context.dart';
+import '../../../protocol/responses/responses.dart';
+import '../../../services/services.dart';
 import 'new_runner.dart';
 
 final activeRunnerDirectory = Provider<Directory>(
@@ -33,23 +32,6 @@ final runnerResourceProviderProvider = Provider(
   name: 'runnerResourceProviderProvider',
 );
 
-// final runnerStreamProvider = StreamProvider.family<Object, ActiveContext>(
-//   (ref, context) async* {
-//     final dir = ref.watch(activeRunnerDirectory);
-//     final pluginFile =
-//         io.File(join(dir.path, kDartTool, 'sidecar', 'sidecar.dart'));
-//     final packagesFile = io.File(join(dir.path, kDartTool, kPackageConfigJson));
-//     final logFile = io.File(join(dir.path, kDartTool, 'log.txt'));
-//     assert(pluginFile.existsSync(), 'plugin executable does not exist');
-//     assert(packagesFile.existsSync(), 'plugin executable does not exist');
-//     final runner = await ref.watch(newRunnerForContextProvider(context).future);
-//     await for (final event in runner.stream) {
-//       yield event;
-//     }
-//   },
-//   name: 'masterServerChannel',
-// );
-
 final analyzerStreamProvider = StreamProvider.family<Object, NewSidecarRunner>(
   (ref, runner) async* {
     final _controller = StreamController<Object>();
@@ -70,15 +52,14 @@ final analyzerStreamProvider = StreamProvider.family<Object, NewSidecarRunner>(
 );
 
 final analyzerNotificationStreamProvider =
-    StreamProvider.family<NotificationWrapper, NewSidecarRunner>(
+    StreamProvider.family<SidecarNotification, NewSidecarRunner>(
   (ref, runner) => ref
       .watch(analyzerStreamProvider(runner).stream)
       .where((event) => event is Map<String, dynamic>)
       .map((event) => event as Map<String, dynamic>)
       .where((event) => event.containsKey('method') && !event.containsKey('id'))
       .map((event) {
-    // print('event: $event');
-    return NotificationWrapper.fromJson(event);
+    return SidecarNotification.fromJson(event);
   }),
   name: 'analyzerNotificationStreamProvider',
 );

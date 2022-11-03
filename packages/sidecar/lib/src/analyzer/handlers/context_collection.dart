@@ -6,7 +6,7 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../plugin/analyzer_plugin.dart';
+import '../plugin/analyzer_plugin_old.dart';
 import '../plugin/plugin_resource_provider.dart';
 import 'byte_store.dart';
 import 'file_content_cache.dart';

@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $activeContextsHash() => r'06a99bdef65b97a69d6c69f03faa135c7f987464';
+String $activeContextsHash() => r'85eb1c2d4e1b9ba5bcb28871d85d86095e842aa7';
 
 /// See also [activeContexts].
 final activeContextsProvider = AutoDisposeProvider<List<ActiveContext>>(
@@ -131,7 +131,7 @@ class ActiveContextRootsProvider
                   : $activeContextRootsHash,
         );
 
-  final dynamic analyzer;
+  final SidecarAnalyzer analyzer;
 
   @override
   bool operator ==(Object other) {
@@ -156,7 +156,7 @@ class ActiveContextRootsFamily extends Family<List<ActiveContextRoot>> {
   ActiveContextRootsFamily();
 
   ActiveContextRootsProvider call(
-    dynamic analyzer,
+    SidecarAnalyzer analyzer,
   ) {
     return ActiveContextRootsProvider(
       analyzer,

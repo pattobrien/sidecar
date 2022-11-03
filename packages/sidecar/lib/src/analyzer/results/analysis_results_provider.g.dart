@@ -30,11 +30,11 @@ class _SystemHash {
 }
 
 String $analysisResultsForFileHash() =>
-    r'de9bd03737c90defa504e72ed6a944445e7c0cf9';
+    r'02f25dcac9700467f2122641b02f003905300af3';
 
 /// See also [analysisResultsForFile].
 class AnalysisResultsForFileProvider
-    extends AutoDisposeFutureProvider<List<dynamic>> {
+    extends AutoDisposeFutureProvider<List<LintResult>> {
   AnalysisResultsForFileProvider(
     this.file,
   ) : super(
@@ -66,12 +66,14 @@ class AnalysisResultsForFileProvider
   }
 }
 
-typedef AnalysisResultsForFileRef = AutoDisposeFutureProviderRef<List<dynamic>>;
+typedef AnalysisResultsForFileRef
+    = AutoDisposeFutureProviderRef<List<LintResult>>;
 
 /// See also [analysisResultsForFile].
 final analysisResultsForFileProvider = AnalysisResultsForFileFamily();
 
-class AnalysisResultsForFileFamily extends Family<AsyncValue<List<dynamic>>> {
+class AnalysisResultsForFileFamily
+    extends Family<AsyncValue<List<LintResult>>> {
   AnalysisResultsForFileFamily();
 
   AnalysisResultsForFileProvider call(
@@ -83,7 +85,7 @@ class AnalysisResultsForFileFamily extends Family<AsyncValue<List<dynamic>>> {
   }
 
   @override
-  AutoDisposeFutureProvider<List<dynamic>> getProviderOverride(
+  AutoDisposeFutureProvider<List<LintResult>> getProviderOverride(
     covariant AnalysisResultsForFileProvider provider,
   ) {
     return call(
@@ -105,7 +107,7 @@ String $lintResultsForFileHash() => r'fca6c1b2722a281f7f133682d7134d3e2d12fd36';
 
 /// See also [lintResultsForFile].
 class LintResultsForFileProvider
-    extends AutoDisposeFutureProvider<List<dynamic>> {
+    extends AutoDisposeFutureProvider<List<LintResult>> {
   LintResultsForFileProvider(
     this.file,
   ) : super(
@@ -137,12 +139,12 @@ class LintResultsForFileProvider
   }
 }
 
-typedef LintResultsForFileRef = AutoDisposeFutureProviderRef<List<dynamic>>;
+typedef LintResultsForFileRef = AutoDisposeFutureProviderRef<List<LintResult>>;
 
 /// See also [lintResultsForFile].
 final lintResultsForFileProvider = LintResultsForFileFamily();
 
-class LintResultsForFileFamily extends Family<AsyncValue<List<dynamic>>> {
+class LintResultsForFileFamily extends Family<AsyncValue<List<LintResult>>> {
   LintResultsForFileFamily();
 
   LintResultsForFileProvider call(
@@ -154,7 +156,7 @@ class LintResultsForFileFamily extends Family<AsyncValue<List<dynamic>>> {
   }
 
   @override
-  AutoDisposeFutureProvider<List<dynamic>> getProviderOverride(
+  AutoDisposeFutureProvider<List<LintResult>> getProviderOverride(
     covariant LintResultsForFileProvider provider,
   ) {
     return call(
@@ -172,11 +174,11 @@ class LintResultsForFileFamily extends Family<AsyncValue<List<dynamic>>> {
   String? get name => r'lintResultsForFileProvider';
 }
 
-String $lintResultsForRootHash() => r'9a98983d6d41c335a462b00e87a8b971b247b21b';
+String $lintResultsForRootHash() => r'daa5acf49572e591be0dec1e4817a783ff3d7f46';
 
 /// See also [lintResultsForRoot].
 class LintResultsForRootProvider
-    extends AutoDisposeFutureProvider<List<dynamic>> {
+    extends AutoDisposeFutureProvider<List<LintResult>> {
   LintResultsForRootProvider(
     this.root,
   ) : super(
@@ -208,12 +210,12 @@ class LintResultsForRootProvider
   }
 }
 
-typedef LintResultsForRootRef = AutoDisposeFutureProviderRef<List<dynamic>>;
+typedef LintResultsForRootRef = AutoDisposeFutureProviderRef<List<LintResult>>;
 
 /// See also [lintResultsForRoot].
 final lintResultsForRootProvider = LintResultsForRootFamily();
 
-class LintResultsForRootFamily extends Family<AsyncValue<List<dynamic>>> {
+class LintResultsForRootFamily extends Family<AsyncValue<List<LintResult>>> {
   LintResultsForRootFamily();
 
   LintResultsForRootProvider call(
@@ -225,7 +227,7 @@ class LintResultsForRootFamily extends Family<AsyncValue<List<dynamic>>> {
   }
 
   @override
-  AutoDisposeFutureProvider<List<dynamic>> getProviderOverride(
+  AutoDisposeFutureProvider<List<LintResult>> getProviderOverride(
     covariant LintResultsForRootProvider provider,
   ) {
     return call(
@@ -244,11 +246,11 @@ class LintResultsForRootFamily extends Family<AsyncValue<List<dynamic>>> {
 }
 
 String $analysisResultsForContextHash() =>
-    r'4a60f1fccf53786f89e709afb21f5370010a03e9';
+    r'7bb6887b550608f120dcaec13cdc19fb4755ad11';
 
 /// See also [analysisResultsForContext].
 class AnalysisResultsForContextProvider
-    extends AutoDisposeProvider<List<dynamic>> {
+    extends AutoDisposeProvider<List<AnalysisResult>> {
   AnalysisResultsForContextProvider(
     this.root,
   ) : super(
@@ -280,12 +282,13 @@ class AnalysisResultsForContextProvider
   }
 }
 
-typedef AnalysisResultsForContextRef = AutoDisposeProviderRef<List<dynamic>>;
+typedef AnalysisResultsForContextRef
+    = AutoDisposeProviderRef<List<AnalysisResult>>;
 
 /// See also [analysisResultsForContext].
 final analysisResultsForContextProvider = AnalysisResultsForContextFamily();
 
-class AnalysisResultsForContextFamily extends Family<List<dynamic>> {
+class AnalysisResultsForContextFamily extends Family<List<AnalysisResult>> {
   AnalysisResultsForContextFamily();
 
   AnalysisResultsForContextProvider call(
@@ -297,7 +300,7 @@ class AnalysisResultsForContextFamily extends Family<List<dynamic>> {
   }
 
   @override
-  AutoDisposeProvider<List<dynamic>> getProviderOverride(
+  AutoDisposeProvider<List<AnalysisResult>> getProviderOverride(
     covariant AnalysisResultsForContextProvider provider,
   ) {
     return call(

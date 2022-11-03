@@ -9,7 +9,7 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
-import '../analyzer/plugin/analyzer_plugin.dart';
+import '../analyzer/plugin/analyzer_plugin_old.dart';
 import '../configurations/project/project_configuration.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
@@ -36,7 +36,7 @@ class ActiveProjectService {
         sidecarOptions: projectConfig!,
         sidecarPluginPackage: pluginUri!,
         sidecarPackages: packages,
-        isMainRoot: true,
+        isExplicitlyEnabled: true,
       );
     } catch (e, stackTrace) {
       logger.severe('ActivePackageService initializeContext', e, stackTrace);
@@ -111,7 +111,7 @@ class ActiveProjectService {
           sidecarPluginPackage: pluginUri ?? mainContext.sidecarPluginPackage,
           //TODO: do we need to inherit packages of main root below?
           sidecarPackages: packages,
-          isMainRoot: false,
+          isExplicitlyEnabled: false,
         );
       },
     ).toList();

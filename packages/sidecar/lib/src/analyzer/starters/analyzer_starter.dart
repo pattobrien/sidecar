@@ -5,7 +5,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
-import '../plugin/analyzer_plugin.dart';
+import '../plugin/sidecar_analyzer.dart';
 import '../plugin/rule_constructors_provider.dart';
 
 SidecarAnalyzer analyzerStarter({

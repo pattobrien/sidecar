@@ -1,8 +1,8 @@
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
-import '../../protocol/models/analysis_result_old.dart';
 import '../../cli/options/cli_options.dart';
+import '../../protocol/protocol.dart';
 import '../../utils/utils.dart';
 import 'log_delegate_base.dart';
 
@@ -45,9 +45,9 @@ class PluginChannelDelegate implements LogDelegateBase {
 
   @override
   void analysisResults(String path, List<LintResult> results) {
-    final errors = results.map((r) => r.toAnalysisError()).toList();
-    channel.sendError('analysisResults: $path - ${results.length} ERRORS');
-    final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
-    channel.sendNotification(notif);
+    // final errors = results.map((r) => r.toAnalysisError()).toList();
+    // channel.sendError('analysisResults: $path - ${results.length} ERRORS');
+    // final notif = plugin.AnalysisErrorsParams(path, errors).toNotification();
+    // channel.sendNotification(notif);
   }
 }

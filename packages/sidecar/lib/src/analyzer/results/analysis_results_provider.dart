@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../configurations/configurations.dart';
+import '../../protocol/protocol.dart';
 import '../../services/services.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/logger/logger.dart';
@@ -12,7 +13,7 @@ import 'results.dart';
 part 'analysis_results_provider.g.dart';
 
 @riverpod
-Future<List<AnalysisResult>> analysisResultsForFile(
+Future<List<LintResult>> analysisResultsForFile(
   AnalysisResultsForFileRef ref,
   AnalyzedFile file,
 ) async {
@@ -25,7 +26,7 @@ Future<List<AnalysisResult>> analysisResultsForFile(
     final resourceProvider = ref.watch(analyzerResourceProvider);
     final content = resourceProvider.getFile(file.path).readAsStringSync();
     final config = ProjectConfiguration.fromYaml(content, fileUri: unit!.uri);
-    return config.allErrors.map((e) => e.toAnalysisResult()).toList();
+    return config.allErrors.map((e) => e.toLintResult()).toList();
   } else {
     final results = await fileService.computeLintResults(
         file: file, rules: rules, unitResult: unit);
@@ -50,7 +51,7 @@ Future<List<LintResult>> lintResultsForRoot(
   ActiveContextRoot root,
 ) async {
   final results = await Future.wait(root
-      .typedAnalyzedFiles()
+      .analyzedFiles()
       .map((file) async => ref.watch(lintResultsForFileProvider(file).future)));
   return results.expand((e) => e).toList();
 }
@@ -70,7 +71,7 @@ List<AnalysisResult> analysisResultsForContext(
   AnalysisResultsForContextRef ref,
   ActiveContextRoot root,
 ) {
-  final analyzedFiles = root.typedAnalyzedFiles();
+  final analyzedFiles = root.analyzedFiles();
   final analysisResults = analyzedFiles.map((file) =>
       ref.watch(analysisResultsForFileProvider(file)).valueOrNull ?? []);
   return analysisResults.expand((e) => e).toList();

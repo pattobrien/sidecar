@@ -12,21 +12,23 @@ import 'analyzed_file.dart';
 class ActiveContextRoot {
   const ActiveContextRoot(
     this._root, {
-    required this.isMainRoot,
+    required this.isExplicitlyEnabledRoot,
   });
 
   final ContextRoot _root;
 
   /// Indicates the package that explicitly activates Sidecar as a plugin.
-  final bool isMainRoot;
+  final bool isExplicitlyEnabledRoot;
 
-  List<AnalyzedFile> typedAnalyzedFiles() =>
-      analyzedFiles().map((e) => AnalyzedFile(this, e)).toList();
+  List<AnalyzedFile> analyzedFiles() => _root
+      .analyzedFiles()
+      .map((e) => AnalyzedFile(this, Uri.parse(e)))
+      .toList();
 
   plugin.ContextRoot get toPluginContextRoot =>
       plugin.ContextRoot(_root.root.path, []);
 
-  Iterable<String> analyzedFiles() => _root.analyzedFiles();
+  // Iterable<String> analyzedFiles() => _root.analyzedFiles();
 
   List<Resource> get excluded => _root.excluded;
 
@@ -55,4 +57,10 @@ class ActiveContextRoot {
 
   @override
   int get hashCode => root.hashCode;
+
+  // factory ActiveContextRoot.fromJson(Map<String, dynamic> json) {
+
+  //   return ActiveContextRoot(json['root'] as String,
+  //       isExplicitlyEnabledRoot: isExplicitlyEnabledRoot);
+  // }
 }

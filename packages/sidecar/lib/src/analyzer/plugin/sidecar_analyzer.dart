@@ -1,7 +1,6 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:async';
-import 'dart:io';
 import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
@@ -12,16 +11,12 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../protocol/requests/requests.dart';
 import '../../protocol/responses/responses.dart';
-
 import '../context/analyzed_file.dart';
 import '../handlers/context_collection.dart';
-import '../options_provider.dart';
 import '../results/results.dart';
-import '../server/analyzer_mode.dart';
 import 'plugin.dart';
 import 'plugin_resource_provider.dart';
 
@@ -59,7 +54,7 @@ class SidecarAnalyzer {
     pluginLogger
         .finer('# of rules: ${_ref.read(ruleConstructorProvider).length}');
     _setupListeners();
-    sendNotification(const InitializationComplete());
+    sendNotification(const InitCompleteNotification());
   }
 
   void _setupListeners() {
@@ -67,53 +62,53 @@ class SidecarAnalyzer {
     stream.listen((dynamic event) {
       print('event: $event');
       if (event is Map<String, dynamic>) {
-        if (event.containsKey('method')) {
-          final request = RequestWrapper.fromJson(event);
-          handleRequest(request);
+        try {
+          final message = SidecarMessage.fromJson(event);
+          if (message is RequestMessage) {
+            handleRequest(message);
+            return;
+          }
+        } catch (e) {
+          //
         }
       }
+      throw UnimplementedError('unknown type received: ${event.runtimeType}');
     });
   }
 
-  Future<SetCollectionResponse> handleAnalysisSetContextRoots(
+  Future<ContextCollectionResponse> handleAnalysisSetContextRoots(
     SetContextCollectionRequest request,
   ) async {
     _collection = _ref.read(contextCollectionProvider(request.roots));
-    return const SetCollectionResponse();
+    return const ContextCollectionResponse();
   }
 
-  Future<void> handleRequest(RequestWrapper request) async {
-    final id = request.id;
-    final params = request.base;
+  Future<void> handleRequest(RequestMessage msg) async {
+    final id = msg.id;
+    final unparsedRequest = msg.request;
+    final response = await unparsedRequest.map<Future<SidecarResponse?>>(
+      setContextCollection: handleAnalysisSetContextRoots,
+      analyzeFile: (request) => Future.value(),
+      assist: (request) => Future.value(),
+      quickFix: handleEditGetFixes,
+      fileUpdate: (request) => Future.value(),
+    );
 
-    // this is where we parse the requests to see which methods to calls
-    ResponseBase? responseBase;
-    if (params is SetContextCollectionRequest) {
-      responseBase = await handleAnalysisSetContextRoots(params);
-    }
-    if (params is AnalysisRequest) {
-      // responseBase = await handleAnalysisSetContextRoots(params);
-    }
-    if (params is QuickAssistRequest) {
-      //
-    }
-    if (params is QuickFixRequest) {
-      //
-    }
-    if (params is FileUpdateEvent) {
-      //
-    }
-    if (responseBase != null) {
-      print('prepping response: ${responseBase.toJson()}');
-      final wrappedResponse = responseBase.toSidecarResponse(id);
-      sendPort.send(wrappedResponse);
+    if (response != null) {
+      final wrappedResponse =
+          SidecarMessage.response(response: response, id: id);
+      final json = wrappedResponse.toJson();
+      print('response: $json');
+      sendPort.send(json);
     }
   }
 
   void sendNotification(
-    NotificationBase notification,
+    SidecarNotification notification,
   ) {
-    final json = NotificationWrapper(notification).toJson();
+    final wrappedResponse =
+        SidecarMessage.notification(notification: notification);
+    final json = wrappedResponse.toJson();
     sendPort.send(json);
   }
 
@@ -212,33 +207,33 @@ class SidecarAnalyzer {
       //TODO: bug, edits are made for multiple files
       final fixes =
           await _ref.read(requestQuickFixesProvider(this, request).future);
-      return QuickFixResponse(resultsWithEdits: fixes);
+      return QuickFixResponse(fixes);
     } catch (e, stackTrace) {
       pluginLogger.severe(
-          'handleEditGetFixes ${request.file.path}', e, stackTrace);
+          'handleEditGetFixes ${request.filePath}', e, stackTrace);
       rethrow;
     }
   }
 
-  Future<QuickAssistResponse> handleEditGetAssists(
-    QuickAssistRequest request,
-  ) async {
-    try {
-      final path = request.path;
-      final analyzedFile = _ref.read(analyzedFileForPathProvider(this, path));
+  // Future<AssistResponse> handleEditGetAssists(
+  //   AssistRequest request,
+  // ) async {
+  //   try {
+  //     final path = request.filePath;
+  //     final analyzedFile = _ref.read(analyzedFileForPathProvider(this, path));
 
-      _ref.refresh(assistResultsForFileProvider(analyzedFile));
-      _ref.refresh(assistResultsWithEditsProvider(analyzedFile));
-      final results =
-          await _ref.read(requestAssistResultsProvider(request).future);
+  //     _ref.refresh(assistResultsForFileProvider(analyzedFile));
+  //     _ref.refresh(assistResultsWithEditsProvider(analyzedFile));
+  //     final results =
+  //         await _ref.read(requestAssistResultsProvider(request).future);
 
-      return QuickAssistResponse(results: results);
-    } catch (e, stackTrace) {
-      pluginLogger.severe(
-          'handleEditGetAssists ${request.file.relativePath}', e, stackTrace);
-      rethrow;
-    }
-  }
+  //     return QuickAssistResponse(results: results);
+  //   } catch (e, stackTrace) {
+  //     pluginLogger.severe(
+  //         'handleEditGetAssists ${request.file.relativePath}', e, stackTrace);
+  //     rethrow;
+  //   }
+  // }
 
   Future<plugin.CompletionGetSuggestionsResult> handleCompletionGetSuggestions(
     plugin.CompletionGetSuggestionsParams parameters,

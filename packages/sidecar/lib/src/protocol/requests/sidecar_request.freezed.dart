@@ -37,7 +37,8 @@ SidecarRequest _$SidecarRequestFromJson(Map<String, dynamic> json) {
 mixin _$SidecarRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<String> roots) setContextCollection,
+    required TResult Function(String mainRoot, List<String> roots)
+        setContextCollection,
     required TResult Function(String filePath) analyzeFile,
     required TResult Function(String filePath, int offset, int length) assist,
     required TResult Function(String filePath, int offset) quickFix,
@@ -46,7 +47,7 @@ mixin _$SidecarRequest {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -55,7 +56,7 @@ mixin _$SidecarRequest {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -118,7 +119,7 @@ abstract class _$$SetContextCollectionRequestCopyWith<$Res> {
           _$SetContextCollectionRequest value,
           $Res Function(_$SetContextCollectionRequest) then) =
       __$$SetContextCollectionRequestCopyWithImpl<$Res>;
-  $Res call({List<String> roots});
+  $Res call({String mainRoot, List<String> roots});
 }
 
 /// @nodoc
@@ -136,10 +137,15 @@ class __$$SetContextCollectionRequestCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? mainRoot = freezed,
     Object? roots = freezed,
   }) {
     return _then(_$SetContextCollectionRequest(
-      roots == freezed
+      mainRoot: mainRoot == freezed
+          ? _value.mainRoot
+          : mainRoot // ignore: cast_nullable_to_non_nullable
+              as String,
+      roots: roots == freezed
           ? _value._roots
           : roots // ignore: cast_nullable_to_non_nullable
               as List<String>,
@@ -150,8 +156,10 @@ class __$$SetContextCollectionRequestCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$SetContextCollectionRequest extends SetContextCollectionRequest {
-  const _$SetContextCollectionRequest(final List<String> roots,
-      {final String? $type})
+  const _$SetContextCollectionRequest(
+      {required this.mainRoot,
+      required final List<String> roots,
+      final String? $type})
       : _roots = roots,
         $type = $type ?? 'setContextCollection',
         super._();
@@ -159,6 +167,8 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
   factory _$SetContextCollectionRequest.fromJson(Map<String, dynamic> json) =>
       _$$SetContextCollectionRequestFromJson(json);
 
+  @override
+  final String mainRoot;
   final List<String> _roots;
   @override
   List<String> get roots {
@@ -171,7 +181,7 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
 
   @override
   String toString() {
-    return 'SidecarRequest.setContextCollection(roots: $roots)';
+    return 'SidecarRequest.setContextCollection(mainRoot: $mainRoot, roots: $roots)';
   }
 
   @override
@@ -179,13 +189,16 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SetContextCollectionRequest &&
+            const DeepCollectionEquality().equals(other.mainRoot, mainRoot) &&
             const DeepCollectionEquality().equals(other._roots, _roots));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_roots));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(mainRoot),
+      const DeepCollectionEquality().hash(_roots));
 
   @JsonKey(ignore: true)
   @override
@@ -196,31 +209,32 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<String> roots) setContextCollection,
+    required TResult Function(String mainRoot, List<String> roots)
+        setContextCollection,
     required TResult Function(String filePath) analyzeFile,
     required TResult Function(String filePath, int offset, int length) assist,
     required TResult Function(String filePath, int offset) quickFix,
     required TResult Function(FileUpdateEvent event) fileUpdate,
   }) {
-    return setContextCollection(roots);
+    return setContextCollection(mainRoot, roots);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
     TResult Function(FileUpdateEvent event)? fileUpdate,
   }) {
-    return setContextCollection?.call(roots);
+    return setContextCollection?.call(mainRoot, roots);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -228,7 +242,7 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     required TResult orElse(),
   }) {
     if (setContextCollection != null) {
-      return setContextCollection(roots);
+      return setContextCollection(mainRoot, roots);
     }
     return orElse();
   }
@@ -283,13 +297,15 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
 }
 
 abstract class SetContextCollectionRequest extends SidecarRequest {
-  const factory SetContextCollectionRequest(final List<String> roots) =
-      _$SetContextCollectionRequest;
+  const factory SetContextCollectionRequest(
+      {required final String mainRoot,
+      required final List<String> roots}) = _$SetContextCollectionRequest;
   const SetContextCollectionRequest._() : super._();
 
   factory SetContextCollectionRequest.fromJson(Map<String, dynamic> json) =
       _$SetContextCollectionRequest.fromJson;
 
+  String get mainRoot;
   List<String> get roots;
   @JsonKey(ignore: true)
   _$$SetContextCollectionRequestCopyWith<_$SetContextCollectionRequest>
@@ -371,7 +387,8 @@ class _$AnalyzeFileRequest extends AnalyzeFileRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<String> roots) setContextCollection,
+    required TResult Function(String mainRoot, List<String> roots)
+        setContextCollection,
     required TResult Function(String filePath) analyzeFile,
     required TResult Function(String filePath, int offset, int length) assist,
     required TResult Function(String filePath, int offset) quickFix,
@@ -383,7 +400,7 @@ class _$AnalyzeFileRequest extends AnalyzeFileRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -395,7 +412,7 @@ class _$AnalyzeFileRequest extends AnalyzeFileRequest {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -569,7 +586,8 @@ class _$AssistRequest extends AssistRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<String> roots) setContextCollection,
+    required TResult Function(String mainRoot, List<String> roots)
+        setContextCollection,
     required TResult Function(String filePath) analyzeFile,
     required TResult Function(String filePath, int offset, int length) assist,
     required TResult Function(String filePath, int offset) quickFix,
@@ -581,7 +599,7 @@ class _$AssistRequest extends AssistRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -593,7 +611,7 @@ class _$AssistRequest extends AssistRequest {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -759,7 +777,8 @@ class _$QuickFixRequest extends QuickFixRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<String> roots) setContextCollection,
+    required TResult Function(String mainRoot, List<String> roots)
+        setContextCollection,
     required TResult Function(String filePath) analyzeFile,
     required TResult Function(String filePath, int offset, int length) assist,
     required TResult Function(String filePath, int offset) quickFix,
@@ -771,7 +790,7 @@ class _$QuickFixRequest extends QuickFixRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -783,7 +802,7 @@ class _$QuickFixRequest extends QuickFixRequest {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -944,7 +963,8 @@ class _$FileUpdateRequest extends FileUpdateRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<String> roots) setContextCollection,
+    required TResult Function(String mainRoot, List<String> roots)
+        setContextCollection,
     required TResult Function(String filePath) analyzeFile,
     required TResult Function(String filePath, int offset, int length) assist,
     required TResult Function(String filePath, int offset) quickFix,
@@ -956,7 +976,7 @@ class _$FileUpdateRequest extends FileUpdateRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,
@@ -968,7 +988,7 @@ class _$FileUpdateRequest extends FileUpdateRequest {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<String> roots)? setContextCollection,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(String filePath)? analyzeFile,
     TResult Function(String filePath, int offset, int length)? assist,
     TResult Function(String filePath, int offset)? quickFix,

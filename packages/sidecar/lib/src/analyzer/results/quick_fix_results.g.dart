@@ -29,11 +29,11 @@ class _SystemHash {
   }
 }
 
-String $requestQuickFixesHash() => r'9eadf2e584fa47b27e587b4e3f972f98208f7a8b';
+String $requestQuickFixesHash() => r'dd1f3c378e7c323306ed91580accb04ddef97996';
 
 /// See also [requestQuickFixes].
 class RequestQuickFixesProvider
-    extends AutoDisposeFutureProvider<List<LintResult>> {
+    extends AutoDisposeFutureProvider<List<LintResultWithEdits>> {
   RequestQuickFixesProvider(
     this.analyzer,
     this.request,
@@ -51,7 +51,7 @@ class RequestQuickFixesProvider
                   : $requestQuickFixesHash,
         );
 
-  final dynamic analyzer;
+  final SidecarAnalyzer analyzer;
   final QuickFixRequest request;
 
   @override
@@ -71,16 +71,18 @@ class RequestQuickFixesProvider
   }
 }
 
-typedef RequestQuickFixesRef = AutoDisposeFutureProviderRef<List<LintResult>>;
+typedef RequestQuickFixesRef
+    = AutoDisposeFutureProviderRef<List<LintResultWithEdits>>;
 
 /// See also [requestQuickFixes].
 final requestQuickFixesProvider = RequestQuickFixesFamily();
 
-class RequestQuickFixesFamily extends Family<AsyncValue<List<LintResult>>> {
+class RequestQuickFixesFamily
+    extends Family<AsyncValue<List<LintResultWithEdits>>> {
   RequestQuickFixesFamily();
 
   RequestQuickFixesProvider call(
-    dynamic analyzer,
+    SidecarAnalyzer analyzer,
     QuickFixRequest request,
   ) {
     return RequestQuickFixesProvider(
@@ -90,7 +92,7 @@ class RequestQuickFixesFamily extends Family<AsyncValue<List<LintResult>>> {
   }
 
   @override
-  AutoDisposeFutureProvider<List<LintResult>> getProviderOverride(
+  AutoDisposeFutureProvider<List<LintResultWithEdits>> getProviderOverride(
     covariant RequestQuickFixesProvider provider,
   ) {
     return call(
@@ -110,11 +112,11 @@ class RequestQuickFixesFamily extends Family<AsyncValue<List<LintResult>>> {
 }
 
 String $quickFixResultsForRootHash() =>
-    r'b32f4523b26ad42e103c76334c05bd1ccc56425e';
+    r'9dcad3bf3d8f7a1e7a8ccd737d94bed7830c3f8e';
 
 /// See also [quickFixResultsForRoot].
 class QuickFixResultsForRootProvider
-    extends AutoDisposeFutureProvider<List<LintResult>> {
+    extends AutoDisposeFutureProvider<List<LintResultWithEdits>> {
   QuickFixResultsForRootProvider(
     this.root,
   ) : super(
@@ -147,13 +149,13 @@ class QuickFixResultsForRootProvider
 }
 
 typedef QuickFixResultsForRootRef
-    = AutoDisposeFutureProviderRef<List<LintResult>>;
+    = AutoDisposeFutureProviderRef<List<LintResultWithEdits>>;
 
 /// See also [quickFixResultsForRoot].
 final quickFixResultsForRootProvider = QuickFixResultsForRootFamily();
 
 class QuickFixResultsForRootFamily
-    extends Family<AsyncValue<List<LintResult>>> {
+    extends Family<AsyncValue<List<LintResultWithEdits>>> {
   QuickFixResultsForRootFamily();
 
   QuickFixResultsForRootProvider call(
@@ -165,7 +167,7 @@ class QuickFixResultsForRootFamily
   }
 
   @override
-  AutoDisposeFutureProvider<List<LintResult>> getProviderOverride(
+  AutoDisposeFutureProvider<List<LintResultWithEdits>> getProviderOverride(
     covariant QuickFixResultsForRootProvider provider,
   ) {
     return call(

@@ -11,6 +11,7 @@ import '../../utils/logger/logger.dart';
 import '../context/context.dart';
 import '../results/results.dart';
 import 'plugin.dart';
+import 'sidecar_analyzer.dart';
 
 part 'active_contexts_provider.g.dart';
 
@@ -34,7 +35,11 @@ List<ActiveContext> activeContexts(
     logger.finer('active context => ${activeContext.activeRoot.root.path}');
   }
   final activeContextsAndDependencies = [...activeContexts, ...dependencies];
-  assert(activeContextsAndDependencies.where((c) => c.isMainRoot).length == 1,
+  assert(
+      activeContextsAndDependencies
+              .where((c) => c.isExplicitlyEnabled)
+              .length ==
+          1,
       'There should only ever be 1 main active context for each isolate.');
 
   return activeContextsAndDependencies;
@@ -73,7 +78,7 @@ StreamSubscription? _listenToConfigForChanges(
     ref.invalidate(activeContextsProvider);
     ref.invalidate(activeContextForRootProvider(root));
     ref.invalidate(activatedRulesForRootProvider(root));
-    for (final file in root.typedAnalyzedFiles()) {
+    for (final file in root.analyzedFiles()) {
       ref.invalidate(analysisResultsForFileProvider(file));
       ref.refresh(createAnalysisReportProvider(file));
     }

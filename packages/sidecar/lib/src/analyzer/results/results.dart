@@ -1,4 +1,3 @@
-export '../../protocol/models/analysis_result_old.dart';
 export 'analysis_results_provider.dart';
 export 'analysis_results_reporter.dart';
 export 'annotations_provider.dart';

@@ -13,7 +13,7 @@ part 'analyzed_file.freezed.dart';
 /// This was created to be type-safe.
 class AnalyzedFile with _$AnalyzedFile {
   const factory AnalyzedFile(
-    ActiveContext context,
+    ActiveContextRoot activeRoot,
     Uri fileUri,
   ) = _AnalyzedFile;
 
@@ -26,6 +26,5 @@ class AnalyzedFile with _$AnalyzedFile {
   bool get isAnalysisOptionsFile => relativePath == kAnalysisOptionsYaml;
   bool get isSidecarYamlFile => relativePath == kSidecarYaml;
 
-  String get relativePath =>
-      p.relative(path, from: context.activeRoot.root.path);
+  String get relativePath => p.relative(path, from: activeRoot.root.path);
 }

@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $sidecarAnnotationsForRootHash() =>
-    r'3233a269d68ddfc32817f20fd44d87986cfd1d4d';
+    r'907aa998d4eedc61cd3b1e5c6eade16dc434ee22';
 
 /// See also [sidecarAnnotationsForRoot].
 class SidecarAnnotationsForRootProvider

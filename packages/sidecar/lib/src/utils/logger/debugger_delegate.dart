@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import '../../analyzer/results/results.dart';
 import '../../analyzer/server/analyzer_mode.dart';
 import '../../cli/options/cli_options.dart';
+import '../../protocol/models/models.dart';
 import '../../rules/rules.dart';
 import 'logger.dart';
 
@@ -59,7 +60,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
     for (final result in results) {
       final ansi = Ansi(true);
       final location =
-          '$relativePath:${result.span.source.start.line}:${result.span.source.start.column}';
+          '$relativePath:${result.span.start.line}:${result.span.start.column}';
 
       // pad error type string so that it aligns in the terminal nicely
       // we need to do this manually (as opposed to using String.padLeft()),

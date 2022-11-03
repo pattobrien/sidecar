@@ -14,7 +14,7 @@ List<SidecarAnnotatedNode> sidecarAnnotationsForRoot(
   ActiveContextRoot root,
 ) {
   final context = ref.watch(activeContextForRootProvider(root));
-  final files = context.activeRoot.typedAnalyzedFiles();
+  final files = context.activeRoot.analyzedFiles();
   return files
       .map<List<SidecarAnnotatedNode>>((file) {
         final unit =

@@ -8,7 +8,6 @@ import 'package:package_config/package_config_types.dart';
 
 import '../../configurations/configurations.dart';
 import '../../protocol/protocol.dart';
-import '../plugin/analyzer_plugin.dart';
 import 'context.dart';
 
 class ActiveContext {
@@ -17,7 +16,7 @@ class ActiveContext {
     required this.sidecarOptions,
     required this.sidecarPluginPackage,
     required this.sidecarPackages,
-    required this.isMainRoot,
+    required this.isExplicitlyEnabled,
   });
 
   final AnalysisContext context;
@@ -25,35 +24,32 @@ class ActiveContext {
   final Package sidecarPluginPackage;
   final List<RulePackageConfiguration> sidecarPackages;
 
-  /// Indicates the package that explicitly activates Sidecar as a plugin.
-  final bool isMainRoot;
+  /// Indicates the package was explicitly activated as a Sidecar plugin, as
+  /// opposed to being a dependency of a package that has Sidecar enabled.
+  final bool isExplicitlyEnabled;
 
-  bool get isDependency => !isMainRoot;
+  bool get isDependency => !isExplicitlyEnabled;
 
   ActiveContextRoot get activeRoot => ActiveContextRoot(
         context.contextRoot,
-        isMainRoot: isMainRoot,
+        isExplicitlyEnabledRoot: isExplicitlyEnabled,
       );
 
-  // @override
   AnalysisOptions get analysisOptions => context.analysisOptions;
 
-  // @override
   Future<List<String>> applyPendingFileChanges() =>
       context.applyPendingFileChanges();
 
-  // @override
   void changeFile(String path) => context.changeFile(path);
 
-  // @override
   ContextRoot get contextRoot => context.contextRoot;
 
-  // @override
   AnalysisSession get currentSession => context.currentSession;
 
-  // @override
   Folder? get sdkRoot => context.sdkRoot;
 }
+
+enum ActiveContextType { dependency, explicit }
 
 extension ContextsX on List<ActiveContext> {
   ActiveContext? contextFor(AnalyzedFile analyzedFile) {

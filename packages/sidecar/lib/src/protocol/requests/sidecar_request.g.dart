@@ -9,13 +9,15 @@ part of 'sidecar_request.dart';
 _$SetContextCollectionRequest _$$SetContextCollectionRequestFromJson(
         Map<String, dynamic> json) =>
     _$SetContextCollectionRequest(
-      (json['roots'] as List<dynamic>).map((e) => e as String).toList(),
+      mainRoot: json['mainRoot'] as String,
+      roots: (json['roots'] as List<dynamic>).map((e) => e as String).toList(),
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$SetContextCollectionRequestToJson(
         _$SetContextCollectionRequest instance) =>
     <String, dynamic>{
+      'mainRoot': instance.mainRoot,
       'roots': instance.roots,
       'runtimeType': instance.$type,
     };

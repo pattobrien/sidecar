@@ -50,8 +50,8 @@ class SidecarNewException with _$SidecarNewException {
   factory SidecarNewException.fromJson(Map<String, dynamic> json) =>
       _$SidecarNewExceptionFromJson(json);
 
-  AnalysisResult toAnalysisResult() {
-    return AnalysisResult(
+  LintResult toLintResult() {
+    return LintResult(
       span: sourceSpan,
       rule: code,
       message: message,

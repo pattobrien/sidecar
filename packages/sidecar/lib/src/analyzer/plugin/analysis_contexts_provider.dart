@@ -2,7 +2,7 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../handlers/context_collection.dart';
-import 'analyzer_plugin.dart';
+import 'analyzer_plugin_old.dart';
 
 part 'analysis_contexts_provider.g.dart';
 

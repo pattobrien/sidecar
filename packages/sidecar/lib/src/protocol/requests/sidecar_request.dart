@@ -13,8 +13,10 @@ part 'sidecar_request.g.dart';
 class SidecarRequest with _$SidecarRequest {
   const SidecarRequest._();
 
-  const factory SidecarRequest.setContextCollection(List<String> roots) =
-      SetContextCollectionRequest;
+  const factory SidecarRequest.setContextCollection({
+    required String mainRoot,
+    required List<String> roots,
+  }) = SetContextCollectionRequest;
 
   const factory SidecarRequest.analyzeFile(String filePath) =
       AnalyzeFileRequest;

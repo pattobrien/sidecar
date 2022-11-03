@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../context/context.dart';
 import 'plugin.dart';
+import 'sidecar_analyzer.dart';
 
 part 'analyzed_files_provider.g.dart';
 
@@ -10,7 +11,7 @@ List<AnalyzedFile> analyzedFilesForRoot(
   AnalyzedFilesForRootRef ref,
   ActiveContextRoot root,
 ) {
-  return root.typedAnalyzedFiles();
+  return root.analyzedFiles();
 }
 
 //TODO: can we remove the analyzer parameter from here

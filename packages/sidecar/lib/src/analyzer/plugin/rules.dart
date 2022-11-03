@@ -45,8 +45,8 @@ List<BaseRule> filteredRulesForFile(
   FilteredRulesForFileRef ref,
   AnalyzedFile file,
 ) {
-  final allRules = ref.watch(activatedRulesForRootProvider(file.root));
-  final context = ref.watch(activeContextForRootProvider(file.root));
+  final allRules = ref.watch(activatedRulesForRootProvider(file.activeRoot));
+  final context = ref.watch(activeContextForRootProvider(file.activeRoot));
   return allRules
       .where((rule) => _isPathIncludedForRule(
           file: file, rule: rule, projectConfiguration: context.sidecarOptions))

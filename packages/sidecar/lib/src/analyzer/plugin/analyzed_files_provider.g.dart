@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $analyzedFilesForRootHash() =>
-    r'65da744402a9f7db95e9e7f4640815523e9032a4';
+    r'f77c00ba7ffb04395dab5f1c8052cccd25692204';
 
 /// See also [analyzedFilesForRoot].
 class AnalyzedFilesForRootProvider
@@ -123,7 +123,7 @@ class AnalyzedFileForPathProvider extends AutoDisposeProvider<AnalyzedFile> {
                   : $analyzedFileForPathHash,
         );
 
-  final dynamic analyzer;
+  final SidecarAnalyzer analyzer;
   final String path;
 
   @override
@@ -152,7 +152,7 @@ class AnalyzedFileForPathFamily extends Family<AnalyzedFile> {
   AnalyzedFileForPathFamily();
 
   AnalyzedFileForPathProvider call(
-    dynamic analyzer,
+    SidecarAnalyzer analyzer,
     String path,
   ) {
     return AnalyzedFileForPathProvider(

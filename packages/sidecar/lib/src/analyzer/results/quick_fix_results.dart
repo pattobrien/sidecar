@@ -1,18 +1,16 @@
-import 'package:analyzer_plugin/protocol/protocol_generated.dart';
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../protocol/models/models.dart';
 import '../../protocol/protocol.dart';
 import '../../services/services.dart';
 import '../context/context.dart';
 import '../plugin/plugin.dart';
+import '../plugin/sidecar_analyzer.dart';
 import 'analysis_results_provider.dart';
 
 part 'quick_fix_results.g.dart';
 
 @riverpod
-Future<List<LintResult>> requestQuickFixes(
+Future<List<LintResultWithEdits>> requestQuickFixes(
   RequestQuickFixesRef ref,
   SidecarAnalyzer analyzer,
   QuickFixRequest request,
@@ -23,7 +21,7 @@ Future<List<LintResult>> requestQuickFixes(
       await ref.watch(lintResultsForFileProvider(request.filePath).future);
 
   final analysisResultsForOffset = lintResults.where(
-      (element) => element.isWithinOffset(request.file.path, request.offset));
+      (element) => element.isWithinOffset(request.filePath, request.offset));
   return Future.wait(analysisResultsForOffset.map((e) async {
     final resultWithEdits =
         await fileService.computeEditResultsForAnalysisResult(context, e);
@@ -32,7 +30,7 @@ Future<List<LintResult>> requestQuickFixes(
 }
 
 @riverpod
-Future<List<LintResult>> quickFixResultsForRoot(
+Future<List<LintResultWithEdits>> quickFixResultsForRoot(
   QuickFixResultsForRootRef ref,
   ActiveContextRoot root,
 ) async {

@@ -242,7 +242,7 @@ class ActivatedRulesForRootFamily extends Family<List<BaseRule>> {
 }
 
 String $filteredRulesForFileHash() =>
-    r'd2f1e2d9d6d1247f3f3c99721bd1ce3fe2c7de6d';
+    r'41c6e9c016ed86a3f5e59813d97b2c5562ec6076';
 
 /// See also [filteredRulesForFile].
 class FilteredRulesForFileProvider extends AutoDisposeProvider<List<BaseRule>> {

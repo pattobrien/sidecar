@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnalyzedFile {
-  ActiveContext get context => throw _privateConstructorUsedError;
+  ActiveContextRoot get activeRoot => throw _privateConstructorUsedError;
   Uri get fileUri => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +29,7 @@ abstract class $AnalyzedFileCopyWith<$Res> {
   factory $AnalyzedFileCopyWith(
           AnalyzedFile value, $Res Function(AnalyzedFile) then) =
       _$AnalyzedFileCopyWithImpl<$Res>;
-  $Res call({ActiveContext context, Uri fileUri});
+  $Res call({ActiveContextRoot activeRoot, Uri fileUri});
 }
 
 /// @nodoc
@@ -42,14 +42,14 @@ class _$AnalyzedFileCopyWithImpl<$Res> implements $AnalyzedFileCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? context = freezed,
+    Object? activeRoot = freezed,
     Object? fileUri = freezed,
   }) {
     return _then(_value.copyWith(
-      context: context == freezed
-          ? _value.context
-          : context // ignore: cast_nullable_to_non_nullable
-              as ActiveContext,
+      activeRoot: activeRoot == freezed
+          ? _value.activeRoot
+          : activeRoot // ignore: cast_nullable_to_non_nullable
+              as ActiveContextRoot,
       fileUri: fileUri == freezed
           ? _value.fileUri
           : fileUri // ignore: cast_nullable_to_non_nullable
@@ -65,7 +65,7 @@ abstract class _$$_AnalyzedFileCopyWith<$Res>
           _$_AnalyzedFile value, $Res Function(_$_AnalyzedFile) then) =
       __$$_AnalyzedFileCopyWithImpl<$Res>;
   @override
-  $Res call({ActiveContext context, Uri fileUri});
+  $Res call({ActiveContextRoot activeRoot, Uri fileUri});
 }
 
 /// @nodoc
@@ -81,14 +81,14 @@ class __$$_AnalyzedFileCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? context = freezed,
+    Object? activeRoot = freezed,
     Object? fileUri = freezed,
   }) {
     return _then(_$_AnalyzedFile(
-      context == freezed
-          ? _value.context
-          : context // ignore: cast_nullable_to_non_nullable
-              as ActiveContext,
+      activeRoot == freezed
+          ? _value.activeRoot
+          : activeRoot // ignore: cast_nullable_to_non_nullable
+              as ActiveContextRoot,
       fileUri == freezed
           ? _value.fileUri
           : fileUri // ignore: cast_nullable_to_non_nullable
@@ -100,16 +100,16 @@ class __$$_AnalyzedFileCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AnalyzedFile extends _AnalyzedFile {
-  const _$_AnalyzedFile(this.context, this.fileUri) : super._();
+  const _$_AnalyzedFile(this.activeRoot, this.fileUri) : super._();
 
   @override
-  final ActiveContext context;
+  final ActiveContextRoot activeRoot;
   @override
   final Uri fileUri;
 
   @override
   String toString() {
-    return 'AnalyzedFile(context: $context, fileUri: $fileUri)';
+    return 'AnalyzedFile(activeRoot: $activeRoot, fileUri: $fileUri)';
   }
 
   @override
@@ -117,14 +117,15 @@ class _$_AnalyzedFile extends _AnalyzedFile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AnalyzedFile &&
-            const DeepCollectionEquality().equals(other.context, context) &&
+            const DeepCollectionEquality()
+                .equals(other.activeRoot, activeRoot) &&
             const DeepCollectionEquality().equals(other.fileUri, fileUri));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(context),
+      const DeepCollectionEquality().hash(activeRoot),
       const DeepCollectionEquality().hash(fileUri));
 
   @JsonKey(ignore: true)
@@ -134,12 +135,12 @@ class _$_AnalyzedFile extends _AnalyzedFile {
 }
 
 abstract class _AnalyzedFile extends AnalyzedFile {
-  const factory _AnalyzedFile(final ActiveContext context, final Uri fileUri) =
-      _$_AnalyzedFile;
+  const factory _AnalyzedFile(
+      final ActiveContextRoot activeRoot, final Uri fileUri) = _$_AnalyzedFile;
   const _AnalyzedFile._() : super._();
 
   @override
-  ActiveContext get context;
+  ActiveContextRoot get activeRoot;
   @override
   Uri get fileUri;
   @override
