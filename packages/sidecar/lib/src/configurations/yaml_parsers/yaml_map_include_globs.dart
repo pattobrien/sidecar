@@ -1,7 +1,7 @@
 import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
-import '../builders/new_exceptions.dart';
+import '../builders/config_exceptions.dart';
 import '../configurations.dart';
 
 extension YamlMapIncludeGlobs on YamlMap {
@@ -17,8 +17,7 @@ extension YamlMapIncludeGlobs on YamlMap {
               .cast<YamlScalar>()
               .firstWhere((element) => element.value == key)
               .span,
-          code: 'sidecar_invalid_field',
-          correction: '',
+          code: invalidFieldCode,
           message: 'Includes requires a list',
         )
       ]);

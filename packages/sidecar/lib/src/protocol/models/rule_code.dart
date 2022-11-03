@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../rules/rules.dart';
+
 part 'rule_code.freezed.dart';
 part 'rule_code.g.dart';
 
@@ -21,3 +23,25 @@ class RuleCode with _$RuleCode {
 }
 
 enum RuleType { lint, assist }
+
+extension BaseRuleX on BaseRule {
+  RuleCode get ruleCode {
+    final thisRule = this;
+    if (thisRule is LintRule) {
+      return RuleCode(
+        type: RuleType.lint,
+        code: code,
+        packageName: packageName,
+        url: thisRule.url,
+      );
+    } else if (this is AssistRule) {
+      return RuleCode(
+        type: RuleType.assist,
+        code: code,
+        packageName: packageName,
+      );
+    } else {
+      throw UnimplementedError('expected either an AssistRule or LintRule.');
+    }
+  }
+}

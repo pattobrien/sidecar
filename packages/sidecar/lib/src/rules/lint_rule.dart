@@ -1,16 +1,16 @@
 import 'package:analyzer/dart/analysis/results.dart';
+import 'package:source_span/source_span.dart';
 
 import '../analyzer/ast/general_visitor.dart';
-import '../protocol/models/analysis_result_old.dart';
-import '../protocol/models/edit_result_old.dart';
-import 'analysis_source.dart';
+import '../protocol/models/models.dart';
+import '../protocol/protocol.dart';
 import 'base_rule.dart';
 import 'lint_severity.dart';
 import 'sidecar_ast_visitor.dart';
 
-abstract class LintRule = BaseRule with LintMixin;
+abstract class LintRule = BaseRule with Lint;
 
-mixin LintMixin on BaseRule {
+mixin Lint on BaseRule {
   LintSeverity get defaultSeverity => LintSeverity.info;
   String? get url => null;
 
@@ -22,7 +22,7 @@ mixin LintMixin on BaseRule {
 }
 
 mixin QuickFix on LintRule {
-  Future<List<EditResult>> computeQuickFixes(AnalysisSourceSpan source);
+  Future<List<EditResult>> computeQuickFixes(SourceSpan source);
 }
 
 mixin LintVisitor on LintRule {

@@ -51,4 +51,18 @@ class AnalysisResult with _$AnalysisResult {
 
   int compareTo(AnalysisResult other) =>
       span.start.offset.compareTo(other.span.start.offset);
+
+  LintResultWithEdits copyWithNoEdits() => copyWithEdits(edits: []);
+
+  LintResultWithEdits copyWithEdits({
+    required List<EditResult> edits,
+  }) {
+    return LintResultWithEdits(
+      rule: rule,
+      span: span,
+      message: message,
+      severity: severity,
+      edits: edits,
+    );
+  }
 }

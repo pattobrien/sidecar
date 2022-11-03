@@ -1,19 +1,19 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:source_span/source_span.dart';
 
-import '../../protocol/models/analysis_result_old.dart';
+import '../../protocol/models/models.dart';
 import '../../rules/rules.dart';
 import '../../utils/json_utils/source_span_utils.dart';
 
-part 'new_exceptions.freezed.dart';
-part 'new_exceptions.g.dart';
+part 'config_exceptions.freezed.dart';
+part 'config_exceptions.g.dart';
 
 @freezed
 class SidecarNewException with _$SidecarNewException {
   const factory SidecarNewException({
-    required String code,
+    required RuleCode code,
     required String message,
-    required String correction,
+    String? correction,
     @JsonKey(fromJson: sourceSpanFromJson, toJson: sourceSpanToJson)
         required SourceSpan sourceSpan,
   }) = _SidecarException;
@@ -25,10 +25,11 @@ class SidecarNewException with _$SidecarNewException {
         required SourceSpan sourceSpan,
   }) {
     return SidecarNewException(
-        code: 'sidecar_invalid_field',
-        message: message,
-        correction: correction,
-        sourceSpan: sourceSpan);
+      code: invalidFieldCode,
+      message: message,
+      correction: correction,
+      sourceSpan: sourceSpan,
+    );
   }
 
   factory SidecarNewException.rule({
@@ -38,19 +39,11 @@ class SidecarNewException with _$SidecarNewException {
         required SourceSpan sourceSpan,
   }) {
     return SidecarNewException(
-        code: 'sidecar_invalid_rule',
+        code: invalidRuleCode,
         message: message,
-        correction: correction ?? '',
+        correction: correction,
         sourceSpan: sourceSpan);
   }
-  // const factory SidecarNewException.package({
-  //   // required String code,
-  //   // required String message,
-  //   // required String correction,
-  //   required String packageName,
-  //   @JsonKey(fromJson: sourceSpanFromJson, toJson: sourceSpanToJson)
-  //       required SourceSpan sourceSpan,
-  // }) = PackageException;
 
   const SidecarNewException._();
 
@@ -58,12 +51,9 @@ class SidecarNewException with _$SidecarNewException {
       _$SidecarNewExceptionFromJson(json);
 
   AnalysisResult toAnalysisResult() {
-    return AnalysisResult.lint(
-      span: AnalysisSourceSpan(
-        path: sourceSpan.start.sourceUrl!.path,
-        source: sourceSpan,
-      ),
-      rule: SidecarLintRule(field: code),
+    return AnalysisResult(
+      span: sourceSpan,
+      rule: code,
       message: message,
       correction: correction,
       severity: LintSeverity.warning,
@@ -71,13 +61,16 @@ class SidecarNewException with _$SidecarNewException {
   }
 }
 
-class SidecarLintRule extends LintRule {
-  SidecarLintRule({required this.field});
-  final String field;
+const invalidFieldCode = RuleCode(
+  type: RuleType.lint,
+  code: 'sidecar_invalid_field',
+  packageName: 'sidecar',
+  // url:
+);
 
-  @override
-  String get code => field;
-
-  @override
-  LintPackageId get packageName => 'sidecar';
-}
+const invalidRuleCode = RuleCode(
+  type: RuleType.lint,
+  code: 'sidecar_invalid_rule',
+  packageName: 'sidecar',
+  // url:
+);

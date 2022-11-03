@@ -21,7 +21,7 @@ FileUpdateEvent _$FileUpdateEventFromJson(Map<String, dynamic> json) {
     case 'modify':
       return ModifyEvent.fromJson(json);
     case 'delete':
-      return ModifyEvent.fromJson(json);
+      return DeleteEvent.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'FileUpdateEvent',
@@ -58,21 +58,21 @@ mixin _$FileUpdateEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(AddEvent value) add,
     required TResult Function(ModifyEvent value) modify,
-    required TResult Function(ModifyEvent value) delete,
+    required TResult Function(DeleteEvent value) delete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AddEvent value)? add,
     TResult Function(ModifyEvent value)? modify,
-    TResult Function(ModifyEvent value)? delete,
+    TResult Function(DeleteEvent value)? delete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AddEvent value)? add,
     TResult Function(ModifyEvent value)? modify,
-    TResult Function(ModifyEvent value)? delete,
+    TResult Function(DeleteEvent value)? delete,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -234,7 +234,7 @@ class _$AddEvent extends AddEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(AddEvent value) add,
     required TResult Function(ModifyEvent value) modify,
-    required TResult Function(ModifyEvent value) delete,
+    required TResult Function(DeleteEvent value) delete,
   }) {
     return add(this);
   }
@@ -244,7 +244,7 @@ class _$AddEvent extends AddEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AddEvent value)? add,
     TResult Function(ModifyEvent value)? modify,
-    TResult Function(ModifyEvent value)? delete,
+    TResult Function(DeleteEvent value)? delete,
   }) {
     return add?.call(this);
   }
@@ -254,7 +254,7 @@ class _$AddEvent extends AddEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AddEvent value)? add,
     TResult Function(ModifyEvent value)? modify,
-    TResult Function(ModifyEvent value)? delete,
+    TResult Function(DeleteEvent value)? delete,
     required TResult orElse(),
   }) {
     if (add != null) {
@@ -400,7 +400,7 @@ class _$ModifyEvent extends ModifyEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(AddEvent value) add,
     required TResult Function(ModifyEvent value) modify,
-    required TResult Function(ModifyEvent value) delete,
+    required TResult Function(DeleteEvent value) delete,
   }) {
     return modify(this);
   }
@@ -410,7 +410,7 @@ class _$ModifyEvent extends ModifyEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AddEvent value)? add,
     TResult Function(ModifyEvent value)? modify,
-    TResult Function(ModifyEvent value)? delete,
+    TResult Function(DeleteEvent value)? delete,
   }) {
     return modify?.call(this);
   }
@@ -420,7 +420,7 @@ class _$ModifyEvent extends ModifyEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AddEvent value)? add,
     TResult Function(ModifyEvent value)? modify,
-    TResult Function(ModifyEvent value)? delete,
+    TResult Function(DeleteEvent value)? delete,
     required TResult orElse(),
   }) {
     if (modify != null) {
@@ -453,11 +453,11 @@ abstract class ModifyEvent extends FileUpdateEvent {
 }
 
 /// @nodoc
-abstract class _$$ModifyEventCopyWith<$Res>
+abstract class _$$DeleteEventCopyWith<$Res>
     implements $FileUpdateEventCopyWith<$Res> {
-  factory _$$ModifyEventCopyWith(
-          _$ModifyEvent value, $Res Function(_$ModifyEvent) then) =
-      __$$ModifyEventCopyWithImpl<$Res>;
+  factory _$$DeleteEventCopyWith(
+          _$DeleteEvent value, $Res Function(_$DeleteEvent) then) =
+      __$$DeleteEventCopyWithImpl<$Res>;
   @override
   $Res call({SourceFileEdit fileEdit});
 
@@ -466,21 +466,21 @@ abstract class _$$ModifyEventCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ModifyEventCopyWithImpl<$Res>
+class __$$DeleteEventCopyWithImpl<$Res>
     extends _$FileUpdateEventCopyWithImpl<$Res>
-    implements _$$ModifyEventCopyWith<$Res> {
-  __$$ModifyEventCopyWithImpl(
-      _$ModifyEvent _value, $Res Function(_$ModifyEvent) _then)
-      : super(_value, (v) => _then(v as _$ModifyEvent));
+    implements _$$DeleteEventCopyWith<$Res> {
+  __$$DeleteEventCopyWithImpl(
+      _$DeleteEvent _value, $Res Function(_$DeleteEvent) _then)
+      : super(_value, (v) => _then(v as _$DeleteEvent));
 
   @override
-  _$ModifyEvent get _value => super._value as _$ModifyEvent;
+  _$DeleteEvent get _value => super._value as _$DeleteEvent;
 
   @override
   $Res call({
     Object? fileEdit = freezed,
   }) {
-    return _then(_$ModifyEvent(
+    return _then(_$DeleteEvent(
       fileEdit == freezed
           ? _value.fileEdit
           : fileEdit // ignore: cast_nullable_to_non_nullable
@@ -491,13 +491,13 @@ class __$$ModifyEventCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ModifyEvent extends ModifyEvent {
-  const _$ModifyEvent(this.fileEdit, {final String? $type})
+class _$DeleteEvent extends DeleteEvent {
+  const _$DeleteEvent(this.fileEdit, {final String? $type})
       : $type = $type ?? 'delete',
         super._();
 
-  factory _$ModifyEvent.fromJson(Map<String, dynamic> json) =>
-      _$$ModifyEventFromJson(json);
+  factory _$DeleteEvent.fromJson(Map<String, dynamic> json) =>
+      _$$DeleteEventFromJson(json);
 
 // does this work?
   @override
@@ -515,7 +515,7 @@ class _$ModifyEvent extends ModifyEvent {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ModifyEvent &&
+            other is _$DeleteEvent &&
             const DeepCollectionEquality().equals(other.fileEdit, fileEdit));
   }
 
@@ -526,8 +526,8 @@ class _$ModifyEvent extends ModifyEvent {
 
   @JsonKey(ignore: true)
   @override
-  _$$ModifyEventCopyWith<_$ModifyEvent> get copyWith =>
-      __$$ModifyEventCopyWithImpl<_$ModifyEvent>(this, _$identity);
+  _$$DeleteEventCopyWith<_$DeleteEvent> get copyWith =>
+      __$$DeleteEventCopyWithImpl<_$DeleteEvent>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -568,7 +568,7 @@ class _$ModifyEvent extends ModifyEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(AddEvent value) add,
     required TResult Function(ModifyEvent value) modify,
-    required TResult Function(ModifyEvent value) delete,
+    required TResult Function(DeleteEvent value) delete,
   }) {
     return delete(this);
   }
@@ -578,7 +578,7 @@ class _$ModifyEvent extends ModifyEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AddEvent value)? add,
     TResult Function(ModifyEvent value)? modify,
-    TResult Function(ModifyEvent value)? delete,
+    TResult Function(DeleteEvent value)? delete,
   }) {
     return delete?.call(this);
   }
@@ -588,7 +588,7 @@ class _$ModifyEvent extends ModifyEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AddEvent value)? add,
     TResult Function(ModifyEvent value)? modify,
-    TResult Function(ModifyEvent value)? delete,
+    TResult Function(DeleteEvent value)? delete,
     required TResult orElse(),
   }) {
     if (delete != null) {
@@ -599,23 +599,23 @@ class _$ModifyEvent extends ModifyEvent {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ModifyEventToJson(
+    return _$$DeleteEventToJson(
       this,
     );
   }
 }
 
-abstract class ModifyEvent extends FileUpdateEvent {
-  const factory ModifyEvent(final SourceFileEdit fileEdit) = _$ModifyEvent;
-  const ModifyEvent._() : super._();
+abstract class DeleteEvent extends FileUpdateEvent {
+  const factory DeleteEvent(final SourceFileEdit fileEdit) = _$DeleteEvent;
+  const DeleteEvent._() : super._();
 
-  factory ModifyEvent.fromJson(Map<String, dynamic> json) =
-      _$ModifyEvent.fromJson;
+  factory DeleteEvent.fromJson(Map<String, dynamic> json) =
+      _$DeleteEvent.fromJson;
 
   @override // does this work?
   SourceFileEdit get fileEdit;
   @override
   @JsonKey(ignore: true)
-  _$$ModifyEventCopyWith<_$ModifyEvent> get copyWith =>
+  _$$DeleteEventCopyWith<_$DeleteEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }

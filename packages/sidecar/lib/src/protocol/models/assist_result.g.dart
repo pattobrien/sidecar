@@ -8,7 +8,7 @@ part of 'assist_result.dart';
 
 _$_AssistResult _$$_AssistResultFromJson(Map<String, dynamic> json) =>
     _$_AssistResult(
-      rule: RuleCode.fromJson(json['rule'] as Map<String, dynamic>),
+      code: RuleCode.fromJson(json['code'] as Map<String, dynamic>),
       edits: (json['edits'] as List<dynamic>?)
               ?.map((e) => EditResult.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -17,6 +17,6 @@ _$_AssistResult _$$_AssistResultFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_AssistResultToJson(_$_AssistResult instance) =>
     <String, dynamic>{
-      'rule': instance.rule,
+      'code': instance.code,
       'edits': instance.edits,
     };

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'new_exceptions.dart';
+part of 'config_exceptions.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -20,9 +20,9 @@ SidecarNewException _$SidecarNewExceptionFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SidecarNewException {
-  String get code => throw _privateConstructorUsedError;
+  RuleCode get code => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  String get correction => throw _privateConstructorUsedError;
+  String? get correction => throw _privateConstructorUsedError;
   @JsonKey(fromJson: sourceSpanFromJson, toJson: sourceSpanToJson)
   SourceSpan get sourceSpan => throw _privateConstructorUsedError;
 
@@ -38,11 +38,13 @@ abstract class $SidecarNewExceptionCopyWith<$Res> {
           SidecarNewException value, $Res Function(SidecarNewException) then) =
       _$SidecarNewExceptionCopyWithImpl<$Res>;
   $Res call(
-      {String code,
+      {RuleCode code,
       String message,
-      String correction,
+      String? correction,
       @JsonKey(fromJson: sourceSpanFromJson, toJson: sourceSpanToJson)
           SourceSpan sourceSpan});
+
+  $RuleCodeCopyWith<$Res> get code;
 }
 
 /// @nodoc
@@ -65,7 +67,7 @@ class _$SidecarNewExceptionCopyWithImpl<$Res>
       code: code == freezed
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
-              as String,
+              as RuleCode,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -73,12 +75,19 @@ class _$SidecarNewExceptionCopyWithImpl<$Res>
       correction: correction == freezed
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       sourceSpan: sourceSpan == freezed
           ? _value.sourceSpan
           : sourceSpan // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
     ));
+  }
+
+  @override
+  $RuleCodeCopyWith<$Res> get code {
+    return $RuleCodeCopyWith<$Res>(_value.code, (value) {
+      return _then(_value.copyWith(code: value));
+    });
   }
 }
 
@@ -90,11 +99,14 @@ abstract class _$$_SidecarExceptionCopyWith<$Res>
       __$$_SidecarExceptionCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String code,
+      {RuleCode code,
       String message,
-      String correction,
+      String? correction,
       @JsonKey(fromJson: sourceSpanFromJson, toJson: sourceSpanToJson)
           SourceSpan sourceSpan});
+
+  @override
+  $RuleCodeCopyWith<$Res> get code;
 }
 
 /// @nodoc
@@ -119,7 +131,7 @@ class __$$_SidecarExceptionCopyWithImpl<$Res>
       code: code == freezed
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
-              as String,
+              as RuleCode,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -127,7 +139,7 @@ class __$$_SidecarExceptionCopyWithImpl<$Res>
       correction: correction == freezed
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       sourceSpan: sourceSpan == freezed
           ? _value.sourceSpan
           : sourceSpan // ignore: cast_nullable_to_non_nullable
@@ -142,7 +154,7 @@ class _$_SidecarException extends _SidecarException {
   const _$_SidecarException(
       {required this.code,
       required this.message,
-      required this.correction,
+      this.correction,
       @JsonKey(fromJson: sourceSpanFromJson, toJson: sourceSpanToJson)
           required this.sourceSpan})
       : super._();
@@ -151,11 +163,11 @@ class _$_SidecarException extends _SidecarException {
       _$$_SidecarExceptionFromJson(json);
 
   @override
-  final String code;
+  final RuleCode code;
   @override
   final String message;
   @override
-  final String correction;
+  final String? correction;
   @override
   @JsonKey(fromJson: sourceSpanFromJson, toJson: sourceSpanToJson)
   final SourceSpan sourceSpan;
@@ -202,9 +214,9 @@ class _$_SidecarException extends _SidecarException {
 
 abstract class _SidecarException extends SidecarNewException {
   const factory _SidecarException(
-      {required final String code,
+      {required final RuleCode code,
       required final String message,
-      required final String correction,
+      final String? correction,
       @JsonKey(fromJson: sourceSpanFromJson, toJson: sourceSpanToJson)
           required final SourceSpan sourceSpan}) = _$_SidecarException;
   const _SidecarException._() : super._();
@@ -213,11 +225,11 @@ abstract class _SidecarException extends SidecarNewException {
       _$_SidecarException.fromJson;
 
   @override
-  String get code;
+  RuleCode get code;
   @override
   String get message;
   @override
-  String get correction;
+  String? get correction;
   @override
   @JsonKey(fromJson: sourceSpanFromJson, toJson: sourceSpanToJson)
   SourceSpan get sourceSpan;

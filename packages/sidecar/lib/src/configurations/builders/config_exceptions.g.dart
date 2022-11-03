@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'new_exceptions.dart';
+part of 'config_exceptions.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -8,9 +8,9 @@ part of 'new_exceptions.dart';
 
 _$_SidecarException _$$_SidecarExceptionFromJson(Map<String, dynamic> json) =>
     _$_SidecarException(
-      code: json['code'] as String,
+      code: RuleCode.fromJson(json['code'] as Map<String, dynamic>),
       message: json['message'] as String,
-      correction: json['correction'] as String,
+      correction: json['correction'] as String?,
       sourceSpan:
           sourceSpanFromJson(json['sourceSpan'] as Map<String, dynamic>),
     );

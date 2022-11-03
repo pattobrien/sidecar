@@ -12,8 +12,8 @@ import '../analyzer/results/results.dart';
 import '../configurations/configurations.dart';
 import 'typedefs.dart';
 
-@Deprecated('switch to type-checking BaseRule type (e.g. LintRule, AssistRule)')
-enum RuleType { lint, assist }
+// @Deprecated('switch to type-checking BaseRule type (e.g. LintRule, AssistRule)')
+// enum RuleType { lint, assist }
 
 abstract class BaseRule {
   String get code;

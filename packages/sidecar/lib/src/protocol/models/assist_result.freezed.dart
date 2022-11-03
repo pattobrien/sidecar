@@ -20,7 +20,7 @@ AssistResult _$AssistResultFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AssistResult {
-  RuleCode get rule => throw _privateConstructorUsedError;
+  RuleCode get code => throw _privateConstructorUsedError;
   List<EditResult> get edits => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,9 +34,9 @@ abstract class $AssistResultCopyWith<$Res> {
   factory $AssistResultCopyWith(
           AssistResult value, $Res Function(AssistResult) then) =
       _$AssistResultCopyWithImpl<$Res>;
-  $Res call({RuleCode rule, List<EditResult> edits});
+  $Res call({RuleCode code, List<EditResult> edits});
 
-  $RuleCodeCopyWith<$Res> get rule;
+  $RuleCodeCopyWith<$Res> get code;
 }
 
 /// @nodoc
@@ -49,13 +49,13 @@ class _$AssistResultCopyWithImpl<$Res> implements $AssistResultCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? rule = freezed,
+    Object? code = freezed,
     Object? edits = freezed,
   }) {
     return _then(_value.copyWith(
-      rule: rule == freezed
-          ? _value.rule
-          : rule // ignore: cast_nullable_to_non_nullable
+      code: code == freezed
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
       edits: edits == freezed
           ? _value.edits
@@ -65,9 +65,9 @@ class _$AssistResultCopyWithImpl<$Res> implements $AssistResultCopyWith<$Res> {
   }
 
   @override
-  $RuleCodeCopyWith<$Res> get rule {
-    return $RuleCodeCopyWith<$Res>(_value.rule, (value) {
-      return _then(_value.copyWith(rule: value));
+  $RuleCodeCopyWith<$Res> get code {
+    return $RuleCodeCopyWith<$Res>(_value.code, (value) {
+      return _then(_value.copyWith(code: value));
     });
   }
 }
@@ -79,10 +79,10 @@ abstract class _$$_AssistResultCopyWith<$Res>
           _$_AssistResult value, $Res Function(_$_AssistResult) then) =
       __$$_AssistResultCopyWithImpl<$Res>;
   @override
-  $Res call({RuleCode rule, List<EditResult> edits});
+  $Res call({RuleCode code, List<EditResult> edits});
 
   @override
-  $RuleCodeCopyWith<$Res> get rule;
+  $RuleCodeCopyWith<$Res> get code;
 }
 
 /// @nodoc
@@ -98,13 +98,13 @@ class __$$_AssistResultCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? rule = freezed,
+    Object? code = freezed,
     Object? edits = freezed,
   }) {
     return _then(_$_AssistResult(
-      rule: rule == freezed
-          ? _value.rule
-          : rule // ignore: cast_nullable_to_non_nullable
+      code: code == freezed
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
       edits: edits == freezed
           ? _value._edits
@@ -118,7 +118,7 @@ class __$$_AssistResultCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_AssistResult extends _AssistResult {
   const _$_AssistResult(
-      {required this.rule, final List<EditResult> edits = const <EditResult>[]})
+      {required this.code, final List<EditResult> edits = const <EditResult>[]})
       : _edits = edits,
         super._();
 
@@ -126,7 +126,7 @@ class _$_AssistResult extends _AssistResult {
       _$$_AssistResultFromJson(json);
 
   @override
-  final RuleCode rule;
+  final RuleCode code;
   final List<EditResult> _edits;
   @override
   @JsonKey()
@@ -137,7 +137,7 @@ class _$_AssistResult extends _AssistResult {
 
   @override
   String toString() {
-    return 'AssistResult(rule: $rule, edits: $edits)';
+    return 'AssistResult(code: $code, edits: $edits)';
   }
 
   @override
@@ -145,7 +145,7 @@ class _$_AssistResult extends _AssistResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AssistResult &&
-            const DeepCollectionEquality().equals(other.rule, rule) &&
+            const DeepCollectionEquality().equals(other.code, code) &&
             const DeepCollectionEquality().equals(other._edits, _edits));
   }
 
@@ -153,7 +153,7 @@ class _$_AssistResult extends _AssistResult {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(rule),
+      const DeepCollectionEquality().hash(code),
       const DeepCollectionEquality().hash(_edits));
 
   @JsonKey(ignore: true)
@@ -171,7 +171,7 @@ class _$_AssistResult extends _AssistResult {
 
 abstract class _AssistResult extends AssistResult {
   const factory _AssistResult(
-      {required final RuleCode rule,
+      {required final RuleCode code,
       final List<EditResult> edits}) = _$_AssistResult;
   const _AssistResult._() : super._();
 
@@ -179,7 +179,7 @@ abstract class _AssistResult extends AssistResult {
       _$_AssistResult.fromJson;
 
   @override
-  RuleCode get rule;
+  RuleCode get code;
   @override
   List<EditResult> get edits;
   @override

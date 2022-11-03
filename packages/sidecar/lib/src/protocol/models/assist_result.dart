@@ -9,7 +9,7 @@ part 'assist_result.g.dart';
 @freezed
 class AssistResult with _$AssistResult {
   const factory AssistResult({
-    required RuleCode rule,
+    required RuleCode code,
     @Default(<EditResult>[]) List<EditResult> edits,
   }) = _AssistResult;
 

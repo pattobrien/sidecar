@@ -28,3 +28,15 @@ Map<String, dynamic> _$$ModifyEventToJson(_$ModifyEvent instance) =>
       'fileEdit': instance.fileEdit,
       'runtimeType': instance.$type,
     };
+
+_$DeleteEvent _$$DeleteEventFromJson(Map<String, dynamic> json) =>
+    _$DeleteEvent(
+      SourceFileEdit.fromJson(json['fileEdit'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$DeleteEventToJson(_$DeleteEvent instance) =>
+    <String, dynamic>{
+      'fileEdit': instance.fileEdit,
+      'runtimeType': instance.$type,
+    };

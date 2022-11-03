@@ -34,7 +34,7 @@ String $assistResultsForFileHash() =>
 
 /// See also [assistResultsForFile].
 class AssistResultsForFileProvider
-    extends AutoDisposeFutureProvider<List<dynamic>> {
+    extends AutoDisposeFutureProvider<List<AssistResult>> {
   AssistResultsForFileProvider(
     this.file,
   ) : super(
@@ -66,12 +66,14 @@ class AssistResultsForFileProvider
   }
 }
 
-typedef AssistResultsForFileRef = AutoDisposeFutureProviderRef<List<dynamic>>;
+typedef AssistResultsForFileRef
+    = AutoDisposeFutureProviderRef<List<AssistResult>>;
 
 /// See also [assistResultsForFile].
 final assistResultsForFileProvider = AssistResultsForFileFamily();
 
-class AssistResultsForFileFamily extends Family<AsyncValue<List<dynamic>>> {
+class AssistResultsForFileFamily
+    extends Family<AsyncValue<List<AssistResult>>> {
   AssistResultsForFileFamily();
 
   AssistResultsForFileProvider call(
@@ -83,7 +85,7 @@ class AssistResultsForFileFamily extends Family<AsyncValue<List<dynamic>>> {
   }
 
   @override
-  AutoDisposeFutureProvider<List<dynamic>> getProviderOverride(
+  AutoDisposeFutureProvider<List<AssistResult>> getProviderOverride(
     covariant AssistResultsForFileProvider provider,
   ) {
     return call(
@@ -106,7 +108,7 @@ String $assistResultsWithEditsHash() =>
 
 /// See also [assistResultsWithEdits].
 class AssistResultsWithEditsProvider
-    extends AutoDisposeFutureProvider<List<dynamic>> {
+    extends AutoDisposeFutureProvider<List<AssistResult>> {
   AssistResultsWithEditsProvider(
     this.file,
   ) : super(
@@ -138,12 +140,14 @@ class AssistResultsWithEditsProvider
   }
 }
 
-typedef AssistResultsWithEditsRef = AutoDisposeFutureProviderRef<List<dynamic>>;
+typedef AssistResultsWithEditsRef
+    = AutoDisposeFutureProviderRef<List<AssistResult>>;
 
 /// See also [assistResultsWithEdits].
 final assistResultsWithEditsProvider = AssistResultsWithEditsFamily();
 
-class AssistResultsWithEditsFamily extends Family<AsyncValue<List<dynamic>>> {
+class AssistResultsWithEditsFamily
+    extends Family<AsyncValue<List<AssistResult>>> {
   AssistResultsWithEditsFamily();
 
   AssistResultsWithEditsProvider call(
@@ -155,7 +159,7 @@ class AssistResultsWithEditsFamily extends Family<AsyncValue<List<dynamic>>> {
   }
 
   @override
-  AutoDisposeFutureProvider<List<dynamic>> getProviderOverride(
+  AutoDisposeFutureProvider<List<AssistResult>> getProviderOverride(
     covariant AssistResultsWithEditsProvider provider,
   ) {
     return call(
@@ -178,7 +182,7 @@ String $requestAssistResultsHash() =>
 
 /// See also [requestAssistResults].
 class RequestAssistResultsProvider
-    extends AutoDisposeFutureProvider<List<dynamic>> {
+    extends AutoDisposeFutureProvider<List<AssistResult>> {
   RequestAssistResultsProvider(
     this.request,
   ) : super(
@@ -210,12 +214,14 @@ class RequestAssistResultsProvider
   }
 }
 
-typedef RequestAssistResultsRef = AutoDisposeFutureProviderRef<List<dynamic>>;
+typedef RequestAssistResultsRef
+    = AutoDisposeFutureProviderRef<List<AssistResult>>;
 
 /// See also [requestAssistResults].
 final requestAssistResultsProvider = RequestAssistResultsFamily();
 
-class RequestAssistResultsFamily extends Family<AsyncValue<List<dynamic>>> {
+class RequestAssistResultsFamily
+    extends Family<AsyncValue<List<AssistResult>>> {
   RequestAssistResultsFamily();
 
   RequestAssistResultsProvider call(
@@ -227,7 +233,7 @@ class RequestAssistResultsFamily extends Family<AsyncValue<List<dynamic>>> {
   }
 
   @override
-  AutoDisposeFutureProvider<List<dynamic>> getProviderOverride(
+  AutoDisposeFutureProvider<List<AssistResult>> getProviderOverride(
     covariant RequestAssistResultsProvider provider,
   ) {
     return call(

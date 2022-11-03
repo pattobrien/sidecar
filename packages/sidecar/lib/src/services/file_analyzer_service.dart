@@ -47,51 +47,53 @@ class FileAnalyzerService {
     return analysisResults.where((res) => res.isWithinOffset(path, offset));
   }
 
-  Future<LintResult> computeEditResultsForAnalysisResult(
+  Future<LintResultWithEdits> computeEditResultsForAnalysisResult(
     ActiveContext context,
     LintResult analysisResult,
+    List<LintRule> rules,
   ) async {
-    final rule = analysisResult.rule;
-    if (rule is! QuickFix) return analysisResult;
+    final code = analysisResult.rule;
+    final rule = rules.firstWhere((element) => element.ruleCode == code);
+    if (rule is! QuickFix) return analysisResult.copyWithNoEdits();
     final editResults = await rule.computeQuickFixes(analysisResult.span);
-    return analysisResult.copyWith(edits: editResults);
+    return analysisResult.copyWithEdits(edits: editResults);
   }
 
-  Future<List<AssistResult>> computeAssistResults({
-    required AnalyzedFile file,
-    required List<AssistRule> rules,
-    required ResolvedUnitResult? unitResult,
-  }) async {
-    //TODO: allow analysis of other file extensions
-    if (!file.isDartFile || unitResult == null) return [];
+  // Future<List<AssistResult>> computeAssistResults({
+  //   required AnalyzedFile file,
+  //   required List<AssistRule> rules,
+  //   required ResolvedUnitResult? unitResult,
+  // }) async {
+  //   //TODO: allow analysis of other file extensions
+  //   if (!file.isDartFile || unitResult == null) return [];
 
-    final results =
-        await Future.wait(rules.map<Future<List<AssistResult>>>((rule) async {
-      try {
-        return rule.filterResults(unitResult);
-      } catch (e, stackTrace) {
-        logger.severe('computeAssistResults', e, stackTrace);
-        return Future.value([]);
-      }
-    }));
-    return results.expand((e) => e).toList()..sort();
-  }
+  //   final results =
+  //       await Future.wait(rules.map<Future<List<AssistResult>>>((rule) async {
+  //     try {
+  //       return rule.filterResults(unitResult);
+  //     } catch (e, stackTrace) {
+  //       logger.severe('computeAssistResults', e, stackTrace);
+  //       return Future.value([]);
+  //     }
+  //   }));
+  //   return results.expand((e) => e).toList()..sort();
+  // }
 
-  List<AssistResult> getAssistResultsAtOffset(
-    Iterable<AssistResult> analysisResults,
-    QuickAssistRequest request,
-  ) {
-    return analysisResults
-        .where((result) => result.isWithinOffset(request.path, request.offset))
-        .toList();
-  }
+  // List<AssistResult> getAssistResultsAtOffset(
+  //   Iterable<AssistResult> analysisResults,
+  //   QuickAssistRequest request,
+  // ) {
+  //   return analysisResults
+  //       .where((result) => result.isWithinOffset(request.path, request.offset))
+  //       .toList();
+  // }
 
-  Future<AssistResult> calculateAssistResultEdits(
-    AssistResult result,
-  ) async {
-    final editResults = await result.rule.computeSourceChanges(result.span);
-    return result.copyWith(edits: editResults);
-  }
+//   Future<AssistResult> calculateAssistResultEdits(
+//     AssistResult result,
+//   ) async {
+//     final editResults = await result.rule.computeSourceChanges(result.span);
+//     return result.copyWith(edits: editResults);
+//   }
 }
 
 final fileAnalyzerServiceProvider = Provider(

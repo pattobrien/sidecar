@@ -3,11 +3,12 @@ import 'package:glob/glob.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../protocol/models/models.dart';
 import '../../rules/rules.dart';
 import '../../utils/json_utils/glob_json_util.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/yaml_writer.dart';
-import '../builders/new_exceptions.dart';
+import '../builders/config_exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 import 'analysis_package_configuration.dart';

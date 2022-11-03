@@ -2,11 +2,11 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../protocol/models/models.dart';
 import '../../protocol/protocol.dart';
 import '../../services/services.dart';
 import '../context/context.dart';
 import '../plugin/plugin.dart';
-import '../../protocol/models/analysis_result_old.dart';
 import 'analysis_results_provider.dart';
 
 part 'quick_fix_results.g.dart';
@@ -20,7 +20,7 @@ Future<List<LintResult>> requestQuickFixes(
   final fileService = ref.watch(fileAnalyzerServiceProvider);
   final context = ref.watch(activeContextForRootProvider(request.file.root));
   final lintResults =
-      await ref.watch(lintResultsForFileProvider(request.file).future);
+      await ref.watch(lintResultsForFileProvider(request.filePath).future);
 
   final analysisResultsForOffset = lintResults.where(
       (element) => element.isWithinOffset(request.file.path, request.offset));

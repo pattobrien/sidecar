@@ -18,7 +18,7 @@ class FileUpdateEvent with _$FileUpdateEvent {
   const factory FileUpdateEvent.delete(
     // does this work?
     SourceFileEdit fileEdit,
-  ) = ModifyEvent;
+  ) = DeleteEvent;
 
   const FileUpdateEvent._();
 

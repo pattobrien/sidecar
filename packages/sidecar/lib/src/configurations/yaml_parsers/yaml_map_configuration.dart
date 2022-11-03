@@ -1,7 +1,7 @@
 import 'package:yaml/yaml.dart';
 
 import '../builders/builders.dart';
-import '../builders/new_exceptions.dart';
+import '../builders/config_exceptions.dart';
 import '../configurations.dart';
 
 extension YamlMapConfigurationParse on YamlMap {

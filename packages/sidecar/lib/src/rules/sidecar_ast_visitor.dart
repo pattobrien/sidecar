@@ -4,7 +4,7 @@ import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:meta/meta.dart';
 
-import '../analyzer/results/results.dart';
+import '../protocol/protocol.dart';
 import '../utils/utils.dart';
 import 'rules.dart';
 
@@ -12,7 +12,6 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
   final List<LintResult> lints = [];
   late LintRule rule;
   late ResolvedUnitResult unit;
-  // late final Ref _ref;
 
   @internal
   void initializeVisitor(
@@ -31,13 +30,12 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     String? correction,
   }) {
     final result = LintResult(
-      rule: rule,
-      span: AnalysisSourceSpan(
-        path: unit.path,
-        source: node.toSourceSpan(unit),
-      ),
+      rule: rule.ruleCode,
+      span: node.toSourceSpan(unit),
+
       message: message,
       correction: correction,
+      // TODO: when do we handle which severity is used? (default vs configured)
       severity: rule.defaultSeverity,
     );
     lints.add(result);
@@ -49,11 +47,8 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void> {
     String? correction,
   }) {
     final result = LintResult(
-      rule: rule,
-      span: AnalysisSourceSpan(
-        path: unit.path,
-        source: token.toSourceSpan(unit),
-      ),
+      rule: rule.ruleCode,
+      span: token.toSourceSpan(unit),
       message: message,
       correction: correction,
       severity: rule.defaultSeverity,
@@ -76,25 +71,25 @@ abstract class SidecarAssistVisitor extends GeneralizingAstVisitor<void> {
     this.unit = unit;
   }
 
-  void reportAstNode(AstNode node) {
-    final result = AssistResult(
-      rule: rule,
-      span: AnalysisSourceSpan(
-        path: unit.path,
-        source: node.toSourceSpan(unit),
-      ),
-    );
-    assists.add(result);
-  }
+  // void reportAstNode(AstNode node) {
+  //   final result = AssistResult(
+  //     code: rule.ruleCode,
+  //     span: EditResult(
+  //       path: unit.path,
+  //       source: node.toSourceSpan(unit),
+  //     ),
+  //   );
+  //   assists.add(result);
+  // }
 
-  void reportToken(Token token) {
-    final result = AssistResult(
-      rule: rule,
-      span: AnalysisSourceSpan(
-        path: unit.path,
-        source: token.toSourceSpan(unit),
-      ),
-    );
-    assists.add(result);
-  }
+  // void reportToken(Token token) {
+  //   final result = AssistResult(
+  //     code: rule.ruleCode,
+  //     span: AnalysisSourceSpan(
+  //       path: unit.path,
+  //       source: token.toSourceSpan(unit),
+  //     ),
+  //   );
+  //   assists.add(result);
+  // }
 }

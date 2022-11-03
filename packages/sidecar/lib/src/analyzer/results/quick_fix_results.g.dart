@@ -33,7 +33,7 @@ String $requestQuickFixesHash() => r'9eadf2e584fa47b27e587b4e3f972f98208f7a8b';
 
 /// See also [requestQuickFixes].
 class RequestQuickFixesProvider
-    extends AutoDisposeFutureProvider<List<dynamic>> {
+    extends AutoDisposeFutureProvider<List<LintResult>> {
   RequestQuickFixesProvider(
     this.analyzer,
     this.request,
@@ -52,7 +52,7 @@ class RequestQuickFixesProvider
         );
 
   final dynamic analyzer;
-  final dynamic request;
+  final QuickFixRequest request;
 
   @override
   bool operator ==(Object other) {
@@ -71,17 +71,17 @@ class RequestQuickFixesProvider
   }
 }
 
-typedef RequestQuickFixesRef = AutoDisposeFutureProviderRef<List<dynamic>>;
+typedef RequestQuickFixesRef = AutoDisposeFutureProviderRef<List<LintResult>>;
 
 /// See also [requestQuickFixes].
 final requestQuickFixesProvider = RequestQuickFixesFamily();
 
-class RequestQuickFixesFamily extends Family<AsyncValue<List<dynamic>>> {
+class RequestQuickFixesFamily extends Family<AsyncValue<List<LintResult>>> {
   RequestQuickFixesFamily();
 
   RequestQuickFixesProvider call(
     dynamic analyzer,
-    dynamic request,
+    QuickFixRequest request,
   ) {
     return RequestQuickFixesProvider(
       analyzer,
@@ -90,7 +90,7 @@ class RequestQuickFixesFamily extends Family<AsyncValue<List<dynamic>>> {
   }
 
   @override
-  AutoDisposeFutureProvider<List<dynamic>> getProviderOverride(
+  AutoDisposeFutureProvider<List<LintResult>> getProviderOverride(
     covariant RequestQuickFixesProvider provider,
   ) {
     return call(
@@ -114,7 +114,7 @@ String $quickFixResultsForRootHash() =>
 
 /// See also [quickFixResultsForRoot].
 class QuickFixResultsForRootProvider
-    extends AutoDisposeFutureProvider<List<dynamic>> {
+    extends AutoDisposeFutureProvider<List<LintResult>> {
   QuickFixResultsForRootProvider(
     this.root,
   ) : super(
@@ -146,12 +146,14 @@ class QuickFixResultsForRootProvider
   }
 }
 
-typedef QuickFixResultsForRootRef = AutoDisposeFutureProviderRef<List<dynamic>>;
+typedef QuickFixResultsForRootRef
+    = AutoDisposeFutureProviderRef<List<LintResult>>;
 
 /// See also [quickFixResultsForRoot].
 final quickFixResultsForRootProvider = QuickFixResultsForRootFamily();
 
-class QuickFixResultsForRootFamily extends Family<AsyncValue<List<dynamic>>> {
+class QuickFixResultsForRootFamily
+    extends Family<AsyncValue<List<LintResult>>> {
   QuickFixResultsForRootFamily();
 
   QuickFixResultsForRootProvider call(
@@ -163,7 +165,7 @@ class QuickFixResultsForRootFamily extends Family<AsyncValue<List<dynamic>>> {
   }
 
   @override
-  AutoDisposeFutureProvider<List<dynamic>> getProviderOverride(
+  AutoDisposeFutureProvider<List<LintResult>> getProviderOverride(
     covariant QuickFixResultsForRootProvider provider,
   ) {
     return call(
