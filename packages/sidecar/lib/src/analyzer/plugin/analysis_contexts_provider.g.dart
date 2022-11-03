@@ -29,23 +29,13 @@ class _SystemHash {
   }
 }
 
-String $AllAnalysisContextsNotifierHash() =>
-    r'1677509733616f2d5cd38daa5f7be489fd6e2dbf';
+String $allContextsHash() => r'b8bb1195de4d0591af81a1dabb98cde7a2e1a9ec';
 
-/// See also [AllAnalysisContextsNotifier].
-final allAnalysisContextsNotifierProvider =
-    NotifierProvider<AllAnalysisContextsNotifier, List<AnalysisContext>>(
-  AllAnalysisContextsNotifier.new,
-  name: r'allAnalysisContextsNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : $AllAnalysisContextsNotifierHash,
+/// See also [allContexts].
+final allContextsProvider = AutoDisposeProvider<List<AnalysisContext>>(
+  allContexts,
+  name: r'allContextsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : $allContextsHash,
 );
-typedef AllAnalysisContextsNotifierRef
-    = NotifierProviderRef<List<AnalysisContext>>;
-
-abstract class _$AllAnalysisContextsNotifier
-    extends Notifier<List<AnalysisContext>> {
-  @override
-  List<AnalysisContext> build();
-}
+typedef AllContextsRef = AutoDisposeProviderRef<List<AnalysisContext>>;

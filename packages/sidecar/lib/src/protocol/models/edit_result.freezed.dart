@@ -14,11 +14,17 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+EditResult _$EditResultFromJson(Map<String, dynamic> json) {
+  return _EditResult.fromJson(json);
+}
+
 /// @nodoc
 mixin _$EditResult {
+  /// User facing message about the edit
   String get message => throw _privateConstructorUsedError;
   List<SourceFileEdit> get sourceChanges => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $EditResultCopyWith<EditResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -97,7 +103,7 @@ class __$$_EditResultCopyWithImpl<$Res> extends _$EditResultCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_EditResult extends _EditResult {
   const _$_EditResult(
       {required this.message,
@@ -105,6 +111,10 @@ class _$_EditResult extends _EditResult {
       : _sourceChanges = sourceChanges,
         super._();
 
+  factory _$_EditResult.fromJson(Map<String, dynamic> json) =>
+      _$$_EditResultFromJson(json);
+
+  /// User facing message about the edit
   @override
   final String message;
   final List<SourceFileEdit> _sourceChanges;
@@ -129,6 +139,7 @@ class _$_EditResult extends _EditResult {
                 .equals(other._sourceChanges, _sourceChanges));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -139,6 +150,13 @@ class _$_EditResult extends _EditResult {
   @override
   _$$_EditResultCopyWith<_$_EditResult> get copyWith =>
       __$$_EditResultCopyWithImpl<_$_EditResult>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_EditResultToJson(
+      this,
+    );
+  }
 }
 
 abstract class _EditResult extends EditResult {
@@ -147,7 +165,12 @@ abstract class _EditResult extends EditResult {
       required final List<SourceFileEdit> sourceChanges}) = _$_EditResult;
   const _EditResult._() : super._();
 
+  factory _EditResult.fromJson(Map<String, dynamic> json) =
+      _$_EditResult.fromJson;
+
   @override
+
+  /// User facing message about the edit
   String get message;
   @override
   List<SourceFileEdit> get sourceChanges;

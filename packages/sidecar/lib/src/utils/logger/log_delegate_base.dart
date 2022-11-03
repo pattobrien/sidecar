@@ -1,4 +1,4 @@
-import '../../analyzer/results/analysis_result.dart';
+import '../../protocol/models/analysis_result_old.dart';
 
 abstract class LogDelegateBase {
   void sidecarError(Object error, StackTrace stackTrace);

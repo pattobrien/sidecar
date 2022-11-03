@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:source_span/source_span.dart';
 
-import '../../analyzer/results/analysis_result.dart';
+import '../../protocol/models/analysis_result_old.dart';
 import '../../rules/rules.dart';
 import '../../utils/json_utils/source_span_utils.dart';
 

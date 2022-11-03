@@ -16,8 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnalyzedFile {
-  ActiveContextRoot get root => throw _privateConstructorUsedError;
-  String get path => throw _privateConstructorUsedError;
+  ActiveContext get context => throw _privateConstructorUsedError;
+  Uri get fileUri => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AnalyzedFileCopyWith<AnalyzedFile> get copyWith =>
@@ -29,7 +29,7 @@ abstract class $AnalyzedFileCopyWith<$Res> {
   factory $AnalyzedFileCopyWith(
           AnalyzedFile value, $Res Function(AnalyzedFile) then) =
       _$AnalyzedFileCopyWithImpl<$Res>;
-  $Res call({ActiveContextRoot root, String path});
+  $Res call({ActiveContext context, Uri fileUri});
 }
 
 /// @nodoc
@@ -42,18 +42,18 @@ class _$AnalyzedFileCopyWithImpl<$Res> implements $AnalyzedFileCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? root = freezed,
-    Object? path = freezed,
+    Object? context = freezed,
+    Object? fileUri = freezed,
   }) {
     return _then(_value.copyWith(
-      root: root == freezed
-          ? _value.root
-          : root // ignore: cast_nullable_to_non_nullable
-              as ActiveContextRoot,
-      path: path == freezed
-          ? _value.path
-          : path // ignore: cast_nullable_to_non_nullable
-              as String,
+      context: context == freezed
+          ? _value.context
+          : context // ignore: cast_nullable_to_non_nullable
+              as ActiveContext,
+      fileUri: fileUri == freezed
+          ? _value.fileUri
+          : fileUri // ignore: cast_nullable_to_non_nullable
+              as Uri,
     ));
   }
 }
@@ -65,7 +65,7 @@ abstract class _$$_AnalyzedFileCopyWith<$Res>
           _$_AnalyzedFile value, $Res Function(_$_AnalyzedFile) then) =
       __$$_AnalyzedFileCopyWithImpl<$Res>;
   @override
-  $Res call({ActiveContextRoot root, String path});
+  $Res call({ActiveContext context, Uri fileUri});
 }
 
 /// @nodoc
@@ -81,18 +81,18 @@ class __$$_AnalyzedFileCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? root = freezed,
-    Object? path = freezed,
+    Object? context = freezed,
+    Object? fileUri = freezed,
   }) {
     return _then(_$_AnalyzedFile(
-      root == freezed
-          ? _value.root
-          : root // ignore: cast_nullable_to_non_nullable
-              as ActiveContextRoot,
-      path == freezed
-          ? _value.path
-          : path // ignore: cast_nullable_to_non_nullable
-              as String,
+      context == freezed
+          ? _value.context
+          : context // ignore: cast_nullable_to_non_nullable
+              as ActiveContext,
+      fileUri == freezed
+          ? _value.fileUri
+          : fileUri // ignore: cast_nullable_to_non_nullable
+              as Uri,
     ));
   }
 }
@@ -100,16 +100,16 @@ class __$$_AnalyzedFileCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AnalyzedFile extends _AnalyzedFile {
-  const _$_AnalyzedFile(this.root, this.path) : super._();
+  const _$_AnalyzedFile(this.context, this.fileUri) : super._();
 
   @override
-  final ActiveContextRoot root;
+  final ActiveContext context;
   @override
-  final String path;
+  final Uri fileUri;
 
   @override
   String toString() {
-    return 'AnalyzedFile(root: $root, path: $path)';
+    return 'AnalyzedFile(context: $context, fileUri: $fileUri)';
   }
 
   @override
@@ -117,15 +117,15 @@ class _$_AnalyzedFile extends _AnalyzedFile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AnalyzedFile &&
-            const DeepCollectionEquality().equals(other.root, root) &&
-            const DeepCollectionEquality().equals(other.path, path));
+            const DeepCollectionEquality().equals(other.context, context) &&
+            const DeepCollectionEquality().equals(other.fileUri, fileUri));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(root),
-      const DeepCollectionEquality().hash(path));
+      const DeepCollectionEquality().hash(context),
+      const DeepCollectionEquality().hash(fileUri));
 
   @JsonKey(ignore: true)
   @override
@@ -134,14 +134,14 @@ class _$_AnalyzedFile extends _AnalyzedFile {
 }
 
 abstract class _AnalyzedFile extends AnalyzedFile {
-  const factory _AnalyzedFile(final ActiveContextRoot root, final String path) =
+  const factory _AnalyzedFile(final ActiveContext context, final Uri fileUri) =
       _$_AnalyzedFile;
   const _AnalyzedFile._() : super._();
 
   @override
-  ActiveContextRoot get root;
+  ActiveContext get context;
   @override
-  String get path;
+  Uri get fileUri;
   @override
   @JsonKey(ignore: true)
   _$$_AnalyzedFileCopyWith<_$_AnalyzedFile> get copyWith =>

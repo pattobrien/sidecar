@@ -18,7 +18,7 @@ import 'notification_providers.dart';
 
 const _uuid = Uuid();
 
-final runnerProvider = Provider(
+final runnerProvider = Provider<SidecarRunner>(
   (ref) => SidecarRunner(ref),
   name: 'runnerProvider',
 );
@@ -34,16 +34,17 @@ class SidecarRunner {
   io.Directory get root => ref.read(activeRunnerDirectory);
 
   plugin.DiscoveredServerIsolateChannel get channel =>
-      ref.read(masterServerChannel);
+      throw UnimplementedError();
+  // ref.read(masterServerChannel);
 
   ResourceProvider get _resourceProvider =>
       ref.read(runnerResourceProviderProvider);
 
-  Stream<plugin.Notification> get _notifications =>
-      ref.read(serverChannelNotificationStreamProvider.stream);
+  Stream<plugin.Notification> get _notifications => throw UnimplementedError();
+  // ref.read(serverChannelNotificationStreamProvider.stream);
 
-  Stream<plugin.Response> get _responses =>
-      ref.read(serverChannelResponseStreamProvider.stream);
+  Stream<plugin.Response> get _responses => throw UnimplementedError();
+  // ref.read(serverChannelResponseStreamProvider.stream);
 
   Stream<plugin.Notification> get _reloader =>
       _notifications.where((e) => e.event == kSidecarHotReloadMethod);

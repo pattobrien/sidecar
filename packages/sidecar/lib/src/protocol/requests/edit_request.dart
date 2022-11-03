@@ -1,14 +1,14 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+// import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../analyzer/context/analyzed_file.dart';
+// import '../../analyzer/context/analyzed_file.dart';
 
-part 'edit_request.freezed.dart';
+// part 'edit_request.freezed.dart';
 
-@freezed
-class EditRequest with _$EditRequest {
-  const factory EditRequest({
-    required int offset,
-    required AnalyzedFile file,
-  }) = _EditRequest;
-  const EditRequest._();
-}
+// @freezed
+// class QuickFixRequest with _$QuickFixRequest {
+//   const factory QuickFixRequest({
+//     required AnalyzedFile file,
+//     required int offset,
+//   }) = _QuickFixRequest;
+//   const QuickFixRequest._();
+// }

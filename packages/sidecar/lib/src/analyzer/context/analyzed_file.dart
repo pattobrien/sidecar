@@ -7,18 +7,25 @@ import 'context.dart';
 part 'analyzed_file.freezed.dart';
 
 @freezed
+
+/// Represents a file that is within some context currently under analysis.
+///
+/// This was created to be type-safe.
 class AnalyzedFile with _$AnalyzedFile {
   const factory AnalyzedFile(
-    ActiveContextRoot root,
-    String path,
+    ActiveContext context,
+    Uri fileUri,
   ) = _AnalyzedFile;
 
   const AnalyzedFile._();
+
+  String get path => fileUri.path;
 
   bool get isDartFile => p.extension(path) == '.dart';
 
   bool get isAnalysisOptionsFile => relativePath == kAnalysisOptionsYaml;
   bool get isSidecarYamlFile => relativePath == kSidecarYaml;
 
-  String get relativePath => p.relative(path, from: root.root.path);
+  String get relativePath =>
+      p.relative(path, from: context.activeRoot.root.path);
 }

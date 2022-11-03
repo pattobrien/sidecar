@@ -29,14 +29,155 @@ class _SystemHash {
   }
 }
 
-String $activeContextsHash() => r'28fa49b6086b857f7443939d852bd289f81e1abe';
+String $activeContextsHash() => r'06a99bdef65b97a69d6c69f03faa135c7f987464';
 
 /// See also [activeContexts].
-final activeContextsProvider = Provider<List<ActiveContext>>(
+final activeContextsProvider = AutoDisposeProvider<List<ActiveContext>>(
   activeContexts,
   name: r'activeContextsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : $activeContextsHash,
 );
-typedef ActiveContextsRef = ProviderRef<List<ActiveContext>>;
+typedef ActiveContextsRef = AutoDisposeProviderRef<List<ActiveContext>>;
+String $activeContextForRootHash() =>
+    r'a17cd7000c947a170159d44fb40c89aca8d4e99b';
+
+/// See also [activeContextForRoot].
+class ActiveContextForRootProvider extends AutoDisposeProvider<ActiveContext> {
+  ActiveContextForRootProvider(
+    this.root,
+  ) : super(
+          (ref) => activeContextForRoot(
+            ref,
+            root,
+          ),
+          from: activeContextForRootProvider,
+          name: r'activeContextForRootProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : $activeContextForRootHash,
+        );
+
+  final ActiveContextRoot root;
+
+  @override
+  bool operator ==(Object other) {
+    return other is ActiveContextForRootProvider && other.root == root;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, root.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+typedef ActiveContextForRootRef = AutoDisposeProviderRef<ActiveContext>;
+
+/// See also [activeContextForRoot].
+final activeContextForRootProvider = ActiveContextForRootFamily();
+
+class ActiveContextForRootFamily extends Family<ActiveContext> {
+  ActiveContextForRootFamily();
+
+  ActiveContextForRootProvider call(
+    ActiveContextRoot root,
+  ) {
+    return ActiveContextForRootProvider(
+      root,
+    );
+  }
+
+  @override
+  AutoDisposeProvider<ActiveContext> getProviderOverride(
+    covariant ActiveContextForRootProvider provider,
+  ) {
+    return call(
+      provider.root,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => null;
+
+  @override
+  String? get name => r'activeContextForRootProvider';
+}
+
+String $activeContextRootsHash() => r'6f58bff3f87100dfa949ab1029cec44affc30fa6';
+
+/// See also [activeContextRoots].
+class ActiveContextRootsProvider
+    extends AutoDisposeProvider<List<ActiveContextRoot>> {
+  ActiveContextRootsProvider(
+    this.analyzer,
+  ) : super(
+          (ref) => activeContextRoots(
+            ref,
+            analyzer,
+          ),
+          from: activeContextRootsProvider,
+          name: r'activeContextRootsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : $activeContextRootsHash,
+        );
+
+  final dynamic analyzer;
+
+  @override
+  bool operator ==(Object other) {
+    return other is ActiveContextRootsProvider && other.analyzer == analyzer;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, analyzer.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+typedef ActiveContextRootsRef = AutoDisposeProviderRef<List<ActiveContextRoot>>;
+
+/// See also [activeContextRoots].
+final activeContextRootsProvider = ActiveContextRootsFamily();
+
+class ActiveContextRootsFamily extends Family<List<ActiveContextRoot>> {
+  ActiveContextRootsFamily();
+
+  ActiveContextRootsProvider call(
+    dynamic analyzer,
+  ) {
+    return ActiveContextRootsProvider(
+      analyzer,
+    );
+  }
+
+  @override
+  AutoDisposeProvider<List<ActiveContextRoot>> getProviderOverride(
+    covariant ActiveContextRootsProvider provider,
+  ) {
+    return call(
+      provider.analyzer,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => null;
+
+  @override
+  String? get name => r'activeContextRootsProvider';
+}

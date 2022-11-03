@@ -18,7 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$CliOptions {
   bool get isVerboseEnabled => throw _privateConstructorUsedError;
   SidecarAnalyzerMode get mode => throw _privateConstructorUsedError;
-  bool get isMiddlemanPlugin => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CliOptionsCopyWith<CliOptions> get copyWith =>
@@ -30,10 +29,7 @@ abstract class $CliOptionsCopyWith<$Res> {
   factory $CliOptionsCopyWith(
           CliOptions value, $Res Function(CliOptions) then) =
       _$CliOptionsCopyWithImpl<$Res>;
-  $Res call(
-      {bool isVerboseEnabled,
-      SidecarAnalyzerMode mode,
-      bool isMiddlemanPlugin});
+  $Res call({bool isVerboseEnabled, SidecarAnalyzerMode mode});
 }
 
 /// @nodoc
@@ -48,7 +44,6 @@ class _$CliOptionsCopyWithImpl<$Res> implements $CliOptionsCopyWith<$Res> {
   $Res call({
     Object? isVerboseEnabled = freezed,
     Object? mode = freezed,
-    Object? isMiddlemanPlugin = freezed,
   }) {
     return _then(_value.copyWith(
       isVerboseEnabled: isVerboseEnabled == freezed
@@ -59,10 +54,6 @@ class _$CliOptionsCopyWithImpl<$Res> implements $CliOptionsCopyWith<$Res> {
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
               as SidecarAnalyzerMode,
-      isMiddlemanPlugin: isMiddlemanPlugin == freezed
-          ? _value.isMiddlemanPlugin
-          : isMiddlemanPlugin // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -74,10 +65,7 @@ abstract class _$$_CliOptionsCopyWith<$Res>
           _$_CliOptions value, $Res Function(_$_CliOptions) then) =
       __$$_CliOptionsCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {bool isVerboseEnabled,
-      SidecarAnalyzerMode mode,
-      bool isMiddlemanPlugin});
+  $Res call({bool isVerboseEnabled, SidecarAnalyzerMode mode});
 }
 
 /// @nodoc
@@ -94,7 +82,6 @@ class __$$_CliOptionsCopyWithImpl<$Res> extends _$CliOptionsCopyWithImpl<$Res>
   $Res call({
     Object? isVerboseEnabled = freezed,
     Object? mode = freezed,
-    Object? isMiddlemanPlugin = freezed,
   }) {
     return _then(_$_CliOptions(
       isVerboseEnabled: isVerboseEnabled == freezed
@@ -105,10 +92,6 @@ class __$$_CliOptionsCopyWithImpl<$Res> extends _$CliOptionsCopyWithImpl<$Res>
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
               as SidecarAnalyzerMode,
-      isMiddlemanPlugin: isMiddlemanPlugin == freezed
-          ? _value.isMiddlemanPlugin
-          : isMiddlemanPlugin // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -116,22 +99,17 @@ class __$$_CliOptionsCopyWithImpl<$Res> extends _$CliOptionsCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_CliOptions extends _CliOptions {
-  const _$_CliOptions(
-      {required this.isVerboseEnabled,
-      required this.mode,
-      required this.isMiddlemanPlugin})
+  const _$_CliOptions({required this.isVerboseEnabled, required this.mode})
       : super._();
 
   @override
   final bool isVerboseEnabled;
   @override
   final SidecarAnalyzerMode mode;
-  @override
-  final bool isMiddlemanPlugin;
 
   @override
   String toString() {
-    return 'CliOptions(isVerboseEnabled: $isVerboseEnabled, mode: $mode, isMiddlemanPlugin: $isMiddlemanPlugin)';
+    return 'CliOptions(isVerboseEnabled: $isVerboseEnabled, mode: $mode)';
   }
 
   @override
@@ -141,17 +119,14 @@ class _$_CliOptions extends _CliOptions {
             other is _$_CliOptions &&
             const DeepCollectionEquality()
                 .equals(other.isVerboseEnabled, isVerboseEnabled) &&
-            const DeepCollectionEquality().equals(other.mode, mode) &&
-            const DeepCollectionEquality()
-                .equals(other.isMiddlemanPlugin, isMiddlemanPlugin));
+            const DeepCollectionEquality().equals(other.mode, mode));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(isVerboseEnabled),
-      const DeepCollectionEquality().hash(mode),
-      const DeepCollectionEquality().hash(isMiddlemanPlugin));
+      const DeepCollectionEquality().hash(mode));
 
   @JsonKey(ignore: true)
   @override
@@ -162,16 +137,13 @@ class _$_CliOptions extends _CliOptions {
 abstract class _CliOptions extends CliOptions {
   const factory _CliOptions(
       {required final bool isVerboseEnabled,
-      required final SidecarAnalyzerMode mode,
-      required final bool isMiddlemanPlugin}) = _$_CliOptions;
+      required final SidecarAnalyzerMode mode}) = _$_CliOptions;
   const _CliOptions._() : super._();
 
   @override
   bool get isVerboseEnabled;
   @override
   SidecarAnalyzerMode get mode;
-  @override
-  bool get isMiddlemanPlugin;
   @override
   @JsonKey(ignore: true)
   _$$_CliOptionsCopyWith<_$_CliOptions> get copyWith =>

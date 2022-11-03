@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:collection/collection.dart';
 import 'package:package_config/package_config.dart';
@@ -8,6 +9,7 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
+import '../analyzer/plugin/analyzer_plugin.dart';
 import '../configurations/project/project_configuration.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
@@ -27,17 +29,12 @@ class ActiveProjectService {
       final packages = getSidecarDependencies(contextUri);
       final projectConfig = getSidecarOptions(analysisContext.contextRoot);
 
-      if (!analysisContext.isSidecarEnabled ||
-          projectConfig == null ||
-          pluginUri == null ||
-          packages.isEmpty) {
-        return null;
-      }
+      if (!isContextActive(analysisContext)) return null;
 
       return ActiveContext(
         analysisContext,
-        sidecarOptions: projectConfig,
-        sidecarPluginPackage: pluginUri,
+        sidecarOptions: projectConfig!,
+        sidecarPluginPackage: pluginUri!,
         sidecarPackages: packages,
         isMainRoot: true,
       );
@@ -45,6 +42,36 @@ class ActiveProjectService {
       logger.severe('ActivePackageService initializeContext', e, stackTrace);
       return null;
     }
+  }
+
+  bool isContextActive(
+    AnalysisContext analysisContext,
+  ) {
+    final contextUri = analysisContext.contextRoot.root.toUri();
+    final pluginUri = getSidecarPluginUriForPackage(contextUri);
+    final packages = getSidecarDependencies(contextUri);
+    final projectConfig = getSidecarOptions(analysisContext.contextRoot);
+
+    if (!analysisContext.isSidecarEnabled ||
+        projectConfig == null ||
+        pluginUri == null ||
+        packages.isEmpty) {
+      return false;
+    }
+    return true;
+  }
+
+  List<AnalysisContext> getAllContextsFromPath(List<String> paths) {
+    final collection = AnalysisContextCollection(includedPaths: paths);
+    return collection.contexts;
+  }
+
+  List<ActiveContext> getActiveContextsFromPath(List<String> paths) {
+    final collection = AnalysisContextCollection(includedPaths: paths);
+    return collection.contexts
+        .map(initializeContext)
+        .whereType<ActiveContext>()
+        .toList();
   }
 
   /// Finds any contexts that

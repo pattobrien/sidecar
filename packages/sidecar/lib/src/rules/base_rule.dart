@@ -28,7 +28,7 @@ abstract class BaseRule {
   late AnalysisConfiguration analysisConfiguration;
 
   List<SidecarAnnotatedNode> get annotatedNodes =>
-      _ref.read(annotationsProvider(_activeRoot));
+      _ref.read(sidecarAnnotationsForRootProvider(_activeRoot));
 
   ActiveContext get context =>
       _ref.read(activeContextForRootProvider(_activeRoot));

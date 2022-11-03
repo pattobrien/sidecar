@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
+// import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
@@ -12,13 +12,13 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
 import '../../rules/rules.dart';
-import '../../utils/logger/cli_observer.dart';
+import '../../services/active_project_service.dart';
 import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
 import '../plugin/plugin.dart';
 import '../server/log_delegate.dart';
+import '../server/runner/new_runner.dart';
 import '../server/runner/notification_providers.dart';
-import '../server/runner/runner.dart';
 import '../server/server.dart';
 
 Future<void> startSidecarCli(
@@ -27,7 +27,6 @@ Future<void> startSidecarCli(
   List<SidecarBaseConstructor>? constructors,
 }) async {
   final cliOptions = CliOptions.fromArgs(args, isPlugin: false);
-  final channel = PluginIsolateChannel(sendPort);
   final logDelegate = DebuggerLogDelegate(cliOptions);
   logger.onRecord.listen((event) {
     logDelegate.sidecarMessage(event.message);
@@ -36,7 +35,7 @@ Future<void> startSidecarCli(
     () async {
       final container = ProviderContainer(
         overrides: [
-          masterPluginChannelProvider.overrideWithValue(channel),
+          // masterPluginChannelProvider.overrideWithValue(channel),
           ruleConstructorProvider.overrideWithValue(constructors ?? []),
           cliOptionsProvider.overrideWithValue(cliOptions),
           logDelegateProvider.overrideWithValue(logDelegate),
@@ -47,14 +46,21 @@ Future<void> startSidecarCli(
       );
 
       try {
-        final plugin = container.read(pluginProvider);
-        plugin.start(channel);
-        final runner = container.read(runnerProvider);
-        await runner.initialize();
+        // final plugin = container.read(pluginProvider);
+        // plugin.start(channel);
+        // container.read(createPluginProvider(sendPort));
+        // TODO: the below should be done by the runner when weve found an active root
+        // final isolate = await container.read(serverSideStarterProvider(
+        //         sendPort: sendPort, root: Directory.current.uri, args: args)
+        //     .future);
+        final service = container.read(activeProjectServiceProvider);
+        final path = Directory.current.path;
+        final activeContexts = service.getActiveContextsFromPath([path]);
+        final runners = await container.read(newRunnerProvider.future);
         logDelegate.dumpResults();
         print('mode: ${cliOptions.mode}');
         if (cliOptions.mode.isCli) {
-          channel.close();
+          // channel.close();
           exit(0);
         }
         if (cliOptions.mode.isDebug) {
@@ -73,7 +79,7 @@ Future<void> startSidecarCli(
                 if (isWithin(targetDirectory.path, event.path)) {
                   print('\nreanalyzing: ${event.path}');
                   final filePath = event.path;
-                  runner.requestAnalysisForFile(filePath);
+                  // runner.requestAnalysisForFile(filePath);
                 }
               }
             },

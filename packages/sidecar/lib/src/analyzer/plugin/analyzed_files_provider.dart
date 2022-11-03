@@ -1,25 +1,29 @@
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../context/context.dart';
 import 'plugin.dart';
 
-final analyzedFilesForRootProvider =
-    Provider.family<List<AnalyzedFile>, ActiveContextRoot>(
-  (ref, root) => root.typedAnalyzedFiles(),
-  name: 'analyzedFilesForRootProvider',
-  dependencies: const [],
-);
+part 'analyzed_files_provider.g.dart';
 
-final analyzedFileFromPath = Provider.family<AnalyzedFile, String>(
-  (ref, path) {
-    final activeContexts = ref.watch(activeContextsProvider);
-    final context = activeContexts.contextForPath(path);
-    final files = ref.watch(analyzedFilesForRootProvider(context!.activeRoot));
-    return files.firstWhere((file) => file.path == path);
-  },
-  name: 'analyzedFileFromPath',
-  dependencies: [
-    activeContextsProvider,
-    analyzedFilesForRootProvider,
-  ],
-);
+@riverpod
+List<AnalyzedFile> analyzedFilesForRoot(
+  AnalyzedFilesForRootRef ref,
+  ActiveContextRoot root,
+) {
+  return root.typedAnalyzedFiles();
+}
+
+//TODO: can we remove the analyzer parameter from here
+// and depend only on a ContextRoot ?
+@riverpod
+AnalyzedFile analyzedFileForPath(
+  AnalyzedFileForPathRef ref,
+  SidecarAnalyzer analyzer,
+  String path,
+) {
+  final activeContexts = ref.watch(activeContextsProvider);
+  final contextForPath = activeContexts.contextForPath(path);
+  final files =
+      ref.watch(analyzedFilesForRootProvider(contextForPath!.activeRoot));
+  return files.firstWhere((element) => element.path == path);
+}

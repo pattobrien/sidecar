@@ -8,6 +8,7 @@ import 'package:package_config/package_config_types.dart';
 
 import '../../configurations/configurations.dart';
 import '../../protocol/protocol.dart';
+import '../plugin/analyzer_plugin.dart';
 import 'context.dart';
 
 class ActiveContext {
@@ -26,6 +27,8 @@ class ActiveContext {
 
   /// Indicates the package that explicitly activates Sidecar as a plugin.
   final bool isMainRoot;
+
+  bool get isDependency => !isMainRoot;
 
   ActiveContextRoot get activeRoot => ActiveContextRoot(
         context.contextRoot,

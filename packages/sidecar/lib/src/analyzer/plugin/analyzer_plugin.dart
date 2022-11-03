@@ -7,12 +7,15 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/src/dart/analysis/byte_store.dart';
+
 import 'package:analyzer_plugin/channel/channel.dart' as plugin;
 import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
+import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:hotreloader/hotreloader.dart';
+import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
+
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
@@ -28,7 +31,6 @@ import '../results/results.dart';
 import '../server/analyzer_mode.dart';
 import '../server/log_delegate.dart';
 import 'plugin.dart';
-import 'plugin_resource_provider.dart';
 
 final pluginLogger = Logger('sidecar-plugin');
 
@@ -67,58 +69,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     pluginLogger
         .finer('# of rules: ${ref.read(ruleConstructorProvider).length}');
     if (mode.isDebug) {
-      pluginLogger.finer('STARTING WITH HOT RELOAD');
-      _startWithHotReload(channel);
+      // pluginLogger.finer('STARTING WITH HOT RELOAD');
     }
-    super.start(channel);
+
+    channel.listen(_onRequest, onError: onError, onDone: onDone);
     channel.sendNotification(
       plugin.Notification(kInitializationCompleteMethod, {}),
     );
-  }
-
-  /// Hot reload the plugin.
-  ///
-  /// This should occur in the following scenarios:
-  /// - a LintRule has been modified (and we want to reanalyze the codebase)
-  /// - ?
-  Future<void> _startWithHotReload(
-    plugin.PluginCommunicationChannel channel,
-  ) async {
-    // await HotReloader.create(onAfterReload: (c) {
-    //   pluginLogger.info('\n${DateTime.now().toIso8601String()} RELOADING...\n');
-    //   final allContexts = ref.read(allAnalysisContextsNotifierProvider);
-    //   print(allContexts.length);
-    //   final analysisContexts = ref.refresh(activeContextsProvider);
-    //   for (final analysisContext in analysisContexts) {
-    //     handleAffectedFiles(
-    //       analysisContext: analysisContext.context,
-    //       paths: c.events?.map((e) => e.path).toList() ?? [],
-    //     );
-    //   }
-
-    //   // for (final event in events) {
-    //   //   switch (event.type) {
-    //   //     case ChangeType.ADD:
-    //   //       // TODO Handle the event.
-    //   //       break;
-    //   //     case ChangeType.MODIFY:
-    //   //       // contentChanged([event.path]);
-    //   //       break;
-    //   //     case ChangeType.REMOVE:
-    //   //       // TODO Handle event.
-    //   //       break;
-    //   //     default:
-    //   //       // Ignore unhandled watch event types.
-    //   //       break;
-    //   //   }
-    //   // }
-    //   // c.events?.map((e) => e.path);
-    //   // if (c.result == HotReloadResult.Succeeded) {
-    //   //   channel.sendNotification(
-    //   //     plugin.Notification(kSidecarHotReloadMethod, {}),
-    //   //   );
-    //   // }
-    // });
   }
 
   @override
@@ -147,6 +104,35 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     } else {
       return super.handleAnalysisSetContextRoots(parameters);
     }
+  }
+
+  /// Handle an 'analysis.setContextRoots' request.
+  ///
+  /// Throw a [RequestFailure] if the request could not be handled.
+  Future<AnalysisSetContextRootsResult> handleAnalysisSetContextRoots(
+      AnalysisSetContextRootsParams parameters) async {
+    final currentContextCollection = _contextCollection;
+    if (currentContextCollection != null) {
+      _contextCollection = null;
+      await beforeContextCollectionDispose(
+        contextCollection: currentContextCollection,
+      );
+      await currentContextCollection.dispose();
+    }
+
+    final includedPaths = parameters.roots.map((e) => e.root).toList();
+    final contextCollection = AnalysisContextCollectionImpl(
+      resourceProvider: resourceProvider,
+      includedPaths: includedPaths,
+      byteStore: _byteStore,
+      sdkPath: _sdkPath,
+      fileContentCache: FileContentCache(resourceProvider),
+    );
+    _contextCollection = contextCollection;
+    await afterNewContextCollection(
+      contextCollection: contextCollection,
+    );
+    return AnalysisSetContextRootsResult();
   }
 
   @override
@@ -190,6 +176,27 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     }
   }
 
+  /// Handles files that might have been affected by a content change of
+  /// one or more files. The implementation may check if these files should
+  /// be analyzed, do such analysis, and send diagnostics.
+  ///
+  /// By default invokes [analyzeFiles] only for files that are analyzed in
+  /// this [analysisContext].
+  @override
+  Future<void> handleAffectedFiles({
+    required AnalysisContext analysisContext,
+    required List<String> paths,
+  }) async {
+    final analyzedPaths = paths
+        .where(analysisContext.contextRoot.isAnalyzed)
+        .toList(growable: false);
+
+    await analyzeFiles(
+      analysisContext: analysisContext,
+      paths: analyzedPaths,
+    );
+  }
+
   Future<void> _forAnalysisContexts(
     AnalysisContextCollection contextCollection,
     Future<void> Function(AnalysisContext analysisContext) f,
@@ -227,8 +234,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
       await Future.wait(paths.map((path) async {
         try {
-          final file = ref.read(analyzedFileFromPath(path));
-          await ref.read(resolvedUnitProvider(file).future);
+          final file = ref.read(analyzedFileForPathProvider(this, path));
+          await ref.read(getResolvedUnitForFileProvider(file).future);
           // ref.read(analysisResultsForFileProvider(file));
           // ref.invalidate(analysisResultsReporterProvider(file));
           await ref.read(createAnalysisReportProvider(file).future);
@@ -252,11 +259,11 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final path = parameters.file;
     final offset = parameters.offset;
     try {
-      final analyzedFile = ref.read(analyzedFileFromPath(path));
-      final editRequest = EditRequest(offset: offset, file: analyzedFile);
+      final analyzedFile = ref.read(analyzedFileForPathProvider(this, path));
+      final editRequest = QuickFixRequest(offset: offset, file: analyzedFile);
       //TODO: bug, edits are made for multiple files
       final fixes =
-          await ref.read(quickFixForRequestProvider(editRequest).future);
+          await ref.read(requestQuickFixesProvider(this, editRequest).future);
 
       return plugin.EditGetFixesResult(fixes);
     } catch (e, stackTrace) {
@@ -270,7 +277,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     plugin.EditGetAssistsParams parameters,
   ) async {
     try {
-      final analyzedFile = ref.read(analyzedFileFromPath(parameters.file));
+      final analyzedFile =
+          ref.read(analyzedFileForPathProvider(this, parameters.file));
       final quickAssistRequest = QuickAssistRequest(
         file: analyzedFile,
         offset: parameters.offset,
@@ -278,9 +286,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       );
 
       ref.refresh(assistResultsForFileProvider(analyzedFile));
-      ref.refresh(assistResultsWithEditsForFileProvider(analyzedFile));
+      ref.refresh(assistResultsWithEditsProvider(analyzedFile));
       final results = await ref
-          .read(assistResultsForRequestProvider(quickAssistRequest).future);
+          .read(requestAssistResultsProvider(quickAssistRequest).future);
 
       final changes = results
           .map((e) => e.toPrioritizedSourceChanges())
@@ -309,6 +317,123 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       -1,
       const <plugin.CompletionSuggestion>[],
     );
+  }
+
+  /// Compute the response that should be returned for the given [request], or
+  /// `null` if the response has already been sent.
+  Future<plugin.Response?> _getResponse(
+      plugin.Request request, int requestTime) async {
+    plugin.ResponseResult? result;
+    switch (request.method) {
+      case plugin.ANALYSIS_REQUEST_GET_NAVIGATION:
+        var params = plugin.AnalysisGetNavigationParams.fromRequest(request);
+        result = await handleAnalysisGetNavigation(params);
+        break;
+      case plugin.ANALYSIS_REQUEST_HANDLE_WATCH_EVENTS:
+        var params =
+            plugin.AnalysisHandleWatchEventsParams.fromRequest(request);
+        result = await handleAnalysisHandleWatchEvents(params);
+        break;
+      case plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS:
+        var params = plugin.AnalysisSetContextRootsParams.fromRequest(request);
+        result = await handleAnalysisSetContextRoots(params);
+        break;
+      case plugin.ANALYSIS_REQUEST_SET_PRIORITY_FILES:
+        var params = plugin.AnalysisSetPriorityFilesParams.fromRequest(request);
+        result = await handleAnalysisSetPriorityFiles(params);
+        break;
+      case plugin.ANALYSIS_REQUEST_SET_SUBSCRIPTIONS:
+        var params = plugin.AnalysisSetSubscriptionsParams.fromRequest(request);
+        result = await handleAnalysisSetSubscriptions(params);
+        break;
+      case plugin.ANALYSIS_REQUEST_UPDATE_CONTENT:
+        var params = plugin.AnalysisUpdateContentParams.fromRequest(request);
+        result = await handleAnalysisUpdateContent(params);
+        break;
+      case plugin.COMPLETION_REQUEST_GET_SUGGESTIONS:
+        var params = plugin.CompletionGetSuggestionsParams.fromRequest(request);
+        result = await handleCompletionGetSuggestions(params);
+        break;
+      case plugin.EDIT_REQUEST_GET_ASSISTS:
+        var params = plugin.EditGetAssistsParams.fromRequest(request);
+        result = await handleEditGetAssists(params);
+        break;
+      case plugin.EDIT_REQUEST_GET_AVAILABLE_REFACTORINGS:
+        var params =
+            plugin.EditGetAvailableRefactoringsParams.fromRequest(request);
+        result = await handleEditGetAvailableRefactorings(params);
+        break;
+      case plugin.EDIT_REQUEST_GET_FIXES:
+        var params = plugin.EditGetFixesParams.fromRequest(request);
+        result = await handleEditGetFixes(params);
+        break;
+      case plugin.EDIT_REQUEST_GET_REFACTORING:
+        var params = plugin.EditGetRefactoringParams.fromRequest(request);
+        result = await handleEditGetRefactoring(params);
+        break;
+      case plugin.KYTHE_REQUEST_GET_KYTHE_ENTRIES:
+        var params = plugin.KytheGetKytheEntriesParams.fromRequest(request);
+        result = await handleKytheGetKytheEntries(params);
+        break;
+      case plugin.PLUGIN_REQUEST_SHUTDOWN:
+        var params = plugin.PluginShutdownParams();
+        result = await handlePluginShutdown(params);
+        channel.sendResponse(result.toResponse(request.id, requestTime));
+        channel.close();
+        return null;
+      case plugin.PLUGIN_REQUEST_VERSION_CHECK:
+        var params = plugin.PluginVersionCheckParams.fromRequest(request);
+        result = await handlePluginVersionCheck(params);
+        break;
+    }
+    if (result == null) {
+      return plugin.Response(request.id, requestTime,
+          error: plugin.RequestErrorFactory.unknownRequest(request.method));
+    }
+    return result.toResponse(request.id, requestTime);
+  }
+
+  /// The method that is called when a [request] is received from the analysis
+  /// server.
+  Future<void> _onRequest(plugin.Request request) async {
+    var requestTime = DateTime.now().millisecondsSinceEpoch;
+    var id = request.id;
+    plugin.Response? response;
+    try {
+      response = await _getResponse(request, requestTime);
+    } on plugin.RequestFailure catch (exception) {
+      response = plugin.Response(id, requestTime, error: exception.error);
+    } catch (exception, stackTrace) {
+      response = plugin.Response(id, requestTime,
+          error: plugin.RequestError(
+              plugin.RequestErrorCode.PLUGIN_ERROR, exception.toString(),
+              stackTrace: stackTrace.toString()));
+    }
+    if (response != null) {
+      channel.sendResponse(response);
+    }
+  }
+
+  /// Send a notification for the file at the given [path] corresponding to the
+  /// given [service].
+  void _sendNotificationForFile(String path, plugin.AnalysisService service) {
+    switch (service) {
+      case plugin.AnalysisService.FOLDING:
+        sendFoldingNotification(path);
+        break;
+      case plugin.AnalysisService.HIGHLIGHTS:
+        sendHighlightsNotification(path);
+        break;
+      case plugin.AnalysisService.NAVIGATION:
+        sendNavigationNotification(path);
+        break;
+      case plugin.AnalysisService.OCCURRENCES:
+        sendOccurrencesNotification(path);
+        break;
+      case plugin.AnalysisService.OUTLINE:
+        sendOutlineNotification(path);
+        break;
+    }
   }
 }
 

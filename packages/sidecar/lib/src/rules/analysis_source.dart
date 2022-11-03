@@ -4,6 +4,7 @@ import 'package:source_span/source_span.dart';
 part 'analysis_source.freezed.dart';
 
 @freezed
+@Deprecated('replace with raw SourceSpan and SourceLocation')
 class AnalysisSource with _$AnalysisSource {
   const factory AnalysisSource.span({
     required SourceSpan source,

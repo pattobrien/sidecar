@@ -1,8 +1,8 @@
 import 'package:analyzer/dart/analysis/results.dart';
 
 import '../analyzer/ast/general_visitor.dart';
-import '../analyzer/results/analysis_result.dart';
-import '../analyzer/results/edit_result.dart';
+import '../protocol/models/analysis_result_old.dart';
+import '../protocol/models/edit_result_old.dart';
 import 'analysis_source.dart';
 import 'base_rule.dart';
 import 'lint_severity.dart';

@@ -1,7 +1,7 @@
 import 'package:analyzer_plugin/channel/channel.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
-import '../../analyzer/results/analysis_result.dart';
+import '../../protocol/models/analysis_result_old.dart';
 import '../../cli/options/cli_options.dart';
 import '../../utils/utils.dart';
 import 'log_delegate_base.dart';

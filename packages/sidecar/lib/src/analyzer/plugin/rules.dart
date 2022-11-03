@@ -1,5 +1,6 @@
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../configurations/configurations.dart';
 import '../../rules/rules.dart';
@@ -8,65 +9,49 @@ import '../context/context.dart';
 import 'active_contexts_provider.dart';
 import 'rule_constructors_provider.dart';
 
-final lintRulesForFileProvider = Provider.family<List<LintRule>, AnalyzedFile>(
-  (ref, analyzedFile) {
-    return ref.watch(filteredRulesProvider(analyzedFile).select(
-      (rules) => rules.whereType<LintRule>().toList(),
-    ));
-  },
-  name: 'lintRulesForFileProvider',
-  dependencies: [
-    filteredRulesProvider,
-  ],
-);
+part 'rules.g.dart';
 
-final assistRulesForFileProvider =
-    Provider.family<List<AssistRule>, AnalyzedFile>(
-  (ref, analyzedFile) {
-    return ref.watch(filteredRulesProvider(analyzedFile)
-        .select((rules) => rules.whereType<AssistRule>().toList()));
-  },
-  name: 'assistRulesForFileProvider',
-  dependencies: [
-    filteredRulesProvider,
-  ],
-);
+@riverpod
+List<LintRule> lintRulesForFile(
+  LintRulesForFileRef ref,
+  AnalyzedFile file,
+) {
+  return ref.watch(filteredRulesForFileProvider(file)
+      .select((rules) => rules.whereType<LintRule>().toList()));
+}
 
-final activatedRulesProvider =
-    Provider.family<List<BaseRule>, ActiveContextRoot>(
-  (ref, root) {
-    final context = ref.watch(activeContextForRootProvider(root));
-    final constructors = ref.watch(ruleConstructorProvider);
-    final ruleService = ref.watch(ruleInitializationServiceProvider);
-    return ruleService.constructRules(
-        context.sidecarOptions, constructors, root);
-  },
-  name: '_activatedRulesProvider',
-  dependencies: [
-    activeContextForRootProvider,
-    ruleInitializationServiceProvider,
-    ruleConstructorProvider,
-  ],
-);
+@riverpod
+List<AssistRule> assistRulesForFile(
+  AssistRulesForFileRef ref,
+  AnalyzedFile file,
+) {
+  return ref.watch(filteredRulesForFileProvider(file)
+      .select((rules) => rules.whereType<AssistRule>().toList()));
+}
 
-/// Filter rules based on globs defined in project configuration
-final filteredRulesProvider = Provider.family<List<BaseRule>, AnalyzedFile>(
-  (ref, analyzedFile) {
-    final allRules = ref.watch(activatedRulesProvider(analyzedFile.root));
-    final context = ref.watch(activeContextsProvider).contextFor(analyzedFile)!;
-    return allRules
-        .where((rule) => _isPathIncludedForRule(
-            file: analyzedFile,
-            rule: rule,
-            projectConfiguration: context.sidecarOptions))
-        .toList();
-  },
-  name: 'filteredRulesProvider',
-  dependencies: [
-    activeContextsProvider,
-    activatedRulesProvider,
-  ],
-);
+@riverpod
+List<BaseRule> activatedRulesForRoot(
+  ActivatedRulesForRootRef ref,
+  ActiveContextRoot root,
+) {
+  final context = ref.watch(activeContextForRootProvider(root));
+  final constructors = ref.watch(ruleConstructorProvider);
+  final ruleService = ref.watch(ruleInitializationServiceProvider);
+  return ruleService.constructRules(context.sidecarOptions, constructors, root);
+}
+
+@riverpod
+List<BaseRule> filteredRulesForFile(
+  FilteredRulesForFileRef ref,
+  AnalyzedFile file,
+) {
+  final allRules = ref.watch(activatedRulesForRootProvider(file.root));
+  final context = ref.watch(activeContextForRootProvider(file.root));
+  return allRules
+      .where((rule) => _isPathIncludedForRule(
+          file: file, rule: rule, projectConfiguration: context.sidecarOptions))
+      .toList();
+}
 
 bool _isPathIncludedForRule({
   required AnalyzedFile file,
