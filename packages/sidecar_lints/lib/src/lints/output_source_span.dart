@@ -46,7 +46,7 @@ class OutputSourceSpan extends AssistRule with AssistVisitor {
 class _Visitor extends SidecarAssistVisitor {
   @override
   void visitNode(AstNode node) {
-    node.visitChildren(this);
-    reportAstNode(node);
+    // node.visitChildren(this);
+    // reportAstNode(node);
   }
 }

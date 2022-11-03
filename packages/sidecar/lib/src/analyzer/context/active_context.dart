@@ -11,7 +11,7 @@ import '../../protocol/protocol.dart';
 import 'context.dart';
 
 class ActiveContext {
-  ActiveContext(
+  const ActiveContext(
     this.context, {
     required this.sidecarOptions,
     required this.sidecarPluginPackage,

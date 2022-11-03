@@ -9,7 +9,7 @@ part of 'sidecar_message.dart';
 _$RequestMessage _$$RequestMessageFromJson(Map<String, dynamic> json) =>
     _$RequestMessage(
       request: SidecarRequest.fromJson(json['request'] as Map<String, dynamic>),
-      id: json['id'] as int,
+      id: json['id'] as String,
       $type: json['runtimeType'] as String?,
     );
 
@@ -24,7 +24,7 @@ _$ResponseMessage _$$ResponseMessageFromJson(Map<String, dynamic> json) =>
     _$ResponseMessage(
       response:
           SidecarResponse.fromJson(json['response'] as Map<String, dynamic>),
-      id: json['id'] as int,
+      id: json['id'] as String,
       $type: json['runtimeType'] as String?,
     );
 

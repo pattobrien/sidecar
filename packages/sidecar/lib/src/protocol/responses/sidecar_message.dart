@@ -11,12 +11,12 @@ class SidecarMessage with _$SidecarMessage {
 
   const factory SidecarMessage.request({
     required SidecarRequest request,
-    required int id,
+    required String id,
   }) = RequestMessage;
 
   const factory SidecarMessage.response({
     required SidecarResponse response,
-    required int id,
+    required String id,
   }) = ResponseMessage;
 
   const factory SidecarMessage.notification({

@@ -12,15 +12,13 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
 import '../../rules/rules.dart';
-import '../../utils/logger/cli_observer.dart';
 import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
 import '../plugin/plugin.dart';
 import '../server/log_delegate.dart';
-import '../server/runner/notification_providers.dart';
-import '../server/runner/runner.dart';
+import '../server/runner/context_providers.dart';
+import '../server/runner/runner_old.dart';
 import '../server/server.dart';
-import 'server_starter.dart';
 
 Future<void> debuggerStarter(
   SendPort sendPort,

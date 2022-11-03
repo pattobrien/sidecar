@@ -14,17 +14,17 @@ import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/protocol.dart';
-import 'notification_providers.dart';
+import 'context_providers.dart';
 
 const _uuid = Uuid();
 
-final runnerProvider = Provider<SidecarRunner>(
-  (ref) => SidecarRunner(ref),
+final runnerProvider = Provider<SidecarRunnerOld>(
+  (ref) => SidecarRunnerOld(ref),
   name: 'runnerProvider',
 );
 
-class SidecarRunner {
-  SidecarRunner(this.ref);
+class SidecarRunnerOld {
+  SidecarRunnerOld(this.ref);
 
   final Ref ref;
   final completed = Completer<void>();
@@ -37,8 +37,7 @@ class SidecarRunner {
       throw UnimplementedError();
   // ref.read(masterServerChannel);
 
-  ResourceProvider get _resourceProvider =>
-      ref.read(runnerResourceProviderProvider);
+  ResourceProvider get _resourceProvider => ref.read(runnerResourceProvider);
 
   Stream<plugin.Notification> get _notifications => throw UnimplementedError();
   // ref.read(serverChannelNotificationStreamProvider.stream);

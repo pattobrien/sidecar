@@ -35,24 +35,24 @@ SidecarMessage _$SidecarMessageFromJson(Map<String, dynamic> json) {
 mixin _$SidecarMessage {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SidecarRequest request, int id) request,
-    required TResult Function(SidecarResponse response, int id) response,
+    required TResult Function(SidecarRequest request, String id) request,
+    required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
     required TResult orElse(),
@@ -108,7 +108,7 @@ abstract class _$$RequestMessageCopyWith<$Res> {
   factory _$$RequestMessageCopyWith(
           _$RequestMessage value, $Res Function(_$RequestMessage) then) =
       __$$RequestMessageCopyWithImpl<$Res>;
-  $Res call({SidecarRequest request, int id});
+  $Res call({SidecarRequest request, String id});
 
   $SidecarRequestCopyWith<$Res> get request;
 }
@@ -137,7 +137,7 @@ class __$$RequestMessageCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
     ));
   }
 
@@ -163,7 +163,7 @@ class _$RequestMessage extends RequestMessage {
   @override
   final SidecarRequest request;
   @override
-  final int id;
+  final String id;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -197,8 +197,8 @@ class _$RequestMessage extends RequestMessage {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SidecarRequest request, int id) request,
-    required TResult Function(SidecarResponse response, int id) response,
+    required TResult Function(SidecarRequest request, String id) request,
+    required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
   }) {
@@ -208,8 +208,8 @@ class _$RequestMessage extends RequestMessage {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
   }) {
@@ -219,8 +219,8 @@ class _$RequestMessage extends RequestMessage {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
     required TResult orElse(),
@@ -279,14 +279,14 @@ class _$RequestMessage extends RequestMessage {
 abstract class RequestMessage extends SidecarMessage {
   const factory RequestMessage(
       {required final SidecarRequest request,
-      required final int id}) = _$RequestMessage;
+      required final String id}) = _$RequestMessage;
   const RequestMessage._() : super._();
 
   factory RequestMessage.fromJson(Map<String, dynamic> json) =
       _$RequestMessage.fromJson;
 
   SidecarRequest get request;
-  int get id;
+  String get id;
   @JsonKey(ignore: true)
   _$$RequestMessageCopyWith<_$RequestMessage> get copyWith =>
       throw _privateConstructorUsedError;
@@ -297,7 +297,7 @@ abstract class _$$ResponseMessageCopyWith<$Res> {
   factory _$$ResponseMessageCopyWith(
           _$ResponseMessage value, $Res Function(_$ResponseMessage) then) =
       __$$ResponseMessageCopyWithImpl<$Res>;
-  $Res call({SidecarResponse response, int id});
+  $Res call({SidecarResponse response, String id});
 
   $SidecarResponseCopyWith<$Res> get response;
 }
@@ -326,7 +326,7 @@ class __$$ResponseMessageCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
     ));
   }
 
@@ -352,7 +352,7 @@ class _$ResponseMessage extends ResponseMessage {
   @override
   final SidecarResponse response;
   @override
-  final int id;
+  final String id;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -386,8 +386,8 @@ class _$ResponseMessage extends ResponseMessage {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SidecarRequest request, int id) request,
-    required TResult Function(SidecarResponse response, int id) response,
+    required TResult Function(SidecarRequest request, String id) request,
+    required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
   }) {
@@ -397,8 +397,8 @@ class _$ResponseMessage extends ResponseMessage {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
   }) {
@@ -408,8 +408,8 @@ class _$ResponseMessage extends ResponseMessage {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
     required TResult orElse(),
@@ -468,14 +468,14 @@ class _$ResponseMessage extends ResponseMessage {
 abstract class ResponseMessage extends SidecarMessage {
   const factory ResponseMessage(
       {required final SidecarResponse response,
-      required final int id}) = _$ResponseMessage;
+      required final String id}) = _$ResponseMessage;
   const ResponseMessage._() : super._();
 
   factory ResponseMessage.fromJson(Map<String, dynamic> json) =
       _$ResponseMessage.fromJson;
 
   SidecarResponse get response;
-  int get id;
+  String get id;
   @JsonKey(ignore: true)
   _$$ResponseMessageCopyWith<_$ResponseMessage> get copyWith =>
       throw _privateConstructorUsedError;
@@ -566,8 +566,8 @@ class _$NotificationMessage extends NotificationMessage {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SidecarRequest request, int id) request,
-    required TResult Function(SidecarResponse response, int id) response,
+    required TResult Function(SidecarRequest request, String id) request,
+    required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
   }) {
@@ -577,8 +577,8 @@ class _$NotificationMessage extends NotificationMessage {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
   }) {
@@ -588,8 +588,8 @@ class _$NotificationMessage extends NotificationMessage {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
     required TResult orElse(),
@@ -710,8 +710,8 @@ class _$ErrorMessage extends ErrorMessage {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SidecarRequest request, int id) request,
-    required TResult Function(SidecarResponse response, int id) response,
+    required TResult Function(SidecarRequest request, String id) request,
+    required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
   }) {
@@ -721,8 +721,8 @@ class _$ErrorMessage extends ErrorMessage {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
   }) {
@@ -732,8 +732,8 @@ class _$ErrorMessage extends ErrorMessage {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SidecarRequest request, int id)? request,
-    TResult Function(SidecarResponse response, int id)? response,
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
     required TResult orElse(),

@@ -17,8 +17,10 @@ import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
 import '../plugin/plugin.dart';
 import '../server/log_delegate.dart';
-import '../server/runner/new_runner.dart';
-import '../server/runner/notification_providers.dart';
+import '../server/runner/context_providers.dart';
+import '../server/runner/runner_providers.dart';
+import '../server/runner/sidecar_runner.dart';
+import '../server/runner/message_providers.dart';
 import '../server/server.dart';
 
 Future<void> startSidecarCli(

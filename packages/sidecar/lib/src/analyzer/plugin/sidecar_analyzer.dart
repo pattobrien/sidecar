@@ -86,12 +86,12 @@ class SidecarAnalyzer {
   Future<void> handleRequest(RequestMessage msg) async {
     final id = msg.id;
     final unparsedRequest = msg.request;
-    final response = await unparsedRequest.map<Future<SidecarResponse?>>(
+    final response = await unparsedRequest.mapOrNull<Future<SidecarResponse?>>(
       setContextCollection: handleAnalysisSetContextRoots,
-      analyzeFile: (request) => Future.value(),
-      assist: (request) => Future.value(),
-      quickFix: handleEditGetFixes,
-      fileUpdate: (request) => Future.value(),
+      // analyzeFile: (request) => Future.value(),
+      // quickFix: handleEditGetFixes,
+      // assist: (request) => Future.value(),
+      // fileUpdate: (request) => Future.value(),
     );
 
     if (response != null) {
@@ -200,20 +200,20 @@ class SidecarAnalyzer {
     }
   }
 
-  Future<QuickFixResponse> handleEditGetFixes(
-    QuickFixRequest request,
-  ) async {
-    try {
-      //TODO: bug, edits are made for multiple files
-      final fixes =
-          await _ref.read(requestQuickFixesProvider(this, request).future);
-      return QuickFixResponse(fixes);
-    } catch (e, stackTrace) {
-      pluginLogger.severe(
-          'handleEditGetFixes ${request.filePath}', e, stackTrace);
-      rethrow;
-    }
-  }
+  // Future<QuickFixResponse> handleEditGetFixes(
+  //   QuickFixRequest request,
+  // ) async {
+  //   try {
+  //     //TODO: bug, edits are made for multiple files
+  //     final fixes =
+  //         await _ref.read(requestQuickFixesProvider(this, request).future);
+  //     return QuickFixResponse(fixes);
+  //   } catch (e, stackTrace) {
+  //     pluginLogger.severe(
+  //         'handleEditGetFixes ${request.filePath}', e, stackTrace);
+  //     rethrow;
+  //   }
+  // }
 
   // Future<AssistResponse> handleEditGetAssists(
   //   AssistRequest request,
