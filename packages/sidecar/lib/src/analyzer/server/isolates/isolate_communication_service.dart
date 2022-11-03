@@ -7,6 +7,7 @@ import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../protocol/analyzer_plugin_exts/context_root.dart';
 import '../../../protocol/protocol.dart';
 import '../../../utils/logger/logger.dart';
 import '../../context/context.dart';

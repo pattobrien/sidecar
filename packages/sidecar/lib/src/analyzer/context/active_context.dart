@@ -17,11 +17,21 @@ class ActiveContext {
     required this.sidecarPluginPackage,
     required this.sidecarPackages,
     required this.isExplicitlyEnabled,
+    required this.packageConfigJson,
   });
 
   final AnalysisContext context;
+
+  /// Active configuration file for this context.
   final ProjectConfiguration sidecarOptions;
+
+  /// Used to keep track of the running plugin's version.
   final Package sidecarPluginPackage;
+
+  /// Contains details of this context's dependencies.
+  final PackageConfig packageConfigJson;
+
+  /// List of all packages that contain lint/assist rules.
   final List<RulePackageConfiguration> sidecarPackages;
 
   /// Indicates the package was explicitly activated as a Sidecar plugin, as
@@ -55,7 +65,7 @@ extension ContextsX on List<ActiveContext> {
   ActiveContext? contextFor(AnalyzedFile analyzedFile) {
     return firstWhereOrNull((activeContext) => activeContext.activeRoot
         .analyzedFiles()
-        .any((filePath) => filePath == analyzedFile.path));
+        .any((file) => file == analyzedFile));
   }
 
   ActiveContext? contextForPath(String path) {

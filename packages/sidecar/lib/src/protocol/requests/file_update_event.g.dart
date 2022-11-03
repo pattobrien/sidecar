@@ -13,7 +13,7 @@ _$AddEvent _$$AddEventFromJson(Map<String, dynamic> json) => _$AddEvent(
 
 Map<String, dynamic> _$$AddEventToJson(_$AddEvent instance) =>
     <String, dynamic>{
-      'fileEdit': instance.fileEdit,
+      'fileEdit': instance.fileEdit.toJson(),
       'runtimeType': instance.$type,
     };
 
@@ -25,7 +25,7 @@ _$ModifyEvent _$$ModifyEventFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$ModifyEventToJson(_$ModifyEvent instance) =>
     <String, dynamic>{
-      'fileEdit': instance.fileEdit,
+      'fileEdit': instance.fileEdit.toJson(),
       'runtimeType': instance.$type,
     };
 
@@ -37,6 +37,6 @@ _$DeleteEvent _$$DeleteEventFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$DeleteEventToJson(_$DeleteEvent instance) =>
     <String, dynamic>{
-      'fileEdit': instance.fileEdit,
+      'fileEdit': instance.fileEdit.toJson(),
       'runtimeType': instance.$type,
     };

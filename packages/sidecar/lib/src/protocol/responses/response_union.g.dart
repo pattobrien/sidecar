@@ -28,7 +28,7 @@ _$AssistResponse _$$AssistResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$AssistResponseToJson(_$AssistResponse instance) =>
     <String, dynamic>{
-      'results': instance.results,
+      'results': instance.results.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };
 
@@ -42,7 +42,7 @@ _$QuickFixResponse _$$QuickFixResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$QuickFixResponseToJson(_$QuickFixResponse instance) =>
     <String, dynamic>{
-      'results': instance.results,
+      'results': instance.results.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };
 
@@ -56,6 +56,6 @@ _$LintResponse _$$LintResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$LintResponseToJson(_$LintResponse instance) =>
     <String, dynamic>{
-      'lints': instance.lints,
+      'lints': instance.lints.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };

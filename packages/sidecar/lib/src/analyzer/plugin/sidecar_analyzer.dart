@@ -1,6 +1,7 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
@@ -61,16 +62,29 @@ class SidecarAnalyzer {
     sendPort.send(receivePort.sendPort);
     stream.listen((dynamic event) {
       print('event: $event');
-      if (event is Map<String, dynamic>) {
+      if (event is String) {
         try {
-          final message = SidecarMessage.fromJson(event);
+          final json = jsonDecode(event) as Map<String, dynamic>;
+          final message = SidecarMessage.fromJson(json);
           if (message is RequestMessage) {
             handleRequest(message);
             return;
           }
         } catch (e) {
-          //
+          throw UnimplementedError('invalid message type: ${e.runtimeType} $e');
         }
+      }
+      if (event is Map<String, dynamic>) {
+        throw UnimplementedError('invalid message map : $event');
+        // try {
+        //   final message = SidecarMessage.fromJson(event);
+        //   if (message is RequestMessage) {
+        //     handleRequest(message);
+        //     return;
+        //   }
+        // } catch (e) {
+        //   //
+        // }
       }
       throw UnimplementedError('unknown type received: ${event.runtimeType}');
     });
@@ -98,8 +112,9 @@ class SidecarAnalyzer {
       final wrappedResponse =
           SidecarMessage.response(response: response, id: id);
       final json = wrappedResponse.toJson();
-      print('response: $json');
-      sendPort.send(json);
+      final encodedJson = jsonEncode(json);
+      print('response: $encodedJson');
+      sendPort.send(encodedJson);
     }
   }
 
@@ -109,7 +124,8 @@ class SidecarAnalyzer {
     final wrappedResponse =
         SidecarMessage.notification(notification: notification);
     final json = wrappedResponse.toJson();
-    sendPort.send(json);
+    final encodedJson = jsonEncode(json);
+    sendPort.send(encodedJson);
   }
 
   // TODO: find a way to keep collection from being disposed of automatically

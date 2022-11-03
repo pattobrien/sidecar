@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:analyzer/file_system/file_system.dart';
@@ -77,15 +78,18 @@ class SidecarRunner {
   Future<void> _requestSetContext() async {
     final mainContext = context;
     final allContexts = [mainContext.activeRoot.root.path, ...contextRoots];
-    await asyncRequest(SetContextCollectionRequest(
-        mainRoot: mainContext.activeRoot.root.path, roots: allContexts));
+    final request = SetContextCollectionRequest(
+        mainRoot: mainContext.activeRoot.root.path, roots: allContexts);
+    await asyncRequest(request);
   }
 
   Future<T> asyncRequest<T extends SidecarResponse>(
       SidecarRequest request) async {
     final id = const Uuid().v4();
     final wrappedRequest = SidecarMessage.request(request: request, id: id);
-    sendPort.send(wrappedRequest.toJson());
+    final json = wrappedRequest.toJson();
+    final encoded = jsonEncode(json);
+    sendPort.send(encoded);
     final response = await _responses.firstWhere((resp) => resp.id == id);
     final parsedMessage = response
         .mapOrNull(

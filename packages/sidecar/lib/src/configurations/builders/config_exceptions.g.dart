@@ -17,7 +17,7 @@ _$_SidecarException _$$_SidecarExceptionFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_SidecarExceptionToJson(_$_SidecarException instance) =>
     <String, dynamic>{
-      'code': instance.code,
+      'code': instance.code.toJson(),
       'message': instance.message,
       'correction': instance.correction,
       'sourceSpan': sourceSpanToJson(instance.sourceSpan),

@@ -9,7 +9,6 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
-import '../analyzer/plugin/analyzer_plugin_old.dart';
 import '../configurations/project/project_configuration.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
@@ -28,6 +27,7 @@ class ActiveProjectService {
       final pluginUri = getSidecarPluginUriForPackage(contextUri);
       final packages = getSidecarDependencies(contextUri);
       final projectConfig = getSidecarOptions(analysisContext.contextRoot);
+      final packageConfigJson = getPackageConfig(contextUri);
 
       if (!isContextActive(analysisContext)) return null;
 
@@ -37,6 +37,7 @@ class ActiveProjectService {
         sidecarPluginPackage: pluginUri!,
         sidecarPackages: packages,
         isExplicitlyEnabled: true,
+        packageConfigJson: packageConfigJson,
       );
     } catch (e, stackTrace) {
       logger.severe('ActivePackageService initializeContext', e, stackTrace);
@@ -79,7 +80,7 @@ class ActiveProjectService {
     ActiveContext mainContext,
     List<AnalysisContext> allContexts,
   ) {
-    final config = _getPackageConfig(mainContext.activeRoot.root.toUri());
+    final config = getPackageConfig(mainContext.activeRoot.root.toUri());
     // get all contexts that are within the working directory and
     // are dependencies of the main active root
     final contexts = allContexts
@@ -105,6 +106,8 @@ class ActiveProjectService {
         }
         final packages = getSidecarDependencies(contextUri);
         final projectConfig = getSidecarOptions(root);
+        final packageConfigJson = getPackageConfig(contextUri);
+
         return ActiveContext(
           analysisContext,
           sidecarOptions: projectConfig ?? mainContext.sidecarOptions,
@@ -112,6 +115,7 @@ class ActiveProjectService {
           //TODO: do we need to inherit packages of main root below?
           sidecarPackages: packages,
           isExplicitlyEnabled: false,
+          packageConfigJson: packageConfigJson,
         );
       },
     ).toList();
@@ -129,7 +133,7 @@ class ActiveProjectService {
   }
 
   // is this needed for any external functions ?
-  PackageConfig _getPackageConfig(Uri root) {
+  PackageConfig getPackageConfig(Uri root) {
     final path = p.join(root.toFilePath(), '.dart_tool', 'package_config.json');
     final file = File(path);
     final contents = file.readAsBytesSync();
@@ -137,7 +141,7 @@ class ActiveProjectService {
   }
 
   List<RulePackageConfiguration> getSidecarDependencies(Uri root) {
-    return _getPackageConfig(root)
+    return getPackageConfig(root)
         .packages
         .map<RulePackageConfiguration?>((package) {
           try {
@@ -153,7 +157,7 @@ class ActiveProjectService {
 
   /// Get the plugin package uri for the current Dart project.
   Package? getSidecarPluginUriForPackage(Uri root) {
-    return _getPackageConfig(root).packages.firstWhereOrNull((package) {
+    return getPackageConfig(root).packages.firstWhereOrNull((package) {
       return package.name == kSidecarPluginName;
     });
   }

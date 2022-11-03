@@ -17,7 +17,7 @@ _$LintResult _$$LintResultFromJson(Map<String, dynamic> json) => _$LintResult(
 
 Map<String, dynamic> _$$LintResultToJson(_$LintResult instance) =>
     <String, dynamic>{
-      'rule': instance.rule,
+      'rule': instance.rule.toJson(),
       'span': sourceSpanToJson(instance.span),
       'message': instance.message,
       'severity': _$LintSeverityEnumMap[instance.severity]!,
@@ -48,11 +48,11 @@ _$LintResultWithEdits _$$LintResultWithEditsFromJson(
 Map<String, dynamic> _$$LintResultWithEditsToJson(
         _$LintResultWithEdits instance) =>
     <String, dynamic>{
-      'rule': instance.rule,
+      'rule': instance.rule.toJson(),
       'span': sourceSpanToJson(instance.span),
       'message': instance.message,
       'severity': _$LintSeverityEnumMap[instance.severity]!,
       'correction': instance.correction,
-      'edits': instance.edits,
+      'edits': instance.edits.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };

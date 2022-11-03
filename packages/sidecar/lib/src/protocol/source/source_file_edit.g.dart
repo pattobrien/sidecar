@@ -18,6 +18,6 @@ _$_SourceFileEdit _$$_SourceFileEditFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_SourceFileEditToJson(_$_SourceFileEdit instance) =>
     <String, dynamic>{
       'file': instance.file.toString(),
-      'edits': instance.edits,
+      'edits': instance.edits.map((e) => e.toJson()).toList(),
       'fileStamp': instance.fileStamp.toIso8601String(),
     };

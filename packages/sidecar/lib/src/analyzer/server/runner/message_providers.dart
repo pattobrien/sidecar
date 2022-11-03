@@ -1,6 +1,8 @@
 // ignore_for_file: implementation_imports, unnecessary_lambdas
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:riverpod/riverpod.dart';
 
@@ -13,6 +15,11 @@ final analyzerStreamProvider = StreamProvider.family<Object, SidecarRunner>(
     ref.onDispose(_controller.close);
     runner.receivePort.listen(
       (dynamic m) {
+        if (m is SendPort) runner.sendPort = m;
+        if (m is String) {
+          final jsonObject = jsonDecode(m) as Map<String, dynamic>;
+          _controller.add(jsonObject);
+        }
         print('got: ${m.toString()}');
         _controller.add(m as Object);
       },

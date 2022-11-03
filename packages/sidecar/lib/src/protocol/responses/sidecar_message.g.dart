@@ -15,7 +15,7 @@ _$RequestMessage _$$RequestMessageFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$RequestMessageToJson(_$RequestMessage instance) =>
     <String, dynamic>{
-      'request': instance.request,
+      'request': instance.request.toJson(),
       'id': instance.id,
       'runtimeType': instance.$type,
     };
@@ -30,7 +30,7 @@ _$ResponseMessage _$$ResponseMessageFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$ResponseMessageToJson(_$ResponseMessage instance) =>
     <String, dynamic>{
-      'response': instance.response,
+      'response': instance.response.toJson(),
       'id': instance.id,
       'runtimeType': instance.$type,
     };
@@ -46,7 +46,7 @@ _$NotificationMessage _$$NotificationMessageFromJson(
 Map<String, dynamic> _$$NotificationMessageToJson(
         _$NotificationMessage instance) =>
     <String, dynamic>{
-      'notification': instance.notification,
+      'notification': instance.notification.toJson(),
       'runtimeType': instance.$type,
     };
 

@@ -17,5 +17,5 @@ _$_EditResult _$$_EditResultFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_EditResultToJson(_$_EditResult instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'sourceChanges': instance.sourceChanges,
+      'sourceChanges': instance.sourceChanges.map((e) => e.toJson()).toList(),
     };

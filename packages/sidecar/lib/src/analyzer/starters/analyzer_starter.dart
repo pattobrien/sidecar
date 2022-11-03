@@ -5,8 +5,8 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
-import '../plugin/sidecar_analyzer.dart';
 import '../plugin/rule_constructors_provider.dart';
+import '../plugin/sidecar_analyzer.dart';
 
 SidecarAnalyzer analyzerStarter({
   required SendPort sendPort,
@@ -27,6 +27,7 @@ SidecarAnalyzer analyzerStarter({
       return SidecarAnalyzer(container, sendPort: sendPort)..start();
     },
     (error, stack) {
+      throw UnimplementedError('$error $stack');
       sendPort.send(SidecarAnalyzerError(error, stack).toJson());
     },
   )!;

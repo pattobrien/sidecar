@@ -17,6 +17,6 @@ _$_AssistResult _$$_AssistResultFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_AssistResultToJson(_$_AssistResult instance) =>
     <String, dynamic>{
-      'code': instance.code,
-      'edits': instance.edits,
+      'code': instance.code.toJson(),
+      'edits': instance.edits.map((e) => e.toJson()).toList(),
     };

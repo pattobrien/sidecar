@@ -73,6 +73,6 @@ _$FileUpdateRequest _$$FileUpdateRequestFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$FileUpdateRequestToJson(_$FileUpdateRequest instance) =>
     <String, dynamic>{
-      'event': instance.event,
+      'event': instance.event.toJson(),
       'runtimeType': instance.$type,
     };
