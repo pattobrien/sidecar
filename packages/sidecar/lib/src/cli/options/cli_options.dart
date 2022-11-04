@@ -15,10 +15,8 @@ class CliOptions with _$CliOptions {
   factory CliOptions.fromArgs(
     List<String> args, {
     required bool isPlugin,
-    // bool isMiddleman = false,
   }) {
     return CliOptions(
-      // isMiddlemanPlugin: isMiddleman,
       isVerboseEnabled: args.contains('verbose') || args.contains('--verbose'),
       mode: args.contains('cli') || args.contains('--cli')
           ? SidecarAnalyzerMode.cli

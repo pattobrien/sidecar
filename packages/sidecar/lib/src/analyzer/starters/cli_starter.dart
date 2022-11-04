@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
-// import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
@@ -19,8 +18,6 @@ import '../plugin/plugin.dart';
 import '../server/log_delegate.dart';
 import '../server/runner/context_providers.dart';
 import '../server/runner/runner_providers.dart';
-import '../server/runner/sidecar_runner.dart';
-import '../server/runner/message_providers.dart';
 import '../server/server.dart';
 
 Future<void> startSidecarCli(
@@ -48,13 +45,6 @@ Future<void> startSidecarCli(
       );
 
       try {
-        // final plugin = container.read(pluginProvider);
-        // plugin.start(channel);
-        // container.read(createPluginProvider(sendPort));
-        // TODO: the below should be done by the runner when weve found an active root
-        // final isolate = await container.read(serverSideStarterProvider(
-        //         sendPort: sendPort, root: Directory.current.uri, args: args)
-        //     .future);
         final service = container.read(activeProjectServiceProvider);
         final path = Directory.current.path;
         final activeContexts = service.getActiveContextsFromPath([path]);
@@ -70,7 +60,7 @@ Future<void> startSidecarCli(
           HotReloader.logLevel = Level.OFF;
           final hotReloader = await HotReloader.create(
             onAfterReload: (c) {
-              // print('\n${DateTime.now().toIso8601String()} RELOADING...\n');
+              print('\n${DateTime.now().toIso8601String()} RELOADING...\n');
 
               // print(c.events?.map((e) => e.path));
               final targetDirectory = container.read(activeRunnerDirectory);
@@ -79,7 +69,7 @@ Future<void> startSidecarCli(
               // if (events.any((event) => event.path))
               for (final event in events) {
                 if (isWithin(targetDirectory.path, event.path)) {
-                  print('\nreanalyzing: ${event.path}');
+                  // print('reanalyzing: ${event.path}');
                   final filePath = event.path;
                   runners.forEach((runner) {
                     runner.requestLintsForFile(filePath);

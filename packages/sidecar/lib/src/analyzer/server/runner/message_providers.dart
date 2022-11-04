@@ -15,14 +15,15 @@ final analyzerStreamProvider = StreamProvider.family<Object, SidecarRunner>(
     ref.onDispose(_controller.close);
     runner.receivePort.listen(
       (dynamic m) {
-        if (m is SendPort) runner.sendPort = m;
-        if (m is String) {
+        if (m is SendPort) {
+          runner.sendPort = m;
+        } else if (m is String) {
           try {
-            print('got: $m');
+            // print('got: $m');
             final jsonObject = jsonDecode(m) as Map<String, dynamic>;
             _controller.add(jsonObject);
           } catch (e) {
-            print('something went wrong: $e: $m');
+            // print('something went wrong: $e: $m');
           }
         } else {
           print('got unexpected type: ${m.runtimeType}');

@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
+import 'dart:math';
 
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/protocol.dart';
+import '../../../utils/printer/lint_printer.dart';
 import '../../context/active_context.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
@@ -49,25 +51,26 @@ class SidecarRunner {
       root: context.activeRoot.root.toUri(),
     );
 
-    _notifications.listen((event) => event.mapOrNull(
+    _notifications.listen((event) => event.map(
           initComplete: (_) => handleInitialization(),
+          lint: (_) => null,
         ));
 
-    // _lintResultsNotification
-    //     .listen((event) => print('ANALYSISRESULT: ${event.toString()}'));
-
-    // _reloader.listen((event) {
-    //   // TODO: replace set context with a simple update, based on the [event]
-    //   // and the updated contents
-    //   _requestSetContext();
-    // });
+    _lints.listen(handleLints);
 
     await _initializationCompleter.future;
     await _requestSetContext();
   }
 
+  void handleLints(LintNotification notification) {
+    if (notification.lints.isNotEmpty) {
+      print('${notification.path}: ${notification.lints.length} results\n');
+      print(notification.lints.prettyPrint());
+    }
+  }
+
   void handleInitialization() {
-    print('initialization completed');
+    print('initialization completed\n');
     _initializationCompleter.complete();
   }
 
@@ -77,9 +80,10 @@ class SidecarRunner {
     final contents = resourceProvider.getFile(path).readAsStringSync();
     final fileUpdateEvent = FileUpdateEvent.add(path, contents);
     final request = FileUpdateRequest([fileUpdateEvent]);
-    final response = await asyncRequest<UpdateFilesResponse>(request);
+    unawaited(asyncRequest<UpdateFilesResponse>(request));
     final lintNotification =
         await _lints.firstWhere((element) => element.path == path);
+    // print('received lints: ${lintNotification.toJson()}');
     return lintNotification.lints;
   }
 

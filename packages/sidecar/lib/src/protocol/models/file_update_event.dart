@@ -22,13 +22,13 @@ class FileUpdateEvent with _$FileUpdateEvent {
     String filePath,
   ) = DeleteEvent;
 
-  String get filePath => map(
-      add: (add) => add.filePath,
-      modify: (modify) => modify.fileEdit.file.path,
-      delete: (delete) => delete.filePath);
-
   const FileUpdateEvent._();
 
   factory FileUpdateEvent.fromJson(Map<String, dynamic> json) =>
       _$FileUpdateEventFromJson(json);
+
+  String get filePath => map(
+      add: (add) => add.filePath,
+      modify: (modify) => modify.fileEdit.file.path,
+      delete: (delete) => delete.filePath);
 }

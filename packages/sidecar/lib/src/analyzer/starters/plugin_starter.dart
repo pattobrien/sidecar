@@ -23,17 +23,7 @@ Future<void> startSidecarPlugin(
   final cliOptions = CliOptions.fromArgs(args, isPlugin: true);
 
   final LogDelegateBase delegate = PluginChannelDelegate(cliOptions, channel);
-  final zoneSpec = ZoneSpecification(
-    print: (self, parent, zone, line) {
-      // if (cliOptions.mode.isPlugin) {
-      final logFile = File(
-          p.join(p.current, kDartTool, 'sidecar', 'logs', 'middleman.txt'));
-      if (!logFile.existsSync()) logFile.create(recursive: true);
-      logFile.writeAsString('\nMIDDLEMAN: $line');
-      delegate.sidecarMessage('MIDDLEMAN: $line');
-      // }
-    },
-  );
+
   await runZonedGuarded<Future<void>>(
     () async {
       final container = ProviderContainer(
@@ -55,6 +45,14 @@ Future<void> startSidecarPlugin(
       }
     },
     delegate.sidecarError,
-    zoneSpecification: zoneSpec,
+    zoneSpecification: ZoneSpecification(
+      print: (self, parent, zone, line) {
+        final logFile = File(
+            p.join(p.current, kDartTool, 'sidecar', 'logs', 'middleman.txt'));
+        if (!logFile.existsSync()) logFile.create(recursive: true);
+        logFile.writeAsString('\nMIDDLEMAN: $line');
+        delegate.sidecarMessage('MIDDLEMAN: $line');
+      },
+    ),
   );
 }

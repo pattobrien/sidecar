@@ -67,7 +67,7 @@ class SidecarAnalyzer {
   void _setupListeners() {
     sendPort.send(receivePort.sendPort);
     stream.listen((dynamic event) {
-      print('event: $event');
+      // print('event: $event');
       if (event is String) {
         try {
           final json = jsonDecode(event) as Map<String, dynamic>;
@@ -137,7 +137,7 @@ class SidecarAnalyzer {
           SidecarMessage.response(response: response, id: id);
       final json = wrappedResponse.toJson();
       final encodedJson = jsonEncode(json);
-      print('response: $encodedJson');
+      // print('response: $encodedJson');
       sendPort.send(encodedJson);
     }
   }
@@ -149,7 +149,7 @@ class SidecarAnalyzer {
         SidecarMessage.notification(notification: notification);
     final json = wrappedResponse.toJson();
     final encodedJson = jsonEncode(json);
-    print('sending notification: $encodedJson');
+    // print('sending notification: $encodedJson');
     sendPort.send(encodedJson);
   }
 
