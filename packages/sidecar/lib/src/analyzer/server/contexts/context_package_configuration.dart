@@ -8,7 +8,7 @@ final projectConfigurationProvider =
     Provider.family<ProjectConfiguration?, ContextRoot>(
   (ref, contextRoot) {
     final packageService = ref.watch(activeProjectServiceProvider);
-    return packageService.getSidecarOptions(contextRoot);
+    return packageService.getSidecarOptions(contextRoot.root.toUri());
   },
   dependencies: [
     activeProjectServiceProvider,

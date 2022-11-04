@@ -16,8 +16,8 @@ import '../../protocol/source/source_edit.dart';
 import '../context/analyzed_file.dart';
 import '../handlers/context_collection.dart';
 import '../results/results.dart';
+import 'analyzer_resource_provider.dart';
 import 'plugin.dart';
-import 'plugin_resource_provider.dart';
 
 final logger = logging.Logger('sidecar-plugin');
 
@@ -35,9 +35,9 @@ class SidecarAnalyzer {
   Stream get stream => receivePort.asBroadcastStream();
 
   AnalyzedFile getFileForPath(String path) =>
-      _ref.read(analyzedFileForPathProvider(this, path));
+      _ref.read(analyzedFileForPathProvider(path));
 
-  final List<String> roots = const [];
+  List<String> roots = const [];
 
   OverlayResourceProvider get resourceProvider =>
       _ref.read(analyzerResourceProvider);
@@ -93,6 +93,7 @@ class SidecarAnalyzer {
   ) async {
     _collection = _ref.read(createContextCollectionProvider(request.roots));
     _ref.read(allContextsNotifierProvider.notifier).update(_collection);
+    roots = request.roots;
     await afterNewContextCollection(contextCollection: _collection);
     return const ContextCollectionResponse();
   }
@@ -152,6 +153,7 @@ class SidecarAnalyzer {
 
   Future<void> contentChanged(List<String> paths) async {
     await _forAnalysisContexts(_collection, (analysisContext) async {
+      // logger.info('root: ${analysisContext.contextRoot.root.path}');
       // ignore: prefer_foreach
       for (final path in paths) {
         analysisContext.changeFile(path);
@@ -223,9 +225,10 @@ class SidecarAnalyzer {
         analysisContext.contextRoot.root.path)) {
       // context is valid => analyze all files
 
+      logger.severe('${DateTime.now()} starting analyzing files: $paths');
       await Future.wait(paths.map((path) async {
         try {
-          final file = _ref.read(analyzedFileForPathProvider(this, path));
+          final file = _ref.read(analyzedFileForPathProvider(path));
           await _ref.read(getResolvedUnitForFileProvider(file).future);
           final results =
               await _ref.read(createAnalysisReportProvider(file).future);
@@ -235,6 +238,7 @@ class SidecarAnalyzer {
           logger.severe('analyzeFiles', e, stackTrace);
         }
       }));
+      logger.severe('${DateTime.now()}  finished analyzing files');
     }
   }
 
@@ -286,6 +290,8 @@ class SidecarAnalyzer {
         if (resourceProvider.hasOverlay(filePath)) {
           final file = resourceProvider.getFile(filePath);
           oldContents = file.readAsStringSync();
+        } else {
+          logger.info('no overlay: $filePath');
         }
       } catch (_) {}
       update.map(
@@ -295,6 +301,7 @@ class SidecarAnalyzer {
             content: event.contents,
             modificationStamp: _overlayModificationStamp++,
           );
+          logger.severe('add: $filePath updated');
         },
         modify: (modify) {
           if (oldContents == null) {

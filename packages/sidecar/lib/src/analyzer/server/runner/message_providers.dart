@@ -19,11 +19,11 @@ final analyzerStreamProvider = StreamProvider.family<Object, SidecarRunner>(
           runner.sendPort = m;
         } else if (m is String) {
           try {
-            // print('got: $m');
+            // print('${DateTime.now().toIso8601String()}: $m');
             final jsonObject = jsonDecode(m) as Map<String, dynamic>;
             _controller.add(jsonObject);
           } catch (e) {
-            // print('something went wrong: $e: $m');
+            print('something went wrong: $e: $m');
           }
         } else {
           print('got unexpected type: ${m.runtimeType}');

@@ -30,11 +30,10 @@ class _SystemHash {
 }
 
 String $analyzedFilesForRootHash() =>
-    r'f77c00ba7ffb04395dab5f1c8052cccd25692204';
+    r'99a3db39f96b2779df343959012e0d781546774f';
 
 /// See also [analyzedFilesForRoot].
-class AnalyzedFilesForRootProvider
-    extends AutoDisposeProvider<List<AnalyzedFile>> {
+class AnalyzedFilesForRootProvider extends Provider<List<AnalyzedFile>> {
   AnalyzedFilesForRootProvider(
     this.root,
   ) : super(
@@ -66,7 +65,7 @@ class AnalyzedFilesForRootProvider
   }
 }
 
-typedef AnalyzedFilesForRootRef = AutoDisposeProviderRef<List<AnalyzedFile>>;
+typedef AnalyzedFilesForRootRef = ProviderRef<List<AnalyzedFile>>;
 
 /// See also [analyzedFilesForRoot].
 final analyzedFilesForRootProvider = AnalyzedFilesForRootFamily();
@@ -83,7 +82,7 @@ class AnalyzedFilesForRootFamily extends Family<List<AnalyzedFile>> {
   }
 
   @override
-  AutoDisposeProvider<List<AnalyzedFile>> getProviderOverride(
+  Provider<List<AnalyzedFile>> getProviderOverride(
     covariant AnalyzedFilesForRootProvider provider,
   ) {
     return call(
@@ -102,17 +101,15 @@ class AnalyzedFilesForRootFamily extends Family<List<AnalyzedFile>> {
 }
 
 String $analyzedFileForPathHash() =>
-    r'0b7a87eacb0185993932de4bbe58e8da3cba65ae';
+    r'171951309a2a70e262f3e782a82a195323691f26';
 
 /// See also [analyzedFileForPath].
 class AnalyzedFileForPathProvider extends AutoDisposeProvider<AnalyzedFile> {
   AnalyzedFileForPathProvider(
-    this.analyzer,
     this.path,
   ) : super(
           (ref) => analyzedFileForPath(
             ref,
-            analyzer,
             path,
           ),
           from: analyzedFileForPathProvider,
@@ -123,20 +120,16 @@ class AnalyzedFileForPathProvider extends AutoDisposeProvider<AnalyzedFile> {
                   : $analyzedFileForPathHash,
         );
 
-  final SidecarAnalyzer analyzer;
   final String path;
 
   @override
   bool operator ==(Object other) {
-    return other is AnalyzedFileForPathProvider &&
-        other.analyzer == analyzer &&
-        other.path == path;
+    return other is AnalyzedFileForPathProvider && other.path == path;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, analyzer.hashCode);
     hash = _SystemHash.combine(hash, path.hashCode);
 
     return _SystemHash.finish(hash);
@@ -152,11 +145,9 @@ class AnalyzedFileForPathFamily extends Family<AnalyzedFile> {
   AnalyzedFileForPathFamily();
 
   AnalyzedFileForPathProvider call(
-    SidecarAnalyzer analyzer,
     String path,
   ) {
     return AnalyzedFileForPathProvider(
-      analyzer,
       path,
     );
   }
@@ -166,7 +157,6 @@ class AnalyzedFileForPathFamily extends Family<AnalyzedFile> {
     covariant AnalyzedFileForPathProvider provider,
   ) {
     return call(
-      provider.analyzer,
       provider.path,
     );
   }

@@ -80,6 +80,7 @@ class SidecarRunner {
     final contents = resourceProvider.getFile(path).readAsStringSync();
     final fileUpdateEvent = FileUpdateEvent.add(path, contents);
     final request = FileUpdateRequest([fileUpdateEvent]);
+    // print(request.toJson());
     unawaited(asyncRequest<UpdateFilesResponse>(request));
     final lintNotification =
         await _lints.firstWhere((element) => element.path == path);
@@ -101,6 +102,7 @@ class SidecarRunner {
     final wrappedRequest = SidecarMessage.request(request: request, id: id);
     final json = wrappedRequest.toJson();
     final encoded = jsonEncode(json);
+    // print('request: $encoded');
     sendPort.send(encoded);
     final response = await _responses.firstWhere((resp) => resp.id == id);
     final parsedMessage = response

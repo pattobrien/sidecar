@@ -6,7 +6,7 @@ import 'sidecar_analyzer.dart';
 
 part 'analyzed_files_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 List<AnalyzedFile> analyzedFilesForRoot(
   AnalyzedFilesForRootRef ref,
   ActiveContextRoot root,
@@ -19,7 +19,7 @@ List<AnalyzedFile> analyzedFilesForRoot(
 @riverpod
 AnalyzedFile analyzedFileForPath(
   AnalyzedFileForPathRef ref,
-  SidecarAnalyzer analyzer,
+  // SidecarAnalyzer analyzer,
   String path,
 ) {
   final activeContexts = ref.watch(activeContextsProvider);

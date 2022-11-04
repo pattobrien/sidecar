@@ -40,6 +40,13 @@ import 'string_lint.dart';
 final _ruleConstructorProvider =
     Provider<List<SidecarBaseConstructor>>((ref) => [AvoidStringLiterals.new]);
 
+// final _directoryProvider =
+//     NotifierProvider.autoDispose<ActiveDirectoryNotifier, List<Directory>>(() {
+//   return ActiveDirectoryNotifier()
+//     ..addDirectory(
+//         Directory(canonicalize('../../examples/my_analyzed_codebase')));
+// });
+
 void main() async {
   final cliOptions = CliOptions.fromArgs(['--cli'], isPlugin: false);
   // final receivePort = ReceivePort('sidecar receivePort');
@@ -62,8 +69,7 @@ void main() async {
     overrides: [
       // masterPluginChannelProvider.overrideWithValue(channel),
       // masterServerChannel.overrideWithValue(serverChannel),
-      activeRunnerDirectory.overrideWithValue(
-          Directory(canonicalize('../../examples/my_analyzed_codebase'))),
+      // runnerActiveContextsProvider.overrideWithProvider(_directoryProvider),
       ruleConstructorProvider.overrideWithProvider(_ruleConstructorProvider),
       cliOptionsProvider.overrideWithValue(cliOptions),
       logDelegateProvider.overrideWithValue(logDelegate),
@@ -88,8 +94,8 @@ void main() async {
   final mainFile = newProject.getFile(mainRelativePath);
 
   print('starting...');
-  final runner = container.read(runnerProvider);
-  await runner.initialize();
+  // final runner = container.read(runnerProvider);
+  // await runner.initialize();
   // final middleman = container.read(middlemanPluginProvider);
   // middleman.start(channel);
   // middleman.;

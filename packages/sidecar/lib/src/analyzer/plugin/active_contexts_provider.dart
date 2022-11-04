@@ -14,7 +14,7 @@ import 'sidecar_analyzer.dart';
 
 part 'active_contexts_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 List<ActiveContext> activeContexts(
   ActiveContextsRef ref,
   // SidecarAnalyzer analyzer,
@@ -22,19 +22,19 @@ List<ActiveContext> activeContexts(
   final service = ref.watch(activeProjectServiceProvider);
   final allContexts =
       ref.watch<List<AnalysisContext>>(allContextsNotifierProvider);
-  final activeContexts =
-      allContexts.map(service.initializeContext).whereType<ActiveContext>();
+  final contexts =
+      allContexts.map(service.getActiveContext).whereType<ActiveContext>();
 
-  final dependencies = activeContexts
+  final dependencies = contexts
       .map((e) => service.getActiveDependencies(e, allContexts))
       .expand((e) => e);
 
   logger.finer('# of all contexts => ${allContexts.length} ');
-  logger.finer('# of active contexts => ${activeContexts.length} ');
-  for (final activeContext in activeContexts) {
+  logger.finer('# of active contexts => ${contexts.length} ');
+  for (final activeContext in contexts) {
     logger.finer('active context => ${activeContext.activeRoot.root.path}');
   }
-  final activeContextsAndDependencies = [...activeContexts, ...dependencies];
+  final activeContextsAndDependencies = [...contexts, ...dependencies];
   assert(
       activeContextsAndDependencies
               .where((c) => c.isExplicitlyEnabled)
@@ -45,7 +45,7 @@ List<ActiveContext> activeContexts(
   return activeContextsAndDependencies;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 ActiveContext activeContextForRoot(
   ActiveContextForRootRef ref,
   ActiveContextRoot root,
@@ -57,7 +57,7 @@ ActiveContext activeContextForRoot(
           activeContext.activeRoot.root.path == root.root.path)));
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 List<ActiveContextRoot> activeContextRoots(
   ActiveContextRootsRef ref,
   SidecarAnalyzer analyzer,

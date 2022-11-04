@@ -6,7 +6,7 @@ import '../../services/services.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/logger/logger.dart';
 import '../context/context.dart';
-import '../plugin/plugin_resource_provider.dart';
+import '../plugin/analyzer_resource_provider.dart';
 import '../plugin/rules.dart';
 import 'results.dart';
 

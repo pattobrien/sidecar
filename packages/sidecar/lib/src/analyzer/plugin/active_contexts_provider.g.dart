@@ -29,22 +29,22 @@ class _SystemHash {
   }
 }
 
-String $activeContextsHash() => r'0bcdc3f53b8d91c1d357c97cb2cb9d99178f1e28';
+String $activeContextsHash() => r'8e9d217143c9d51ce483b9d1ccf63705a2dc46cd';
 
 /// See also [activeContexts].
-final activeContextsProvider = AutoDisposeProvider<List<ActiveContext>>(
+final activeContextsProvider = Provider<List<ActiveContext>>(
   activeContexts,
   name: r'activeContextsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : $activeContextsHash,
 );
-typedef ActiveContextsRef = AutoDisposeProviderRef<List<ActiveContext>>;
+typedef ActiveContextsRef = ProviderRef<List<ActiveContext>>;
 String $activeContextForRootHash() =>
-    r'a17cd7000c947a170159d44fb40c89aca8d4e99b';
+    r'54f92139bfd840d9e4f4c84cabeb931efd5f2cb3';
 
 /// See also [activeContextForRoot].
-class ActiveContextForRootProvider extends AutoDisposeProvider<ActiveContext> {
+class ActiveContextForRootProvider extends Provider<ActiveContext> {
   ActiveContextForRootProvider(
     this.root,
   ) : super(
@@ -76,7 +76,7 @@ class ActiveContextForRootProvider extends AutoDisposeProvider<ActiveContext> {
   }
 }
 
-typedef ActiveContextForRootRef = AutoDisposeProviderRef<ActiveContext>;
+typedef ActiveContextForRootRef = ProviderRef<ActiveContext>;
 
 /// See also [activeContextForRoot].
 final activeContextForRootProvider = ActiveContextForRootFamily();
@@ -93,7 +93,7 @@ class ActiveContextForRootFamily extends Family<ActiveContext> {
   }
 
   @override
-  AutoDisposeProvider<ActiveContext> getProviderOverride(
+  Provider<ActiveContext> getProviderOverride(
     covariant ActiveContextForRootProvider provider,
   ) {
     return call(
@@ -111,11 +111,10 @@ class ActiveContextForRootFamily extends Family<ActiveContext> {
   String? get name => r'activeContextForRootProvider';
 }
 
-String $activeContextRootsHash() => r'6f58bff3f87100dfa949ab1029cec44affc30fa6';
+String $activeContextRootsHash() => r'4df2cb5f0b681dc8ee433fe62722c1dbd54a5fc5';
 
 /// See also [activeContextRoots].
-class ActiveContextRootsProvider
-    extends AutoDisposeProvider<List<ActiveContextRoot>> {
+class ActiveContextRootsProvider extends Provider<List<ActiveContextRoot>> {
   ActiveContextRootsProvider(
     this.analyzer,
   ) : super(
@@ -147,7 +146,7 @@ class ActiveContextRootsProvider
   }
 }
 
-typedef ActiveContextRootsRef = AutoDisposeProviderRef<List<ActiveContextRoot>>;
+typedef ActiveContextRootsRef = ProviderRef<List<ActiveContextRoot>>;
 
 /// See also [activeContextRoots].
 final activeContextRootsProvider = ActiveContextRootsFamily();
@@ -164,7 +163,7 @@ class ActiveContextRootsFamily extends Family<List<ActiveContextRoot>> {
   }
 
   @override
-  AutoDisposeProvider<List<ActiveContextRoot>> getProviderOverride(
+  Provider<List<ActiveContextRoot>> getProviderOverride(
     covariant ActiveContextRootsProvider provider,
   ) {
     return call(

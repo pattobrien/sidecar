@@ -15,10 +15,11 @@ import '../server.dart';
 final activeContextsMiddlemanProvider = Provider<List<ActiveContext>>(
   (ref) {
     final allContexts = ref.watch(allContextsProvider);
+    // final resourceProvider = ref.watch(middlemanResourceProvider);
     logger.finer('MM # of all contexts => ${allContexts.length} ');
     final service = ref.watch(activeProjectServiceProvider);
     final mainActiveContexts = allContexts
-        .map<ActiveContext?>(service.initializeContext)
+        .map<ActiveContext?>(service.getActiveContext)
         .whereType<ActiveContext>()
         .toList();
     final dependencyContexts = mainActiveContexts

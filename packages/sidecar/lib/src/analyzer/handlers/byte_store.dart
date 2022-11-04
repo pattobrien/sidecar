@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../protocol/constants/constants.dart';
 import '../../utils/byte_store_ext.dart';
-import '../plugin/plugin_resource_provider.dart';
+import '../plugin/analyzer_resource_provider.dart';
 
 part 'byte_store.g.dart';
 

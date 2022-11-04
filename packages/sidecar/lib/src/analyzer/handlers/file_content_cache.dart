@@ -3,7 +3,7 @@
 import 'package:analyzer/src/dart/analysis/file_content_cache.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../plugin/plugin_resource_provider.dart';
+import '../plugin/analyzer_resource_provider.dart';
 
 part 'file_content_cache.g.dart';
 

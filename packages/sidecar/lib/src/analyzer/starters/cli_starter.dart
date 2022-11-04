@@ -26,15 +26,13 @@ Future<void> startSidecarCli(
   List<SidecarBaseConstructor>? constructors,
 }) async {
   final cliOptions = CliOptions.fromArgs(args, isPlugin: false);
+  print('mode: ${cliOptions.mode}\n');
   final logDelegate = DebuggerLogDelegate(cliOptions);
-  logger.onRecord.listen((event) {
-    logDelegate.sidecarMessage(event.message);
-  });
+  // logger.onRecord.listen(print);
   await runZonedGuarded<Future<void>>(
     () async {
       final container = ProviderContainer(
         overrides: [
-          // masterPluginChannelProvider.overrideWithValue(channel),
           ruleConstructorProvider.overrideWithValue(constructors ?? []),
           cliOptionsProvider.overrideWithValue(cliOptions),
           logDelegateProvider.overrideWithValue(logDelegate),
@@ -45,12 +43,25 @@ Future<void> startSidecarCli(
       );
 
       try {
+        final directory = Directory.current;
+
         final service = container.read(activeProjectServiceProvider);
-        final path = Directory.current.path;
-        final activeContexts = service.getActiveContextsFromPath([path]);
-        final runners = await container.read(newRunnerProvider.future);
+        final resourceProvider = container.read(runnerResourceProvider);
+        final activeContext = service.initActiveContextFromUri(directory.uri,
+            resourceProvider: resourceProvider);
+
+        if (activeContext == null) {
+          throw UnimplementedError(
+              'This is not a valid Sidecar directory: ${directory.path}');
+        }
+        container.read(runnerActiveContextsProvider.notifier).update = [
+          activeContext
+        ];
+
+        //TODO: make the plugin path dynamic
+        const pluginPath = '/Users/pattobrien/Development/sidecar/packages';
+        final runners = await container.read(getRunnersProvider.future);
         logDelegate.dumpResults();
-        print('mode: ${cliOptions.mode}');
         if (cliOptions.mode.isCli) {
           // channel.close();
           exit(0);
@@ -61,19 +72,32 @@ Future<void> startSidecarCli(
           final hotReloader = await HotReloader.create(
             onAfterReload: (c) {
               print('\n${DateTime.now().toIso8601String()} RELOADING...\n');
-
-              // print(c.events?.map((e) => e.path));
-              final targetDirectory = container.read(activeRunnerDirectory);
+              final elements = container.getAllProviderElements();
+              final numberOfRunners =
+                  elements.where((e) => e.origin == getRunnersProvider);
+              final contextNumber =
+                  container.read(runnerActiveContextsProvider);
+              print(
+                  'runners: ${numberOfRunners.length} - ${numberOfRunners.map<dynamic>((e) => e.readSelf())}');
               final events = c.events ?? [];
               // TODO: check for any changes to lint rules
               // if (events.any((event) => event.path))
-              for (final event in events) {
-                if (isWithin(targetDirectory.path, event.path)) {
-                  // print('reanalyzing: ${event.path}');
+
+              for (final runner in runners) {
+                for (final event in events) {
                   final filePath = event.path;
-                  runners.forEach((runner) {
+                  final rootPath = runner.context.activeRoot.root.path;
+                  if (isWithin(rootPath, event.path)) {
+                    print('reanalyzing: $filePath');
                     runner.requestLintsForFile(filePath);
-                  });
+                  }
+                  if (isWithin(pluginPath, filePath)) {
+                    print('rebuilding runners: ${event.path}');
+
+                    print('activeContexts: ${contextNumber.length}');
+                    container.refresh(getRunnersProvider);
+                    break;
+                  }
                 }
               }
             },

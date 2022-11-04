@@ -4,6 +4,6 @@ import 'package:riverpod/riverpod.dart';
 
 final analyzerResourceProvider = Provider<OverlayResourceProvider>(
   (ref) => OverlayResourceProvider(PhysicalResourceProvider.INSTANCE),
-  name: 'pluginResourceProvider',
+  name: 'analyzerResourceProvider',
   dependencies: const [],
 );

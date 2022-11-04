@@ -1,8 +1,9 @@
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
+import 'package:analyzer/file_system/file_system.dart';
 import 'package:collection/collection.dart';
 import 'package:package_config/package_config.dart';
 import 'package:path/path.dart' as p;
@@ -12,6 +13,7 @@ import '../analyzer/context/context.dart';
 import '../configurations/project/project_configuration.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
+import '../protocol/models/context_details.dart';
 import '../protocol/protocol.dart';
 import '../utils/logger/logger.dart';
 import '../utils/utils.dart';
@@ -19,20 +21,22 @@ import '../utils/utils.dart';
 class ActiveProjectService {
   const ActiveProjectService();
 
-  ActiveContext? initializeContext(
-    AnalysisContext analysisContext,
-  ) {
+  ActiveContext? initActiveContextFromUri(
+    Uri contextUri, {
+    ResourceProvider? resourceProvider,
+  }) {
     try {
-      final contextUri = analysisContext.contextRoot.root.toUri();
+      if (!isContextActive(contextUri)) return null;
+
       final pluginUri = getSidecarPluginUriForPackage(contextUri);
       final packages = getSidecarDependencies(contextUri);
-      final projectConfig = getSidecarOptions(analysisContext.contextRoot);
+      final projectConfig = getSidecarOptions(contextUri);
       final packageConfigJson = getPackageConfig(contextUri);
-
-      if (!isContextActive(analysisContext)) return null;
+      final context = getAnalysisContextForRoot(contextUri,
+          resourceProvider: resourceProvider);
 
       return ActiveContext(
-        context: analysisContext,
+        context: context,
         sidecarOptions: projectConfig!,
         sidecarPluginPackage: pluginUri!,
         sidecarPackages: packages,
@@ -41,39 +45,96 @@ class ActiveProjectService {
       );
     } catch (e, stackTrace) {
       logger.severe('ActivePackageService initializeContext', e, stackTrace);
-      return null;
+      rethrow;
+      // return null;
     }
   }
 
-  bool isContextActive(
-    AnalysisContext analysisContext,
+  ActiveContext? getActiveContext(
+    AnalysisContext context,
+    //  { ResourceProvider? resourceProvider, }
   ) {
-    final contextUri = analysisContext.contextRoot.root.toUri();
-    final pluginUri = getSidecarPluginUriForPackage(contextUri);
-    final packages = getSidecarDependencies(contextUri);
-    final projectConfig = getSidecarOptions(analysisContext.contextRoot);
+    try {
+      final contextUri = context.contextRoot.root.toUri();
+      if (!isContextActive(contextUri)) return null;
 
-    if (!analysisContext.isSidecarEnabled ||
-        projectConfig == null ||
+      final pluginUri = getSidecarPluginUriForPackage(contextUri);
+      final packages = getSidecarDependencies(contextUri);
+      final projectConfig = getSidecarOptions(contextUri);
+      final packageConfigJson = getPackageConfig(contextUri);
+      // final context = getAnalysisContextForRoot(contextUri,
+      //     resourceProvider: resourceProvider);
+
+      return ActiveContext(
+        context: context,
+        sidecarOptions: projectConfig!,
+        sidecarPluginPackage: pluginUri!,
+        sidecarPackages: packages,
+        isExplicitlyEnabled: true,
+        packageConfigJson: packageConfigJson,
+      );
+    } catch (e, stackTrace) {
+      logger.severe('ActivePackageService initializeContext', e, stackTrace);
+      rethrow;
+      // return null;
+    }
+  }
+
+  AnalysisContext getAnalysisContextForRoot(
+    Uri root, {
+    ResourceProvider? resourceProvider,
+  }) {
+    var path = root.normalizePath().path;
+
+    if (path.endsWith('/')) {
+      path = path.substring(0, path.length - 1);
+    }
+
+    final collection = AnalysisContextCollection(
+      includedPaths: [path],
+      resourceProvider: resourceProvider,
+    );
+    return collection.contextFor(path);
+  }
+
+  bool isContextActive(
+    Uri root,
+  ) {
+    final pluginUri = getSidecarPluginUriForPackage(root);
+    final packages = getSidecarDependencies(root);
+    final projectConfig = getSidecarOptions(root);
+
+    if (projectConfig == null ||
         pluginUri == null ||
+        // !root.isSidecarEnabled ||
         packages.isEmpty) {
       return false;
     }
     return true;
   }
 
-  List<AnalysisContext> getAllContextsFromPath(List<String> paths) {
-    final collection = AnalysisContextCollection(includedPaths: paths);
+  List<AnalysisContext> getAllContextsFromPath(
+    List<String> includePaths, {
+    List<String>? excludePaths,
+  }) {
+    final collection = AnalysisContextCollection(
+        includedPaths: includePaths, excludedPaths: excludePaths);
     return collection.contexts;
   }
 
-  List<ActiveContext> getActiveContextsFromPath(List<String> paths) {
-    final collection = AnalysisContextCollection(includedPaths: paths);
-    return collection.contexts
-        .map(initializeContext)
-        .whereType<ActiveContext>()
-        .toList();
-  }
+  // List<ActiveContext> getActiveContextsFromPath(
+  //   List<String> paths, {
+  //   ResourceProvider? resourceProvider,
+  // }) {
+  //   final collection = AnalysisContextCollection(includedPaths: paths);
+  //   return collection.contexts
+  //       .map((e) => initializeContext(
+  //             e,
+  //             resourceProvider: resourceProvider,
+  //           ))
+  //       .whereType<ActiveContext>()
+  //       .toList();
+  // }
 
   /// Finds any contexts that
   List<ActiveContext> getActiveDependencies(
@@ -105,7 +166,7 @@ class ActiveProjectService {
               'plugin package must be identical between any active roots within the same isolate.');
         }
         final packages = getSidecarDependencies(contextUri);
-        final projectConfig = getSidecarOptions(root);
+        final projectConfig = getSidecarOptions(contextUri);
         final packageConfigJson = getPackageConfig(contextUri);
 
         return ActiveContext(
@@ -121,9 +182,27 @@ class ActiveProjectService {
     ).toList();
   }
 
+  List<ContextDetails> createActiveContextDetails(
+    Uri directory,
+    ResourceProvider resourceProvider,
+  ) {
+    final collection = AnalysisContextCollection(
+        includedPaths: [directory.path], resourceProvider: resourceProvider);
+    return collection.contexts
+        .map(
+          (e) => ContextDetails(
+            includesPaths: e.contextRoot.includedPaths.map(Uri.parse).toList(),
+            excludesPaths: e.contextRoot.excludedPaths.map(Uri.parse).toList(),
+            optionsFile: e.contextRoot.optionsFile?.toUri(),
+            packagesFile: e.contextRoot.packagesFile?.toUri(),
+          ),
+        )
+        .toList();
+  }
+
   Future<bool> createDefaultSidecarYaml(Uri root) async {
     const contents = defaultSidecarContent;
-    final file = File(p.join(root.path, kSidecarYaml));
+    final file = io.File(p.join(root.path, kSidecarYaml));
     if (file.existsSync()) {
       return false;
     } else {
@@ -135,7 +214,7 @@ class ActiveProjectService {
   // is this needed for any external functions ?
   PackageConfig getPackageConfig(Uri root) {
     final path = p.join(root.toFilePath(), '.dart_tool', 'package_config.json');
-    final file = File(path);
+    final file = io.File(path);
     final contents = file.readAsBytesSync();
     return PackageConfig.parseBytes(contents, file.uri);
   }
@@ -162,21 +241,21 @@ class ActiveProjectService {
     });
   }
 
-  String? _getSidecarFile(ContextRoot contextRoot) {
-    final sidecarYamlPath = p.join(contextRoot.root.path, kSidecarYaml);
-    final sidecarYamlFile = File(sidecarYamlPath);
+  String? _getSidecarFile(Uri root) {
+    final sidecarYamlPath = p.join(root.path, kSidecarYaml);
+    final sidecarYamlFile = io.File(sidecarYamlPath);
     if (!sidecarYamlFile.existsSync()) return null;
     return sidecarYamlFile.readAsStringSync();
   }
 
-  ProjectConfiguration? getSidecarOptions(ContextRoot contextRoot) {
+  ProjectConfiguration? getSidecarOptions(Uri root) {
     logger.finer('getSidecarOptions started');
     try {
-      final contents = _getSidecarFile(contextRoot);
+      final contents = _getSidecarFile(root);
       if (contents == null) return null;
       return ProjectConfiguration.fromYaml(
         contents,
-        fileUri: Uri.parse(contextRoot.root.canonicalizePath(kSidecarYaml)),
+        fileUri: Uri.parse(p.canonicalize(p.join(root.path, kSidecarYaml))),
       );
     } catch (e, stackTrace) {
       logger.shout('ISOLATE NON-FATAL: ', e, stackTrace);

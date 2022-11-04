@@ -18,6 +18,7 @@ class SomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
+    //
     final someString2 = someString;
     final someIconData = Icons.abc;
     final someIconData2 = Icons.snowboarding;
