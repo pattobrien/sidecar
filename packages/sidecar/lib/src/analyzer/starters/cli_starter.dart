@@ -75,10 +75,7 @@ Future<void> startSidecarCli(
               final elements = container.getAllProviderElements();
               final numberOfRunners =
                   elements.where((e) => e.origin == getRunnersProvider);
-              final contextNumber =
-                  container.read(runnerActiveContextsProvider);
-              print(
-                  'runners: ${numberOfRunners.length} - ${numberOfRunners.map<dynamic>((e) => e.readSelf())}');
+              print('# of active runners: ${numberOfRunners.length}');
               final events = c.events ?? [];
               // TODO: check for any changes to lint rules
               // if (events.any((event) => event.path))
@@ -88,13 +85,14 @@ Future<void> startSidecarCli(
                   final filePath = event.path;
                   final rootPath = runner.context.activeRoot.root.path;
                   if (isWithin(rootPath, event.path)) {
-                    print('reanalyzing: $filePath');
+                    print('reanalyzing: $filePath\n');
                     runner.requestLintsForFile(filePath);
                   }
                   if (isWithin(pluginPath, filePath)) {
-                    print('rebuilding runners: ${event.path}');
+                    print(
+                        'rebuilding runner: ${runner.context.contextRoot.root.path}\n');
 
-                    print('activeContexts: ${contextNumber.length}');
+                    // print('activeContexts: ${contextNumber.length}');
                     container.refresh(getRunnersProvider);
                     break;
                   }
@@ -109,7 +107,7 @@ Future<void> startSidecarCli(
     },
     logDelegate.sidecarError,
     zoneSpecification: ZoneSpecification(
-      print: (self, parent, zone, line) => logDelegate.sidecarMessage(line),
+      print: (self, parent, zone, line) => stdout.writeln(line),
     ),
   );
 }

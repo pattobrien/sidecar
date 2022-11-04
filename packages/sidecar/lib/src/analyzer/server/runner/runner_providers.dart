@@ -13,11 +13,11 @@ Future<List<SidecarRunner>> getRunners(
   GetRunnersRef ref,
   // Uri activeRoot,
 ) async {
-  print('creating runners');
+  // print('creating runners');
   final activePrimaryContexts = ref.watch(runnerActiveContextsProvider);
   final runners = await Future.wait(activePrimaryContexts.map((context) async {
     final runner = SidecarRunner(ref, context: context, contextRoots: []);
-    print('creating runners: init');
+    // print('creating runners: init');
     await runner.initialize();
     return runner;
   }));
