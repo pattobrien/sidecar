@@ -30,6 +30,8 @@ abstract class $AnalyzedFileCopyWith<$Res> {
           AnalyzedFile value, $Res Function(AnalyzedFile) then) =
       _$AnalyzedFileCopyWithImpl<$Res>;
   $Res call({ActiveContextRoot activeRoot, Uri fileUri});
+
+  $ActiveContextRootCopyWith<$Res> get activeRoot;
 }
 
 /// @nodoc
@@ -56,6 +58,13 @@ class _$AnalyzedFileCopyWithImpl<$Res> implements $AnalyzedFileCopyWith<$Res> {
               as Uri,
     ));
   }
+
+  @override
+  $ActiveContextRootCopyWith<$Res> get activeRoot {
+    return $ActiveContextRootCopyWith<$Res>(_value.activeRoot, (value) {
+      return _then(_value.copyWith(activeRoot: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -66,6 +75,9 @@ abstract class _$$_AnalyzedFileCopyWith<$Res>
       __$$_AnalyzedFileCopyWithImpl<$Res>;
   @override
   $Res call({ActiveContextRoot activeRoot, Uri fileUri});
+
+  @override
+  $ActiveContextRootCopyWith<$Res> get activeRoot;
 }
 
 /// @nodoc

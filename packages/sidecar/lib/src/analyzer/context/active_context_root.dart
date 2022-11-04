@@ -3,46 +3,48 @@
 import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/src/workspace/workspace.dart';
-import 'package:meta/meta.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'analyzed_file.dart';
 
+part 'active_context_root.freezed.dart';
+
+@freezed
 @immutable
-class ActiveContextRoot {
-  const ActiveContextRoot(
-    this._root, {
-    required this.isExplicitlyEnabledRoot,
-  });
+class ActiveContextRoot with _$ActiveContextRoot {
+  const factory ActiveContextRoot(
+    ContextRoot contextRoot, {
 
-  final ContextRoot _root;
+    /// Indicates the package that explicitly activates Sidecar as a plugin.
+    required bool isExplicitlyEnabledRoot,
+  }) = _ActiveContextRoot;
 
-  /// Indicates the package that explicitly activates Sidecar as a plugin.
-  final bool isExplicitlyEnabledRoot;
+  const ActiveContextRoot._();
 
-  List<AnalyzedFile> analyzedFiles() => _root
+  List<AnalyzedFile> analyzedFiles() => contextRoot
       .analyzedFiles()
       .map((e) => AnalyzedFile(this, Uri.parse(e)))
       .toList();
 
-  List<Resource> get excluded => _root.excluded;
+  List<Resource> get excluded => contextRoot.excluded;
 
-  Iterable<String> get excludedPaths => _root.excludedPaths;
+  Iterable<String> get excludedPaths => contextRoot.excludedPaths;
 
-  List<Resource> get included => _root.included;
+  List<Resource> get included => contextRoot.included;
 
-  Iterable<String> get includedPaths => _root.includedPaths;
+  Iterable<String> get includedPaths => contextRoot.includedPaths;
 
-  bool isAnalyzed(String path) => _root.isAnalyzed(path);
+  bool isAnalyzed(String path) => contextRoot.isAnalyzed(path);
 
-  File? get optionsFile => _root.optionsFile;
+  File? get optionsFile => contextRoot.optionsFile;
 
-  File? get packagesFile => _root.packagesFile;
+  File? get packagesFile => contextRoot.packagesFile;
 
-  ResourceProvider get resourceProvider => _root.resourceProvider;
+  ResourceProvider get resourceProvider => contextRoot.resourceProvider;
 
-  Folder get root => _root.root;
+  Folder get root => contextRoot.root;
 
-  Workspace get workspace => _root.workspace;
+  Workspace get workspace => contextRoot.workspace;
 
   //TODO: verify that this is a good equality check
   @override
@@ -51,10 +53,4 @@ class ActiveContextRoot {
 
   @override
   int get hashCode => root.hashCode;
-
-  // factory ActiveContextRoot.fromJson(Map<String, dynamic> json) {
-
-  //   return ActiveContextRoot(json['root'] as String,
-  //       isExplicitlyEnabledRoot: isExplicitlyEnabledRoot);
-  // }
 }

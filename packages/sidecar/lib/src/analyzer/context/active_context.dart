@@ -4,39 +4,40 @@ import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/dart/analysis/session.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:collection/collection.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'package:package_config/package_config_types.dart';
 
 import '../../configurations/configurations.dart';
 import '../../protocol/protocol.dart';
 import 'context.dart';
 
-class ActiveContext {
-  const ActiveContext(
-    this.context, {
-    required this.sidecarOptions,
-    required this.sidecarPluginPackage,
-    required this.sidecarPackages,
-    required this.isExplicitlyEnabled,
-    required this.packageConfigJson,
-  });
+part 'active_context.freezed.dart';
+// part 'active_context.g.dart';
 
-  final AnalysisContext context;
+@freezed
+class ActiveContext with _$ActiveContext {
+  const factory ActiveContext({
+    required AnalysisContext context,
 
-  /// Active configuration file for this context.
-  final ProjectConfiguration sidecarOptions;
+    /// Active configuration file for this context.
+    required ProjectConfiguration sidecarOptions,
 
-  /// Used to keep track of the running plugin's version.
-  final Package sidecarPluginPackage;
+    /// Used to keep track of the running plugin's version.
+    required Package sidecarPluginPackage,
 
-  /// Contains details of this context's dependencies.
-  final PackageConfig packageConfigJson;
+    /// Contains details of this context's dependencies.
+    required PackageConfig packageConfigJson,
 
-  /// List of all packages that contain lint/assist rules.
-  final List<RulePackageConfiguration> sidecarPackages;
+    /// List of all packages that contain lint/assist rules.
+    required List<RulePackageConfiguration> sidecarPackages,
 
-  /// Indicates the package was explicitly activated as a Sidecar plugin, as
-  /// opposed to being a dependency of a package that has Sidecar enabled.
-  final bool isExplicitlyEnabled;
+    /// Indicates the package was explicitly activated as a Sidecar plugin, as
+    /// opposed to being a dependency of a package that has Sidecar enabled.
+    required bool isExplicitlyEnabled,
+  }) = _ActiveContext;
+
+  const ActiveContext._();
 
   bool get isDependency => !isExplicitlyEnabled;
 

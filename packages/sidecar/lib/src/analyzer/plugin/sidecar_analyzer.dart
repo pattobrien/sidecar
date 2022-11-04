@@ -1,5 +1,3 @@
-// ignore_for_file: implementation_imports
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
@@ -7,8 +5,6 @@ import 'dart:isolate';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:logging/logging.dart' as logging;
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
@@ -17,16 +13,13 @@ import '../../protocol/logging/log_record.dart';
 import '../../protocol/requests/requests.dart';
 import '../../protocol/responses/responses.dart';
 import '../../protocol/source/source_edit.dart';
-import '../context/active_context.dart';
 import '../context/analyzed_file.dart';
 import '../handlers/context_collection.dart';
 import '../results/results.dart';
 import 'plugin.dart';
 import 'plugin_resource_provider.dart';
 
-// part 'analyzer_plugin.g.dart';
-
-final pluginLogger = logging.Logger('sidecar-plugin');
+final logger = logging.Logger('sidecar-plugin');
 
 class SidecarAnalyzer {
   SidecarAnalyzer(
@@ -50,16 +43,15 @@ class SidecarAnalyzer {
       _ref.read(analyzerResourceProvider);
 
   void start() {
-    pluginLogger.onRecord.listen((event) {
-      final log = LogRecord(event.toString());
+    logger.onRecord.listen((event) {
+      final log = LogRecord.simple(event.toString());
       final notification = SidecarMessage.log(log);
       final json = notification.toJson();
       final encodedJson = jsonEncode(json);
       sendPort.send(encodedJson);
     });
-    pluginLogger.finer('END PLUGIN STARTING....');
-    pluginLogger
-        .finer('# of rules: ${_ref.read(ruleConstructorProvider).length}');
+    logger.finer('END PLUGIN STARTING....');
+    logger.finer('# of rules: ${_ref.read(ruleConstructorProvider).length}');
     _setupListeners();
     sendNotification(const InitCompleteNotification());
   }
@@ -225,8 +217,7 @@ class SidecarAnalyzer {
     required List<String> paths,
   }) async {
     final activeContexts = _ref.read(activeContextsProvider);
-    pluginLogger
-        .finer('CHANGEDFILES = ${paths.length} ${paths.toList().toString()}');
+    logger.finer('CHANGEDFILES = ${paths.length} ${paths.toList().toString()}');
     if (activeContexts.any((activeContext) =>
         activeContext.activeRoot.root.path ==
         analysisContext.contextRoot.root.path)) {
@@ -241,7 +232,7 @@ class SidecarAnalyzer {
           final notification = LintNotification(path, results);
           sendNotification(notification);
         } catch (e, stackTrace) {
-          pluginLogger.severe('analyzeFiles', e, stackTrace);
+          logger.severe('analyzeFiles', e, stackTrace);
         }
       }));
     }
@@ -334,17 +325,17 @@ class SidecarAnalyzer {
     return const UpdateFilesResponse();
   }
 
-  Future<plugin.CompletionGetSuggestionsResult> handleCompletionGetSuggestions(
-    plugin.CompletionGetSuggestionsParams parameters,
-  ) async {
-    final filePath = parameters.file;
-    final offset = parameters.offset;
-    return plugin.CompletionGetSuggestionsResult(
-      -1,
-      -1,
-      const <plugin.CompletionSuggestion>[],
-    );
-  }
+  // Future<plugin.CompletionGetSuggestionsResult> handleCompletionGetSuggestions(
+  //   plugin.CompletionGetSuggestionsParams parameters,
+  // ) async {
+  //   final filePath = parameters.file;
+  //   final offset = parameters.offset;
+  //   return plugin.CompletionGetSuggestionsResult(
+  //     -1,
+  //     -1,
+  //     const <plugin.CompletionSuggestion>[],
+  //   );
+  // }
 }
 
 // final pluginInitializationProvider = FutureProvider.autoDispose<void>(

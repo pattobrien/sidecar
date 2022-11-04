@@ -30,6 +30,8 @@ abstract class $IsolateDetailsCopyWith<$Res> {
           IsolateDetails value, $Res Function(IsolateDetails) then) =
       _$IsolateDetailsCopyWithImpl<$Res>;
   $Res call({ServerIsolateChannel channel, ActiveContextRoot activeRoot});
+
+  $ActiveContextRootCopyWith<$Res> get activeRoot;
 }
 
 /// @nodoc
@@ -57,6 +59,13 @@ class _$IsolateDetailsCopyWithImpl<$Res>
               as ActiveContextRoot,
     ));
   }
+
+  @override
+  $ActiveContextRootCopyWith<$Res> get activeRoot {
+    return $ActiveContextRootCopyWith<$Res>(_value.activeRoot, (value) {
+      return _then(_value.copyWith(activeRoot: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -67,6 +76,9 @@ abstract class _$$_IsolateDetailsCopyWith<$Res>
       __$$_IsolateDetailsCopyWithImpl<$Res>;
   @override
   $Res call({ServerIsolateChannel channel, ActiveContextRoot activeRoot});
+
+  @override
+  $ActiveContextRootCopyWith<$Res> get activeRoot;
 }
 
 /// @nodoc

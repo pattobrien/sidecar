@@ -68,6 +68,8 @@ abstract class $IsolateMessageCopyWith<$Res> {
           IsolateMessage value, $Res Function(IsolateMessage) then) =
       _$IsolateMessageCopyWithImpl<$Res>;
   $Res call({ActiveContextRoot root});
+
+  $ActiveContextRootCopyWith<$Res> get root;
 }
 
 /// @nodoc
@@ -90,6 +92,13 @@ class _$IsolateMessageCopyWithImpl<$Res>
               as ActiveContextRoot,
     ));
   }
+
+  @override
+  $ActiveContextRootCopyWith<$Res> get root {
+    return $ActiveContextRootCopyWith<$Res>(_value.root, (value) {
+      return _then(_value.copyWith(root: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -100,6 +109,9 @@ abstract class _$$IsolateRequestCopyWith<$Res>
       __$$IsolateRequestCopyWithImpl<$Res>;
   @override
   $Res call({Request request, ActiveContextRoot root});
+
+  @override
+  $ActiveContextRootCopyWith<$Res> get root;
 }
 
 /// @nodoc
@@ -254,6 +266,9 @@ abstract class _$$IsolateResponseCopyWith<$Res>
       __$$IsolateResponseCopyWithImpl<$Res>;
   @override
   $Res call({Response response, ActiveContextRoot root});
+
+  @override
+  $ActiveContextRootCopyWith<$Res> get root;
 }
 
 /// @nodoc

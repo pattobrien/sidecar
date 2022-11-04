@@ -7,7 +7,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../services/services.dart';
 import '../../utils/file_paths.dart';
-import '../../utils/logger/logger.dart';
 import '../context/context.dart';
 import '../results/results.dart';
 import 'plugin.dart';

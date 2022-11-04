@@ -32,7 +32,7 @@ class ActiveProjectService {
       if (!isContextActive(analysisContext)) return null;
 
       return ActiveContext(
-        analysisContext,
+        context: analysisContext,
         sidecarOptions: projectConfig!,
         sidecarPluginPackage: pluginUri!,
         sidecarPackages: packages,
@@ -109,7 +109,7 @@ class ActiveProjectService {
         final packageConfigJson = getPackageConfig(contextUri);
 
         return ActiveContext(
-          analysisContext,
+          context: analysisContext,
           sidecarOptions: projectConfig ?? mainContext.sidecarOptions,
           sidecarPluginPackage: pluginUri ?? mainContext.sidecarPluginPackage,
           //TODO: do we need to inherit packages of main root below?

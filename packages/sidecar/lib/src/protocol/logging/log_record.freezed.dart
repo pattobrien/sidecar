@@ -15,13 +15,68 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 LogRecord _$LogRecordFromJson(Map<String, dynamic> json) {
-  return _LogRecord.fromJson(json);
+  switch (json['runtimeType']) {
+    case 'simple':
+      return _LogRecord.fromJson(json);
+    case 'fromAnalyzer':
+      return AnalyzerLogRecord.fromJson(json);
+    case 'fromRule':
+      return RuleLogRecord.fromJson(json);
+
+    default:
+      throw CheckedFromJsonException(json, 'runtimeType', 'LogRecord',
+          'Invalid union type "${json['runtimeType']}"!');
+  }
 }
 
 /// @nodoc
 mixin _$LogRecord {
   String get message => throw _privateConstructorUsedError;
-
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message) simple,
+    required TResult Function(ContextDetails mainContext, String message)
+        fromAnalyzer,
+    required TResult Function(RuleCode lintCode, String message) fromRule,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String message)? simple,
+    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(RuleCode lintCode, String message)? fromRule,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message)? simple,
+    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(RuleCode lintCode, String message)? fromRule,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogRecord value) simple,
+    required TResult Function(AnalyzerLogRecord value) fromAnalyzer,
+    required TResult Function(RuleLogRecord value) fromRule,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogRecord value)? simple,
+    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult Function(RuleLogRecord value)? fromRule,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogRecord value)? simple,
+    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult Function(RuleLogRecord value)? fromRule,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $LogRecordCopyWith<LogRecord> get copyWith =>
@@ -91,7 +146,9 @@ class __$$_LogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_LogRecord extends _LogRecord {
-  const _$_LogRecord(this.message) : super._();
+  const _$_LogRecord(this.message, {final String? $type})
+      : $type = $type ?? 'simple',
+        super._();
 
   factory _$_LogRecord.fromJson(Map<String, dynamic> json) =>
       _$$_LogRecordFromJson(json);
@@ -99,9 +156,12 @@ class _$_LogRecord extends _LogRecord {
   @override
   final String message;
 
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
   @override
   String toString() {
-    return 'LogRecord(message: $message)';
+    return 'LogRecord.simple(message: $message)';
   }
 
   @override
@@ -123,6 +183,75 @@ class _$_LogRecord extends _LogRecord {
       __$$_LogRecordCopyWithImpl<_$_LogRecord>(this, _$identity);
 
   @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message) simple,
+    required TResult Function(ContextDetails mainContext, String message)
+        fromAnalyzer,
+    required TResult Function(RuleCode lintCode, String message) fromRule,
+  }) {
+    return simple(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String message)? simple,
+    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(RuleCode lintCode, String message)? fromRule,
+  }) {
+    return simple?.call(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message)? simple,
+    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(RuleCode lintCode, String message)? fromRule,
+    required TResult orElse(),
+  }) {
+    if (simple != null) {
+      return simple(message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogRecord value) simple,
+    required TResult Function(AnalyzerLogRecord value) fromAnalyzer,
+    required TResult Function(RuleLogRecord value) fromRule,
+  }) {
+    return simple(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogRecord value)? simple,
+    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult Function(RuleLogRecord value)? fromRule,
+  }) {
+    return simple?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogRecord value)? simple,
+    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult Function(RuleLogRecord value)? fromRule,
+    required TResult orElse(),
+  }) {
+    if (simple != null) {
+      return simple(this);
+    }
+    return orElse();
+  }
+
+  @override
   Map<String, dynamic> toJson() {
     return _$$_LogRecordToJson(
       this,
@@ -142,5 +271,379 @@ abstract class _LogRecord extends LogRecord {
   @override
   @JsonKey(ignore: true)
   _$$_LogRecordCopyWith<_$_LogRecord> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AnalyzerLogRecordCopyWith<$Res>
+    implements $LogRecordCopyWith<$Res> {
+  factory _$$AnalyzerLogRecordCopyWith(
+          _$AnalyzerLogRecord value, $Res Function(_$AnalyzerLogRecord) then) =
+      __$$AnalyzerLogRecordCopyWithImpl<$Res>;
+  @override
+  $Res call({ContextDetails mainContext, String message});
+
+  $ContextDetailsCopyWith<$Res> get mainContext;
+}
+
+/// @nodoc
+class __$$AnalyzerLogRecordCopyWithImpl<$Res>
+    extends _$LogRecordCopyWithImpl<$Res>
+    implements _$$AnalyzerLogRecordCopyWith<$Res> {
+  __$$AnalyzerLogRecordCopyWithImpl(
+      _$AnalyzerLogRecord _value, $Res Function(_$AnalyzerLogRecord) _then)
+      : super(_value, (v) => _then(v as _$AnalyzerLogRecord));
+
+  @override
+  _$AnalyzerLogRecord get _value => super._value as _$AnalyzerLogRecord;
+
+  @override
+  $Res call({
+    Object? mainContext = freezed,
+    Object? message = freezed,
+  }) {
+    return _then(_$AnalyzerLogRecord(
+      mainContext == freezed
+          ? _value.mainContext
+          : mainContext // ignore: cast_nullable_to_non_nullable
+              as ContextDetails,
+      message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+
+  @override
+  $ContextDetailsCopyWith<$Res> get mainContext {
+    return $ContextDetailsCopyWith<$Res>(_value.mainContext, (value) {
+      return _then(_value.copyWith(mainContext: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AnalyzerLogRecord extends AnalyzerLogRecord {
+  const _$AnalyzerLogRecord(this.mainContext, this.message,
+      {final String? $type})
+      : $type = $type ?? 'fromAnalyzer',
+        super._();
+
+  factory _$AnalyzerLogRecord.fromJson(Map<String, dynamic> json) =>
+      _$$AnalyzerLogRecordFromJson(json);
+
+  @override
+  final ContextDetails mainContext;
+  @override
+  final String message;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'LogRecord.fromAnalyzer(mainContext: $mainContext, message: $message)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AnalyzerLogRecord &&
+            const DeepCollectionEquality()
+                .equals(other.mainContext, mainContext) &&
+            const DeepCollectionEquality().equals(other.message, message));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(mainContext),
+      const DeepCollectionEquality().hash(message));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$AnalyzerLogRecordCopyWith<_$AnalyzerLogRecord> get copyWith =>
+      __$$AnalyzerLogRecordCopyWithImpl<_$AnalyzerLogRecord>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message) simple,
+    required TResult Function(ContextDetails mainContext, String message)
+        fromAnalyzer,
+    required TResult Function(RuleCode lintCode, String message) fromRule,
+  }) {
+    return fromAnalyzer(mainContext, message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String message)? simple,
+    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(RuleCode lintCode, String message)? fromRule,
+  }) {
+    return fromAnalyzer?.call(mainContext, message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message)? simple,
+    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(RuleCode lintCode, String message)? fromRule,
+    required TResult orElse(),
+  }) {
+    if (fromAnalyzer != null) {
+      return fromAnalyzer(mainContext, message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogRecord value) simple,
+    required TResult Function(AnalyzerLogRecord value) fromAnalyzer,
+    required TResult Function(RuleLogRecord value) fromRule,
+  }) {
+    return fromAnalyzer(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogRecord value)? simple,
+    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult Function(RuleLogRecord value)? fromRule,
+  }) {
+    return fromAnalyzer?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogRecord value)? simple,
+    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult Function(RuleLogRecord value)? fromRule,
+    required TResult orElse(),
+  }) {
+    if (fromAnalyzer != null) {
+      return fromAnalyzer(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AnalyzerLogRecordToJson(
+      this,
+    );
+  }
+}
+
+abstract class AnalyzerLogRecord extends LogRecord {
+  const factory AnalyzerLogRecord(
+          final ContextDetails mainContext, final String message) =
+      _$AnalyzerLogRecord;
+  const AnalyzerLogRecord._() : super._();
+
+  factory AnalyzerLogRecord.fromJson(Map<String, dynamic> json) =
+      _$AnalyzerLogRecord.fromJson;
+
+  ContextDetails get mainContext;
+  @override
+  String get message;
+  @override
+  @JsonKey(ignore: true)
+  _$$AnalyzerLogRecordCopyWith<_$AnalyzerLogRecord> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$RuleLogRecordCopyWith<$Res>
+    implements $LogRecordCopyWith<$Res> {
+  factory _$$RuleLogRecordCopyWith(
+          _$RuleLogRecord value, $Res Function(_$RuleLogRecord) then) =
+      __$$RuleLogRecordCopyWithImpl<$Res>;
+  @override
+  $Res call({RuleCode lintCode, String message});
+
+  $RuleCodeCopyWith<$Res> get lintCode;
+}
+
+/// @nodoc
+class __$$RuleLogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
+    implements _$$RuleLogRecordCopyWith<$Res> {
+  __$$RuleLogRecordCopyWithImpl(
+      _$RuleLogRecord _value, $Res Function(_$RuleLogRecord) _then)
+      : super(_value, (v) => _then(v as _$RuleLogRecord));
+
+  @override
+  _$RuleLogRecord get _value => super._value as _$RuleLogRecord;
+
+  @override
+  $Res call({
+    Object? lintCode = freezed,
+    Object? message = freezed,
+  }) {
+    return _then(_$RuleLogRecord(
+      lintCode == freezed
+          ? _value.lintCode
+          : lintCode // ignore: cast_nullable_to_non_nullable
+              as RuleCode,
+      message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+
+  @override
+  $RuleCodeCopyWith<$Res> get lintCode {
+    return $RuleCodeCopyWith<$Res>(_value.lintCode, (value) {
+      return _then(_value.copyWith(lintCode: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$RuleLogRecord extends RuleLogRecord {
+  const _$RuleLogRecord(this.lintCode, this.message, {final String? $type})
+      : $type = $type ?? 'fromRule',
+        super._();
+
+  factory _$RuleLogRecord.fromJson(Map<String, dynamic> json) =>
+      _$$RuleLogRecordFromJson(json);
+
+  @override
+  final RuleCode lintCode;
+  @override
+  final String message;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'LogRecord.fromRule(lintCode: $lintCode, message: $message)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RuleLogRecord &&
+            const DeepCollectionEquality().equals(other.lintCode, lintCode) &&
+            const DeepCollectionEquality().equals(other.message, message));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(lintCode),
+      const DeepCollectionEquality().hash(message));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$RuleLogRecordCopyWith<_$RuleLogRecord> get copyWith =>
+      __$$RuleLogRecordCopyWithImpl<_$RuleLogRecord>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message) simple,
+    required TResult Function(ContextDetails mainContext, String message)
+        fromAnalyzer,
+    required TResult Function(RuleCode lintCode, String message) fromRule,
+  }) {
+    return fromRule(lintCode, message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String message)? simple,
+    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(RuleCode lintCode, String message)? fromRule,
+  }) {
+    return fromRule?.call(lintCode, message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message)? simple,
+    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(RuleCode lintCode, String message)? fromRule,
+    required TResult orElse(),
+  }) {
+    if (fromRule != null) {
+      return fromRule(lintCode, message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogRecord value) simple,
+    required TResult Function(AnalyzerLogRecord value) fromAnalyzer,
+    required TResult Function(RuleLogRecord value) fromRule,
+  }) {
+    return fromRule(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogRecord value)? simple,
+    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult Function(RuleLogRecord value)? fromRule,
+  }) {
+    return fromRule?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogRecord value)? simple,
+    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult Function(RuleLogRecord value)? fromRule,
+    required TResult orElse(),
+  }) {
+    if (fromRule != null) {
+      return fromRule(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RuleLogRecordToJson(
+      this,
+    );
+  }
+}
+
+abstract class RuleLogRecord extends LogRecord {
+  const factory RuleLogRecord(final RuleCode lintCode, final String message) =
+      _$RuleLogRecord;
+  const RuleLogRecord._() : super._();
+
+  factory RuleLogRecord.fromJson(Map<String, dynamic> json) =
+      _$RuleLogRecord.fromJson;
+
+  RuleCode get lintCode;
+  @override
+  String get message;
+  @override
+  @JsonKey(ignore: true)
+  _$$RuleLogRecordCopyWith<_$RuleLogRecord> get copyWith =>
       throw _privateConstructorUsedError;
 }
