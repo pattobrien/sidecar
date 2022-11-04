@@ -52,11 +52,15 @@ Map<String, dynamic> _$$NotificationMessageToJson(
 
 _$ErrorMessage _$$ErrorMessageFromJson(Map<String, dynamic> json) =>
     _$ErrorMessage(
+      json['error'] as Object,
+      stringToStack(json['stack'] as String),
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$ErrorMessageToJson(_$ErrorMessage instance) =>
     <String, dynamic>{
+      'error': instance.error,
+      'stack': stackToString(instance.stack),
       'runtimeType': instance.$type,
     };
 

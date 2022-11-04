@@ -17,8 +17,6 @@ SidecarAnalyzer analyzerStarter({
     final container = ProviderContainer(
       overrides: [
         ruleConstructorProvider.overrideWithValue(constructors),
-        //  cliOptionsProvider.overrideWithValue(cliOptions),
-        // logDelegateProvider.overrideWithValue(logDelegate),
       ],
       observers: [
         //
@@ -26,8 +24,11 @@ SidecarAnalyzer analyzerStarter({
     );
     return SidecarAnalyzer(container, sendPort: sendPort)..start();
   }, (error, stack) {
+    final msg = ErrorMessage(error, stack);
+    final json = msg.toJson();
+    final encodedJson = jsonEncode(json);
+    sendPort.send(encodedJson);
     throw UnimplementedError('$error $stack');
-    sendPort.send(SidecarAnalyzerError(error, stack).toJson());
   }, zoneSpecification: ZoneSpecification(
     print: (self, parent, zone, line) {
       try {

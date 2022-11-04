@@ -16,10 +16,10 @@ class RuleCode with _$RuleCode {
     String? url,
   }) = _RuleCode;
 
+  const RuleCode._();
+
   factory RuleCode.fromJson(Map<String, dynamic> json) =>
       _$RuleCodeFromJson(json);
-
-  const RuleCode._();
 }
 
 enum RuleType { lint, assist }

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../utils/json_utils/json_utils.dart';
 import '../logging/log_record.dart';
 import '../protocol.dart';
 
@@ -24,9 +25,14 @@ class SidecarMessage with _$SidecarMessage {
     required SidecarNotification notification,
   }) = NotificationMessage;
 
-  const factory SidecarMessage.error() = ErrorMessage;
+  const factory SidecarMessage.error(
+    Object error,
+    @JsonKey(toJson: stackToString, fromJson: stringToStack) StackTrace stack,
+  ) = ErrorMessage;
 
-  const factory SidecarMessage.log(LogRecord record) = LogMessage;
+  const factory SidecarMessage.log(
+    LogRecord record,
+  ) = LogMessage;
 
   factory SidecarMessage.fromJson(Map<String, dynamic> json) =>
       _$SidecarMessageFromJson(json);

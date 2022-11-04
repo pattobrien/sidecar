@@ -40,7 +40,11 @@ mixin _$SidecarMessage {
     required TResult Function(SidecarRequest request, String id) request,
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
-    required TResult Function() error,
+    required TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)
+        error,
     required TResult Function(LogRecord record) log,
   }) =>
       throw _privateConstructorUsedError;
@@ -49,7 +53,11 @@ mixin _$SidecarMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
   }) =>
       throw _privateConstructorUsedError;
@@ -58,7 +66,11 @@ mixin _$SidecarMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) =>
@@ -208,7 +220,11 @@ class _$RequestMessage extends RequestMessage {
     required TResult Function(SidecarRequest request, String id) request,
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
-    required TResult Function() error,
+    required TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)
+        error,
     required TResult Function(LogRecord record) log,
   }) {
     return request(this.request, id);
@@ -220,7 +236,11 @@ class _$RequestMessage extends RequestMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
   }) {
     return request?.call(this.request, id);
@@ -232,7 +252,11 @@ class _$RequestMessage extends RequestMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) {
@@ -403,7 +427,11 @@ class _$ResponseMessage extends ResponseMessage {
     required TResult Function(SidecarRequest request, String id) request,
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
-    required TResult Function() error,
+    required TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)
+        error,
     required TResult Function(LogRecord record) log,
   }) {
     return response(this.response, id);
@@ -415,7 +443,11 @@ class _$ResponseMessage extends ResponseMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
   }) {
     return response?.call(this.response, id);
@@ -427,7 +459,11 @@ class _$ResponseMessage extends ResponseMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) {
@@ -589,7 +625,11 @@ class _$NotificationMessage extends NotificationMessage {
     required TResult Function(SidecarRequest request, String id) request,
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
-    required TResult Function() error,
+    required TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)
+        error,
     required TResult Function(LogRecord record) log,
   }) {
     return notification(this.notification);
@@ -601,7 +641,11 @@ class _$NotificationMessage extends NotificationMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
   }) {
     return notification?.call(this.notification);
@@ -613,7 +657,11 @@ class _$NotificationMessage extends NotificationMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) {
@@ -691,6 +739,10 @@ abstract class _$$ErrorMessageCopyWith<$Res> {
   factory _$$ErrorMessageCopyWith(
           _$ErrorMessage value, $Res Function(_$ErrorMessage) then) =
       __$$ErrorMessageCopyWithImpl<$Res>;
+  $Res call(
+      {Object error,
+      @JsonKey(toJson: stackToString, fromJson: stringToStack)
+          StackTrace stack});
 }
 
 /// @nodoc
@@ -703,35 +755,71 @@ class __$$ErrorMessageCopyWithImpl<$Res>
 
   @override
   _$ErrorMessage get _value => super._value as _$ErrorMessage;
+
+  @override
+  $Res call({
+    Object? error = freezed,
+    Object? stack = freezed,
+  }) {
+    return _then(_$ErrorMessage(
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as Object,
+      stack == freezed
+          ? _value.stack
+          : stack // ignore: cast_nullable_to_non_nullable
+              as StackTrace,
+    ));
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ErrorMessage extends ErrorMessage {
-  const _$ErrorMessage({final String? $type})
+  const _$ErrorMessage(this.error,
+      @JsonKey(toJson: stackToString, fromJson: stringToStack) this.stack,
+      {final String? $type})
       : $type = $type ?? 'error',
         super._();
 
   factory _$ErrorMessage.fromJson(Map<String, dynamic> json) =>
       _$$ErrorMessageFromJson(json);
 
+  @override
+  final Object error;
+  @override
+  @JsonKey(toJson: stackToString, fromJson: stringToStack)
+  final StackTrace stack;
+
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'SidecarMessage.error()';
+    return 'SidecarMessage.error(error: $error, stack: $stack)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ErrorMessage);
+        (other.runtimeType == runtimeType &&
+            other is _$ErrorMessage &&
+            const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality().equals(other.stack, stack));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(error),
+      const DeepCollectionEquality().hash(stack));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$ErrorMessageCopyWith<_$ErrorMessage> get copyWith =>
+      __$$ErrorMessageCopyWithImpl<_$ErrorMessage>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -739,10 +827,14 @@ class _$ErrorMessage extends ErrorMessage {
     required TResult Function(SidecarRequest request, String id) request,
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
-    required TResult Function() error,
+    required TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)
+        error,
     required TResult Function(LogRecord record) log,
   }) {
-    return error();
+    return error(this.error, stack);
   }
 
   @override
@@ -751,10 +843,14 @@ class _$ErrorMessage extends ErrorMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
   }) {
-    return error?.call();
+    return error?.call(this.error, stack);
   }
 
   @override
@@ -763,12 +859,16 @@ class _$ErrorMessage extends ErrorMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error();
+      return error(this.error, stack);
     }
     return orElse();
   }
@@ -822,11 +922,21 @@ class _$ErrorMessage extends ErrorMessage {
 }
 
 abstract class ErrorMessage extends SidecarMessage {
-  const factory ErrorMessage() = _$ErrorMessage;
+  const factory ErrorMessage(
+      final Object error,
+      @JsonKey(toJson: stackToString, fromJson: stringToStack)
+          final StackTrace stack) = _$ErrorMessage;
   const ErrorMessage._() : super._();
 
   factory ErrorMessage.fromJson(Map<String, dynamic> json) =
       _$ErrorMessage.fromJson;
+
+  Object get error;
+  @JsonKey(toJson: stackToString, fromJson: stringToStack)
+  StackTrace get stack;
+  @JsonKey(ignore: true)
+  _$$ErrorMessageCopyWith<_$ErrorMessage> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -915,7 +1025,11 @@ class _$LogMessage extends LogMessage {
     required TResult Function(SidecarRequest request, String id) request,
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
-    required TResult Function() error,
+    required TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)
+        error,
     required TResult Function(LogRecord record) log,
   }) {
     return log(record);
@@ -927,7 +1041,11 @@ class _$LogMessage extends LogMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
   }) {
     return log?.call(record);
@@ -939,7 +1057,11 @@ class _$LogMessage extends LogMessage {
     TResult Function(SidecarRequest request, String id)? request,
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
-    TResult Function()? error,
+    TResult Function(
+            Object error,
+            @JsonKey(toJson: stackToString, fromJson: stringToStack)
+                StackTrace stack)?
+        error,
     TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) {
