@@ -17,11 +17,17 @@ final analyzerStreamProvider = StreamProvider.family<Object, SidecarRunner>(
       (dynamic m) {
         if (m is SendPort) runner.sendPort = m;
         if (m is String) {
-          final jsonObject = jsonDecode(m) as Map<String, dynamic>;
-          _controller.add(jsonObject);
+          try {
+            print('got: $m');
+            final jsonObject = jsonDecode(m) as Map<String, dynamic>;
+            _controller.add(jsonObject);
+          } catch (e) {
+            print('something went wrong: $e: $m');
+          }
+        } else {
+          print('got unexpected type: ${m.runtimeType}');
+          _controller.add(m as Object);
         }
-        print('got: ${m.toString()}');
-        _controller.add(m as Object);
       },
       onError: (dynamic e) => _controller.addError(e as Object),
       onDone: _controller.close,

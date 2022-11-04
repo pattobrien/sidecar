@@ -36,6 +36,10 @@ class SidecarRunner {
   Stream<SidecarNotification> get _notifications =>
       _ref.read(analyzerNotificationStreamProvider(this).stream);
 
+  Stream<LintNotification> get _lints => _notifications
+      .where((e) => e is LintNotification)
+      .map((e) => e as LintNotification);
+
   /// Starts the plugin and sends the necessary requests for initializing it.
   Future<void> initialize() async {
     print('initializing...');
@@ -45,7 +49,7 @@ class SidecarRunner {
       root: context.activeRoot.root.toUri(),
     );
 
-    _notifications.listen((event) => event.map(
+    _notifications.listen((event) => event.mapOrNull(
           initComplete: (_) => handleInitialization(),
         ));
 
@@ -70,9 +74,13 @@ class SidecarRunner {
   final _initializationCompleter = Completer<void>();
 
   Future<List<LintResult>> requestLintsForFile(String path) async {
-    final request = AnalyzeFileRequest(path);
-    final response = await asyncRequest<LintResponse>(request);
-    return response.lints;
+    final contents = resourceProvider.getFile(path).readAsStringSync();
+    final fileUpdateEvent = FileUpdateEvent.add(path, contents);
+    final request = FileUpdateRequest([fileUpdateEvent]);
+    final response = await asyncRequest<UpdateFilesResponse>(request);
+    final lintNotification =
+        await _lints.firstWhere((element) => element.path == path);
+    return lintNotification.lints;
   }
 
   Future<void> _requestSetContext() async {

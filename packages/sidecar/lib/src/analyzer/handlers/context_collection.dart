@@ -13,8 +13,8 @@ import 'file_content_cache.dart';
 part 'context_collection.g.dart';
 
 @riverpod
-AnalysisContextCollection contextCollection(
-  ContextCollectionRef ref,
+AnalysisContextCollection createContextCollection(
+  CreateContextCollectionRef ref,
   List<String> roots,
 ) {
   final byteStore = ref.watch(createByteStoreProvider);

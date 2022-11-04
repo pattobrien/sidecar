@@ -24,6 +24,8 @@ SidecarResponse _$SidecarResponseFromJson(Map<String, dynamic> json) {
       return QuickFixResponse.fromJson(json);
     case 'lint':
       return LintResponse.fromJson(json);
+    case 'updateFiles':
+      return UpdateFilesResponse.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'SidecarResponse',
@@ -39,6 +41,7 @@ mixin _$SidecarResponse {
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
+    required TResult Function() updateFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -47,6 +50,7 @@ mixin _$SidecarResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,6 +59,7 @@ mixin _$SidecarResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -65,6 +70,7 @@ mixin _$SidecarResponse {
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
+    required TResult Function(UpdateFilesResponse value) updateFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -73,6 +79,7 @@ mixin _$SidecarResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -81,6 +88,7 @@ mixin _$SidecarResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -161,6 +169,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
+    required TResult Function() updateFiles,
   }) {
     return contextCollection();
   }
@@ -172,6 +181,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
   }) {
     return contextCollection?.call();
   }
@@ -183,6 +193,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
     required TResult orElse(),
   }) {
     if (contextCollection != null) {
@@ -199,6 +210,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
+    required TResult Function(UpdateFilesResponse value) updateFiles,
   }) {
     return contextCollection(this);
   }
@@ -210,6 +222,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
   }) {
     return contextCollection?.call(this);
   }
@@ -221,6 +234,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
     required TResult orElse(),
   }) {
     if (contextCollection != null) {
@@ -329,6 +343,7 @@ class _$AssistResponse extends AssistResponse {
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
+    required TResult Function() updateFiles,
   }) {
     return assist(results);
   }
@@ -340,6 +355,7 @@ class _$AssistResponse extends AssistResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
   }) {
     return assist?.call(results);
   }
@@ -351,6 +367,7 @@ class _$AssistResponse extends AssistResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
     required TResult orElse(),
   }) {
     if (assist != null) {
@@ -367,6 +384,7 @@ class _$AssistResponse extends AssistResponse {
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
+    required TResult Function(UpdateFilesResponse value) updateFiles,
   }) {
     return assist(this);
   }
@@ -378,6 +396,7 @@ class _$AssistResponse extends AssistResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
   }) {
     return assist?.call(this);
   }
@@ -389,6 +408,7 @@ class _$AssistResponse extends AssistResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
     required TResult orElse(),
   }) {
     if (assist != null) {
@@ -503,6 +523,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
+    required TResult Function() updateFiles,
   }) {
     return quickFix(results);
   }
@@ -514,6 +535,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
   }) {
     return quickFix?.call(results);
   }
@@ -525,6 +547,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
     required TResult orElse(),
   }) {
     if (quickFix != null) {
@@ -541,6 +564,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
+    required TResult Function(UpdateFilesResponse value) updateFiles,
   }) {
     return quickFix(this);
   }
@@ -552,6 +576,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
   }) {
     return quickFix?.call(this);
   }
@@ -563,6 +588,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
     required TResult orElse(),
   }) {
     if (quickFix != null) {
@@ -676,6 +702,7 @@ class _$LintResponse extends LintResponse {
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
+    required TResult Function() updateFiles,
   }) {
     return lint(lints);
   }
@@ -687,6 +714,7 @@ class _$LintResponse extends LintResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
   }) {
     return lint?.call(lints);
   }
@@ -698,6 +726,7 @@ class _$LintResponse extends LintResponse {
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
     required TResult orElse(),
   }) {
     if (lint != null) {
@@ -714,6 +743,7 @@ class _$LintResponse extends LintResponse {
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
+    required TResult Function(UpdateFilesResponse value) updateFiles,
   }) {
     return lint(this);
   }
@@ -725,6 +755,7 @@ class _$LintResponse extends LintResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
   }) {
     return lint?.call(this);
   }
@@ -736,6 +767,7 @@ class _$LintResponse extends LintResponse {
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
     required TResult orElse(),
   }) {
     if (lint != null) {
@@ -763,4 +795,148 @@ abstract class LintResponse extends SidecarResponse {
   @JsonKey(ignore: true)
   _$$LintResponseCopyWith<_$LintResponse> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$UpdateFilesResponseCopyWith<$Res> {
+  factory _$$UpdateFilesResponseCopyWith(_$UpdateFilesResponse value,
+          $Res Function(_$UpdateFilesResponse) then) =
+      __$$UpdateFilesResponseCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$UpdateFilesResponseCopyWithImpl<$Res>
+    extends _$SidecarResponseCopyWithImpl<$Res>
+    implements _$$UpdateFilesResponseCopyWith<$Res> {
+  __$$UpdateFilesResponseCopyWithImpl(
+      _$UpdateFilesResponse _value, $Res Function(_$UpdateFilesResponse) _then)
+      : super(_value, (v) => _then(v as _$UpdateFilesResponse));
+
+  @override
+  _$UpdateFilesResponse get _value => super._value as _$UpdateFilesResponse;
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$UpdateFilesResponse extends UpdateFilesResponse {
+  const _$UpdateFilesResponse({final String? $type})
+      : $type = $type ?? 'updateFiles',
+        super._();
+
+  factory _$UpdateFilesResponse.fromJson(Map<String, dynamic> json) =>
+      _$$UpdateFilesResponseFromJson(json);
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'SidecarResponse.updateFiles()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$UpdateFilesResponse);
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() contextCollection,
+    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(List<LintResultWithEdits> results) quickFix,
+    required TResult Function(List<LintResult> lints) lint,
+    required TResult Function() updateFiles,
+  }) {
+    return updateFiles();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? contextCollection,
+    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(List<LintResultWithEdits> results)? quickFix,
+    TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
+  }) {
+    return updateFiles?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? contextCollection,
+    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(List<LintResultWithEdits> results)? quickFix,
+    TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
+    required TResult orElse(),
+  }) {
+    if (updateFiles != null) {
+      return updateFiles();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ContextCollectionResponse value)
+        contextCollection,
+    required TResult Function(AssistResponse value) assist,
+    required TResult Function(QuickFixResponse value) quickFix,
+    required TResult Function(LintResponse value) lint,
+    required TResult Function(UpdateFilesResponse value) updateFiles,
+  }) {
+    return updateFiles(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ContextCollectionResponse value)? contextCollection,
+    TResult Function(AssistResponse value)? assist,
+    TResult Function(QuickFixResponse value)? quickFix,
+    TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
+  }) {
+    return updateFiles?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ContextCollectionResponse value)? contextCollection,
+    TResult Function(AssistResponse value)? assist,
+    TResult Function(QuickFixResponse value)? quickFix,
+    TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
+    required TResult orElse(),
+  }) {
+    if (updateFiles != null) {
+      return updateFiles(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UpdateFilesResponseToJson(
+      this,
+    );
+  }
+}
+
+abstract class UpdateFilesResponse extends SidecarResponse {
+  const factory UpdateFilesResponse() = _$UpdateFilesResponse;
+  const UpdateFilesResponse._() : super._();
+
+  factory UpdateFilesResponse.fromJson(Map<String, dynamic> json) =
+      _$UpdateFilesResponse.fromJson;
 }

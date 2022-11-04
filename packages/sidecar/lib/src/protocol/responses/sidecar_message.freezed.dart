@@ -24,6 +24,8 @@ SidecarMessage _$SidecarMessageFromJson(Map<String, dynamic> json) {
       return NotificationMessage.fromJson(json);
     case 'error':
       return ErrorMessage.fromJson(json);
+    case 'log':
+      return LogMessage.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'SidecarMessage',
@@ -39,6 +41,7 @@ mixin _$SidecarMessage {
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
+    required TResult Function(LogRecord record) log,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -47,6 +50,7 @@ mixin _$SidecarMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,6 +59,7 @@ mixin _$SidecarMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -64,6 +69,7 @@ mixin _$SidecarMessage {
     required TResult Function(ResponseMessage value) response,
     required TResult Function(NotificationMessage value) notification,
     required TResult Function(ErrorMessage value) error,
+    required TResult Function(LogMessage value) log,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -72,6 +78,7 @@ mixin _$SidecarMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -80,6 +87,7 @@ mixin _$SidecarMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -201,6 +209,7 @@ class _$RequestMessage extends RequestMessage {
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
+    required TResult Function(LogRecord record) log,
   }) {
     return request(this.request, id);
   }
@@ -212,6 +221,7 @@ class _$RequestMessage extends RequestMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
   }) {
     return request?.call(this.request, id);
   }
@@ -223,6 +233,7 @@ class _$RequestMessage extends RequestMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) {
     if (request != null) {
@@ -238,6 +249,7 @@ class _$RequestMessage extends RequestMessage {
     required TResult Function(ResponseMessage value) response,
     required TResult Function(NotificationMessage value) notification,
     required TResult Function(ErrorMessage value) error,
+    required TResult Function(LogMessage value) log,
   }) {
     return request(this);
   }
@@ -249,6 +261,7 @@ class _$RequestMessage extends RequestMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
   }) {
     return request?.call(this);
   }
@@ -260,6 +273,7 @@ class _$RequestMessage extends RequestMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
     required TResult orElse(),
   }) {
     if (request != null) {
@@ -390,6 +404,7 @@ class _$ResponseMessage extends ResponseMessage {
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
+    required TResult Function(LogRecord record) log,
   }) {
     return response(this.response, id);
   }
@@ -401,6 +416,7 @@ class _$ResponseMessage extends ResponseMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
   }) {
     return response?.call(this.response, id);
   }
@@ -412,6 +428,7 @@ class _$ResponseMessage extends ResponseMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) {
     if (response != null) {
@@ -427,6 +444,7 @@ class _$ResponseMessage extends ResponseMessage {
     required TResult Function(ResponseMessage value) response,
     required TResult Function(NotificationMessage value) notification,
     required TResult Function(ErrorMessage value) error,
+    required TResult Function(LogMessage value) log,
   }) {
     return response(this);
   }
@@ -438,6 +456,7 @@ class _$ResponseMessage extends ResponseMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
   }) {
     return response?.call(this);
   }
@@ -449,6 +468,7 @@ class _$ResponseMessage extends ResponseMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
     required TResult orElse(),
   }) {
     if (response != null) {
@@ -570,6 +590,7 @@ class _$NotificationMessage extends NotificationMessage {
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
+    required TResult Function(LogRecord record) log,
   }) {
     return notification(this.notification);
   }
@@ -581,6 +602,7 @@ class _$NotificationMessage extends NotificationMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
   }) {
     return notification?.call(this.notification);
   }
@@ -592,6 +614,7 @@ class _$NotificationMessage extends NotificationMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) {
     if (notification != null) {
@@ -607,6 +630,7 @@ class _$NotificationMessage extends NotificationMessage {
     required TResult Function(ResponseMessage value) response,
     required TResult Function(NotificationMessage value) notification,
     required TResult Function(ErrorMessage value) error,
+    required TResult Function(LogMessage value) log,
   }) {
     return notification(this);
   }
@@ -618,6 +642,7 @@ class _$NotificationMessage extends NotificationMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
   }) {
     return notification?.call(this);
   }
@@ -629,6 +654,7 @@ class _$NotificationMessage extends NotificationMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
     required TResult orElse(),
   }) {
     if (notification != null) {
@@ -714,6 +740,7 @@ class _$ErrorMessage extends ErrorMessage {
     required TResult Function(SidecarResponse response, String id) response,
     required TResult Function(SidecarNotification notification) notification,
     required TResult Function() error,
+    required TResult Function(LogRecord record) log,
   }) {
     return error();
   }
@@ -725,6 +752,7 @@ class _$ErrorMessage extends ErrorMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
   }) {
     return error?.call();
   }
@@ -736,6 +764,7 @@ class _$ErrorMessage extends ErrorMessage {
     TResult Function(SidecarResponse response, String id)? response,
     TResult Function(SidecarNotification notification)? notification,
     TResult Function()? error,
+    TResult Function(LogRecord record)? log,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -751,6 +780,7 @@ class _$ErrorMessage extends ErrorMessage {
     required TResult Function(ResponseMessage value) response,
     required TResult Function(NotificationMessage value) notification,
     required TResult Function(ErrorMessage value) error,
+    required TResult Function(LogMessage value) log,
   }) {
     return error(this);
   }
@@ -762,6 +792,7 @@ class _$ErrorMessage extends ErrorMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
   }) {
     return error?.call(this);
   }
@@ -773,6 +804,7 @@ class _$ErrorMessage extends ErrorMessage {
     TResult Function(ResponseMessage value)? response,
     TResult Function(NotificationMessage value)? notification,
     TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -795,4 +827,185 @@ abstract class ErrorMessage extends SidecarMessage {
 
   factory ErrorMessage.fromJson(Map<String, dynamic> json) =
       _$ErrorMessage.fromJson;
+}
+
+/// @nodoc
+abstract class _$$LogMessageCopyWith<$Res> {
+  factory _$$LogMessageCopyWith(
+          _$LogMessage value, $Res Function(_$LogMessage) then) =
+      __$$LogMessageCopyWithImpl<$Res>;
+  $Res call({LogRecord record});
+
+  $LogRecordCopyWith<$Res> get record;
+}
+
+/// @nodoc
+class __$$LogMessageCopyWithImpl<$Res>
+    extends _$SidecarMessageCopyWithImpl<$Res>
+    implements _$$LogMessageCopyWith<$Res> {
+  __$$LogMessageCopyWithImpl(
+      _$LogMessage _value, $Res Function(_$LogMessage) _then)
+      : super(_value, (v) => _then(v as _$LogMessage));
+
+  @override
+  _$LogMessage get _value => super._value as _$LogMessage;
+
+  @override
+  $Res call({
+    Object? record = freezed,
+  }) {
+    return _then(_$LogMessage(
+      record == freezed
+          ? _value.record
+          : record // ignore: cast_nullable_to_non_nullable
+              as LogRecord,
+    ));
+  }
+
+  @override
+  $LogRecordCopyWith<$Res> get record {
+    return $LogRecordCopyWith<$Res>(_value.record, (value) {
+      return _then(_value.copyWith(record: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$LogMessage extends LogMessage {
+  const _$LogMessage(this.record, {final String? $type})
+      : $type = $type ?? 'log',
+        super._();
+
+  factory _$LogMessage.fromJson(Map<String, dynamic> json) =>
+      _$$LogMessageFromJson(json);
+
+  @override
+  final LogRecord record;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'SidecarMessage.log(record: $record)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LogMessage &&
+            const DeepCollectionEquality().equals(other.record, record));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(record));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$LogMessageCopyWith<_$LogMessage> get copyWith =>
+      __$$LogMessageCopyWithImpl<_$LogMessage>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(SidecarRequest request, String id) request,
+    required TResult Function(SidecarResponse response, String id) response,
+    required TResult Function(SidecarNotification notification) notification,
+    required TResult Function() error,
+    required TResult Function(LogRecord record) log,
+  }) {
+    return log(record);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
+    TResult Function(SidecarNotification notification)? notification,
+    TResult Function()? error,
+    TResult Function(LogRecord record)? log,
+  }) {
+    return log?.call(record);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(SidecarRequest request, String id)? request,
+    TResult Function(SidecarResponse response, String id)? response,
+    TResult Function(SidecarNotification notification)? notification,
+    TResult Function()? error,
+    TResult Function(LogRecord record)? log,
+    required TResult orElse(),
+  }) {
+    if (log != null) {
+      return log(record);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(RequestMessage value) request,
+    required TResult Function(ResponseMessage value) response,
+    required TResult Function(NotificationMessage value) notification,
+    required TResult Function(ErrorMessage value) error,
+    required TResult Function(LogMessage value) log,
+  }) {
+    return log(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(RequestMessage value)? request,
+    TResult Function(ResponseMessage value)? response,
+    TResult Function(NotificationMessage value)? notification,
+    TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
+  }) {
+    return log?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(RequestMessage value)? request,
+    TResult Function(ResponseMessage value)? response,
+    TResult Function(NotificationMessage value)? notification,
+    TResult Function(ErrorMessage value)? error,
+    TResult Function(LogMessage value)? log,
+    required TResult orElse(),
+  }) {
+    if (log != null) {
+      return log(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LogMessageToJson(
+      this,
+    );
+  }
+}
+
+abstract class LogMessage extends SidecarMessage {
+  const factory LogMessage(final LogRecord record) = _$LogMessage;
+  const LogMessage._() : super._();
+
+  factory LogMessage.fromJson(Map<String, dynamic> json) =
+      _$LogMessage.fromJson;
+
+  LogRecord get record;
+  @JsonKey(ignore: true)
+  _$$LogMessageCopyWith<_$LogMessage> get copyWith =>
+      throw _privateConstructorUsedError;
 }

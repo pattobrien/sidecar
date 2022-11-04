@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'file_update_event.dart';
+import '../models/file_update_event.dart';
 
 part 'sidecar_request.freezed.dart';
 part 'sidecar_request.g.dart';
@@ -18,8 +18,7 @@ class SidecarRequest with _$SidecarRequest {
     required List<String> roots,
   }) = SetContextCollectionRequest;
 
-  const factory SidecarRequest.analyzeFile(String filePath) =
-      AnalyzeFileRequest;
+  const factory SidecarRequest.lint(List<String> files) = LintRequest;
 
   const factory SidecarRequest.assist({
     // required AnalyzedFile file,
@@ -35,7 +34,7 @@ class SidecarRequest with _$SidecarRequest {
     // required int length,
   }) = QuickFixRequest;
 
-  const factory SidecarRequest.fileUpdate(FileUpdateEvent event) =
+  const factory SidecarRequest.updateFiles(List<FileUpdateEvent> updates) =
       FileUpdateRequest;
 
   factory SidecarRequest.fromJson(Map<String, dynamic> json) =>

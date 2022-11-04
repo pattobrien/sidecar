@@ -14,10 +14,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+LogRecord _$LogRecordFromJson(Map<String, dynamic> json) {
+  return _LogRecord.fromJson(json);
+}
+
 /// @nodoc
 mixin _$LogRecord {
   String get message => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $LogRecordCopyWith<LogRecord> get copyWith =>
       throw _privateConstructorUsedError;
@@ -75,7 +80,7 @@ class __$$_LogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
     Object? message = freezed,
   }) {
     return _then(_$_LogRecord(
-      message: message == freezed
+      message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
@@ -84,9 +89,12 @@ class __$$_LogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_LogRecord extends _LogRecord {
-  const _$_LogRecord({required this.message}) : super._();
+  const _$_LogRecord(this.message) : super._();
+
+  factory _$_LogRecord.fromJson(Map<String, dynamic> json) =>
+      _$$_LogRecordFromJson(json);
 
   @override
   final String message;
@@ -104,6 +112,7 @@ class _$_LogRecord extends _LogRecord {
             const DeepCollectionEquality().equals(other.message, message));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
@@ -112,11 +121,21 @@ class _$_LogRecord extends _LogRecord {
   @override
   _$$_LogRecordCopyWith<_$_LogRecord> get copyWith =>
       __$$_LogRecordCopyWithImpl<_$_LogRecord>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_LogRecordToJson(
+      this,
+    );
+  }
 }
 
 abstract class _LogRecord extends LogRecord {
-  const factory _LogRecord({required final String message}) = _$_LogRecord;
+  const factory _LogRecord(final String message) = _$_LogRecord;
   const _LogRecord._() : super._();
+
+  factory _LogRecord.fromJson(Map<String, dynamic> json) =
+      _$_LogRecord.fromJson;
 
   @override
   String get message;

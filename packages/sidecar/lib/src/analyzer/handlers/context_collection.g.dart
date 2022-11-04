@@ -29,31 +29,32 @@ class _SystemHash {
   }
 }
 
-String $contextCollectionHash() => r'42d8764cbac783ba94bbce81ecd9423ec715746f';
+String $createContextCollectionHash() =>
+    r'fd8f079362406f7186c71e27f82426825736c86b';
 
-/// See also [contextCollection].
-class ContextCollectionProvider
+/// See also [createContextCollection].
+class CreateContextCollectionProvider
     extends AutoDisposeProvider<AnalysisContextCollection> {
-  ContextCollectionProvider(
+  CreateContextCollectionProvider(
     this.roots,
   ) : super(
-          (ref) => contextCollection(
+          (ref) => createContextCollection(
             ref,
             roots,
           ),
-          from: contextCollectionProvider,
-          name: r'contextCollectionProvider',
+          from: createContextCollectionProvider,
+          name: r'createContextCollectionProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $contextCollectionHash,
+                  : $createContextCollectionHash,
         );
 
   final List<String> roots;
 
   @override
   bool operator ==(Object other) {
-    return other is ContextCollectionProvider && other.roots == roots;
+    return other is CreateContextCollectionProvider && other.roots == roots;
   }
 
   @override
@@ -65,26 +66,26 @@ class ContextCollectionProvider
   }
 }
 
-typedef ContextCollectionRef
+typedef CreateContextCollectionRef
     = AutoDisposeProviderRef<AnalysisContextCollection>;
 
-/// See also [contextCollection].
-final contextCollectionProvider = ContextCollectionFamily();
+/// See also [createContextCollection].
+final createContextCollectionProvider = CreateContextCollectionFamily();
 
-class ContextCollectionFamily extends Family<AnalysisContextCollection> {
-  ContextCollectionFamily();
+class CreateContextCollectionFamily extends Family<AnalysisContextCollection> {
+  CreateContextCollectionFamily();
 
-  ContextCollectionProvider call(
+  CreateContextCollectionProvider call(
     List<String> roots,
   ) {
-    return ContextCollectionProvider(
+    return CreateContextCollectionProvider(
       roots,
     );
   }
 
   @override
   AutoDisposeProvider<AnalysisContextCollection> getProviderOverride(
-    covariant ContextCollectionProvider provider,
+    covariant CreateContextCollectionProvider provider,
   ) {
     return call(
       provider.roots,
@@ -98,5 +99,5 @@ class ContextCollectionFamily extends Family<AnalysisContextCollection> {
   List<ProviderOrFamily>? get dependencies => null;
 
   @override
-  String? get name => r'contextCollectionProvider';
+  String? get name => r'createContextCollectionProvider';
 }

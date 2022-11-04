@@ -9,12 +9,15 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:logging/logging.dart';
+import 'package:logging/logging.dart' as logging;
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
+import '../../protocol/logging/log_record.dart';
 import '../../protocol/requests/requests.dart';
 import '../../protocol/responses/responses.dart';
+import '../../protocol/source/source_edit.dart';
+import '../context/active_context.dart';
 import '../context/analyzed_file.dart';
 import '../handlers/context_collection.dart';
 import '../results/results.dart';
@@ -23,7 +26,7 @@ import 'plugin_resource_provider.dart';
 
 // part 'analyzer_plugin.g.dart';
 
-final pluginLogger = Logger('sidecar-plugin');
+final pluginLogger = logging.Logger('sidecar-plugin');
 
 class SidecarAnalyzer {
   SidecarAnalyzer(
@@ -38,9 +41,6 @@ class SidecarAnalyzer {
 
   Stream get stream => receivePort.asBroadcastStream();
 
-  AnalysisContextCollection get _contextCollection =>
-      _ref.read(contextCollectionProvider(roots));
-
   AnalyzedFile getFileForPath(String path) =>
       _ref.read(analyzedFileForPathProvider(this, path));
 
@@ -50,7 +50,13 @@ class SidecarAnalyzer {
       _ref.read(analyzerResourceProvider);
 
   void start() {
-    pluginLogger.onRecord.listen((event) => sendPort.send(event.toString()));
+    pluginLogger.onRecord.listen((event) {
+      final log = LogRecord(event.toString());
+      final notification = SidecarMessage.log(log);
+      final json = notification.toJson();
+      final encodedJson = jsonEncode(json);
+      sendPort.send(encodedJson);
+    });
     pluginLogger.finer('END PLUGIN STARTING....');
     pluginLogger
         .finer('# of rules: ${_ref.read(ruleConstructorProvider).length}');
@@ -93,8 +99,26 @@ class SidecarAnalyzer {
   Future<ContextCollectionResponse> handleAnalysisSetContextRoots(
     SetContextCollectionRequest request,
   ) async {
-    _collection = _ref.read(contextCollectionProvider(request.roots));
+    _collection = _ref.read(createContextCollectionProvider(request.roots));
+    _ref.read(allContextsNotifierProvider.notifier).update(_collection);
+    await afterNewContextCollection(contextCollection: _collection);
     return const ContextCollectionResponse();
+  }
+
+  /// This method is invoked when a new instance of [AnalysisContextCollection]
+  /// is created, so the plugin can perform initial analysis of analyzed files.
+  ///
+  /// By default analyzes every [AnalysisContext] with [analyzeFiles].
+  Future<void> afterNewContextCollection({
+    required AnalysisContextCollection contextCollection,
+  }) async {
+    await _forAnalysisContexts(contextCollection, (analysisContext) async {
+      final paths = analysisContext.contextRoot.analyzedFiles().toList();
+      await analyzeFiles(
+        analysisContext: analysisContext,
+        paths: paths,
+      );
+    });
   }
 
   Future<void> handleRequest(RequestMessage msg) async {
@@ -102,7 +126,7 @@ class SidecarAnalyzer {
     final unparsedRequest = msg.request;
     final response = await unparsedRequest.mapOrNull<Future<SidecarResponse?>>(
       setContextCollection: handleAnalysisSetContextRoots,
-      // analyzeFile: (request) => Future.value(),
+      updateFiles: handleAnalysisUpdateContent,
       // quickFix: handleEditGetFixes,
       // assist: (request) => Future.value(),
       // fileUpdate: (request) => Future.value(),
@@ -125,6 +149,7 @@ class SidecarAnalyzer {
         SidecarMessage.notification(notification: notification);
     final json = wrappedResponse.toJson();
     final encodedJson = jsonEncode(json);
+    print('sending notification: $encodedJson');
     sendPort.send(encodedJson);
   }
 
@@ -134,7 +159,7 @@ class SidecarAnalyzer {
   // Overridden to allow for non-Dart files to be analyzed for changes
 
   Future<void> contentChanged(List<String> paths) async {
-    await _forAnalysisContexts(_contextCollection, (analysisContext) async {
+    await _forAnalysisContexts(_collection, (analysisContext) async {
       // ignore: prefer_foreach
       for (final path in paths) {
         analysisContext.changeFile(path);
@@ -158,14 +183,17 @@ class SidecarAnalyzer {
     required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
-    final analyzedPaths = paths
-        .where(analysisContext.contextRoot.isAnalyzed)
-        .toList(growable: false);
+    final analysisContexts = _ref.read(activeContextsProvider);
+    for (final analysisContext in analysisContexts) {
+      final analyzedPaths = paths
+          .where(analysisContext.contextRoot.isAnalyzed)
+          .toList(growable: false);
 
-    await analyzeFiles(
-      analysisContext: analysisContext,
-      paths: analyzedPaths,
-    );
+      await analyzeFiles(
+        analysisContext: analysisContext.context,
+        paths: analyzedPaths,
+      );
+    }
   }
 
   Future<void> _forAnalysisContexts(
@@ -208,7 +236,10 @@ class SidecarAnalyzer {
         try {
           final file = _ref.read(analyzedFileForPathProvider(this, path));
           await _ref.read(getResolvedUnitForFileProvider(file).future);
-          await _ref.read(createAnalysisReportProvider(file).future);
+          final results =
+              await _ref.read(createAnalysisReportProvider(file).future);
+          final notification = LintNotification(path, results);
+          sendNotification(notification);
         } catch (e, stackTrace) {
           pluginLogger.severe('analyzeFiles', e, stackTrace);
         }
@@ -250,6 +281,58 @@ class SidecarAnalyzer {
   //     rethrow;
   //   }
   // }
+  int _overlayModificationStamp = 0;
+  Future<UpdateFilesResponse> handleAnalysisUpdateContent(
+    FileUpdateRequest request,
+  ) async {
+    final changedPaths = <String>{};
+    final updates = request.updates;
+    for (final update in updates) {
+      // Prepare the old overlay contents.
+      final filePath = update.filePath;
+      String? oldContents;
+      try {
+        if (resourceProvider.hasOverlay(filePath)) {
+          final file = resourceProvider.getFile(filePath);
+          oldContents = file.readAsStringSync();
+        }
+      } catch (_) {}
+      update.map(
+        add: (event) {
+          resourceProvider.setOverlay(
+            filePath,
+            content: event.contents,
+            modificationStamp: _overlayModificationStamp++,
+          );
+        },
+        modify: (modify) {
+          if (oldContents == null) {
+            // The server should only send a ChangeContentOverlay if there is
+            // already an existing overlay for the source.
+            throw UnimplementedError('invalidOverlayChangeNoContent');
+          }
+          try {
+            final newContents = SourceEdit.applySequenceOfEdits(
+                oldContents, modify.fileEdit.edits);
+            resourceProvider.setOverlay(
+              filePath,
+              content: newContents,
+              modificationStamp: _overlayModificationStamp++,
+            );
+          } on RangeError {
+            throw UnimplementedError('invalidOverlayChangeInvalidEdit');
+          }
+        },
+        delete: (delete) {
+          resourceProvider.removeOverlay(filePath);
+        },
+      );
+
+      changedPaths.add(filePath);
+    }
+    await contentChanged(changedPaths.toList());
+    return const UpdateFilesResponse();
+  }
 
   Future<plugin.CompletionGetSuggestionsResult> handleCompletionGetSuggestions(
     plugin.CompletionGetSuggestionsParams parameters,

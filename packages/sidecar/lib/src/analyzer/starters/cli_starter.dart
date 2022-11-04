@@ -81,7 +81,9 @@ Future<void> startSidecarCli(
                 if (isWithin(targetDirectory.path, event.path)) {
                   print('\nreanalyzing: ${event.path}');
                   final filePath = event.path;
-                  // runner.requestAnalysisForFile(filePath);
+                  runners.forEach((runner) {
+                    runner.requestLintsForFile(filePath);
+                  });
                 }
               }
             },

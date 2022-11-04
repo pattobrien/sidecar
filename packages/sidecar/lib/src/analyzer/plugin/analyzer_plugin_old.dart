@@ -149,6 +149,21 @@
 //     await super.afterNewContextCollection(contextCollection: contextCollection);
 //     if (mode.isCli) initializationCompleter.complete();
 //   }
+//   /// This method is invoked when a new instance of [AnalysisContextCollection]
+//   /// is created, so the plugin can perform initial analysis of analyzed files.
+//   ///
+//   /// By default analyzes every [AnalysisContext] with [analyzeFiles].
+//   Future<void> afterNewContextCollection({
+//     required AnalysisContextCollection contextCollection,
+//   }) async {
+//     await _forAnalysisContexts(contextCollection, (analysisContext) async {
+//       final paths = analysisContext.contextRoot.analyzedFiles().toList();
+//       await analyzeFiles(
+//         analysisContext: analysisContext,
+//         paths: paths,
+//       );
+//     });
+//   }
 
 //   // Overridden to allow for non-Dart files to be analyzed for changes
 //   @override

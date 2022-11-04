@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../logging/log_record.dart';
 import '../protocol.dart';
 
 part 'sidecar_message.freezed.dart';
@@ -24,6 +25,8 @@ class SidecarMessage with _$SidecarMessage {
   }) = NotificationMessage;
 
   const factory SidecarMessage.error() = ErrorMessage;
+
+  const factory SidecarMessage.log(LogRecord record) = LogMessage;
 
   factory SidecarMessage.fromJson(Map<String, dynamic> json) =>
       _$SidecarMessageFromJson(json);

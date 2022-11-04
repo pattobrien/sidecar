@@ -22,16 +22,15 @@ Map<String, dynamic> _$$SetContextCollectionRequestToJson(
       'runtimeType': instance.$type,
     };
 
-_$AnalyzeFileRequest _$$AnalyzeFileRequestFromJson(Map<String, dynamic> json) =>
-    _$AnalyzeFileRequest(
-      json['filePath'] as String,
+_$LintRequest _$$LintRequestFromJson(Map<String, dynamic> json) =>
+    _$LintRequest(
+      (json['files'] as List<dynamic>).map((e) => e as String).toList(),
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$AnalyzeFileRequestToJson(
-        _$AnalyzeFileRequest instance) =>
+Map<String, dynamic> _$$LintRequestToJson(_$LintRequest instance) =>
     <String, dynamic>{
-      'filePath': instance.filePath,
+      'files': instance.files,
       'runtimeType': instance.$type,
     };
 
@@ -67,12 +66,14 @@ Map<String, dynamic> _$$QuickFixRequestToJson(_$QuickFixRequest instance) =>
 
 _$FileUpdateRequest _$$FileUpdateRequestFromJson(Map<String, dynamic> json) =>
     _$FileUpdateRequest(
-      FileUpdateEvent.fromJson(json['event'] as Map<String, dynamic>),
+      (json['updates'] as List<dynamic>)
+          .map((e) => FileUpdateEvent.fromJson(e as Map<String, dynamic>))
+          .toList(),
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$FileUpdateRequestToJson(_$FileUpdateRequest instance) =>
     <String, dynamic>{
-      'event': instance.event.toJson(),
+      'updates': instance.updates.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };

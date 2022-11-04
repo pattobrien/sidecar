@@ -18,7 +18,7 @@ SidecarAnalyzer analyzerStarter({
         overrides: [
           ruleConstructorProvider.overrideWithValue(constructors),
           //  cliOptionsProvider.overrideWithValue(cliOptions),
-          //  logDelegateProvider.overrideWithValue(logDelegate),
+          // logDelegateProvider.overrideWithValue(logDelegate),
         ],
         observers: [
           //

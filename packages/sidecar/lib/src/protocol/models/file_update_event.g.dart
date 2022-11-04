@@ -7,13 +7,15 @@ part of 'file_update_event.dart';
 // **************************************************************************
 
 _$AddEvent _$$AddEventFromJson(Map<String, dynamic> json) => _$AddEvent(
-      SourceFileEdit.fromJson(json['fileEdit'] as Map<String, dynamic>),
+      json['filePath'] as String,
+      json['contents'] as String,
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$AddEventToJson(_$AddEvent instance) =>
     <String, dynamic>{
-      'fileEdit': instance.fileEdit.toJson(),
+      'filePath': instance.filePath,
+      'contents': instance.contents,
       'runtimeType': instance.$type,
     };
 
@@ -31,12 +33,12 @@ Map<String, dynamic> _$$ModifyEventToJson(_$ModifyEvent instance) =>
 
 _$DeleteEvent _$$DeleteEventFromJson(Map<String, dynamic> json) =>
     _$DeleteEvent(
-      SourceFileEdit.fromJson(json['fileEdit'] as Map<String, dynamic>),
+      json['filePath'] as String,
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$DeleteEventToJson(_$DeleteEvent instance) =>
     <String, dynamic>{
-      'fileEdit': instance.fileEdit.toJson(),
+      'filePath': instance.filePath,
       'runtimeType': instance.$type,
     };

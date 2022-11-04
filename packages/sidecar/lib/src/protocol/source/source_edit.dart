@@ -36,6 +36,32 @@ class SourceEdit with _$SourceEdit {
 
   factory SourceEdit.fromJson(Map<String, dynamic> json) =>
       _$SourceEditFromJson(json);
+
+  /// Get the result of applying a set of [edits] to the given [code].  Edits
+  /// are applied in the order they appear in [edits].  Access via
+  /// SourceEdit.applySequence().
+  static String applySequenceOfEdits(String code, Iterable<SourceEdit> edits) {
+    for (final edit in edits) {
+      code = edit.applySourceEdit(code);
+    }
+    return code;
+  }
+}
+
+/// Get the result of applying the edit to the given [code]. Access via
+/// SourceEdit.apply().
+String applyEdit(String code, SourceEdit edit) {
+  if (edit.length < 0) {
+    throw RangeError('length is negative');
+  }
+  return code.replaceRange(edit.offset, edit.end, edit.replacement);
+}
+
+extension SourceEditX on SourceEdit {
+  String applySourceEdit(String source) => applyEdit(source, this);
+  int get length => originalSourceSpan.length;
+  int get offset => originalSourceSpan.start.offset;
+  int get end => originalSourceSpan.end.offset;
 }
 // /// The offset of the region to be modified.
 //   int offset;

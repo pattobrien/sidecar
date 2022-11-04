@@ -30,10 +30,11 @@ class _SystemHash {
 }
 
 String $createAnalysisReportHash() =>
-    r'a30f6c175912fa7caeb22d9644a1b2299a8cfeda';
+    r'5dd098723e3c1e69a42a50e627f56e1f6bf481a3';
 
 /// See also [createAnalysisReport].
-class CreateAnalysisReportProvider extends AutoDisposeFutureProvider<void> {
+class CreateAnalysisReportProvider
+    extends AutoDisposeFutureProvider<List<LintResult>> {
   CreateAnalysisReportProvider(
     this.file,
   ) : super(
@@ -65,12 +66,13 @@ class CreateAnalysisReportProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-typedef CreateAnalysisReportRef = AutoDisposeFutureProviderRef<void>;
+typedef CreateAnalysisReportRef
+    = AutoDisposeFutureProviderRef<List<LintResult>>;
 
 /// See also [createAnalysisReport].
 final createAnalysisReportProvider = CreateAnalysisReportFamily();
 
-class CreateAnalysisReportFamily extends Family<AsyncValue<void>> {
+class CreateAnalysisReportFamily extends Family<AsyncValue<List<LintResult>>> {
   CreateAnalysisReportFamily();
 
   CreateAnalysisReportProvider call(
@@ -82,7 +84,7 @@ class CreateAnalysisReportFamily extends Family<AsyncValue<void>> {
   }
 
   @override
-  AutoDisposeFutureProvider<void> getProviderOverride(
+  AutoDisposeFutureProvider<List<LintResult>> getProviderOverride(
     covariant CreateAnalysisReportProvider provider,
   ) {
     return call(

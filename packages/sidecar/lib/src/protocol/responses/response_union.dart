@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../models/analysis_result.dart';
-import '../models/assist_result.dart';
+import '../models/models.dart';
 
 part 'response_union.freezed.dart';
 part 'response_union.g.dart';
@@ -18,6 +17,8 @@ class SidecarResponse with _$SidecarResponse {
       QuickFixResponse;
 
   const factory SidecarResponse.lint(List<LintResult> lints) = LintResponse;
+
+  const factory SidecarResponse.updateFiles() = UpdateFilesResponse;
 
   factory SidecarResponse.fromJson(Map<String, dynamic> json) =>
       _$SidecarResponseFromJson(json);

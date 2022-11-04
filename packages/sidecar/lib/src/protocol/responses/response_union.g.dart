@@ -59,3 +59,15 @@ Map<String, dynamic> _$$LintResponseToJson(_$LintResponse instance) =>
       'lints': instance.lints.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };
+
+_$UpdateFilesResponse _$$UpdateFilesResponseFromJson(
+        Map<String, dynamic> json) =>
+    _$UpdateFilesResponse(
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$UpdateFilesResponseToJson(
+        _$UpdateFilesResponse instance) =>
+    <String, dynamic>{
+      'runtimeType': instance.$type,
+    };

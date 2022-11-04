@@ -5,10 +5,13 @@ import '../source/source_file_edit.dart';
 part 'file_update_event.freezed.dart';
 part 'file_update_event.g.dart';
 
+//TODO: Delete FileUpdateEvent class in favor of SourceFileEdit union
+// (SourceFileAdd, SourceFileEdit, SourceFileDelete)
 @freezed
 class FileUpdateEvent with _$FileUpdateEvent {
   const factory FileUpdateEvent.add(
-    SourceFileEdit fileEdit,
+    String filePath,
+    String contents,
   ) = AddEvent;
 
   const factory FileUpdateEvent.modify(
@@ -16,9 +19,13 @@ class FileUpdateEvent with _$FileUpdateEvent {
   ) = ModifyEvent;
 
   const factory FileUpdateEvent.delete(
-    // does this work?
-    SourceFileEdit fileEdit,
+    String filePath,
   ) = DeleteEvent;
+
+  String get filePath => map(
+      add: (add) => add.filePath,
+      modify: (modify) => modify.fileEdit.file.path,
+      delete: (delete) => delete.filePath);
 
   const FileUpdateEvent._();
 

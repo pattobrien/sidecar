@@ -21,7 +21,8 @@ List<ActiveContext> activeContexts(
   // SidecarAnalyzer analyzer,
 ) {
   final service = ref.watch(activeProjectServiceProvider);
-  final allContexts = ref.watch<List<AnalysisContext>>(allContextsProvider);
+  final allContexts =
+      ref.watch<List<AnalysisContext>>(allContextsNotifierProvider);
   final activeContexts =
       allContexts.map(service.initializeContext).whereType<ActiveContext>();
 

@@ -31,26 +31,25 @@ FileUpdateEvent _$FileUpdateEventFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FileUpdateEvent {
-  SourceFileEdit get fileEdit => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SourceFileEdit fileEdit) add,
+    required TResult Function(String filePath, String contents) add,
     required TResult Function(SourceFileEdit fileEdit) modify,
-    required TResult Function(SourceFileEdit fileEdit) delete,
+    required TResult Function(String filePath) delete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SourceFileEdit fileEdit)? add,
+    TResult Function(String filePath, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(SourceFileEdit fileEdit)? delete,
+    TResult Function(String filePath)? delete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SourceFileEdit fileEdit)? add,
+    TResult Function(String filePath, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(SourceFileEdit fileEdit)? delete,
+    TResult Function(String filePath)? delete,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -77,9 +76,6 @@ mixin _$FileUpdateEvent {
   }) =>
       throw _privateConstructorUsedError;
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $FileUpdateEventCopyWith<FileUpdateEvent> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -87,9 +83,6 @@ abstract class $FileUpdateEventCopyWith<$Res> {
   factory $FileUpdateEventCopyWith(
           FileUpdateEvent value, $Res Function(FileUpdateEvent) then) =
       _$FileUpdateEventCopyWithImpl<$Res>;
-  $Res call({SourceFileEdit fileEdit});
-
-  $SourceFileEditCopyWith<$Res> get fileEdit;
 }
 
 /// @nodoc
@@ -100,38 +93,14 @@ class _$FileUpdateEventCopyWithImpl<$Res>
   final FileUpdateEvent _value;
   // ignore: unused_field
   final $Res Function(FileUpdateEvent) _then;
-
-  @override
-  $Res call({
-    Object? fileEdit = freezed,
-  }) {
-    return _then(_value.copyWith(
-      fileEdit: fileEdit == freezed
-          ? _value.fileEdit
-          : fileEdit // ignore: cast_nullable_to_non_nullable
-              as SourceFileEdit,
-    ));
-  }
-
-  @override
-  $SourceFileEditCopyWith<$Res> get fileEdit {
-    return $SourceFileEditCopyWith<$Res>(_value.fileEdit, (value) {
-      return _then(_value.copyWith(fileEdit: value));
-    });
-  }
 }
 
 /// @nodoc
-abstract class _$$AddEventCopyWith<$Res>
-    implements $FileUpdateEventCopyWith<$Res> {
+abstract class _$$AddEventCopyWith<$Res> {
   factory _$$AddEventCopyWith(
           _$AddEvent value, $Res Function(_$AddEvent) then) =
       __$$AddEventCopyWithImpl<$Res>;
-  @override
-  $Res call({SourceFileEdit fileEdit});
-
-  @override
-  $SourceFileEditCopyWith<$Res> get fileEdit;
+  $Res call({String filePath, String contents});
 }
 
 /// @nodoc
@@ -145,13 +114,18 @@ class __$$AddEventCopyWithImpl<$Res> extends _$FileUpdateEventCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? fileEdit = freezed,
+    Object? filePath = freezed,
+    Object? contents = freezed,
   }) {
     return _then(_$AddEvent(
-      fileEdit == freezed
-          ? _value.fileEdit
-          : fileEdit // ignore: cast_nullable_to_non_nullable
-              as SourceFileEdit,
+      filePath == freezed
+          ? _value.filePath
+          : filePath // ignore: cast_nullable_to_non_nullable
+              as String,
+      contents == freezed
+          ? _value.contents
+          : contents // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -159,7 +133,7 @@ class __$$AddEventCopyWithImpl<$Res> extends _$FileUpdateEventCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AddEvent extends AddEvent {
-  const _$AddEvent(this.fileEdit, {final String? $type})
+  const _$AddEvent(this.filePath, this.contents, {final String? $type})
       : $type = $type ?? 'add',
         super._();
 
@@ -167,14 +141,16 @@ class _$AddEvent extends AddEvent {
       _$$AddEventFromJson(json);
 
   @override
-  final SourceFileEdit fileEdit;
+  final String filePath;
+  @override
+  final String contents;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'FileUpdateEvent.add(fileEdit: $fileEdit)';
+    return 'FileUpdateEvent.add(filePath: $filePath, contents: $contents)';
   }
 
   @override
@@ -182,13 +158,16 @@ class _$AddEvent extends AddEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddEvent &&
-            const DeepCollectionEquality().equals(other.fileEdit, fileEdit));
+            const DeepCollectionEquality().equals(other.filePath, filePath) &&
+            const DeepCollectionEquality().equals(other.contents, contents));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(fileEdit));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(filePath),
+      const DeepCollectionEquality().hash(contents));
 
   @JsonKey(ignore: true)
   @override
@@ -198,33 +177,33 @@ class _$AddEvent extends AddEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SourceFileEdit fileEdit) add,
+    required TResult Function(String filePath, String contents) add,
     required TResult Function(SourceFileEdit fileEdit) modify,
-    required TResult Function(SourceFileEdit fileEdit) delete,
+    required TResult Function(String filePath) delete,
   }) {
-    return add(fileEdit);
+    return add(filePath, contents);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SourceFileEdit fileEdit)? add,
+    TResult Function(String filePath, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(SourceFileEdit fileEdit)? delete,
+    TResult Function(String filePath)? delete,
   }) {
-    return add?.call(fileEdit);
+    return add?.call(filePath, contents);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SourceFileEdit fileEdit)? add,
+    TResult Function(String filePath, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(SourceFileEdit fileEdit)? delete,
+    TResult Function(String filePath)? delete,
     required TResult orElse(),
   }) {
     if (add != null) {
-      return add(fileEdit);
+      return add(filePath, contents);
     }
     return orElse();
   }
@@ -272,29 +251,26 @@ class _$AddEvent extends AddEvent {
 }
 
 abstract class AddEvent extends FileUpdateEvent {
-  const factory AddEvent(final SourceFileEdit fileEdit) = _$AddEvent;
+  const factory AddEvent(final String filePath, final String contents) =
+      _$AddEvent;
   const AddEvent._() : super._();
 
   factory AddEvent.fromJson(Map<String, dynamic> json) = _$AddEvent.fromJson;
 
-  @override
-  SourceFileEdit get fileEdit;
-  @override
+  String get filePath;
+  String get contents;
   @JsonKey(ignore: true)
   _$$AddEventCopyWith<_$AddEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ModifyEventCopyWith<$Res>
-    implements $FileUpdateEventCopyWith<$Res> {
+abstract class _$$ModifyEventCopyWith<$Res> {
   factory _$$ModifyEventCopyWith(
           _$ModifyEvent value, $Res Function(_$ModifyEvent) then) =
       __$$ModifyEventCopyWithImpl<$Res>;
-  @override
   $Res call({SourceFileEdit fileEdit});
 
-  @override
   $SourceFileEditCopyWith<$Res> get fileEdit;
 }
 
@@ -319,6 +295,13 @@ class __$$ModifyEventCopyWithImpl<$Res>
           : fileEdit // ignore: cast_nullable_to_non_nullable
               as SourceFileEdit,
     ));
+  }
+
+  @override
+  $SourceFileEditCopyWith<$Res> get fileEdit {
+    return $SourceFileEditCopyWith<$Res>(_value.fileEdit, (value) {
+      return _then(_value.copyWith(fileEdit: value));
+    });
   }
 }
 
@@ -364,9 +347,9 @@ class _$ModifyEvent extends ModifyEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SourceFileEdit fileEdit) add,
+    required TResult Function(String filePath, String contents) add,
     required TResult Function(SourceFileEdit fileEdit) modify,
-    required TResult Function(SourceFileEdit fileEdit) delete,
+    required TResult Function(String filePath) delete,
   }) {
     return modify(fileEdit);
   }
@@ -374,9 +357,9 @@ class _$ModifyEvent extends ModifyEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SourceFileEdit fileEdit)? add,
+    TResult Function(String filePath, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(SourceFileEdit fileEdit)? delete,
+    TResult Function(String filePath)? delete,
   }) {
     return modify?.call(fileEdit);
   }
@@ -384,9 +367,9 @@ class _$ModifyEvent extends ModifyEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SourceFileEdit fileEdit)? add,
+    TResult Function(String filePath, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(SourceFileEdit fileEdit)? delete,
+    TResult Function(String filePath)? delete,
     required TResult orElse(),
   }) {
     if (modify != null) {
@@ -444,25 +427,18 @@ abstract class ModifyEvent extends FileUpdateEvent {
   factory ModifyEvent.fromJson(Map<String, dynamic> json) =
       _$ModifyEvent.fromJson;
 
-  @override
   SourceFileEdit get fileEdit;
-  @override
   @JsonKey(ignore: true)
   _$$ModifyEventCopyWith<_$ModifyEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$DeleteEventCopyWith<$Res>
-    implements $FileUpdateEventCopyWith<$Res> {
+abstract class _$$DeleteEventCopyWith<$Res> {
   factory _$$DeleteEventCopyWith(
           _$DeleteEvent value, $Res Function(_$DeleteEvent) then) =
       __$$DeleteEventCopyWithImpl<$Res>;
-  @override
-  $Res call({SourceFileEdit fileEdit});
-
-  @override
-  $SourceFileEditCopyWith<$Res> get fileEdit;
+  $Res call({String filePath});
 }
 
 /// @nodoc
@@ -478,13 +454,13 @@ class __$$DeleteEventCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? fileEdit = freezed,
+    Object? filePath = freezed,
   }) {
     return _then(_$DeleteEvent(
-      fileEdit == freezed
-          ? _value.fileEdit
-          : fileEdit // ignore: cast_nullable_to_non_nullable
-              as SourceFileEdit,
+      filePath == freezed
+          ? _value.filePath
+          : filePath // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -492,23 +468,22 @@ class __$$DeleteEventCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$DeleteEvent extends DeleteEvent {
-  const _$DeleteEvent(this.fileEdit, {final String? $type})
+  const _$DeleteEvent(this.filePath, {final String? $type})
       : $type = $type ?? 'delete',
         super._();
 
   factory _$DeleteEvent.fromJson(Map<String, dynamic> json) =>
       _$$DeleteEventFromJson(json);
 
-// does this work?
   @override
-  final SourceFileEdit fileEdit;
+  final String filePath;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'FileUpdateEvent.delete(fileEdit: $fileEdit)';
+    return 'FileUpdateEvent.delete(filePath: $filePath)';
   }
 
   @override
@@ -516,13 +491,13 @@ class _$DeleteEvent extends DeleteEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DeleteEvent &&
-            const DeepCollectionEquality().equals(other.fileEdit, fileEdit));
+            const DeepCollectionEquality().equals(other.filePath, filePath));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(fileEdit));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(filePath));
 
   @JsonKey(ignore: true)
   @override
@@ -532,33 +507,33 @@ class _$DeleteEvent extends DeleteEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(SourceFileEdit fileEdit) add,
+    required TResult Function(String filePath, String contents) add,
     required TResult Function(SourceFileEdit fileEdit) modify,
-    required TResult Function(SourceFileEdit fileEdit) delete,
+    required TResult Function(String filePath) delete,
   }) {
-    return delete(fileEdit);
+    return delete(filePath);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SourceFileEdit fileEdit)? add,
+    TResult Function(String filePath, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(SourceFileEdit fileEdit)? delete,
+    TResult Function(String filePath)? delete,
   }) {
-    return delete?.call(fileEdit);
+    return delete?.call(filePath);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SourceFileEdit fileEdit)? add,
+    TResult Function(String filePath, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(SourceFileEdit fileEdit)? delete,
+    TResult Function(String filePath)? delete,
     required TResult orElse(),
   }) {
     if (delete != null) {
-      return delete(fileEdit);
+      return delete(filePath);
     }
     return orElse();
   }
@@ -606,15 +581,13 @@ class _$DeleteEvent extends DeleteEvent {
 }
 
 abstract class DeleteEvent extends FileUpdateEvent {
-  const factory DeleteEvent(final SourceFileEdit fileEdit) = _$DeleteEvent;
+  const factory DeleteEvent(final String filePath) = _$DeleteEvent;
   const DeleteEvent._() : super._();
 
   factory DeleteEvent.fromJson(Map<String, dynamic> json) =
       _$DeleteEvent.fromJson;
 
-  @override // does this work?
-  SourceFileEdit get fileEdit;
-  @override
+  String get filePath;
   @JsonKey(ignore: true)
   _$$DeleteEventCopyWith<_$DeleteEvent> get copyWith =>
       throw _privateConstructorUsedError;

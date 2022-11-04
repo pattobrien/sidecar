@@ -59,3 +59,14 @@ Map<String, dynamic> _$$ErrorMessageToJson(_$ErrorMessage instance) =>
     <String, dynamic>{
       'runtimeType': instance.$type,
     };
+
+_$LogMessage _$$LogMessageFromJson(Map<String, dynamic> json) => _$LogMessage(
+      LogRecord.fromJson(json['record'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$LogMessageToJson(_$LogMessage instance) =>
+    <String, dynamic>{
+      'record': instance.record.toJson(),
+      'runtimeType': instance.$type,
+    };
