@@ -18,7 +18,6 @@ class SomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
-    //
     final someString2 = someString;
     final someIconData = Icons.abc;
     final someIconData2 = Icons.snowboarding;
@@ -44,6 +43,9 @@ class SomePage extends ConsumerWidget {
             someIconData,
             color: x,
           ),
+
+          // hane
+
           SizedBox(width: 10.0),
           SizedBox(width: someNumber),
           Icon(Icons.snowboarding),

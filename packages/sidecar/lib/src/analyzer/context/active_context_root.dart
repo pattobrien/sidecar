@@ -13,11 +13,11 @@ part 'active_context_root.freezed.dart';
 @immutable
 class ActiveContextRoot with _$ActiveContextRoot {
   const factory ActiveContextRoot(
-    ContextRoot contextRoot, {
+    ContextRoot contextRoot,
 
     /// Indicates the package that explicitly activates Sidecar as a plugin.
-    required bool isExplicitlyEnabledRoot,
-  }) = _ActiveContextRoot;
+    // required bool isExplicitlyEnabledRoot,
+  ) = _ActiveContextRoot;
 
   const ActiveContextRoot._();
 

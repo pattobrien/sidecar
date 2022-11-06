@@ -34,6 +34,7 @@ mixin _$ActiveContext {
   /// Indicates the package was explicitly activated as a Sidecar plugin, as
   /// opposed to being a dependency of a package that has Sidecar enabled.
   bool get isExplicitlyEnabled => throw _privateConstructorUsedError;
+  List<AnalysisContext> get allRoots => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ActiveContextCopyWith<ActiveContext> get copyWith =>
@@ -51,7 +52,8 @@ abstract class $ActiveContextCopyWith<$Res> {
       Package sidecarPluginPackage,
       PackageConfig packageConfigJson,
       List<RulePackageConfiguration> sidecarPackages,
-      bool isExplicitlyEnabled});
+      bool isExplicitlyEnabled,
+      List<AnalysisContext> allRoots});
 }
 
 /// @nodoc
@@ -71,6 +73,7 @@ class _$ActiveContextCopyWithImpl<$Res>
     Object? packageConfigJson = freezed,
     Object? sidecarPackages = freezed,
     Object? isExplicitlyEnabled = freezed,
+    Object? allRoots = freezed,
   }) {
     return _then(_value.copyWith(
       context: context == freezed
@@ -97,6 +100,10 @@ class _$ActiveContextCopyWithImpl<$Res>
           ? _value.isExplicitlyEnabled
           : isExplicitlyEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
+      allRoots: allRoots == freezed
+          ? _value.allRoots
+          : allRoots // ignore: cast_nullable_to_non_nullable
+              as List<AnalysisContext>,
     ));
   }
 }
@@ -114,7 +121,8 @@ abstract class _$$_ActiveContextCopyWith<$Res>
       Package sidecarPluginPackage,
       PackageConfig packageConfigJson,
       List<RulePackageConfiguration> sidecarPackages,
-      bool isExplicitlyEnabled});
+      bool isExplicitlyEnabled,
+      List<AnalysisContext> allRoots});
 }
 
 /// @nodoc
@@ -136,6 +144,7 @@ class __$$_ActiveContextCopyWithImpl<$Res>
     Object? packageConfigJson = freezed,
     Object? sidecarPackages = freezed,
     Object? isExplicitlyEnabled = freezed,
+    Object? allRoots = freezed,
   }) {
     return _then(_$_ActiveContext(
       context: context == freezed
@@ -162,6 +171,10 @@ class __$$_ActiveContextCopyWithImpl<$Res>
           ? _value.isExplicitlyEnabled
           : isExplicitlyEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
+      allRoots: allRoots == freezed
+          ? _value._allRoots
+          : allRoots // ignore: cast_nullable_to_non_nullable
+              as List<AnalysisContext>,
     ));
   }
 }
@@ -175,8 +188,10 @@ class _$_ActiveContext extends _ActiveContext {
       required this.sidecarPluginPackage,
       required this.packageConfigJson,
       required final List<RulePackageConfiguration> sidecarPackages,
-      required this.isExplicitlyEnabled})
+      required this.isExplicitlyEnabled,
+      required final List<AnalysisContext> allRoots})
       : _sidecarPackages = sidecarPackages,
+        _allRoots = allRoots,
         super._();
 
   @override
@@ -208,10 +223,16 @@ class _$_ActiveContext extends _ActiveContext {
   /// opposed to being a dependency of a package that has Sidecar enabled.
   @override
   final bool isExplicitlyEnabled;
+  final List<AnalysisContext> _allRoots;
+  @override
+  List<AnalysisContext> get allRoots {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_allRoots);
+  }
 
   @override
   String toString() {
-    return 'ActiveContext(context: $context, sidecarOptions: $sidecarOptions, sidecarPluginPackage: $sidecarPluginPackage, packageConfigJson: $packageConfigJson, sidecarPackages: $sidecarPackages, isExplicitlyEnabled: $isExplicitlyEnabled)';
+    return 'ActiveContext(context: $context, sidecarOptions: $sidecarOptions, sidecarPluginPackage: $sidecarPluginPackage, packageConfigJson: $packageConfigJson, sidecarPackages: $sidecarPackages, isExplicitlyEnabled: $isExplicitlyEnabled, allRoots: $allRoots)';
   }
 
   @override
@@ -229,7 +250,8 @@ class _$_ActiveContext extends _ActiveContext {
             const DeepCollectionEquality()
                 .equals(other._sidecarPackages, _sidecarPackages) &&
             const DeepCollectionEquality()
-                .equals(other.isExplicitlyEnabled, isExplicitlyEnabled));
+                .equals(other.isExplicitlyEnabled, isExplicitlyEnabled) &&
+            const DeepCollectionEquality().equals(other._allRoots, _allRoots));
   }
 
   @override
@@ -240,7 +262,8 @@ class _$_ActiveContext extends _ActiveContext {
       const DeepCollectionEquality().hash(sidecarPluginPackage),
       const DeepCollectionEquality().hash(packageConfigJson),
       const DeepCollectionEquality().hash(_sidecarPackages),
-      const DeepCollectionEquality().hash(isExplicitlyEnabled));
+      const DeepCollectionEquality().hash(isExplicitlyEnabled),
+      const DeepCollectionEquality().hash(_allRoots));
 
   @JsonKey(ignore: true)
   @override
@@ -255,7 +278,8 @@ abstract class _ActiveContext extends ActiveContext {
       required final Package sidecarPluginPackage,
       required final PackageConfig packageConfigJson,
       required final List<RulePackageConfiguration> sidecarPackages,
-      required final bool isExplicitlyEnabled}) = _$_ActiveContext;
+      required final bool isExplicitlyEnabled,
+      required final List<AnalysisContext> allRoots}) = _$_ActiveContext;
   const _ActiveContext._() : super._();
 
   @override
@@ -281,6 +305,8 @@ abstract class _ActiveContext extends ActiveContext {
   /// Indicates the package was explicitly activated as a Sidecar plugin, as
   /// opposed to being a dependency of a package that has Sidecar enabled.
   bool get isExplicitlyEnabled;
+  @override
+  List<AnalysisContext> get allRoots;
   @override
   @JsonKey(ignore: true)
   _$$_ActiveContextCopyWith<_$_ActiveContext> get copyWith =>

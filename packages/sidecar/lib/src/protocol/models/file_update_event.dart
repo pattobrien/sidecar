@@ -10,7 +10,7 @@ part 'file_update_event.g.dart';
 @freezed
 class FileUpdateEvent with _$FileUpdateEvent {
   const factory FileUpdateEvent.add(
-    String filePath,
+    Uri fileUri,
     String contents,
   ) = AddEvent;
 
@@ -19,7 +19,7 @@ class FileUpdateEvent with _$FileUpdateEvent {
   ) = ModifyEvent;
 
   const factory FileUpdateEvent.delete(
-    String filePath,
+    Uri fileUri,
   ) = DeleteEvent;
 
   const FileUpdateEvent._();
@@ -28,7 +28,7 @@ class FileUpdateEvent with _$FileUpdateEvent {
       _$FileUpdateEventFromJson(json);
 
   String get filePath => map(
-      add: (add) => add.filePath,
+      add: (add) => add.fileUri.path,
       modify: (modify) => modify.fileEdit.file.path,
-      delete: (delete) => delete.filePath);
+      delete: (delete) => delete.fileUri.path);
 }

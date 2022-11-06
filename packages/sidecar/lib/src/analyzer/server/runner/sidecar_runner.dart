@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'dart:math';
 
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -18,12 +19,12 @@ class SidecarRunner {
   SidecarRunner(
     this._ref, {
     required this.context,
-    required this.contextRoots,
   }) : receivePort = ReceivePort('runner');
 
   final Ref _ref;
   final ActiveContext context;
-  final List<String> contextRoots;
+  List<AnalysisContext> get allContexts =>
+      [context.context, ...context.allRoots];
   final ReceivePort receivePort;
 
   late final SendPort sendPort;
@@ -35,10 +36,10 @@ class SidecarRunner {
   Stream<ResponseMessage> get _responses =>
       _ref.read(analyzerResponseStreamProvider(this).stream);
 
-  Stream<SidecarNotification> get _notifications =>
+  Stream<SidecarNotification> get notifications =>
       _ref.read(analyzerNotificationStreamProvider(this).stream);
 
-  Stream<LintNotification> get _lints => _notifications
+  Stream<LintNotification> get _lints => notifications
       .where((e) => e is LintNotification)
       .map((e) => e as LintNotification);
 
@@ -51,7 +52,7 @@ class SidecarRunner {
       root: context.activeRoot.root.toUri(),
     );
 
-    _notifications.listen((event) => event.map(
+    notifications.listen((event) => event.map(
           initComplete: (_) => handleInitialization(),
           lint: (_) => null,
         ));
@@ -79,7 +80,7 @@ class SidecarRunner {
 
   Future<List<LintResult>> requestLintsForFile(String path) async {
     final contents = resourceProvider.getFile(path).readAsStringSync();
-    final fileUpdateEvent = FileUpdateEvent.add(path, contents);
+    final fileUpdateEvent = FileUpdateEvent.add(Uri.parse(path), contents);
     final request = FileUpdateRequest([fileUpdateEvent]);
     // print(request.toJson());
     unawaited(asyncRequest<UpdateFilesResponse>(request));
@@ -97,9 +98,12 @@ class SidecarRunner {
 
   Future<void> _requestSetContext() async {
     final mainContext = context;
-    final allContexts = [mainContext.activeRoot.root.path, ...contextRoots];
+    final allContextRootPaths = <String>[
+      mainContext.activeRoot.root.path,
+      ...mainContext.allRoots.map((e) => e.contextRoot.root.path),
+    ];
     final request = SetContextCollectionRequest(
-        mainRoot: mainContext.activeRoot.root.path, roots: allContexts);
+        mainRoot: mainContext.activeRoot.root.path, roots: allContextRootPaths);
     await asyncRequest(request);
   }
 

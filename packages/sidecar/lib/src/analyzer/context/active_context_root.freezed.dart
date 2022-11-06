@@ -18,9 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ActiveContextRoot {
   ContextRoot get contextRoot => throw _privateConstructorUsedError;
 
-  /// Indicates the package that explicitly activates Sidecar as a plugin.
-  bool get isExplicitlyEnabledRoot => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
   $ActiveContextRootCopyWith<ActiveContextRoot> get copyWith =>
       throw _privateConstructorUsedError;
@@ -31,7 +28,7 @@ abstract class $ActiveContextRootCopyWith<$Res> {
   factory $ActiveContextRootCopyWith(
           ActiveContextRoot value, $Res Function(ActiveContextRoot) then) =
       _$ActiveContextRootCopyWithImpl<$Res>;
-  $Res call({ContextRoot contextRoot, bool isExplicitlyEnabledRoot});
+  $Res call({ContextRoot contextRoot});
 }
 
 /// @nodoc
@@ -46,17 +43,12 @@ class _$ActiveContextRootCopyWithImpl<$Res>
   @override
   $Res call({
     Object? contextRoot = freezed,
-    Object? isExplicitlyEnabledRoot = freezed,
   }) {
     return _then(_value.copyWith(
       contextRoot: contextRoot == freezed
           ? _value.contextRoot
           : contextRoot // ignore: cast_nullable_to_non_nullable
               as ContextRoot,
-      isExplicitlyEnabledRoot: isExplicitlyEnabledRoot == freezed
-          ? _value.isExplicitlyEnabledRoot
-          : isExplicitlyEnabledRoot // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -68,7 +60,7 @@ abstract class _$$_ActiveContextRootCopyWith<$Res>
           $Res Function(_$_ActiveContextRoot) then) =
       __$$_ActiveContextRootCopyWithImpl<$Res>;
   @override
-  $Res call({ContextRoot contextRoot, bool isExplicitlyEnabledRoot});
+  $Res call({ContextRoot contextRoot});
 }
 
 /// @nodoc
@@ -85,17 +77,12 @@ class __$$_ActiveContextRootCopyWithImpl<$Res>
   @override
   $Res call({
     Object? contextRoot = freezed,
-    Object? isExplicitlyEnabledRoot = freezed,
   }) {
     return _then(_$_ActiveContextRoot(
       contextRoot == freezed
           ? _value.contextRoot
           : contextRoot // ignore: cast_nullable_to_non_nullable
               as ContextRoot,
-      isExplicitlyEnabledRoot: isExplicitlyEnabledRoot == freezed
-          ? _value.isExplicitlyEnabledRoot
-          : isExplicitlyEnabledRoot // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -103,20 +90,14 @@ class __$$_ActiveContextRootCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ActiveContextRoot extends _ActiveContextRoot {
-  const _$_ActiveContextRoot(this.contextRoot,
-      {required this.isExplicitlyEnabledRoot})
-      : super._();
+  const _$_ActiveContextRoot(this.contextRoot) : super._();
 
   @override
   final ContextRoot contextRoot;
 
-  /// Indicates the package that explicitly activates Sidecar as a plugin.
-  @override
-  final bool isExplicitlyEnabledRoot;
-
   @override
   String toString() {
-    return 'ActiveContextRoot(contextRoot: $contextRoot, isExplicitlyEnabledRoot: $isExplicitlyEnabledRoot)';
+    return 'ActiveContextRoot(contextRoot: $contextRoot)';
   }
 
   @JsonKey(ignore: true)
@@ -127,16 +108,12 @@ class _$_ActiveContextRoot extends _ActiveContextRoot {
 }
 
 abstract class _ActiveContextRoot extends ActiveContextRoot {
-  const factory _ActiveContextRoot(final ContextRoot contextRoot,
-      {required final bool isExplicitlyEnabledRoot}) = _$_ActiveContextRoot;
+  const factory _ActiveContextRoot(final ContextRoot contextRoot) =
+      _$_ActiveContextRoot;
   const _ActiveContextRoot._() : super._();
 
   @override
   ContextRoot get contextRoot;
-  @override
-
-  /// Indicates the package that explicitly activates Sidecar as a plugin.
-  bool get isExplicitlyEnabledRoot;
   @override
   @JsonKey(ignore: true)
   _$$_ActiveContextRootCopyWith<_$_ActiveContextRoot> get copyWith =>

@@ -9,24 +9,6 @@ import '../plugin/plugin.dart';
 
 part 'resolved_unit_provider.g.dart';
 
-// final resolvedUnitProvider =
-//     FutureProvider.family<ResolvedUnitResult?, AnalyzedFile>(
-//   (ref, file) async {
-//     SomeResolvedUnitResult? someUnitResult;
-//     await report(() async {
-//       final context = ref.watch(activeContextForRootProvider(file.root));
-//       final analysisSession = context.currentSession;
-//       someUnitResult = await analysisSession.getResolvedUnit(file.path);
-//     }, 'resolvedUnitProvider');
-//     final r = someUnitResult is ResolvedUnitResult ? someUnitResult : null;
-//     return r as ResolvedUnitResult?;
-//   },
-//   name: 'resolvedUnitProvider',
-//   dependencies: [
-//     activeContextForRootProvider,
-//   ],
-// );
-
 @riverpod
 Future<ResolvedUnitResult?> getResolvedUnitForFile(
   GetResolvedUnitForFileRef ref,

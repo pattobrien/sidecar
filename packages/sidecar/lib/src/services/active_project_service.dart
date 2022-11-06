@@ -12,7 +12,6 @@ import '../analyzer/context/context.dart';
 import '../configurations/project/project_configuration.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
-import '../protocol/models/context_details.dart';
 import '../protocol/protocol.dart';
 import '../utils/logger/logger.dart';
 import '../utils/utils.dart';
@@ -31,11 +30,15 @@ class ActiveProjectService {
       final packages = getSidecarDependencies(contextUri);
       final projectConfig = getSidecarOptions(contextUri);
       final packageConfigJson = getPackageConfig(contextUri);
-      final context = _createAnalysisContextForUri(contextUri,
+
+      final allContexts = _createAnalysisContextsForUri(contextUri,
           resourceProvider: resourceProvider);
 
+      final primaryContext = allContexts.contextForRoot(contextUri);
+
       return ActiveContext(
-        context: context,
+        context: primaryContext!,
+        allRoots: _getDependencyContexts(allContexts, packageConfigJson),
         sidecarOptions: projectConfig!,
         sidecarPluginPackage: pluginUri!,
         sidecarPackages: packages,
@@ -49,8 +52,19 @@ class ActiveProjectService {
     }
   }
 
+  List<AnalysisContext> _getDependencyContexts(
+    List<AnalysisContext> allContexts,
+    PackageConfig packageConfigJson,
+  ) {
+    return allContexts
+        .where((context) => packageConfigJson.packages
+            .any((package) => package.root == context.contextRoot.root.toUri()))
+        .toList();
+  }
+
   ActiveContext? getActiveContext(
     AnalysisContext context,
+    List<AnalysisContext> allContexts,
   ) {
     try {
       final contextUri = context.contextRoot.root.toUri();
@@ -60,9 +74,12 @@ class ActiveProjectService {
       final packages = getSidecarDependencies(contextUri);
       final projectConfig = getSidecarOptions(contextUri);
       final packageConfigJson = getPackageConfig(contextUri);
+      final dependencyContexts =
+          _getDependencyContexts(allContexts, packageConfigJson);
 
       return ActiveContext(
         context: context,
+        allRoots: dependencyContexts,
         sidecarOptions: projectConfig!,
         sidecarPluginPackage: pluginUri!,
         sidecarPackages: packages,
@@ -76,7 +93,7 @@ class ActiveProjectService {
     }
   }
 
-  AnalysisContext _createAnalysisContextForUri(
+  List<AnalysisContext> _createAnalysisContextsForUri(
     Uri root, {
     ResourceProvider? resourceProvider,
   }) {
@@ -90,7 +107,7 @@ class ActiveProjectService {
       includedPaths: [path],
       resourceProvider: resourceProvider,
     );
-    return collection.contextFor(path);
+    return collection.contexts;
   }
 
   bool isContextActive(
@@ -110,50 +127,50 @@ class ActiveProjectService {
   }
 
   /// Finds any contexts that
-  List<ActiveContext> getActiveDependencies(
-    ActiveContext mainContext,
-    List<AnalysisContext> allContexts,
-  ) {
-    final config = getPackageConfig(mainContext.activeRoot.root.toUri());
-    // get all contexts that are within the working directory and
-    // are dependencies of the main active root
-    final contexts = allContexts
-        .where((context) => config.packages
-            .where((pkg) => pkg.root != mainContext.activeRoot.root.toUri())
-            .any(
-              (package) =>
-                  package.root.normalizePath().path ==
-                  context.contextRoot.root.toUri().normalizePath().path,
-            ))
-        .toList();
+  // List<ActiveContext> getActiveDependencies(
+  //   ActiveContext mainContext,
+  //   List<AnalysisContext> allContexts,
+  // ) {
+  //   final config = getPackageConfig(mainContext.activeRoot.root.toUri());
+  //   // get all contexts that are within the working directory and
+  //   // are dependencies of the main active root
+  //   final contexts = allContexts
+  //       .where((context) => config.packages
+  //           .where((pkg) => pkg.root != mainContext.activeRoot.root.toUri())
+  //           .any(
+  //             (package) =>
+  //                 package.root.normalizePath().path ==
+  //                 context.contextRoot.root.toUri().normalizePath().path,
+  //           ))
+  //       .toList();
 
-    // check for any options files, etc. if none are available,
-    // inherit the details from main root
-    return contexts.map(
-      (analysisContext) {
-        final root = analysisContext.contextRoot;
-        final contextUri = root.root.toUri();
-        final pluginUri = getSidecarPluginUriForPackage(contextUri);
-        if (pluginUri != null) {
-          assert(pluginUri != mainContext.sidecarPluginPackage,
-              'plugin package must be identical between any active roots within the same isolate.');
-        }
-        final packages = getSidecarDependencies(contextUri);
-        final projectConfig = getSidecarOptions(contextUri);
-        final packageConfigJson = getPackageConfig(contextUri);
+  //   // check for any options files, etc. if none are available,
+  //   // inherit the details from main root
+  //   return contexts.map(
+  //     (analysisContext) {
+  //       final root = analysisContext.contextRoot;
+  //       final contextUri = root.root.toUri();
+  //       final pluginUri = getSidecarPluginUriForPackage(contextUri);
+  //       if (pluginUri != null) {
+  //         assert(pluginUri != mainContext.sidecarPluginPackage,
+  //             'plugin package must be identical between any active roots within the same isolate.');
+  //       }
+  //       final packages = getSidecarDependencies(contextUri);
+  //       final projectConfig = getSidecarOptions(contextUri);
+  //       final packageConfigJson = getPackageConfig(contextUri);
 
-        return ActiveContext(
-          context: analysisContext,
-          sidecarOptions: projectConfig ?? mainContext.sidecarOptions,
-          sidecarPluginPackage: pluginUri ?? mainContext.sidecarPluginPackage,
-          //TODO: do we need to inherit packages of main root below?
-          sidecarPackages: packages,
-          isExplicitlyEnabled: false,
-          packageConfigJson: packageConfigJson,
-        );
-      },
-    ).toList();
-  }
+  //       return ActiveContext(
+  //         context: analysisContext,
+  //         sidecarOptions: projectConfig ?? mainContext.sidecarOptions,
+  //         sidecarPluginPackage: pluginUri ?? mainContext.sidecarPluginPackage,
+  //         //TODO: do we need to inherit packages of main root below?
+  //         sidecarPackages: packages,
+  //         isExplicitlyEnabled: false,
+  //         packageConfigJson: packageConfigJson,
+  //       );
+  //     },
+  //   ).toList();
+  // }
 
   List<ContextDetails> createActiveContextDetails(
     Uri directory,

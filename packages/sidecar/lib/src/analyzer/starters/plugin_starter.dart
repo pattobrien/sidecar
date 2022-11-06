@@ -47,11 +47,11 @@ Future<void> startSidecarPlugin(
     delegate.sidecarError,
     zoneSpecification: ZoneSpecification(
       print: (self, parent, zone, line) {
-        final logFile = File(
-            p.join(p.current, kDartTool, 'sidecar', 'logs', 'middleman.txt'));
-        if (!logFile.existsSync()) logFile.create(recursive: true);
-        logFile.writeAsString('\nMIDDLEMAN: $line');
-        delegate.sidecarMessage('MIDDLEMAN: $line');
+        // final logFile = File(
+        //     p.join(p.current, kDartTool, 'sidecar', 'logs', 'middleman.txt'));
+        // if (!logFile.existsSync()) logFile.create(recursive: true);
+        // logFile.writeAsString('\nMIDDLEMAN: $line');
+        // delegate.sidecarMessage('MIDDLEMAN: $line');
       },
     ),
   );

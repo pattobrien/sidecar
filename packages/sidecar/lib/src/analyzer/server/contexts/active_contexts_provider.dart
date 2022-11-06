@@ -19,12 +19,12 @@ final activeContextsMiddlemanProvider = Provider<List<ActiveContext>>(
     logger.finer('MM # of all contexts => ${allContexts.length} ');
     final service = ref.watch(activeProjectServiceProvider);
     final mainActiveContexts = allContexts
-        .map<ActiveContext?>(service.getActiveContext)
+        .map<ActiveContext?>((e) => service.getActiveContext(e, allContexts))
         .whereType<ActiveContext>()
         .toList();
-    final dependencyContexts = mainActiveContexts
-        .map((e) => service.getActiveDependencies(e, allContexts));
-    return [...mainActiveContexts, ...dependencyContexts.expand((e) => e)];
+    // final dependencyContexts = mainActiveContexts
+    //     .map((e) => service.getActiveDependencies(e, allContexts));
+    return mainActiveContexts;
   },
   name: 'activeContextsProvider',
   dependencies: [

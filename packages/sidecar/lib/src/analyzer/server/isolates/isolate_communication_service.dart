@@ -441,6 +441,6 @@ final isolateCommunicationServiceProvider =
   name: 'isolateCommunicationServiceProvider',
   dependencies: [
     masterPluginChannelProvider,
-    middlemanPluginIsInitializedProvider,
+    // middlemanPluginIsInitializedProvider,
   ],
 );

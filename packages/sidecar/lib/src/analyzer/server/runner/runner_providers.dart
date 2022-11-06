@@ -16,7 +16,7 @@ Future<List<SidecarRunner>> getRunners(
   // print('creating runners');
   final activePrimaryContexts = ref.watch(runnerActiveContextsProvider);
   final runners = await Future.wait(activePrimaryContexts.map((context) async {
-    final runner = SidecarRunner(ref, context: context, contextRoots: []);
+    final runner = SidecarRunner(ref, context: context);
     // print('creating runners: init');
     await runner.initialize();
     return runner;

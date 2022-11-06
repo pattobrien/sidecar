@@ -35,6 +35,7 @@ class ActiveContext with _$ActiveContext {
     /// Indicates the package was explicitly activated as a Sidecar plugin, as
     /// opposed to being a dependency of a package that has Sidecar enabled.
     required bool isExplicitlyEnabled,
+    required List<AnalysisContext> allRoots,
   }) = _ActiveContext;
 
   const ActiveContext._();
@@ -43,8 +44,14 @@ class ActiveContext with _$ActiveContext {
 
   ActiveContextRoot get activeRoot => ActiveContextRoot(
         context.contextRoot,
-        isExplicitlyEnabledRoot: isExplicitlyEnabled,
+        // isExplicitlyEnabledRoot: isExplicitlyEnabled,
       );
+
+  List<String> activeAnalyzedFiles() {
+    return [
+      ...contextRoot.analyzedFiles(),
+    ];
+  }
 
   AnalysisOptions get analysisOptions => context.analysisOptions;
 
@@ -66,7 +73,7 @@ extension ActiveContextsX on List<ActiveContext> {
   ActiveContext? contextFor(AnalyzedFile analyzedFile) {
     return firstWhereOrNull((activeContext) => activeContext.activeRoot
         .analyzedFiles()
-        .any((file) => file == analyzedFile));
+        .any((file) => file == analyzedFile.path));
   }
 
   ActiveContext? contextForPath(String path) {
@@ -81,6 +88,13 @@ extension AnalysisContextsX on List<AnalysisContext> {
     return firstWhereOrNull((context) => context.contextRoot
         .analyzedFiles()
         .any((filePath) => filePath == path));
+  }
+
+  AnalysisContext? contextForRoot(Uri root) {
+    return firstWhereOrNull((context) {
+      final contextRoot = context.contextRoot.root.toUri();
+      return contextRoot == root;
+    });
   }
 
   Context? contextRootForPath(String path) {

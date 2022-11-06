@@ -33,23 +33,23 @@ FileUpdateEvent _$FileUpdateEventFromJson(Map<String, dynamic> json) {
 mixin _$FileUpdateEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String filePath, String contents) add,
+    required TResult Function(Uri fileUri, String contents) add,
     required TResult Function(SourceFileEdit fileEdit) modify,
-    required TResult Function(String filePath) delete,
+    required TResult Function(Uri fileUri) delete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String filePath, String contents)? add,
+    TResult Function(Uri fileUri, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(String filePath)? delete,
+    TResult Function(Uri fileUri)? delete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String filePath, String contents)? add,
+    TResult Function(Uri fileUri, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(String filePath)? delete,
+    TResult Function(Uri fileUri)? delete,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -100,7 +100,7 @@ abstract class _$$AddEventCopyWith<$Res> {
   factory _$$AddEventCopyWith(
           _$AddEvent value, $Res Function(_$AddEvent) then) =
       __$$AddEventCopyWithImpl<$Res>;
-  $Res call({String filePath, String contents});
+  $Res call({Uri fileUri, String contents});
 }
 
 /// @nodoc
@@ -114,14 +114,14 @@ class __$$AddEventCopyWithImpl<$Res> extends _$FileUpdateEventCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? filePath = freezed,
+    Object? fileUri = freezed,
     Object? contents = freezed,
   }) {
     return _then(_$AddEvent(
-      filePath == freezed
-          ? _value.filePath
-          : filePath // ignore: cast_nullable_to_non_nullable
-              as String,
+      fileUri == freezed
+          ? _value.fileUri
+          : fileUri // ignore: cast_nullable_to_non_nullable
+              as Uri,
       contents == freezed
           ? _value.contents
           : contents // ignore: cast_nullable_to_non_nullable
@@ -133,7 +133,7 @@ class __$$AddEventCopyWithImpl<$Res> extends _$FileUpdateEventCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AddEvent extends AddEvent {
-  const _$AddEvent(this.filePath, this.contents, {final String? $type})
+  const _$AddEvent(this.fileUri, this.contents, {final String? $type})
       : $type = $type ?? 'add',
         super._();
 
@@ -141,7 +141,7 @@ class _$AddEvent extends AddEvent {
       _$$AddEventFromJson(json);
 
   @override
-  final String filePath;
+  final Uri fileUri;
   @override
   final String contents;
 
@@ -150,7 +150,7 @@ class _$AddEvent extends AddEvent {
 
   @override
   String toString() {
-    return 'FileUpdateEvent.add(filePath: $filePath, contents: $contents)';
+    return 'FileUpdateEvent.add(fileUri: $fileUri, contents: $contents)';
   }
 
   @override
@@ -158,7 +158,7 @@ class _$AddEvent extends AddEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddEvent &&
-            const DeepCollectionEquality().equals(other.filePath, filePath) &&
+            const DeepCollectionEquality().equals(other.fileUri, fileUri) &&
             const DeepCollectionEquality().equals(other.contents, contents));
   }
 
@@ -166,7 +166,7 @@ class _$AddEvent extends AddEvent {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(filePath),
+      const DeepCollectionEquality().hash(fileUri),
       const DeepCollectionEquality().hash(contents));
 
   @JsonKey(ignore: true)
@@ -177,33 +177,33 @@ class _$AddEvent extends AddEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String filePath, String contents) add,
+    required TResult Function(Uri fileUri, String contents) add,
     required TResult Function(SourceFileEdit fileEdit) modify,
-    required TResult Function(String filePath) delete,
+    required TResult Function(Uri fileUri) delete,
   }) {
-    return add(filePath, contents);
+    return add(fileUri, contents);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String filePath, String contents)? add,
+    TResult Function(Uri fileUri, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(String filePath)? delete,
+    TResult Function(Uri fileUri)? delete,
   }) {
-    return add?.call(filePath, contents);
+    return add?.call(fileUri, contents);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String filePath, String contents)? add,
+    TResult Function(Uri fileUri, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(String filePath)? delete,
+    TResult Function(Uri fileUri)? delete,
     required TResult orElse(),
   }) {
     if (add != null) {
-      return add(filePath, contents);
+      return add(fileUri, contents);
     }
     return orElse();
   }
@@ -251,13 +251,12 @@ class _$AddEvent extends AddEvent {
 }
 
 abstract class AddEvent extends FileUpdateEvent {
-  const factory AddEvent(final String filePath, final String contents) =
-      _$AddEvent;
+  const factory AddEvent(final Uri fileUri, final String contents) = _$AddEvent;
   const AddEvent._() : super._();
 
   factory AddEvent.fromJson(Map<String, dynamic> json) = _$AddEvent.fromJson;
 
-  String get filePath;
+  Uri get fileUri;
   String get contents;
   @JsonKey(ignore: true)
   _$$AddEventCopyWith<_$AddEvent> get copyWith =>
@@ -347,9 +346,9 @@ class _$ModifyEvent extends ModifyEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String filePath, String contents) add,
+    required TResult Function(Uri fileUri, String contents) add,
     required TResult Function(SourceFileEdit fileEdit) modify,
-    required TResult Function(String filePath) delete,
+    required TResult Function(Uri fileUri) delete,
   }) {
     return modify(fileEdit);
   }
@@ -357,9 +356,9 @@ class _$ModifyEvent extends ModifyEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String filePath, String contents)? add,
+    TResult Function(Uri fileUri, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(String filePath)? delete,
+    TResult Function(Uri fileUri)? delete,
   }) {
     return modify?.call(fileEdit);
   }
@@ -367,9 +366,9 @@ class _$ModifyEvent extends ModifyEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String filePath, String contents)? add,
+    TResult Function(Uri fileUri, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(String filePath)? delete,
+    TResult Function(Uri fileUri)? delete,
     required TResult orElse(),
   }) {
     if (modify != null) {
@@ -438,7 +437,7 @@ abstract class _$$DeleteEventCopyWith<$Res> {
   factory _$$DeleteEventCopyWith(
           _$DeleteEvent value, $Res Function(_$DeleteEvent) then) =
       __$$DeleteEventCopyWithImpl<$Res>;
-  $Res call({String filePath});
+  $Res call({Uri fileUri});
 }
 
 /// @nodoc
@@ -454,13 +453,13 @@ class __$$DeleteEventCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? filePath = freezed,
+    Object? fileUri = freezed,
   }) {
     return _then(_$DeleteEvent(
-      filePath == freezed
-          ? _value.filePath
-          : filePath // ignore: cast_nullable_to_non_nullable
-              as String,
+      fileUri == freezed
+          ? _value.fileUri
+          : fileUri // ignore: cast_nullable_to_non_nullable
+              as Uri,
     ));
   }
 }
@@ -468,7 +467,7 @@ class __$$DeleteEventCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$DeleteEvent extends DeleteEvent {
-  const _$DeleteEvent(this.filePath, {final String? $type})
+  const _$DeleteEvent(this.fileUri, {final String? $type})
       : $type = $type ?? 'delete',
         super._();
 
@@ -476,14 +475,14 @@ class _$DeleteEvent extends DeleteEvent {
       _$$DeleteEventFromJson(json);
 
   @override
-  final String filePath;
+  final Uri fileUri;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'FileUpdateEvent.delete(filePath: $filePath)';
+    return 'FileUpdateEvent.delete(fileUri: $fileUri)';
   }
 
   @override
@@ -491,13 +490,13 @@ class _$DeleteEvent extends DeleteEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DeleteEvent &&
-            const DeepCollectionEquality().equals(other.filePath, filePath));
+            const DeepCollectionEquality().equals(other.fileUri, fileUri));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(filePath));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(fileUri));
 
   @JsonKey(ignore: true)
   @override
@@ -507,33 +506,33 @@ class _$DeleteEvent extends DeleteEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String filePath, String contents) add,
+    required TResult Function(Uri fileUri, String contents) add,
     required TResult Function(SourceFileEdit fileEdit) modify,
-    required TResult Function(String filePath) delete,
+    required TResult Function(Uri fileUri) delete,
   }) {
-    return delete(filePath);
+    return delete(fileUri);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String filePath, String contents)? add,
+    TResult Function(Uri fileUri, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(String filePath)? delete,
+    TResult Function(Uri fileUri)? delete,
   }) {
-    return delete?.call(filePath);
+    return delete?.call(fileUri);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String filePath, String contents)? add,
+    TResult Function(Uri fileUri, String contents)? add,
     TResult Function(SourceFileEdit fileEdit)? modify,
-    TResult Function(String filePath)? delete,
+    TResult Function(Uri fileUri)? delete,
     required TResult orElse(),
   }) {
     if (delete != null) {
-      return delete(filePath);
+      return delete(fileUri);
     }
     return orElse();
   }
@@ -581,13 +580,13 @@ class _$DeleteEvent extends DeleteEvent {
 }
 
 abstract class DeleteEvent extends FileUpdateEvent {
-  const factory DeleteEvent(final String filePath) = _$DeleteEvent;
+  const factory DeleteEvent(final Uri fileUri) = _$DeleteEvent;
   const DeleteEvent._() : super._();
 
   factory DeleteEvent.fromJson(Map<String, dynamic> json) =
       _$DeleteEvent.fromJson;
 
-  String get filePath;
+  Uri get fileUri;
   @JsonKey(ignore: true)
   _$$DeleteEventCopyWith<_$DeleteEvent> get copyWith =>
       throw _privateConstructorUsedError;
