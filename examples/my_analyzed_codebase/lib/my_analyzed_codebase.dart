@@ -45,7 +45,6 @@ class SomePage extends ConsumerWidget {
           ),
 
           // hane
-
           SizedBox(width: 10.0),
           SizedBox(width: someNumber),
           Icon(Icons.snowboarding),

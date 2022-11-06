@@ -1,6 +1,7 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -11,6 +12,7 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
+import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/src/analyzer/server/runner/context_providers.dart';
 import 'package:source_span/source_span.dart';
@@ -18,6 +20,7 @@ import 'package:source_span/source_span.dart';
 import '../../../sidecar.dart';
 import '../../cli/options/cli_options.dart';
 import '../../protocol/constants/constants.dart';
+import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../protocol/source/source_file_edit.dart';
 import '../../services/active_project_service.dart';
@@ -68,19 +71,19 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
   }
 
   void sendRequest(plugin.Request request) {
-    if (request.method == plugin.PLUGIN_REQUEST_VERSION_CHECK) {
-      _handleVersionRequest(request);
-    } else if (request.method == plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS) {
-      final params = plugin.AnalysisSetContextRootsParams.fromRequest(request);
-      handleAnalysisSetContextRoots(params);
-      // isolateService.handleServerRequest(request);
-    } else if (request.method == plugin.PLUGIN_REQUEST_SHUTDOWN) {
-      isolateService.handleServerRequest(request);
-      isolateService.shutdownAllPlugins();
-    } else {
-      // isolateService.handleServerRequest(request);
-      handleAllRequests(request);
-    }
+    // if (request.method == plugin.PLUGIN_REQUEST_VERSION_CHECK) {
+    //   _handleVersionRequest(request);
+    // } else if (request.method == plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS) {
+    //   final params = plugin.AnalysisSetContextRootsParams.fromRequest(request);
+    //   handleAnalysisSetContextRoots(params);
+    //   // isolateService.handleServerRequest(request);
+    // } else if (request.method == plugin.PLUGIN_REQUEST_SHUTDOWN) {
+    //   isolateService.handleServerRequest(request);
+    //   isolateService.shutdownAllPlugins();
+    // } else {
+    // isolateService.handleServerRequest(request);
+    handleAllRequests(request);
+    // }
   }
 
   Future<void> handleAllRequests(plugin.Request request) async {
@@ -90,12 +93,12 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
     channel.sendResponse(response);
   }
 
-  Future<void> _handleVersionRequest(plugin.Request request) async {
-    final requestTime = DateTime.now().millisecondsSinceEpoch;
-    final params = plugin.PluginVersionCheckParams.fromRequest(request);
-    final response = await handlePluginVersionCheck(params);
-    channel.sendResponse(response.toResponse(request.id, requestTime));
-  }
+  // Future<void> _handleVersionRequest(plugin.Request request) async {
+  //   final requestTime = DateTime.now().millisecondsSinceEpoch;
+  //   final params = plugin.PluginVersionCheckParams.fromRequest(request);
+  //   final response = await handlePluginVersionCheck(params);
+  //   channel.sendResponse(response.toResponse(request.id, requestTime));
+  // }
 
   Future<SidecarResponse> _sendToSingleRunner(
     SidecarRequest request,
@@ -128,8 +131,9 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
       case plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS:
         final params =
             plugin.AnalysisSetContextRootsParams.fromRequest(request);
-        // result = await handleAnalysisSetContextRoots(params);
-        throw UnimplementedError('handling contexts should happen elsewhere');
+        result = await handleAnalysisSetContextRoots(params);
+        break;
+      // throw UnimplementedError('handling contexts should happen elsewhere');
 
       case plugin.ANALYSIS_REQUEST_SET_PRIORITY_FILES:
         final params =
@@ -234,6 +238,13 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
   }
 
   @override
+  Future<void> beforeContextCollectionDispose({
+    required AnalysisContextCollection contextCollection,
+  }) async {
+    //
+  }
+
+  @override
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
@@ -249,20 +260,34 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
     ref.read(runnerActiveContextsProvider.notifier).update = activeContexts;
     final runners = await ref.read(getRunnersProvider.future);
 
-    for (final runner in runners) {
+    await Future.wait(runners.map((runner) async {
       runner.notifications.listen((notification) {
         notification.map(
           initComplete: (initComplete) => null,
           lint: (lint) => channel.sendNotification(lint.toPluginNotification()),
         );
       });
-    }
+      runner.logs.listen((event) {
+        // final msg = event.map(
+        //     simple: simple, fromAnalyzer: fromAnalyzer, fromRule: fromRule,);
+        final runnerName = runner.context.activeRoot.root.shortName;
+        channel.sendError('RUNNER $runnerName: ${event.toJson()}');
+        _log(event, runner.context.activeRoot.root.path);
+      });
+      // return runner.initialize();
+    }));
 
     ref
         .read(allContextsProvider.state)
         .update((_) => contextCollection.contexts);
     ref.read(isolateDetailsProvider);
     ref.read(middlemanPluginIsInitializedProvider.state).update((_) => true);
+  }
+
+  void _log(LogRecord log, String path) {
+    final file = File(join(path, kDartTool, 'sidecar_logs', 'log.txt'));
+    if (!file.existsSync()) file.createSync(recursive: true);
+    file.writeAsStringSync('${log.toJson()}\n', mode: FileMode.append);
   }
 
   @override

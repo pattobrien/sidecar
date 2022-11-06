@@ -121,7 +121,7 @@ class SidecarAnalyzer {
     await _forAnalysisContexts((analysisContext) async {
       final paths = analysisContext.contextRoot.analyzedFiles().toList();
       await analyzeFiles(
-        analysisContext: analysisContext,
+        // analysisContext: analysisContext,
         paths: paths,
       );
     });
@@ -181,7 +181,7 @@ class SidecarAnalyzer {
           .where((path) => p.extension(path) != '.dart');
 
       await handleAffectedFiles(
-        analysisContext: analysisContext,
+        // analysisContext: analysisContext,
         paths: [...affected, ...nonDartPathsInContext],
         // paths: affected,
       );
@@ -189,7 +189,7 @@ class SidecarAnalyzer {
   }
 
   Future<void> handleAffectedFiles({
-    required AnalysisContext analysisContext,
+    // required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
     final analysisContexts = _ref.read(allContextsNotifierProvider);
@@ -199,7 +199,7 @@ class SidecarAnalyzer {
           .toList(growable: false);
 
       await analyzeFiles(
-        analysisContext: analysisContext,
+        // analysisContext: analysisContext,
         paths: analyzedPaths,
       );
     }
@@ -230,31 +230,24 @@ class SidecarAnalyzer {
   Set<String> priorityPaths = {};
 
   Future<void> analyzeFiles({
-    required AnalysisContext analysisContext,
+    // required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
-    final activeContexts = _ref.read(allContextsNotifierProvider);
-    logger.finer('CHANGEDFILES = ${paths.length} ${paths.toList().toString()}');
-    if (activeContexts.any((context) =>
-        context.contextRoot.root.path ==
-        analysisContext.contextRoot.root.path)) {
-      // context is valid => analyze all files
-
-      logger.severe('${DateTime.now()} starting analyzing files: $paths');
-      await Future.wait(paths.map((path) async {
-        try {
-          final file = _ref.read(analyzedFileForPathProvider(path));
-          await _ref.read(getResolvedUnitForFileProvider(file).future);
-          final results =
-              await _ref.read(createAnalysisReportProvider(file).future);
-          final notification = LintNotification(path, results);
-          sendNotification(notification);
-        } catch (e, stackTrace) {
-          logger.severe('analyzeFiles', e, stackTrace);
-        }
-      }));
-      logger.severe('${DateTime.now()}  finished analyzing files');
-    }
+    logger.severe('${DateTime.now()} starting analyzing files: $paths');
+    await Future.wait(paths.map((path) async {
+      try {
+        final file = _ref.read(analyzedFileForPathProvider(path));
+        await _ref.read(getResolvedUnitForFileProvider(file).future);
+        final results =
+            await _ref.read(createAnalysisReportProvider(file).future);
+        final notification = LintNotification(path, results);
+        sendNotification(notification);
+      } catch (e, stackTrace) {
+        logger.severe('analyzeFiles', e, stackTrace);
+      }
+    }));
+    logger.severe('${DateTime.now()}  finished analyzing files');
+    // }
   }
 
   // Future<QuickFixResponse> handleEditGetFixes(

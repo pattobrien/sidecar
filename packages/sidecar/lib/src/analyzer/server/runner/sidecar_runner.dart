@@ -8,6 +8,7 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
 import '../../../utils/printer/lint_printer.dart';
 import '../../context/active_context.dart';
@@ -38,6 +39,9 @@ class SidecarRunner {
 
   Stream<SidecarNotification> get notifications =>
       _ref.read(analyzerNotificationStreamProvider(this).stream);
+
+  Stream<LogRecord> get logs =>
+      _ref.read(analyzerLogStreamProvider(this).stream);
 
   Stream<LintNotification> get _lints => notifications
       .where((e) => e is LintNotification)
