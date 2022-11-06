@@ -34,7 +34,7 @@ Future<ResolvedUnitResult?> getResolvedUnitForFile(
 ) async {
   SomeResolvedUnitResult? someUnitResult;
   await report(() async {
-    final context = ref.watch(activeContextForRootProvider(file.activeRoot));
+    final context = ref.watch(analysisContextForRootProvider(file.context));
     final analysisSession = context.currentSession;
     someUnitResult = await analysisSession.getResolvedUnit(file.path);
   }, 'resolvedUnitProvider');

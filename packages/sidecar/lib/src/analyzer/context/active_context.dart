@@ -62,7 +62,7 @@ class ActiveContext with _$ActiveContext {
 
 enum ActiveContextType { dependency, explicit }
 
-extension ContextsX on List<ActiveContext> {
+extension ActiveContextsX on List<ActiveContext> {
   ActiveContext? contextFor(AnalyzedFile analyzedFile) {
     return firstWhereOrNull((activeContext) => activeContext.activeRoot
         .analyzedFiles()
@@ -72,6 +72,22 @@ extension ContextsX on List<ActiveContext> {
   ActiveContext? contextForPath(String path) {
     return firstWhereOrNull((activeContext) => activeContext.activeRoot
         .analyzedFiles()
-        .any((filePath) => filePath.path == path));
+        .any((filePath) => filePath == path));
+  }
+}
+
+extension AnalysisContextsX on List<AnalysisContext> {
+  AnalysisContext? contextForPath(String path) {
+    return firstWhereOrNull((context) => context.contextRoot
+        .analyzedFiles()
+        .any((filePath) => filePath == path));
+  }
+
+  Context? contextRootForPath(String path) {
+    final analysisContext = firstWhereOrNull((context) => context.contextRoot
+        .analyzedFiles()
+        .any((filePath) => filePath == path));
+    if (analysisContext == null) return null;
+    return Context(root: analysisContext.contextRoot.root.toUri());
   }
 }

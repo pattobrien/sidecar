@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AnalyzedFile {
-  ActiveContextRoot get activeRoot => throw _privateConstructorUsedError;
+  Context get context => throw _privateConstructorUsedError;
   Uri get fileUri => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,9 +29,9 @@ abstract class $AnalyzedFileCopyWith<$Res> {
   factory $AnalyzedFileCopyWith(
           AnalyzedFile value, $Res Function(AnalyzedFile) then) =
       _$AnalyzedFileCopyWithImpl<$Res>;
-  $Res call({ActiveContextRoot activeRoot, Uri fileUri});
+  $Res call({Context context, Uri fileUri});
 
-  $ActiveContextRootCopyWith<$Res> get activeRoot;
+  $ContextCopyWith<$Res> get context;
 }
 
 /// @nodoc
@@ -44,14 +44,14 @@ class _$AnalyzedFileCopyWithImpl<$Res> implements $AnalyzedFileCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? activeRoot = freezed,
+    Object? context = freezed,
     Object? fileUri = freezed,
   }) {
     return _then(_value.copyWith(
-      activeRoot: activeRoot == freezed
-          ? _value.activeRoot
-          : activeRoot // ignore: cast_nullable_to_non_nullable
-              as ActiveContextRoot,
+      context: context == freezed
+          ? _value.context
+          : context // ignore: cast_nullable_to_non_nullable
+              as Context,
       fileUri: fileUri == freezed
           ? _value.fileUri
           : fileUri // ignore: cast_nullable_to_non_nullable
@@ -60,9 +60,9 @@ class _$AnalyzedFileCopyWithImpl<$Res> implements $AnalyzedFileCopyWith<$Res> {
   }
 
   @override
-  $ActiveContextRootCopyWith<$Res> get activeRoot {
-    return $ActiveContextRootCopyWith<$Res>(_value.activeRoot, (value) {
-      return _then(_value.copyWith(activeRoot: value));
+  $ContextCopyWith<$Res> get context {
+    return $ContextCopyWith<$Res>(_value.context, (value) {
+      return _then(_value.copyWith(context: value));
     });
   }
 }
@@ -74,10 +74,10 @@ abstract class _$$_AnalyzedFileCopyWith<$Res>
           _$_AnalyzedFile value, $Res Function(_$_AnalyzedFile) then) =
       __$$_AnalyzedFileCopyWithImpl<$Res>;
   @override
-  $Res call({ActiveContextRoot activeRoot, Uri fileUri});
+  $Res call({Context context, Uri fileUri});
 
   @override
-  $ActiveContextRootCopyWith<$Res> get activeRoot;
+  $ContextCopyWith<$Res> get context;
 }
 
 /// @nodoc
@@ -93,14 +93,14 @@ class __$$_AnalyzedFileCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? activeRoot = freezed,
+    Object? context = freezed,
     Object? fileUri = freezed,
   }) {
     return _then(_$_AnalyzedFile(
-      activeRoot == freezed
-          ? _value.activeRoot
-          : activeRoot // ignore: cast_nullable_to_non_nullable
-              as ActiveContextRoot,
+      context == freezed
+          ? _value.context
+          : context // ignore: cast_nullable_to_non_nullable
+              as Context,
       fileUri == freezed
           ? _value.fileUri
           : fileUri // ignore: cast_nullable_to_non_nullable
@@ -112,16 +112,16 @@ class __$$_AnalyzedFileCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AnalyzedFile extends _AnalyzedFile {
-  const _$_AnalyzedFile(this.activeRoot, this.fileUri) : super._();
+  const _$_AnalyzedFile(this.context, this.fileUri) : super._();
 
   @override
-  final ActiveContextRoot activeRoot;
+  final Context context;
   @override
   final Uri fileUri;
 
   @override
   String toString() {
-    return 'AnalyzedFile(activeRoot: $activeRoot, fileUri: $fileUri)';
+    return 'AnalyzedFile(context: $context, fileUri: $fileUri)';
   }
 
   @override
@@ -129,15 +129,14 @@ class _$_AnalyzedFile extends _AnalyzedFile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AnalyzedFile &&
-            const DeepCollectionEquality()
-                .equals(other.activeRoot, activeRoot) &&
+            const DeepCollectionEquality().equals(other.context, context) &&
             const DeepCollectionEquality().equals(other.fileUri, fileUri));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(activeRoot),
+      const DeepCollectionEquality().hash(context),
       const DeepCollectionEquality().hash(fileUri));
 
   @JsonKey(ignore: true)
@@ -147,12 +146,12 @@ class _$_AnalyzedFile extends _AnalyzedFile {
 }
 
 abstract class _AnalyzedFile extends AnalyzedFile {
-  const factory _AnalyzedFile(
-      final ActiveContextRoot activeRoot, final Uri fileUri) = _$_AnalyzedFile;
+  const factory _AnalyzedFile(final Context context, final Uri fileUri) =
+      _$_AnalyzedFile;
   const _AnalyzedFile._() : super._();
 
   @override
-  ActiveContextRoot get activeRoot;
+  Context get context;
   @override
   Uri get fileUri;
   @override

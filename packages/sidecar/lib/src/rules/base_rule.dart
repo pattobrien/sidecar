@@ -1,3 +1,4 @@
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -10,6 +11,7 @@ import '../analyzer/context/active_context_root.dart';
 import '../analyzer/plugin/plugin.dart';
 import '../analyzer/results/results.dart';
 import '../configurations/configurations.dart';
+import '../protocol/protocol.dart';
 import 'typedefs.dart';
 
 // @Deprecated('switch to type-checking BaseRule type (e.g. LintRule, AssistRule)')
@@ -22,7 +24,7 @@ abstract class BaseRule {
   MapDecoder? get jsonDecoder => null;
 
   late Ref _ref;
-  late ActiveContextRoot _activeRoot;
+  late Context _activeRoot;
 
   @internal
   late AnalysisConfiguration analysisConfiguration;
@@ -30,8 +32,8 @@ abstract class BaseRule {
   List<SidecarAnnotatedNode> get annotatedNodes =>
       _ref.read(sidecarAnnotationsForRootProvider(_activeRoot));
 
-  ActiveContext get context =>
-      _ref.read(activeContextForRootProvider(_activeRoot));
+  AnalysisContext get context =>
+      _ref.read(analysisContextForRootProvider(_activeRoot));
 
   AnalysisSession get session => context.currentSession;
 
@@ -47,7 +49,7 @@ abstract class BaseRule {
   @internal
   void initialize({
     required Ref ref,
-    required ActiveContextRoot activeRoot,
+    required Context activeRoot,
     required AnalysisConfiguration configuration,
   }) {
     _ref = ref;

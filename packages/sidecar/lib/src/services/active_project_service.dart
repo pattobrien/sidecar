@@ -2,7 +2,6 @@ import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/dart/analysis/context_root.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:collection/collection.dart';
 import 'package:package_config/package_config.dart';

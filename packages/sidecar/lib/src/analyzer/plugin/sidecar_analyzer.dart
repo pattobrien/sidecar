@@ -10,6 +10,7 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/logging/log_record.dart';
+import '../../protocol/models/context.dart';
 import '../../protocol/requests/requests.dart';
 import '../../protocol/responses/responses.dart';
 import '../../protocol/source/source_edit.dart';
@@ -37,10 +38,10 @@ class SidecarAnalyzer {
   AnalyzedFile getFileForPath(String path) =>
       _ref.read(analyzedFileForPathProvider(path));
 
-  List<String> roots = const [];
-
   OverlayResourceProvider get resourceProvider =>
       _ref.read(analyzerResourceProvider);
+
+  late final Context context;
 
   void start() {
     logger.onRecord.listen((event) {
@@ -92,6 +93,8 @@ class SidecarAnalyzer {
     SetActiveRootRequest request,
   ) async {
     final activeContextRoot = request.root;
+    //TODO; send the Context instance in the request, instead of just the Uri itself
+    context = Context(root: request.root);
     _ref
         .read(activeContextNotifierProvider.notifier)
         .updateRoot(activeContextRoot);
@@ -102,10 +105,11 @@ class SidecarAnalyzer {
   Future<ContextCollectionResponse> handleAnalysisSetContextRoots(
     SetContextCollectionRequest request,
   ) async {
-    _collection = _ref.read(createContextCollectionProvider(request.roots));
-    _ref.read(allContextsNotifierProvider.notifier).update(_collection);
-    roots = request.roots;
-    await afterNewContextCollection(contextCollection: _collection);
+    final collection =
+        _ref.read(createContextCollectionProvider(request.roots));
+    _ref.read(allContextsNotifierProvider.notifier).update(collection);
+    // roots = request.roots;
+    await afterNewContextCollection();
     return const ContextCollectionResponse();
   }
 
@@ -113,10 +117,8 @@ class SidecarAnalyzer {
   /// is created, so the plugin can perform initial analysis of analyzed files.
   ///
   /// By default analyzes every [AnalysisContext] with [analyzeFiles].
-  Future<void> afterNewContextCollection({
-    required AnalysisContextCollection contextCollection,
-  }) async {
-    await _forAnalysisContexts(contextCollection, (analysisContext) async {
+  Future<void> afterNewContextCollection() async {
+    await _forAnalysisContexts((analysisContext) async {
       final paths = analysisContext.contextRoot.analyzedFiles().toList();
       await analyzeFiles(
         analysisContext: analysisContext,
@@ -160,12 +162,12 @@ class SidecarAnalyzer {
   }
 
   // TODO: find a way to keep collection from being disposed of automatically
-  late AnalysisContextCollection _collection;
+  // late AnalysisContextCollection _collection;
 
   // Overridden to allow for non-Dart files to be analyzed for changes
 
   Future<void> contentChanged(List<String> paths) async {
-    await _forAnalysisContexts(_collection, (analysisContext) async {
+    await _forAnalysisContexts((analysisContext) async {
       // logger.info('root: ${analysisContext.contextRoot.root.path}');
       // ignore: prefer_foreach
       for (final path in paths) {
@@ -190,25 +192,25 @@ class SidecarAnalyzer {
     required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
-    final analysisContexts = _ref.read(activeContextsProvider);
+    final analysisContexts = _ref.read(allContextsNotifierProvider);
     for (final analysisContext in analysisContexts) {
       final analyzedPaths = paths
           .where(analysisContext.contextRoot.isAnalyzed)
           .toList(growable: false);
 
       await analyzeFiles(
-        analysisContext: analysisContext.context,
+        analysisContext: analysisContext,
         paths: analyzedPaths,
       );
     }
   }
 
   Future<void> _forAnalysisContexts(
-    AnalysisContextCollection contextCollection,
     Future<void> Function(AnalysisContext analysisContext) f,
   ) async {
     final nonPriorityAnalysisContexts = <AnalysisContext>[];
-    for (final analysisContext in contextCollection.contexts) {
+    final analysisContexts = _ref.read(allContextsNotifierProvider);
+    for (final analysisContext in analysisContexts) {
       if (_isPriorityAnalysisContext(analysisContext)) {
         await f(analysisContext);
       } else {
@@ -231,10 +233,10 @@ class SidecarAnalyzer {
     required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
-    final activeContexts = _ref.read(activeContextsProvider);
+    final activeContexts = _ref.read(allContextsNotifierProvider);
     logger.finer('CHANGEDFILES = ${paths.length} ${paths.toList().toString()}');
-    if (activeContexts.any((activeContext) =>
-        activeContext.activeRoot.root.path ==
+    if (activeContexts.any((context) =>
+        context.contextRoot.root.path ==
         analysisContext.contextRoot.root.path)) {
       // context is valid => analyze all files
 

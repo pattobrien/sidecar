@@ -1,17 +1,21 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../protocol/models/models.dart';
 import '../context/context.dart';
 import 'plugin.dart';
-import 'sidecar_analyzer.dart';
 
 part 'analyzed_files_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 List<AnalyzedFile> analyzedFilesForRoot(
   AnalyzedFilesForRootRef ref,
-  ActiveContextRoot root,
+  Context context,
 ) {
-  return root.analyzedFiles();
+  final ctx = ref.watch(analysisContextForRootProvider(context));
+  return ctx.contextRoot
+      .analyzedFiles()
+      .map((e) => AnalyzedFile(context, Uri.parse(e)))
+      .toList();
 }
 
 //TODO: can we remove the analyzer parameter from here
@@ -22,9 +26,8 @@ AnalyzedFile analyzedFileForPath(
   // SidecarAnalyzer analyzer,
   String path,
 ) {
-  final activeContexts = ref.watch(activeContextsProvider);
-  final contextForPath = activeContexts.contextForPath(path);
-  final files =
-      ref.watch(analyzedFilesForRootProvider(contextForPath!.activeRoot));
+  final analysisContexts = ref.watch(allContextsNotifierProvider);
+  final contextForPath = analysisContexts.contextRootForPath(path);
+  final files = ref.watch(analyzedFilesForRootProvider(contextForPath!));
   return files.firstWhere((element) => element.path == path);
 }

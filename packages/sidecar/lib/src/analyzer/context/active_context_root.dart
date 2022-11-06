@@ -21,10 +21,11 @@ class ActiveContextRoot with _$ActiveContextRoot {
 
   const ActiveContextRoot._();
 
-  List<AnalyzedFile> analyzedFiles() => contextRoot
-      .analyzedFiles()
-      .map((e) => AnalyzedFile(this, Uri.parse(e)))
-      .toList();
+  // List<AnalyzedFile> analyzedFiles() => contextRoot
+  //     .analyzedFiles()
+  //     .map((e) => AnalyzedFile(this, Uri.parse(e)))
+  //     .toList();
+  List<String> analyzedFiles() => contextRoot.analyzedFiles().toList();
 
   List<Resource> get excluded => contextRoot.excluded;
 

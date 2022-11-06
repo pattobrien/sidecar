@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $sidecarAnnotationsForRootHash() =>
-    r'907aa998d4eedc61cd3b1e5c6eade16dc434ee22';
+    r'62bfd02835975589f849cff7f172514cb5c3bb50';
 
 /// See also [sidecarAnnotationsForRoot].
 class SidecarAnnotationsForRootProvider
@@ -50,7 +50,7 @@ class SidecarAnnotationsForRootProvider
                   : $sidecarAnnotationsForRootHash,
         );
 
-  final ActiveContextRoot root;
+  final Context root;
 
   @override
   bool operator ==(Object other) {
@@ -77,7 +77,7 @@ class SidecarAnnotationsForRootFamily
   SidecarAnnotationsForRootFamily();
 
   SidecarAnnotationsForRootProvider call(
-    ActiveContextRoot root,
+    Context root,
   ) {
     return SidecarAnnotationsForRootProvider(
       root,

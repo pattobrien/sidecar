@@ -1,7 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
-import '../analyzer/context/active_context_root.dart';
 import '../configurations/project/project.dart';
+import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
 
@@ -12,7 +12,7 @@ class RuleInitializationService {
   List<BaseRule> constructRules(
     ProjectConfiguration projectConfiguration,
     List<SidecarBaseConstructor> ruleConstructors,
-    ActiveContextRoot activeRoot,
+    Context activeRoot,
   ) {
     logger.finer(
         'initializing ${projectConfiguration.lintPackages?.length ?? 0} lint packages');

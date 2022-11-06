@@ -66,3 +66,75 @@ abstract class _$ActiveContextNotifier extends Notifier<ActiveContext?> {
   @override
   ActiveContext? build();
 }
+
+String $analysisContextForRootHash() =>
+    r'9593018fcc230822c79711ec109cbb8af045f3a7';
+
+/// See also [analysisContextForRoot].
+class AnalysisContextForRootProvider
+    extends AutoDisposeProvider<AnalysisContext> {
+  AnalysisContextForRootProvider(
+    this.context,
+  ) : super(
+          (ref) => analysisContextForRoot(
+            ref,
+            context,
+          ),
+          from: analysisContextForRootProvider,
+          name: r'analysisContextForRootProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : $analysisContextForRootHash,
+        );
+
+  final Context context;
+
+  @override
+  bool operator ==(Object other) {
+    return other is AnalysisContextForRootProvider && other.context == context;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, context.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+typedef AnalysisContextForRootRef = AutoDisposeProviderRef<AnalysisContext>;
+
+/// See also [analysisContextForRoot].
+final analysisContextForRootProvider = AnalysisContextForRootFamily();
+
+class AnalysisContextForRootFamily extends Family<AnalysisContext> {
+  AnalysisContextForRootFamily();
+
+  AnalysisContextForRootProvider call(
+    Context context,
+  ) {
+    return AnalysisContextForRootProvider(
+      context,
+    );
+  }
+
+  @override
+  AutoDisposeProvider<AnalysisContext> getProviderOverride(
+    covariant AnalysisContextForRootProvider provider,
+  ) {
+    return call(
+      provider.context,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => null;
+
+  @override
+  String? get name => r'analysisContextForRootProvider';
+}

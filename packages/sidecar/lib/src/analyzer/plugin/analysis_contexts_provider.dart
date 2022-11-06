@@ -2,6 +2,7 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../protocol/models/models.dart';
 import '../../services/active_project_service.dart';
 import '../context/active_context.dart';
 import 'analyzer_resource_provider.dart';
@@ -44,9 +45,12 @@ class ActiveContextNotifier extends _$ActiveContextNotifier {
   }
 }
 
-// @riverpod
-// List<AnalysisContext> allContexts(AllContextsRef ref) {
-//   final activeContext = ref.watch(activeContextNotifierProvider);
-//   activeContext.
-//   return [];
-// }
+@riverpod
+AnalysisContext analysisContextForRoot(
+  AnalysisContextForRootRef ref,
+  Context context,
+) {
+  final allContexts = ref.watch(allContextsNotifierProvider);
+  return allContexts.firstWhere((analysisContext) =>
+      analysisContext.contextRoot.root.toUri() == context.root);
+}

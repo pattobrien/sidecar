@@ -174,7 +174,7 @@ class LintResultsForFileFamily extends Family<AsyncValue<List<LintResult>>> {
   String? get name => r'lintResultsForFileProvider';
 }
 
-String $lintResultsForRootHash() => r'daa5acf49572e591be0dec1e4817a783ff3d7f46';
+String $lintResultsForRootHash() => r'97da302c19ab0c931c72df8d59bca090ab2064bd';
 
 /// See also [lintResultsForRoot].
 class LintResultsForRootProvider
@@ -194,7 +194,7 @@ class LintResultsForRootProvider
                   : $lintResultsForRootHash,
         );
 
-  final ActiveContextRoot root;
+  final Context root;
 
   @override
   bool operator ==(Object other) {
@@ -219,7 +219,7 @@ class LintResultsForRootFamily extends Family<AsyncValue<List<LintResult>>> {
   LintResultsForRootFamily();
 
   LintResultsForRootProvider call(
-    ActiveContextRoot root,
+    Context root,
   ) {
     return LintResultsForRootProvider(
       root,
@@ -246,7 +246,7 @@ class LintResultsForRootFamily extends Family<AsyncValue<List<LintResult>>> {
 }
 
 String $analysisResultsForContextHash() =>
-    r'7bb6887b550608f120dcaec13cdc19fb4755ad11';
+    r'55314139f9af2f7a18939812eeca3a36bdefab95';
 
 /// See also [analysisResultsForContext].
 class AnalysisResultsForContextProvider
@@ -266,7 +266,7 @@ class AnalysisResultsForContextProvider
                   : $analysisResultsForContextHash,
         );
 
-  final ActiveContextRoot root;
+  final Context root;
 
   @override
   bool operator ==(Object other) {
@@ -292,7 +292,7 @@ class AnalysisResultsForContextFamily extends Family<List<AnalysisResult>> {
   AnalysisResultsForContextFamily();
 
   AnalysisResultsForContextProvider call(
-    ActiveContextRoot root,
+    Context root,
   ) {
     return AnalysisResultsForContextProvider(
       root,

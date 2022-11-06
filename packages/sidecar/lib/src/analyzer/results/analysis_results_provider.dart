@@ -6,6 +6,7 @@ import '../../services/services.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/logger/logger.dart';
 import '../context/context.dart';
+import '../plugin/analyzed_files_provider.dart';
 import '../plugin/analyzer_resource_provider.dart';
 import '../plugin/rules.dart';
 import 'results.dart';
@@ -48,10 +49,10 @@ Future<List<LintResult>> lintResultsForFile(
 @riverpod
 Future<List<LintResult>> lintResultsForRoot(
   LintResultsForRootRef ref,
-  ActiveContextRoot root,
+  Context root,
 ) async {
-  final results = await Future.wait(root
-      .analyzedFiles()
+  final files = ref.watch(analyzedFilesForRootProvider(root));
+  final results = await Future.wait(files
       .map((file) async => ref.watch(lintResultsForFileProvider(file).future)));
   return results.expand((e) => e).toList();
 }
@@ -69,9 +70,9 @@ Future<List<LintResult>> lintResultsForRoot(
 @riverpod
 List<AnalysisResult> analysisResultsForContext(
   AnalysisResultsForContextRef ref,
-  ActiveContextRoot root,
+  Context root,
 ) {
-  final analyzedFiles = root.analyzedFiles();
+  final analyzedFiles = ref.watch(analyzedFilesForRootProvider(root));
   final analysisResults = analyzedFiles.map((file) =>
       ref.watch(analysisResultsForFileProvider(file)).valueOrNull ?? []);
   return analysisResults.expand((e) => e).toList();

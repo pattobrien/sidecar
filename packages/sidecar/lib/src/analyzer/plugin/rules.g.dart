@@ -170,7 +170,7 @@ class AssistRulesForFileFamily extends Family<List<AssistRule>> {
 }
 
 String $activatedRulesForRootHash() =>
-    r'931cbde7976905ceb81de807748ce22240d4cae6';
+    r'f130a2e1d8b551a1b9037a2deb2312f3d9906704';
 
 /// See also [activatedRulesForRoot].
 class ActivatedRulesForRootProvider
@@ -190,7 +190,7 @@ class ActivatedRulesForRootProvider
                   : $activatedRulesForRootHash,
         );
 
-  final ActiveContextRoot root;
+  final Context root;
 
   @override
   bool operator ==(Object other) {
@@ -215,7 +215,7 @@ class ActivatedRulesForRootFamily extends Family<List<BaseRule>> {
   ActivatedRulesForRootFamily();
 
   ActivatedRulesForRootProvider call(
-    ActiveContextRoot root,
+    Context root,
   ) {
     return ActivatedRulesForRootProvider(
       root,
@@ -242,7 +242,7 @@ class ActivatedRulesForRootFamily extends Family<List<BaseRule>> {
 }
 
 String $filteredRulesForFileHash() =>
-    r'41c6e9c016ed86a3f5e59813d97b2c5562ec6076';
+    r'a083630f6958324a70dd2dc7d4ae77ff841cf7b3';
 
 /// See also [filteredRulesForFile].
 class FilteredRulesForFileProvider extends AutoDisposeProvider<List<BaseRule>> {

@@ -30,16 +30,17 @@ class _SystemHash {
 }
 
 String $analyzedFilesForRootHash() =>
-    r'99a3db39f96b2779df343959012e0d781546774f';
+    r'e56fee0f04cbc615efb5b9c31fec4a7a6eb81890';
 
 /// See also [analyzedFilesForRoot].
-class AnalyzedFilesForRootProvider extends Provider<List<AnalyzedFile>> {
+class AnalyzedFilesForRootProvider
+    extends AutoDisposeProvider<List<AnalyzedFile>> {
   AnalyzedFilesForRootProvider(
-    this.root,
+    this.context,
   ) : super(
           (ref) => analyzedFilesForRoot(
             ref,
-            root,
+            context,
           ),
           from: analyzedFilesForRootProvider,
           name: r'analyzedFilesForRootProvider',
@@ -49,23 +50,23 @@ class AnalyzedFilesForRootProvider extends Provider<List<AnalyzedFile>> {
                   : $analyzedFilesForRootHash,
         );
 
-  final ActiveContextRoot root;
+  final Context context;
 
   @override
   bool operator ==(Object other) {
-    return other is AnalyzedFilesForRootProvider && other.root == root;
+    return other is AnalyzedFilesForRootProvider && other.context == context;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, root.hashCode);
+    hash = _SystemHash.combine(hash, context.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-typedef AnalyzedFilesForRootRef = ProviderRef<List<AnalyzedFile>>;
+typedef AnalyzedFilesForRootRef = AutoDisposeProviderRef<List<AnalyzedFile>>;
 
 /// See also [analyzedFilesForRoot].
 final analyzedFilesForRootProvider = AnalyzedFilesForRootFamily();
@@ -74,19 +75,19 @@ class AnalyzedFilesForRootFamily extends Family<List<AnalyzedFile>> {
   AnalyzedFilesForRootFamily();
 
   AnalyzedFilesForRootProvider call(
-    ActiveContextRoot root,
+    Context context,
   ) {
     return AnalyzedFilesForRootProvider(
-      root,
+      context,
     );
   }
 
   @override
-  Provider<List<AnalyzedFile>> getProviderOverride(
+  AutoDisposeProvider<List<AnalyzedFile>> getProviderOverride(
     covariant AnalyzedFilesForRootProvider provider,
   ) {
     return call(
-      provider.root,
+      provider.context,
     );
   }
 
@@ -101,7 +102,7 @@ class AnalyzedFilesForRootFamily extends Family<List<AnalyzedFile>> {
 }
 
 String $analyzedFileForPathHash() =>
-    r'171951309a2a70e262f3e782a82a195323691f26';
+    r'0e0d4d0588ad192235eb655dcfac40c9643c8ae6';
 
 /// See also [analyzedFileForPath].
 class AnalyzedFileForPathProvider extends AutoDisposeProvider<AnalyzedFile> {

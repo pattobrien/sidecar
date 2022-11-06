@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
 
+import '../../protocol/models/models.dart';
 import '../../utils/file_paths.dart';
-import 'context.dart';
 
 part 'analyzed_file.freezed.dart';
 
@@ -13,7 +13,7 @@ part 'analyzed_file.freezed.dart';
 /// This was created to be type-safe.
 class AnalyzedFile with _$AnalyzedFile {
   const factory AnalyzedFile(
-    ActiveContextRoot activeRoot,
+    Context context,
     Uri fileUri,
   ) = _AnalyzedFile;
 
@@ -26,5 +26,5 @@ class AnalyzedFile with _$AnalyzedFile {
   bool get isAnalysisOptionsFile => relativePath == kAnalysisOptionsYaml;
   bool get isSidecarYamlFile => relativePath == kSidecarYaml;
 
-  String get relativePath => p.relative(path, from: activeRoot.root.path);
+  String get relativePath => p.relative(path, from: context.root.path);
 }

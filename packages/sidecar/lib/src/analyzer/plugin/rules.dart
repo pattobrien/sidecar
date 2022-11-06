@@ -1,12 +1,11 @@
-import 'package:path/path.dart' as p;
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../configurations/configurations.dart';
+import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
 import '../../services/services.dart';
 import '../context/context.dart';
-import 'active_contexts_provider.dart';
+import 'analysis_contexts_provider.dart';
 import 'rule_constructors_provider.dart';
 
 part 'rules.g.dart';
@@ -32,9 +31,9 @@ List<AssistRule> assistRulesForFile(
 @riverpod
 List<BaseRule> activatedRulesForRoot(
   ActivatedRulesForRootRef ref,
-  ActiveContextRoot root,
+  Context root,
 ) {
-  final context = ref.watch(activeContextForRootProvider(root));
+  final context = ref.watch(activeContextNotifierProvider)!;
   final constructors = ref.watch(ruleConstructorProvider);
   final ruleService = ref.watch(ruleInitializationServiceProvider);
   return ruleService.constructRules(context.sidecarOptions, constructors, root);
@@ -45,8 +44,8 @@ List<BaseRule> filteredRulesForFile(
   FilteredRulesForFileRef ref,
   AnalyzedFile file,
 ) {
-  final allRules = ref.watch(activatedRulesForRootProvider(file.activeRoot));
-  final context = ref.watch(activeContextForRootProvider(file.activeRoot));
+  final allRules = ref.watch(activatedRulesForRootProvider(file.context));
+  final context = ref.watch(activeContextNotifierProvider)!;
   return allRules
       .where((rule) => _isPathIncludedForRule(
           file: file, rule: rule, projectConfiguration: context.sidecarOptions))

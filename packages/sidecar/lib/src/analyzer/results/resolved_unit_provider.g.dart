@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $getResolvedUnitForFileHash() =>
-    r'8cc647ac812e23716b14d458ac78d7725d837c64';
+    r'1652fabcf563af1dcec7f9499e71e479b104431f';
 
 /// See also [getResolvedUnitForFile].
 class GetResolvedUnitForFileProvider
