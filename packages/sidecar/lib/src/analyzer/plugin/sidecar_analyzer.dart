@@ -88,6 +88,17 @@ class SidecarAnalyzer {
     });
   }
 
+  Future<SetActiveRootResponse> handleSetActiveRoot(
+    SetActiveRootRequest request,
+  ) async {
+    final activeContextRoot = request.root;
+    _ref
+        .read(activeContextNotifierProvider.notifier)
+        .updateRoot(activeContextRoot);
+    // print('active context root set to: ${activeContextRoot.path}');
+    return const SetActiveRootResponse();
+  }
+
   Future<ContextCollectionResponse> handleAnalysisSetContextRoots(
     SetContextCollectionRequest request,
   ) async {
@@ -117,12 +128,14 @@ class SidecarAnalyzer {
   Future<void> handleRequest(RequestMessage msg) async {
     final id = msg.id;
     final unparsedRequest = msg.request;
-    final response = await unparsedRequest.mapOrNull<Future<SidecarResponse?>>(
+    final response = await unparsedRequest.map<Future<SidecarResponse?>>(
+      setActiveRoot: handleSetActiveRoot,
       setContextCollection: handleAnalysisSetContextRoots,
       updateFiles: handleAnalysisUpdateContent,
       // quickFix: handleEditGetFixes,
-      // assist: (request) => Future.value(),
-      // fileUpdate: (request) => Future.value(),
+      quickFix: (request) => Future.value(),
+      assist: (request) => Future.value(),
+      lint: (value) => Future.value(),
     );
 
     if (response != null) {

@@ -59,6 +59,7 @@ class SidecarRunner {
     _lints.listen(handleLints);
 
     await _initializationCompleter.future;
+    await _requestSetActiveRoot();
     await _requestSetContext();
   }
 
@@ -88,6 +89,12 @@ class SidecarRunner {
     return lintNotification.lints;
   }
 
+  Future<void> _requestSetActiveRoot() async {
+    final mainContextRoot = context.activeRoot.root.toUri();
+    final request = SetActiveRootRequest(mainContextRoot);
+    await asyncRequest(request);
+  }
+
   Future<void> _requestSetContext() async {
     final mainContext = context;
     final allContexts = [mainContext.activeRoot.root.path, ...contextRoots];
@@ -97,7 +104,8 @@ class SidecarRunner {
   }
 
   Future<T> asyncRequest<T extends SidecarResponse>(
-      SidecarRequest request) async {
+    SidecarRequest request,
+  ) async {
     final id = const Uuid().v4();
     final wrappedRequest = SidecarMessage.request(request: request, id: id);
     final json = wrappedRequest.toJson();

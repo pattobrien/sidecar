@@ -13,6 +13,8 @@ part 'sidecar_request.g.dart';
 class SidecarRequest with _$SidecarRequest {
   const SidecarRequest._();
 
+  const factory SidecarRequest.setActiveRoot(Uri root) = SetActiveRootRequest;
+
   const factory SidecarRequest.setContextCollection({
     required String mainRoot,
     required List<String> roots,

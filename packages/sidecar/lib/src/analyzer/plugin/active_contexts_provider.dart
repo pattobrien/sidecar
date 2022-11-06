@@ -60,7 +60,7 @@ ActiveContext activeContextForRoot(
 @Riverpod(keepAlive: true)
 List<ActiveContextRoot> activeContextRoots(
   ActiveContextRootsRef ref,
-  SidecarAnalyzer analyzer,
+  // SidecarAnalyzer analyzer,
 ) {
   return ref.watch(activeContextsProvider).map((e) => e.activeRoot).toList();
 }

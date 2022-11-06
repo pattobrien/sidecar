@@ -111,72 +111,14 @@ class ActiveContextForRootFamily extends Family<ActiveContext> {
   String? get name => r'activeContextForRootProvider';
 }
 
-String $activeContextRootsHash() => r'4df2cb5f0b681dc8ee433fe62722c1dbd54a5fc5';
+String $activeContextRootsHash() => r'a956ff0e9960d506e5e56824de1fab44a6266136';
 
 /// See also [activeContextRoots].
-class ActiveContextRootsProvider extends Provider<List<ActiveContextRoot>> {
-  ActiveContextRootsProvider(
-    this.analyzer,
-  ) : super(
-          (ref) => activeContextRoots(
-            ref,
-            analyzer,
-          ),
-          from: activeContextRootsProvider,
-          name: r'activeContextRootsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : $activeContextRootsHash,
-        );
-
-  final SidecarAnalyzer analyzer;
-
-  @override
-  bool operator ==(Object other) {
-    return other is ActiveContextRootsProvider && other.analyzer == analyzer;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, analyzer.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
+final activeContextRootsProvider = Provider<List<ActiveContextRoot>>(
+  activeContextRoots,
+  name: r'activeContextRootsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : $activeContextRootsHash,
+);
 typedef ActiveContextRootsRef = ProviderRef<List<ActiveContextRoot>>;
-
-/// See also [activeContextRoots].
-final activeContextRootsProvider = ActiveContextRootsFamily();
-
-class ActiveContextRootsFamily extends Family<List<ActiveContextRoot>> {
-  ActiveContextRootsFamily();
-
-  ActiveContextRootsProvider call(
-    SidecarAnalyzer analyzer,
-  ) {
-    return ActiveContextRootsProvider(
-      analyzer,
-    );
-  }
-
-  @override
-  Provider<List<ActiveContextRoot>> getProviderOverride(
-    covariant ActiveContextRootsProvider provider,
-  ) {
-    return call(
-      provider.analyzer,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'activeContextRootsProvider';
-}

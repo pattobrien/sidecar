@@ -32,7 +32,7 @@ class ActiveProjectService {
       final packages = getSidecarDependencies(contextUri);
       final projectConfig = getSidecarOptions(contextUri);
       final packageConfigJson = getPackageConfig(contextUri);
-      final context = getAnalysisContextForRoot(contextUri,
+      final context = _createAnalysisContextForUri(contextUri,
           resourceProvider: resourceProvider);
 
       return ActiveContext(
@@ -52,7 +52,6 @@ class ActiveProjectService {
 
   ActiveContext? getActiveContext(
     AnalysisContext context,
-    //  { ResourceProvider? resourceProvider, }
   ) {
     try {
       final contextUri = context.contextRoot.root.toUri();
@@ -62,8 +61,6 @@ class ActiveProjectService {
       final packages = getSidecarDependencies(contextUri);
       final projectConfig = getSidecarOptions(contextUri);
       final packageConfigJson = getPackageConfig(contextUri);
-      // final context = getAnalysisContextForRoot(contextUri,
-      //     resourceProvider: resourceProvider);
 
       return ActiveContext(
         context: context,
@@ -80,7 +77,7 @@ class ActiveProjectService {
     }
   }
 
-  AnalysisContext getAnalysisContextForRoot(
+  AnalysisContext _createAnalysisContextForUri(
     Uri root, {
     ResourceProvider? resourceProvider,
   }) {
@@ -106,35 +103,12 @@ class ActiveProjectService {
 
     if (projectConfig == null ||
         pluginUri == null ||
-        // !root.isSidecarEnabled ||
+        //TODO: !root.isSidecarEnabled ||
         packages.isEmpty) {
       return false;
     }
     return true;
   }
-
-  List<AnalysisContext> getAllContextsFromPath(
-    List<String> includePaths, {
-    List<String>? excludePaths,
-  }) {
-    final collection = AnalysisContextCollection(
-        includedPaths: includePaths, excludedPaths: excludePaths);
-    return collection.contexts;
-  }
-
-  // List<ActiveContext> getActiveContextsFromPath(
-  //   List<String> paths, {
-  //   ResourceProvider? resourceProvider,
-  // }) {
-  //   final collection = AnalysisContextCollection(includedPaths: paths);
-  //   return collection.contexts
-  //       .map((e) => initializeContext(
-  //             e,
-  //             resourceProvider: resourceProvider,
-  //           ))
-  //       .whereType<ActiveContext>()
-  //       .toList();
-  // }
 
   /// Finds any contexts that
   List<ActiveContext> getActiveDependencies(

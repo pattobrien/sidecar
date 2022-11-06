@@ -20,6 +20,8 @@ class SidecarResponse with _$SidecarResponse {
 
   const factory SidecarResponse.updateFiles() = UpdateFilesResponse;
 
+  const factory SidecarResponse.setActiveRoot() = SetActiveRootResponse;
+
   factory SidecarResponse.fromJson(Map<String, dynamic> json) =>
       _$SidecarResponseFromJson(json);
 }

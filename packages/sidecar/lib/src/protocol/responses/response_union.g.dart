@@ -71,3 +71,15 @@ Map<String, dynamic> _$$UpdateFilesResponseToJson(
     <String, dynamic>{
       'runtimeType': instance.$type,
     };
+
+_$SetActiveRootResponse _$$SetActiveRootResponseFromJson(
+        Map<String, dynamic> json) =>
+    _$SetActiveRootResponse(
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$SetActiveRootResponseToJson(
+        _$SetActiveRootResponse instance) =>
+    <String, dynamic>{
+      'runtimeType': instance.$type,
+    };
