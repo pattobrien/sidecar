@@ -34,7 +34,7 @@ class IsolateBuilderService {
 
   ServerIsolateChannel _startNewIsolate(ActiveContext activeContext) {
     // create executable file with lints from packages
-    _setupPluginSourceFiles(activeContext);
+    setupPluginSourceFiles(activeContext);
     setupBootstrapper(activeContext);
 
     // start isolate
@@ -56,7 +56,7 @@ class IsolateBuilderService {
     details.channel.close();
   }
 
-  void _setupPluginSourceFiles(ActiveContext activeContext) {
+  void setupPluginSourceFiles(ActiveContext activeContext) {
     final sourceExecutableDirectory = Directory(p.join(
         activeContext.pluginSourceUri.toFilePath(windows: Platform.isWindows),
         'tools',
@@ -95,7 +95,7 @@ class IsolateBuilderService {
         channel: channel, activeRoot: activeContext.activeRoot);
   }
 
-  @visibleForTesting
+  // @visibleForTesting
   void setupBootstrapper(ActiveContext activeContext) {
     final bootstrapperPath = p.join(
         _packageToolDirectory(activeContext.activeRoot).path,
