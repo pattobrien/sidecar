@@ -21,9 +21,7 @@ import '../../protocol/protocol.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/utils.dart';
-import '../../utils/analysis_context_utilities.dart';
 import '../context/active_context.dart';
-import '../context/analyzed_file.dart';
 import '../options_provider.dart';
 import 'analysis_context_providers.dart';
 import 'isolates/isolates.dart';
@@ -172,6 +170,33 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
     return plugin.EditGetFixesResult(fixes);
   }
 
+  /// Handle an 'analysis.handleWatchEvents' request.
+  ///
+  /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  @override
+  Future<plugin.AnalysisHandleWatchEventsResult>
+      handleAnalysisHandleWatchEvents(
+    plugin.AnalysisHandleWatchEventsParams parameters,
+  ) async {
+    for (final event in parameters.events) {
+      switch (event.type) {
+        case plugin.WatchEventType.ADD:
+          // TODO(brianwilkerson) Handle the event.
+          break;
+        case plugin.WatchEventType.MODIFY:
+          await contentChanged([event.path]);
+          break;
+        case plugin.WatchEventType.REMOVE:
+          // TODO(brianwilkerson) Handle the event.
+          break;
+        default:
+          // Ignore unhandled watch event types.
+          break;
+      }
+    }
+    return plugin.AnalysisHandleWatchEventsResult();
+  }
+
   /// Handle an 'edit.getAssists' request.
   ///
   /// Throw a [plugin.RequestFailure] if the request could not be handled.
@@ -245,10 +270,6 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
 
         final sidecarRequest = SidecarRequest.updateFiles(runnerEvents);
         return runner.asyncRequest<UpdateFilesResponse>(sidecarRequest);
-        // final allRunners = ref.read(runnersProvider);
-
-        // final anyErrors = messages.every((msg) => msg is! SidecarResponse);
-        // assert(!anyErrors, 'errors received');
       }));
     }));
     return plugin.AnalysisUpdateContentResult();
@@ -351,7 +372,7 @@ final middlemanPluginProvider = Provider<MiddlemanPluginNew>(
   name: 'middlemanPluginProvider',
   dependencies: [
     cliOptionsProvider,
-    isolateDetailsProvider,
+    // isolateDetailsProvider,
     masterPluginChannelProvider,
     allContextsProvider,
     // isolateCommunicationServiceProvider,
@@ -359,6 +380,3 @@ final middlemanPluginProvider = Provider<MiddlemanPluginNew>(
     // middlemanPluginIsInitializedProvider,
   ],
 );
-
-// final middlemanPluginIsInitializedProvider =
-//     StateProvider<bool>((ref) => false);

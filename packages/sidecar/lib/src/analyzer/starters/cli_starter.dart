@@ -87,6 +87,7 @@ Future<void> startSidecarCli(
           final hotReloader = await HotReloader.create(
             onAfterReload: (c) {
               print('\n${DateTime.now().toIso8601String()} RELOADING...\n');
+              print('${c.events?.length ?? 0} file changes: ${c.events ?? []}');
               final elements = container.getAllProviderElements();
               final numberOfRunners =
                   elements.where((e) => e.origin == runnersProvider);

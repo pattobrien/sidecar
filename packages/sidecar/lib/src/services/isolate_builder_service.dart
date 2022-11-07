@@ -1,60 +1,53 @@
-// ignore_for_file: implementation_imports
-
 import 'dart:io';
 
-import 'package:analyzer/dart/analysis/context_root.dart';
-import 'package:analyzer/instrumentation/noop_service.dart';
-import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/context/context.dart';
 import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
-import '../protocol/protocol.dart';
 import '../utils/file_paths.dart';
 import '../utils/logger/logger.dart';
 
 class IsolateBuilderService {
   const IsolateBuilderService();
 
-  IsolateDetails startIsolate(ActiveContext activeContext) {
-    logger.finer('STARTING ISOLATE');
-    return IsolateDetails(
-      channel: _startNewIsolate(activeContext),
-      activeRoot: activeContext.activeRoot,
-    );
-  }
+  // IsolateDetails startIsolate(ActiveContext activeContext) {
+  //   logger.finer('STARTING ISOLATE');
+  //   return IsolateDetails(
+  //     channel: _startNewIsolate(activeContext),
+  //     activeRoot: activeContext.activeRoot,
+  //   );
+  // }
 
-  IsolateDetails updateContext(
-      IsolateDetails previousDetails, ActiveContext newContext) {
-    return _restartIsolate(previousDetails, activeContext: newContext);
-  }
+  // IsolateDetails updateContext(
+  //     IsolateDetails previousDetails, ActiveContext newContext) {
+  //   return _restartIsolate(previousDetails, activeContext: newContext);
+  // }
 
-  ServerIsolateChannel _startNewIsolate(ActiveContext activeContext) {
-    // create executable file with lints from packages
-    setupPluginSourceFiles(activeContext);
-    setupBootstrapper(activeContext);
+  // ServerIsolateChannel _startNewIsolate(ActiveContext activeContext) {
+  //   // create executable file with lints from packages
+  //   setupPluginSourceFiles(activeContext);
+  //   setupBootstrapper(activeContext);
 
-    // start isolate
-    final packagesUri = _packagesUri(activeContext.activeRoot);
-    final executableUri = _executableUri(activeContext.activeRoot);
+  //   // start isolate
+  //   final packagesUri = _packagesUri(activeContext.activeRoot);
+  //   final executableUri = _executableUri(activeContext.activeRoot);
 
-    logger.finer(
-        'plugin isolate details: package_config.json=${packagesUri.path} || executable=${executableUri.path}');
-    final pluginIsolateChannel = ServerIsolateChannel.discovered(
-      executableUri,
-      packagesUri,
-      NoopInstrumentationService(),
-    );
+  //   logger.finer(
+  //       'plugin isolate details: package_config.json=${packagesUri.path} || executable=${executableUri.path}');
+  //   final pluginIsolateChannel = ServerIsolateChannel.discovered(
+  //     executableUri,
+  //     packagesUri,
+  //     NoopInstrumentationService(),
+  //   );
 
-    return pluginIsolateChannel;
-  }
+  //   return pluginIsolateChannel;
+  // }
 
-  void shutdownIsolate(IsolateDetails details) {
-    details.channel.close();
-  }
+  // void shutdownIsolate(IsolateDetails details) {
+  //   details.channel.close();
+  // }
 
   void setupPluginSourceFiles(ActiveContext activeContext) {
     final sourceExecutableDirectory = Directory(p.join(
@@ -84,16 +77,16 @@ class IsolateBuilderService {
     });
   }
 
-  IsolateDetails _restartIsolate(
-    IsolateDetails previousDetails, {
-    required ActiveContext activeContext,
-  }) {
-    final channel = _startNewIsolate(activeContext);
+  // IsolateDetails _restartIsolate(
+  //   IsolateDetails previousDetails, {
+  //   required ActiveContext activeContext,
+  // }) {
+  //   final channel = _startNewIsolate(activeContext);
 
-    shutdownIsolate(previousDetails);
-    return IsolateDetails(
-        channel: channel, activeRoot: activeContext.activeRoot);
-  }
+  //   shutdownIsolate(previousDetails);
+  //   return IsolateDetails(
+  //       channel: channel, activeRoot: activeContext.activeRoot);
+  // }
 
   // @visibleForTesting
   void setupBootstrapper(ActiveContext activeContext) {

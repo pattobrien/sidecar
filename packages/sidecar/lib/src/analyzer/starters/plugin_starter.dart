@@ -28,7 +28,7 @@ Future<void> startSidecarPlugin(
           // logDelegateProvider.overrideWithValue(delegate),
         ],
         observers: [
-          // PluginObserver(cliOptions, channel),
+          PluginObserver(cliOptions, channel),
         ],
       );
 
@@ -43,7 +43,7 @@ Future<void> startSidecarPlugin(
     delegate.sidecarError,
     zoneSpecification: ZoneSpecification(
       print: (self, parent, zone, line) {
-        // delegate.sidecarLog(line);
+        delegate.sidecarLog(line);
       },
     ),
   );

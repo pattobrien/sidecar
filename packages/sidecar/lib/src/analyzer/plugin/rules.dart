@@ -19,24 +19,6 @@ List<LintRule> lintRulesForFile(
       .select((rules) => rules.whereType<LintRule>().toList()));
 }
 
-// @riverpod
-// List<LintRule> lintRulesForRoot(
-//   LintRulesForRootRef ref,
-//   Context root,
-// ) {
-//   return ref.watch(activatedRulesForRootProvider(root)
-//       .select((rules) => rules.whereType<LintRule>().toList()));
-// }
-
-// @riverpod
-// List<AssistRule> assistRulesForRoot(
-//   AssistRulesForRootRef ref,
-//   Context root,
-// ) {
-//   return ref.watch(activatedRulesForRootProvider(root)
-//       .select((rules) => rules.whereType<AssistRule>().toList()));
-// }
-
 @riverpod
 List<AssistRule> assistRulesForFile(
   AssistRulesForFileRef ref,
@@ -52,7 +34,6 @@ List<BaseRule> activatedRulesForRoot(
   Context root,
 ) {
   final context = ref.watch(activeContextNotifierProvider);
-  // assert(context != null, 'expected to find one context');
   final constructors = ref.watch(ruleConstructorProvider);
   final ruleService = ref.watch(ruleInitializationServiceProvider);
   return ruleService.constructRules(context.sidecarOptions, constructors, root);
@@ -67,8 +48,6 @@ List<BaseRule> filteredRulesForFile(
   final context = ref.watch(activeContextNotifierProvider);
 
   return allRules.where((rule) {
-    // final relativePath = file.relativePath;
-    // final contextPath = file.context.root.path;
     final isPathIncluded = _isPathIncludedForRule(
         file: file, rule: rule, projectConfiguration: context.sidecarOptions);
     return isPathIncluded;

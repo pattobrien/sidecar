@@ -106,7 +106,7 @@ final middlemanPluginProvider = Provider<MiddlemanPluginNew>(
   name: 'middlemanPluginProvider',
   dependencies: [
     cliOptionsProvider,
-    isolateDetailsProvider,
+    // isolateDetailsProvider,
     masterPluginChannelProvider,
     allContextsProvider,
     isolateCommunicationServiceProvider,

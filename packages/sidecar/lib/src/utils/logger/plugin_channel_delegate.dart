@@ -1,8 +1,7 @@
 import 'dart:io' as io;
-import 'package:path/path.dart' as p;
 
 import 'package:analyzer_plugin/channel/channel.dart';
-import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
+import 'package:path/path.dart' as p;
 
 import '../../cli/options/cli_options.dart';
 import '../../protocol/protocol.dart';
@@ -16,12 +15,12 @@ class PluginChannelDelegate implements LogDelegateBase {
   final PluginCommunicationChannel channel;
 
   void _log(String message) {
-    const url = '/Users/pattobrien/Development/sidecar';
-    final logFile =
-        io.File(p.join(url, '.sidecar', 'sidecar_logs', 'middleman.txt'));
-    // if (!logFile.existsSync()) logFile.create(recursive: true);
-    logFile.writeAsStringSync('\nMIDDLEMANDELEGATE: $message',
-        mode: io.FileMode.append, flush: true);
+    // const url = '/Users/pattobrien/Development/sidecar';
+    // final logFile =
+    //     io.File(p.join(url, '.sidecar', 'sidecar_logs', 'middleman.txt'));
+    // // if (!logFile.existsSync()) logFile.create(recursive: true);
+    // logFile.writeAsStringSync('\nMIDDLEMANDELEGATE: $message',
+    //     mode: io.FileMode.append, flush: true);
   }
 
   @override

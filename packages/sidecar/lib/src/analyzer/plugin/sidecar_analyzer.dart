@@ -72,7 +72,7 @@ class SidecarAnalyzer {
   void _setupListeners() {
     // _sendPort.send(receivePort.sendPort);
     stream.listen((dynamic event) {
-      // print('event: $event');
+      // logger.info('event: $event');
       if (event is String) {
         try {
           final json = jsonDecode(event) as Map<String, dynamic>;
@@ -87,15 +87,6 @@ class SidecarAnalyzer {
       }
       if (event is Map<String, dynamic>) {
         throw UnimplementedError('invalid message map : $event');
-        // try {
-        //   final message = SidecarMessage.fromJson(event);
-        //   if (message is RequestMessage) {
-        //     handleRequest(message);
-        //     return;
-        //   }
-        // } catch (e) {
-        //   //
-        // }
       }
       throw UnimplementedError('unknown type received: ${event.runtimeType}');
     });
@@ -164,18 +155,10 @@ class SidecarAnalyzer {
     );
 
     if (response != null) {
-      final wrappedResponse =
-          SidecarMessage.response(response: response, id: id);
-      // final json = wrappedResponse.toJson();
-      // final encodedJson = jsonEncode(json);
-      // print('response: $encodedJson');
-      // sendPort.send(encodedJson);
-      sendToRunner(wrappedResponse);
+      final message = SidecarMessage.response(response: response, id: id);
+      sendToRunner(message);
     }
   }
-
-  // TODO: find a way to keep collection from being disposed of automatically
-  // late AnalysisContextCollection _collection;
 
   // Overridden to allow for non-Dart files to be analyzed for changes
 
@@ -189,32 +172,33 @@ class SidecarAnalyzer {
       final affected = await analysisContext.applyPendingFileChanges();
 
       // sidecar custom implementation to analyze all non-dart files
-      final nonDartPathsInContext = paths
-          .where((e) => analysisContext.contextRoot.isAnalyzed(e))
-          .where((path) => p.extension(path) != '.dart');
+      // TODO: including all files is causing a lot of performance issues
+      // final nonDartPathsInContext = paths
+      //     .where((e) => analysisContext.contextRoot.isAnalyzed(e))
+      //     .where((path) => p.extension(path) != '.dart');
 
       await handleAffectedFiles(
-        // analysisContext: analysisContext,
-        paths: [...affected, ...nonDartPathsInContext],
-        // paths: affected,
+        analysisContext: analysisContext,
+        // paths: [...affected, ...nonDartPathsInContext],
+        paths: affected,
       );
     });
   }
 
   Future<void> handleAffectedFiles({
-    // required AnalysisContext analysisContext,
+    required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
-    final analysisContexts = _ref.read(allContextsNotifierProvider);
-    for (final analysisContext in analysisContexts) {
-      final files = paths
-          .map((e) => _ref.read(analyzedFileForPathProvider(e)))
-          .where((element) =>
-              element.context.root == analysisContext.contextRoot.root.toUri())
-          .toList();
+    // final analysisContexts = _ref.read(allContextsNotifierProvider);
+    // for (final analysisContext in analysisContexts) {
+    final files = paths
+        .map((e) => _ref.read(analyzedFileForPathProvider(e)))
+        .where((element) =>
+            element.context.root == analysisContext.contextRoot.root.toUri())
+        .toList();
 
-      await analyzeFiles(files: files);
-    }
+    await analyzeFiles(files: files);
+    // }
   }
 
   Future<void> _forAnalysisContexts(
@@ -240,7 +224,7 @@ class SidecarAnalyzer {
   }
 
   //TODO utilize priority paths
-  static Set<String> priorityPaths = {};
+  final Set<String> priorityPaths = {};
 
   Future<void> analyzeFiles({
     // required AnalysisContext analysisContext,
