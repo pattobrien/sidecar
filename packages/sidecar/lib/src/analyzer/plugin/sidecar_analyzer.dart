@@ -145,10 +145,12 @@ class SidecarAnalyzer {
     logger.severe('afterNewContextCollection');
     await _forAnalysisContexts((analysisContext) async {
       final paths = analysisContext.contextRoot.analyzedFiles().toList();
+      final files =
+          paths.map((e) => _ref.read(analyzedFileForPathProvider(e))).toList();
       logger.info('afterNewContextCollection files: ${paths.toList()}');
       await analyzeFiles(
         // analysisContext: analysisContext,
-        paths: paths,
+        files: files,
       );
     });
   }
@@ -210,14 +212,13 @@ class SidecarAnalyzer {
   }) async {
     final analysisContexts = _ref.read(allContextsNotifierProvider);
     for (final analysisContext in analysisContexts) {
-      final analyzedPaths = paths
-          .where(analysisContext.contextRoot.isAnalyzed)
-          .toList(growable: false);
+      final files = paths
+          .map((e) => _ref.read(analyzedFileForPathProvider(e)))
+          .where((element) =>
+              element.context.root == analysisContext.contextRoot.root.toUri())
+          .toList();
 
-      await analyzeFiles(
-        // analysisContext: analysisContext,
-        paths: analyzedPaths,
-      );
+      await analyzeFiles(files: files);
     }
   }
 
@@ -248,16 +249,15 @@ class SidecarAnalyzer {
 
   Future<void> analyzeFiles({
     // required AnalysisContext analysisContext,
-    required List<String> paths,
+    required List<AnalyzedFile> files,
   }) async {
-    logger.finest('${DateTime.now()} starting analyzing files: $paths');
-    await Future.wait(paths.map((path) async {
+    logger.finest('${DateTime.now()} starting analyzing files: $files');
+    await Future.wait(files.map((file) async {
       try {
-        final file = _ref.read(analyzedFileForPathProvider(path));
         await _ref.read(getResolvedUnitForFileProvider(file).future);
         final results =
             await _ref.read(createAnalysisReportProvider(file).future);
-        final notification = LintNotification(path, results);
+        final notification = LintNotification(file, results);
         communication.sendNotification(notification);
       } catch (e, stackTrace) {
         logger.severe('analyzeFiles', e, stackTrace);

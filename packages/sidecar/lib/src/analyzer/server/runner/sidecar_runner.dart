@@ -13,6 +13,7 @@ import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
 import '../../../utils/printer/lint_printer.dart';
 import '../../context/active_context.dart';
+import '../../context/context.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
 import 'message_providers.dart';
@@ -114,39 +115,37 @@ class SidecarRunner {
         .firstWhereOrNull((element) => element.contextRoot.isAnalyzed(path));
   }
 
-  Future<List<LintResult>> requestLintsForFile(String path) async {
-    final contents = resourceProvider.getFile(path).readAsStringSync();
-    final fileUpdateEvent = FileUpdateEvent.add(Uri.parse(path), contents);
+  Future<List<LintResult>> requestLintsForFile(AnalyzedFile file) async {
+    final contents = resourceProvider.getFile(file.path).readAsStringSync();
+    final fileUpdateEvent = FileUpdateEvent.add(file, contents);
     final request = FileUpdateRequest([fileUpdateEvent]);
     // print(request.toJson());
     unawaited(asyncRequest<UpdateFilesResponse>(request));
     final lintNotification =
-        await lints.firstWhere((element) => element.path == path);
+        await lints.firstWhere((element) => element.file == file);
     // print('received lints: ${lintNotification.toJson()}');
     return lintNotification.lints;
   }
 
   Future<void> requestSetActiveRoot() async {
-    print('_requestSetActiveRoot');
+    // print('_requestSetActiveRoot');
     final mainContextRoot = context.activeRoot.root.toUri();
     final request = SetActiveRootRequest(mainContextRoot);
     await asyncRequest(request);
-    print('_requestSetActiveRoot completed');
+    // print('_requestSetActiveRoot completed');
   }
 
   Future<ContextCollectionResponse> requestSetContext() async {
-    print('_requestSetContext');
+    // print('_requestSetContext');
     final mainContext = context;
     final allContextRootPaths = <String>[
       mainContext.activeRoot.root.path,
       ...mainContext.allRoots.map((e) => e.contextRoot.root.path),
     ];
-    // print('_requestSetContext: ${mainContext.activeRoot.root.path}');
-    // print('_requestSetContext: ${allContextRootPaths.length} contexts total');
     final request = SetContextCollectionRequest(
         mainRoot: mainContext.activeRoot.root.path, roots: allContextRootPaths);
     final response = await asyncRequest<ContextCollectionResponse>(request);
-    print('_requestSetContext completed');
+    // print('_requestSetContext completed');
     return response;
   }
 

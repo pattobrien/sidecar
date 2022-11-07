@@ -9,7 +9,6 @@ import 'package:riverpod/riverpod.dart';
 import '../../cli/options/cli_options.dart';
 import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
-import '../server/log_delegate.dart';
 import '../server/server.dart';
 
 Future<void> startSidecarPlugin(

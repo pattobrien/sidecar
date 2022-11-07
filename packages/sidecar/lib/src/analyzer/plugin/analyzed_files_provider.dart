@@ -1,3 +1,4 @@
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../protocol/models/models.dart';
@@ -18,12 +19,23 @@ List<AnalyzedFile> analyzedFilesForRoot(
       .toList();
 }
 
-//TODO: can we remove the analyzer parameter from here
-// and depend only on a ContextRoot ?
+// @riverpod
+// List<AnalyzedFile> analyzedFilesForContext(
+//   AnalyzedFilesForRootRef ref,
+//   AnalysisContext context,
+// ) {
+//   final filePaths = context.contextRoot.analyzedFiles();
+//   // filePaths.map((e) => ref.watch(analyzedFileForPathProvider(e)));
+//   // final ctx = ;
+//   // return ctx.contextRoot
+//   //     .analyzedFiles()
+//   //     .map((e) => AnalyzedFile(context, Uri.parse(e)))
+//   //     .toList();
+// }
+
 @riverpod
 AnalyzedFile analyzedFileForPath(
   AnalyzedFileForPathRef ref,
-  // SidecarAnalyzer analyzer,
   String path,
 ) {
   final analysisContexts = ref.watch(allContextsNotifierProvider);

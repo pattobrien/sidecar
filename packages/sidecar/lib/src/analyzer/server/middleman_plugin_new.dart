@@ -54,9 +54,6 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
 
   CliOptions get options => ref.read(cliOptionsProvider);
 
-  // IsolateCommunicationService get isolateService =>
-  //     ref.read(isolateCommunicationServiceProvider);
-
   @override
   void start(plugin.PluginCommunicationChannel channel) {
     logger.onRecord.listen((event) {});
@@ -132,8 +129,8 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
         case plugin.PLUGIN_REQUEST_SHUTDOWN:
           final params = plugin.PluginShutdownParams();
           result = await handlePluginShutdown(params);
-          // _channel.sendResponse(result.toResponse(request.id, requestTime));
-          // _channel.close();
+          channel.sendResponse(result.toResponse(request.id, requestTime));
+          channel.close();
           break;
         case plugin.PLUGIN_REQUEST_VERSION_CHECK:
           final params = plugin.PluginVersionCheckParams.fromRequest(request);
@@ -157,21 +154,9 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
   /// Throw a [plugin.RequestFailure] if the request could not be handled.
   @override
   Future<plugin.EditGetFixesResult> handleEditGetFixes(
-      plugin.EditGetFixesParams parameters) async {
+    plugin.EditGetFixesParams parameters,
+  ) async {
     final runners = ref.watch(runnersProvider);
-    // for (final runner in runners) {
-    //   final path = parameters.file;
-    //   final context = runner.getContextForPath(path);
-    //   if (context == null) continue;
-    //   final analyzedFile = AnalyzedFile(
-    //       Context(root: context.contextRoot.root.toUri()), Uri.parse(path));
-    // final assistRequest =
-    //     QuickFixRequest(file: analyzedFile, offset: parameters.offset);
-    // final response =
-    //     await runner.asyncRequest<QuickFixResponse>(assistRequest);
-    // return plugin.EditGetFixesResult(
-    //     response.results.map((e) => e.toAnalysisErrorFixes()).toList());
-    // }
     final responses = await Future.wait(runners.map((runner) async {
       final path = parameters.file;
       final context = runner.getContextForPath(path);
@@ -182,16 +167,12 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
           QuickFixRequest(file: analyzedFile, offset: parameters.offset);
       return runner.asyncRequest<QuickFixResponse>(assistRequest);
     }));
-
-    // return plugin.EditGetFixesResult(
-    //     response.results.map((e) => e.toAnalysisErrorFixes()).toList());
-    final parsedResponses = responses
+    final fixes = responses
         .whereType<QuickFixResponse>()
-        .map((response) =>
-            response.results.map((e) => e.toAnalysisErrorFixes()).toList())
-        .expand((e) => e)
+        .map((response) => response.toPluginResponse())
+        .expand((result) => result.fixes)
         .toList();
-    return plugin.EditGetFixesResult(parsedResponses);
+    return plugin.EditGetFixesResult(fixes);
   }
 
   /// Handle an 'edit.getAssists' request.
@@ -222,8 +203,6 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
             .expand((e) => e)
             .toList())
         .expand((e) => e);
-    // return plugin.EditGetAssistsResult(
-    //     const <plugin.PrioritizedSourceChange>[]);
     return plugin.EditGetAssistsResult(parsedResponses.toList());
   }
 
@@ -232,32 +211,40 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
     plugin.AnalysisUpdateContentParams parameters,
   ) async {
     final events = parameters.files.entries.map((entry) {
-      final fileUri = Uri.parse(entry.key);
+      final analysisContext = ref
+          .read(runnersProvider)
+          .map((e) => e.context)
+          .firstWhere((element) => element.contextRoot.isAnalyzed(entry.key));
+      final context = Context(root: analysisContext.contextRoot.root.toUri());
+      final analyzedFile = AnalyzedFile(context, Uri.parse(entry.key));
       final contentOverlay = entry.value;
       if (contentOverlay is plugin.AddContentOverlay) {
-        return FileUpdateEvent.add(fileUri, contentOverlay.content);
+        return FileUpdateEvent.add(analyzedFile, contentOverlay.content);
       }
       if (contentOverlay is plugin.ChangeContentOverlay) {
         final edits = contentOverlay.edits.map((e) {
-          final start = SourceLocation(e.offset, sourceUrl: fileUri);
-          final end = SourceLocation(e.offset + e.length, sourceUrl: fileUri);
+          final start =
+              SourceLocation(e.offset, sourceUrl: analyzedFile.fileUri);
+          final end = SourceLocation(e.offset + e.length,
+              sourceUrl: analyzedFile.fileUri);
           final originalText = ' ' * (e.length);
           final span = SourceSpan(start, end, originalText);
           return SourceEdit(
               originalSourceSpan: span, replacement: e.replacement);
         }).toList();
         final sourceFileEdit = SourceFileEdit(
-            file: fileUri, fileStamp: DateTime.now(), edits: edits);
-        return FileUpdateEvent.modify(sourceFileEdit);
+            file: analyzedFile.fileUri,
+            fileStamp: DateTime.now(),
+            edits: edits);
+        return FileUpdateEvent.modify(analyzedFile, sourceFileEdit);
       } else if (contentOverlay is plugin.RemoveContentOverlay) {
-        return FileUpdateEvent.delete(fileUri);
+        return FileUpdateEvent.delete(analyzedFile);
       } else {
         throw UnimplementedError('INVALID OVERLAY');
       }
     }).toList();
 
     final allRunners = ref.read(runnersProvider);
-    channel.sendError('ALLRUNNERS: ${allRunners.length}');
     final messages =
         await Future.wait<UpdateFilesResponse>(allRunners.map((runner) async {
       final runnerEvents = events.where((event) {
@@ -267,7 +254,6 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
       final sidecarRequest = SidecarRequest.updateFiles(runnerEvents);
       return runner.asyncRequest<UpdateFilesResponse>(sidecarRequest);
     }));
-    channel.sendError('CONTENTCHANGED: ${allRunners.length}');
     // final anyErrors = messages.every((msg) => msg is! SidecarResponse);
     // assert(!anyErrors, 'errors received');
     return plugin.AnalysisUpdateContentResult();
@@ -334,11 +320,7 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
     // ref.read(middlemanPluginIsInitializedProvider.state).update((_) => true);
   }
 
-  void _logMiddleman(SidecarRunner runner, LogRecord log) async {
-    // final runnerName = runner.context.activeRoot.root.shortName;
-    // final uri = runner.context.activeRoot.root.toUri();
-    // final file = File(
-    //     join(uri.path, kDartTool, 'sidecar_logs', '${runnerName}_mm_logs.txt'));
+  void _logMiddleman(SidecarRunner runner, LogRecord log) {
     final message = log.when(
       simple: (message) => message,
       fromAnalyzer: (mainContext, timestamp, severity, message) {
@@ -348,17 +330,11 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
         return 'LINTCODE LOG: $message';
       },
     );
-    // if (!file.existsSync()) file.createSync(recursive: true);
-    // await file.writeAsString('$message\n');
     channel.sendError(message);
-    // logger.info(message);
   }
 
-  void _log(SidecarRunner runner, LogRecord log) async {
+  void _log(SidecarRunner runner, LogRecord log) {
     final runnerName = runner.context.activeRoot.root.shortName;
-    // final uri = runner.context.activeRoot.root.toUri();
-    // final file = File(
-    //     join(uri.path, kDartTool, 'sidecar_logs', '${runnerName}_logs.txt'));
     final message = log.when(
       simple: (message) => message,
       fromAnalyzer: (mainContext, timestamp, severity, message) {
@@ -368,10 +344,7 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
         return 'LINTCODE LOG: $message';
       },
     );
-    // if (!file.existsSync()) file.createSync(recursive: true);
-    // await file.writeAsString('$message\n', mode: FileMode.append, flush: true);
     channel.sendError(message);
-    // logger.info(message);
   }
 
   @override

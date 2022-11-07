@@ -6,10 +6,11 @@ import 'dart:isolate';
 
 import 'package:hotreloader/hotreloader.dart';
 import 'package:logging/logging.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
+import '../../protocol/models/models.dart';
 import '../../rules/rules.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/logger/logger.dart';
@@ -66,7 +67,7 @@ Future<void> startSidecarCli(
           runner.lints.listen((notification) {
             if (notification.lints.isNotEmpty) {
               print(
-                  '${notification.path}: ${notification.lints.length} results\n');
+                  '${notification.file.relativePath}: ${notification.lints.length} results\n');
               print(notification.lints.prettyPrint());
             }
           });
@@ -95,11 +96,13 @@ Future<void> startSidecarCli(
                 for (final event in events) {
                   final filePath = event.path;
                   final rootPath = runner.context.activeRoot.root.path;
-                  if (isWithin(rootPath, event.path)) {
+                  // final file =
+                  //     container.read(analyzedFileForPathProvider(filePath));
+                  if (p.isWithin(rootPath, event.path)) {
                     print('reanalyzing: $filePath\n');
-                    runner.requestLintsForFile(filePath);
+                    // runner.requestLintsForFile(file);
                   }
-                  if (isWithin(pluginPath, filePath)) {
+                  if (p.isWithin(pluginPath, filePath)) {
                     print(
                         'rebuilding runner: ${runner.context.contextRoot.root.path}\n');
 

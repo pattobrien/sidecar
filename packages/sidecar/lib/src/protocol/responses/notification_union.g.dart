@@ -20,7 +20,7 @@ Map<String, dynamic> _$$InitCompleteNotificationToJson(
 
 _$LintNotification _$$LintNotificationFromJson(Map<String, dynamic> json) =>
     _$LintNotification(
-      json['path'] as String,
+      AnalyzedFile.fromJson(json['file'] as Map<String, dynamic>),
       (json['lints'] as List<dynamic>)
           .map((e) => LintResult.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -29,7 +29,7 @@ _$LintNotification _$$LintNotificationFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$LintNotificationToJson(_$LintNotification instance) =>
     <String, dynamic>{
-      'path': instance.path,
+      'file': instance.file.toJson(),
       'lints': instance.lints.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };

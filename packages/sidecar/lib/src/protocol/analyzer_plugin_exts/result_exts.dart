@@ -32,7 +32,8 @@ extension LintResultX on AnalysisResult {
 extension LintNotificationX on LintNotification {
   plugin.Notification toPluginNotification() {
     final analysisErrors = lints.map((e) => e.toAnalysisError()).toList();
-    return plugin.AnalysisErrorsParams(path, analysisErrors).toNotification();
+    return plugin.AnalysisErrorsParams(file.path, analysisErrors)
+        .toNotification();
   }
 }
 
