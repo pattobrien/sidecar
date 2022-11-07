@@ -9,26 +9,33 @@ import 'sidecar_runner.dart';
 part 'runner_providers.g.dart';
 
 @Riverpod(keepAlive: true)
-Future<List<SidecarRunner>> getRunners(
-  GetRunnersRef ref,
+List<SidecarRunner> runners(
+  RunnersRef ref,
   // Uri activeRoot,
-) async {
+) {
   // print('creating runners');
   final activePrimaryContexts = ref.watch(runnerActiveContextsProvider);
-  final runners = await Future.wait(activePrimaryContexts.map((context) async {
+  final runners = activePrimaryContexts.map((context) {
     final runner = SidecarRunner(ref, context: context);
     // print('creating runners: init');
-    await runner.initialize();
+    // await runner.initialize();
     return runner;
-  }));
+  }).toList();
   return runners;
 }
 
+@Riverpod(keepAlive: true)
+Future<void> runnersInitializer(RunnersInitializerRef ref) async {
+  final runners = ref.watch(runnersProvider);
+  await Future.wait(runners.map((runner) => runner.initialize()));
+  await Future.wait(runners.map((runner) => runner.requestSetContext()));
+}
+
 @riverpod
-Future<SidecarRunner> runnerForContext(
+SidecarRunner runnerForContext(
   RunnerForContextRef ref,
   ActiveContext context,
-) async {
-  final runners = await ref.watch(getRunnersProvider.future);
+) {
+  final runners = ref.watch(runnersProvider);
   return runners.firstWhere((element) => element.context == context);
 }

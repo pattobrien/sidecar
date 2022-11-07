@@ -96,4 +96,9 @@ class DebuggerLogDelegate implements LogDelegateBase {
   void dumpResults() {
     logger.info('\n\n${buffer.toString()}');
   }
+
+  @override
+  void sidecarLog(String message) {
+    logger.info(message);
+  }
 }

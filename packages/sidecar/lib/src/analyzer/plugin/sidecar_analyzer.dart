@@ -5,7 +5,7 @@ import 'dart:isolate';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
-import 'package:logging/logging.dart' as logging;
+import 'package:logging/logging.dart' hide LogRecord;
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
@@ -19,21 +19,35 @@ import '../handlers/context_collection.dart';
 import '../results/results.dart';
 import 'analyzer_resource_provider.dart';
 import 'plugin.dart';
+import 'sidecar_analyzer_comm_service.dart';
 
-final logger = logging.Logger('sidecar-plugin');
+final logger = Logger('sidecar-plugin');
 
 class SidecarAnalyzer {
   SidecarAnalyzer(
     this._ref, {
-    required this.sendPort,
-  }) : receivePort = ReceivePort('sidecar-analyzer');
+    required this.sP,
+    // required this.context,
+    required RequestMessage initRequest,
+    // required this.rootUri,
+  }) : context =
+            Context(root: (initRequest.request as SetActiveRootRequest).root) {
+    _initLogger();
+    handleSetActiveRoot(initRequest);
+    _setupListeners();
+  }
 
-  final initializationCompleter = Completer<void>();
+  // final initializationCompleter = Completer<void>();
   final ProviderContainer _ref;
-  final SendPort sendPort;
-  final ReceivePort receivePort;
+  final SendPort sP;
+  final Context context;
+  // final Uri rootUri;
 
-  Stream get stream => receivePort.asBroadcastStream();
+  SidecarAnalyzerCommService get communication =>
+      _ref.read(sidecarAnalyzerCommServiceProvider(sP));
+
+  Stream<dynamic> get stream =>
+      _ref.read(analyzerCommunicationStream(sP).stream);
 
   AnalyzedFile getFileForPath(String path) =>
       _ref.read(analyzedFileForPathProvider(path));
@@ -41,24 +55,29 @@ class SidecarAnalyzer {
   OverlayResourceProvider get resourceProvider =>
       _ref.read(analyzerResourceProvider);
 
-  late final Context context;
+  // void start() {
+  //   // logger.onRecord.listen((event) {});
+  //   // logger.finer('END PLUGIN STARTING....');
+  //   // logger.finer('# of rules: ${_ref.read(ruleConstructorProvider).length}');
 
-  void start() {
+  //   // sendNotification(const InitCompleteNotification());
+  // }
+
+  void _initLogger() {
     logger.onRecord.listen((event) {
-      final log = LogRecord.simple(event.toString());
-      final notification = SidecarMessage.log(log);
-      final json = notification.toJson();
-      final encodedJson = jsonEncode(json);
-      sendPort.send(encodedJson);
+      final severity = LogSeverity.fromLogLevel(event.level);
+      final record =
+          LogRecord.fromAnalyzer(context, event.time, severity, event.message);
+      final message = SidecarMessage.log(record);
+      sendToRunner(message);
     });
-    logger.finer('END PLUGIN STARTING....');
-    logger.finer('# of rules: ${_ref.read(ruleConstructorProvider).length}');
-    _setupListeners();
-    sendNotification(const InitCompleteNotification());
   }
 
+  void sendToRunner(SidecarMessage message) =>
+      communication.sendToRunner(message);
+
   void _setupListeners() {
-    sendPort.send(receivePort.sendPort);
+    // _sendPort.send(receivePort.sendPort);
     stream.listen((dynamic event) {
       // print('event: $event');
       if (event is String) {
@@ -89,27 +108,32 @@ class SidecarAnalyzer {
     });
   }
 
-  Future<SetActiveRootResponse> handleSetActiveRoot(
-    SetActiveRootRequest request,
+  Future<void> handleSetActiveRoot(
+    RequestMessage request,
   ) async {
-    final activeContextRoot = request.root;
     //TODO; send the Context instance in the request, instead of just the Uri itself
-    context = Context(root: request.root);
-    _ref
-        .read(activeContextNotifierProvider.notifier)
-        .updateRoot(activeContextRoot);
+    // context = Context(root: request.root);
+    // _initLogger();
+    // logger.severe('handleSetActiveRoot: ${context.root}');
+    _ref.read(activeContextNotifierProvider.notifier).updateRoot(context.root);
     // print('active context root set to: ${activeContextRoot.path}');
-    return const SetActiveRootResponse();
+    // return const SetActiveRootResponse();
+    const response = SetActiveRootResponse();
+    final wrappedResponse =
+        SidecarMessage.response(response: response, id: request.id);
+    communication.sendToRunner(wrappedResponse);
   }
 
   Future<ContextCollectionResponse> handleAnalysisSetContextRoots(
     SetContextCollectionRequest request,
   ) async {
+    logger.info('handleAnalysisSetContextRoots');
     final collection =
         _ref.read(createContextCollectionProvider(request.roots));
     _ref.read(allContextsNotifierProvider.notifier).update(collection);
     // roots = request.roots;
     await afterNewContextCollection();
+    logger.info('handleAnalysisSetContextRoots complete');
     return const ContextCollectionResponse();
   }
 
@@ -118,8 +142,10 @@ class SidecarAnalyzer {
   ///
   /// By default analyzes every [AnalysisContext] with [analyzeFiles].
   Future<void> afterNewContextCollection() async {
+    logger.severe('afterNewContextCollection');
     await _forAnalysisContexts((analysisContext) async {
       final paths = analysisContext.contextRoot.analyzedFiles().toList();
+      logger.info('afterNewContextCollection files: ${paths.toList()}');
       await analyzeFiles(
         // analysisContext: analysisContext,
         paths: paths,
@@ -131,7 +157,8 @@ class SidecarAnalyzer {
     final id = msg.id;
     final unparsedRequest = msg.request;
     final response = await unparsedRequest.map<Future<SidecarResponse?>>(
-      setActiveRoot: handleSetActiveRoot,
+      setActiveRoot: (_) =>
+          throw StateError('setActiveRoot should happen before initialization'),
       setContextCollection: handleAnalysisSetContextRoots,
       updateFiles: handleAnalysisUpdateContent,
       // quickFix: handleEditGetFixes,
@@ -143,22 +170,12 @@ class SidecarAnalyzer {
     if (response != null) {
       final wrappedResponse =
           SidecarMessage.response(response: response, id: id);
-      final json = wrappedResponse.toJson();
-      final encodedJson = jsonEncode(json);
+      // final json = wrappedResponse.toJson();
+      // final encodedJson = jsonEncode(json);
       // print('response: $encodedJson');
-      sendPort.send(encodedJson);
+      // sendPort.send(encodedJson);
+      sendToRunner(wrappedResponse);
     }
-  }
-
-  void sendNotification(
-    SidecarNotification notification,
-  ) {
-    final wrappedResponse =
-        SidecarMessage.notification(notification: notification);
-    final json = wrappedResponse.toJson();
-    final encodedJson = jsonEncode(json);
-    // print('sending notification: $encodedJson');
-    sendPort.send(encodedJson);
   }
 
   // TODO: find a way to keep collection from being disposed of automatically
@@ -227,13 +244,14 @@ class SidecarAnalyzer {
     return priorityPaths.any(analysisContext.contextRoot.isAnalyzed);
   }
 
-  Set<String> priorityPaths = {};
+  //TODO utilize priority paths
+  static Set<String> priorityPaths = {};
 
   Future<void> analyzeFiles({
     // required AnalysisContext analysisContext,
     required List<String> paths,
   }) async {
-    logger.severe('${DateTime.now()} starting analyzing files: $paths');
+    logger.finest('${DateTime.now()} starting analyzing files: $paths');
     await Future.wait(paths.map((path) async {
       try {
         final file = _ref.read(analyzedFileForPathProvider(path));
@@ -241,12 +259,12 @@ class SidecarAnalyzer {
         final results =
             await _ref.read(createAnalysisReportProvider(file).future);
         final notification = LintNotification(path, results);
-        sendNotification(notification);
+        communication.sendNotification(notification);
       } catch (e, stackTrace) {
         logger.severe('analyzeFiles', e, stackTrace);
       }
     }));
-    logger.severe('${DateTime.now()}  finished analyzing files');
+    logger.finest('${DateTime.now()}  finished analyzing files');
     // }
   }
 
@@ -298,8 +316,6 @@ class SidecarAnalyzer {
         if (resourceProvider.hasOverlay(filePath)) {
           final file = resourceProvider.getFile(filePath);
           oldContents = file.readAsStringSync();
-        } else {
-          logger.info('no overlay: $filePath');
         }
       } catch (_) {}
       update.map(
@@ -309,7 +325,7 @@ class SidecarAnalyzer {
             content: event.contents,
             modificationStamp: _overlayModificationStamp++,
           );
-          logger.severe('add: $filePath updated');
+          logger.info('add: $filePath updated');
         },
         modify: (modify) {
           if (oldContents == null) {
@@ -371,4 +387,3 @@ class SidecarAnalyzer {
 //     cliOptionsProvider,
 //   ],
 // );
-

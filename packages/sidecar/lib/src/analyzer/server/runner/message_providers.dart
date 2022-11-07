@@ -10,37 +10,6 @@ import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/responses/responses.dart';
 import 'sidecar_runner.dart';
 
-final analyzerStreamProvider = StreamProvider.family<Object, SidecarRunner>(
-  (ref, runner) async* {
-    final _controller = StreamController<Object>();
-    ref.onDispose(_controller.close);
-    runner.receivePort.listen(
-      (dynamic m) {
-        if (m is SendPort) {
-          runner.sendPort = m;
-        } else if (m is String) {
-          try {
-            // print('${DateTime.now().toIso8601String()}: $m');
-            final jsonObject = jsonDecode(m) as Map<String, dynamic>;
-            _controller.add(jsonObject);
-          } catch (e) {
-            print('something went wrong: $e: $m');
-          }
-        } else {
-          print('got unexpected type: ${m.runtimeType}');
-          _controller.add(m as Object);
-        }
-      },
-      onError: (dynamic e) => _controller.addError(e as Object),
-      onDone: _controller.close,
-    );
-    await for (final event in _controller.stream) {
-      yield event;
-    }
-  },
-  name: 'serverChannelStreamProvider',
-);
-
 final analyzerMessageStreamProvider =
     StreamProvider.family<SidecarMessage, SidecarRunner>((ref, runner) {
   final stream = ref.watch(analyzerStreamProvider(runner).stream);

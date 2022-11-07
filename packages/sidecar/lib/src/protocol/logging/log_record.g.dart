@@ -19,7 +19,9 @@ Map<String, dynamic> _$$_LogRecordToJson(_$_LogRecord instance) =>
 
 _$AnalyzerLogRecord _$$AnalyzerLogRecordFromJson(Map<String, dynamic> json) =>
     _$AnalyzerLogRecord(
-      ContextDetails.fromJson(json['mainContext'] as Map<String, dynamic>),
+      Context.fromJson(json['mainContext'] as Map<String, dynamic>),
+      DateTime.parse(json['timestamp'] as String),
+      $enumDecode(_$LogSeverityEnumMap, json['severity']),
       json['message'] as String,
       $type: json['runtimeType'] as String?,
     );
@@ -27,9 +29,19 @@ _$AnalyzerLogRecord _$$AnalyzerLogRecordFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$AnalyzerLogRecordToJson(_$AnalyzerLogRecord instance) =>
     <String, dynamic>{
       'mainContext': instance.mainContext.toJson(),
+      'timestamp': instance.timestamp.toIso8601String(),
+      'severity': _$LogSeverityEnumMap[instance.severity]!,
       'message': instance.message,
       'runtimeType': instance.$type,
     };
+
+const _$LogSeverityEnumMap = {
+  LogSeverity.error: 'error',
+  LogSeverity.warning: 'warning',
+  LogSeverity.info: 'info',
+  LogSeverity.verbose: 'verbose',
+  LogSeverity.unknown: 'unknown',
+};
 
 _$RuleLogRecord _$$RuleLogRecordFromJson(Map<String, dynamic> json) =>
     _$RuleLogRecord(

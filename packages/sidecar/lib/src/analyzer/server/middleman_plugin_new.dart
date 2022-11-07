@@ -29,9 +29,11 @@ import '../context/active_context.dart';
 import '../options_provider.dart';
 import 'analysis_context_providers.dart';
 import 'isolates/isolates.dart';
+import 'isolates/multi_isolate_message.dart';
 import 'middleman_resource_provider.dart';
 import 'plugin_channel_provider.dart';
 import 'runner/runner_providers.dart';
+import 'runner/sidecar_runner.dart';
 
 class MiddlemanPluginNew extends plugin.ServerPlugin {
   MiddlemanPluginNew(this.ref)
@@ -54,143 +56,102 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
 
   CliOptions get options => ref.read(cliOptionsProvider);
 
-  IsolateCommunicationService get isolateService =>
-      ref.read(isolateCommunicationServiceProvider);
+  // IsolateCommunicationService get isolateService =>
+  //     ref.read(isolateCommunicationServiceProvider);
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    logger.finer('MIDDLEMAN STARTING....');
-    _start(channel);
+    logger.onRecord.listen((event) {});
+    logger.info('MIDDLEMAN STARTING....');
+    ref.read(masterPluginChannelProvider).listen(handleAllRequests);
   }
 
-  Future<void> _start(
-    plugin.PluginCommunicationChannel channel,
-  ) async {
-    // if (analyzerMode.isDebug) await _startWithHotReload(channel);
-    ref.read(masterPluginChannelProvider).listen(sendRequest);
-  }
-
-  void sendRequest(plugin.Request request) {
-    // if (request.method == plugin.PLUGIN_REQUEST_VERSION_CHECK) {
-    //   _handleVersionRequest(request);
-    // } else if (request.method == plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS) {
-    //   final params = plugin.AnalysisSetContextRootsParams.fromRequest(request);
-    //   handleAnalysisSetContextRoots(params);
-    //   // isolateService.handleServerRequest(request);
-    // } else if (request.method == plugin.PLUGIN_REQUEST_SHUTDOWN) {
-    //   isolateService.handleServerRequest(request);
-    //   isolateService.shutdownAllPlugins();
-    // } else {
-    // isolateService.handleServerRequest(request);
-    handleAllRequests(request);
-    // }
-  }
-
-  Future<void> handleAllRequests(plugin.Request request) async {
-    final response =
-        await _getResponse(request, DateTime.now().microsecondsSinceEpoch);
-    if (response == null) return;
-    channel.sendResponse(response);
-  }
-
-  // Future<void> _handleVersionRequest(plugin.Request request) async {
-  //   final requestTime = DateTime.now().millisecondsSinceEpoch;
-  //   final params = plugin.PluginVersionCheckParams.fromRequest(request);
-  //   final response = await handlePluginVersionCheck(params);
-  //   channel.sendResponse(response.toResponse(request.id, requestTime));
-  // }
-
-  Future<SidecarResponse> _sendToSingleRunner(
-    SidecarRequest request,
-    String path,
-  ) async {
-    final allRunners = await ref.read(getRunnersProvider.future);
-    final runner = allRunners.singleWhere(
-        (runner) => runner.allContexts.contextForPath(path) != null);
-    // for (final runner in applicableRunners) {
-    final response = await runner.asyncRequest(request);
-    return response;
-    // }
-  }
-
-  Future<plugin.Response?> _getResponse(
+  Future<void> handleAllRequests(
     plugin.Request request,
-    int requestTime,
   ) async {
+    final isIntialized =
+        isRunnerInitialized.entries.every((entry) => entry.value == true);
+    final requestTime = DateTime.now().microsecondsSinceEpoch;
     plugin.ResponseResult? result;
-    switch (request.method) {
-      case plugin.ANALYSIS_REQUEST_GET_NAVIGATION:
-        final params = plugin.AnalysisGetNavigationParams.fromRequest(request);
-        result = await handleAnalysisGetNavigation(params);
-        break;
-      case plugin.ANALYSIS_REQUEST_HANDLE_WATCH_EVENTS:
-        final params =
-            plugin.AnalysisHandleWatchEventsParams.fromRequest(request);
-        result = await handleAnalysisHandleWatchEvents(params);
-        break;
-      case plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS:
-        final params =
-            plugin.AnalysisSetContextRootsParams.fromRequest(request);
-        result = await handleAnalysisSetContextRoots(params);
-        break;
-      // throw UnimplementedError('handling contexts should happen elsewhere');
-
-      case plugin.ANALYSIS_REQUEST_SET_PRIORITY_FILES:
-        final params =
-            plugin.AnalysisSetPriorityFilesParams.fromRequest(request);
-        result = await handleAnalysisSetPriorityFiles(params);
-        break;
-      case plugin.ANALYSIS_REQUEST_SET_SUBSCRIPTIONS:
-        final params =
-            plugin.AnalysisSetSubscriptionsParams.fromRequest(request);
-        result = await handleAnalysisSetSubscriptions(params);
-        break;
-      case plugin.ANALYSIS_REQUEST_UPDATE_CONTENT:
-        final params = plugin.AnalysisUpdateContentParams.fromRequest(request);
-        result = await handleAnalysisUpdateContent(params);
-        break;
-      case plugin.COMPLETION_REQUEST_GET_SUGGESTIONS:
-        final params =
-            plugin.CompletionGetSuggestionsParams.fromRequest(request);
-        result = await handleCompletionGetSuggestions(params);
-        break;
-      case plugin.EDIT_REQUEST_GET_ASSISTS:
-        final params = plugin.EditGetAssistsParams.fromRequest(request);
-        result = await handleEditGetAssists(params);
-        break;
-      case plugin.EDIT_REQUEST_GET_AVAILABLE_REFACTORINGS:
-        final params =
-            plugin.EditGetAvailableRefactoringsParams.fromRequest(request);
-        result = await handleEditGetAvailableRefactorings(params);
-        break;
-      case plugin.EDIT_REQUEST_GET_FIXES:
-        final params = plugin.EditGetFixesParams.fromRequest(request);
-        result = await handleEditGetFixes(params);
-        break;
-      case plugin.EDIT_REQUEST_GET_REFACTORING:
-        final params = plugin.EditGetRefactoringParams.fromRequest(request);
-        result = await handleEditGetRefactoring(params);
-        break;
-      case plugin.KYTHE_REQUEST_GET_KYTHE_ENTRIES:
-        final params = plugin.KytheGetKytheEntriesParams.fromRequest(request);
-        result = await handleKytheGetKytheEntries(params);
-        break;
-      case plugin.PLUGIN_REQUEST_SHUTDOWN:
-        final params = plugin.PluginShutdownParams();
-        result = await handlePluginShutdown(params);
-        // _channel.sendResponse(result.toResponse(request.id, requestTime));
-        // _channel.close();
-        return null;
-      case plugin.PLUGIN_REQUEST_VERSION_CHECK:
-        final params = plugin.PluginVersionCheckParams.fromRequest(request);
-        result = await handlePluginVersionCheck(params);
-        break;
+    if (isIntialized) {
+      switch (request.method) {
+        case plugin.ANALYSIS_REQUEST_GET_NAVIGATION:
+          final params =
+              plugin.AnalysisGetNavigationParams.fromRequest(request);
+          result = await handleAnalysisGetNavigation(params);
+          break;
+        case plugin.ANALYSIS_REQUEST_HANDLE_WATCH_EVENTS:
+          final params =
+              plugin.AnalysisHandleWatchEventsParams.fromRequest(request);
+          result = await handleAnalysisHandleWatchEvents(params);
+          break;
+        case plugin.ANALYSIS_REQUEST_SET_CONTEXT_ROOTS:
+          final params =
+              plugin.AnalysisSetContextRootsParams.fromRequest(request);
+          result = await handleAnalysisSetContextRoots(params);
+          break;
+        case plugin.ANALYSIS_REQUEST_SET_PRIORITY_FILES:
+          final params =
+              plugin.AnalysisSetPriorityFilesParams.fromRequest(request);
+          result = await handleAnalysisSetPriorityFiles(params);
+          break;
+        case plugin.ANALYSIS_REQUEST_SET_SUBSCRIPTIONS:
+          final params =
+              plugin.AnalysisSetSubscriptionsParams.fromRequest(request);
+          result = await handleAnalysisSetSubscriptions(params);
+          break;
+        case plugin.ANALYSIS_REQUEST_UPDATE_CONTENT:
+          final params =
+              plugin.AnalysisUpdateContentParams.fromRequest(request);
+          result = await handleAnalysisUpdateContent(params);
+          break;
+        case plugin.COMPLETION_REQUEST_GET_SUGGESTIONS:
+          final params =
+              plugin.CompletionGetSuggestionsParams.fromRequest(request);
+          result = await handleCompletionGetSuggestions(params);
+          break;
+        case plugin.EDIT_REQUEST_GET_ASSISTS:
+          final params = plugin.EditGetAssistsParams.fromRequest(request);
+          result = await handleEditGetAssists(params);
+          break;
+        case plugin.EDIT_REQUEST_GET_AVAILABLE_REFACTORINGS:
+          final params =
+              plugin.EditGetAvailableRefactoringsParams.fromRequest(request);
+          result = await handleEditGetAvailableRefactorings(params);
+          break;
+        case plugin.EDIT_REQUEST_GET_FIXES:
+          final params = plugin.EditGetFixesParams.fromRequest(request);
+          result = await handleEditGetFixes(params);
+          break;
+        case plugin.EDIT_REQUEST_GET_REFACTORING:
+          final params = plugin.EditGetRefactoringParams.fromRequest(request);
+          result = await handleEditGetRefactoring(params);
+          break;
+        case plugin.KYTHE_REQUEST_GET_KYTHE_ENTRIES:
+          final params = plugin.KytheGetKytheEntriesParams.fromRequest(request);
+          result = await handleKytheGetKytheEntries(params);
+          break;
+        case plugin.PLUGIN_REQUEST_SHUTDOWN:
+          final params = plugin.PluginShutdownParams();
+          result = await handlePluginShutdown(params);
+          // _channel.sendResponse(result.toResponse(request.id, requestTime));
+          // _channel.close();
+          break;
+        case plugin.PLUGIN_REQUEST_VERSION_CHECK:
+          final params = plugin.PluginVersionCheckParams.fromRequest(request);
+          result = await handlePluginVersionCheck(params);
+          break;
+      }
+      if (result == null) {
+        final response = plugin.Response(request.id, requestTime,
+            error: plugin.RequestErrorFactory.unknownRequest(request.method));
+        return channel.sendResponse(response);
+      }
+      final response = result.toResponse(request.id, requestTime);
+      channel.sendResponse(response);
+    } else {
+      queuedRequests.add(request);
     }
-    if (result == null) {
-      return plugin.Response(request.id, requestTime,
-          error: plugin.RequestErrorFactory.unknownRequest(request.method));
-    }
-    return result.toResponse(request.id, requestTime);
   }
 
   @override
@@ -222,7 +183,8 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
       }
     }).toList();
 
-    final allRunners = await ref.read(getRunnersProvider.future);
+    final allRunners = ref.read(runnersProvider);
+    channel.sendError('ALLRUNNERS: ${allRunners.length}');
     final messages =
         await Future.wait<UpdateFilesResponse>(allRunners.map((runner) async {
       final runnerEvents = events.where((event) {
@@ -232,9 +194,23 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
       final sidecarRequest = SidecarRequest.updateFiles(runnerEvents);
       return runner.asyncRequest<UpdateFilesResponse>(sidecarRequest);
     }));
+    channel.sendError('CONTENTCHANGED: ${allRunners.length}');
     // final anyErrors = messages.every((msg) => msg is! SidecarResponse);
     // assert(!anyErrors, 'errors received');
     return plugin.AnalysisUpdateContentResult();
+  }
+
+  final queuedRequests = <plugin.Request>[];
+  final isRunnerInitialized = <SidecarRunner, bool>{};
+  final state = <String, MultiIsolateMessage>{};
+
+  void dumpRequests() {
+    logger.finer('dumpRequests = ${queuedRequests.length}');
+    // ignore: prefer_foreach
+    for (final request in queuedRequests
+      ..sort((a, b) => a.id.compareTo(b.id))) {
+      handleAllRequests(request);
+    }
   }
 
   @override
@@ -258,36 +234,71 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
         .toList();
 
     ref.read(runnerActiveContextsProvider.notifier).update = activeContexts;
-    final runners = await ref.read(getRunnersProvider.future);
+    final runners = ref.read(runnersProvider);
+    // await ref.read(runnersInitializerProvider.future);
 
     await Future.wait(runners.map((runner) async {
+      isRunnerInitialized[runner] = false;
       runner.notifications.listen((notification) {
-        notification.map(
-          initComplete: (initComplete) => null,
-          lint: (lint) => channel.sendNotification(lint.toPluginNotification()),
-        );
+        //
       });
-      runner.logs.listen((event) {
-        // final msg = event.map(
-        //     simple: simple, fromAnalyzer: fromAnalyzer, fromRule: fromRule,);
-        final runnerName = runner.context.activeRoot.root.shortName;
-        channel.sendError('RUNNER $runnerName: ${event.toJson()}');
-        _log(event, runner.context.activeRoot.root.path);
+      runner.lints.listen((lint) {
+        // channel.sendError('LINTSLINTS: ${lint.toJson()}');
+        channel.sendNotification(lint.toPluginNotification());
       });
-      // return runner.initialize();
+      runner.logs.listen((event) => _log(runner, event));
+      logger.onRecord.listen(
+          (event) => _logMiddleman(runner, LogRecord.simple(event.toString())));
+      await runner.initialize();
+      await runner.requestSetContext();
+      isRunnerInitialized[runner] = true;
     }));
-
+    dumpRequests();
     ref
         .read(allContextsProvider.state)
         .update((_) => contextCollection.contexts);
-    ref.read(isolateDetailsProvider);
-    ref.read(middlemanPluginIsInitializedProvider.state).update((_) => true);
+    // ref.read(isolateDetailsProvider);
+    // ref.read(middlemanPluginIsInitializedProvider.state).update((_) => true);
   }
 
-  void _log(LogRecord log, String path) {
-    final file = File(join(path, kDartTool, 'sidecar_logs', 'log.txt'));
-    if (!file.existsSync()) file.createSync(recursive: true);
-    file.writeAsStringSync('${log.toJson()}\n', mode: FileMode.append);
+  void _logMiddleman(SidecarRunner runner, LogRecord log) async {
+    // final runnerName = runner.context.activeRoot.root.shortName;
+    // final uri = runner.context.activeRoot.root.toUri();
+    // final file = File(
+    //     join(uri.path, kDartTool, 'sidecar_logs', '${runnerName}_mm_logs.txt'));
+    final message = log.when(
+      simple: (message) => message,
+      fromAnalyzer: (mainContext, timestamp, severity, message) {
+        return '$timestamp [${severity.name.toUpperCase()}] $message';
+      },
+      fromRule: (lintCode, message) {
+        return 'LINTCODE LOG: $message';
+      },
+    );
+    // if (!file.existsSync()) file.createSync(recursive: true);
+    // await file.writeAsString('$message\n');
+    channel.sendError(message);
+    // logger.info(message);
+  }
+
+  void _log(SidecarRunner runner, LogRecord log) async {
+    final runnerName = runner.context.activeRoot.root.shortName;
+    // final uri = runner.context.activeRoot.root.toUri();
+    // final file = File(
+    //     join(uri.path, kDartTool, 'sidecar_logs', '${runnerName}_logs.txt'));
+    final message = log.when(
+      simple: (message) => message,
+      fromAnalyzer: (mainContext, timestamp, severity, message) {
+        return '$timestamp [${severity.name}] $runnerName $message';
+      },
+      fromRule: (lintCode, message) {
+        return 'LINTCODE LOG: $message';
+      },
+    );
+    // if (!file.existsSync()) file.createSync(recursive: true);
+    // await file.writeAsString('$message\n', mode: FileMode.append, flush: true);
+    channel.sendError(message);
+    // logger.info(message);
   }
 
   @override
@@ -307,11 +318,11 @@ final middlemanPluginProvider = Provider<MiddlemanPluginNew>(
     isolateDetailsProvider,
     masterPluginChannelProvider,
     allContextsProvider,
-    isolateCommunicationServiceProvider,
+    // isolateCommunicationServiceProvider,
     middlemanResourceProvider,
-    middlemanPluginIsInitializedProvider,
+    // middlemanPluginIsInitializedProvider,
   ],
 );
 
-final middlemanPluginIsInitializedProvider =
-    StateProvider<bool>((ref) => false);
+// final middlemanPluginIsInitializedProvider =
+//     StateProvider<bool>((ref) => false);

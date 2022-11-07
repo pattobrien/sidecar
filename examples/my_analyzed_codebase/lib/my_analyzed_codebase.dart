@@ -38,13 +38,13 @@ class SomePage extends ConsumerWidget {
             someIconData,
             color: x,
           ),
+
           SizedBox(width: 10.0),
           Icon(
             someIconData,
             color: x,
           ),
-
-          // hane
+          //
           SizedBox(width: 10.0),
           SizedBox(width: someNumber),
           Icon(Icons.snowboarding),

@@ -35,7 +35,8 @@ mixin _$LogRecord {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) simple,
-    required TResult Function(ContextDetails mainContext, String message)
+    required TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)
         fromAnalyzer,
     required TResult Function(RuleCode lintCode, String message) fromRule,
   }) =>
@@ -43,14 +44,18 @@ mixin _$LogRecord {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String message)? simple,
-    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)?
+        fromAnalyzer,
     TResult Function(RuleCode lintCode, String message)? fromRule,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? simple,
-    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)?
+        fromAnalyzer,
     TResult Function(RuleCode lintCode, String message)? fromRule,
     required TResult orElse(),
   }) =>
@@ -186,7 +191,8 @@ class _$_LogRecord extends _LogRecord {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) simple,
-    required TResult Function(ContextDetails mainContext, String message)
+    required TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)
         fromAnalyzer,
     required TResult Function(RuleCode lintCode, String message) fromRule,
   }) {
@@ -197,7 +203,9 @@ class _$_LogRecord extends _LogRecord {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String message)? simple,
-    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)?
+        fromAnalyzer,
     TResult Function(RuleCode lintCode, String message)? fromRule,
   }) {
     return simple?.call(message);
@@ -207,7 +215,9 @@ class _$_LogRecord extends _LogRecord {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? simple,
-    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)?
+        fromAnalyzer,
     TResult Function(RuleCode lintCode, String message)? fromRule,
     required TResult orElse(),
   }) {
@@ -281,9 +291,13 @@ abstract class _$$AnalyzerLogRecordCopyWith<$Res>
           _$AnalyzerLogRecord value, $Res Function(_$AnalyzerLogRecord) then) =
       __$$AnalyzerLogRecordCopyWithImpl<$Res>;
   @override
-  $Res call({ContextDetails mainContext, String message});
+  $Res call(
+      {Context mainContext,
+      DateTime timestamp,
+      LogSeverity severity,
+      String message});
 
-  $ContextDetailsCopyWith<$Res> get mainContext;
+  $ContextCopyWith<$Res> get mainContext;
 }
 
 /// @nodoc
@@ -300,13 +314,23 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
   @override
   $Res call({
     Object? mainContext = freezed,
+    Object? timestamp = freezed,
+    Object? severity = freezed,
     Object? message = freezed,
   }) {
     return _then(_$AnalyzerLogRecord(
       mainContext == freezed
           ? _value.mainContext
           : mainContext // ignore: cast_nullable_to_non_nullable
-              as ContextDetails,
+              as Context,
+      timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      severity == freezed
+          ? _value.severity
+          : severity // ignore: cast_nullable_to_non_nullable
+              as LogSeverity,
       message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -315,8 +339,8 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
   }
 
   @override
-  $ContextDetailsCopyWith<$Res> get mainContext {
-    return $ContextDetailsCopyWith<$Res>(_value.mainContext, (value) {
+  $ContextCopyWith<$Res> get mainContext {
+    return $ContextCopyWith<$Res>(_value.mainContext, (value) {
       return _then(_value.copyWith(mainContext: value));
     });
   }
@@ -325,7 +349,8 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AnalyzerLogRecord extends AnalyzerLogRecord {
-  const _$AnalyzerLogRecord(this.mainContext, this.message,
+  const _$AnalyzerLogRecord(
+      this.mainContext, this.timestamp, this.severity, this.message,
       {final String? $type})
       : $type = $type ?? 'fromAnalyzer',
         super._();
@@ -334,7 +359,11 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
       _$$AnalyzerLogRecordFromJson(json);
 
   @override
-  final ContextDetails mainContext;
+  final Context mainContext;
+  @override
+  final DateTime timestamp;
+  @override
+  final LogSeverity severity;
   @override
   final String message;
 
@@ -343,7 +372,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
 
   @override
   String toString() {
-    return 'LogRecord.fromAnalyzer(mainContext: $mainContext, message: $message)';
+    return 'LogRecord.fromAnalyzer(mainContext: $mainContext, timestamp: $timestamp, severity: $severity, message: $message)';
   }
 
   @override
@@ -353,6 +382,8 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
             other is _$AnalyzerLogRecord &&
             const DeepCollectionEquality()
                 .equals(other.mainContext, mainContext) &&
+            const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
+            const DeepCollectionEquality().equals(other.severity, severity) &&
             const DeepCollectionEquality().equals(other.message, message));
   }
 
@@ -361,6 +392,8 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(mainContext),
+      const DeepCollectionEquality().hash(timestamp),
+      const DeepCollectionEquality().hash(severity),
       const DeepCollectionEquality().hash(message));
 
   @JsonKey(ignore: true)
@@ -372,33 +405,38 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) simple,
-    required TResult Function(ContextDetails mainContext, String message)
+    required TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)
         fromAnalyzer,
     required TResult Function(RuleCode lintCode, String message) fromRule,
   }) {
-    return fromAnalyzer(mainContext, message);
+    return fromAnalyzer(mainContext, timestamp, severity, message);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String message)? simple,
-    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)?
+        fromAnalyzer,
     TResult Function(RuleCode lintCode, String message)? fromRule,
   }) {
-    return fromAnalyzer?.call(mainContext, message);
+    return fromAnalyzer?.call(mainContext, timestamp, severity, message);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? simple,
-    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)?
+        fromAnalyzer,
     TResult Function(RuleCode lintCode, String message)? fromRule,
     required TResult orElse(),
   }) {
     if (fromAnalyzer != null) {
-      return fromAnalyzer(mainContext, message);
+      return fromAnalyzer(mainContext, timestamp, severity, message);
     }
     return orElse();
   }
@@ -447,14 +485,18 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
 
 abstract class AnalyzerLogRecord extends LogRecord {
   const factory AnalyzerLogRecord(
-          final ContextDetails mainContext, final String message) =
-      _$AnalyzerLogRecord;
+      final Context mainContext,
+      final DateTime timestamp,
+      final LogSeverity severity,
+      final String message) = _$AnalyzerLogRecord;
   const AnalyzerLogRecord._() : super._();
 
   factory AnalyzerLogRecord.fromJson(Map<String, dynamic> json) =
       _$AnalyzerLogRecord.fromJson;
 
-  ContextDetails get mainContext;
+  Context get mainContext;
+  DateTime get timestamp;
+  LogSeverity get severity;
   @override
   String get message;
   @override
@@ -558,7 +600,8 @@ class _$RuleLogRecord extends RuleLogRecord {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) simple,
-    required TResult Function(ContextDetails mainContext, String message)
+    required TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)
         fromAnalyzer,
     required TResult Function(RuleCode lintCode, String message) fromRule,
   }) {
@@ -569,7 +612,9 @@ class _$RuleLogRecord extends RuleLogRecord {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String message)? simple,
-    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)?
+        fromAnalyzer,
     TResult Function(RuleCode lintCode, String message)? fromRule,
   }) {
     return fromRule?.call(lintCode, message);
@@ -579,7 +624,9 @@ class _$RuleLogRecord extends RuleLogRecord {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? simple,
-    TResult Function(ContextDetails mainContext, String message)? fromAnalyzer,
+    TResult Function(Context mainContext, DateTime timestamp,
+            LogSeverity severity, String message)?
+        fromAnalyzer,
     TResult Function(RuleCode lintCode, String message)? fromRule,
     required TResult orElse(),
   }) {

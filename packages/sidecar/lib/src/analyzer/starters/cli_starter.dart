@@ -13,6 +13,7 @@ import '../../cli/options/cli_options.dart';
 import '../../rules/rules.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/logger/logger.dart';
+import '../../utils/printer/lint_printer.dart';
 import '../options_provider.dart';
 import '../plugin/plugin.dart';
 import '../server/log_delegate.dart';
@@ -60,7 +61,17 @@ Future<void> startSidecarCli(
 
         //TODO: make the plugin path dynamic
         const pluginPath = '/Users/pattobrien/Development/sidecar/packages';
-        final runners = await container.read(getRunnersProvider.future);
+        final runners = container.read(runnersProvider);
+        for (final runner in runners) {
+          runner.lints.listen((notification) {
+            if (notification.lints.isNotEmpty) {
+              print(
+                  '${notification.path}: ${notification.lints.length} results\n');
+              print(notification.lints.prettyPrint());
+            }
+          });
+        }
+        await container.read(runnersInitializerProvider.future);
         logDelegate.dumpResults();
         if (cliOptions.mode.isCli) {
           // channel.close();
@@ -74,7 +85,7 @@ Future<void> startSidecarCli(
               print('\n${DateTime.now().toIso8601String()} RELOADING...\n');
               final elements = container.getAllProviderElements();
               final numberOfRunners =
-                  elements.where((e) => e.origin == getRunnersProvider);
+                  elements.where((e) => e.origin == runnersProvider);
               print('# of active runners: ${numberOfRunners.length}');
               final events = c.events ?? [];
               // TODO: check for any changes to lint rules
@@ -93,7 +104,7 @@ Future<void> startSidecarCli(
                         'rebuilding runner: ${runner.context.contextRoot.root.path}\n');
 
                     // print('activeContexts: ${contextNumber.length}');
-                    container.refresh(getRunnersProvider);
+                    container.refresh(runnersProvider);
                     break;
                   }
                 }

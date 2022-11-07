@@ -29,21 +29,31 @@ class _SystemHash {
   }
 }
 
-String $getRunnersHash() => r'da9105c284e2d964d6901f029d3d6ecf2308062a';
+String $runnersHash() => r'ca61ef0ad5e3a748da837417e98642c170bb31c3';
 
-/// See also [getRunners].
-final getRunnersProvider = FutureProvider<List<SidecarRunner>>(
-  getRunners,
-  name: r'getRunnersProvider',
+/// See also [runners].
+final runnersProvider = Provider<List<SidecarRunner>>(
+  runners,
+  name: r'runnersProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : $getRunnersHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : $runnersHash,
 );
-typedef GetRunnersRef = FutureProviderRef<List<SidecarRunner>>;
-String $runnerForContextHash() => r'98ad46c4083d85f77c8c75cab8f934d82a1b5ef1';
+typedef RunnersRef = ProviderRef<List<SidecarRunner>>;
+String $runnersInitializerHash() => r'6d0610d1bbf92c82a76ad8d346ce706b71f02e21';
+
+/// See also [runnersInitializer].
+final runnersInitializerProvider = FutureProvider<void>(
+  runnersInitializer,
+  name: r'runnersInitializerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : $runnersInitializerHash,
+);
+typedef RunnersInitializerRef = FutureProviderRef<void>;
+String $runnerForContextHash() => r'660aed90532fe84608815498b153d42d5379031e';
 
 /// See also [runnerForContext].
-class RunnerForContextProvider
-    extends AutoDisposeFutureProvider<SidecarRunner> {
+class RunnerForContextProvider extends AutoDisposeProvider<SidecarRunner> {
   RunnerForContextProvider(
     this.context,
   ) : super(
@@ -75,12 +85,12 @@ class RunnerForContextProvider
   }
 }
 
-typedef RunnerForContextRef = AutoDisposeFutureProviderRef<SidecarRunner>;
+typedef RunnerForContextRef = AutoDisposeProviderRef<SidecarRunner>;
 
 /// See also [runnerForContext].
 final runnerForContextProvider = RunnerForContextFamily();
 
-class RunnerForContextFamily extends Family<AsyncValue<SidecarRunner>> {
+class RunnerForContextFamily extends Family<SidecarRunner> {
   RunnerForContextFamily();
 
   RunnerForContextProvider call(
@@ -92,7 +102,7 @@ class RunnerForContextFamily extends Family<AsyncValue<SidecarRunner>> {
   }
 
   @override
-  AutoDisposeFutureProvider<SidecarRunner> getProviderOverride(
+  AutoDisposeProvider<SidecarRunner> getProviderOverride(
     covariant RunnerForContextProvider provider,
   ) {
     return call(

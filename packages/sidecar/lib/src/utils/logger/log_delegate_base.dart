@@ -7,11 +7,9 @@ abstract class LogDelegateBase {
 
   void sidecarMessage(String message);
 
-  void pluginInitializationFail(Object err, StackTrace stackTrace);
+  void sidecarLog(String message);
 
   void analysisResults(String path, List<LintResult> results);
-
-  void pluginRestart();
 
   void analysisResultError(LintResult result, Object err, StackTrace stack);
 }

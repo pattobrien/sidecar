@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logging/logging.dart';
 
-import '../models/context_details.dart';
 import '../models/models.dart';
 
 part 'log_record.freezed.dart';
@@ -13,7 +13,9 @@ class LogRecord with _$LogRecord {
   ) = _LogRecord;
 
   const factory LogRecord.fromAnalyzer(
-    ContextDetails mainContext,
+    Context mainContext,
+    DateTime timestamp,
+    LogSeverity severity,
     String message,
   ) = AnalyzerLogRecord;
 
@@ -27,3 +29,32 @@ class LogRecord with _$LogRecord {
   factory LogRecord.fromJson(Map<String, dynamic> json) =>
       _$LogRecordFromJson(json);
 }
+
+enum LogSeverity {
+  error([Level.SEVERE, Level.SHOUT]),
+  warning([Level.WARNING]),
+  info([Level.FINE, Level.FINER, Level.FINEST]),
+  verbose([]),
+  unknown([]);
+
+  const LogSeverity(this.levels);
+
+  final List<Level> levels;
+
+  static LogSeverity fromLogLevel(Level level) {
+    if (level == Level.FINE ||
+        level == Level.FINER ||
+        level == Level.FINEST ||
+        level == Level.INFO) {
+      return LogSeverity.info;
+    } else if (level == Level.SEVERE || level == Level.SHOUT) {
+      return LogSeverity.error;
+    } else if (level == Level.WARNING) {
+      return LogSeverity.warning;
+    } else {
+      return LogSeverity.unknown;
+    }
+  }
+}
+
+extension LogSeverityX on LogSeverity {}

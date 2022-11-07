@@ -111,7 +111,7 @@ final middlemanPluginProvider = Provider<MiddlemanPluginNew>(
     allContextsProvider,
     isolateCommunicationServiceProvider,
     middlemanResourceProvider,
-    middlemanPluginIsInitializedProvider,
+    // middlemanPluginIsInitializedProvider,
   ],
 );
 

@@ -32,7 +32,8 @@ class SidecarRunner {
 
   ResourceProvider get resourceProvider => _ref.read(runnerResourceProvider);
 
-  Stream<Object> get stream => _ref.read(analyzerStreamProvider(this).stream);
+  final _controller = StreamController<Object>();
+  Stream<Object> get _stream => _controller.stream;
 
   Stream<ResponseMessage> get _responses =>
       _ref.read(analyzerResponseStreamProvider(this).stream);
@@ -43,13 +44,14 @@ class SidecarRunner {
   Stream<LogRecord> get logs =>
       _ref.read(analyzerLogStreamProvider(this).stream);
 
-  Stream<LintNotification> get _lints => notifications
+  Stream<LintNotification> get lints => notifications
       .where((e) => e is LintNotification)
       .map((e) => e as LintNotification);
 
   /// Starts the plugin and sends the necessary requests for initializing it.
   Future<void> initialize() async {
     print('initializing...');
+    _initStream();
 
     await serverSideStarter(
       sendPort: receivePort.sendPort,
@@ -61,18 +63,42 @@ class SidecarRunner {
           lint: (_) => null,
         ));
 
-    _lints.listen(handleLints);
+    lints.listen(_handleLints);
 
     await _initializationCompleter.future;
-    await _requestSetActiveRoot();
-    await _requestSetContext();
+    await requestSetActiveRoot();
+    // await _requestSetContext();
   }
 
-  void handleLints(LintNotification notification) {
-    if (notification.lints.isNotEmpty) {
-      print('${notification.path}: ${notification.lints.length} results\n');
-      print(notification.lints.prettyPrint());
-    }
+  void _handleLints(LintNotification notification) {
+    // if (notification.lints.isNotEmpty) {
+    // print('${notification.path}: ${notification.lints.length} results\n');
+    // print(notification.lints.prettyPrint());
+    // }
+  }
+
+  void _initStream() {
+    receivePort.listen(
+      (dynamic m) {
+        if (m == null) return;
+        if (m is SendPort) {
+          sendPort = m;
+        } else if (m is String) {
+          try {
+            // print('${DateTime.now().toIso8601String()}: $m');
+            final jsonObject = jsonDecode(m) as Map<String, dynamic>;
+            _controller.add(jsonObject);
+          } catch (e) {
+            print('something went wrong: $e: $m');
+          }
+        } else {
+          print('got unexpected type: ${m.runtimeType}');
+          _controller.add(m as Object);
+        }
+      },
+      onError: (dynamic e) => _controller.addError(e as Object),
+      onDone: _controller.close,
+    );
   }
 
   void handleInitialization() {
@@ -89,26 +115,33 @@ class SidecarRunner {
     // print(request.toJson());
     unawaited(asyncRequest<UpdateFilesResponse>(request));
     final lintNotification =
-        await _lints.firstWhere((element) => element.path == path);
+        await lints.firstWhere((element) => element.path == path);
     // print('received lints: ${lintNotification.toJson()}');
     return lintNotification.lints;
   }
 
-  Future<void> _requestSetActiveRoot() async {
+  Future<void> requestSetActiveRoot() async {
+    print('_requestSetActiveRoot');
     final mainContextRoot = context.activeRoot.root.toUri();
     final request = SetActiveRootRequest(mainContextRoot);
     await asyncRequest(request);
+    print('_requestSetActiveRoot completed');
   }
 
-  Future<void> _requestSetContext() async {
+  Future<ContextCollectionResponse> requestSetContext() async {
+    print('_requestSetContext');
     final mainContext = context;
     final allContextRootPaths = <String>[
       mainContext.activeRoot.root.path,
       ...mainContext.allRoots.map((e) => e.contextRoot.root.path),
     ];
+    // print('_requestSetContext: ${mainContext.activeRoot.root.path}');
+    // print('_requestSetContext: ${allContextRootPaths.length} contexts total');
     final request = SetContextCollectionRequest(
         mainRoot: mainContext.activeRoot.root.path, roots: allContextRootPaths);
-    await asyncRequest(request);
+    final response = await asyncRequest<ContextCollectionResponse>(request);
+    print('_requestSetContext completed');
+    return response;
   }
 
   Future<T> asyncRequest<T extends SidecarResponse>(
@@ -140,3 +173,13 @@ class SidecarRunner {
     // sendRequest(plugin.PluginShutdownParams().toRequest(_uuid.v4()));
   }
 }
+
+final analyzerStreamProvider = StreamProvider.family<Object, SidecarRunner>(
+  (ref, runner) async* {
+    final stream = runner._stream;
+    await for (final event in stream) {
+      yield event;
+    }
+  },
+  name: 'serverChannelStreamProvider',
+);
