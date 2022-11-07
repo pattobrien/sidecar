@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
+import '../../utils/json_utils/json_utils.dart';
 import '../models/models.dart';
 
 part 'log_record.freezed.dart';
@@ -17,6 +18,9 @@ class LogRecord with _$LogRecord {
     DateTime timestamp,
     LogSeverity severity,
     String message,
+    // @JsonKey(includeIfNull: false) Object? error,
+    @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+        StackTrace? stackTrace,
   ) = AnalyzerLogRecord;
 
   const factory LogRecord.fromRule(

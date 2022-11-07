@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $AllContextsNotifierHash() =>
-    r'd971f09ffef5ae5e9e0264d217022489c46a05eb';
+    r'f0b770589dc9740b20780c9dad97ef79e10676a5';
 
 /// See also [AllContextsNotifier].
 final allContextsNotifierProvider =
@@ -49,7 +49,7 @@ abstract class _$AllContextsNotifier extends Notifier<List<AnalysisContext>> {
 }
 
 String $ActiveContextNotifierHash() =>
-    r'e3cb16a770bf985de573e8b872c20c096ed62119';
+    r'05f2970bbea4e0dc88ef1075c1a4e4c89f1556c4';
 
 /// See also [ActiveContextNotifier].
 final activeContextNotifierProvider =
@@ -68,11 +68,10 @@ abstract class _$ActiveContextNotifier extends Notifier<ActiveContext?> {
 }
 
 String $analysisContextForRootHash() =>
-    r'9593018fcc230822c79711ec109cbb8af045f3a7';
+    r'ee1f4f5cfb86e56af9bb537eb1340ca795066be7';
 
 /// See also [analysisContextForRoot].
-class AnalysisContextForRootProvider
-    extends AutoDisposeProvider<AnalysisContext> {
+class AnalysisContextForRootProvider extends Provider<AnalysisContext> {
   AnalysisContextForRootProvider(
     this.context,
   ) : super(
@@ -104,7 +103,7 @@ class AnalysisContextForRootProvider
   }
 }
 
-typedef AnalysisContextForRootRef = AutoDisposeProviderRef<AnalysisContext>;
+typedef AnalysisContextForRootRef = ProviderRef<AnalysisContext>;
 
 /// See also [analysisContextForRoot].
 final analysisContextForRootProvider = AnalysisContextForRootFamily();
@@ -121,7 +120,7 @@ class AnalysisContextForRootFamily extends Family<AnalysisContext> {
   }
 
   @override
-  AutoDisposeProvider<AnalysisContext> getProviderOverride(
+  Provider<AnalysisContext> getProviderOverride(
     covariant AnalysisContextForRootProvider provider,
   ) {
     return call(

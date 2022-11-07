@@ -30,11 +30,11 @@ class _SystemHash {
 }
 
 String $getResolvedUnitForFileHash() =>
-    r'1652fabcf563af1dcec7f9499e71e479b104431f';
+    r'10ccb63eff2bcf19ffa1dd97a40dc3b1d03b6d74';
 
 /// See also [getResolvedUnitForFile].
 class GetResolvedUnitForFileProvider
-    extends AutoDisposeFutureProvider<ResolvedUnitResult?> {
+    extends FutureProvider<ResolvedUnitResult?> {
   GetResolvedUnitForFileProvider(
     this.file,
   ) : super(
@@ -66,8 +66,7 @@ class GetResolvedUnitForFileProvider
   }
 }
 
-typedef GetResolvedUnitForFileRef
-    = AutoDisposeFutureProviderRef<ResolvedUnitResult?>;
+typedef GetResolvedUnitForFileRef = FutureProviderRef<ResolvedUnitResult?>;
 
 /// See also [getResolvedUnitForFile].
 final getResolvedUnitForFileProvider = GetResolvedUnitForFileFamily();
@@ -85,7 +84,7 @@ class GetResolvedUnitForFileFamily
   }
 
   @override
-  AutoDisposeFutureProvider<ResolvedUnitResult?> getProviderOverride(
+  FutureProvider<ResolvedUnitResult?> getProviderOverride(
     covariant GetResolvedUnitForFileProvider provider,
   ) {
     return call(

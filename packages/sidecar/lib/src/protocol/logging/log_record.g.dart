@@ -23,17 +23,28 @@ _$AnalyzerLogRecord _$$AnalyzerLogRecordFromJson(Map<String, dynamic> json) =>
       DateTime.parse(json['timestamp'] as String),
       $enumDecode(_$LogSeverityEnumMap, json['severity']),
       json['message'] as String,
+      stringToStackNullable(json['stackTrace'] as String?),
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$AnalyzerLogRecordToJson(_$AnalyzerLogRecord instance) =>
-    <String, dynamic>{
-      'mainContext': instance.mainContext.toJson(),
-      'timestamp': instance.timestamp.toIso8601String(),
-      'severity': _$LogSeverityEnumMap[instance.severity]!,
-      'message': instance.message,
-      'runtimeType': instance.$type,
-    };
+Map<String, dynamic> _$$AnalyzerLogRecordToJson(_$AnalyzerLogRecord instance) {
+  final val = <String, dynamic>{
+    'mainContext': instance.mainContext.toJson(),
+    'timestamp': instance.timestamp.toIso8601String(),
+    'severity': _$LogSeverityEnumMap[instance.severity]!,
+    'message': instance.message,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('stackTrace', stackToStringNullable(instance.stackTrace));
+  val['runtimeType'] = instance.$type;
+  return val;
+}
 
 const _$LogSeverityEnumMap = {
   LogSeverity.error: 'error',

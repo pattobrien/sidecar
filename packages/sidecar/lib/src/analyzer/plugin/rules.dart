@@ -19,23 +19,23 @@ List<LintRule> lintRulesForFile(
       .select((rules) => rules.whereType<LintRule>().toList()));
 }
 
-@riverpod
-List<LintRule> lintRulesForRoot(
-  LintRulesForRootRef ref,
-  Context root,
-) {
-  return ref.watch(activatedRulesForRootProvider(root)
-      .select((rules) => rules.whereType<LintRule>().toList()));
-}
+// @riverpod
+// List<LintRule> lintRulesForRoot(
+//   LintRulesForRootRef ref,
+//   Context root,
+// ) {
+//   return ref.watch(activatedRulesForRootProvider(root)
+//       .select((rules) => rules.whereType<LintRule>().toList()));
+// }
 
-@riverpod
-List<AssistRule> assistRulesForRoot(
-  AssistRulesForRootRef ref,
-  Context root,
-) {
-  return ref.watch(activatedRulesForRootProvider(root)
-      .select((rules) => rules.whereType<AssistRule>().toList()));
-}
+// @riverpod
+// List<AssistRule> assistRulesForRoot(
+//   AssistRulesForRootRef ref,
+//   Context root,
+// ) {
+//   return ref.watch(activatedRulesForRootProvider(root)
+//       .select((rules) => rules.whereType<AssistRule>().toList()));
+// }
 
 @riverpod
 List<AssistRule> assistRulesForFile(
@@ -46,28 +46,34 @@ List<AssistRule> assistRulesForFile(
       .select((rules) => rules.whereType<AssistRule>().toList()));
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 List<BaseRule> activatedRulesForRoot(
   ActivatedRulesForRootRef ref,
   Context root,
 ) {
-  final context = ref.watch(activeContextNotifierProvider)!;
+  final context = ref.watch(activeContextNotifierProvider);
+  assert(context != null, 'expected to find one context');
   final constructors = ref.watch(ruleConstructorProvider);
   final ruleService = ref.watch(ruleInitializationServiceProvider);
-  return ruleService.constructRules(context.sidecarOptions, constructors, root);
+  return ruleService.constructRules(
+      context!.sidecarOptions, constructors, root);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 List<BaseRule> filteredRulesForFile(
   FilteredRulesForFileRef ref,
   AnalyzedFile file,
 ) {
   final allRules = ref.watch(activatedRulesForRootProvider(file.context));
   final context = ref.watch(activeContextNotifierProvider)!;
-  return allRules
-      .where((rule) => _isPathIncludedForRule(
-          file: file, rule: rule, projectConfiguration: context.sidecarOptions))
-      .toList();
+
+  return allRules.where((rule) {
+    // final relativePath = file.relativePath;
+    // final contextPath = file.context.root.path;
+    final isPathIncluded = _isPathIncludedForRule(
+        file: file, rule: rule, projectConfiguration: context.sidecarOptions);
+    return isPathIncluded;
+  }).toList();
 }
 
 bool _isPathIncludedForRule({
@@ -75,11 +81,12 @@ bool _isPathIncludedForRule({
   required BaseRule rule,
   required ProjectConfiguration projectConfiguration,
 }) {
+  // print(relativePath);
   // #1 check explicit LintRule/CodeEdit includes from project config
   final ruleConfig = projectConfiguration.getConfigurationForRule(rule);
 
   if (ruleConfig != null && ruleConfig.includes != null) {
-    return ruleConfig.includes!.any((glob) => glob.matches(file.relativePath));
+    return ruleConfig.includesMatch(file.relativePath);
   }
 
   // #2 check default LintRule/CodeEdit includes from lint/edit definition
@@ -87,7 +94,14 @@ bool _isPathIncludedForRule({
     return rule.includes!.any((glob) => glob.matches(file.relativePath));
   }
 
-  // TODO: #3 check explicit LintPackage includes from project config
+  final rulePackageConfig =
+      projectConfiguration.getPackageConfigurationForRule(rule);
+
+  // check explicit LintPackage includes from project config
+  if (rulePackageConfig != null && rulePackageConfig.includes != null) {
+    return rulePackageConfig.includesMatch(file.relativePath);
+  }
+
   // TODO: #4 check default LintPackage includes from LintPackage definition
 
   // #5 check project configuration

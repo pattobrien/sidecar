@@ -1,17 +1,17 @@
-// import 'dart:async';
+import 'dart:async';
 
-// import 'package:analyzer/dart/analysis/analysis_context.dart';
-// import 'package:analyzer/dart/analysis/context_root.dart';
-// import 'package:path/path.dart' as p;
-// import 'package:riverpod/riverpod.dart';
+import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/context_root.dart';
+import 'package:path/path.dart' as p;
+import 'package:riverpod/riverpod.dart';
 
-// import '../../services/services.dart';
-// import '../../utils/file_paths.dart';
-// import '../context/context.dart';
-// import '../results/analysis_results_provider.dart';
-// import '../results/analysis_results_reporter.dart';
-// import '../server/log_delegate.dart';
-// import 'plugin.dart';
+import '../../services/services.dart';
+import '../../utils/file_paths.dart';
+import '../context/context.dart';
+import '../results/analysis_results_provider.dart';
+import '../results/analysis_results_reporter.dart';
+import '../server/log_delegate.dart';
+import 'plugin.dart';
 
 // final activeContextDependenciesProvider = Provider<List<AnalysisContext>>(
 //   (ref) {

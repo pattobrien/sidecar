@@ -26,6 +26,7 @@ Future<List<LintResult>> analysisResultsForFile(
   if (file.isSidecarYamlFile) {
     final resourceProvider = ref.watch(analyzerResourceProvider);
     final content = resourceProvider.getFile(file.path).readAsStringSync();
+
     final config = ProjectConfiguration.fromYaml(content, fileUri: unit!.uri);
     return config.allErrors.map((e) => e.toLintResult()).toList();
   } else {
@@ -41,9 +42,10 @@ Future<List<LintResult>> analysisResultsForFile(
 Future<List<LintResult>> lintResultsForFile(
   LintResultsForFileRef ref,
   AnalyzedFile file,
-) async {
-  final results = await ref.watch(analysisResultsForFileProvider(file).future);
-  return results.whereType<LintResult>().toList();
+) {
+  return ref
+      .watch(analysisResultsForFileProvider(file).future)
+      .then((results) => results.whereType<LintResult>().toList());
 }
 
 @riverpod

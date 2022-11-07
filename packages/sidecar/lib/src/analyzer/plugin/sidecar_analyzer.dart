@@ -27,9 +27,7 @@ class SidecarAnalyzer {
   SidecarAnalyzer(
     this._ref, {
     required this.sP,
-    // required this.context,
     required RequestMessage initRequest,
-    // required this.rootUri,
   }) : context =
             Context(root: (initRequest.request as SetActiveRootRequest).root) {
     _initLogger();
@@ -37,11 +35,9 @@ class SidecarAnalyzer {
     _setupListeners();
   }
 
-  // final initializationCompleter = Completer<void>();
   final ProviderContainer _ref;
   final SendPort sP;
   final Context context;
-  // final Uri rootUri;
 
   SidecarAnalyzerCommService get communication =>
       _ref.read(sidecarAnalyzerCommServiceProvider(sP));
@@ -66,8 +62,8 @@ class SidecarAnalyzer {
   void _initLogger() {
     logger.onRecord.listen((event) {
       final severity = LogSeverity.fromLogLevel(event.level);
-      final record =
-          LogRecord.fromAnalyzer(context, event.time, severity, event.message);
+      final record = LogRecord.fromAnalyzer(
+          context, event.time, severity, event.message, event.stackTrace);
       final message = SidecarMessage.log(record);
       sendToRunner(message);
     });
@@ -254,7 +250,7 @@ class SidecarAnalyzer {
     logger.finest('${DateTime.now()} starting analyzing files: $files');
     await Future.wait(files.map((file) async {
       try {
-        await _ref.read(getResolvedUnitForFileProvider(file).future);
+        await _ref.refresh(getResolvedUnitForFileProvider(file).future);
         final results =
             await _ref.read(createAnalysisReportProvider(file).future);
         final notification = LintNotification(file, results);

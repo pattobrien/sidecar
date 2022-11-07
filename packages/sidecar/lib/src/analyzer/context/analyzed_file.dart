@@ -30,5 +30,5 @@ class AnalyzedFile with _$AnalyzedFile {
   bool get isAnalysisOptionsFile => relativePath == kAnalysisOptionsYaml;
   bool get isSidecarYamlFile => relativePath == kSidecarYaml;
 
-  String get relativePath => p.relative(path, from: context.root.path);
+  String get relativePath => p.relative(path, from: context.root.toFilePath());
 }

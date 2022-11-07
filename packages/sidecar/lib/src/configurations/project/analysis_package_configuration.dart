@@ -4,12 +4,18 @@ import 'package:yaml/yaml.dart';
 
 import '../../utils/json_utils/glob_json_util.dart';
 import '../builders/config_exceptions.dart';
+import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 
 part 'analysis_package_configuration.g.dart';
 
 abstract class AnalysisPackageConfiguration {
   const AnalysisPackageConfiguration();
+  List<Glob>? get includes;
+  List<SidecarNewException> get errors;
+
+  bool includesMatch(String relativePath) =>
+      includes?.any((glob) => glob.matches(relativePath)) ?? false;
 }
 
 @JsonSerializable(anyMap: true, explicitToJson: true, includeIfNull: false)
@@ -22,7 +28,10 @@ class LintPackageConfiguration extends AnalysisPackageConfiguration {
 
   factory LintPackageConfiguration.fromJson(Object? yamlMap) {
     if (yamlMap is YamlMap?) {
+      final includes = yamlMap?.parseGlobIncludes();
       return LintPackageConfiguration._(
+        includes: includes?.item1,
+        errors: [...?includes?.item2],
         lints: yamlMap?.nodes
             .map<String, LintConfiguration?>((dynamic key, value) {
           final yamlKey = key as YamlScalar;
@@ -71,7 +80,10 @@ class AssistPackageConfiguration extends AnalysisPackageConfiguration {
 
   factory AssistPackageConfiguration.fromJson(Object? yamlMap) {
     if (yamlMap is YamlMap?) {
+      final includes = yamlMap?.parseGlobIncludes();
       return AssistPackageConfiguration._(
+        includes: includes?.item1,
+        errors: [...?includes?.item2],
         assists: yamlMap?.nodes
             .map<String, AssistConfiguration>((dynamic key, value) {
           final yamlKey = key as YamlScalar;

@@ -16,6 +16,8 @@ abstract class AnalysisConfiguration {
   bool? get enabled;
   List<SidecarNewException> get errors;
   List<Glob>? get includes;
+  bool includesMatch(String relativePath) =>
+      includes?.any((glob) => glob.matches(relativePath)) ?? false;
 }
 
 @JsonSerializable(anyMap: true, explicitToJson: true, includeIfNull: false)

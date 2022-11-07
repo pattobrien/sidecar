@@ -30,6 +30,12 @@ class SidecarRunner {
       [context.context, ...context.allRoots];
   final ReceivePort receivePort;
 
+  AnalyzedFile? getAnalyzedFileForPath(String path) => allContexts
+      .firstWhere(
+          (ctx) => ctx.typedAnalyzedFiles().any((file) => file.path == path))
+      .typedAnalyzedFiles()
+      .firstWhere((file) => file.path == path);
+
   late final SendPort sendPort;
 
   ResourceProvider get resourceProvider => _ref.read(runnerResourceProvider);
@@ -65,18 +71,9 @@ class SidecarRunner {
           lint: (_) => null,
         ));
 
-    lints.listen(_handleLints);
-
     await _initializationCompleter.future;
     await requestSetActiveRoot();
     // await _requestSetContext();
-  }
-
-  void _handleLints(LintNotification notification) {
-    // if (notification.lints.isNotEmpty) {
-    // print('${notification.path}: ${notification.lints.length} results\n');
-    // print(notification.lints.prettyPrint());
-    // }
   }
 
   void _initStream() {

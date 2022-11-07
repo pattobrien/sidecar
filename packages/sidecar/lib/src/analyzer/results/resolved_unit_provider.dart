@@ -9,11 +9,16 @@ import '../plugin/plugin.dart';
 
 part 'resolved_unit_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<ResolvedUnitResult?> getResolvedUnitForFile(
   GetResolvedUnitForFileRef ref,
   AnalyzedFile file,
 ) async {
+  final rules = ref.watch(filteredRulesForFileProvider(file));
+  if (rules.isEmpty && !file.isSidecarYamlFile) {
+    //if there are no rules active for a certain file, then we dont resolve the file
+    return Future.value();
+  }
   SomeResolvedUnitResult? someUnitResult;
   await report(() async {
     final context = ref.watch(analysisContextForRootProvider(file.context));

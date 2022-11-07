@@ -6,8 +6,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../analyzer/context/active_context.dart';
-import '../analyzer/context/active_context_root.dart';
 import '../analyzer/plugin/plugin.dart';
 import '../analyzer/results/results.dart';
 import '../configurations/configurations.dart';

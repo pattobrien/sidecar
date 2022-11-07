@@ -27,8 +27,8 @@ part 'analysis_results_reporter.g.dart';
 @riverpod
 Future<List<LintResult>> createAnalysisReport(
     CreateAnalysisReportRef ref, AnalyzedFile file) async {
-  final results = await ref.watch(lintResultsForFileProvider(file).future);
-  logger.finer('analysisResultsReporterProvider = ${file.relativePath}');
-  // ref.watch(logDelegateProvider).analysisResults(file.path, results);
-  return results;
+  return ref.watch(lintResultsForFileProvider(file).future);
+  // logger.finer('analysisResultsReporterProvider = ${file.relativePath}');
+  // // ref.watch(logDelegateProvider).analysisResults(file.path, results);
+  // return results;
 }

@@ -99,146 +99,6 @@ class LintRulesForFileFamily extends Family<List<LintRule>> {
   String? get name => r'lintRulesForFileProvider';
 }
 
-String $lintRulesForRootHash() => r'65532a1f5206f3ee1297d8c544f8b67edcc04aa8';
-
-/// See also [lintRulesForRoot].
-class LintRulesForRootProvider extends AutoDisposeProvider<List<LintRule>> {
-  LintRulesForRootProvider(
-    this.root,
-  ) : super(
-          (ref) => lintRulesForRoot(
-            ref,
-            root,
-          ),
-          from: lintRulesForRootProvider,
-          name: r'lintRulesForRootProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : $lintRulesForRootHash,
-        );
-
-  final Context root;
-
-  @override
-  bool operator ==(Object other) {
-    return other is LintRulesForRootProvider && other.root == root;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, root.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-typedef LintRulesForRootRef = AutoDisposeProviderRef<List<LintRule>>;
-
-/// See also [lintRulesForRoot].
-final lintRulesForRootProvider = LintRulesForRootFamily();
-
-class LintRulesForRootFamily extends Family<List<LintRule>> {
-  LintRulesForRootFamily();
-
-  LintRulesForRootProvider call(
-    Context root,
-  ) {
-    return LintRulesForRootProvider(
-      root,
-    );
-  }
-
-  @override
-  AutoDisposeProvider<List<LintRule>> getProviderOverride(
-    covariant LintRulesForRootProvider provider,
-  ) {
-    return call(
-      provider.root,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'lintRulesForRootProvider';
-}
-
-String $assistRulesForRootHash() => r'b66add49583a6f147428206b56810d5e7250dfa9';
-
-/// See also [assistRulesForRoot].
-class AssistRulesForRootProvider extends AutoDisposeProvider<List<AssistRule>> {
-  AssistRulesForRootProvider(
-    this.root,
-  ) : super(
-          (ref) => assistRulesForRoot(
-            ref,
-            root,
-          ),
-          from: assistRulesForRootProvider,
-          name: r'assistRulesForRootProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : $assistRulesForRootHash,
-        );
-
-  final Context root;
-
-  @override
-  bool operator ==(Object other) {
-    return other is AssistRulesForRootProvider && other.root == root;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, root.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-typedef AssistRulesForRootRef = AutoDisposeProviderRef<List<AssistRule>>;
-
-/// See also [assistRulesForRoot].
-final assistRulesForRootProvider = AssistRulesForRootFamily();
-
-class AssistRulesForRootFamily extends Family<List<AssistRule>> {
-  AssistRulesForRootFamily();
-
-  AssistRulesForRootProvider call(
-    Context root,
-  ) {
-    return AssistRulesForRootProvider(
-      root,
-    );
-  }
-
-  @override
-  AutoDisposeProvider<List<AssistRule>> getProviderOverride(
-    covariant AssistRulesForRootProvider provider,
-  ) {
-    return call(
-      provider.root,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'assistRulesForRootProvider';
-}
-
 String $assistRulesForFileHash() => r'a3eed53d780fa2eceeab93ac56cbf6fbdc5e6f1a';
 
 /// See also [assistRulesForFile].
@@ -310,11 +170,10 @@ class AssistRulesForFileFamily extends Family<List<AssistRule>> {
 }
 
 String $activatedRulesForRootHash() =>
-    r'f130a2e1d8b551a1b9037a2deb2312f3d9906704';
+    r'04a45cc0525fbb5d7257213d33823552654bb2d8';
 
 /// See also [activatedRulesForRoot].
-class ActivatedRulesForRootProvider
-    extends AutoDisposeProvider<List<BaseRule>> {
+class ActivatedRulesForRootProvider extends Provider<List<BaseRule>> {
   ActivatedRulesForRootProvider(
     this.root,
   ) : super(
@@ -346,7 +205,7 @@ class ActivatedRulesForRootProvider
   }
 }
 
-typedef ActivatedRulesForRootRef = AutoDisposeProviderRef<List<BaseRule>>;
+typedef ActivatedRulesForRootRef = ProviderRef<List<BaseRule>>;
 
 /// See also [activatedRulesForRoot].
 final activatedRulesForRootProvider = ActivatedRulesForRootFamily();
@@ -363,7 +222,7 @@ class ActivatedRulesForRootFamily extends Family<List<BaseRule>> {
   }
 
   @override
-  AutoDisposeProvider<List<BaseRule>> getProviderOverride(
+  Provider<List<BaseRule>> getProviderOverride(
     covariant ActivatedRulesForRootProvider provider,
   ) {
     return call(
@@ -382,10 +241,10 @@ class ActivatedRulesForRootFamily extends Family<List<BaseRule>> {
 }
 
 String $filteredRulesForFileHash() =>
-    r'a083630f6958324a70dd2dc7d4ae77ff841cf7b3';
+    r'a49767823ec6f64c84a89bf389aee12039e80c89';
 
 /// See also [filteredRulesForFile].
-class FilteredRulesForFileProvider extends AutoDisposeProvider<List<BaseRule>> {
+class FilteredRulesForFileProvider extends Provider<List<BaseRule>> {
   FilteredRulesForFileProvider(
     this.file,
   ) : super(
@@ -417,7 +276,7 @@ class FilteredRulesForFileProvider extends AutoDisposeProvider<List<BaseRule>> {
   }
 }
 
-typedef FilteredRulesForFileRef = AutoDisposeProviderRef<List<BaseRule>>;
+typedef FilteredRulesForFileRef = ProviderRef<List<BaseRule>>;
 
 /// See also [filteredRulesForFile].
 final filteredRulesForFileProvider = FilteredRulesForFileFamily();
@@ -434,7 +293,7 @@ class FilteredRulesForFileFamily extends Family<List<BaseRule>> {
   }
 
   @override
-  AutoDisposeProvider<List<BaseRule>> getProviderOverride(
+  Provider<List<BaseRule>> getProviderOverride(
     covariant FilteredRulesForFileProvider provider,
   ) {
     return call(

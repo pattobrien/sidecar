@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $createAnalysisReportHash() =>
-    r'5dd098723e3c1e69a42a50e627f56e1f6bf481a3';
+    r'414425a1c3282b00d288ffd8afc9d2b8e0e182b1';
 
 /// See also [createAnalysisReport].
 class CreateAnalysisReportProvider

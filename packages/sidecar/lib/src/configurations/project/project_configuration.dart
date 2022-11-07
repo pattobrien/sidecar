@@ -149,6 +149,16 @@ class ProjectConfiguration {
   bool includes(String relativePath) =>
       includeGlobs.any((glob) => glob.matches(relativePath));
 
+  AnalysisPackageConfiguration? getPackageConfigurationForRule(BaseRule rule) {
+    if (rule is AssistRule) {
+      return assistPackages?[rule.packageName];
+    } else if (rule is LintRule) {
+      return lintPackages?[rule.packageName];
+    } else {
+      throw UnimplementedError('getConfigurationForRule: unknown base type');
+    }
+  }
+
   AnalysisConfiguration? getConfigurationForRule(BaseRule rule) {
     if (rule is AssistRule) {
       return assistPackages?[rule.packageName]?.assists?[rule.code];

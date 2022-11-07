@@ -21,6 +21,7 @@ import '../../protocol/protocol.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/utils.dart';
+import '../../utils/analysis_context_utilities.dart';
 import '../context/active_context.dart';
 import '../context/analyzed_file.dart';
 import '../options_provider.dart';
@@ -158,14 +159,10 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
   ) async {
     final runners = ref.watch(runnersProvider);
     final responses = await Future.wait(runners.map((runner) async {
-      final path = parameters.file;
-      final context = runner.getContextForPath(path);
-      if (context == null) return null;
-      final analyzedFile = AnalyzedFile(
-          Context(root: context.contextRoot.root.toUri()), Uri.parse(path));
-      final assistRequest =
-          QuickFixRequest(file: analyzedFile, offset: parameters.offset);
-      return runner.asyncRequest<QuickFixResponse>(assistRequest);
+      final file = runner.getAnalyzedFileForPath(parameters.file);
+      if (file == null) return null;
+      final request = QuickFixRequest(file: file, offset: parameters.offset);
+      return runner.asyncRequest<QuickFixResponse>(request);
     }));
     final fixes = responses
         .whereType<QuickFixResponse>()
@@ -184,16 +181,11 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
   ) async {
     final runners = ref.watch(runnersProvider);
     final responses = await Future.wait(runners.map((runner) async {
-      final path = parameters.file;
-      final context = runner.getContextForPath(path);
-      if (context == null) return null;
-      final analyzedFile = AnalyzedFile(
-          Context(root: context.contextRoot.root.toUri()), Uri.parse(path));
-      final assistRequest = AssistRequest(
-          file: analyzedFile,
-          offset: parameters.offset,
-          length: parameters.length);
-      return runner.asyncRequest<AssistResponse>(assistRequest);
+      final file = runner.getAnalyzedFileForPath(parameters.file);
+      if (file == null) return null;
+      final request = AssistRequest(
+          file: file, offset: parameters.offset, length: parameters.length);
+      return runner.asyncRequest<AssistResponse>(request);
     }));
 
     final parsedResponses = responses
@@ -210,52 +202,55 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
   Future<plugin.AnalysisUpdateContentResult> handleAnalysisUpdateContent(
     plugin.AnalysisUpdateContentParams parameters,
   ) async {
-    final events = parameters.files.entries.map((entry) {
-      final analysisContext = ref
-          .read(runnersProvider)
-          .map((e) => e.context)
-          .firstWhere((element) => element.contextRoot.isAnalyzed(entry.key));
-      final context = Context(root: analysisContext.contextRoot.root.toUri());
-      final analyzedFile = AnalyzedFile(context, Uri.parse(entry.key));
-      final contentOverlay = entry.value;
-      if (contentOverlay is plugin.AddContentOverlay) {
-        return FileUpdateEvent.add(analyzedFile, contentOverlay.content);
-      }
-      if (contentOverlay is plugin.ChangeContentOverlay) {
-        final edits = contentOverlay.edits.map((e) {
-          final start =
-              SourceLocation(e.offset, sourceUrl: analyzedFile.fileUri);
-          final end = SourceLocation(e.offset + e.length,
-              sourceUrl: analyzedFile.fileUri);
-          final originalText = ' ' * (e.length);
-          final span = SourceSpan(start, end, originalText);
-          return SourceEdit(
-              originalSourceSpan: span, replacement: e.replacement);
+    final runners = ref.read(runnersProvider);
+    final responses = await Future.wait(runners.map((runner) async {
+      final events = parameters.files.entries
+          .map((entry) {
+            final analyzedFile = runner.getAnalyzedFileForPath(entry.key);
+            if (analyzedFile == null) return null;
+            final contentOverlay = entry.value;
+            if (contentOverlay is plugin.AddContentOverlay) {
+              return FileUpdateEvent.add(analyzedFile, contentOverlay.content);
+            }
+            if (contentOverlay is plugin.ChangeContentOverlay) {
+              final edits = contentOverlay.edits.map((e) {
+                final start =
+                    SourceLocation(e.offset, sourceUrl: analyzedFile.fileUri);
+                final end = SourceLocation(e.offset + e.length,
+                    sourceUrl: analyzedFile.fileUri);
+                final originalText = ' ' * (e.length);
+                final span = SourceSpan(start, end, originalText);
+                return SourceEdit(
+                    originalSourceSpan: span, replacement: e.replacement);
+              }).toList();
+              final sourceFileEdit = SourceFileEdit(
+                  file: analyzedFile.fileUri,
+                  fileStamp: DateTime.now(),
+                  edits: edits);
+              return FileUpdateEvent.modify(analyzedFile, sourceFileEdit);
+            } else if (contentOverlay is plugin.RemoveContentOverlay) {
+              return FileUpdateEvent.delete(analyzedFile);
+            } else {
+              throw UnimplementedError('INVALID OVERLAY');
+            }
+          })
+          .whereType<FileUpdateEvent>()
+          .toList();
+
+      final messages =
+          await Future.wait<UpdateFilesResponse>(runners.map((runner) async {
+        final runnerEvents = events.where((event) {
+          return runner.allContexts.contextForPath(event.filePath) != null;
         }).toList();
-        final sourceFileEdit = SourceFileEdit(
-            file: analyzedFile.fileUri,
-            fileStamp: DateTime.now(),
-            edits: edits);
-        return FileUpdateEvent.modify(analyzedFile, sourceFileEdit);
-      } else if (contentOverlay is plugin.RemoveContentOverlay) {
-        return FileUpdateEvent.delete(analyzedFile);
-      } else {
-        throw UnimplementedError('INVALID OVERLAY');
-      }
-    }).toList();
 
-    final allRunners = ref.read(runnersProvider);
-    final messages =
-        await Future.wait<UpdateFilesResponse>(allRunners.map((runner) async {
-      final runnerEvents = events.where((event) {
-        return runner.allContexts.contextForPath(event.filePath) != null;
-      }).toList();
+        final sidecarRequest = SidecarRequest.updateFiles(runnerEvents);
+        return runner.asyncRequest<UpdateFilesResponse>(sidecarRequest);
+        // final allRunners = ref.read(runnersProvider);
 
-      final sidecarRequest = SidecarRequest.updateFiles(runnerEvents);
-      return runner.asyncRequest<UpdateFilesResponse>(sidecarRequest);
+        // final anyErrors = messages.every((msg) => msg is! SidecarResponse);
+        // assert(!anyErrors, 'errors received');
+      }));
     }));
-    // final anyErrors = messages.every((msg) => msg is! SidecarResponse);
-    // assert(!anyErrors, 'errors received');
     return plugin.AnalysisUpdateContentResult();
   }
 
@@ -323,7 +318,7 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
   void _logMiddleman(SidecarRunner runner, LogRecord log) {
     final message = log.when(
       simple: (message) => message,
-      fromAnalyzer: (mainContext, timestamp, severity, message) {
+      fromAnalyzer: (mainContext, timestamp, severity, message, stack) {
         return '$timestamp [${severity.name.toUpperCase()}] $message';
       },
       fromRule: (lintCode, message) {
@@ -337,7 +332,7 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
     final runnerName = runner.context.activeRoot.root.shortName;
     final message = log.when(
       simple: (message) => message,
-      fromAnalyzer: (mainContext, timestamp, severity, message) {
+      fromAnalyzer: (mainContext, timestamp, severity, message, stack) {
         return '$timestamp [${severity.name}] $runnerName $message';
       },
       fromRule: (lintCode, message) {

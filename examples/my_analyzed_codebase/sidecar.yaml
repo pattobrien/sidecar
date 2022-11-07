@@ -10,6 +10,9 @@ lints:
   #       prefix: "AppLocalizations.of(context)"
 
   design_system_lints:
+    # includes:
+    # - 123
+    #   - "bin/**"
     # avoid_color_literal:
     avoid_icon_literal:
       severity: info
