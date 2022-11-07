@@ -11,15 +11,10 @@ part 'runner_providers.g.dart';
 @Riverpod(keepAlive: true)
 List<SidecarRunner> runners(
   RunnersRef ref,
-  // Uri activeRoot,
 ) {
-  // print('creating runners');
   final activePrimaryContexts = ref.watch(runnerActiveContextsProvider);
   final runners = activePrimaryContexts.map((context) {
-    final runner = SidecarRunner(ref, context: context);
-    // print('creating runners: init');
-    // await runner.initialize();
-    return runner;
+    return SidecarRunner(ref, context: context);
   }).toList();
   return runners;
 }

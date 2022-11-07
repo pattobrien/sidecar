@@ -23,10 +23,6 @@ import 'sidecar_analyzer_comm_service.dart';
 
 final logger = Logger('sidecar-plugin');
 
-// final sidecarAnalyzerProvider =
-//     Provider.family<SidecarAnalyzer, RequestMessage>(
-//         (ref, message) => SidecarAnalyzer(ref, initRequest: message));
-
 class SidecarAnalyzer {
   SidecarAnalyzer(
     this._ref, {
@@ -143,6 +139,7 @@ class SidecarAnalyzer {
     logger.severe('afterNewContextCollection');
     await _forAnalysisContexts((analysisContext) async {
       final paths = analysisContext.contextRoot.analyzedFiles().toList();
+
       final files =
           paths.map((e) => _ref.read(analyzedFileForPathProvider(e))).toList();
       logger.info('afterNewContextCollection files: ${paths.toList()}');

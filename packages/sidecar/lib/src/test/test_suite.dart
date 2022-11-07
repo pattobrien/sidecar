@@ -14,7 +14,6 @@ import 'package:riverpod/riverpod.dart';
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 
 import '../../sidecar.dart';
-import '../analyzer/server/runner/runner_old.dart';
 import '../cli/options/cli_options.dart';
 import '../utils/logger/debugger_delegate.dart';
 import '../utils/logger/logger.dart';

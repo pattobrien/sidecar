@@ -289,15 +289,10 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
 
     ref.read(runnerActiveContextsProvider.notifier).update = activeContexts;
     final runners = ref.read(runnersProvider);
-    // await ref.read(runnersInitializerProvider.future);
 
     await Future.wait(runners.map((runner) async {
       isRunnerInitialized[runner] = false;
-      runner.notifications.listen((notification) {
-        //
-      });
       runner.lints.listen((lint) {
-        // channel.sendError('LINTSLINTS: ${lint.toJson()}');
         channel.sendNotification(lint.toPluginNotification());
       });
       runner.logs.listen((event) => _log(runner, event));

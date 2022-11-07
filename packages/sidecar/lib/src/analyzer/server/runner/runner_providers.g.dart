@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $runnersHash() => r'ca61ef0ad5e3a748da837417e98642c170bb31c3';
+String $runnersHash() => r'97fe633824390a1cf52ef18164a86ffa089e75db';
 
 /// See also [runners].
 final runnersProvider = Provider<List<SidecarRunner>>(

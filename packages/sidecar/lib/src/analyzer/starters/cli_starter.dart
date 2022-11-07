@@ -61,7 +61,7 @@ Future<void> startSidecarCli(
         ];
 
         //TODO: make the plugin path dynamic
-        const pluginPath = '/Users/pattobrien/Development/sidecar/packages';
+        final pluginUri = activeContext.sidecarPluginPackage.root;
         final runners = container.read(runnersProvider);
         for (final runner in runners) {
           runner.lints.listen((notification) {
@@ -71,6 +71,9 @@ Future<void> startSidecarCli(
               print(notification.lints.prettyPrint());
             }
           });
+          // runner.logs.listen((event) {
+          //   stdout.writeln(event.toString());
+          // });
         }
         await container.read(runnersInitializerProvider.future);
         logDelegate.dumpResults();
@@ -87,22 +90,23 @@ Future<void> startSidecarCli(
               final elements = container.getAllProviderElements();
               final numberOfRunners =
                   elements.where((e) => e.origin == runnersProvider);
-              print('# of active runners: ${numberOfRunners.length}');
+              // print('# of active runners: ${numberOfRunners.length}');
               final events = c.events ?? [];
               // TODO: check for any changes to lint rules
               // if (events.any((event) => event.path))
 
               for (final runner in runners) {
+                // print('runner: ${runner.context.activeRoot.root.path}');
                 for (final event in events) {
+                  // print('event: ${event.path}');
                   final filePath = event.path;
                   final rootPath = runner.context.activeRoot.root.path;
-                  final file = runner.getAnalyzedFileForPath(filePath);
-                  if (file == null) continue;
                   if (p.isWithin(rootPath, event.path)) {
+                    final file = runner.getAnalyzedFileForPath(filePath);
+                    if (file == null) continue;
                     print('reanalyzing: $filePath\n');
                     runner.requestLintsForFile(file);
-                  }
-                  if (p.isWithin(pluginPath, filePath)) {
+                  } else if (p.isWithin(pluginUri.path, filePath)) {
                     print(
                         'rebuilding runner: ${runner.context.contextRoot.root.path}\n');
 

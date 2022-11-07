@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
-import 'dart:math';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/file_system/file_system.dart';
@@ -11,8 +10,6 @@ import 'package:uuid/uuid.dart';
 
 import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
-import '../../../utils/printer/lint_printer.dart';
-import '../../context/active_context.dart';
 import '../../context/context.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
@@ -91,8 +88,8 @@ class SidecarRunner {
             print('something went wrong: $e: $m');
           }
         } else {
-          print('got unexpected type: ${m.runtimeType}');
-          _controller.add(m as Object);
+          print('got unexpected type: ${m.runtimeType} ${m.toString()}');
+          // _controller.add(m as Object);
         }
       },
       onError: (dynamic e) => _controller.addError(e as Object),
@@ -165,14 +162,6 @@ class SidecarRunner {
     if (parsedMessage == null) throw UnimplementedError();
     if (parsedMessage is! T) throw UnimplementedError();
     return parsedMessage;
-  }
-
-  /// Stop the command runner, sending a [plugin.PluginShutdownParams] request in the process.
-  Future<void> close() async {
-    // if (_closed) return;
-    // _closed = true;
-    //TODO: this should be awaited
-    // sendRequest(plugin.PluginShutdownParams().toRequest(_uuid.v4()));
   }
 }
 

@@ -25,6 +25,7 @@ AnalyzedFile analyzedFileForPath(
 ) {
   final contextRootForPath = ref.watch(allContextsNotifierProvider
       .select((value) => value.contextRootForPath(path)));
+  final uri = Uri.parse(path);
   final files = ref.watch(analyzedFilesForRootProvider(contextRootForPath!));
-  return files.firstWhere((element) => element.path == path);
+  return files.firstWhere((element) => element.fileUri == uri);
 }
