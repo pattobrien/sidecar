@@ -161,10 +161,9 @@ class SidecarAnalyzer {
           throw StateError('setActiveRoot should happen before initialization'),
       setContextCollection: handleAnalysisSetContextRoots,
       updateFiles: handleAnalysisUpdateContent,
-      // quickFix: handleEditGetFixes,
-      quickFix: (request) => Future.value(),
-      assist: (request) => Future.value(),
-      lint: (value) => Future.value(),
+      quickFix: handleEditGetFixes,
+      assist: handleEditGetAssists,
+      lint: (value) => throw StateError('lint is an invalid request'),
     );
 
     if (response != null) {
@@ -268,40 +267,39 @@ class SidecarAnalyzer {
     // }
   }
 
-  // Future<QuickFixResponse> handleEditGetFixes(
-  //   QuickFixRequest request,
-  // ) async {
-  //   try {
-  //     //TODO: bug, edits are made for multiple files
-  //     final fixes =
-  //         await _ref.read(requestQuickFixesProvider(this, request).future);
-  //     return QuickFixResponse(fixes);
-  //   } catch (e, stackTrace) {
-  //     pluginLogger.severe(
-  //         'handleEditGetFixes ${request.filePath}', e, stackTrace);
-  //     rethrow;
-  //   }
-  // }
+  Future<QuickFixResponse> handleEditGetFixes(
+    QuickFixRequest request,
+  ) async {
+    try {
+      //TODO: bug, edits are made for multiple files
+      final fixes = await _ref.read(requestQuickFixesProvider(request).future);
+      return QuickFixResponse(fixes);
+    } catch (e, stackTrace) {
+      logger.severe('handleEditGetFixes ${request.file.path}', e, stackTrace);
+      rethrow;
+    }
+  }
 
-  // Future<AssistResponse> handleEditGetAssists(
-  //   AssistRequest request,
-  // ) async {
-  //   try {
-  //     final path = request.filePath;
-  //     final analyzedFile = _ref.read(analyzedFileForPathProvider(this, path));
+  Future<AssistResponse> handleEditGetAssists(
+    AssistRequest request,
+  ) async {
+    try {
+      final path = request.file.path;
+      final analyzedFile = _ref.read(analyzedFileForPathProvider(path));
 
-  //     _ref.refresh(assistResultsForFileProvider(analyzedFile));
-  //     _ref.refresh(assistResultsWithEditsProvider(analyzedFile));
-  //     final results =
-  //         await _ref.read(requestAssistResultsProvider(request).future);
+      _ref.refresh(assistResultsForFileProvider(analyzedFile));
+      _ref.refresh(assistResultsWithEditsProvider(analyzedFile));
+      final results =
+          await _ref.read(requestAssistResultsProvider(request).future);
 
-  //     return QuickAssistResponse(results: results);
-  //   } catch (e, stackTrace) {
-  //     pluginLogger.severe(
-  //         'handleEditGetAssists ${request.file.relativePath}', e, stackTrace);
-  //     rethrow;
-  //   }
-  // }
+      return AssistResponse(results);
+    } catch (e, stackTrace) {
+      logger.severe(
+          'handleEditGetAssists ${request.file.relativePath}', e, stackTrace);
+      rethrow;
+    }
+  }
+
   int _overlayModificationStamp = 0;
   Future<UpdateFilesResponse> handleAnalysisUpdateContent(
     FileUpdateRequest request,

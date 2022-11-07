@@ -21,6 +21,8 @@ AssistResult _$AssistResultFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AssistResult {
   RuleCode get code => throw _privateConstructorUsedError;
+  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+  SourceSpan get span => throw _privateConstructorUsedError;
   List<EditResult> get edits => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +36,11 @@ abstract class $AssistResultCopyWith<$Res> {
   factory $AssistResultCopyWith(
           AssistResult value, $Res Function(AssistResult) then) =
       _$AssistResultCopyWithImpl<$Res>;
-  $Res call({RuleCode code, List<EditResult> edits});
+  $Res call(
+      {RuleCode code,
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          SourceSpan span,
+      List<EditResult> edits});
 
   $RuleCodeCopyWith<$Res> get code;
 }
@@ -50,6 +56,7 @@ class _$AssistResultCopyWithImpl<$Res> implements $AssistResultCopyWith<$Res> {
   @override
   $Res call({
     Object? code = freezed,
+    Object? span = freezed,
     Object? edits = freezed,
   }) {
     return _then(_value.copyWith(
@@ -57,6 +64,10 @@ class _$AssistResultCopyWithImpl<$Res> implements $AssistResultCopyWith<$Res> {
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
+      span: span == freezed
+          ? _value.span
+          : span // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
       edits: edits == freezed
           ? _value.edits
           : edits // ignore: cast_nullable_to_non_nullable
@@ -79,7 +90,11 @@ abstract class _$$_AssistResultCopyWith<$Res>
           _$_AssistResult value, $Res Function(_$_AssistResult) then) =
       __$$_AssistResultCopyWithImpl<$Res>;
   @override
-  $Res call({RuleCode code, List<EditResult> edits});
+  $Res call(
+      {RuleCode code,
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          SourceSpan span,
+      List<EditResult> edits});
 
   @override
   $RuleCodeCopyWith<$Res> get code;
@@ -99,6 +114,7 @@ class __$$_AssistResultCopyWithImpl<$Res>
   @override
   $Res call({
     Object? code = freezed,
+    Object? span = freezed,
     Object? edits = freezed,
   }) {
     return _then(_$_AssistResult(
@@ -106,6 +122,10 @@ class __$$_AssistResultCopyWithImpl<$Res>
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
+      span: span == freezed
+          ? _value.span
+          : span // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
       edits: edits == freezed
           ? _value._edits
           : edits // ignore: cast_nullable_to_non_nullable
@@ -118,7 +138,10 @@ class __$$_AssistResultCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_AssistResult extends _AssistResult {
   const _$_AssistResult(
-      {required this.code, final List<EditResult> edits = const <EditResult>[]})
+      {required this.code,
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          required this.span,
+      final List<EditResult> edits = const <EditResult>[]})
       : _edits = edits,
         super._();
 
@@ -127,6 +150,9 @@ class _$_AssistResult extends _AssistResult {
 
   @override
   final RuleCode code;
+  @override
+  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+  final SourceSpan span;
   final List<EditResult> _edits;
   @override
   @JsonKey()
@@ -137,7 +163,7 @@ class _$_AssistResult extends _AssistResult {
 
   @override
   String toString() {
-    return 'AssistResult(code: $code, edits: $edits)';
+    return 'AssistResult(code: $code, span: $span, edits: $edits)';
   }
 
   @override
@@ -146,6 +172,7 @@ class _$_AssistResult extends _AssistResult {
         (other.runtimeType == runtimeType &&
             other is _$_AssistResult &&
             const DeepCollectionEquality().equals(other.code, code) &&
+            const DeepCollectionEquality().equals(other.span, span) &&
             const DeepCollectionEquality().equals(other._edits, _edits));
   }
 
@@ -154,6 +181,7 @@ class _$_AssistResult extends _AssistResult {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(code),
+      const DeepCollectionEquality().hash(span),
       const DeepCollectionEquality().hash(_edits));
 
   @JsonKey(ignore: true)
@@ -172,6 +200,8 @@ class _$_AssistResult extends _AssistResult {
 abstract class _AssistResult extends AssistResult {
   const factory _AssistResult(
       {required final RuleCode code,
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          required final SourceSpan span,
       final List<EditResult> edits}) = _$_AssistResult;
   const _AssistResult._() : super._();
 
@@ -180,6 +210,9 @@ abstract class _AssistResult extends AssistResult {
 
   @override
   RuleCode get code;
+  @override
+  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+  SourceSpan get span;
   @override
   List<EditResult> get edits;
   @override

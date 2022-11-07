@@ -20,6 +20,24 @@ List<LintRule> lintRulesForFile(
 }
 
 @riverpod
+List<LintRule> lintRulesForRoot(
+  LintRulesForRootRef ref,
+  Context root,
+) {
+  return ref.watch(activatedRulesForRootProvider(root)
+      .select((rules) => rules.whereType<LintRule>().toList()));
+}
+
+@riverpod
+List<AssistRule> assistRulesForRoot(
+  AssistRulesForRootRef ref,
+  Context root,
+) {
+  return ref.watch(activatedRulesForRootProvider(root)
+      .select((rules) => rules.whereType<AssistRule>().toList()));
+}
+
+@riverpod
 List<AssistRule> assistRulesForFile(
   AssistRulesForFileRef ref,
   AnalyzedFile file,

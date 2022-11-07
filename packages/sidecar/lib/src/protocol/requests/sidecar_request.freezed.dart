@@ -43,8 +43,8 @@ mixin _$SidecarRequest {
     required TResult Function(String mainRoot, List<String> roots)
         setContextCollection,
     required TResult Function(List<String> files) lint,
-    required TResult Function(String filePath, int offset, int length) assist,
-    required TResult Function(String filePath, int offset) quickFix,
+    required TResult Function(AnalyzedFile file, int offset, int length) assist,
+    required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
   }) =>
       throw _privateConstructorUsedError;
@@ -53,8 +53,8 @@ mixin _$SidecarRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
   }) =>
       throw _privateConstructorUsedError;
@@ -63,8 +63,8 @@ mixin _$SidecarRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
     required TResult orElse(),
   }) =>
@@ -200,8 +200,8 @@ class _$SetActiveRootRequest extends SetActiveRootRequest {
     required TResult Function(String mainRoot, List<String> roots)
         setContextCollection,
     required TResult Function(List<String> files) lint,
-    required TResult Function(String filePath, int offset, int length) assist,
-    required TResult Function(String filePath, int offset) quickFix,
+    required TResult Function(AnalyzedFile file, int offset, int length) assist,
+    required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
   }) {
     return setActiveRoot(root);
@@ -213,8 +213,8 @@ class _$SetActiveRootRequest extends SetActiveRootRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
   }) {
     return setActiveRoot?.call(root);
@@ -226,8 +226,8 @@ class _$SetActiveRootRequest extends SetActiveRootRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
     required TResult orElse(),
   }) {
@@ -402,8 +402,8 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     required TResult Function(String mainRoot, List<String> roots)
         setContextCollection,
     required TResult Function(List<String> files) lint,
-    required TResult Function(String filePath, int offset, int length) assist,
-    required TResult Function(String filePath, int offset) quickFix,
+    required TResult Function(AnalyzedFile file, int offset, int length) assist,
+    required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
   }) {
     return setContextCollection(mainRoot, roots);
@@ -415,8 +415,8 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
   }) {
     return setContextCollection?.call(mainRoot, roots);
@@ -428,8 +428,8 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
     required TResult orElse(),
   }) {
@@ -590,8 +590,8 @@ class _$LintRequest extends LintRequest {
     required TResult Function(String mainRoot, List<String> roots)
         setContextCollection,
     required TResult Function(List<String> files) lint,
-    required TResult Function(String filePath, int offset, int length) assist,
-    required TResult Function(String filePath, int offset) quickFix,
+    required TResult Function(AnalyzedFile file, int offset, int length) assist,
+    required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
   }) {
     return lint(files);
@@ -603,8 +603,8 @@ class _$LintRequest extends LintRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
   }) {
     return lint?.call(files);
@@ -616,8 +616,8 @@ class _$LintRequest extends LintRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
     required TResult orElse(),
   }) {
@@ -697,7 +697,9 @@ abstract class _$$AssistRequestCopyWith<$Res> {
   factory _$$AssistRequestCopyWith(
           _$AssistRequest value, $Res Function(_$AssistRequest) then) =
       __$$AssistRequestCopyWithImpl<$Res>;
-  $Res call({String filePath, int offset, int length});
+  $Res call({AnalyzedFile file, int offset, int length});
+
+  $AnalyzedFileCopyWith<$Res> get file;
 }
 
 /// @nodoc
@@ -713,15 +715,15 @@ class __$$AssistRequestCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? filePath = freezed,
+    Object? file = freezed,
     Object? offset = freezed,
     Object? length = freezed,
   }) {
     return _then(_$AssistRequest(
-      filePath: filePath == freezed
-          ? _value.filePath
-          : filePath // ignore: cast_nullable_to_non_nullable
-              as String,
+      file: file == freezed
+          ? _value.file
+          : file // ignore: cast_nullable_to_non_nullable
+              as AnalyzedFile,
       offset: offset == freezed
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
@@ -732,13 +734,20 @@ class __$$AssistRequestCopyWithImpl<$Res>
               as int,
     ));
   }
+
+  @override
+  $AnalyzedFileCopyWith<$Res> get file {
+    return $AnalyzedFileCopyWith<$Res>(_value.file, (value) {
+      return _then(_value.copyWith(file: value));
+    });
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$AssistRequest extends AssistRequest {
   const _$AssistRequest(
-      {required this.filePath,
+      {required this.file,
       required this.offset,
       required this.length,
       final String? $type})
@@ -750,7 +759,7 @@ class _$AssistRequest extends AssistRequest {
 
 // required AnalyzedFile file,
   @override
-  final String filePath;
+  final AnalyzedFile file;
   @override
   final int offset;
   @override
@@ -761,7 +770,7 @@ class _$AssistRequest extends AssistRequest {
 
   @override
   String toString() {
-    return 'SidecarRequest.assist(filePath: $filePath, offset: $offset, length: $length)';
+    return 'SidecarRequest.assist(file: $file, offset: $offset, length: $length)';
   }
 
   @override
@@ -769,7 +778,7 @@ class _$AssistRequest extends AssistRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AssistRequest &&
-            const DeepCollectionEquality().equals(other.filePath, filePath) &&
+            const DeepCollectionEquality().equals(other.file, file) &&
             const DeepCollectionEquality().equals(other.offset, offset) &&
             const DeepCollectionEquality().equals(other.length, length));
   }
@@ -778,7 +787,7 @@ class _$AssistRequest extends AssistRequest {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(filePath),
+      const DeepCollectionEquality().hash(file),
       const DeepCollectionEquality().hash(offset),
       const DeepCollectionEquality().hash(length));
 
@@ -794,11 +803,11 @@ class _$AssistRequest extends AssistRequest {
     required TResult Function(String mainRoot, List<String> roots)
         setContextCollection,
     required TResult Function(List<String> files) lint,
-    required TResult Function(String filePath, int offset, int length) assist,
-    required TResult Function(String filePath, int offset) quickFix,
+    required TResult Function(AnalyzedFile file, int offset, int length) assist,
+    required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
   }) {
-    return assist(filePath, offset, length);
+    return assist(file, offset, length);
   }
 
   @override
@@ -807,11 +816,11 @@ class _$AssistRequest extends AssistRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
   }) {
-    return assist?.call(filePath, offset, length);
+    return assist?.call(file, offset, length);
   }
 
   @override
@@ -820,13 +829,13 @@ class _$AssistRequest extends AssistRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
     required TResult orElse(),
   }) {
     if (assist != null) {
-      return assist(filePath, offset, length);
+      return assist(file, offset, length);
     }
     return orElse();
   }
@@ -885,7 +894,7 @@ class _$AssistRequest extends AssistRequest {
 
 abstract class AssistRequest extends SidecarRequest {
   const factory AssistRequest(
-      {required final String filePath,
+      {required final AnalyzedFile file,
       required final int offset,
       required final int length}) = _$AssistRequest;
   const AssistRequest._() : super._();
@@ -894,7 +903,7 @@ abstract class AssistRequest extends SidecarRequest {
       _$AssistRequest.fromJson;
 
 // required AnalyzedFile file,
-  String get filePath;
+  AnalyzedFile get file;
   int get offset;
   int get length;
   @JsonKey(ignore: true)
@@ -907,7 +916,9 @@ abstract class _$$QuickFixRequestCopyWith<$Res> {
   factory _$$QuickFixRequestCopyWith(
           _$QuickFixRequest value, $Res Function(_$QuickFixRequest) then) =
       __$$QuickFixRequestCopyWithImpl<$Res>;
-  $Res call({String filePath, int offset});
+  $Res call({AnalyzedFile file, int offset});
+
+  $AnalyzedFileCopyWith<$Res> get file;
 }
 
 /// @nodoc
@@ -923,19 +934,26 @@ class __$$QuickFixRequestCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? filePath = freezed,
+    Object? file = freezed,
     Object? offset = freezed,
   }) {
     return _then(_$QuickFixRequest(
-      filePath: filePath == freezed
-          ? _value.filePath
-          : filePath // ignore: cast_nullable_to_non_nullable
-              as String,
+      file: file == freezed
+          ? _value.file
+          : file // ignore: cast_nullable_to_non_nullable
+              as AnalyzedFile,
       offset: offset == freezed
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
               as int,
     ));
+  }
+
+  @override
+  $AnalyzedFileCopyWith<$Res> get file {
+    return $AnalyzedFileCopyWith<$Res>(_value.file, (value) {
+      return _then(_value.copyWith(file: value));
+    });
   }
 }
 
@@ -943,7 +961,7 @@ class __$$QuickFixRequestCopyWithImpl<$Res>
 @JsonSerializable()
 class _$QuickFixRequest extends QuickFixRequest {
   const _$QuickFixRequest(
-      {required this.filePath, required this.offset, final String? $type})
+      {required this.file, required this.offset, final String? $type})
       : $type = $type ?? 'quickFix',
         super._();
 
@@ -951,7 +969,7 @@ class _$QuickFixRequest extends QuickFixRequest {
       _$$QuickFixRequestFromJson(json);
 
   @override
-  final String filePath;
+  final AnalyzedFile file;
   @override
   final int offset;
 
@@ -960,7 +978,7 @@ class _$QuickFixRequest extends QuickFixRequest {
 
   @override
   String toString() {
-    return 'SidecarRequest.quickFix(filePath: $filePath, offset: $offset)';
+    return 'SidecarRequest.quickFix(file: $file, offset: $offset)';
   }
 
   @override
@@ -968,7 +986,7 @@ class _$QuickFixRequest extends QuickFixRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$QuickFixRequest &&
-            const DeepCollectionEquality().equals(other.filePath, filePath) &&
+            const DeepCollectionEquality().equals(other.file, file) &&
             const DeepCollectionEquality().equals(other.offset, offset));
   }
 
@@ -976,7 +994,7 @@ class _$QuickFixRequest extends QuickFixRequest {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(filePath),
+      const DeepCollectionEquality().hash(file),
       const DeepCollectionEquality().hash(offset));
 
   @JsonKey(ignore: true)
@@ -991,11 +1009,11 @@ class _$QuickFixRequest extends QuickFixRequest {
     required TResult Function(String mainRoot, List<String> roots)
         setContextCollection,
     required TResult Function(List<String> files) lint,
-    required TResult Function(String filePath, int offset, int length) assist,
-    required TResult Function(String filePath, int offset) quickFix,
+    required TResult Function(AnalyzedFile file, int offset, int length) assist,
+    required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
   }) {
-    return quickFix(filePath, offset);
+    return quickFix(file, offset);
   }
 
   @override
@@ -1004,11 +1022,11 @@ class _$QuickFixRequest extends QuickFixRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
   }) {
-    return quickFix?.call(filePath, offset);
+    return quickFix?.call(file, offset);
   }
 
   @override
@@ -1017,13 +1035,13 @@ class _$QuickFixRequest extends QuickFixRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
     required TResult orElse(),
   }) {
     if (quickFix != null) {
-      return quickFix(filePath, offset);
+      return quickFix(file, offset);
     }
     return orElse();
   }
@@ -1082,14 +1100,14 @@ class _$QuickFixRequest extends QuickFixRequest {
 
 abstract class QuickFixRequest extends SidecarRequest {
   const factory QuickFixRequest(
-      {required final String filePath,
+      {required final AnalyzedFile file,
       required final int offset}) = _$QuickFixRequest;
   const QuickFixRequest._() : super._();
 
   factory QuickFixRequest.fromJson(Map<String, dynamic> json) =
       _$QuickFixRequest.fromJson;
 
-  String get filePath;
+  AnalyzedFile get file;
   int get offset;
   @JsonKey(ignore: true)
   _$$QuickFixRequestCopyWith<_$QuickFixRequest> get copyWith =>
@@ -1180,8 +1198,8 @@ class _$FileUpdateRequest extends FileUpdateRequest {
     required TResult Function(String mainRoot, List<String> roots)
         setContextCollection,
     required TResult Function(List<String> files) lint,
-    required TResult Function(String filePath, int offset, int length) assist,
-    required TResult Function(String filePath, int offset) quickFix,
+    required TResult Function(AnalyzedFile file, int offset, int length) assist,
+    required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
   }) {
     return updateFiles(updates);
@@ -1193,8 +1211,8 @@ class _$FileUpdateRequest extends FileUpdateRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
   }) {
     return updateFiles?.call(updates);
@@ -1206,8 +1224,8 @@ class _$FileUpdateRequest extends FileUpdateRequest {
     TResult Function(Uri root)? setActiveRoot,
     TResult Function(String mainRoot, List<String> roots)? setContextCollection,
     TResult Function(List<String> files)? lint,
-    TResult Function(String filePath, int offset, int length)? assist,
-    TResult Function(String filePath, int offset)? quickFix,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
     required TResult orElse(),
   }) {

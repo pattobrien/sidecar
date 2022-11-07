@@ -26,7 +26,7 @@ lints:
     avoid_box_shadow_literal:
     # avoid_edge_insets_literal:
 #
-# assists:
-#   sidecar_lints:
-#     output_ast_node_tree:
-#     output_source_span:
+assists:
+  sidecar_lints:
+    output_ast_node_tree:
+    output_source_span:

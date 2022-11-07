@@ -5,6 +5,7 @@ import '../../protocol/models/models.dart';
 import '../../utils/file_paths.dart';
 
 part 'analyzed_file.freezed.dart';
+part 'analyzed_file.g.dart';
 
 @freezed
 
@@ -18,6 +19,9 @@ class AnalyzedFile with _$AnalyzedFile {
   ) = _AnalyzedFile;
 
   const AnalyzedFile._();
+
+  factory AnalyzedFile.fromJson(Map<String, dynamic> json) =>
+      _$AnalyzedFileFromJson(json);
 
   String get path => fileUri.path;
 

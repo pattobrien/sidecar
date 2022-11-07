@@ -50,7 +50,7 @@ Map<String, dynamic> _$$LintRequestToJson(_$LintRequest instance) =>
 
 _$AssistRequest _$$AssistRequestFromJson(Map<String, dynamic> json) =>
     _$AssistRequest(
-      filePath: json['filePath'] as String,
+      file: AnalyzedFile.fromJson(json['file'] as Map<String, dynamic>),
       offset: json['offset'] as int,
       length: json['length'] as int,
       $type: json['runtimeType'] as String?,
@@ -58,7 +58,7 @@ _$AssistRequest _$$AssistRequestFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$AssistRequestToJson(_$AssistRequest instance) =>
     <String, dynamic>{
-      'filePath': instance.filePath,
+      'file': instance.file.toJson(),
       'offset': instance.offset,
       'length': instance.length,
       'runtimeType': instance.$type,
@@ -66,14 +66,14 @@ Map<String, dynamic> _$$AssistRequestToJson(_$AssistRequest instance) =>
 
 _$QuickFixRequest _$$QuickFixRequestFromJson(Map<String, dynamic> json) =>
     _$QuickFixRequest(
-      filePath: json['filePath'] as String,
+      file: AnalyzedFile.fromJson(json['file'] as Map<String, dynamic>),
       offset: json['offset'] as int,
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$QuickFixRequestToJson(_$QuickFixRequest instance) =>
     <String, dynamic>{
-      'filePath': instance.filePath,
+      'file': instance.file.toJson(),
       'offset': instance.offset,
       'runtimeType': instance.$type,
     };

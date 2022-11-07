@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../analyzer/context/analyzed_file.dart';
 import '../models/file_update_event.dart';
 
 part 'sidecar_request.freezed.dart';
@@ -24,13 +25,13 @@ class SidecarRequest with _$SidecarRequest {
 
   const factory SidecarRequest.assist({
     // required AnalyzedFile file,
-    required String filePath,
+    required AnalyzedFile file,
     required int offset,
     required int length,
   }) = AssistRequest;
 
   const factory SidecarRequest.quickFix({
-    required String filePath,
+    required AnalyzedFile file,
     required int offset,
     // TODO: confirm that length is not sent with quick fix requests
     // required int length,

@@ -1,7 +1,6 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -12,26 +11,25 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
-import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/src/analyzer/server/runner/context_providers.dart';
 import 'package:source_span/source_span.dart';
 
-import '../../../sidecar.dart';
 import '../../cli/options/cli_options.dart';
 import '../../protocol/constants/constants.dart';
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
-import '../../protocol/source/source_file_edit.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/logger/logger.dart';
+import '../../utils/utils.dart';
 import '../context/active_context.dart';
+import '../context/analyzed_file.dart';
 import '../options_provider.dart';
 import 'analysis_context_providers.dart';
 import 'isolates/isolates.dart';
 import 'isolates/multi_isolate_message.dart';
 import 'middleman_resource_provider.dart';
 import 'plugin_channel_provider.dart';
+import 'runner/context_providers.dart';
 import 'runner/runner_providers.dart';
 import 'runner/sidecar_runner.dart';
 
@@ -152,6 +150,81 @@ class MiddlemanPluginNew extends plugin.ServerPlugin {
     } else {
       queuedRequests.add(request);
     }
+  }
+
+  /// Handle an 'edit.getFixes' request.
+  ///
+  /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  @override
+  Future<plugin.EditGetFixesResult> handleEditGetFixes(
+      plugin.EditGetFixesParams parameters) async {
+    final runners = ref.watch(runnersProvider);
+    // for (final runner in runners) {
+    //   final path = parameters.file;
+    //   final context = runner.getContextForPath(path);
+    //   if (context == null) continue;
+    //   final analyzedFile = AnalyzedFile(
+    //       Context(root: context.contextRoot.root.toUri()), Uri.parse(path));
+    // final assistRequest =
+    //     QuickFixRequest(file: analyzedFile, offset: parameters.offset);
+    // final response =
+    //     await runner.asyncRequest<QuickFixResponse>(assistRequest);
+    // return plugin.EditGetFixesResult(
+    //     response.results.map((e) => e.toAnalysisErrorFixes()).toList());
+    // }
+    final responses = await Future.wait(runners.map((runner) async {
+      final path = parameters.file;
+      final context = runner.getContextForPath(path);
+      if (context == null) return null;
+      final analyzedFile = AnalyzedFile(
+          Context(root: context.contextRoot.root.toUri()), Uri.parse(path));
+      final assistRequest =
+          QuickFixRequest(file: analyzedFile, offset: parameters.offset);
+      return runner.asyncRequest<QuickFixResponse>(assistRequest);
+    }));
+
+    // return plugin.EditGetFixesResult(
+    //     response.results.map((e) => e.toAnalysisErrorFixes()).toList());
+    final parsedResponses = responses
+        .whereType<QuickFixResponse>()
+        .map((response) =>
+            response.results.map((e) => e.toAnalysisErrorFixes()).toList())
+        .expand((e) => e)
+        .toList();
+    return plugin.EditGetFixesResult(parsedResponses);
+  }
+
+  /// Handle an 'edit.getAssists' request.
+  ///
+  /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  @override
+  Future<plugin.EditGetAssistsResult> handleEditGetAssists(
+    plugin.EditGetAssistsParams parameters,
+  ) async {
+    final runners = ref.watch(runnersProvider);
+    final responses = await Future.wait(runners.map((runner) async {
+      final path = parameters.file;
+      final context = runner.getContextForPath(path);
+      if (context == null) return null;
+      final analyzedFile = AnalyzedFile(
+          Context(root: context.contextRoot.root.toUri()), Uri.parse(path));
+      final assistRequest = AssistRequest(
+          file: analyzedFile,
+          offset: parameters.offset,
+          length: parameters.length);
+      return runner.asyncRequest<AssistResponse>(assistRequest);
+    }));
+
+    final parsedResponses = responses
+        .whereType<AssistResponse>()
+        .map((response) => response.results
+            .map((e) => e.toPrioritizedSourceChanges())
+            .expand((e) => e)
+            .toList())
+        .expand((e) => e);
+    // return plugin.EditGetAssistsResult(
+    //     const <plugin.PrioritizedSourceChange>[]);
+    return plugin.EditGetAssistsResult(parsedResponses.toList());
   }
 
   @override

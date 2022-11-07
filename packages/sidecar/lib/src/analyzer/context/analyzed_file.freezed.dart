@@ -14,11 +14,16 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+AnalyzedFile _$AnalyzedFileFromJson(Map<String, dynamic> json) {
+  return _AnalyzedFile.fromJson(json);
+}
+
 /// @nodoc
 mixin _$AnalyzedFile {
   Context get context => throw _privateConstructorUsedError;
   Uri get fileUri => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $AnalyzedFileCopyWith<AnalyzedFile> get copyWith =>
       throw _privateConstructorUsedError;
@@ -110,9 +115,12 @@ class __$$_AnalyzedFileCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_AnalyzedFile extends _AnalyzedFile {
   const _$_AnalyzedFile(this.context, this.fileUri) : super._();
+
+  factory _$_AnalyzedFile.fromJson(Map<String, dynamic> json) =>
+      _$$_AnalyzedFileFromJson(json);
 
   @override
   final Context context;
@@ -133,6 +141,7 @@ class _$_AnalyzedFile extends _AnalyzedFile {
             const DeepCollectionEquality().equals(other.fileUri, fileUri));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -143,12 +152,22 @@ class _$_AnalyzedFile extends _AnalyzedFile {
   @override
   _$$_AnalyzedFileCopyWith<_$_AnalyzedFile> get copyWith =>
       __$$_AnalyzedFileCopyWithImpl<_$_AnalyzedFile>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_AnalyzedFileToJson(
+      this,
+    );
+  }
 }
 
 abstract class _AnalyzedFile extends AnalyzedFile {
   const factory _AnalyzedFile(final Context context, final Uri fileUri) =
       _$_AnalyzedFile;
   const _AnalyzedFile._() : super._();
+
+  factory _AnalyzedFile.fromJson(Map<String, dynamic> json) =
+      _$_AnalyzedFile.fromJson;
 
   @override
   Context get context;

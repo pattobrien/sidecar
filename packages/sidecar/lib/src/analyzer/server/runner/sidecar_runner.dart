@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/file_system/file_system.dart';
+import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -107,6 +108,11 @@ class SidecarRunner {
   }
 
   final _initializationCompleter = Completer<void>();
+
+  AnalysisContext? getContextForPath(String path) {
+    return allContexts
+        .firstWhereOrNull((element) => element.contextRoot.isAnalyzed(path));
+  }
 
   Future<List<LintResult>> requestLintsForFile(String path) async {
     final contents = resourceProvider.getFile(path).readAsStringSync();

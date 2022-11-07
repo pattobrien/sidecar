@@ -17,19 +17,16 @@ class SourceEdit with _$SourceEdit {
 
   factory SourceEdit.simple(
     int offset,
-    int length,
-    Uri url,
-    String originalText,
-    String replacement,
-  ) {
+    int length, {
+    Uri? sourceUri,
+    String? originalText,
+    required String replacement,
+  }) {
     return SourceEdit(
       originalSourceSpan: SourceSpan(
-          SourceLocation(offset, sourceUrl: url),
-          SourceLocation(
-            offset + length,
-            sourceUrl: url,
-          ),
-          originalText),
+          SourceLocation(offset, sourceUrl: sourceUri),
+          SourceLocation(offset + length, sourceUrl: sourceUri),
+          originalText ?? ' ' * length),
       replacement: replacement,
     );
   }

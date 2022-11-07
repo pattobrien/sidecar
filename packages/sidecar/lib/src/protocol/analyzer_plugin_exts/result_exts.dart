@@ -7,11 +7,10 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../sidecar.dart';
 import '../../rules/lint_severity.dart';
 import '../../utils/utils.dart';
-import '../models/analysis_result.dart';
-import '../models/edit_result.dart';
+import '../protocol.dart';
+import 'source_exts.dart';
 
 extension LintResultX on AnalysisResult {
   plugin.AnalysisError toAnalysisError() {
@@ -37,24 +36,24 @@ extension LintNotificationX on LintNotification {
   }
 }
 
-// extension LintResultWithEditsX on LintResultWithEdits {
-//   AnalysisErrorFixes toAnalysisErrorFixes() {
-//     final fixes = edits.map((e) => e.toPrioritizedSourceChange()).toList();
-//     return AnalysisErrorFixes(toAnalysisError(), fixes: fixes);
-//   }
-// }
+extension LintResultWithEditsX on LintResultWithEdits {
+  plugin.AnalysisErrorFixes toAnalysisErrorFixes() {
+    final fixes = edits.map((e) => e.toPrioritizedSourceChange()).toList();
+    return plugin.AnalysisErrorFixes(toAnalysisError(), fixes: fixes);
+  }
+}
 
-// extension AssistResultX on AssistResult {
-//   List<PrioritizedSourceChange> toPrioritizedSourceChanges() {
-//     return edits.map((e) => e.toPrioritizedSourceChange()).toList();
-//   }
-// }
+extension AssistResultX on AssistResult {
+  List<plugin.PrioritizedSourceChange> toPrioritizedSourceChanges() {
+    return edits.map((e) => e.toPrioritizedSourceChange()).toList();
+  }
+}
 
-// extension EditResultX on EditResult {
-//   PrioritizedSourceChange toPrioritizedSourceChange() {
-//     return PrioritizedSourceChange(
-//       0,
-//       SourceChange(message, edits: sourceChanges),
-//     );
-//   }
-// }
+extension EditResultX on EditResult {
+  plugin.PrioritizedSourceChange toPrioritizedSourceChange() {
+    return plugin.PrioritizedSourceChange(
+      0,
+      plugin.SourceChange(message, edits: sourceChanges.toPluginFileEdits()),
+    );
+  }
+}
