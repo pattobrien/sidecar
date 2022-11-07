@@ -15,12 +15,12 @@ lints:
     #   - "bin/**"
     # avoid_color_literal:
     avoid_icon_literal:
-      severity: info
+      severity: warning
       enabled: true
     avoid_sized_box_height_width_literals:
       severity: info
     avoid_text_style_literal:
-      severity: warning
+      severity: info
       enabled: true
       includes:
         - "lib/**"

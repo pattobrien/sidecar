@@ -170,7 +170,7 @@ class AssistRulesForFileFamily extends Family<List<AssistRule>> {
 }
 
 String $activatedRulesForRootHash() =>
-    r'04a45cc0525fbb5d7257213d33823552654bb2d8';
+    r'810285015ba41c23046e543e1cd845492aa833bb';
 
 /// See also [activatedRulesForRoot].
 class ActivatedRulesForRootProvider extends Provider<List<BaseRule>> {
@@ -241,7 +241,7 @@ class ActivatedRulesForRootFamily extends Family<List<BaseRule>> {
 }
 
 String $filteredRulesForFileHash() =>
-    r'a49767823ec6f64c84a89bf389aee12039e80c89';
+    r'15a8457d902fafd739e4fa31212796d7b38b2820';
 
 /// See also [filteredRulesForFile].
 class FilteredRulesForFileProvider extends Provider<List<BaseRule>> {

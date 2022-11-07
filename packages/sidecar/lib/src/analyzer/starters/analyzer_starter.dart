@@ -6,6 +6,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
+import '../plugin/analysis_contexts_provider.dart';
 import '../plugin/rule_constructors_provider.dart';
 import '../plugin/sidecar_analyzer.dart';
 import '../plugin/sidecar_analyzer_comm_service.dart';
@@ -18,16 +19,17 @@ Future<SidecarAnalyzer> analyzerStarter({
     final container = ProviderContainer(
       overrides: [
         ruleConstructorProvider.overrideWithValue(constructors),
+        rootUriProvider.overrideWithValue(Uri()),
       ],
       observers: [
         //
       ],
     );
-    final service =
-        container.read(sidecarAnalyzerCommServiceProvider(sendPort));
+    final service = container.read(sidecarAnalyzerCommServiceProvider);
+    service.initialize(sendPort);
     final completer = Completer<RequestMessage>();
     final sub = container
-        .read(analyzerCommunicationStream(sendPort).stream)
+        .read(analyzerCommunicationStream.stream)
         .listen((dynamic event) {
       if (event is String) {
         try {
@@ -45,10 +47,16 @@ Future<SidecarAnalyzer> analyzerStarter({
       }
     });
     service.sendNotification(const InitCompleteNotification());
-    final request = await completer.future;
 
-    final analyzer =
-        SidecarAnalyzer(container, sP: sendPort, initRequest: request);
+    final request = await completer.future;
+    final root = (request.request as SetActiveRootRequest).root;
+
+    container.updateOverrides([
+      ruleConstructorProvider.overrideWithValue(constructors),
+      rootUriProvider.overrideWithValue(root),
+    ]);
+
+    final analyzer = SidecarAnalyzer(container, initRequest: request);
     await sub.cancel();
     return analyzer;
   }, (error, stack) {

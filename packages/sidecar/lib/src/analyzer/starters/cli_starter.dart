@@ -96,11 +96,11 @@ Future<void> startSidecarCli(
                 for (final event in events) {
                   final filePath = event.path;
                   final rootPath = runner.context.activeRoot.root.path;
-                  // final file =
-                  //     container.read(analyzedFileForPathProvider(filePath));
+                  final file = runner.getAnalyzedFileForPath(filePath);
+                  if (file == null) continue;
                   if (p.isWithin(rootPath, event.path)) {
                     print('reanalyzing: $filePath\n');
-                    // runner.requestLintsForFile(file);
+                    runner.requestLintsForFile(file);
                   }
                   if (p.isWithin(pluginPath, filePath)) {
                     print(

@@ -102,7 +102,7 @@ class AnalyzedFilesForRootFamily extends Family<List<AnalyzedFile>> {
 }
 
 String $analyzedFileForPathHash() =>
-    r'0e0d4d0588ad192235eb655dcfac40c9643c8ae6';
+    r'26f0fe0b4bc95a6669d5e8dbb5f7f31e739a071f';
 
 /// See also [analyzedFileForPath].
 class AnalyzedFileForPathProvider extends AutoDisposeProvider<AnalyzedFile> {

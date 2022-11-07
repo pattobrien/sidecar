@@ -6,19 +6,18 @@ import 'package:riverpod/riverpod.dart';
 import '../../protocol/protocol.dart';
 
 final sidecarAnalyzerCommServiceProvider =
-    Provider.family<SidecarAnalyzerCommService, SendPort>(
-        (ref, sendPort) => SidecarAnalyzerCommService(sendPort));
+    Provider<SidecarAnalyzerCommService>((ref) => SidecarAnalyzerCommService());
 
-final analyzerCommunicationStream = StreamProvider.family<dynamic, SendPort>(
-    (ref, sendPort) =>
-        ref.watch(sidecarAnalyzerCommServiceProvider(sendPort)).stream);
+final analyzerCommunicationStream = StreamProvider<dynamic>(
+    (ref) => ref.watch(sidecarAnalyzerCommServiceProvider).stream);
 
 class SidecarAnalyzerCommService {
-  SidecarAnalyzerCommService(this._sendPort) {
-    _initialize();
+  SidecarAnalyzerCommService() {
+    // initialize();
   }
 
-  final SendPort _sendPort;
+  late final SendPort _sendPort;
+  // final Uri root;
   final ReceivePort _receivePort = ReceivePort();
 
   Stream<dynamic> get stream => _receivePort.asBroadcastStream();
@@ -43,7 +42,8 @@ class SidecarAnalyzerCommService {
     rootUri = uri;
   }
 
-  void _initialize() {
+  void initialize(SendPort sendPort) {
+    _sendPort = sendPort;
     _sendPort.send(_receivePort.sendPort);
   }
 }

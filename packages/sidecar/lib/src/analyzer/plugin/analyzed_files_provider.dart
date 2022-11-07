@@ -1,4 +1,3 @@
-import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../protocol/models/models.dart';
@@ -19,27 +18,13 @@ List<AnalyzedFile> analyzedFilesForRoot(
       .toList();
 }
 
-// @riverpod
-// List<AnalyzedFile> analyzedFilesForContext(
-//   AnalyzedFilesForRootRef ref,
-//   AnalysisContext context,
-// ) {
-//   final filePaths = context.contextRoot.analyzedFiles();
-//   // filePaths.map((e) => ref.watch(analyzedFileForPathProvider(e)));
-//   // final ctx = ;
-//   // return ctx.contextRoot
-//   //     .analyzedFiles()
-//   //     .map((e) => AnalyzedFile(context, Uri.parse(e)))
-//   //     .toList();
-// }
-
 @riverpod
 AnalyzedFile analyzedFileForPath(
   AnalyzedFileForPathRef ref,
   String path,
 ) {
-  final analysisContexts = ref.watch(allContextsNotifierProvider);
-  final contextForPath = analysisContexts.contextRootForPath(path);
-  final files = ref.watch(analyzedFilesForRootProvider(contextForPath!));
+  final contextRootForPath = ref.watch(allContextsNotifierProvider
+      .select((value) => value.contextRootForPath(path)));
+  final files = ref.watch(analyzedFilesForRootProvider(contextRootForPath!));
   return files.firstWhere((element) => element.path == path);
 }

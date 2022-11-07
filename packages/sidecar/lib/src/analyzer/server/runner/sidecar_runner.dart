@@ -31,9 +31,9 @@ class SidecarRunner {
   final ReceivePort receivePort;
 
   AnalyzedFile? getAnalyzedFileForPath(String path) => allContexts
-      .firstWhere(
+      .firstWhereOrNull(
           (ctx) => ctx.typedAnalyzedFiles().any((file) => file.path == path))
-      .typedAnalyzedFiles()
+      ?.typedAnalyzedFiles()
       .firstWhere((file) => file.path == path);
 
   late final SendPort sendPort;

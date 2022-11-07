@@ -52,11 +52,10 @@ List<BaseRule> activatedRulesForRoot(
   Context root,
 ) {
   final context = ref.watch(activeContextNotifierProvider);
-  assert(context != null, 'expected to find one context');
+  // assert(context != null, 'expected to find one context');
   final constructors = ref.watch(ruleConstructorProvider);
   final ruleService = ref.watch(ruleInitializationServiceProvider);
-  return ruleService.constructRules(
-      context!.sidecarOptions, constructors, root);
+  return ruleService.constructRules(context.sidecarOptions, constructors, root);
 }
 
 @Riverpod(keepAlive: true)
@@ -65,7 +64,7 @@ List<BaseRule> filteredRulesForFile(
   AnalyzedFile file,
 ) {
   final allRules = ref.watch(activatedRulesForRootProvider(file.context));
-  final context = ref.watch(activeContextNotifierProvider)!;
+  final context = ref.watch(activeContextNotifierProvider);
 
   return allRules.where((rule) {
     // final relativePath = file.relativePath;

@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $AllContextsNotifierHash() =>
-    r'f0b770589dc9740b20780c9dad97ef79e10676a5';
+    r'4420b56be104042570210b87705d558aebe57590';
 
 /// See also [AllContextsNotifier].
 final allContextsNotifierProvider =
@@ -49,26 +49,26 @@ abstract class _$AllContextsNotifier extends Notifier<List<AnalysisContext>> {
 }
 
 String $ActiveContextNotifierHash() =>
-    r'05f2970bbea4e0dc88ef1075c1a4e4c89f1556c4';
+    r'cdbb85c3be26477a9153041a729fa69292b08dc8';
 
 /// See also [ActiveContextNotifier].
 final activeContextNotifierProvider =
-    NotifierProvider<ActiveContextNotifier, ActiveContext?>(
+    NotifierProvider<ActiveContextNotifier, ActiveContext>(
   ActiveContextNotifier.new,
   name: r'activeContextNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : $ActiveContextNotifierHash,
 );
-typedef ActiveContextNotifierRef = NotifierProviderRef<ActiveContext?>;
+typedef ActiveContextNotifierRef = NotifierProviderRef<ActiveContext>;
 
-abstract class _$ActiveContextNotifier extends Notifier<ActiveContext?> {
+abstract class _$ActiveContextNotifier extends Notifier<ActiveContext> {
   @override
-  ActiveContext? build();
+  ActiveContext build();
 }
 
 String $analysisContextForRootHash() =>
-    r'ee1f4f5cfb86e56af9bb537eb1340ca795066be7';
+    r'4d03f919c924a5424c35b885d9858d9844f9fda7';
 
 /// See also [analysisContextForRoot].
 class AnalysisContextForRootProvider extends Provider<AnalysisContext> {

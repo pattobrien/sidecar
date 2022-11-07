@@ -23,10 +23,13 @@ import 'sidecar_analyzer_comm_service.dart';
 
 final logger = Logger('sidecar-plugin');
 
+// final sidecarAnalyzerProvider =
+//     Provider.family<SidecarAnalyzer, RequestMessage>(
+//         (ref, message) => SidecarAnalyzer(ref, initRequest: message));
+
 class SidecarAnalyzer {
   SidecarAnalyzer(
     this._ref, {
-    required this.sP,
     required RequestMessage initRequest,
   }) : context =
             Context(root: (initRequest.request as SetActiveRootRequest).root) {
@@ -36,14 +39,12 @@ class SidecarAnalyzer {
   }
 
   final ProviderContainer _ref;
-  final SendPort sP;
   final Context context;
 
   SidecarAnalyzerCommService get communication =>
-      _ref.read(sidecarAnalyzerCommServiceProvider(sP));
+      _ref.read(sidecarAnalyzerCommServiceProvider);
 
-  Stream<dynamic> get stream =>
-      _ref.read(analyzerCommunicationStream(sP).stream);
+  Stream<dynamic> get stream => _ref.read(analyzerCommunicationStream.stream);
 
   AnalyzedFile getFileForPath(String path) =>
       _ref.read(analyzedFileForPathProvider(path));
@@ -111,7 +112,8 @@ class SidecarAnalyzer {
     // context = Context(root: request.root);
     // _initLogger();
     // logger.severe('handleSetActiveRoot: ${context.root}');
-    _ref.read(activeContextNotifierProvider.notifier).updateRoot(context.root);
+    // _ref.read(activeContextNotifierProvider.notifier).updateRoot(context.root);
+
     // print('active context root set to: ${activeContextRoot.path}');
     // return const SetActiveRootResponse();
     const response = SetActiveRootResponse();
@@ -250,7 +252,7 @@ class SidecarAnalyzer {
     logger.finest('${DateTime.now()} starting analyzing files: $files');
     await Future.wait(files.map((file) async {
       try {
-        await _ref.refresh(getResolvedUnitForFileProvider(file).future);
+        await _ref.read(getResolvedUnitForFileProvider(file).future);
         final results =
             await _ref.read(createAnalysisReportProvider(file).future);
         final notification = LintNotification(file, results);
