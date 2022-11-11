@@ -28,6 +28,8 @@ SidecarRequest _$SidecarRequestFromJson(Map<String, dynamic> json) {
       return QuickFixRequest.fromJson(json);
     case 'updateFiles':
       return FileUpdateRequest.fromJson(json);
+    case 'setPriorityFiles':
+      return SetPriorityFilesRequest.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'SidecarRequest',
@@ -46,6 +48,7 @@ mixin _$SidecarRequest {
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
+    required TResult Function(Set<AnalyzedFile> files) setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -56,6 +59,7 @@ mixin _$SidecarRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -66,6 +70,7 @@ mixin _$SidecarRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -78,6 +83,7 @@ mixin _$SidecarRequest {
     required TResult Function(AssistRequest value) assist,
     required TResult Function(QuickFixRequest value) quickFix,
     required TResult Function(FileUpdateRequest value) updateFiles,
+    required TResult Function(SetPriorityFilesRequest value) setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -88,6 +94,7 @@ mixin _$SidecarRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -98,6 +105,7 @@ mixin _$SidecarRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -203,6 +211,7 @@ class _$SetActiveRootRequest extends SetActiveRootRequest {
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
+    required TResult Function(Set<AnalyzedFile> files) setPriorityFiles,
   }) {
     return setActiveRoot(root);
   }
@@ -216,6 +225,7 @@ class _$SetActiveRootRequest extends SetActiveRootRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return setActiveRoot?.call(root);
   }
@@ -229,6 +239,7 @@ class _$SetActiveRootRequest extends SetActiveRootRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (setActiveRoot != null) {
@@ -247,6 +258,7 @@ class _$SetActiveRootRequest extends SetActiveRootRequest {
     required TResult Function(AssistRequest value) assist,
     required TResult Function(QuickFixRequest value) quickFix,
     required TResult Function(FileUpdateRequest value) updateFiles,
+    required TResult Function(SetPriorityFilesRequest value) setPriorityFiles,
   }) {
     return setActiveRoot(this);
   }
@@ -260,6 +272,7 @@ class _$SetActiveRootRequest extends SetActiveRootRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return setActiveRoot?.call(this);
   }
@@ -273,6 +286,7 @@ class _$SetActiveRootRequest extends SetActiveRootRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (setActiveRoot != null) {
@@ -405,6 +419,7 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
+    required TResult Function(Set<AnalyzedFile> files) setPriorityFiles,
   }) {
     return setContextCollection(mainRoot, roots);
   }
@@ -418,6 +433,7 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return setContextCollection?.call(mainRoot, roots);
   }
@@ -431,6 +447,7 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (setContextCollection != null) {
@@ -449,6 +466,7 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     required TResult Function(AssistRequest value) assist,
     required TResult Function(QuickFixRequest value) quickFix,
     required TResult Function(FileUpdateRequest value) updateFiles,
+    required TResult Function(SetPriorityFilesRequest value) setPriorityFiles,
   }) {
     return setContextCollection(this);
   }
@@ -462,6 +480,7 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return setContextCollection?.call(this);
   }
@@ -475,6 +494,7 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (setContextCollection != null) {
@@ -593,6 +613,7 @@ class _$LintRequest extends LintRequest {
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
+    required TResult Function(Set<AnalyzedFile> files) setPriorityFiles,
   }) {
     return lint(files);
   }
@@ -606,6 +627,7 @@ class _$LintRequest extends LintRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return lint?.call(files);
   }
@@ -619,6 +641,7 @@ class _$LintRequest extends LintRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (lint != null) {
@@ -637,6 +660,7 @@ class _$LintRequest extends LintRequest {
     required TResult Function(AssistRequest value) assist,
     required TResult Function(QuickFixRequest value) quickFix,
     required TResult Function(FileUpdateRequest value) updateFiles,
+    required TResult Function(SetPriorityFilesRequest value) setPriorityFiles,
   }) {
     return lint(this);
   }
@@ -650,6 +674,7 @@ class _$LintRequest extends LintRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return lint?.call(this);
   }
@@ -663,6 +688,7 @@ class _$LintRequest extends LintRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (lint != null) {
@@ -757,7 +783,6 @@ class _$AssistRequest extends AssistRequest {
   factory _$AssistRequest.fromJson(Map<String, dynamic> json) =>
       _$$AssistRequestFromJson(json);
 
-// required AnalyzedFile file,
   @override
   final AnalyzedFile file;
   @override
@@ -806,6 +831,7 @@ class _$AssistRequest extends AssistRequest {
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
+    required TResult Function(Set<AnalyzedFile> files) setPriorityFiles,
   }) {
     return assist(file, offset, length);
   }
@@ -819,6 +845,7 @@ class _$AssistRequest extends AssistRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return assist?.call(file, offset, length);
   }
@@ -832,6 +859,7 @@ class _$AssistRequest extends AssistRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (assist != null) {
@@ -850,6 +878,7 @@ class _$AssistRequest extends AssistRequest {
     required TResult Function(AssistRequest value) assist,
     required TResult Function(QuickFixRequest value) quickFix,
     required TResult Function(FileUpdateRequest value) updateFiles,
+    required TResult Function(SetPriorityFilesRequest value) setPriorityFiles,
   }) {
     return assist(this);
   }
@@ -863,6 +892,7 @@ class _$AssistRequest extends AssistRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return assist?.call(this);
   }
@@ -876,6 +906,7 @@ class _$AssistRequest extends AssistRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (assist != null) {
@@ -902,7 +933,6 @@ abstract class AssistRequest extends SidecarRequest {
   factory AssistRequest.fromJson(Map<String, dynamic> json) =
       _$AssistRequest.fromJson;
 
-// required AnalyzedFile file,
   AnalyzedFile get file;
   int get offset;
   int get length;
@@ -1012,6 +1042,7 @@ class _$QuickFixRequest extends QuickFixRequest {
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
+    required TResult Function(Set<AnalyzedFile> files) setPriorityFiles,
   }) {
     return quickFix(file, offset);
   }
@@ -1025,6 +1056,7 @@ class _$QuickFixRequest extends QuickFixRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return quickFix?.call(file, offset);
   }
@@ -1038,6 +1070,7 @@ class _$QuickFixRequest extends QuickFixRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (quickFix != null) {
@@ -1056,6 +1089,7 @@ class _$QuickFixRequest extends QuickFixRequest {
     required TResult Function(AssistRequest value) assist,
     required TResult Function(QuickFixRequest value) quickFix,
     required TResult Function(FileUpdateRequest value) updateFiles,
+    required TResult Function(SetPriorityFilesRequest value) setPriorityFiles,
   }) {
     return quickFix(this);
   }
@@ -1069,6 +1103,7 @@ class _$QuickFixRequest extends QuickFixRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return quickFix?.call(this);
   }
@@ -1082,6 +1117,7 @@ class _$QuickFixRequest extends QuickFixRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (quickFix != null) {
@@ -1201,6 +1237,7 @@ class _$FileUpdateRequest extends FileUpdateRequest {
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
+    required TResult Function(Set<AnalyzedFile> files) setPriorityFiles,
   }) {
     return updateFiles(updates);
   }
@@ -1214,6 +1251,7 @@ class _$FileUpdateRequest extends FileUpdateRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return updateFiles?.call(updates);
   }
@@ -1227,6 +1265,7 @@ class _$FileUpdateRequest extends FileUpdateRequest {
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (updateFiles != null) {
@@ -1245,6 +1284,7 @@ class _$FileUpdateRequest extends FileUpdateRequest {
     required TResult Function(AssistRequest value) assist,
     required TResult Function(QuickFixRequest value) quickFix,
     required TResult Function(FileUpdateRequest value) updateFiles,
+    required TResult Function(SetPriorityFilesRequest value) setPriorityFiles,
   }) {
     return updateFiles(this);
   }
@@ -1258,6 +1298,7 @@ class _$FileUpdateRequest extends FileUpdateRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return updateFiles?.call(this);
   }
@@ -1271,6 +1312,7 @@ class _$FileUpdateRequest extends FileUpdateRequest {
     TResult Function(AssistRequest value)? assist,
     TResult Function(QuickFixRequest value)? quickFix,
     TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (updateFiles != null) {
@@ -1298,5 +1340,200 @@ abstract class FileUpdateRequest extends SidecarRequest {
   List<FileUpdateEvent> get updates;
   @JsonKey(ignore: true)
   _$$FileUpdateRequestCopyWith<_$FileUpdateRequest> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SetPriorityFilesRequestCopyWith<$Res> {
+  factory _$$SetPriorityFilesRequestCopyWith(_$SetPriorityFilesRequest value,
+          $Res Function(_$SetPriorityFilesRequest) then) =
+      __$$SetPriorityFilesRequestCopyWithImpl<$Res>;
+  $Res call({Set<AnalyzedFile> files});
+}
+
+/// @nodoc
+class __$$SetPriorityFilesRequestCopyWithImpl<$Res>
+    extends _$SidecarRequestCopyWithImpl<$Res>
+    implements _$$SetPriorityFilesRequestCopyWith<$Res> {
+  __$$SetPriorityFilesRequestCopyWithImpl(_$SetPriorityFilesRequest _value,
+      $Res Function(_$SetPriorityFilesRequest) _then)
+      : super(_value, (v) => _then(v as _$SetPriorityFilesRequest));
+
+  @override
+  _$SetPriorityFilesRequest get _value =>
+      super._value as _$SetPriorityFilesRequest;
+
+  @override
+  $Res call({
+    Object? files = freezed,
+  }) {
+    return _then(_$SetPriorityFilesRequest(
+      files == freezed
+          ? _value._files
+          : files // ignore: cast_nullable_to_non_nullable
+              as Set<AnalyzedFile>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SetPriorityFilesRequest extends SetPriorityFilesRequest {
+  const _$SetPriorityFilesRequest(final Set<AnalyzedFile> files,
+      {final String? $type})
+      : _files = files,
+        $type = $type ?? 'setPriorityFiles',
+        super._();
+
+  factory _$SetPriorityFilesRequest.fromJson(Map<String, dynamic> json) =>
+      _$$SetPriorityFilesRequestFromJson(json);
+
+  final Set<AnalyzedFile> _files;
+  @override
+  Set<AnalyzedFile> get files {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableSetView(_files);
+  }
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'SidecarRequest.setPriorityFiles(files: $files)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetPriorityFilesRequest &&
+            const DeepCollectionEquality().equals(other._files, _files));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_files));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$SetPriorityFilesRequestCopyWith<_$SetPriorityFilesRequest> get copyWith =>
+      __$$SetPriorityFilesRequestCopyWithImpl<_$SetPriorityFilesRequest>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Uri root) setActiveRoot,
+    required TResult Function(String mainRoot, List<String> roots)
+        setContextCollection,
+    required TResult Function(List<String> files) lint,
+    required TResult Function(AnalyzedFile file, int offset, int length) assist,
+    required TResult Function(AnalyzedFile file, int offset) quickFix,
+    required TResult Function(List<FileUpdateEvent> updates) updateFiles,
+    required TResult Function(Set<AnalyzedFile> files) setPriorityFiles,
+  }) {
+    return setPriorityFiles(files);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(Uri root)? setActiveRoot,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
+    TResult Function(List<String> files)? lint,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
+    TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
+  }) {
+    return setPriorityFiles?.call(files);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Uri root)? setActiveRoot,
+    TResult Function(String mainRoot, List<String> roots)? setContextCollection,
+    TResult Function(List<String> files)? lint,
+    TResult Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult Function(AnalyzedFile file, int offset)? quickFix,
+    TResult Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
+    required TResult orElse(),
+  }) {
+    if (setPriorityFiles != null) {
+      return setPriorityFiles(files);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SetActiveRootRequest value) setActiveRoot,
+    required TResult Function(SetContextCollectionRequest value)
+        setContextCollection,
+    required TResult Function(LintRequest value) lint,
+    required TResult Function(AssistRequest value) assist,
+    required TResult Function(QuickFixRequest value) quickFix,
+    required TResult Function(FileUpdateRequest value) updateFiles,
+    required TResult Function(SetPriorityFilesRequest value) setPriorityFiles,
+  }) {
+    return setPriorityFiles(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(SetActiveRootRequest value)? setActiveRoot,
+    TResult Function(SetContextCollectionRequest value)? setContextCollection,
+    TResult Function(LintRequest value)? lint,
+    TResult Function(AssistRequest value)? assist,
+    TResult Function(QuickFixRequest value)? quickFix,
+    TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
+  }) {
+    return setPriorityFiles?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetActiveRootRequest value)? setActiveRoot,
+    TResult Function(SetContextCollectionRequest value)? setContextCollection,
+    TResult Function(LintRequest value)? lint,
+    TResult Function(AssistRequest value)? assist,
+    TResult Function(QuickFixRequest value)? quickFix,
+    TResult Function(FileUpdateRequest value)? updateFiles,
+    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
+    required TResult orElse(),
+  }) {
+    if (setPriorityFiles != null) {
+      return setPriorityFiles(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SetPriorityFilesRequestToJson(
+      this,
+    );
+  }
+}
+
+abstract class SetPriorityFilesRequest extends SidecarRequest {
+  const factory SetPriorityFilesRequest(final Set<AnalyzedFile> files) =
+      _$SetPriorityFilesRequest;
+  const SetPriorityFilesRequest._() : super._();
+
+  factory SetPriorityFilesRequest.fromJson(Map<String, dynamic> json) =
+      _$SetPriorityFilesRequest.fromJson;
+
+  Set<AnalyzedFile> get files;
+  @JsonKey(ignore: true)
+  _$$SetPriorityFilesRequestCopyWith<_$SetPriorityFilesRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -1,20 +1,20 @@
-// APPROVED ICONS
+// // APPROVED ICONS
 
-import 'package:flutter/material.dart';
-// import 'package:design_system_annotations/design_system_annotations.dart';
+// import 'package:flutter/material.dart';
+// // import 'package:design_system_annotations/design_system_annotations.dart';
 
-class ProjectIcons {
-  static const abc = Icons.stop;
-}
+// class ProjectIcons {
+//   static const abc = Icons.stop;
+// }
 
-// @designSystem
-class ProjectIcons2 {
-  static const abc = Icons.party_mode;
-}
+// // @designSystem
+// class ProjectIcons2 {
+//   static const abc = Icons.party_mode;
+// }
 
-final y = 1;
+// final y = 1;
 
-// @designSystemIcons
-class ProjectIcons3 {
-  static const abc = Icons.shield_outlined;
-}
+// // @designSystemIcons
+// class ProjectIcons3 {
+//   static const abc = Icons.shield_outlined;
+// }

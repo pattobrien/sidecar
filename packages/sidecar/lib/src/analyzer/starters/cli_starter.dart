@@ -10,9 +10,9 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
-import '../../protocol/models/models.dart';
 import '../../rules/rules.dart';
 import '../../services/active_project_service.dart';
+import '../../utils/duration_ext.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/printer/lint_printer.dart';
 import '../options_provider.dart';
@@ -71,9 +71,12 @@ Future<void> startSidecarCli(
               print(notification.lints.prettyPrint());
             }
           });
-          // runner.logs.listen((event) {
-          //   stdout.writeln(event.toString());
-          // });
+          runner.logs.listen((event) {
+            event.mapOrNull(
+              simple: print,
+              // fromAnalyzer: print,
+            );
+          });
         }
         await container.read(runnersInitializerProvider.future);
         logDelegate.dumpResults();
@@ -85,38 +88,48 @@ Future<void> startSidecarCli(
           hierarchicalLoggingEnabled = true;
           HotReloader.logLevel = Level.OFF;
           final hotReloader = await HotReloader.create(
-            onAfterReload: (c) {
+            onAfterReload: (c) async {
+              final watch = Stopwatch()..start();
               print('\n${DateTime.now().toIso8601String()} RELOADING...\n');
-              print('${c.events?.length ?? 0} file changes: ${c.events ?? []}');
-              final elements = container.getAllProviderElements();
-              final numberOfRunners =
-                  elements.where((e) => e.origin == runnersProvider);
+              // print('${c.events?.length ?? 0} file changes: ${c.events ?? []}');
+              // final elements = container.getAllProviderElements();
+              // final numberOfRunners =
+              //     elements.where((e) => e.origin == runnersProvider);
               // print('# of active runners: ${numberOfRunners.length}');
               final events = c.events ?? [];
               // TODO: check for any changes to lint rules
               // if (events.any((event) => event.path))
-
+              // print('# o runners: ${runners.length}');
               for (final runner in runners) {
+                // final runnerWatch = Stopwatch()..start();
                 // print('runner: ${runner.context.activeRoot.root.path}');
+                final rootPath = runner.context.activeRoot.root.path;
                 for (final event in events) {
+                  // print('# o events: ${events.length}');
                   // print('event: ${event.path}');
                   final filePath = event.path;
-                  final rootPath = runner.context.activeRoot.root.path;
+                  // print('${DateTime.now().toIso8601String()} if isWithin');
                   if (p.isWithin(rootPath, event.path)) {
-                    final file = runner.getAnalyzedFileForPath(filePath);
-                    if (file == null) continue;
-                    print('reanalyzing: $filePath\n');
-                    runner.requestLintsForFile(file);
-                  } else if (p.isWithin(pluginUri.path, filePath)) {
-                    print(
-                        'rebuilding runner: ${runner.context.contextRoot.root.path}\n');
+                    // final someWatch = Stopwatch()..start();
+                    final file = runner.getAnalyzedFile(filePath);
+                    // print(
+                    //     'getAnalyzedFileForPath: ${someWatch.elapsed.prettified()}');
+                    if (file == null) {
+                      // print('not analyzing: $filePath');
+                      continue;
+                    }
+                    // print('reanalyzing: ${file.relativePath}\n');
 
-                    // print('activeContexts: ${contextNumber.length}');
-                    container.refresh(runnersProvider);
-                    break;
+                    await runner.requestLintsForFile(file);
+                  } else if (p.isWithin(pluginUri.path, filePath)) {
+                    // print('rebuilding runner: $rootPath \n');
+                    // container.refresh(runnersProvider);
+                    // await runner.initialize();
                   }
                 }
+                // print('runner reload: ${runnerWatch.elapsed.prettified()}');
               }
+              print('total reload: ${watch.elapsed.prettified()}');
             },
           );
         }

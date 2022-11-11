@@ -31,7 +31,7 @@ extension LintResultPrinter on LintResult {
         lintErrorType = '  ${severity.ansi}';
         break;
     }
-    final packageId = '${ansi.green}${rule.packageName}${ansi.none}';
+    final packageId = '${ansi.green}${rule.package}${ansi.none}';
     final lintCode = '${ansi.green}${rule.code}${ansi.none}';
     final msg = '${ansi.bold}$message${ansi.none}';
     final corr = correction;

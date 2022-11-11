@@ -4,12 +4,14 @@ import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/file_system/file_system.dart';
+import 'package:analyzer_plugin/protocol/protocol.dart';
 import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
+import '../../../utils/duration_ext.dart';
 import '../../context/context.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
@@ -27,11 +29,13 @@ class SidecarRunner {
       [context.context, ...context.allRoots];
   final ReceivePort receivePort;
 
-  AnalyzedFile? getAnalyzedFileForPath(String path) => allContexts
-      .firstWhereOrNull(
-          (ctx) => ctx.typedAnalyzedFiles().any((file) => file.path == path))
-      ?.typedAnalyzedFiles()
-      .firstWhere((file) => file.path == path);
+  AnalyzedFile? getAnalyzedFile(String path) {
+    final context = allContexts
+        .firstWhereOrNull((context) => context.contextRoot.isAnalyzed(path));
+    if (context == null) return null;
+    return AnalyzedFile(Uri.parse(path),
+        contextRoot: context.contextRoot.root.toUri());
+  }
 
   late final SendPort sendPort;
 
@@ -64,32 +68,25 @@ class SidecarRunner {
     );
 
     notifications.listen((event) => event.map(
-          initComplete: (_) => handleInitialization(),
+          initComplete: (_) => handleStartupNotification(),
           lint: (_) => null,
         ));
 
     await _initializationCompleter.future;
     await requestSetActiveRoot();
-    // await _requestSetContext();
   }
 
   void _initStream() {
     receivePort.listen(
       (dynamic m) {
         if (m == null) return;
+        assert(m is SendPort || m is String,
+            'unexpected type ${m.runtimeType} $m');
         if (m is SendPort) {
           sendPort = m;
         } else if (m is String) {
-          try {
-            // print('${DateTime.now().toIso8601String()}: $m');
-            final jsonObject = jsonDecode(m) as Map<String, dynamic>;
-            _controller.add(jsonObject);
-          } catch (e) {
-            print('something went wrong: $e: $m');
-          }
-        } else {
-          print('got unexpected type: ${m.runtimeType} ${m.toString()}');
-          // _controller.add(m as Object);
+          final jsonObject = jsonDecode(m) as Map<String, dynamic>;
+          _controller.add(jsonObject);
         }
       },
       onError: (dynamic e) => _controller.addError(e as Object),
@@ -97,8 +94,8 @@ class SidecarRunner {
     );
   }
 
-  void handleInitialization() {
-    print('initialization completed\n');
+  void handleStartupNotification() {
+    print('isolate startup completed\n');
     _initializationCompleter.complete();
   }
 
@@ -109,16 +106,40 @@ class SidecarRunner {
         .firstWhereOrNull((element) => element.contextRoot.isAnalyzed(path));
   }
 
-  Future<List<LintResult>> requestLintsForFile(AnalyzedFile file) async {
+  Future<UpdateFilesResponse?> requestLintsForFile(
+    AnalyzedFile file,
+  ) async {
+    final watch = Stopwatch()..start();
+    print('file reload 1: ${watch.elapsed.prettified()}');
     final contents = resourceProvider.getFile(file.path).readAsStringSync();
     final fileUpdateEvent = FileUpdateEvent.add(file, contents);
     final request = FileUpdateRequest([fileUpdateEvent]);
-    // print(request.toJson());
-    unawaited(asyncRequest<UpdateFilesResponse>(request));
-    final lintNotification =
-        await lints.firstWhere((element) => element.file == file);
-    // print('received lints: ${lintNotification.toJson()}');
-    return lintNotification.lints;
+    final id = const Uuid().v4();
+    final wrappedRequest = SidecarMessage.request(request: request, id: id);
+    final json = wrappedRequest.toJson();
+    final encoded = jsonEncode(json);
+    // print('request: $encoded');
+    sendPort.send(encoded);
+
+    // final responseCompleter = Completer<SidecarMessage>();
+    // final conditionCompleter = Completer<void>();
+    // await completer?.call().then((value) async {
+    //   conditionCompleter.complete();
+    // });
+    final response = await _responses.firstWhere((resp) => resp.id == id);
+    // .then(responseCompleter.complete);
+    // final response = await responseCompleter.future;
+    final parsedMessage = response
+        .mapOrNull(
+          response: (response) => response,
+          error: (error) => throw UnimplementedError(),
+        )
+        ?.response;
+    if (parsedMessage == null) throw UnimplementedError();
+    if (parsedMessage is! UpdateFilesResponse) throw UnimplementedError();
+    // return conditionCompleter.isCompleted ? null : parsedMessage;
+    print('file reload 3: ${watch.elapsed.prettified()}');
+    return parsedMessage;
   }
 
   Future<void> requestSetActiveRoot() async {

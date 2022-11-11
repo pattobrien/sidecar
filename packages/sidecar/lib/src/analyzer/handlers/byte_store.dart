@@ -9,7 +9,7 @@ import '../plugin/analyzer_resource_provider.dart';
 
 part 'byte_store.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 ByteStore createByteStore(CreateByteStoreRef ref) {
   final resourceProvider = ref.watch(analyzerResourceProvider);
   return resourceProvider.createByteStore(kSidecarPluginName);

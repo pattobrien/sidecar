@@ -29,15 +29,8 @@ class RuleInitializationService {
           if (ruleConfig.enabled == false) return null;
 
           logger.finer('activating ${rule.code}');
-          //TODO: ref should not be provided like this
-          rule.initialize(
-              ref: ref, activeRoot: activeRoot, configuration: ruleConfig);
-          // if (rule.errors?.isNotEmpty ?? false) {
-          //   // errorComposer.addErrors(rule.errors!);
-          //   return null;
-          // } else {
+
           return rule;
-          // }
         })
         .whereType<BaseRule>()
         .toList();

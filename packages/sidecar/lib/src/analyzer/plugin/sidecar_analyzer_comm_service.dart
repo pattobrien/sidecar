@@ -11,6 +11,11 @@ final sidecarAnalyzerCommServiceProvider =
 final analyzerCommunicationStream = StreamProvider<dynamic>(
     (ref) => ref.watch(sidecarAnalyzerCommServiceProvider).stream);
 
+final listener = Provider((ref) async {
+  final x = ref.watch(analyzerCommunicationStream);
+  // print('received: $x');
+});
+
 class SidecarAnalyzerCommService {
   SidecarAnalyzerCommService() {
     // initialize();

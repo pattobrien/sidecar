@@ -13,6 +13,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../../../sidecar.dart';
 import '../../../services/active_project_service.dart';
 import '../../../services/isolate_builder_service.dart';
+import '../../../utils/duration_ext.dart';
 import '../exit_codes.dart';
 
 class AnalyzeCommand extends Command<int> {
@@ -31,7 +32,9 @@ class AnalyzeCommand extends Command<int> {
   FutureOr<int> run() async {
     final ansi = Ansi(true);
     final xLogger = Logger.standard(ansi: ansi);
-    final progress = xLogger.progress('sidecar - Analyzing project');
+    // final progress = xLogger.progress('sidecar - Analyzing project');
+    final watch = Stopwatch()..start();
+    xLogger.write('sidecar - Analyzing project...');
     try {
       if (!stdout.supportsAnsiEscapes) {
         stdout.writeln('ansi is not supported!');
@@ -117,14 +120,20 @@ class AnalyzeCommand extends Command<int> {
           stdout.write(message);
         });
         await startSidecarCli(receivePort.sendPort, ['--cli']);
+        stdout.writeln('completed in: ${watch.elapsed.prettified()}');
+        await stdout.flush();
         return 0;
+        // ignore: dead_code
       } else {
         final receivePort = ReceivePort();
         receivePort.listen((dynamic message) {
           stdout.write(message);
+        }, onDone: () async {
+          // TODO: elapsed time
+          // stdout.writeln('completed in: ${watch.elapsed.prettified()}');
+          // await stdout.flush();
         });
         await startSidecarCli(receivePort.sendPort, ['--cli']);
-        return 0;
       }
 
       // final process = await Process.start(
@@ -144,7 +153,7 @@ class AnalyzeCommand extends Command<int> {
       // stdout.writeln('finished in: ${progress.elapsed.inSeconds} seconds.');
       // stdout.writeln('exit: ${exitCode.toString()}');
 
-      // return ExitCode.success;
+      return ExitCode.success;
     } catch (e) {
       stdout.writeln('CLI ERROR: $e');
       rethrow;

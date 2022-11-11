@@ -30,14 +30,14 @@ class _SystemHash {
 }
 
 String $createFileContentCacheHash() =>
-    r'5f540f72a5fde3c4d9b387fd5442c88021a5a427';
+    r'e3f9c9875a0804dca25c425d1400a7b903734498';
 
 /// See also [createFileContentCache].
-final createFileContentCacheProvider = AutoDisposeProvider<FileContentCache>(
+final createFileContentCacheProvider = Provider<FileContentCache>(
   createFileContentCache,
   name: r'createFileContentCacheProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : $createFileContentCacheHash,
 );
-typedef CreateFileContentCacheRef = AutoDisposeProviderRef<FileContentCache>;
+typedef CreateFileContentCacheRef = ProviderRef<FileContentCache>;

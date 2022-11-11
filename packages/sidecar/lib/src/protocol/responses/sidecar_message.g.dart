@@ -22,8 +22,7 @@ Map<String, dynamic> _$$RequestMessageToJson(_$RequestMessage instance) =>
 
 _$ResponseMessage _$$ResponseMessageFromJson(Map<String, dynamic> json) =>
     _$ResponseMessage(
-      response:
-          SidecarResponse.fromJson(json['response'] as Map<String, dynamic>),
+      SidecarResponse.fromJson(json['response'] as Map<String, dynamic>),
       id: json['id'] as String,
       $type: json['runtimeType'] as String?,
     );

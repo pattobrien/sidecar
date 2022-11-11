@@ -28,7 +28,7 @@ Future<void> startSidecarPlugin(
           // logDelegateProvider.overrideWithValue(delegate),
         ],
         observers: [
-          PluginObserver(cliOptions, channel),
+          // PluginObserver(cliOptions, channel),
         ],
       );
 

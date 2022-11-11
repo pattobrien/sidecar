@@ -357,7 +357,7 @@ class __$$ResponseMessageCopyWithImpl<$Res>
     Object? id = freezed,
   }) {
     return _then(_$ResponseMessage(
-      response: response == freezed
+      response == freezed
           ? _value.response
           : response // ignore: cast_nullable_to_non_nullable
               as SidecarResponse,
@@ -379,8 +379,8 @@ class __$$ResponseMessageCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ResponseMessage extends ResponseMessage {
-  const _$ResponseMessage(
-      {required this.response, required this.id, final String? $type})
+  const _$ResponseMessage(this.response,
+      {required this.id, final String? $type})
       : $type = $type ?? 'response',
         super._();
 
@@ -522,9 +522,8 @@ class _$ResponseMessage extends ResponseMessage {
 }
 
 abstract class ResponseMessage extends SidecarMessage {
-  const factory ResponseMessage(
-      {required final SidecarResponse response,
-      required final String id}) = _$ResponseMessage;
+  const factory ResponseMessage(final SidecarResponse response,
+      {required final String id}) = _$ResponseMessage;
   const ResponseMessage._() : super._();
 
   factory ResponseMessage.fromJson(Map<String, dynamic> json) =

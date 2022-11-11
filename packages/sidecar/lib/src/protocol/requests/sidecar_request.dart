@@ -24,7 +24,6 @@ class SidecarRequest with _$SidecarRequest {
   const factory SidecarRequest.lint(List<String> files) = LintRequest;
 
   const factory SidecarRequest.assist({
-    // required AnalyzedFile file,
     required AnalyzedFile file,
     required int offset,
     required int length,
@@ -37,8 +36,13 @@ class SidecarRequest with _$SidecarRequest {
     // required int length,
   }) = QuickFixRequest;
 
-  const factory SidecarRequest.updateFiles(List<FileUpdateEvent> updates) =
-      FileUpdateRequest;
+  const factory SidecarRequest.updateFiles(
+    List<FileUpdateEvent> updates,
+  ) = FileUpdateRequest;
+
+  const factory SidecarRequest.setPriorityFiles(
+    Set<AnalyzedFile> files,
+  ) = SetPriorityFilesRequest;
 
   factory SidecarRequest.fromJson(Map<String, dynamic> json) =>
       _$SidecarRequestFromJson(json);

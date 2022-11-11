@@ -16,8 +16,8 @@ class SidecarMessage with _$SidecarMessage {
     required String id,
   }) = RequestMessage;
 
-  const factory SidecarMessage.response({
-    required SidecarResponse response,
+  const factory SidecarMessage.response(
+    SidecarResponse response, {
     required String id,
   }) = ResponseMessage;
 

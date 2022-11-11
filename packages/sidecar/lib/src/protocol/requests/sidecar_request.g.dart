@@ -91,3 +91,19 @@ Map<String, dynamic> _$$FileUpdateRequestToJson(_$FileUpdateRequest instance) =>
       'updates': instance.updates.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };
+
+_$SetPriorityFilesRequest _$$SetPriorityFilesRequestFromJson(
+        Map<String, dynamic> json) =>
+    _$SetPriorityFilesRequest(
+      (json['files'] as List<dynamic>)
+          .map((e) => AnalyzedFile.fromJson(e as Map<String, dynamic>))
+          .toSet(),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$SetPriorityFilesRequestToJson(
+        _$SetPriorityFilesRequest instance) =>
+    <String, dynamic>{
+      'files': instance.files.map((e) => e.toJson()).toList(),
+      'runtimeType': instance.$type,
+    };

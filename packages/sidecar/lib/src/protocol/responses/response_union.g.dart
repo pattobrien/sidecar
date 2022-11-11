@@ -83,3 +83,15 @@ Map<String, dynamic> _$$SetActiveRootResponseToJson(
     <String, dynamic>{
       'runtimeType': instance.$type,
     };
+
+_$SetPriorityFilesResponse _$$SetPriorityFilesResponseFromJson(
+        Map<String, dynamic> json) =>
+    _$SetPriorityFilesResponse(
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$SetPriorityFilesResponseToJson(
+        _$SetPriorityFilesResponse instance) =>
+    <String, dynamic>{
+      'runtimeType': instance.$type,
+    };

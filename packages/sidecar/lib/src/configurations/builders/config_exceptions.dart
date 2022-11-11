@@ -61,16 +61,14 @@ class SidecarNewException with _$SidecarNewException {
   }
 }
 
-const invalidFieldCode = RuleCode(
-  type: RuleType.lint,
-  code: 'sidecar_invalid_field',
-  packageName: 'sidecar',
+const invalidFieldCode = LintCode(
+  'sidecar_invalid_field',
+  package: 'sidecar',
   // url:
 );
 
-const invalidRuleCode = RuleCode(
-  type: RuleType.lint,
-  code: 'sidecar_invalid_rule',
-  packageName: 'sidecar',
+const invalidRuleCode = AssistCode(
+  'sidecar_invalid_rule',
+  package: 'sidecar',
   // url:
 );

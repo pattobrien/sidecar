@@ -1,73 +1,25 @@
-import 'package:analyzer/dart/analysis/analysis_context.dart';
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/analysis/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:glob/glob.dart';
-import 'package:riverpod/riverpod.dart';
 
-import '../analyzer/plugin/plugin.dart';
-import '../analyzer/results/results.dart';
-import '../configurations/configurations.dart';
 import '../protocol/protocol.dart';
-import 'typedefs.dart';
-
-// @Deprecated('switch to type-checking BaseRule type (e.g. LintRule, AssistRule)')
-// enum RuleType { lint, assist }
 
 abstract class BaseRule {
-  String get code;
-  LintPackageId get packageName;
+  RuleCode get code;
   List<Glob>? get includes => null;
-  MapDecoder? get jsonDecoder => null;
+  List<Glob>? get excludes => null;
+}
 
-  late Ref _ref;
-  late Context _activeRoot;
-
-  @internal
-  late AnalysisConfiguration analysisConfiguration;
-
-  List<SidecarAnnotatedNode> get annotatedNodes =>
-      _ref.read(sidecarAnnotationsForRootProvider(_activeRoot));
-
-  AnalysisContext get context =>
-      _ref.read(analysisContextForRootProvider(_activeRoot));
-
-  AnalysisSession get session => context.currentSession;
-
-  Future<ResolvedUnitResult> getResolvedUnitResult(String path) async {
-    final analysisSession = session;
-    final unitResult = await analysisSession.getResolvedUnit(path);
-    if (unitResult is ResolvedUnitResult) {
-      return unitResult;
-    }
-    throw StateError('Failed to analyze $path');
-  }
+mixin Configuration on BaseRule {
+  late final Map<dynamic, dynamic>? packageConfiguration;
+  late final Map<dynamic, dynamic>? ruleConfiguration;
 
   @internal
-  void initialize({
-    required Ref ref,
-    required Context activeRoot,
-    required AnalysisConfiguration configuration,
+  void init({
+    Map<dynamic, dynamic>? packageConfiguration,
+    Map<dynamic, dynamic>? ruleConfiguration,
   }) {
-    _ref = ref;
-    _activeRoot = activeRoot;
-    analysisConfiguration = configuration;
-    if (jsonDecoder != null) {
-      if (configuration.configuration == null) {
-        //TODO: need to handle this
-      } else {
-        // try {
-        //   _configuration = jsonDecoder!(configuration.configuration!);
-        // } on SidecarAggregateException catch (e) {
-        //   _errors.addAll(e.exceptions);
-        // } catch (e, stackTrace) {
-        //   rethrow;
-        //   // final error = SidecarLintPackageException(
-        //   // );
-        //   // _errors.add(error);
-        // }
-      }
-    }
+    this.packageConfiguration = packageConfiguration;
+    this.ruleConfiguration = ruleConfiguration;
   }
 }

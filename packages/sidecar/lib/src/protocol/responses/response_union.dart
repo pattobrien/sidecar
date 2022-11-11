@@ -21,6 +21,7 @@ class SidecarResponse with _$SidecarResponse {
   const factory SidecarResponse.updateFiles() = UpdateFilesResponse;
 
   const factory SidecarResponse.setActiveRoot() = SetActiveRootResponse;
+  const factory SidecarResponse.setPriorityFiles() = SetPriorityFilesResponse;
 
   factory SidecarResponse.fromJson(Map<String, dynamic> json) =>
       _$SidecarResponseFromJson(json);

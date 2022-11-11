@@ -77,7 +77,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
           lintErrorType = '  ${result.severity.ansi}';
           break;
       }
-      final packageId = '${ansi.green}${result.rule.packageName}${ansi.none}';
+      final packageId = '${ansi.green}${result.rule.package}${ansi.none}';
       final lintCode = '${ansi.green}${result.rule.code}${ansi.none}';
       final message = '${ansi.bold}${result.message}${ansi.none}';
       final correction = result.correction;

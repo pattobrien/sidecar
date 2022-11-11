@@ -1,20 +1,14 @@
-import 'package:analyzer_plugin/channel/channel.dart' as plugin;
-import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../rules/lint_severity.dart';
 import '../../utils/utils.dart';
 import '../protocol.dart';
-import 'source_exts.dart';
 
 extension LintResultX on AnalysisResult {
   plugin.AnalysisError toAnalysisError() {
-    final concatenatedLintCode = '${rule.packageName}.${rule.code}';
+    final concatenatedLintCode = '${rule.package}.${rule.code}';
     return plugin.AnalysisError(
       severity.analysisError,
       plugin.AnalysisErrorType.HINT,

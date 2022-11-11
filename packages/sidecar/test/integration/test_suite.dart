@@ -22,7 +22,7 @@ import 'package:sidecar/src/analyzer/plugin/plugin.dart';
 import 'package:sidecar/src/analyzer/server/log_delegate.dart';
 import 'package:sidecar/src/analyzer/server/runner/context_providers.dart';
 import 'package:sidecar/src/analyzer/server/runner/message_providers.dart';
-import 'package:sidecar/src/analyzer/server/runner/runner_old.dart';
+// import 'package:sidecar/src/analyzer/server/runner/runner_old.dart';
 import 'package:sidecar/src/analyzer/server/server.dart';
 import 'package:sidecar/src/cli/options/cli_options.dart';
 import 'package:sidecar/src/test/assets/project_creator.dart';

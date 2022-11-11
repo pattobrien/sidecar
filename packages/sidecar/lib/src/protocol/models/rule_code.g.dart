@@ -6,22 +6,32 @@ part of 'rule_code.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_RuleCode _$$_RuleCodeFromJson(Map<String, dynamic> json) => _$_RuleCode(
-      type: $enumDecode(_$RuleTypeEnumMap, json['type']),
-      code: json['code'] as String,
-      packageName: json['packageName'] as String,
+_$LintCode _$$LintCodeFromJson(Map<String, dynamic> json) => _$LintCode(
+      json['code'] as String,
+      package: json['package'] as String,
       url: json['url'] as String?,
+      $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$_RuleCodeToJson(_$_RuleCode instance) =>
+Map<String, dynamic> _$$LintCodeToJson(_$LintCode instance) =>
     <String, dynamic>{
-      'type': _$RuleTypeEnumMap[instance.type]!,
       'code': instance.code,
-      'packageName': instance.packageName,
+      'package': instance.package,
       'url': instance.url,
+      'runtimeType': instance.$type,
     };
 
-const _$RuleTypeEnumMap = {
-  RuleType.lint: 'lint',
-  RuleType.assist: 'assist',
-};
+_$AssistCode _$$AssistCodeFromJson(Map<String, dynamic> json) => _$AssistCode(
+      json['code'] as String,
+      package: json['package'] as String,
+      url: json['url'] as String?,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$AssistCodeToJson(_$AssistCode instance) =>
+    <String, dynamic>{
+      'code': instance.code,
+      'package': instance.package,
+      'url': instance.url,
+      'runtimeType': instance.$type,
+    };

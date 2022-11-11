@@ -16,6 +16,8 @@ import 'errors.dart';
 
 part 'project_configuration.g.dart';
 
+enum _RuleType { lint, assist }
+
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ProjectConfiguration {
   const ProjectConfiguration({
@@ -96,13 +98,13 @@ class ProjectConfiguration {
 
   static Map<PackageName, AnalysisPackageConfiguration>? _parsePackages(
     YamlMap? map, {
-    required RuleType type,
+    required _RuleType type,
   }) {
     try {
       return map?.nodes.map((dynamic key, dynamic value) {
         if (value is YamlMap) {
           key as YamlScalar;
-          final config = type == RuleType.lint
+          final config = type == _RuleType.lint
               ? LintPackageConfiguration.fromJson(value)
               : AssistPackageConfiguration.fromJson(value);
           return MapEntry(key.value as String, config);
@@ -123,13 +125,13 @@ class ProjectConfiguration {
   static Map<PackageName, AssistPackageConfiguration>? _parseAssistPackages(
     YamlMap? map,
   ) =>
-      _parsePackages(map, type: RuleType.assist)?.map(
+      _parsePackages(map, type: _RuleType.assist)?.map(
           (key, value) => MapEntry(key, value as AssistPackageConfiguration));
 
   static Map<PackageName, LintPackageConfiguration>? _parseLintPackages(
     YamlMap? map,
   ) =>
-      _parsePackages(map, type: RuleType.lint)?.map(
+      _parsePackages(map, type: _RuleType.lint)?.map(
           (key, value) => MapEntry(key, value as LintPackageConfiguration));
 
   @JsonKey(name: 'lints')
@@ -145,27 +147,48 @@ class ProjectConfiguration {
   final List<SidecarNewException> errors;
 
   List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];
+  Set<Glob> get projectGlobs {
+    final projectGlobs = _includes;
+    return projectGlobs?.toSet() ?? <Glob>{};
+  }
 
   bool includes(String relativePath) =>
       includeGlobs.any((glob) => glob.matches(relativePath));
 
-  AnalysisPackageConfiguration? getPackageConfigurationForRule(BaseRule rule) {
+  AnalysisConfiguration? getConfigurationForRule(BaseRule rule) {
     if (rule is AssistRule) {
-      return assistPackages?[rule.packageName];
+      return assistPackages?[rule.code.package]?.assists?[rule.code];
     } else if (rule is LintRule) {
-      return lintPackages?[rule.packageName];
+      return lintPackages?[rule.code.package]?.lints?[rule.code];
     } else {
       throw UnimplementedError('getConfigurationForRule: unknown base type');
     }
   }
 
-  AnalysisConfiguration? getConfigurationForRule(BaseRule rule) {
+  AnalysisPackageConfiguration? getPackageConfigurationForRule(BaseRule rule) {
     if (rule is AssistRule) {
-      return assistPackages?[rule.packageName]?.assists?[rule.code];
+      return assistPackages?[rule.code.package];
     } else if (rule is LintRule) {
-      return lintPackages?[rule.packageName]?.lints?[rule.code];
+      return lintPackages?[rule.code.package];
     } else {
       throw UnimplementedError('getConfigurationForRule: unknown base type');
+    }
+  }
+
+  AnalysisPackageConfiguration? getPackageConfigurationForCode(RuleCode code) {
+    if (code is LintCode) {
+      return assistPackages?[code.package];
+    } else {
+      // if (code is AssistCode) {
+      return lintPackages?[code.package];
+    }
+  }
+
+  AnalysisConfiguration? getRuleConfigurationForCode(RuleCode code) {
+    if (code is LintCode) {
+      return lintPackages?[code.package]?.lints?[code.code];
+    } else {
+      return assistPackages?[code.package]?.assists?[code.code];
     }
   }
 }

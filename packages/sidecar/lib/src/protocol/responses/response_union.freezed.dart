@@ -28,6 +28,8 @@ SidecarResponse _$SidecarResponseFromJson(Map<String, dynamic> json) {
       return UpdateFilesResponse.fromJson(json);
     case 'setActiveRoot':
       return SetActiveRootResponse.fromJson(json);
+    case 'setPriorityFiles':
+      return SetPriorityFilesResponse.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'SidecarResponse',
@@ -45,6 +47,7 @@ mixin _$SidecarResponse {
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
     required TResult Function() setActiveRoot,
+    required TResult Function() setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,6 +58,7 @@ mixin _$SidecarResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -65,6 +69,7 @@ mixin _$SidecarResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -77,6 +82,7 @@ mixin _$SidecarResponse {
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
     required TResult Function(SetActiveRootResponse value) setActiveRoot,
+    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -87,6 +93,7 @@ mixin _$SidecarResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -97,6 +104,7 @@ mixin _$SidecarResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -179,6 +187,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
     required TResult Function() setActiveRoot,
+    required TResult Function() setPriorityFiles,
   }) {
     return contextCollection();
   }
@@ -192,6 +201,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
   }) {
     return contextCollection?.call();
   }
@@ -205,6 +215,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (contextCollection != null) {
@@ -223,6 +234,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
     required TResult Function(SetActiveRootResponse value) setActiveRoot,
+    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return contextCollection(this);
   }
@@ -236,6 +248,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return contextCollection?.call(this);
   }
@@ -249,6 +262,7 @@ class _$ContextCollectionResponse extends ContextCollectionResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (contextCollection != null) {
@@ -359,6 +373,7 @@ class _$AssistResponse extends AssistResponse {
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
     required TResult Function() setActiveRoot,
+    required TResult Function() setPriorityFiles,
   }) {
     return assist(results);
   }
@@ -372,6 +387,7 @@ class _$AssistResponse extends AssistResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
   }) {
     return assist?.call(results);
   }
@@ -385,6 +401,7 @@ class _$AssistResponse extends AssistResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (assist != null) {
@@ -403,6 +420,7 @@ class _$AssistResponse extends AssistResponse {
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
     required TResult Function(SetActiveRootResponse value) setActiveRoot,
+    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return assist(this);
   }
@@ -416,6 +434,7 @@ class _$AssistResponse extends AssistResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return assist?.call(this);
   }
@@ -429,6 +448,7 @@ class _$AssistResponse extends AssistResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (assist != null) {
@@ -545,6 +565,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
     required TResult Function() setActiveRoot,
+    required TResult Function() setPriorityFiles,
   }) {
     return quickFix(results);
   }
@@ -558,6 +579,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
   }) {
     return quickFix?.call(results);
   }
@@ -571,6 +593,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (quickFix != null) {
@@ -589,6 +612,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
     required TResult Function(SetActiveRootResponse value) setActiveRoot,
+    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return quickFix(this);
   }
@@ -602,6 +626,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return quickFix?.call(this);
   }
@@ -615,6 +640,7 @@ class _$QuickFixResponse extends QuickFixResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (quickFix != null) {
@@ -730,6 +756,7 @@ class _$LintResponse extends LintResponse {
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
     required TResult Function() setActiveRoot,
+    required TResult Function() setPriorityFiles,
   }) {
     return lint(lints);
   }
@@ -743,6 +770,7 @@ class _$LintResponse extends LintResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
   }) {
     return lint?.call(lints);
   }
@@ -756,6 +784,7 @@ class _$LintResponse extends LintResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (lint != null) {
@@ -774,6 +803,7 @@ class _$LintResponse extends LintResponse {
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
     required TResult Function(SetActiveRootResponse value) setActiveRoot,
+    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return lint(this);
   }
@@ -787,6 +817,7 @@ class _$LintResponse extends LintResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return lint?.call(this);
   }
@@ -800,6 +831,7 @@ class _$LintResponse extends LintResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (lint != null) {
@@ -885,6 +917,7 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
     required TResult Function() setActiveRoot,
+    required TResult Function() setPriorityFiles,
   }) {
     return updateFiles();
   }
@@ -898,6 +931,7 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
   }) {
     return updateFiles?.call();
   }
@@ -911,6 +945,7 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (updateFiles != null) {
@@ -929,6 +964,7 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
     required TResult Function(SetActiveRootResponse value) setActiveRoot,
+    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return updateFiles(this);
   }
@@ -942,6 +978,7 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return updateFiles?.call(this);
   }
@@ -955,6 +992,7 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (updateFiles != null) {
@@ -1035,6 +1073,7 @@ class _$SetActiveRootResponse extends SetActiveRootResponse {
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
     required TResult Function() setActiveRoot,
+    required TResult Function() setPriorityFiles,
   }) {
     return setActiveRoot();
   }
@@ -1048,6 +1087,7 @@ class _$SetActiveRootResponse extends SetActiveRootResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
   }) {
     return setActiveRoot?.call();
   }
@@ -1061,6 +1101,7 @@ class _$SetActiveRootResponse extends SetActiveRootResponse {
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
     TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (setActiveRoot != null) {
@@ -1079,6 +1120,7 @@ class _$SetActiveRootResponse extends SetActiveRootResponse {
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
     required TResult Function(SetActiveRootResponse value) setActiveRoot,
+    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return setActiveRoot(this);
   }
@@ -1092,6 +1134,7 @@ class _$SetActiveRootResponse extends SetActiveRootResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return setActiveRoot?.call(this);
   }
@@ -1105,6 +1148,7 @@ class _$SetActiveRootResponse extends SetActiveRootResponse {
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
     TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
     if (setActiveRoot != null) {
@@ -1127,4 +1171,162 @@ abstract class SetActiveRootResponse extends SidecarResponse {
 
   factory SetActiveRootResponse.fromJson(Map<String, dynamic> json) =
       _$SetActiveRootResponse.fromJson;
+}
+
+/// @nodoc
+abstract class _$$SetPriorityFilesResponseCopyWith<$Res> {
+  factory _$$SetPriorityFilesResponseCopyWith(_$SetPriorityFilesResponse value,
+          $Res Function(_$SetPriorityFilesResponse) then) =
+      __$$SetPriorityFilesResponseCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SetPriorityFilesResponseCopyWithImpl<$Res>
+    extends _$SidecarResponseCopyWithImpl<$Res>
+    implements _$$SetPriorityFilesResponseCopyWith<$Res> {
+  __$$SetPriorityFilesResponseCopyWithImpl(_$SetPriorityFilesResponse _value,
+      $Res Function(_$SetPriorityFilesResponse) _then)
+      : super(_value, (v) => _then(v as _$SetPriorityFilesResponse));
+
+  @override
+  _$SetPriorityFilesResponse get _value =>
+      super._value as _$SetPriorityFilesResponse;
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
+  const _$SetPriorityFilesResponse({final String? $type})
+      : $type = $type ?? 'setPriorityFiles',
+        super._();
+
+  factory _$SetPriorityFilesResponse.fromJson(Map<String, dynamic> json) =>
+      _$$SetPriorityFilesResponseFromJson(json);
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'SidecarResponse.setPriorityFiles()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetPriorityFilesResponse);
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() contextCollection,
+    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(List<LintResultWithEdits> results) quickFix,
+    required TResult Function(List<LintResult> lints) lint,
+    required TResult Function() updateFiles,
+    required TResult Function() setActiveRoot,
+    required TResult Function() setPriorityFiles,
+  }) {
+    return setPriorityFiles();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? contextCollection,
+    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(List<LintResultWithEdits> results)? quickFix,
+    TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
+    TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
+  }) {
+    return setPriorityFiles?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? contextCollection,
+    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(List<LintResultWithEdits> results)? quickFix,
+    TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
+    TResult Function()? setActiveRoot,
+    TResult Function()? setPriorityFiles,
+    required TResult orElse(),
+  }) {
+    if (setPriorityFiles != null) {
+      return setPriorityFiles();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ContextCollectionResponse value)
+        contextCollection,
+    required TResult Function(AssistResponse value) assist,
+    required TResult Function(QuickFixResponse value) quickFix,
+    required TResult Function(LintResponse value) lint,
+    required TResult Function(UpdateFilesResponse value) updateFiles,
+    required TResult Function(SetActiveRootResponse value) setActiveRoot,
+    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
+  }) {
+    return setPriorityFiles(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ContextCollectionResponse value)? contextCollection,
+    TResult Function(AssistResponse value)? assist,
+    TResult Function(QuickFixResponse value)? quickFix,
+    TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
+    TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+  }) {
+    return setPriorityFiles?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ContextCollectionResponse value)? contextCollection,
+    TResult Function(AssistResponse value)? assist,
+    TResult Function(QuickFixResponse value)? quickFix,
+    TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
+    TResult Function(SetActiveRootResponse value)? setActiveRoot,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+    required TResult orElse(),
+  }) {
+    if (setPriorityFiles != null) {
+      return setPriorityFiles(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SetPriorityFilesResponseToJson(
+      this,
+    );
+  }
+}
+
+abstract class SetPriorityFilesResponse extends SidecarResponse {
+  const factory SetPriorityFilesResponse() = _$SetPriorityFilesResponse;
+  const SetPriorityFilesResponse._() : super._();
+
+  factory SetPriorityFilesResponse.fromJson(Map<String, dynamic> json) =
+      _$SetPriorityFilesResponse.fromJson;
 }

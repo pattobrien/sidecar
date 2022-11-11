@@ -1,8 +1,11 @@
+// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
+
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
 
-import '../../protocol/models/models.dart';
 import '../../utils/file_paths.dart';
+import 'active_context.dart';
 
 part 'analyzed_file.freezed.dart';
 part 'analyzed_file.g.dart';
@@ -14,11 +17,17 @@ part 'analyzed_file.g.dart';
 /// This was created to be type-safe.
 class AnalyzedFile with _$AnalyzedFile {
   const factory AnalyzedFile(
-    Context context,
-    Uri fileUri,
-  ) = _AnalyzedFile;
+    Uri fileUri, {
+    required Uri contextRoot,
+  }) = _AnalyzedFile;
 
   const AnalyzedFile._();
+
+  factory AnalyzedFile.fromContext(
+    Uri fileUri, {
+    required AnalysisContext context,
+  }) =>
+      AnalyzedFile(fileUri, contextRoot: context.contextRoot.root.toUri());
 
   factory AnalyzedFile.fromJson(Map<String, dynamic> json) =>
       _$AnalyzedFileFromJson(json);
@@ -30,5 +39,56 @@ class AnalyzedFile with _$AnalyzedFile {
   bool get isAnalysisOptionsFile => relativePath == kAnalysisOptionsYaml;
   bool get isSidecarYamlFile => relativePath == kSidecarYaml;
 
-  String get relativePath => p.relative(path, from: context.root.toFilePath());
+  String get relativePath => p.relative(path, from: contextRoot.path);
+}
+
+// Uri contextToUri(AnalysisContext context) => context.contextRoot.root.toUri();
+// AnalysisContext contextFromUri(Uri root) => context.contextRoot.root.toUri();
+
+@freezed
+class AnalyzedFileWithContext with _$AnalyzedFileWithContext {
+  const factory AnalyzedFileWithContext(
+    Uri fileUri, {
+    required AnalysisContext context,
+  }) = _AnalyzedFileWithContext;
+
+  const AnalyzedFileWithContext._();
+
+  factory AnalyzedFileWithContext.fromFile(
+    AnalyzedFile file,
+    List<AnalysisContext> contexts,
+  ) {
+    final context = contexts.contextForPath(file.path)!;
+    return AnalyzedFileWithContext(file.fileUri, context: context);
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_AnalyzedFileWithContext &&
+            const DeepCollectionEquality().equals(other.fileUri, fileUri) &&
+            const DeepCollectionEquality().equals(
+                other.context.contextRoot.root.path,
+                context.contextRoot.root.path));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(fileUri),
+      const DeepCollectionEquality().hash(context.contextRoot.root.path));
+
+  AnalyzedFile toAnalyzedFile() =>
+      AnalyzedFile(fileUri, contextRoot: context.contextRoot.root.toUri());
+
+  String get path => fileUri.path;
+
+  bool get isDartFile => p.extension(path) == '.dart';
+
+  bool get isAnalysisOptionsFile => relativePath == kAnalysisOptionsYaml;
+  bool get isSidecarYamlFile => relativePath == kSidecarYaml;
+
+  String get relativePath =>
+      p.relative(path, from: context.contextRoot.root.path);
 }

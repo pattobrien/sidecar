@@ -14,15 +14,22 @@ calculate() {
 class SomePage extends ConsumerWidget {
   final color = Color(0x12345678);
   final insets = EdgeInsets.all(10);
+  //
+  //
+  //
+
+  //
   final shadow = BoxShadow();
-  // final calculator = Calculator();
+  //
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final someString = 'translation';
     final someString2 = someString;
     final someIconData = Icons.abc;
+
     final someIconData2 = Icons.snowboarding;
+
     final double someNumber = 10.0;
     final x = Color(123);
     return Container(
@@ -46,9 +53,10 @@ class SomePage extends ConsumerWidget {
             color: x,
           ),
           SizedBox(width: 10.0),
+
           SizedBox(width: someNumber),
           Icon(Icons.snowboarding),
-          Icon(ProjectIcons.abc),
+          // Icon(ProjectIcons.abc),
           TextFormField(
             controller: ref.watch(myTextControllerProvider),
           ),

@@ -38,10 +38,11 @@ class SourceEdit with _$SourceEdit {
   /// are applied in the order they appear in [edits].  Access via
   /// SourceEdit.applySequence().
   static String applySequenceOfEdits(String code, Iterable<SourceEdit> edits) {
+    var editedCode = code;
     for (final edit in edits) {
-      code = edit.applySourceEdit(code);
+      editedCode = edit.applySourceEdit(editedCode);
     }
-    return code;
+    return editedCode;
   }
 }
 

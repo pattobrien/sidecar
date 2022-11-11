@@ -29,14 +29,14 @@ class _SystemHash {
   }
 }
 
-String $createByteStoreHash() => r'0c09e91ae57d42b70f224576a8318a5ec3f3d0db';
+String $createByteStoreHash() => r'26c2fcb0207fd7c11279422e5a78ba5f9cbdb3dd';
 
 /// See also [createByteStore].
-final createByteStoreProvider = AutoDisposeProvider<ByteStore>(
+final createByteStoreProvider = Provider<ByteStore>(
   createByteStore,
   name: r'createByteStoreProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : $createByteStoreHash,
 );
-typedef CreateByteStoreRef = AutoDisposeProviderRef<ByteStore>;
+typedef CreateByteStoreRef = ProviderRef<ByteStore>;

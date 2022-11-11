@@ -1,10 +1,12 @@
+// ignore_for_file: avoid_types_on_closure_parameters
+
 import 'dart:async';
 import 'dart:convert';
-import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
+import 'package:collection/collection.dart';
 import 'package:logging/logging.dart' hide LogRecord;
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
@@ -14,12 +16,14 @@ import '../../protocol/models/context.dart';
 import '../../protocol/requests/requests.dart';
 import '../../protocol/responses/responses.dart';
 import '../../protocol/source/source_edit.dart';
+import '../../utils/duration_ext.dart';
 import '../context/analyzed_file.dart';
-import '../handlers/context_collection.dart';
-import '../results/results.dart';
-import 'analyzer_resource_provider.dart';
+import 'collection_provider.dart';
+import 'files_provider.dart';
+import 'resolved_unit_provider.dart';
+import 'results_providers.dart';
+import 'scoped_rules_provider.dart';
 import 'plugin.dart';
-import 'sidecar_analyzer_comm_service.dart';
 
 final logger = Logger('sidecar-plugin');
 
@@ -30,31 +34,20 @@ class SidecarAnalyzer {
   }) : context =
             Context(root: (initRequest.request as SetActiveRootRequest).root) {
     _initLogger();
-    handleSetActiveRoot(initRequest);
     _setupListeners();
+    _handleSetActiveRoot(initRequest);
   }
 
   final ProviderContainer _ref;
   final Context context;
 
-  SidecarAnalyzerCommService get communication =>
+  SidecarAnalyzerCommService get channel =>
       _ref.read(sidecarAnalyzerCommServiceProvider);
 
   Stream<dynamic> get stream => _ref.read(analyzerCommunicationStream.stream);
 
-  AnalyzedFile getFileForPath(String path) =>
-      _ref.read(analyzedFileForPathProvider(path));
-
   OverlayResourceProvider get resourceProvider =>
       _ref.read(analyzerResourceProvider);
-
-  // void start() {
-  //   // logger.onRecord.listen((event) {});
-  //   // logger.finer('END PLUGIN STARTING....');
-  //   // logger.finer('# of rules: ${_ref.read(ruleConstructorProvider).length}');
-
-  //   // sendNotification(const InitCompleteNotification());
-  // }
 
   void _initLogger() {
     logger.onRecord.listen((event) {
@@ -66,60 +59,77 @@ class SidecarAnalyzer {
     });
   }
 
-  void sendToRunner(SidecarMessage message) =>
-      communication.sendToRunner(message);
+  void sendToRunner(SidecarMessage message) => channel.sendToRunner(message);
+
+  void handleError(Object error, StackTrace stack) =>
+      channel.sendToRunner(SidecarMessage.error(error, stack));
 
   void _setupListeners() {
-    // _sendPort.send(receivePort.sendPort);
-    stream.listen((dynamic event) {
-      // logger.info('event: $event');
-      if (event is String) {
+    stream.listen(
+      (dynamic event) {
+        assert(event is String, 'incorrect type: ${event.runtimeType} $event');
         try {
-          final json = jsonDecode(event) as Map<String, dynamic>;
-          final message = SidecarMessage.fromJson(json);
-          if (message is RequestMessage) {
-            handleRequest(message);
-            return;
-          }
+          final json = jsonDecode(event as String) as Map<String, dynamic>;
+          final message = RequestMessage.fromJson(json);
+          handleRequest(message);
         } catch (e) {
-          throw UnimplementedError('invalid message type: ${e.runtimeType} $e');
+          throw UnimplementedError('invalid message type: $e');
         }
-      }
-      if (event is Map<String, dynamic>) {
-        throw UnimplementedError('invalid message map : $event');
-      }
-      throw UnimplementedError('unknown type received: ${event.runtimeType}');
-    });
+      },
+      onError: handleError,
+    );
   }
 
-  Future<void> handleSetActiveRoot(
-    RequestMessage request,
-  ) async {
-    //TODO; send the Context instance in the request, instead of just the Uri itself
-    // context = Context(root: request.root);
-    // _initLogger();
-    // logger.severe('handleSetActiveRoot: ${context.root}');
-    // _ref.read(activeContextNotifierProvider.notifier).updateRoot(context.root);
+  Future<void> handleRequest(RequestMessage msg) async {
+    final response = await msg.request.map<FutureOr<SidecarResponse?>>(
+      setActiveRoot: handleSetActiveRoot,
+      setContextCollection: handleAnalysisSetContextRoots,
+      setPriorityFiles: handleSetPriorityFiles,
+      updateFiles: handleUpdateFiles,
+      quickFix: handleEditGetFixes,
+      assist: handleEditGetAssists,
+      lint: handleLint,
+    );
 
-    // print('active context root set to: ${activeContextRoot.path}');
-    // return const SetActiveRootResponse();
-    const response = SetActiveRootResponse();
-    final wrappedResponse =
-        SidecarMessage.response(response: response, id: request.id);
-    communication.sendToRunner(wrappedResponse);
+    if (response != null) {
+      final responseMessage = SidecarMessage.response(response, id: msg.id);
+      sendToRunner(responseMessage);
+    }
+  }
+
+  SetPriorityFilesResponse handleSetPriorityFiles(
+    SetPriorityFilesRequest request,
+  ) {
+    priorityFiles = request.files.toSet();
+    return const SetPriorityFilesResponse();
+  }
+
+  Future<SetActiveRootResponse> handleSetActiveRoot(
+    SetActiveRootRequest request,
+  ) async {
+    return const SetActiveRootResponse();
+  }
+
+  Future<void> _handleSetActiveRoot(RequestMessage request) async {
+    final response =
+        await handleSetActiveRoot(request.request as SetActiveRootRequest);
+    sendToRunner(SidecarMessage.response(response, id: request.id));
   }
 
   Future<ContextCollectionResponse> handleAnalysisSetContextRoots(
     SetContextCollectionRequest request,
   ) async {
-    logger.info('handleAnalysisSetContextRoots');
-    final collection =
-        _ref.read(createContextCollectionProvider(request.roots));
-    _ref.read(allContextsNotifierProvider.notifier).update(collection);
-    // roots = request.roots;
+    logger.info('handleAnalysisSetContextRoots - mainRoot ${request.mainRoot}');
+    logger.info('handleAnalysisSetContextRoots - allRoots: ${request.roots}');
+    final notifier = _ref.read(contextCollectionProvider.notifier);
+    notifier.setContextCollection(request.roots, []);
     await afterNewContextCollection();
     logger.info('handleAnalysisSetContextRoots complete');
     return const ContextCollectionResponse();
+  }
+
+  Future<LintResponse> handleLint(LintRequest request) {
+    throw StateError('LintRequest is an invalid request');
   }
 
   /// This method is invoked when a new instance of [AnalysisContextCollection]
@@ -127,85 +137,101 @@ class SidecarAnalyzer {
   ///
   /// By default analyzes every [AnalysisContext] with [analyzeFiles].
   Future<void> afterNewContextCollection() async {
-    logger.severe('afterNewContextCollection');
-    await _forAnalysisContexts((analysisContext) async {
-      final paths = analysisContext.contextRoot.analyzedFiles().toList();
-
-      final files =
-          paths.map((e) => _ref.read(analyzedFileForPathProvider(e))).toList();
-      logger.info('afterNewContextCollection files: ${paths.toList()}');
-      await analyzeFiles(
-        // analysisContext: analysisContext,
-        files: files,
-      );
-    });
-  }
-
-  Future<void> handleRequest(RequestMessage msg) async {
-    final id = msg.id;
-    final unparsedRequest = msg.request;
-    final response = await unparsedRequest.map<Future<SidecarResponse?>>(
-      setActiveRoot: (_) =>
-          throw StateError('setActiveRoot should happen before initialization'),
-      setContextCollection: handleAnalysisSetContextRoots,
-      updateFiles: handleAnalysisUpdateContent,
-      quickFix: handleEditGetFixes,
-      assist: handleEditGetAssists,
-      lint: (value) => throw StateError('lint is an invalid request'),
-    );
-
-    if (response != null) {
-      final message = SidecarMessage.response(response: response, id: id);
-      sendToRunner(message);
-    }
+    logger.info('afterNewContextCollection');
+    print('afterNewContextCollection');
+    // await _forAnalysisContexts((analysisContext) async {
+    final files = _ref.refresh(activeProjectScopedFilesProvider);
+    print('afterNewContextCollection complte');
+    // logger.info('afterNewContextCollection files: ${paths.toList()}');
+    await analyzeFiles(files: files);
+    // });
   }
 
   // Overridden to allow for non-Dart files to be analyzed for changes
+  Future<void> contentChanged(Set<String> paths) async {
+    // logger.info('contentChanged paths: ${paths.length} $paths');
+    print('contentChanged paths: ${paths.length} $paths');
+    final watch = Stopwatch()..start();
 
-  Future<void> contentChanged(List<String> paths) async {
     await _forAnalysisContexts((analysisContext) async {
       // logger.info('root: ${analysisContext.contextRoot.root.path}');
-      // ignore: prefer_foreach
-      for (final path in paths) {
-        analysisContext.changeFile(path);
-      }
+      final contextPath = analysisContext.contextRoot.root.path;
+      final localWatch = Stopwatch()..start();
+      paths.forEach(analysisContext.changeFile);
       final affected = await analysisContext.applyPendingFileChanges();
-
+      final affectedWithoutOriginalPaths = affected.toSet()..removeAll(paths);
       // sidecar custom implementation to analyze all non-dart files
-      // TODO: including all files is causing a lot of performance issues
+      // TODO: does this incur performance issues?
       // final nonDartPathsInContext = paths
       //     .where((e) => analysisContext.contextRoot.isAnalyzed(e))
       //     .where((path) => p.extension(path) != '.dart');
 
+      // for a better user experience:
+      // first we handle the changed files, then we handle all affected files
+
+      final files = _ref
+          .read(activeProjectScopedFilesProvider)
+          .where((e) => paths.any((path) => path == e.path))
+          .where((element) =>
+              element.context.contextRoot.root.path ==
+              analysisContext.contextRoot.root.path)
+          .toList();
+      // print('changedFiles: $files');
+      await handleAffectedFiles(
+        analysisContext: analysisContext,
+        files: files,
+      );
+      final affectedFiles = _ref
+          .read(activeProjectScopedFilesProvider)
+          .where(
+              (e) => affectedWithoutOriginalPaths.any((path) => path == e.path))
+          .where((element) =>
+              element.context.contextRoot.root.path ==
+              analysisContext.contextRoot.root.path)
+          .toList();
+      // print('affectedFiles: $affectedFiles');
       await handleAffectedFiles(
         analysisContext: analysisContext,
         // paths: [...affected, ...nonDartPathsInContext],
-        paths: affected,
+        files: affectedFiles,
       );
+      print(
+          'contentChanged $contextPath - ${localWatch.elapsed.prettified()} ${watch.elapsed.prettified()}');
     });
+    print('contentChanged complete - ${watch.elapsed.prettified()}');
   }
 
+  /// PATTOBRIEN:
+  /// this is where we should handle the order of events that happen post-content change
+  /// i.e.:
+  /// - first, analyze high priority files
+  /// - second, analyze low priority files
+  /// - third, check for new annotations
+  /// - fourth, proactively refresh assist filters
+  /// - fifth, proactively calculate edits (assists and quick fixes)
   Future<void> handleAffectedFiles({
     required AnalysisContext analysisContext,
-    required List<String> paths,
+    required List<AnalyzedFileWithContext> files,
   }) async {
-    // final analysisContexts = _ref.read(allContextsNotifierProvider);
-    // for (final analysisContext in analysisContexts) {
-    final files = paths
-        .map((e) => _ref.read(analyzedFileForPathProvider(e)))
-        .where((element) =>
-            element.context.root == analysisContext.contextRoot.root.toUri())
-        .toList();
-
+    logger.info('handleAffectedFiles paths: ${files.length} $files');
+    for (final file in files) {
+      _ref.refresh(nodeRegistryForFileProvider(file));
+      // _ref.refresh(registryVisitorProvider(file));
+      _ref.refresh(resolvedUnitForFileProvider(file));
+      // _ref.refresh(unitContextProvider(file));
+      // _ref.refresh(scopedVisitorForFileProvider(file));
+      // _ref.refresh(lintResultsProvider(file));
+    }
+    // first analyze the files
     await analyzeFiles(files: files);
-    // }
   }
 
   Future<void> _forAnalysisContexts(
     Future<void> Function(AnalysisContext analysisContext) f,
   ) async {
     final nonPriorityAnalysisContexts = <AnalysisContext>[];
-    final analysisContexts = _ref.read(allContextsNotifierProvider);
+    final analysisContexts = _ref.read(contextCollectionProvider);
+    print('contexts: ${analysisContexts.length}');
     for (final analysisContext in analysisContexts) {
       if (_isPriorityAnalysisContext(analysisContext)) {
         await f(analysisContext);
@@ -220,38 +246,42 @@ class SidecarAnalyzer {
   }
 
   bool _isPriorityAnalysisContext(AnalysisContext analysisContext) {
-    return priorityPaths.any(analysisContext.contextRoot.isAnalyzed);
+    return priorityFiles
+        .map((e) => e.path)
+        .any(analysisContext.contextRoot.isAnalyzed);
   }
 
-  //TODO utilize priority paths
-  final Set<String> priorityPaths = {};
+  Set<AnalyzedFile> priorityFiles = {};
 
   Future<void> analyzeFiles({
-    // required AnalysisContext analysisContext,
-    required List<AnalyzedFile> files,
+    required List<AnalyzedFileWithContext> files,
   }) async {
-    logger.finest('${DateTime.now()} starting analyzing files: $files');
-    await Future.wait(files.map((file) async {
+    logger.info('${DateTime.now()} starting analyzing files: $files');
+    for (final file in files.where((file) => file.isDartFile)) {
       try {
-        await _ref.read(getResolvedUnitForFileProvider(file).future);
-        final results =
-            await _ref.read(createAnalysisReportProvider(file).future);
-        final notification = LintNotification(file, results);
-        communication.sendNotification(notification);
+        final watch = Stopwatch()..start();
+        final results = await _ref.read(lintResultsProvider(file).future);
+        print(
+            'analyzeFiles ${file.relativePath} ${watch.elapsed.prettified()}');
+        final notification =
+            LintNotification(file.toAnalyzedFile(), results.toList());
+
+        logger.info('results: ${file.relativePath} ${notification.toJson()}');
+        channel.sendNotification(notification);
       } catch (e, stackTrace) {
-        logger.severe('analyzeFiles', e, stackTrace);
+        logger.severe('analyzeFiles:', e, stackTrace);
       }
-    }));
+    }
     logger.finest('${DateTime.now()}  finished analyzing files');
-    // }
   }
 
   Future<QuickFixResponse> handleEditGetFixes(
     QuickFixRequest request,
   ) async {
     try {
-      //TODO: bug, edits are made for multiple files
-      final fixes = await _ref.read(requestQuickFixesProvider(request).future);
+      final contexts = _ref.read(contextCollectionProvider);
+      final file = AnalyzedFileWithContext.fromFile(request.file, contexts);
+      final fixes = await _ref.read(quickFixResultsProvider(file).future);
       return QuickFixResponse(fixes);
     } catch (e, stackTrace) {
       logger.severe('handleEditGetFixes ${request.file.path}', e, stackTrace);
@@ -262,48 +292,45 @@ class SidecarAnalyzer {
   Future<AssistResponse> handleEditGetAssists(
     AssistRequest request,
   ) async {
+    final file = _ref
+        .read(activeProjectScopedFilesProvider)
+        .firstWhereOrNull((file) => file.path == request.file.path);
+
+    if (file == null) return const AssistResponse([]);
+
     try {
-      final path = request.file.path;
-      final analyzedFile = _ref.read(analyzedFileForPathProvider(path));
-
-      _ref.refresh(assistResultsForFileProvider(analyzedFile));
-      _ref.refresh(assistResultsWithEditsProvider(analyzedFile));
-      final results =
-          await _ref.read(requestAssistResultsProvider(request).future);
-
-      return AssistResponse(results);
-    } catch (e, stackTrace) {
-      logger.severe(
-          'handleEditGetAssists ${request.file.relativePath}', e, stackTrace);
+      final results = await _ref.read(assistFiltersProvider(file).future);
+      final resultsAtOffset = results
+          .where((result) => result.isWithinOffset(file.path, request.offset));
+      final resultsWithCalculations = await Future.wait(resultsAtOffset
+          .map((e) async => _ref.read(assistResultsProvider(e).future)));
+      return AssistResponse(resultsWithCalculations.expand((e) => e).toList());
+    } catch (e, stack) {
+      logger.severe('handleEditGetAssists ${file.relativePath}', e, stack);
       rethrow;
     }
   }
 
   int _overlayModificationStamp = 0;
-  Future<UpdateFilesResponse> handleAnalysisUpdateContent(
+  Future<UpdateFilesResponse> handleUpdateFiles(
     FileUpdateRequest request,
   ) async {
+    print('handleUpdateFiles');
+    final watch = Stopwatch()..start();
     final changedPaths = <String>{};
-    final updates = request.updates;
-    for (final update in updates) {
-      // Prepare the old overlay contents.
+
+    for (final update in request.updates) {
       final filePath = update.filePath;
-      String? oldContents;
-      try {
-        if (resourceProvider.hasOverlay(filePath)) {
-          final file = resourceProvider.getFile(filePath);
-          oldContents = file.readAsStringSync();
-        }
-      } catch (_) {}
+      final oldContents = resourceProvider.hasOverlay(filePath)
+          ? resourceProvider.getFile(filePath).readAsStringSync()
+          : null;
+
       update.map(
-        add: (event) {
-          resourceProvider.setOverlay(
-            filePath,
-            content: event.contents,
-            modificationStamp: _overlayModificationStamp++,
-          );
-          logger.info('add: $filePath updated');
-        },
+        add: (event) => resourceProvider.setOverlay(
+          filePath,
+          content: event.contents,
+          modificationStamp: _overlayModificationStamp++,
+        ),
         modify: (modify) {
           if (oldContents == null) {
             // The server should only send a ChangeContentOverlay if there is
@@ -311,56 +338,24 @@ class SidecarAnalyzer {
             throw UnimplementedError('invalidOverlayChangeNoContent');
           }
           try {
-            final newContents = SourceEdit.applySequenceOfEdits(
+            final contents = SourceEdit.applySequenceOfEdits(
                 oldContents, modify.fileEdit.edits);
-            resourceProvider.setOverlay(
-              filePath,
-              content: newContents,
-              modificationStamp: _overlayModificationStamp++,
-            );
+            resourceProvider.setOverlay(filePath,
+                content: contents,
+                modificationStamp: _overlayModificationStamp++);
+            // ignore: avoid_catching_errors
           } on RangeError {
             throw UnimplementedError('invalidOverlayChangeInvalidEdit');
           }
         },
-        delete: (delete) {
-          resourceProvider.removeOverlay(filePath);
-        },
+        delete: (_) => resourceProvider.removeOverlay(filePath),
       );
 
       changedPaths.add(filePath);
     }
-    await contentChanged(changedPaths.toList());
+    print('handleUpdateFiles - ${watch.elapsed.prettified()}');
+    await contentChanged(changedPaths);
+    print('handleUpdateFiles contentChanged - ${watch.elapsed.prettified()}');
     return const UpdateFilesResponse();
   }
-
-  // Future<plugin.CompletionGetSuggestionsResult> handleCompletionGetSuggestions(
-  //   plugin.CompletionGetSuggestionsParams parameters,
-  // ) async {
-  //   final filePath = parameters.file;
-  //   final offset = parameters.offset;
-  //   return plugin.CompletionGetSuggestionsResult(
-  //     -1,
-  //     -1,
-  //     const <plugin.CompletionSuggestion>[],
-  //   );
-  // }
 }
-
-// final pluginInitializationProvider = FutureProvider.autoDispose<void>(
-//   (ref) async {
-//     final plugin = ref.watch(pluginProvider);
-//     await plugin.initializationCompleter.future;
-//     final loggerDelegate = ref.watch(logDelegateProvider);
-//     final cliOptions = ref.watch(cliOptionsProvider);
-//     if (cliOptions.mode.isCli) {
-//       loggerDelegate as DebuggerLogDelegate;
-//       loggerDelegate.dumpResults();
-//     }
-//   },
-//   name: 'pluginInitializationProvider',
-//   dependencies: [
-//     createPluginProvider,
-//     logDelegateProvider,
-//     cliOptionsProvider,
-//   ],
-// );

@@ -4,6 +4,7 @@ import 'dart:isolate';
 
 import 'package:riverpod/riverpod.dart';
 
+import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
 import '../plugin/analysis_contexts_provider.dart';
@@ -11,7 +12,8 @@ import '../plugin/rule_constructors_provider.dart';
 import '../plugin/sidecar_analyzer.dart';
 import '../plugin/sidecar_analyzer_comm_service.dart';
 
-Future<SidecarAnalyzer> analyzerStarter({
+//
+Future<void> analyzerStarter({
   required SendPort sendPort,
   List<SidecarBaseConstructor> constructors = const [],
 }) {
@@ -37,9 +39,7 @@ Future<SidecarAnalyzer> analyzerStarter({
           final msg = SidecarMessage.fromJson(json);
           if (msg is RequestMessage) {
             final request = msg.request;
-            if (request is SetActiveRootRequest) {
-              completer.complete(msg);
-            }
+            if (request is SetActiveRootRequest) completer.complete(msg);
           }
         } catch (e) {
           rethrow;
@@ -67,17 +67,17 @@ Future<SidecarAnalyzer> analyzerStarter({
     throw UnimplementedError('INVALID ERROR: $error $stack');
   }, zoneSpecification: ZoneSpecification(
     print: (self, parent, zone, line) {
-      try {
-        // final json = jsonDecode(line) as Map<String, dynamic>;
-        // final msg = SidecarMessage.fromJson(json);
-        // if (msg is LogMessage) {
-        return sendPort.send(line);
-        // }
-        // throw UnimplementedError(
-        //     'unexpected log message format: ${msg.runtimeType}');
-      } catch (e, stack) {
-        throw UnimplementedError('unexpected analyzer zone error: $e, $stack');
-      }
+      // while logger is the preferred form of printing logs
+      // print() can be used as well. note that
+      // any message that comes through here will be a simple raw string
+      // and therefore will need to be wrapped with LogMessage.simple();
+      // otherwise, SidecarRunner will not be able to parse the object correctly.
+
+      final logRecord = LogRecord.simple(line);
+      final message = SidecarMessage.log(logRecord);
+      final json = message.toJson();
+      final encodedJson = jsonEncode(json);
+      return sendPort.send(encodedJson);
     },
   ))!;
 }

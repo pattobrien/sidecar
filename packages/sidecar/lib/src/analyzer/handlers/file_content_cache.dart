@@ -7,7 +7,7 @@ import '../plugin/analyzer_resource_provider.dart';
 
 part 'file_content_cache.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 FileContentCache createFileContentCache(CreateFileContentCacheRef ref) {
   final provider = ref.watch(analyzerResourceProvider);
   return FileContentCache(provider);
