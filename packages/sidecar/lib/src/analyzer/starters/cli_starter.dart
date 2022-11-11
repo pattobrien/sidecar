@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:cli_util/cli_logging.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
@@ -68,14 +69,14 @@ Future<void> startSidecarCli(
             if (notification.lints.isNotEmpty) {
               print(
                   '${notification.file.relativePath}: ${notification.lints.length} results\n');
-              print(notification.lints.prettyPrint());
+              print(notification.lints.toList().prettyPrint());
             }
           });
           runner.logs.listen((event) {
             event.mapOrNull(
-              simple: print,
-              // fromAnalyzer: print,
-            );
+                // simple: print,
+                // fromAnalyzer: print,
+                );
           });
         }
         await container.read(runnersInitializerProvider.future);
@@ -90,7 +91,9 @@ Future<void> startSidecarCli(
           final hotReloader = await HotReloader.create(
             onAfterReload: (c) async {
               final watch = Stopwatch()..start();
-              print('\n${DateTime.now().toIso8601String()} RELOADING...\n');
+              final ansi = Ansi(true);
+              print(
+                  '\u001b[31m\n${DateTime.now().toIso8601String()} RELOADING...\n\u001b[0m');
               // print('${c.events?.length ?? 0} file changes: ${c.events ?? []}');
               // final elements = container.getAllProviderElements();
               // final numberOfRunners =

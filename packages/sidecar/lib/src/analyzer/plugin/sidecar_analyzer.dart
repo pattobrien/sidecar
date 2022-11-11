@@ -2,17 +2,19 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
+import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart' hide LogRecord;
-import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/models/context.dart';
+import '../../protocol/models/models.dart';
 import '../../protocol/requests/requests.dart';
 import '../../protocol/responses/responses.dart';
 import '../../protocol/source/source_edit.dart';
@@ -20,10 +22,9 @@ import '../../utils/duration_ext.dart';
 import '../context/analyzed_file.dart';
 import 'collection_provider.dart';
 import 'files_provider.dart';
+import 'plugin.dart';
 import 'resolved_unit_provider.dart';
 import 'results_providers.dart';
-import 'scoped_rules_provider.dart';
-import 'plugin.dart';
 
 final logger = Logger('sidecar-plugin');
 
@@ -147,54 +148,58 @@ class SidecarAnalyzer {
     // });
   }
 
+  AnalyzedFileWithContext? _getFileWithContext(AnalyzedFile file) {
+    return _ref.read(activeProjectScopedFilesProvider).firstWhereOrNull((e) =>
+        file.path == e.path &&
+        file.contextRoot == e.context.contextRoot.root.toUri());
+  }
+
+  AnalyzedFileWithContext? _getFileWithContextFromPath(
+    String path,
+    AnalysisContext context,
+  ) {
+    return _ref.read(activeProjectScopedFilesProvider).firstWhereOrNull((e) =>
+        path == e.path &&
+        context.contextRoot.root.toUri() == e.context.contextRoot.root.toUri());
+  }
+
   // Overridden to allow for non-Dart files to be analyzed for changes
-  Future<void> contentChanged(Set<String> paths) async {
+  Future<void> contentChanged(Set<AnalyzedFile> files) async {
     // logger.info('contentChanged paths: ${paths.length} $paths');
-    print('contentChanged paths: ${paths.length} $paths');
+    print('contentChanged paths: ${files.length} $files');
     final watch = Stopwatch()..start();
 
-    await _forAnalysisContexts((analysisContext) async {
-      // logger.info('root: ${analysisContext.contextRoot.root.path}');
-      final contextPath = analysisContext.contextRoot.root.path;
+    final filesWithContexts = files.map(_getFileWithContext).whereNotNull();
+
+    await _forAnalysisContexts((context) async {
+      final contextPath = context.contextRoot.root.path;
+      final filesInContext = filesWithContexts
+          .where((file) => file.context.contextRoot.root.path == contextPath)
+          .toList();
       final localWatch = Stopwatch()..start();
-      paths.forEach(analysisContext.changeFile);
-      final affected = await analysisContext.applyPendingFileChanges();
-      final affectedWithoutOriginalPaths = affected.toSet()..removeAll(paths);
-      // sidecar custom implementation to analyze all non-dart files
-      // TODO: does this incur performance issues?
-      // final nonDartPathsInContext = paths
-      //     .where((e) => analysisContext.contextRoot.isAnalyzed(e))
-      //     .where((path) => p.extension(path) != '.dart');
+      // ignore: avoid_function_literals_in_foreach_calls
+      filesInContext.forEach((e) => context.changeFile(e.path));
+      final affected = await context.applyPendingFileChanges();
+      final affectedWithoutOriginalPaths = affected.toSet()
+        ..removeAll(filesInContext.map((e) => e.path));
+
+      final affectedOriginalPaths = filesInContext
+          .where((f) => affected.any((affectedPath) => affectedPath == f.path))
+          .toList();
 
       // for a better user experience:
       // first we handle the changed files, then we handle all affected files
+      // this allows us to also include any changed non-dart files in our analysis
 
-      final files = _ref
-          .read(activeProjectScopedFilesProvider)
-          .where((e) => paths.any((path) => path == e.path))
-          .where((element) =>
-              element.context.contextRoot.root.path ==
-              analysisContext.contextRoot.root.path)
+      await analyzeFiles(files: affectedOriginalPaths);
+
+      // print('contentChanged abcde');
+      // analyze files that may have been affected by the files that explicitly changed
+      final affectedFiles = affectedWithoutOriginalPaths
+          .map((e) => _getFileWithContextFromPath(e, context))
+          .whereNotNull()
           .toList();
-      // print('changedFiles: $files');
-      await handleAffectedFiles(
-        analysisContext: analysisContext,
-        files: files,
-      );
-      final affectedFiles = _ref
-          .read(activeProjectScopedFilesProvider)
-          .where(
-              (e) => affectedWithoutOriginalPaths.any((path) => path == e.path))
-          .where((element) =>
-              element.context.contextRoot.root.path ==
-              analysisContext.contextRoot.root.path)
-          .toList();
-      // print('affectedFiles: $affectedFiles');
-      await handleAffectedFiles(
-        analysisContext: analysisContext,
-        // paths: [...affected, ...nonDartPathsInContext],
-        files: affectedFiles,
-      );
+      await analyzeFiles(files: affectedFiles);
       print(
           'contentChanged $contextPath - ${localWatch.elapsed.prettified()} ${watch.elapsed.prettified()}');
     });
@@ -209,22 +214,18 @@ class SidecarAnalyzer {
   /// - third, check for new annotations
   /// - fourth, proactively refresh assist filters
   /// - fifth, proactively calculate edits (assists and quick fixes)
-  Future<void> handleAffectedFiles({
-    required AnalysisContext analysisContext,
-    required List<AnalyzedFileWithContext> files,
-  }) async {
-    logger.info('handleAffectedFiles paths: ${files.length} $files');
-    for (final file in files) {
-      _ref.refresh(nodeRegistryForFileProvider(file));
-      // _ref.refresh(registryVisitorProvider(file));
-      _ref.refresh(resolvedUnitForFileProvider(file));
-      // _ref.refresh(unitContextProvider(file));
-      // _ref.refresh(scopedVisitorForFileProvider(file));
-      // _ref.refresh(lintResultsProvider(file));
-    }
-    // first analyze the files
-    await analyzeFiles(files: files);
-  }
+  // Future<void> handleAffectedFiles({
+  //   required AnalysisContext analysisContext,
+  //   required List<AnalyzedFileWithContext> files,
+  // }) async {
+  //   logger.info('handleAffectedFiles paths: ${files.length} $files');
+  //   for (final file in files) {
+  //     // _ref.invalidate(nodeRegistryForFileProvider(file));
+  //     // _ref.invalidate(resolvedUnitForFileProvider(file));
+  //   }
+  //   // first analyze the files
+  //   await analyzeFiles(files: files);
+  // }
 
   Future<void> _forAnalysisContexts(
     Future<void> Function(AnalysisContext analysisContext) f,
@@ -256,22 +257,36 @@ class SidecarAnalyzer {
   Future<void> analyzeFiles({
     required List<AnalyzedFileWithContext> files,
   }) async {
+    // TODO: remove only analyzing dart files
+    final dartFiles = files.where((file) => file.isDartFile);
     logger.info('${DateTime.now()} starting analyzing files: $files');
-    for (final file in files.where((file) => file.isDartFile)) {
-      try {
-        final watch = Stopwatch()..start();
-        final results = await _ref.read(lintResultsProvider(file).future);
-        print(
-            'analyzeFiles ${file.relativePath} ${watch.elapsed.prettified()}');
-        final notification =
-            LintNotification(file.toAnalyzedFile(), results.toList());
+    // print('ANALYZINGFILES: ${files.length} files');
 
-        logger.info('results: ${file.relativePath} ${notification.toJson()}');
-        channel.sendNotification(notification);
-      } catch (e, stackTrace) {
-        logger.severe('analyzeFiles:', e, stackTrace);
+    for (final file in dartFiles) {
+      Set<LintResult>? results;
+      final watch = Stopwatch()..start();
+
+      try {
+        _ref.invalidate(nodeRegistryForFileProvider(file));
+        _ref.invalidate(resolvedUnitForFileProvider(file));
+        final lints = await _ref.refresh(lintResultsProvider(file).future);
+        results = lints;
+      } catch (e) {
+        // TODO: assert is throwing here.
+        // rethrow;
       }
+
+      if (results == null) continue;
+      print('analyzeFile ${file.relativePath} ${watch.elapsed.prettified()}');
+      final notification = LintNotification(file.toAnalyzedFile(), results);
+
+      // print('results: ${file.relativePath} ${notification.toJson()}');
+      channel.sendNotification(notification);
+      // return notification;
+
     }
+    // }
+
     logger.finest('${DateTime.now()}  finished analyzing files');
   }
 
@@ -317,7 +332,7 @@ class SidecarAnalyzer {
   ) async {
     print('handleUpdateFiles');
     final watch = Stopwatch()..start();
-    final changedPaths = <String>{};
+    final changedPaths = <AnalyzedFile>{};
 
     for (final update in request.updates) {
       final filePath = update.filePath;
@@ -351,7 +366,7 @@ class SidecarAnalyzer {
         delete: (_) => resourceProvider.removeOverlay(filePath),
       );
 
-      changedPaths.add(filePath);
+      changedPaths.add(update.file);
     }
     print('handleUpdateFiles - ${watch.elapsed.prettified()}');
     await contentChanged(changedPaths);

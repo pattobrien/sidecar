@@ -5,6 +5,7 @@ import 'dart:isolate';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer_plugin/protocol/protocol.dart';
+import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -106,10 +107,35 @@ class SidecarRunner {
         .firstWhereOrNull((element) => element.contextRoot.isAnalyzed(path));
   }
 
+  Future<T?> asyncCancelableRequest<T extends SidecarResponse>(
+    SidecarRequest request,
+  ) async {
+    final id = const Uuid().v4();
+    final wrappedRequest = SidecarMessage.request(request: request, id: id);
+    final json = wrappedRequest.toJson();
+    final encoded = jsonEncode(json);
+    // print('request: $encoded');
+    sendPort.send(encoded);
+    final cancelableResponse = CancelableOperation<ResponseMessage>.fromFuture(
+      _responses.firstWhere((resp) => resp.id == id),
+      onCancel: () => null,
+    );
+    final response = await cancelableResponse.valueOrCancellation();
+    final parsedMessage = response
+        ?.mapOrNull(
+          response: (response) => response,
+          error: (error) => throw UnimplementedError(),
+        )
+        ?.response;
+    if (parsedMessage is! T) throw UnimplementedError();
+    return parsedMessage;
+  }
+
   Future<UpdateFilesResponse?> requestLintsForFile(
     AnalyzedFile file,
   ) async {
     final watch = Stopwatch()..start();
+
     print('file reload 1: ${watch.elapsed.prettified()}');
     final contents = resourceProvider.getFile(file.path).readAsStringSync();
     final fileUpdateEvent = FileUpdateEvent.add(file, contents);
@@ -120,6 +146,12 @@ class SidecarRunner {
     final encoded = jsonEncode(json);
     // print('request: $encoded');
     sendPort.send(encoded);
+    final sub = lints.listen((event) {
+      if (event.file.path == file.path) {
+        print(
+            'LINT RECEIVED for ${file.relativePath} in ${watch.elapsed.prettified()}');
+      }
+    });
 
     // final responseCompleter = Completer<SidecarMessage>();
     // final conditionCompleter = Completer<void>();
@@ -127,6 +159,7 @@ class SidecarRunner {
     //   conditionCompleter.complete();
     // });
     final response = await _responses.firstWhere((resp) => resp.id == id);
+    await sub.cancel();
     // .then(responseCompleter.complete);
     // final response = await responseCompleter.future;
     final parsedMessage = response

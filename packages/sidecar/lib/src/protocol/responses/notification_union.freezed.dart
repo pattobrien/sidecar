@@ -32,19 +32,19 @@ mixin _$SidecarNotification {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initComplete,
-    required TResult Function(AnalyzedFile file, List<LintResult> lints) lint,
+    required TResult Function(AnalyzedFile file, Set<LintResult> lints) lint,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initComplete,
-    TResult Function(AnalyzedFile file, List<LintResult> lints)? lint,
+    TResult Function(AnalyzedFile file, Set<LintResult> lints)? lint,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initComplete,
-    TResult Function(AnalyzedFile file, List<LintResult> lints)? lint,
+    TResult Function(AnalyzedFile file, Set<LintResult> lints)? lint,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -140,7 +140,7 @@ class _$InitCompleteNotification extends InitCompleteNotification {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initComplete,
-    required TResult Function(AnalyzedFile file, List<LintResult> lints) lint,
+    required TResult Function(AnalyzedFile file, Set<LintResult> lints) lint,
   }) {
     return initComplete();
   }
@@ -149,7 +149,7 @@ class _$InitCompleteNotification extends InitCompleteNotification {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initComplete,
-    TResult Function(AnalyzedFile file, List<LintResult> lints)? lint,
+    TResult Function(AnalyzedFile file, Set<LintResult> lints)? lint,
   }) {
     return initComplete?.call();
   }
@@ -158,7 +158,7 @@ class _$InitCompleteNotification extends InitCompleteNotification {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initComplete,
-    TResult Function(AnalyzedFile file, List<LintResult> lints)? lint,
+    TResult Function(AnalyzedFile file, Set<LintResult> lints)? lint,
     required TResult orElse(),
   }) {
     if (initComplete != null) {
@@ -219,7 +219,7 @@ abstract class _$$LintNotificationCopyWith<$Res> {
   factory _$$LintNotificationCopyWith(
           _$LintNotification value, $Res Function(_$LintNotification) then) =
       __$$LintNotificationCopyWithImpl<$Res>;
-  $Res call({AnalyzedFile file, List<LintResult> lints});
+  $Res call({AnalyzedFile file, Set<LintResult> lints});
 
   $AnalyzedFileCopyWith<$Res> get file;
 }
@@ -248,7 +248,7 @@ class __$$LintNotificationCopyWithImpl<$Res>
       lints == freezed
           ? _value._lints
           : lints // ignore: cast_nullable_to_non_nullable
-              as List<LintResult>,
+              as Set<LintResult>,
     ));
   }
 
@@ -263,7 +263,7 @@ class __$$LintNotificationCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LintNotification extends LintNotification {
-  const _$LintNotification(this.file, final List<LintResult> lints,
+  const _$LintNotification(this.file, final Set<LintResult> lints,
       {final String? $type})
       : _lints = lints,
         $type = $type ?? 'lint',
@@ -274,11 +274,11 @@ class _$LintNotification extends LintNotification {
 
   @override
   final AnalyzedFile file;
-  final List<LintResult> _lints;
+  final Set<LintResult> _lints;
   @override
-  List<LintResult> get lints {
+  Set<LintResult> get lints {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_lints);
+    return EqualUnmodifiableSetView(_lints);
   }
 
   @JsonKey(name: 'runtimeType')
@@ -314,7 +314,7 @@ class _$LintNotification extends LintNotification {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initComplete,
-    required TResult Function(AnalyzedFile file, List<LintResult> lints) lint,
+    required TResult Function(AnalyzedFile file, Set<LintResult> lints) lint,
   }) {
     return lint(file, lints);
   }
@@ -323,7 +323,7 @@ class _$LintNotification extends LintNotification {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initComplete,
-    TResult Function(AnalyzedFile file, List<LintResult> lints)? lint,
+    TResult Function(AnalyzedFile file, Set<LintResult> lints)? lint,
   }) {
     return lint?.call(file, lints);
   }
@@ -332,7 +332,7 @@ class _$LintNotification extends LintNotification {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initComplete,
-    TResult Function(AnalyzedFile file, List<LintResult> lints)? lint,
+    TResult Function(AnalyzedFile file, Set<LintResult> lints)? lint,
     required TResult orElse(),
   }) {
     if (lint != null) {
@@ -382,7 +382,7 @@ class _$LintNotification extends LintNotification {
 
 abstract class LintNotification extends SidecarNotification {
   const factory LintNotification(
-          final AnalyzedFile file, final List<LintResult> lints) =
+          final AnalyzedFile file, final Set<LintResult> lints) =
       _$LintNotification;
   const LintNotification._() : super._();
 
@@ -390,7 +390,7 @@ abstract class LintNotification extends SidecarNotification {
       _$LintNotification.fromJson;
 
   AnalyzedFile get file;
-  List<LintResult> get lints;
+  Set<LintResult> get lints;
   @JsonKey(ignore: true)
   _$$LintNotificationCopyWith<_$LintNotification> get copyWith =>
       throw _privateConstructorUsedError;

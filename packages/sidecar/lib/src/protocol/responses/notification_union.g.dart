@@ -23,7 +23,7 @@ _$LintNotification _$$LintNotificationFromJson(Map<String, dynamic> json) =>
       AnalyzedFile.fromJson(json['file'] as Map<String, dynamic>),
       (json['lints'] as List<dynamic>)
           .map((e) => LintResult.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          .toSet(),
       $type: json['runtimeType'] as String?,
     );
 

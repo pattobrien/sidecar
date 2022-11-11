@@ -149,27 +149,27 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     }
   }
 
-  /// Handle an 'edit.getFixes' request.
-  ///
-  /// Throw a [plugin.RequestFailure] if the request could not be handled.
-  @override
-  Future<plugin.EditGetFixesResult> handleEditGetFixes(
-    plugin.EditGetFixesParams parameters,
-  ) async {
-    final runners = ref.watch(runnersProvider);
-    final responses = await Future.wait(runners.map((runner) async {
-      final file = runner.getAnalyzedFile(parameters.file);
-      if (file == null) return null;
-      final request = QuickFixRequest(file: file, offset: parameters.offset);
-      return runner.asyncRequest<QuickFixResponse>(request);
-    }));
-    final fixes = responses
-        .whereType<QuickFixResponse>()
-        .map((response) => response.toPluginResponse())
-        .expand((result) => result.fixes)
-        .toList();
-    return plugin.EditGetFixesResult(fixes);
-  }
+  // /// Handle an 'edit.getFixes' request.
+  // ///
+  // /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  // @override
+  // Future<plugin.EditGetFixesResult> handleEditGetFixes(
+  //   plugin.EditGetFixesParams parameters,
+  // ) async {
+  //   final runners = ref.watch(runnersProvider);
+  //   final responses = await Future.wait(runners.map((runner) async {
+  //     final file = runner.getAnalyzedFile(parameters.file);
+  //     if (file == null) return null;
+  //     final request = QuickFixRequest(file: file, offset: parameters.offset);
+  //     return runner.asyncRequest<QuickFixResponse>(request);
+  //   }));
+  //   final fixes = responses
+  //       .whereType<QuickFixResponse>()
+  //       .map((response) => response.toPluginResponse())
+  //       .expand((result) => result.fixes)
+  //       .toList();
+  //   return plugin.EditGetFixesResult(fixes);
+  // }
 
   /// Handle an 'analysis.handleWatchEvents' request.
   ///
@@ -198,32 +198,32 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     return plugin.AnalysisHandleWatchEventsResult();
   }
 
-  /// Handle an 'edit.getAssists' request.
-  ///
-  /// Throw a [plugin.RequestFailure] if the request could not be handled.
-  @override
-  Future<plugin.EditGetAssistsResult> handleEditGetAssists(
-    plugin.EditGetAssistsParams parameters,
-  ) async {
-    final runnerFiles = getRunnersForPath(parameters.file);
-    final responses =
-        await Future.wait(runnerFiles.entries.map((runnerFile) async {
-      final request = AssistRequest(
-          file: runnerFile.value,
-          offset: parameters.offset,
-          length: parameters.length);
-      return runnerFile.key.asyncRequest<AssistResponse>(request);
-    }));
+  // /// Handle an 'edit.getAssists' request.
+  // ///
+  // /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  // @override
+  // Future<plugin.EditGetAssistsResult> handleEditGetAssists(
+  //   plugin.EditGetAssistsParams parameters,
+  // ) async {
+  //   final runnerFiles = getRunnersForPath(parameters.file);
+  //   final responses =
+  //       await Future.wait(runnerFiles.entries.map((runnerFile) async {
+  //     final request = AssistRequest(
+  //         file: runnerFile.value,
+  //         offset: parameters.offset,
+  //         length: parameters.length);
+  //     return runnerFile.key.asyncRequest<AssistResponse>(request);
+  //   }));
 
-    final parsedResponses = responses
-        .whereType<AssistResponse>()
-        .map((response) => response.results
-            .map((e) => e.toPrioritizedSourceChanges())
-            .expand((e) => e)
-            .toList())
-        .expand((e) => e);
-    return plugin.EditGetAssistsResult(parsedResponses.toList());
-  }
+  //   final parsedResponses = responses
+  //       .whereType<AssistResponse>()
+  //       .map((response) => response.results
+  //           .map((e) => e.toPrioritizedSourceChanges())
+  //           .expand((e) => e)
+  //           .toList())
+  //       .expand((e) => e);
+  //   return plugin.EditGetAssistsResult(parsedResponses.toList());
+  // }
 
   @override
   Future<plugin.AnalysisUpdateContentResult> handleAnalysisUpdateContent(
@@ -268,9 +268,20 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
         final runnerEvents = events.where((event) {
           return runner.allContexts.contextForPath(event.filePath) != null;
         }).toList();
+
+        // for (final event in runnerEvents) {
+        //   final sWatch = Stopwatch()..start();
+        //   final path = event.filePath;
+        //   runner.lints.listen((event) {
+        //     if (event.file.path == path) {
+        //       print('lint received in ${sWatch.elapsed.prettified()}');
+        //     }
+        //   });
+        // }
         print(
             'updateFilesRequest: ${runnerEvents.map((e) => e.filePath).toList()}');
         final sidecarRequest = SidecarRequest.updateFiles(runnerEvents);
+
         return runner.asyncRequest<UpdateFilesResponse>(sidecarRequest);
       }));
     }));
@@ -374,7 +385,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
 
   void _logMiddleman(SidecarRunner runner, LogRecord log) {
     final message = log.when(
-      simple: (message) => message,
+      simple: (message) => '[MIDDLEMAN] $message',
       fromAnalyzer: (mainContext, timestamp, severity, message, stack) {
         return '$timestamp [${severity.name.toUpperCase()}] $message';
       },
@@ -390,7 +401,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     final message = log.when(
       simple: (message) => 'simple log: $message',
       fromAnalyzer: (mainContext, timestamp, severity, message, stack) {
-        return '$timestamp [${severity.name}] $runnerName $message';
+        return '$timestamp [$runnerName] [${severity.name.toUpperCase()}] $message $stack';
       },
       fromRule: (lintCode, message) {
         return 'LINTCODE LOG: $message';

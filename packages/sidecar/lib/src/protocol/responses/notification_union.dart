@@ -13,7 +13,7 @@ class SidecarNotification with _$SidecarNotification {
 
   const factory SidecarNotification.lint(
     AnalyzedFile file,
-    List<LintResult> lints,
+    Set<LintResult> lints,
   ) = LintNotification;
 
   factory SidecarNotification.fromJson(Map<String, dynamic> json) =>

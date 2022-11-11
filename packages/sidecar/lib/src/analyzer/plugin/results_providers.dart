@@ -1,4 +1,8 @@
+// ignore_for_file: dead_code
+
+import 'package:async/async.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../protocol/models/analysis_result.dart';
 import '../../protocol/models/assist_result.dart';
@@ -15,7 +19,7 @@ import 'scoped_rules_provider.dart';
 const proactiveAssistFilter = true;
 const proactiveFixComputes = true;
 
-final annotationResultsProvider = Provider((ref) {
+final annotationResultsProvider = Provider.autoDispose((ref) {
   //TODO: what if an annotation is in a file thats outside the project scope?
   // do we still not want to analyze those files for metadata?
   final scopedFiles = ref.watch(activeProjectScopedFilesProvider);
@@ -37,30 +41,53 @@ final registryVisitorProvider =
   return RegisteredLintVisitor(registry);
 });
 
+const _uuid = Uuid();
 final lintResultsProvider =
-    FutureProvider.family<Set<LintResult>, AnalyzedFileWithContext>(
+    FutureProvider.family<Set<LintResult>?, AnalyzedFileWithContext>(
         (ref, file) async {
-  final startWatch = Stopwatch()..start();
-  final rules = ref.watch(scopedLintRulesForFileProvider(file));
-  final visitorRules = ref.watch(scopedVisitorForFileProvider(file));
-  final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
-  final visitor = ref.watch(registryVisitorProvider(file));
-  final visitors = ref.watch(scopedVisitorForFileProvider(file));
-  if (unit == null) return {};
-  final watch = Stopwatch()..start();
-  for (final visitor in visitors) {
-    visitor.setUnit(unit);
+  // final keepAlive = ref.keepAlive();
+  Future<Set<LintResult>> v() async {
+    final visitor = ref.watch(registryVisitorProvider(file));
+    final visitors = ref.watch(scopedVisitorForFileProvider(file));
+    final rules = ref.watch(scopedLintRulesForFileProvider(file));
+    final visitorRules = ref.watch(scopedVisitorForFileProvider(file));
+    final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
+    if (unit == null) return {};
+    for (final visitor in visitors) {
+      visitor.setUnit(unit);
+    }
+    unit.unit.accept(visitor);
+    return visitor.results;
   }
-  print(
-      'lR: ${file.relativePath} ${startWatch.elapsed.prettified()} ${watch.elapsed.prettified()}');
-  unit.unit.accept(visitor);
-  print(
-      'lR end: ${file.relativePath} ${startWatch.elapsed.prettified()} ${watch.elapsed.prettified()}');
-  final results = visitor.results;
-  return results;
+
+  // final operation = CancelableOperation.fromFuture(v(), onCancel: () => null);
+
+  final id = _uuid.v4();
+  ref.onDispose(() {
+    print('$id DISPOSED ${file.toString()}');
+    // operation.isCompleted ? operation.cancel() : () {};
+    // keepAlive.close();
+  });
+
+  // print('$id lintResultsProvider STARTED');
+
+  // Future<Set<LintResult>> _function() async {
+  // return visitor.results;
+  // return operation.valueOrCancellation();
+  return v();
+  // });
+  // }
+
+  // final result =
+  //     CancelableOperation.fromFuture(_function(), onCancel: () => null);
+  // ref.onCancel(result.cancel);
+
+  // return result.valueOrCancellation();
+  // return _function();
+  // return guardedResult.valueOrNull;
 });
 
-final lintResultsCompleterProvider = FutureProvider((ref) async {
+final lintResultsCompleterProvider = FutureProvider.autoDispose((ref) async {
   final elements = ref.container
       .getAllProviderElements()
       .where((base) => base.origin.from == lintResultsProvider)
@@ -71,9 +98,8 @@ final lintResultsCompleterProvider = FutureProvider((ref) async {
   await Future.wait(elements.map((e) async => ref.watch(e.future)));
 });
 
-final assistFiltersProvider =
-    FutureProvider.family<Set<LintResult>, AnalyzedFileWithContext>(
-        (ref, file) async {
+final assistFiltersProvider = FutureProvider.family
+    .autoDispose<Set<LintResult>, AnalyzedFileWithContext>((ref, file) async {
   final registry = ref.watch(nodeRegistryForFileProvider(file));
   final visitor = RegisteredLintVisitor(registry);
 
@@ -87,14 +113,14 @@ final assistFiltersProvider =
 
 // lastly, we can calculate the things that are lowest priority, compared to lints
 
-final assistResultsProvider =
-    FutureProvider.family<List<AssistResult>, LintResult>((ref, result) {
+final assistResultsProvider = FutureProvider.family
+    .autoDispose<List<AssistResult>, LintResult>((ref, result) {
   // for a given filter result, compute the applicable source changes
   return [];
 });
 
-final quickFixResultsProvider =
-    FutureProvider.family<List<LintResultWithEdits>, AnalyzedFileWithContext>(
+final quickFixResultsProvider = FutureProvider.family
+    .autoDispose<List<LintResultWithEdits>, AnalyzedFileWithContext>(
         (ref, file) async {
   // calculate the quick fixes from the lint result
   await ref.watch(lintResultsCompleterProvider.future);
