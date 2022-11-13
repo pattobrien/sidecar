@@ -39,17 +39,6 @@ final runnersProvider = Provider<List<SidecarRunner>>(
       const bool.fromEnvironment('dart.vm.product') ? null : $runnersHash,
 );
 typedef RunnersRef = ProviderRef<List<SidecarRunner>>;
-String $runnersInitializerHash() => r'6d0610d1bbf92c82a76ad8d346ce706b71f02e21';
-
-/// See also [runnersInitializer].
-final runnersInitializerProvider = FutureProvider<void>(
-  runnersInitializer,
-  name: r'runnersInitializerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : $runnersInitializerHash,
-);
-typedef RunnersInitializerRef = FutureProviderRef<void>;
 String $runnerForContextHash() => r'660aed90532fe84608815498b153d42d5379031e';
 
 /// See also [runnerForContext].

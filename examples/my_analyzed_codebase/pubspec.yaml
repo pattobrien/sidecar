@@ -15,8 +15,8 @@ dependencies:
   flutter_riverpod: ^2.0.2
   path: ^1.8.0
   intl: ^0.17.0
-  # my_backend_client:
-  #   path: packages/my_backend_client/
+  my_backend_client:
+    path: packages/my_backend_client/
 
 dev_dependencies:
   auto_route_generator: ^5.0.2

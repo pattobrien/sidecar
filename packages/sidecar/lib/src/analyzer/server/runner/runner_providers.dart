@@ -19,12 +19,12 @@ List<SidecarRunner> runners(
   return runners;
 }
 
-@Riverpod(keepAlive: true)
-Future<void> runnersInitializer(RunnersInitializerRef ref) async {
-  final runners = ref.watch(runnersProvider);
-  await Future.wait(runners.map((runner) => runner.initialize()));
-  await Future.wait(runners.map((runner) => runner.requestSetContext()));
-}
+// @Riverpod(keepAlive: true)
+// Future<void> runnersInitializer(RunnersInitializerRef ref) async {
+//   final runners = ref.watch(runnersProvider);
+//   await Future.wait(runners.map((runner) => runner.initialize()));
+//   // await Future.wait(runners.map((runner) => runner.requestSetContext()));
+// }
 
 @riverpod
 SidecarRunner runnerForContext(

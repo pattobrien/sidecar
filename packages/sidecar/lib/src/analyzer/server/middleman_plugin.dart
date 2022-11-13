@@ -19,6 +19,7 @@ import '../../protocol/constants/constants.dart';
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../services/active_project_service.dart';
+import '../../services/active_project_service_new.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/utils.dart';
 import '../context/active_context.dart';
@@ -306,14 +307,11 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   }) async {
     logger.finer(
         'MIDDLEMAN afterNewContextCollection || ${contextCollection.contexts.length} contexts');
-    final service = ref.read(activeProjectServiceProvider);
-
-    final activeContexts = contextCollection.contexts
-        .map((e) => service.getActiveContext(e, contextCollection.contexts))
-        .whereType<ActiveContext>()
-        .toList();
-
-    ref.read(runnerActiveContextsProvider.notifier).update = activeContexts;
+    final service = ref.read(activeProjectServiceNewProvider);
+    final activeContexts =
+        service.getActivePackagesFromCollection(contextCollection);
+    ref.read(runnerActiveContextsProvider.notifier).update =
+        activeContexts.toList();
     final runners = ref.read(runnersProvider);
 
     await Future.wait(runners.map((runner) async {
@@ -327,9 +325,11 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
       runner.logs.listen((event) => _log(runner, event));
       logger.onRecord.listen(
           (event) => _logMiddleman(runner, LogRecord.simple(event.toString())));
-      await runner.initialize();
 
-      await runner.requestSetContext();
+      final workspaceScope = contextCollection.contexts
+          .map((e) => e.contextRoot.root.toUri())
+          .toList();
+      await runner.initialize();
       isRunnerInitialized[runner] = true;
     }));
     dumpRequests();
@@ -398,7 +398,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   }
 
   void _log(SidecarRunner runner, LogRecord log) {
-    final runnerName = runner.context.activeRoot.root.shortName;
+    final runnerName = runner.context.root.pathSegments.last;
     final message = log.when(
       simple: (message) => 'simple log: $message',
       fromAnalyzer: (mainContext, timestamp, severity, message, stack) {

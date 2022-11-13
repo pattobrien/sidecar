@@ -102,11 +102,12 @@ class ProjectConfiguration {
   }) {
     try {
       return map?.nodes.map((dynamic key, dynamic value) {
-        if (value is YamlMap) {
+        final dynamic thisValue = value;
+        if (thisValue is YamlMap) {
           key as YamlScalar;
           final config = type == _RuleType.lint
-              ? LintPackageConfiguration.fromJson(value)
-              : AssistPackageConfiguration.fromJson(value);
+              ? LintPackageConfiguration.fromJson(thisValue)
+              : AssistPackageConfiguration.fromJson(thisValue);
           return MapEntry(key.value as String, config);
         } else {
           // we want to throw an error if the package doesnt have a single lint declared

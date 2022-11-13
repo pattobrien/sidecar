@@ -36,7 +36,7 @@ mixin _$LogRecord {
   TResult when<TResult extends Object?>({
     required TResult Function(String message) simple,
     required TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -50,7 +50,7 @@ mixin _$LogRecord {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String message)? simple,
     TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -64,7 +64,7 @@ mixin _$LogRecord {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? simple,
     TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -207,7 +207,7 @@ class _$_LogRecord extends _LogRecord {
   TResult when<TResult extends Object?>({
     required TResult Function(String message) simple,
     required TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -224,7 +224,7 @@ class _$_LogRecord extends _LogRecord {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String message)? simple,
     TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -241,7 +241,7 @@ class _$_LogRecord extends _LogRecord {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? simple,
     TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -322,14 +322,14 @@ abstract class _$$AnalyzerLogRecordCopyWith<$Res>
       __$$AnalyzerLogRecordCopyWithImpl<$Res>;
   @override
   $Res call(
-      {Context mainContext,
+      {ActivePackage mainContext,
       DateTime timestamp,
       LogSeverity severity,
       String message,
       @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
           StackTrace? stackTrace});
 
-  $ContextCopyWith<$Res> get mainContext;
+  $ActivePackageCopyWith<$Res> get mainContext;
 }
 
 /// @nodoc
@@ -355,7 +355,7 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
       mainContext == freezed
           ? _value.mainContext
           : mainContext // ignore: cast_nullable_to_non_nullable
-              as Context,
+              as ActivePackage,
       timestamp == freezed
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -376,8 +376,8 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
   }
 
   @override
-  $ContextCopyWith<$Res> get mainContext {
-    return $ContextCopyWith<$Res>(_value.mainContext, (value) {
+  $ActivePackageCopyWith<$Res> get mainContext {
+    return $ActivePackageCopyWith<$Res>(_value.mainContext, (value) {
       return _then(_value.copyWith(mainContext: value));
     });
   }
@@ -401,7 +401,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
       _$$AnalyzerLogRecordFromJson(json);
 
   @override
-  final Context mainContext;
+  final ActivePackage mainContext;
   @override
   final DateTime timestamp;
   @override
@@ -458,7 +458,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   TResult when<TResult extends Object?>({
     required TResult Function(String message) simple,
     required TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -475,7 +475,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String message)? simple,
     TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -493,7 +493,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? simple,
     TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -554,7 +554,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
 
 abstract class AnalyzerLogRecord extends LogRecord {
   const factory AnalyzerLogRecord(
-      final Context mainContext,
+      final ActivePackage mainContext,
       final DateTime timestamp,
       final LogSeverity severity,
       final String message,
@@ -565,7 +565,7 @@ abstract class AnalyzerLogRecord extends LogRecord {
   factory AnalyzerLogRecord.fromJson(Map<String, dynamic> json) =
       _$AnalyzerLogRecord.fromJson;
 
-  Context get mainContext;
+  ActivePackage get mainContext;
   DateTime get timestamp;
   LogSeverity get severity;
   @override
@@ -677,7 +677,7 @@ class _$RuleLogRecord extends RuleLogRecord {
   TResult when<TResult extends Object?>({
     required TResult Function(String message) simple,
     required TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -694,7 +694,7 @@ class _$RuleLogRecord extends RuleLogRecord {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String message)? simple,
     TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,
@@ -711,7 +711,7 @@ class _$RuleLogRecord extends RuleLogRecord {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? simple,
     TResult Function(
-            Context mainContext,
+            ActivePackage mainContext,
             DateTime timestamp,
             LogSeverity severity,
             String message,

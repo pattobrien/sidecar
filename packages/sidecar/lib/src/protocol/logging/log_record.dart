@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
+import '../../analyzer/context/active_package.dart';
 import '../../utils/json_utils/json_utils.dart';
 import '../models/models.dart';
 
@@ -14,7 +15,7 @@ class LogRecord with _$LogRecord {
   ) = _LogRecord;
 
   const factory LogRecord.fromAnalyzer(
-    Context mainContext,
+    ActivePackage mainContext,
     DateTime timestamp,
     LogSeverity severity,
     String message,

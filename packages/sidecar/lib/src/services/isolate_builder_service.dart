@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
+import '../../sidecar.dart';
+import '../analyzer/context/active_package.dart';
 import '../analyzer/context/context.dart';
 import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
@@ -49,9 +51,10 @@ class IsolateBuilderService {
   //   details.channel.close();
   // }
 
-  void setupPluginSourceFiles(ActiveContext activeContext) {
+  void setupPluginSourceFiles(ActivePackage activeContext) {
     final sourceExecutableDirectory = Directory(p.join(
-        activeContext.pluginSourceUri.toFilePath(windows: Platform.isWindows),
+        activeContext.sidecarPluginPackage
+            .toFilePath(windows: Platform.isWindows),
         'tools',
         'analyzer_plugin',
         'bin'));
@@ -67,9 +70,9 @@ class IsolateBuilderService {
     pluginFileEntities.whereType<File>().forEach((sourceFileEntity) {
       Directory(_pluginPath(
         sourceFileEntity.absolute.parent.path,
-        newDirectory: _packageToolDirectory(activeContext.activeRoot),
+        newDirectory: _packageToolDirectory(activeContext.root),
       )).createSync(recursive: true);
-      final newDirectory = _packageToolDirectory(activeContext.activeRoot);
+      final newDirectory = _packageToolDirectory(activeContext.root);
       final newPath = _pluginPath(sourceFileEntity.absolute.path,
           newDirectory: newDirectory);
 
@@ -89,10 +92,9 @@ class IsolateBuilderService {
   // }
 
   // @visibleForTesting
-  void setupBootstrapper(ActiveContext activeContext) {
+  void setupBootstrapper(ActivePackage activeContext) {
     final bootstrapperPath = p.join(
-        _packageToolDirectory(activeContext.activeRoot).path,
-        'constructors.dart');
+        _packageToolDirectory(activeContext.root).path, 'constructors.dart');
     final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
     final listBuffer = StringBuffer()..writeln(constructorListBegin);
 
@@ -101,11 +103,12 @@ class IsolateBuilderService {
         'setupBootstrapper || adding ${sidecarPackages.length} packages');
 
     for (final sidecarPackage in sidecarPackages) {
-      final name = sidecarPackage.packageName;
+      final name = sidecarPackage.pathSegments.reversed.toList()[1];
+      final package = parseLintPackage(name, sidecarPackage)!;
       importsBuffer.writeln("import 'package:$name/$name.dart' as $name;");
       final rules = [
-        ...?sidecarPackage.lints,
-        ...?sidecarPackage.assists,
+        ...?package.lints,
+        ...?package.assists,
       ];
       for (final rule in rules) {
         listBuffer.writeln('\t$name.${rule.className}.new,');
@@ -120,18 +123,17 @@ class IsolateBuilderService {
     File(bootstrapperPath).writeAsStringSync(fullContents.toString());
   }
 
-  Uri _packagesUri(ActiveContextRoot projectRoot) =>
-      Uri.file(p.join(projectRoot.root.path, kDartTool, kPackageConfigJson),
+  Uri _packagesUri(Uri projectRoot) =>
+      Uri.file(p.join(projectRoot.path, kDartTool, kPackageConfigJson),
           windows: Platform.isWindows);
 
-  Uri _executableUri(ActiveContextRoot projectRoot) => Uri.file(
-      p.join(
-          projectRoot.root.path, kDartTool, kSidecarPluginName, 'sidecar.dart'),
+  Uri _executableUri(Uri projectRoot) => Uri.file(
+      p.join(projectRoot.path, kDartTool, kSidecarPluginName, 'sidecar.dart'),
       windows: Platform.isWindows);
 
-  Uri _packageToolDirectory(ActiveContextRoot projectRoot) => Uri.directory(
-      p.join(projectRoot.root.path, kDartTool, kSidecarPluginName),
-      windows: Platform.isWindows);
+  Uri _packageToolDirectory(Uri projectRoot) =>
+      Uri.directory(p.join(projectRoot.path, kDartTool, kSidecarPluginName),
+          windows: Platform.isWindows);
 }
 
 final isolateBuilderServiceProvider = Provider(

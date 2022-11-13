@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:cli_util/cli_logging.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:logging/logging.dart';
@@ -13,6 +14,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../cli/options/cli_options.dart';
 import '../../rules/rules.dart';
 import '../../services/active_project_service.dart';
+import '../../services/active_project_service_new.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/printer/lint_printer.dart';
@@ -46,10 +48,12 @@ Future<void> startSidecarCli(
       try {
         final directory = Directory.current;
 
-        final service = container.read(activeProjectServiceProvider);
+        final service = container.read(activeProjectServiceNewProvider);
         final resourceProvider = container.read(runnerResourceProvider);
-        final activeContext = service.initActiveContextFromUri(directory.uri,
-            resourceProvider: resourceProvider);
+        final collection =
+            AnalysisContextCollection(includedPaths: [directory.path]);
+        final context = collection.contextFor(directory.path);
+        final activeContext = service.getActivePackageFromContext(context);
 
         if (activeContext == null) {
           throw UnimplementedError(
@@ -60,7 +64,7 @@ Future<void> startSidecarCli(
         ];
 
         //TODO: make the plugin path dynamic
-        final pluginUri = activeContext.sidecarPluginPackage.root;
+        final pluginUri = activeContext.sidecarPluginPackage;
         final runners = container.read(runnersProvider);
         for (final runner in runners) {
           runner.lints.listen((notification) {
@@ -77,8 +81,10 @@ Future<void> startSidecarCli(
               // fromAnalyzer: print,
             );
           });
+          await runner.initialize();
         }
-        await container.read(runnersInitializerProvider.future);
+        // await container.read(runnersInitializerProvider.future);
+
         logDelegate.dumpResults();
         if (cliOptions.mode.isCli) {
           // channel.close();
@@ -105,7 +111,7 @@ Future<void> startSidecarCli(
               for (final runner in runners) {
                 // final runnerWatch = Stopwatch()..start();
                 // print('runner: ${runner.context.activeRoot.root.path}');
-                final rootPath = runner.context.activeRoot.root.path;
+                final rootPath = runner.context.root.path;
                 for (final event in events) {
                   // print('# o events: ${events.length}');
                   // print('event: ${event.path}');

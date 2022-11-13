@@ -12,6 +12,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../../../sidecar.dart';
 import '../../../services/active_project_service.dart';
+import '../../../services/active_project_service_new.dart';
 import '../../../services/isolate_builder_service.dart';
 import '../../../utils/duration_ext.dart';
 import '../exit_codes.dart';
@@ -42,14 +43,15 @@ class AnalyzeCommand extends Command<int> {
 
       final root = Directory.current.absolute.uri;
       final container = ProviderContainer();
-      final activeProjectService = container.read(activeProjectServiceProvider);
-      final activeProject = activeProjectService.initActiveContextFromUri(root);
+      final activeProjectService =
+          container.read(activeProjectServiceNewProvider);
+      final activeProject = activeProjectService.getActivePackageFromUri(root);
 
       if (activeProject == null) {
         throw StateError(
             'Invalid dart directory, no package_config.json file found.');
       }
-      final pluginPackage = activeProject.pluginSourceUri;
+      final pluginPackage = activeProject.sidecarPluginPackage;
       stdout.writeln();
       stdout.writeln('project:\u001b[35m ${root.toFilePath()} \u001b[0m');
       stdout.writeln('plugin:  ${pluginPackage.toFilePath()}');

@@ -1,12 +1,13 @@
 import 'package:riverpod/riverpod.dart';
 
-import '../../services/active_project_service.dart';
-import 'analysis_contexts_provider.dart';
+import '../../configurations/configurations.dart';
+import '../../services/active_project_service_new.dart';
+import 'active_package_provider.dart';
 
-final projectConfigurationProvider = Provider((ref) {
-  final activeProjectService = ref.watch(activeProjectServiceProvider);
-  final activeProjectRoot = ref.watch(rootUriProvider);
-  return activeProjectService.getSidecarOptions(activeProjectRoot)!;
+final projectConfigurationProvider = Provider<ProjectConfiguration>((ref) {
+  final activePackage = ref.watch(activePackageProvider).value!;
+  final activePackageService = ref.watch(activeProjectServiceNewProvider);
+  return activePackageService.getSidecarOptions(activePackage.root)!;
 });
 
 final activeProjectGlobSetProvider = Provider((ref) {

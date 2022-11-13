@@ -19,7 +19,7 @@ Map<String, dynamic> _$$_LogRecordToJson(_$_LogRecord instance) =>
 
 _$AnalyzerLogRecord _$$AnalyzerLogRecordFromJson(Map<String, dynamic> json) =>
     _$AnalyzerLogRecord(
-      Context.fromJson(json['mainContext'] as Map<String, dynamic>),
+      ActivePackage.fromJson(json['mainContext'] as Map<String, dynamic>),
       DateTime.parse(json['timestamp'] as String),
       $enumDecode(_$LogSeverityEnumMap, json['severity']),
       json['message'] as String,

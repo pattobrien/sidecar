@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
@@ -11,6 +12,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
+import '../../context/active_package.dart';
 import '../../context/context.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
@@ -20,13 +22,29 @@ class SidecarRunner {
   SidecarRunner(
     this._ref, {
     required this.context,
-  }) : receivePort = ReceivePort('runner');
+  })  : receivePort = ReceivePort('runner'),
+        allContexts = [];
 
   final Ref _ref;
-  final ActiveContext context;
-  List<AnalysisContext> get allContexts =>
-      [context.context, ...context.allRoots];
+  final ActivePackage context;
+  final List<AnalysisContext> allContexts;
   final ReceivePort receivePort;
+
+  void _setContexts() {
+    final paths = context.dependencies.map((e) => e.path).toList().map((path) {
+      if (path.endsWith('/')) {
+        return path.substring(0, path.length - 1);
+      } else {
+        return path;
+      }
+    }).toList();
+    final contexts = AnalysisContextCollection(includedPaths: paths)
+        .contexts
+        .where((element) => context.dependencies.any(
+            (dependency) => dependency == element.contextRoot.root.toUri()))
+        .toList();
+    allContexts.addAll(contexts);
+  }
 
   AnalyzedFile? getAnalyzedFile(String path) {
     final context = allContexts
@@ -59,12 +77,11 @@ class SidecarRunner {
   /// Starts the plugin and sends the necessary requests for initializing it.
   Future<void> initialize() async {
     print('initializing analysis...');
+
+    _setContexts();
     _initStream();
 
-    await serverSideStarter(
-      sendPort: receivePort.sendPort,
-      root: context.activeRoot.root.toUri(),
-    );
+    await serverSideStarter(sendPort: receivePort.sendPort, root: context.root);
 
     notifications.listen((event) => event.map(
           initComplete: (_) => handleStartupNotification(),
@@ -175,25 +192,31 @@ class SidecarRunner {
 
   Future<void> requestSetActiveRoot() async {
     // print('_requestSetActiveRoot');
-    final mainContextRoot = context.activeRoot.root.toUri();
-    final request = SetActiveRootRequest(mainContextRoot);
+    final request = SetActivePackageRequest(context);
     await asyncRequest(request);
     // print('_requestSetActiveRoot completed');
   }
 
-  Future<ContextCollectionResponse> requestSetContext() async {
-    // print('_requestSetContext');
-    final mainContext = context;
-    final allContextRootPaths = <String>[
-      mainContext.activeRoot.root.path,
-      ...mainContext.allRoots.map((e) => e.contextRoot.root.path),
-    ];
-    final request = SetContextCollectionRequest(
-        mainRoot: mainContext.activeRoot.root.path, roots: allContextRootPaths);
-    final response = await asyncRequest<ContextCollectionResponse>(request);
-    // print('_requestSetContext completed');
-    return response;
-  }
+  // Future<ContextCollectionResponse> requestSetContext() async {
+  //   // print('_requestSetContext');
+  //   final allContextRootPaths = <String>[
+  //     context.root.path,
+  //     ...context.dependencies.map((e) => e.path),
+  //   ];
+  //   final request = SetContextCollectionRequest(
+  //       mainRoot: context.root.path, roots: allContextRootPaths);
+  //   final response = await asyncRequest<ContextCollectionResponse>(request);
+  //   // print('_requestSetContext completed');
+  //   return response;
+  // }
+
+  // Future<ContextCollectionResponse> setWorkspaceScopeFromRoots(
+  //   List<Uri> roots,
+  // ) async {
+  //   final request = SetContextCollectionRequest(roots: roots);
+  //   final response = await asyncRequest<ContextCollectionResponse>(request);
+  //   return response;
+  // }
 
   Future<T> asyncRequest<T extends SidecarResponse>(
     SidecarRequest request,

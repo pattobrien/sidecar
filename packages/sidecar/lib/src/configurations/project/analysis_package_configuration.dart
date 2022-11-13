@@ -26,22 +26,25 @@ class LintPackageConfiguration extends AnalysisPackageConfiguration {
     this.includes,
   }) : errors = const [];
 
-  factory LintPackageConfiguration.fromJson(Object? yamlMap) {
-    if (yamlMap is YamlMap?) {
-      final includes = yamlMap?.parseGlobIncludes();
+  factory LintPackageConfiguration.fromJson(Map<dynamic, dynamic> yamlMap) {
+    if (yamlMap is YamlMap) {
+      final includes = yamlMap.parseGlobIncludes();
       return LintPackageConfiguration._(
-        includes: includes?.item1,
-        errors: [...?includes?.item2],
-        lints: yamlMap?.nodes
-            .map<String, LintConfiguration?>((dynamic key, value) {
+        includes: includes.item1,
+        errors: includes.item2,
+        lints:
+            yamlMap.nodes.map<String, LintConfiguration?>((dynamic key, value) {
           final yamlKey = key as YamlScalar;
-          if (value == null) return MapEntry(yamlKey.value.toString(), null);
+          if (value.value == null) {
+            return MapEntry(yamlKey.value.toString(), null);
+          }
           final config = LintConfiguration.fromJson(value);
           return MapEntry(yamlKey.value.toString(), config);
         }),
       );
     }
-    throw UnimplementedError();
+    throw UnimplementedError(
+        'LintPackageConfiguration was invalid type: ${yamlMap.runtimeType}');
   }
 
   const LintPackageConfiguration._({

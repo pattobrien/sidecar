@@ -2,7 +2,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../context/active_context.dart';
 
-final rootUriProvider = Provider<Uri>((ref) => Uri());
+// final rootUriProvider = Provider<Uri>((ref) => Uri());
 
 
 // StreamSubscription? _listenToConfigForChanges(

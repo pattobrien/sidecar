@@ -6,13 +6,14 @@ import 'package:yaml/yaml.dart';
 
 import 'rule_yaml_nodes.dart';
 
+// @JsonSerializable(anyMap: true)
 class RulePackageConfiguration {
   factory RulePackageConfiguration.fromYamlMap(
     YamlMap map, {
     required Uri uri,
     required String packageName,
   }) {
-    return RulePackageConfiguration._(
+    return RulePackageConfiguration(
       map['lints'] as YamlList?,
       map['assists'] as YamlList?,
       source: map,
@@ -21,23 +22,24 @@ class RulePackageConfiguration {
     );
   }
 
-  RulePackageConfiguration._(
-    this._lints,
-    this._assists, {
+  RulePackageConfiguration(
+    this.yamlLints,
+    this.yamlAssists, {
     required this.source,
     required this.packageName,
     required this.uri,
   });
 
-  final YamlList? _lints;
-  final YamlList? _assists;
+  final YamlList? yamlLints;
+  final YamlList? yamlAssists;
   final YamlMap source;
 
   final String packageName;
   final Uri uri;
 
-  List<LintNode>? get lints => _lints?.nodes.map(LintNode.new).toList();
-  List<AssistNode>? get assists => _assists?.nodes.map(AssistNode.new).toList();
+  List<LintNode>? get lints => yamlLints?.nodes.map(LintNode.new).toList();
+  List<AssistNode>? get assists =>
+      yamlAssists?.nodes.map(AssistNode.new).toList();
 }
 
 RulePackageConfiguration? parseLintPackage(String name, Uri root) {

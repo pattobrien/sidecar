@@ -12,7 +12,6 @@ dependencies:
   analyzer: ^4.2.0
   analyzer_plugin: ^0.11.1
   args: ^2.3.1
-  async: ^2.9.0
   characters: ^1.2.0
   checked_yaml: ^2.0.1
   cli_util: ^0.3.5

@@ -1,17 +1,17 @@
-import 'package:analyzer/dart/analysis/context_root.dart';
-import 'package:package_config/package_config.dart';
-import 'package:riverpod/riverpod.dart';
+// import 'package:analyzer/dart/analysis/context_root.dart';
+// import 'package:package_config/package_config.dart';
+// import 'package:riverpod/riverpod.dart';
 
-import '../../../services/services.dart';
+// import '../../../services/services.dart';
 
-final contextSidecarPluginPackageProvider =
-    Provider.family<Package?, ContextRoot>(
-  (ref, root) {
-    final service = ref.watch(activeProjectServiceProvider);
-    return service.getSidecarPluginUriForPackage(root.root.toUri());
-  },
-  name: 'contextSidecarPluginPackageProvider',
-  dependencies: [
-    activeProjectServiceProvider,
-  ],
-);
+// final contextSidecarPluginPackageProvider =
+//     Provider.family<Package?, ContextRoot>(
+//   (ref, root) {
+//     final service = ref.watch(activeProjectServiceProvider);
+//     return service._getSidecarPluginUriForPackage(root.root.toUri());
+//   },
+//   name: 'contextSidecarPluginPackageProvider',
+//   dependencies: [
+//     activeProjectServiceProvider,
+//   ],
+// );

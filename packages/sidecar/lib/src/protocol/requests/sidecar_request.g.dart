@@ -6,33 +6,17 @@ part of 'sidecar_request.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SetActiveRootRequest _$$SetActiveRootRequestFromJson(
+_$SetActivePackageRequest _$$SetActivePackageRequestFromJson(
         Map<String, dynamic> json) =>
-    _$SetActiveRootRequest(
-      Uri.parse(json['root'] as String),
+    _$SetActivePackageRequest(
+      ActivePackage.fromJson(json['package'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$SetActiveRootRequestToJson(
-        _$SetActiveRootRequest instance) =>
+Map<String, dynamic> _$$SetActivePackageRequestToJson(
+        _$SetActivePackageRequest instance) =>
     <String, dynamic>{
-      'root': instance.root.toString(),
-      'runtimeType': instance.$type,
-    };
-
-_$SetContextCollectionRequest _$$SetContextCollectionRequestFromJson(
-        Map<String, dynamic> json) =>
-    _$SetContextCollectionRequest(
-      mainRoot: json['mainRoot'] as String,
-      roots: (json['roots'] as List<dynamic>).map((e) => e as String).toList(),
-      $type: json['runtimeType'] as String?,
-    );
-
-Map<String, dynamic> _$$SetContextCollectionRequestToJson(
-        _$SetContextCollectionRequest instance) =>
-    <String, dynamic>{
-      'mainRoot': instance.mainRoot,
-      'roots': instance.roots,
+      'package': instance.package.toJson(),
       'runtimeType': instance.$type,
     };
 

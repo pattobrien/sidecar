@@ -1,4 +1,3 @@
-import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/ast/ast.dart';

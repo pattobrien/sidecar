@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -18,8 +19,11 @@ import '../../protocol/models/models.dart';
 import '../../protocol/requests/requests.dart';
 import '../../protocol/responses/responses.dart';
 import '../../protocol/source/source_edit.dart';
+import '../../rules/typedefs.dart';
 import '../../utils/duration_ext.dart';
+import '../context/active_package.dart';
 import '../context/analyzed_file.dart';
+import 'active_package_provider.dart';
 import 'collection_provider.dart';
 import 'files_provider.dart';
 import 'plugin.dart';
@@ -28,19 +32,19 @@ import 'results_providers.dart';
 
 final logger = Logger('sidecar-plugin');
 
+final sidecarAnalyzerProvider = Provider((ref) {
+  return SidecarAnalyzer(ref);
+});
+
 class SidecarAnalyzer {
   SidecarAnalyzer(
-    this._ref, {
-    required RequestMessage initRequest,
-  }) : context =
-            Context(root: (initRequest.request as SetActiveRootRequest).root) {
+    this._ref,
+  ) {
     _initLogger();
-    _setupListeners();
-    _handleSetActiveRoot(initRequest);
+    _init();
   }
 
-  final ProviderContainer _ref;
-  final Context context;
+  final Ref _ref;
 
   SidecarAnalyzerCommService get channel =>
       _ref.read(sidecarAnalyzerCommServiceProvider);
@@ -49,12 +53,28 @@ class SidecarAnalyzer {
 
   OverlayResourceProvider get resourceProvider =>
       _ref.read(analyzerResourceProvider);
+  void _init() async {
+    _setupListeners();
+    // final notifier = _ref.read(contextCollectionProvider.notifier);
+    // final workspaceScope = _ref.read(provider);
+    // final activePackage = _ref.read(activePackageProvider).value!;
+    // if (request.workspaceScope != null) {
+    //   final contextRoots = request.workspaceScope!.map((e) => e.path).toList();
+    //   notifier.setContextCollection(contextRoots, []);
+    // } else {
+    // final roots = request.package.dependencies.map((e) => e.path).toList();
+    // final roots = [activePackage.root.path];
+    // notifier.setContextCollection(roots, []);
+    // }
+    await afterNewContextCollection();
+  }
 
   void _initLogger() {
     logger.onRecord.listen((event) {
       final severity = LogSeverity.fromLogLevel(event.level);
+      final package = _ref.read(activePackageProvider).value!;
       final record = LogRecord.fromAnalyzer(
-          context, event.time, severity, event.message, event.stackTrace);
+          package, event.time, severity, event.message, event.stackTrace);
       final message = SidecarMessage.log(record);
       sendToRunner(message);
     });
@@ -64,8 +84,10 @@ class SidecarAnalyzer {
 
   void handleError(Object error, StackTrace stack) =>
       channel.sendToRunner(SidecarMessage.error(error, stack));
+  final isSetupCompleter = Completer<void>();
 
   void _setupListeners() {
+    if (isSetupCompleter.isCompleted) return;
     stream.listen(
       (dynamic event) {
         assert(event is String, 'incorrect type: ${event.runtimeType} $event');
@@ -79,12 +101,12 @@ class SidecarAnalyzer {
       },
       onError: handleError,
     );
+    isSetupCompleter.complete();
   }
 
   Future<void> handleRequest(RequestMessage msg) async {
     final response = await msg.request.map<FutureOr<SidecarResponse?>>(
-      setActiveRoot: handleSetActiveRoot,
-      setContextCollection: handleAnalysisSetContextRoots,
+      setActivePackage: handleSetActivePackage,
       setPriorityFiles: handleSetPriorityFiles,
       updateFiles: handleUpdateFiles,
       quickFix: handleEditGetFixes,
@@ -105,26 +127,38 @@ class SidecarAnalyzer {
     return const SetPriorityFilesResponse();
   }
 
-  Future<SetActiveRootResponse> handleSetActiveRoot(
-    SetActiveRootRequest request,
+  Future<SetActivePackageResponse> handleSetActivePackage(
+    SetActivePackageRequest request,
   ) async {
-    return const SetActiveRootResponse();
+    _setupListeners();
+    // final notifier = _ref.read(contextCollectionProvider.notifier);
+    // if (request.workspaceScope != null) {
+    //   final contextRoots = request.workspaceScope!.map((e) => e.path).toList();
+    //   notifier.setContextCollection(contextRoots, []);
+    // } else {
+    //   // final roots = request.package.dependencies.map((e) => e.path).toList();
+    //   final roots = [request.package.root.path];
+    //   notifier.setContextCollection(roots, []);
+    // }
+    // await afterNewContextCollection();
+    return const SetActivePackageResponse();
   }
 
-  Future<void> _handleSetActiveRoot(RequestMessage request) async {
-    final response =
-        await handleSetActiveRoot(request.request as SetActiveRootRequest);
-    sendToRunner(SidecarMessage.response(response, id: request.id));
-  }
+  // Future<void> _handleSetActiveRoot(RequestMessage request) async {
+  //   final response = await handleSetActivePackage(
+  //       request.request as SetActivePackageRequest);
 
-  Future<ContextCollectionResponse> handleAnalysisSetContextRoots(
-    SetContextCollectionRequest request,
-  ) async {
-    final notifier = _ref.read(contextCollectionProvider.notifier);
-    notifier.setContextCollection(request.roots, []);
-    await afterNewContextCollection();
-    return const ContextCollectionResponse();
-  }
+  //   sendToRunner(SidecarMessage.response(response, id: request.id));
+  // }
+
+  // Future<ContextCollectionResponse> handleAnalysisSetContextRoots(
+  //   SetContextCollectionRequest request,
+  // ) async {
+  //   final notifier = _ref.read(contextCollectionProvider.notifier);
+  //   notifier.setContextCollection(request.roots, []);
+  //   await afterNewContextCollection();
+  //   return const ContextCollectionResponse();
+  // }
 
   Future<LintResponse> handleLint(LintRequest request) {
     throw StateError('LintRequest is an invalid request');

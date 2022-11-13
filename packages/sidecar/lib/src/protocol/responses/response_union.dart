@@ -8,7 +8,7 @@ part 'response_union.g.dart';
 @freezed
 class SidecarResponse with _$SidecarResponse {
   const SidecarResponse._();
-  const factory SidecarResponse.contextCollection() = ContextCollectionResponse;
+  // const factory SidecarResponse.contextCollection() = ContextCollectionResponse;
 
   const factory SidecarResponse.assist(List<AssistResult> results) =
       AssistResponse;
@@ -20,7 +20,7 @@ class SidecarResponse with _$SidecarResponse {
 
   const factory SidecarResponse.updateFiles() = UpdateFilesResponse;
 
-  const factory SidecarResponse.setActiveRoot() = SetActiveRootResponse;
+  const factory SidecarResponse.setActivePackage() = SetActivePackageResponse;
   const factory SidecarResponse.setPriorityFiles() = SetPriorityFilesResponse;
 
   factory SidecarResponse.fromJson(Map<String, dynamic> json) =>

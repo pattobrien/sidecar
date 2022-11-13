@@ -30,20 +30,20 @@ class _SystemHash {
 }
 
 String $RunnerActiveContextsHash() =>
-    r'83cd84a233166e5b48bd661df12a215299c5210e';
+    r'ab2a4a56e814d88e034ddeb56ef5a087de240f9f';
 
 /// See also [RunnerActiveContexts].
 final runnerActiveContextsProvider =
-    NotifierProvider<RunnerActiveContexts, List<ActiveContext>>(
+    NotifierProvider<RunnerActiveContexts, List<ActivePackage>>(
   RunnerActiveContexts.new,
   name: r'runnerActiveContextsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : $RunnerActiveContextsHash,
 );
-typedef RunnerActiveContextsRef = NotifierProviderRef<List<ActiveContext>>;
+typedef RunnerActiveContextsRef = NotifierProviderRef<List<ActivePackage>>;
 
-abstract class _$RunnerActiveContexts extends Notifier<List<ActiveContext>> {
+abstract class _$RunnerActiveContexts extends Notifier<List<ActivePackage>> {
   @override
-  List<ActiveContext> build();
+  List<ActivePackage> build();
 }

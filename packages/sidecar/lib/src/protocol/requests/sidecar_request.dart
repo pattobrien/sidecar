@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../analyzer/context/active_package.dart';
 import '../../analyzer/context/analyzed_file.dart';
 import '../models/file_update_event.dart';
 
@@ -14,12 +15,12 @@ part 'sidecar_request.g.dart';
 class SidecarRequest with _$SidecarRequest {
   const SidecarRequest._();
 
-  const factory SidecarRequest.setActiveRoot(Uri root) = SetActiveRootRequest;
+  const factory SidecarRequest.setActivePackage(ActivePackage package) =
+      SetActivePackageRequest;
 
-  const factory SidecarRequest.setContextCollection({
-    required String mainRoot,
-    required List<String> roots,
-  }) = SetContextCollectionRequest;
+  // const factory SidecarRequest.setContextCollection({
+  //   required List<Uri> roots,
+  // }) = SetContextCollectionRequest;
 
   const factory SidecarRequest.lint(List<String> files) = LintRequest;
 

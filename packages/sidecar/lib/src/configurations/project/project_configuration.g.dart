@@ -10,7 +10,8 @@ ProjectConfiguration _$ProjectConfigurationFromJson(
         Map<String, dynamic> json) =>
     ProjectConfiguration(
       lintPackages: (json['lints'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, LintPackageConfiguration.fromJson(e as Object)),
+        (k, e) => MapEntry(
+            k, LintPackageConfiguration.fromJson(e as Map<String, dynamic>)),
       ),
       assistPackages: (json['assists'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, AssistPackageConfiguration.fromJson(e as Object)),
