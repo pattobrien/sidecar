@@ -4,7 +4,6 @@ import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/file_system/file_system.dart';
-import 'package:analyzer_plugin/protocol/protocol.dart';
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
@@ -12,7 +11,6 @@ import 'package:uuid/uuid.dart';
 
 import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
-import '../../../utils/duration_ext.dart';
 import '../../context/context.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
@@ -60,7 +58,7 @@ class SidecarRunner {
 
   /// Starts the plugin and sends the necessary requests for initializing it.
   Future<void> initialize() async {
-    print('initializing...');
+    print('initializing analysis...');
     _initStream();
 
     await serverSideStarter(
@@ -96,7 +94,7 @@ class SidecarRunner {
   }
 
   void handleStartupNotification() {
-    print('isolate startup completed\n');
+    // print('isolate startup completed\n');
     _initializationCompleter.complete();
   }
 
@@ -136,7 +134,7 @@ class SidecarRunner {
   ) async {
     final watch = Stopwatch()..start();
 
-    print('file reload 1: ${watch.elapsed.prettified()}');
+    // print('file reload 1: ${watch.elapsed.prettified()}');
     final contents = resourceProvider.getFile(file.path).readAsStringSync();
     final fileUpdateEvent = FileUpdateEvent.add(file, contents);
     final request = FileUpdateRequest([fileUpdateEvent]);
@@ -148,8 +146,8 @@ class SidecarRunner {
     sendPort.send(encoded);
     final sub = lints.listen((event) {
       if (event.file.path == file.path) {
-        print(
-            'LINT RECEIVED for ${file.relativePath} in ${watch.elapsed.prettified()}');
+        // print(
+        //     '${DateTime.now().toIso8601String()} LINT RECEIVED for ${file.relativePath} in ${watch.elapsed.prettified()}');
       }
     });
 
@@ -171,7 +169,7 @@ class SidecarRunner {
     if (parsedMessage == null) throw UnimplementedError();
     if (parsedMessage is! UpdateFilesResponse) throw UnimplementedError();
     // return conditionCompleter.isCompleted ? null : parsedMessage;
-    print('file reload 3: ${watch.elapsed.prettified()}');
+    // print('file reload 3: ${watch.elapsed.prettified()}');
     return parsedMessage;
   }
 

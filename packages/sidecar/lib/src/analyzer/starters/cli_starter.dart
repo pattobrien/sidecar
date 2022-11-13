@@ -29,9 +29,7 @@ Future<void> startSidecarCli(
   List<SidecarBaseConstructor>? constructors,
 }) async {
   final cliOptions = CliOptions.fromArgs(args, isPlugin: false);
-  print('mode: ${cliOptions.mode}\n');
   final logDelegate = DebuggerLogDelegate(cliOptions);
-  // logger.onRecord.listen(print);
   await runZonedGuarded<Future<void>>(
     () async {
       final container = ProviderContainer(
@@ -74,9 +72,10 @@ Future<void> startSidecarCli(
           });
           runner.logs.listen((event) {
             event.mapOrNull(
-                // simple: print,
-                // fromAnalyzer: print,
-                );
+              simple: (msg) =>
+                  print('${DateTime.now().toIso8601String()} $msg'),
+              // fromAnalyzer: print,
+            );
           });
         }
         await container.read(runnersInitializerProvider.future);

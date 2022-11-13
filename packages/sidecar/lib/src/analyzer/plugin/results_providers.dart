@@ -41,50 +41,31 @@ final registryVisitorProvider =
   return RegisteredLintVisitor(registry);
 });
 
-const _uuid = Uuid();
 final lintResultsProvider =
-    FutureProvider.family<Set<LintResult>?, AnalyzedFileWithContext>(
+    FutureProvider.family<Set<LintResult>, AnalyzedFileWithContext>(
         (ref, file) async {
-  // final keepAlive = ref.keepAlive();
-  Future<Set<LintResult>> v() async {
-    final visitor = ref.watch(registryVisitorProvider(file));
-    final visitors = ref.watch(scopedVisitorForFileProvider(file));
-    final rules = ref.watch(scopedLintRulesForFileProvider(file));
-    final visitorRules = ref.watch(scopedVisitorForFileProvider(file));
-    final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
-    if (unit == null) return {};
-    for (final visitor in visitors) {
-      visitor.setUnit(unit);
-    }
-    unit.unit.accept(visitor);
-    return visitor.results;
+  // benchmark for file: upgrade_options.dart
+  // total time: 59.537ms
+  //
+  // lintResultsProvider subtotal:
+  // - get unit: 6.60ms
+  // - unit.unit.accept(visitor): 15.5ms
+  //
+  // append content overlays: ??
+  // communication / data transfer: ??
+
+  // - applyPendingFileChanges: 4.61ms
+  final visitor = ref.watch(registryVisitorProvider(file));
+  final visitors = ref.watch(scopedVisitorForFileProvider(file));
+  final rules = ref.watch(scopedLintRulesForFileProvider(file));
+  final visitorRules = ref.watch(scopedVisitorForFileProvider(file));
+  final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
+  if (unit == null) return {};
+  for (final visitor in visitors) {
+    visitor.setUnit(unit);
   }
-
-  // final operation = CancelableOperation.fromFuture(v(), onCancel: () => null);
-
-  final id = _uuid.v4();
-  ref.onDispose(() {
-    print('$id DISPOSED ${file.toString()}');
-    // operation.isCompleted ? operation.cancel() : () {};
-    // keepAlive.close();
-  });
-
-  // print('$id lintResultsProvider STARTED');
-
-  // Future<Set<LintResult>> _function() async {
-  // return visitor.results;
-  // return operation.valueOrCancellation();
-  return v();
-  // });
-  // }
-
-  // final result =
-  //     CancelableOperation.fromFuture(_function(), onCancel: () => null);
-  // ref.onCancel(result.cancel);
-
-  // return result.valueOrCancellation();
-  // return _function();
-  // return guardedResult.valueOrNull;
+  unit.unit.accept(visitor);
+  return visitor.results;
 });
 
 final lintResultsCompleterProvider = FutureProvider.autoDispose((ref) async {

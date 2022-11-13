@@ -23,7 +23,7 @@ class ContextCollection extends _$ContextCollection {
     List<String> includes,
     List<String> excludes,
   ) {
-    print('setContextCollection - $includes');
+    // print('setContextCollection - $includes');
     final byteStore = ref.watch(createByteStoreProvider);
     final contentCache = ref.watch(createFileContentCacheProvider);
     final resourceProvider = ref.watch(analyzerResourceProvider);
@@ -40,8 +40,8 @@ class ContextCollection extends _$ContextCollection {
       zoneSpecification: ZoneSpecification(print: (_, __, ___, line) {}),
     );
 
-    print(
-        'collection complete: ${collection?.contexts.map((e) => e.contextRoot.root.path)}');
+    // print(
+    //     'collection complete: ${collection?.contexts.map((e) => e.contextRoot.root.path)}');
 
     if (collection == null) throw UnimplementedError();
 

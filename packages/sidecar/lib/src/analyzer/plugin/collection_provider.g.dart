@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $ContextCollectionHash() => r'2d67659e593d6fea828cec3f958e3456e2a3f24f';
+String $ContextCollectionHash() => r'0685ddc7d53f4c845e2d753dd261b5e54d3731df';
 
 /// See also [ContextCollection].
 final contextCollectionProvider =

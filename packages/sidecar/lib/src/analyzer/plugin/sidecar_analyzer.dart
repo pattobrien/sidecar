@@ -120,12 +120,9 @@ class SidecarAnalyzer {
   Future<ContextCollectionResponse> handleAnalysisSetContextRoots(
     SetContextCollectionRequest request,
   ) async {
-    logger.info('handleAnalysisSetContextRoots - mainRoot ${request.mainRoot}');
-    logger.info('handleAnalysisSetContextRoots - allRoots: ${request.roots}');
     final notifier = _ref.read(contextCollectionProvider.notifier);
     notifier.setContextCollection(request.roots, []);
     await afterNewContextCollection();
-    logger.info('handleAnalysisSetContextRoots complete');
     return const ContextCollectionResponse();
   }
 
@@ -138,11 +135,8 @@ class SidecarAnalyzer {
   ///
   /// By default analyzes every [AnalysisContext] with [analyzeFiles].
   Future<void> afterNewContextCollection() async {
-    logger.info('afterNewContextCollection');
-    print('afterNewContextCollection');
     // await _forAnalysisContexts((analysisContext) async {
     final files = _ref.refresh(activeProjectScopedFilesProvider);
-    print('afterNewContextCollection complte');
     // logger.info('afterNewContextCollection files: ${paths.toList()}');
     await analyzeFiles(files: files);
     // });
@@ -166,44 +160,46 @@ class SidecarAnalyzer {
   // Overridden to allow for non-Dart files to be analyzed for changes
   Future<void> contentChanged(Set<AnalyzedFile> files) async {
     // logger.info('contentChanged paths: ${paths.length} $paths');
-    print('contentChanged paths: ${files.length} $files');
     final watch = Stopwatch()..start();
 
     final filesWithContexts = files.map(_getFileWithContext).whereNotNull();
 
-    await _forAnalysisContexts((context) async {
-      final contextPath = context.contextRoot.root.path;
-      final filesInContext = filesWithContexts
-          .where((file) => file.context.contextRoot.root.path == contextPath)
-          .toList();
-      final localWatch = Stopwatch()..start();
-      // ignore: avoid_function_literals_in_foreach_calls
-      filesInContext.forEach((e) => context.changeFile(e.path));
-      final affected = await context.applyPendingFileChanges();
-      final affectedWithoutOriginalPaths = affected.toSet()
-        ..removeAll(filesInContext.map((e) => e.path));
+    Future<void> handleContexts(List<AnalysisContext> contexts) async {
+      for (final context in contexts) {
+        // await _forAnalysisContexts((context) async {
+        final contextPath = context.contextRoot.root.path;
+        final filesInContext = filesWithContexts
+            .where((file) => file.context.contextRoot.root.path == contextPath)
+            .toList();
+        // ignore: avoid_function_literals_in_foreach_calls
+        filesInContext.forEach((e) => context.changeFile(e.path));
+        final affected = await context.applyPendingFileChanges();
+        final affectedWithoutOriginalPaths = affected.toSet()
+          ..removeAll(filesInContext.map((e) => e.path));
+        final affectedOriginalPaths = filesInContext
+            .where(
+                (f) => affected.any((affectedPath) => affectedPath == f.path))
+            .toList();
+        // for a better user experience:
+        // first we handle the changed files, then we handle all affected files
+        // this allows us to also include any changed non-dart files in our analysis
 
-      final affectedOriginalPaths = filesInContext
-          .where((f) => affected.any((affectedPath) => affectedPath == f.path))
-          .toList();
+        await analyzeFiles(files: affectedOriginalPaths);
 
-      // for a better user experience:
-      // first we handle the changed files, then we handle all affected files
-      // this allows us to also include any changed non-dart files in our analysis
+        // print('contentChanged abcde');
+        // analyze files that may have been affected by the files that explicitly changed
+        final affectedFiles = affectedWithoutOriginalPaths
+            .map((e) => _getFileWithContextFromPath(e, context))
+            .whereNotNull()
+            .toList();
+        await analyzeFiles(files: affectedFiles);
+      }
+    }
 
-      await analyzeFiles(files: affectedOriginalPaths);
+    // TODO: confirm this works for high/ low-priority contexts
+    await handleContexts(_getPriorityContexts());
 
-      // print('contentChanged abcde');
-      // analyze files that may have been affected by the files that explicitly changed
-      final affectedFiles = affectedWithoutOriginalPaths
-          .map((e) => _getFileWithContextFromPath(e, context))
-          .whereNotNull()
-          .toList();
-      await analyzeFiles(files: affectedFiles);
-      print(
-          'contentChanged $contextPath - ${localWatch.elapsed.prettified()} ${watch.elapsed.prettified()}');
-    });
-    print('contentChanged complete - ${watch.elapsed.prettified()}');
+    await handleContexts(_getLowPriorityContexts());
   }
 
   /// PATTOBRIEN:
@@ -227,23 +223,42 @@ class SidecarAnalyzer {
   //   await analyzeFiles(files: files);
   // }
 
-  Future<void> _forAnalysisContexts(
-    Future<void> Function(AnalysisContext analysisContext) f,
-  ) async {
-    final nonPriorityAnalysisContexts = <AnalysisContext>[];
-    final analysisContexts = _ref.read(contextCollectionProvider);
-    print('contexts: ${analysisContexts.length}');
-    for (final analysisContext in analysisContexts) {
-      if (_isPriorityAnalysisContext(analysisContext)) {
-        await f(analysisContext);
-      } else {
-        nonPriorityAnalysisContexts.add(analysisContext);
-      }
-    }
+  // Future<void> _forAnalysisContexts(
+  //   Future<void> Function(AnalysisContext analysisContext) f,
+  // ) async {
+  //   final nonPriorityAnalysisContexts = <AnalysisContext>[];
+  //   final analysisContexts = _ref.read(contextCollectionProvider);
+  //   print('contexts: ${analysisContexts.length}');
+  //   for (final analysisContext in analysisContexts) {
+  //     if (_isPriorityAnalysisContext(analysisContext)) {
+  //       await f(analysisContext);
+  //     } else {
+  //       nonPriorityAnalysisContexts.add(analysisContext);
+  //     }
+  //   }
 
-    for (final analysisContext in nonPriorityAnalysisContexts) {
-      await f(analysisContext);
-    }
+  //   for (final analysisContext in nonPriorityAnalysisContexts) {
+  //     await f(analysisContext);
+  //   }
+  // }
+
+  List<AnalysisContext> _getLowPriorityContexts() {
+    final watch = Stopwatch()..start();
+    final contexts = _ref.read(contextCollectionProvider);
+    final lowPriorityContexts = contexts
+        .where((context) => priorityFiles.every(
+            (file) => file.contextRoot.path != context.contextRoot.root.path))
+        .toList();
+    return lowPriorityContexts;
+  }
+
+  List<AnalysisContext> _getPriorityContexts() {
+    final contexts = _ref.read(contextCollectionProvider);
+    final priorityContexts = contexts
+        .where((context) => priorityFiles.any(
+            (file) => file.contextRoot.path == context.contextRoot.root.path))
+        .toList();
+    return priorityContexts;
   }
 
   bool _isPriorityAnalysisContext(AnalysisContext analysisContext) {
@@ -264,7 +279,7 @@ class SidecarAnalyzer {
 
     for (final file in dartFiles) {
       Set<LintResult>? results;
-      final watch = Stopwatch()..start();
+      // final watch = Stopwatch()..start();
 
       try {
         _ref.invalidate(nodeRegistryForFileProvider(file));
@@ -277,7 +292,7 @@ class SidecarAnalyzer {
       }
 
       if (results == null) continue;
-      print('analyzeFile ${file.relativePath} ${watch.elapsed.prettified()}');
+      // print('analyzeFile ${file.relativePath} ${watch.elapsed.prettified()}');
       final notification = LintNotification(file.toAnalyzedFile(), results);
 
       // print('results: ${file.relativePath} ${notification.toJson()}');
@@ -330,12 +345,12 @@ class SidecarAnalyzer {
   Future<UpdateFilesResponse> handleUpdateFiles(
     FileUpdateRequest request,
   ) async {
-    print('handleUpdateFiles');
-    final watch = Stopwatch()..start();
     final changedPaths = <AnalyzedFile>{};
 
     for (final update in request.updates) {
+      final watch = Stopwatch()..start();
       final filePath = update.filePath;
+      print('handleUpdateFiles $filePath');
       final oldContents = resourceProvider.hasOverlay(filePath)
           ? resourceProvider.getFile(filePath).readAsStringSync()
           : null;
@@ -367,10 +382,10 @@ class SidecarAnalyzer {
       );
 
       changedPaths.add(update.file);
+      print('handleUpdateFiles $filePath - ${watch.elapsed.prettified()}');
     }
-    print('handleUpdateFiles - ${watch.elapsed.prettified()}');
     await contentChanged(changedPaths);
-    print('handleUpdateFiles contentChanged - ${watch.elapsed.prettified()}');
+    // print('handleUpdateFiles completed - ${watch.elapsed.prettified()}');
     return const UpdateFilesResponse();
   }
 }

@@ -9,26 +9,24 @@ import 'project_configuration_provider.dart';
 final resolvedUnitForFileProvider =
     FutureProvider.family<ResolvedUnitResult?, AnalyzedFileWithContext>(
         (ref, file) async {
-  // final keepAlive = ref.keepAlive();
-  // ref.onDispose(keepAlive.close);
-  final watch = Stopwatch()..start();
+  // final watch = Stopwatch()..start();
   if (!file.isDartFile && !file.isSidecarYamlFile) return null;
   final result = await file.context.currentSession.getResolvedUnit(file.path);
-  print('resolvedUnitForFileProvider - ${watch.elapsed.prettified()}');
+  // print('resolvedUnitForFile ${watch.elapsed.prettified()} ${file.path}');
   return result as ResolvedUnitResult;
 });
 
-final unitContextProvider = FutureProvider.family
-    .autoDispose<UnitContext?, AnalyzedFileWithContext>((ref, file) async {
-  final result = await ref.watch(resolvedUnitForFileProvider(file).future);
-  final configuration = ref.watch(projectConfigurationProvider);
+// final unitContextProvider = FutureProvider.family
+//     .autoDispose<UnitContext?, AnalyzedFileWithContext>((ref, file) async {
+//   final result = await ref.watch(resolvedUnitForFileProvider(file).future);
+//   final configuration = ref.watch(projectConfigurationProvider);
 
-  if (result == null) return null;
-  final unitContext = UnitContextImpl(
-      currentUnit: result.unit,
-      sourceUri: result.uri,
-      contents: result.content,
-      configuration: configuration);
+//   if (result == null) return null;
+//   final unitContext = UnitContextImpl(
+//       currentUnit: result.unit,
+//       sourceUri: result.uri,
+//       contents: result.content,
+//       configuration: configuration);
 
-  return unitContext;
-});
+//   return unitContext;
+// });

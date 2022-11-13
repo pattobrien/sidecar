@@ -15,7 +15,6 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Colors.amber,
-        
         textTheme: TextTheme(
           bodyText1: TextStyle(
               //

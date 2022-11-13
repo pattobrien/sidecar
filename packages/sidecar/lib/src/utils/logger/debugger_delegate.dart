@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 
-import '../../analyzer/results/results.dart';
 import '../../analyzer/server/analyzer_mode.dart';
 import '../../cli/options/cli_options.dart';
 import '../../protocol/models/models.dart';
@@ -25,11 +24,6 @@ class DebuggerLogDelegate implements LogDelegateBase {
   }
 
   @override
-  void pluginInitializationFail(Object err, StackTrace stackTrace) {
-    stderr.writeln('pluginInitializationFail: $err\n$stackTrace');
-  }
-
-  @override
   void sidecarError(Object error, StackTrace stackTrace) {
     stderr.writeln('sidecarError: $error\n$stackTrace');
   }
@@ -38,11 +32,6 @@ class DebuggerLogDelegate implements LogDelegateBase {
   void sidecarVerboseMessage(String message) {
     // if (!cliOptions.isVerboseEnabled) return;
     stdout.writeln('${watch.elapsed} $message');
-  }
-
-  @override
-  void pluginRestart() {
-    stdout.writeln('pluginRestart');
   }
 
   @override
@@ -94,7 +83,7 @@ class DebuggerLogDelegate implements LogDelegateBase {
   }
 
   void dumpResults() {
-    logger.info('\n\n${buffer.toString()}');
+    logger.info('\n${buffer.toString()}');
   }
 
   @override

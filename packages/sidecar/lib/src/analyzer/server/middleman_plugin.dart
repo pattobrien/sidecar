@@ -56,7 +56,6 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    // logger.onRecord.listen((event) {});
     logger.info('PLUGIN STARTING....');
     ref.read(masterPluginChannelProvider).listen(handleAllRequests);
   }
@@ -231,6 +230,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   ) async {
     final runners = ref.read(runnersProvider);
     await Future.wait(runners.map((runner) async {
+      print('MM handleAnalysisUpdateContent');
       final events = parameters.files.entries
           .map((entry) {
             final analyzedFile = runner.getAnalyzedFile(entry.key);
@@ -282,6 +282,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
             'updateFilesRequest: ${runnerEvents.map((e) => e.filePath).toList()}');
         final sidecarRequest = SidecarRequest.updateFiles(runnerEvents);
 
+        print('MM handleAnalysisUpdateContent asyncRequest start');
         return runner.asyncRequest<UpdateFilesResponse>(sidecarRequest);
       }));
     }));
