@@ -9,8 +9,9 @@ import 'plugin.dart';
 
 final activePackageProvider = FutureProvider<ActivePackage>((ref) async {
   final completer = Completer<RequestMessage>();
-  final comm = ref.watch(sidecarAnalyzerCommServiceProvider);
-  ref.listen<AsyncValue<dynamic>>(analyzerCommunicationStream, (_, event) {
+  final comm = ref.watch(communicationChannelProvider);
+  ref.listen<AsyncValue<dynamic>>(communitcationChannelStreamProvider,
+      (_, event) {
     final dynamic value = event.value;
     if (value is String) {
       try {
@@ -29,6 +30,6 @@ final activePackageProvider = FutureProvider<ActivePackage>((ref) async {
   final request = message.request as SetActivePackageRequest;
   final response =
       SidecarMessage.response(const SetActivePackageResponse(), id: message.id);
-  comm.sendToRunner(response);
+  comm.sendMessage(response);
   return request.package;
 });

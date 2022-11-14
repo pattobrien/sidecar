@@ -32,46 +32,68 @@ LogRecord _$LogRecordFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$LogRecord {
   String get message => throw _privateConstructorUsedError;
+  DateTime get timestamp => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String message) simple,
+    required TResult Function(String message, DateTime timestamp) simple,
     required TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)
+        fromAnalyzer,
+    required TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)
-        fromAnalyzer,
-    required TResult Function(RuleCode lintCode, String message) fromRule,
+        fromRule,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message)? simple,
+    TResult Function(String message, DateTime timestamp)? simple,
     TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        fromAnalyzer,
+    TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
-        fromAnalyzer,
-    TResult Function(RuleCode lintCode, String message)? fromRule,
+        fromRule,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? simple,
+    TResult Function(String message, DateTime timestamp)? simple,
     TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        fromAnalyzer,
+    TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
-        fromAnalyzer,
-    TResult Function(RuleCode lintCode, String message)? fromRule,
+        fromRule,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -107,7 +129,7 @@ mixin _$LogRecord {
 abstract class $LogRecordCopyWith<$Res> {
   factory $LogRecordCopyWith(LogRecord value, $Res Function(LogRecord) then) =
       _$LogRecordCopyWithImpl<$Res>;
-  $Res call({String message});
+  $Res call({String message, DateTime timestamp});
 }
 
 /// @nodoc
@@ -121,12 +143,17 @@ class _$LogRecordCopyWithImpl<$Res> implements $LogRecordCopyWith<$Res> {
   @override
   $Res call({
     Object? message = freezed,
+    Object? timestamp = freezed,
   }) {
     return _then(_value.copyWith(
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -137,7 +164,7 @@ abstract class _$$_LogRecordCopyWith<$Res> implements $LogRecordCopyWith<$Res> {
           _$_LogRecord value, $Res Function(_$_LogRecord) then) =
       __$$_LogRecordCopyWithImpl<$Res>;
   @override
-  $Res call({String message});
+  $Res call({String message, DateTime timestamp});
 }
 
 /// @nodoc
@@ -153,12 +180,17 @@ class __$$_LogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = freezed,
+    Object? timestamp = freezed,
   }) {
     return _then(_$_LogRecord(
       message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -166,7 +198,7 @@ class __$$_LogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_LogRecord extends _LogRecord {
-  const _$_LogRecord(this.message, {final String? $type})
+  const _$_LogRecord(this.message, this.timestamp, {final String? $type})
       : $type = $type ?? 'simple',
         super._();
 
@@ -175,13 +207,15 @@ class _$_LogRecord extends _LogRecord {
 
   @override
   final String message;
+  @override
+  final DateTime timestamp;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'LogRecord.simple(message: $message)';
+    return 'LogRecord.simple(message: $message, timestamp: $timestamp)';
   }
 
   @override
@@ -189,13 +223,16 @@ class _$_LogRecord extends _LogRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_LogRecord &&
-            const DeepCollectionEquality().equals(other.message, message));
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.timestamp, timestamp));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(timestamp));
 
   @JsonKey(ignore: true)
   @override
@@ -205,54 +242,75 @@ class _$_LogRecord extends _LogRecord {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String message) simple,
+    required TResult Function(String message, DateTime timestamp) simple,
     required TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)
+        fromAnalyzer,
+    required TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)
-        fromAnalyzer,
-    required TResult Function(RuleCode lintCode, String message) fromRule,
+        fromRule,
   }) {
-    return simple(message);
+    return simple(message, timestamp);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message)? simple,
+    TResult Function(String message, DateTime timestamp)? simple,
     TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        fromAnalyzer,
+    TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
-        fromAnalyzer,
-    TResult Function(RuleCode lintCode, String message)? fromRule,
+        fromRule,
   }) {
-    return simple?.call(message);
+    return simple?.call(message, timestamp);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? simple,
+    TResult Function(String message, DateTime timestamp)? simple,
     TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        fromAnalyzer,
+    TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
-        fromAnalyzer,
-    TResult Function(RuleCode lintCode, String message)? fromRule,
+        fromRule,
     required TResult orElse(),
   }) {
     if (simple != null) {
-      return simple(message);
+      return simple(message, timestamp);
     }
     return orElse();
   }
@@ -300,7 +358,8 @@ class _$_LogRecord extends _LogRecord {
 }
 
 abstract class _LogRecord extends LogRecord {
-  const factory _LogRecord(final String message) = _$_LogRecord;
+  const factory _LogRecord(final String message, final DateTime timestamp) =
+      _$_LogRecord;
   const _LogRecord._() : super._();
 
   factory _LogRecord.fromJson(Map<String, dynamic> json) =
@@ -308,6 +367,8 @@ abstract class _LogRecord extends LogRecord {
 
   @override
   String get message;
+  @override
+  DateTime get timestamp;
   @override
   @JsonKey(ignore: true)
   _$$_LogRecordCopyWith<_$_LogRecord> get copyWith =>
@@ -322,14 +383,14 @@ abstract class _$$AnalyzerLogRecordCopyWith<$Res>
       __$$AnalyzerLogRecordCopyWithImpl<$Res>;
   @override
   $Res call(
-      {ActivePackage mainContext,
+      {String message,
       DateTime timestamp,
+      ActivePackage? context,
       LogSeverity severity,
-      String message,
       @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
           StackTrace? stackTrace});
 
-  $ActivePackageCopyWith<$Res> get mainContext;
+  $ActivePackageCopyWith<$Res>? get context;
 }
 
 /// @nodoc
@@ -345,30 +406,30 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? mainContext = freezed,
-    Object? timestamp = freezed,
-    Object? severity = freezed,
     Object? message = freezed,
+    Object? timestamp = freezed,
+    Object? context = freezed,
+    Object? severity = freezed,
     Object? stackTrace = freezed,
   }) {
     return _then(_$AnalyzerLogRecord(
-      mainContext == freezed
-          ? _value.mainContext
-          : mainContext // ignore: cast_nullable_to_non_nullable
-              as ActivePackage,
-      timestamp == freezed
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      severity == freezed
-          ? _value.severity
-          : severity // ignore: cast_nullable_to_non_nullable
-              as LogSeverity,
       message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      stackTrace == freezed
+      timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      context: context == freezed
+          ? _value.context
+          : context // ignore: cast_nullable_to_non_nullable
+              as ActivePackage?,
+      severity: severity == freezed
+          ? _value.severity
+          : severity // ignore: cast_nullable_to_non_nullable
+              as LogSeverity,
+      stackTrace: stackTrace == freezed
           ? _value.stackTrace
           : stackTrace // ignore: cast_nullable_to_non_nullable
               as StackTrace?,
@@ -376,9 +437,13 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
   }
 
   @override
-  $ActivePackageCopyWith<$Res> get mainContext {
-    return $ActivePackageCopyWith<$Res>(_value.mainContext, (value) {
-      return _then(_value.copyWith(mainContext: value));
+  $ActivePackageCopyWith<$Res>? get context {
+    if (_value.context == null) {
+      return null;
+    }
+
+    return $ActivePackageCopyWith<$Res>(_value.context!, (value) {
+      return _then(_value.copyWith(context: value));
     });
   }
 }
@@ -387,13 +452,13 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   const _$AnalyzerLogRecord(
-      this.mainContext,
-      this.timestamp,
-      this.severity,
       this.message,
+      this.timestamp,
+      {this.context,
+      required this.severity,
       @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
           this.stackTrace,
-      {final String? $type})
+      final String? $type})
       : $type = $type ?? 'fromAnalyzer',
         super._();
 
@@ -401,14 +466,13 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
       _$$AnalyzerLogRecordFromJson(json);
 
   @override
-  final ActivePackage mainContext;
+  final String message;
   @override
   final DateTime timestamp;
   @override
-  final LogSeverity severity;
+  final ActivePackage? context;
   @override
-  final String message;
-// @JsonKey(includeIfNull: false) Object? error,
+  final LogSeverity severity;
   @override
   @JsonKey(
       toJson: stackToStringNullable,
@@ -421,7 +485,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
 
   @override
   String toString() {
-    return 'LogRecord.fromAnalyzer(mainContext: $mainContext, timestamp: $timestamp, severity: $severity, message: $message, stackTrace: $stackTrace)';
+    return 'LogRecord.fromAnalyzer(message: $message, timestamp: $timestamp, context: $context, severity: $severity, stackTrace: $stackTrace)';
   }
 
   @override
@@ -429,11 +493,10 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AnalyzerLogRecord &&
-            const DeepCollectionEquality()
-                .equals(other.mainContext, mainContext) &&
-            const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
-            const DeepCollectionEquality().equals(other.severity, severity) &&
             const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
+            const DeepCollectionEquality().equals(other.context, context) &&
+            const DeepCollectionEquality().equals(other.severity, severity) &&
             const DeepCollectionEquality()
                 .equals(other.stackTrace, stackTrace));
   }
@@ -442,10 +505,10 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(mainContext),
-      const DeepCollectionEquality().hash(timestamp),
-      const DeepCollectionEquality().hash(severity),
       const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(timestamp),
+      const DeepCollectionEquality().hash(context),
+      const DeepCollectionEquality().hash(severity),
       const DeepCollectionEquality().hash(stackTrace));
 
   @JsonKey(ignore: true)
@@ -456,56 +519,76 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String message) simple,
+    required TResult Function(String message, DateTime timestamp) simple,
     required TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)
+        fromAnalyzer,
+    required TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)
-        fromAnalyzer,
-    required TResult Function(RuleCode lintCode, String message) fromRule,
+        fromRule,
   }) {
-    return fromAnalyzer(mainContext, timestamp, severity, message, stackTrace);
+    return fromAnalyzer(message, timestamp, context, severity, stackTrace);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message)? simple,
+    TResult Function(String message, DateTime timestamp)? simple,
     TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        fromAnalyzer,
+    TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
-        fromAnalyzer,
-    TResult Function(RuleCode lintCode, String message)? fromRule,
+        fromRule,
   }) {
     return fromAnalyzer?.call(
-        mainContext, timestamp, severity, message, stackTrace);
+        message, timestamp, context, severity, stackTrace);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? simple,
+    TResult Function(String message, DateTime timestamp)? simple,
     TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        fromAnalyzer,
+    TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
-        fromAnalyzer,
-    TResult Function(RuleCode lintCode, String message)? fromRule,
+        fromRule,
     required TResult orElse(),
   }) {
     if (fromAnalyzer != null) {
-      return fromAnalyzer(
-          mainContext, timestamp, severity, message, stackTrace);
+      return fromAnalyzer(message, timestamp, context, severity, stackTrace);
     }
     return orElse();
   }
@@ -554,22 +637,23 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
 
 abstract class AnalyzerLogRecord extends LogRecord {
   const factory AnalyzerLogRecord(
-      final ActivePackage mainContext,
-      final DateTime timestamp,
-      final LogSeverity severity,
       final String message,
+      final DateTime timestamp,
+      {final ActivePackage? context,
+      required final LogSeverity severity,
       @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
-          final StackTrace? stackTrace) = _$AnalyzerLogRecord;
+          final StackTrace? stackTrace}) = _$AnalyzerLogRecord;
   const AnalyzerLogRecord._() : super._();
 
   factory AnalyzerLogRecord.fromJson(Map<String, dynamic> json) =
       _$AnalyzerLogRecord.fromJson;
 
-  ActivePackage get mainContext;
-  DateTime get timestamp;
-  LogSeverity get severity;
   @override
-  String get message; // @JsonKey(includeIfNull: false) Object? error,
+  String get message;
+  @override
+  DateTime get timestamp;
+  ActivePackage? get context;
+  LogSeverity get severity;
   @JsonKey(
       toJson: stackToStringNullable,
       fromJson: stringToStackNullable,
@@ -588,7 +672,13 @@ abstract class _$$RuleLogRecordCopyWith<$Res>
           _$RuleLogRecord value, $Res Function(_$RuleLogRecord) then) =
       __$$RuleLogRecordCopyWithImpl<$Res>;
   @override
-  $Res call({RuleCode lintCode, String message});
+  $Res call(
+      {RuleCode lintCode,
+      DateTime timestamp,
+      LogSeverity severity,
+      String message,
+      @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+          StackTrace? stackTrace});
 
   $RuleCodeCopyWith<$Res> get lintCode;
 }
@@ -606,17 +696,32 @@ class __$$RuleLogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
   @override
   $Res call({
     Object? lintCode = freezed,
+    Object? timestamp = freezed,
+    Object? severity = freezed,
     Object? message = freezed,
+    Object? stackTrace = freezed,
   }) {
     return _then(_$RuleLogRecord(
       lintCode == freezed
           ? _value.lintCode
           : lintCode // ignore: cast_nullable_to_non_nullable
               as RuleCode,
+      timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      severity == freezed
+          ? _value.severity
+          : severity // ignore: cast_nullable_to_non_nullable
+              as LogSeverity,
       message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      stackTrace == freezed
+          ? _value.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
     ));
   }
 
@@ -631,7 +736,14 @@ class __$$RuleLogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$RuleLogRecord extends RuleLogRecord {
-  const _$RuleLogRecord(this.lintCode, this.message, {final String? $type})
+  const _$RuleLogRecord(
+      this.lintCode,
+      this.timestamp,
+      this.severity,
+      this.message,
+      @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+          this.stackTrace,
+      {final String? $type})
       : $type = $type ?? 'fromRule',
         super._();
 
@@ -641,14 +753,24 @@ class _$RuleLogRecord extends RuleLogRecord {
   @override
   final RuleCode lintCode;
   @override
+  final DateTime timestamp;
+  @override
+  final LogSeverity severity;
+  @override
   final String message;
+  @override
+  @JsonKey(
+      toJson: stackToStringNullable,
+      fromJson: stringToStackNullable,
+      includeIfNull: false)
+  final StackTrace? stackTrace;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'LogRecord.fromRule(lintCode: $lintCode, message: $message)';
+    return 'LogRecord.fromRule(lintCode: $lintCode, timestamp: $timestamp, severity: $severity, message: $message, stackTrace: $stackTrace)';
   }
 
   @override
@@ -657,7 +779,11 @@ class _$RuleLogRecord extends RuleLogRecord {
         (other.runtimeType == runtimeType &&
             other is _$RuleLogRecord &&
             const DeepCollectionEquality().equals(other.lintCode, lintCode) &&
-            const DeepCollectionEquality().equals(other.message, message));
+            const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
+            const DeepCollectionEquality().equals(other.severity, severity) &&
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality()
+                .equals(other.stackTrace, stackTrace));
   }
 
   @JsonKey(ignore: true)
@@ -665,7 +791,10 @@ class _$RuleLogRecord extends RuleLogRecord {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(lintCode),
-      const DeepCollectionEquality().hash(message));
+      const DeepCollectionEquality().hash(timestamp),
+      const DeepCollectionEquality().hash(severity),
+      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(stackTrace));
 
   @JsonKey(ignore: true)
   @override
@@ -675,54 +804,75 @@ class _$RuleLogRecord extends RuleLogRecord {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String message) simple,
+    required TResult Function(String message, DateTime timestamp) simple,
     required TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)
+        fromAnalyzer,
+    required TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)
-        fromAnalyzer,
-    required TResult Function(RuleCode lintCode, String message) fromRule,
+        fromRule,
   }) {
-    return fromRule(lintCode, message);
+    return fromRule(lintCode, timestamp, severity, message, stackTrace);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message)? simple,
+    TResult Function(String message, DateTime timestamp)? simple,
     TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        fromAnalyzer,
+    TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
-        fromAnalyzer,
-    TResult Function(RuleCode lintCode, String message)? fromRule,
+        fromRule,
   }) {
-    return fromRule?.call(lintCode, message);
+    return fromRule?.call(lintCode, timestamp, severity, message, stackTrace);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? simple,
+    TResult Function(String message, DateTime timestamp)? simple,
     TResult Function(
-            ActivePackage mainContext,
+            String message,
+            DateTime timestamp,
+            ActivePackage? context,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        fromAnalyzer,
+    TResult Function(
+            RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
             String message,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
-        fromAnalyzer,
-    TResult Function(RuleCode lintCode, String message)? fromRule,
+        fromRule,
     required TResult orElse(),
   }) {
     if (fromRule != null) {
-      return fromRule(lintCode, message);
+      return fromRule(lintCode, timestamp, severity, message, stackTrace);
     }
     return orElse();
   }
@@ -770,8 +920,13 @@ class _$RuleLogRecord extends RuleLogRecord {
 }
 
 abstract class RuleLogRecord extends LogRecord {
-  const factory RuleLogRecord(final RuleCode lintCode, final String message) =
-      _$RuleLogRecord;
+  const factory RuleLogRecord(
+      final RuleCode lintCode,
+      final DateTime timestamp,
+      final LogSeverity severity,
+      final String message,
+      @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+          final StackTrace? stackTrace) = _$RuleLogRecord;
   const RuleLogRecord._() : super._();
 
   factory RuleLogRecord.fromJson(Map<String, dynamic> json) =
@@ -779,7 +934,15 @@ abstract class RuleLogRecord extends LogRecord {
 
   RuleCode get lintCode;
   @override
+  DateTime get timestamp;
+  LogSeverity get severity;
+  @override
   String get message;
+  @JsonKey(
+      toJson: stackToStringNullable,
+      fromJson: stringToStackNullable,
+      includeIfNull: false)
+  StackTrace? get stackTrace;
   @override
   @JsonKey(ignore: true)
   _$$RuleLogRecordCopyWith<_$RuleLogRecord> get copyWith =>

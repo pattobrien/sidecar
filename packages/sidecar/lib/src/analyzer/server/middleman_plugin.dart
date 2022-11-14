@@ -26,8 +26,6 @@ import '../context/active_context.dart';
 import '../context/analyzed_file.dart';
 import '../options_provider.dart';
 import 'analysis_context_providers.dart';
-import 'isolates/isolate_communication_service.dart';
-import 'isolates/multi_isolate_message.dart';
 import 'middleman_resource_provider.dart';
 import 'plugin_channel_provider.dart';
 import 'runner/context_providers.dart';
@@ -292,7 +290,6 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
 
   final queuedRequests = <plugin.Request>[];
   final isRunnerInitialized = <SidecarRunner, bool>{};
-  final state = <String, MultiIsolateMessage>{};
 
   void dumpRequests() {
     logger.finer('dumpRequests = ${queuedRequests.length}');
@@ -323,12 +320,9 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
         );
       });
       runner.logs.listen((event) => _log(runner, event));
-      logger.onRecord.listen(
-          (event) => _logMiddleman(runner, LogRecord.simple(event.toString())));
+      logger.onRecord.listen((event) =>
+          _log(runner, LogRecord.simple(event.toString(), DateTime.now())));
 
-      final workspaceScope = contextCollection.contexts
-          .map((e) => e.contextRoot.root.toUri())
-          .toList();
       await runner.initialize();
       isRunnerInitialized[runner] = true;
     }));
@@ -336,8 +330,6 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     ref
         .read(allContextsProvider.state)
         .update((_) => contextCollection.contexts);
-    // ref.read(isolateDetailsProvider);
-    // ref.read(middlemanPluginIsInitializedProvider.state).update((_) => true);
   }
 
   List<SidecarRunner> get runners => ref.read(runnersProvider);
@@ -378,38 +370,8 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     };
   }
 
-  // List<SidecarRunner> getRunnersForPath(String path) {
-  //   return runners
-  //       .where((element) => element.getAnalyzedFileForPath(path) != null)
-  //       .toList();
-  // }
-
-  void _logMiddleman(SidecarRunner runner, LogRecord log) {
-    final message = log.when(
-      simple: (message) => '[MIDDLEMAN] $message',
-      fromAnalyzer: (mainContext, timestamp, severity, message, stack) {
-        return '$timestamp [${severity.name.toUpperCase()}] $message';
-      },
-      fromRule: (lintCode, message) {
-        return 'LINTCODE LOG: $message';
-      },
-    );
-    channel.sendError(message);
-  }
-
-  void _log(SidecarRunner runner, LogRecord log) {
-    final runnerName = runner.context.root.pathSegments.last;
-    final message = log.when(
-      simple: (message) => 'simple log: $message',
-      fromAnalyzer: (mainContext, timestamp, severity, message, stack) {
-        return '$timestamp [$runnerName] [${severity.name.toUpperCase()}] $message $stack';
-      },
-      fromRule: (lintCode, message) {
-        return 'LINTCODE LOG: $message';
-      },
-    );
-    channel.sendError(message);
-  }
+  void _log(SidecarRunner runner, LogRecord log) =>
+      channel.sendError(log.prettified());
 
   @override
   Future<void> analyzeFile({
@@ -427,7 +389,6 @@ final middlemanPluginProvider = Provider<MiddlemanPlugin>(
     cliOptionsProvider,
     masterPluginChannelProvider,
     allContextsProvider,
-    isolateCommunicationServiceProvider,
     middlemanResourceProvider,
   ],
 );

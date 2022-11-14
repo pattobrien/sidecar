@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $runnersHash() => r'97fe633824390a1cf52ef18164a86ffa089e75db';
+String $runnersHash() => r'cbfe7eb22bff6dbfa8e5f5d024b5213acead0201';
 
 /// See also [runners].
 final runnersProvider = Provider<List<SidecarRunner>>(
@@ -39,7 +39,7 @@ final runnersProvider = Provider<List<SidecarRunner>>(
       const bool.fromEnvironment('dart.vm.product') ? null : $runnersHash,
 );
 typedef RunnersRef = ProviderRef<List<SidecarRunner>>;
-String $runnerForContextHash() => r'660aed90532fe84608815498b153d42d5379031e';
+String $runnerForContextHash() => r'127e41dcc8cb656036fb1bfa0952de235591e854';
 
 /// See also [runnerForContext].
 class RunnerForContextProvider extends AutoDisposeProvider<SidecarRunner> {

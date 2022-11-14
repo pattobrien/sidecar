@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
@@ -12,27 +14,45 @@ part 'log_record.g.dart';
 class LogRecord with _$LogRecord {
   const factory LogRecord.simple(
     String message,
+    DateTime timestamp,
   ) = _LogRecord;
 
   const factory LogRecord.fromAnalyzer(
-    ActivePackage mainContext,
-    DateTime timestamp,
-    LogSeverity severity,
     String message,
-    // @JsonKey(includeIfNull: false) Object? error,
+    DateTime timestamp, {
+    ActivePackage? context,
+    required LogSeverity severity,
     @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
         StackTrace? stackTrace,
-  ) = AnalyzerLogRecord;
+  }) = AnalyzerLogRecord;
 
   const factory LogRecord.fromRule(
     RuleCode lintCode,
+    DateTime timestamp,
+    LogSeverity severity,
     String message,
+    @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+        StackTrace? stackTrace,
   ) = RuleLogRecord;
 
   const LogRecord._();
 
   factory LogRecord.fromJson(Map<String, dynamic> json) =>
       _$LogRecordFromJson(json);
+}
+
+extension LogRecordX on LogRecord {
+  String prettified() => when(
+        simple: (message, timestamp) {
+          return '[SIMPLE-LOG] ${timestamp.toIso8601String()} $message';
+        },
+        fromAnalyzer: (message, timestamp, context, severity, stackTrace) {
+          return '[${context?.root.pathSegments.reversed.toList()[1] ?? 'UNKNOWN'}] ${timestamp.toIso8601String()} $message $stackTrace';
+        },
+        fromRule: (lintCode, timestamp, severity, message, stackTrace) {
+          return '[${lintCode.package}.${lintCode.code}] ${timestamp.toIso8601String()} $message $stackTrace';
+        },
+      );
 }
 
 enum LogSeverity {

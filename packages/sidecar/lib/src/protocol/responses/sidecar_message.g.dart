@@ -49,20 +49,6 @@ Map<String, dynamic> _$$NotificationMessageToJson(
       'runtimeType': instance.$type,
     };
 
-_$ErrorMessage _$$ErrorMessageFromJson(Map<String, dynamic> json) =>
-    _$ErrorMessage(
-      json['error'] as Object,
-      stringToStack(json['stack'] as String),
-      $type: json['runtimeType'] as String?,
-    );
-
-Map<String, dynamic> _$$ErrorMessageToJson(_$ErrorMessage instance) =>
-    <String, dynamic>{
-      'error': instance.error,
-      'stack': stackToString(instance.stack),
-      'runtimeType': instance.$type,
-    };
-
 _$LogMessage _$$LogMessageFromJson(Map<String, dynamic> json) => _$LogMessage(
       LogRecord.fromJson(json['record'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,

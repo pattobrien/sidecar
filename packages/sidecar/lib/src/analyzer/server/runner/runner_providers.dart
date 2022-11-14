@@ -14,7 +14,7 @@ List<SidecarRunner> runners(
 ) {
   final activePrimaryContexts = ref.watch(runnerActiveContextsProvider);
   final runners = activePrimaryContexts.map((context) {
-    return SidecarRunner(ref, context: context);
+    return SidecarRunner(ref, activePackage: context);
   }).toList();
   return runners;
 }
@@ -32,5 +32,5 @@ SidecarRunner runnerForContext(
   ActiveContext context,
 ) {
   final runners = ref.watch(runnersProvider);
-  return runners.firstWhere((element) => element.context == context);
+  return runners.firstWhere((element) => element.activePackage == context);
 }

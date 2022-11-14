@@ -1,19 +1,16 @@
-// ignore_for_file: implementation_imports
-
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:cli_util/cli_logging.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
+import '../../protocol/logging/log_record.dart';
 import '../../rules/rules.dart';
-import '../../services/active_project_service.dart';
 import '../../services/active_project_service_new.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/logger/logger.dart';
@@ -47,97 +44,62 @@ Future<void> startSidecarCli(
 
       try {
         final directory = Directory.current;
+        final path = directory.path;
 
         final service = container.read(activeProjectServiceNewProvider);
-        final resourceProvider = container.read(runnerResourceProvider);
-        final collection =
-            AnalysisContextCollection(includedPaths: [directory.path]);
-        final context = collection.contextFor(directory.path);
+        final collection = AnalysisContextCollection(includedPaths: [path]);
+        final context = collection.contextFor(path);
         final activeContext = service.getActivePackageFromContext(context);
 
         if (activeContext == null) {
-          throw UnimplementedError(
-              'This is not a valid Sidecar directory: ${directory.path}');
+          throw StateError('Invalid Sidecar directory: $path');
         }
         container.read(runnerActiveContextsProvider.notifier).update = [
           activeContext
         ];
 
-        //TODO: make the plugin path dynamic
         final pluginUri = activeContext.sidecarPluginPackage;
         final runners = container.read(runnersProvider);
         for (final runner in runners) {
-          runner.lints.listen((notification) {
-            if (notification.lints.isNotEmpty) {
-              print(
-                  '${notification.file.relativePath}: ${notification.lints.length} results\n');
-              print(notification.lints.toList().prettyPrint());
+          runner.lints.listen((event) {
+            if (event.lints.isNotEmpty) {
+              final numberResults = event.lints.length;
+              print('${event.file.relativePath}: $numberResults results\n');
+              print(event.lints.toList().prettyPrint());
             }
           });
-          runner.logs.listen((event) {
-            event.mapOrNull(
-              simple: (msg) =>
-                  print('${DateTime.now().toIso8601String()} $msg'),
-              // fromAnalyzer: print,
-            );
-          });
+          runner.logs.listen((event) => print(event.prettified()));
           await runner.initialize();
         }
-        // await container.read(runnersInitializerProvider.future);
 
         logDelegate.dumpResults();
-        if (cliOptions.mode.isCli) {
-          // channel.close();
-          exit(0);
-        }
+        if (cliOptions.mode.isCli) exit(0);
         if (cliOptions.mode.isDebug) {
           hierarchicalLoggingEnabled = true;
           HotReloader.logLevel = Level.OFF;
           final hotReloader = await HotReloader.create(
             onAfterReload: (c) async {
               final watch = Stopwatch()..start();
-              final ansi = Ansi(true);
-              print(
-                  '\u001b[31m\n${DateTime.now().toIso8601String()} RELOADING...\n\u001b[0m');
-              // print('${c.events?.length ?? 0} file changes: ${c.events ?? []}');
-              // final elements = container.getAllProviderElements();
-              // final numberOfRunners =
-              //     elements.where((e) => e.origin == runnersProvider);
-              // print('# of active runners: ${numberOfRunners.length}');
+              final timestamp = DateTime.now().toIso8601String();
+              print('\u001b[31m\n$timestamp RELOADING...\n\u001b[0m');
               final events = c.events ?? [];
-              // TODO: check for any changes to lint rules
-              // if (events.any((event) => event.path))
-              // print('# o runners: ${runners.length}');
               for (final runner in runners) {
-                // final runnerWatch = Stopwatch()..start();
-                // print('runner: ${runner.context.activeRoot.root.path}');
-                final rootPath = runner.context.root.path;
+                final rootPath = runner.activePackage.root.path;
                 for (final event in events) {
-                  // print('# o events: ${events.length}');
-                  // print('event: ${event.path}');
                   final filePath = event.path;
-                  // print('${DateTime.now().toIso8601String()} if isWithin');
                   if (p.isWithin(rootPath, event.path)) {
-                    // final someWatch = Stopwatch()..start();
                     final file = runner.getAnalyzedFile(filePath);
-                    // print(
-                    //     'getAnalyzedFileForPath: ${someWatch.elapsed.prettified()}');
-                    if (file == null) {
-                      // print('not analyzing: $filePath');
-                      continue;
-                    }
-                    // print('reanalyzing: ${file.relativePath}\n');
+                    if (file == null) continue;
 
                     await runner.requestLintsForFile(file);
                   } else if (p.isWithin(pluginUri.path, filePath)) {
-                    // print('rebuilding runner: $rootPath \n');
+                    // TODO: refresh runner / analyzer
                     // container.refresh(runnersProvider);
                     // await runner.initialize();
                   }
                 }
-                // print('runner reload: ${runnerWatch.elapsed.prettified()}');
               }
-              print('total reload: ${watch.elapsed.prettified()}');
+              print('total time to reload: ${watch.elapsed.prettified()}');
             },
           );
         }

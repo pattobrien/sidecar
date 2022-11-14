@@ -5,13 +5,13 @@ import 'dart:isolate';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/file_system.dart';
-import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
+import '../../../services/isolate_builder_service.dart';
 import '../../context/active_package.dart';
 import '../../context/context.dart';
 import '../../starters/server_starter.dart';
@@ -21,17 +21,18 @@ import 'message_providers.dart';
 class SidecarRunner {
   SidecarRunner(
     this._ref, {
-    required this.context,
+    required this.activePackage,
   })  : receivePort = ReceivePort('runner'),
         allContexts = [];
 
   final Ref _ref;
-  final ActivePackage context;
+  final ActivePackage activePackage;
   final List<AnalysisContext> allContexts;
   final ReceivePort receivePort;
 
   void _setContexts() {
-    final paths = context.dependencies.map((e) => e.path).toList().map((path) {
+    final paths =
+        activePackage.dependencies.map((e) => e.path).toList().map((path) {
       if (path.endsWith('/')) {
         return path.substring(0, path.length - 1);
       } else {
@@ -40,7 +41,7 @@ class SidecarRunner {
     }).toList();
     final contexts = AnalysisContextCollection(includedPaths: paths)
         .contexts
-        .where((element) => context.dependencies.any(
+        .where((element) => activePackage.dependencies.any(
             (dependency) => dependency == element.contextRoot.root.toUri()))
         .toList();
     allContexts.addAll(contexts);
@@ -80,8 +81,11 @@ class SidecarRunner {
 
     _setContexts();
     _initStream();
-
-    await serverSideStarter(sendPort: receivePort.sendPort, root: context.root);
+    final isolateBuilder = _ref.read(isolateBuilderServiceProvider);
+    isolateBuilder.setupPluginSourceFiles(activePackage);
+    isolateBuilder.setupBootstrapper(activePackage);
+    await serverSideStarter(
+        sendPort: receivePort.sendPort, root: activePackage.root);
 
     notifications.listen((event) => event.map(
           initComplete: (_) => handleStartupNotification(),
@@ -122,30 +126,6 @@ class SidecarRunner {
         .firstWhereOrNull((element) => element.contextRoot.isAnalyzed(path));
   }
 
-  Future<T?> asyncCancelableRequest<T extends SidecarResponse>(
-    SidecarRequest request,
-  ) async {
-    final id = const Uuid().v4();
-    final wrappedRequest = SidecarMessage.request(request: request, id: id);
-    final json = wrappedRequest.toJson();
-    final encoded = jsonEncode(json);
-    // print('request: $encoded');
-    sendPort.send(encoded);
-    final cancelableResponse = CancelableOperation<ResponseMessage>.fromFuture(
-      _responses.firstWhere((resp) => resp.id == id),
-      onCancel: () => null,
-    );
-    final response = await cancelableResponse.valueOrCancellation();
-    final parsedMessage = response
-        ?.mapOrNull(
-          response: (response) => response,
-          error: (error) => throw UnimplementedError(),
-        )
-        ?.response;
-    if (parsedMessage is! T) throw UnimplementedError();
-    return parsedMessage;
-  }
-
   Future<UpdateFilesResponse?> requestLintsForFile(
     AnalyzedFile file,
   ) async {
@@ -177,66 +157,31 @@ class SidecarRunner {
     await sub.cancel();
     // .then(responseCompleter.complete);
     // final response = await responseCompleter.future;
-    final parsedMessage = response
-        .mapOrNull(
-          response: (response) => response,
-          error: (error) => throw UnimplementedError(),
-        )
-        ?.response;
-    if (parsedMessage == null) throw UnimplementedError();
-    if (parsedMessage is! UpdateFilesResponse) throw UnimplementedError();
+    final msg = response.mapOrNull(response: (response) => response)?.response;
+    if (msg == null) throw UnimplementedError();
+    if (msg is! UpdateFilesResponse) throw UnimplementedError();
     // return conditionCompleter.isCompleted ? null : parsedMessage;
     // print('file reload 3: ${watch.elapsed.prettified()}');
-    return parsedMessage;
+    return msg;
   }
 
   Future<void> requestSetActiveRoot() async {
-    // print('_requestSetActiveRoot');
-    final request = SetActivePackageRequest(context);
+    final request = SetActivePackageRequest(activePackage);
     await asyncRequest(request);
-    // print('_requestSetActiveRoot completed');
   }
-
-  // Future<ContextCollectionResponse> requestSetContext() async {
-  //   // print('_requestSetContext');
-  //   final allContextRootPaths = <String>[
-  //     context.root.path,
-  //     ...context.dependencies.map((e) => e.path),
-  //   ];
-  //   final request = SetContextCollectionRequest(
-  //       mainRoot: context.root.path, roots: allContextRootPaths);
-  //   final response = await asyncRequest<ContextCollectionResponse>(request);
-  //   // print('_requestSetContext completed');
-  //   return response;
-  // }
-
-  // Future<ContextCollectionResponse> setWorkspaceScopeFromRoots(
-  //   List<Uri> roots,
-  // ) async {
-  //   final request = SetContextCollectionRequest(roots: roots);
-  //   final response = await asyncRequest<ContextCollectionResponse>(request);
-  //   return response;
-  // }
 
   Future<T> asyncRequest<T extends SidecarResponse>(
     SidecarRequest request,
   ) async {
     final id = const Uuid().v4();
     final wrappedRequest = SidecarMessage.request(request: request, id: id);
-    final json = wrappedRequest.toJson();
-    final encoded = jsonEncode(json);
-    // print('request: $encoded');
-    sendPort.send(encoded);
+    final message = wrappedRequest.toEncodedJson();
+    sendPort.send(message);
     final response = await _responses.firstWhere((resp) => resp.id == id);
-    final parsedMessage = response
-        .mapOrNull(
-          response: (response) => response,
-          error: (error) => throw UnimplementedError(),
-        )
-        ?.response;
-    if (parsedMessage == null) throw UnimplementedError();
-    if (parsedMessage is! T) throw UnimplementedError();
-    return parsedMessage;
+    final msg = response.mapOrNull(response: (response) => response)?.response;
+    if (msg == null) throw UnimplementedError();
+    if (msg is! T) throw UnimplementedError();
+    return msg;
   }
 }
 

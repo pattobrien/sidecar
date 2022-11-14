@@ -1,12 +1,11 @@
-// ignore_for_file: dead_code
+import 'dart:async';
+import 'dart:developer';
 
-import 'package:async/async.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../protocol/models/analysis_result.dart';
 import '../../protocol/models/assist_result.dart';
-import '../../utils/duration_ext.dart';
+import '../../services/file_analyzer_service.dart';
 import '../ast/general_visitor.dart';
 import '../context/analyzed_file.dart';
 import '../visitors/annotation_visitor.dart';
@@ -60,23 +59,37 @@ final lintResultsProvider =
   final rules = ref.watch(scopedLintRulesForFileProvider(file));
   final visitorRules = ref.watch(scopedVisitorForFileProvider(file));
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
-  if (unit == null) return {};
-  for (final visitor in visitors) {
-    visitor.setUnit(unit);
-  }
-  unit.unit.accept(visitor);
-  return visitor.results;
+  return runZonedGuarded<Set<LintResult>>(
+        () {
+          if (unit == null) return {};
+          for (final visitor in visitors) {
+            visitor.setUnit(unit);
+          }
+          unit.unit.accept(visitor);
+          return visitor.results;
+        },
+        (error, stack) {
+          log(
+            'lintResultsProvider error',
+            error: error,
+            stackTrace: stack,
+            time: DateTime.now(),
+            name: 'lintResults',
+          );
+        },
+      ) ??
+      {};
 });
 
 final lintResultsCompleterProvider = FutureProvider.autoDispose((ref) async {
-  final elements = ref.container
+  final lintResults = ref.container
       .getAllProviderElements()
       .where((base) => base.origin.from == lintResultsProvider)
       .map((e) => e.origin as FutureProvider<Set<LintResult>>);
   print('lintResultsCompleterProvider rebuilding...');
   // we want to await for all lints to be computed before proceeding with any
   // pro-active quick-fix computing
-  await Future.wait(elements.map((e) async => ref.watch(e.future)));
+  await Future.wait(lintResults.map((e) async => ref.watch(e.future)));
 });
 
 final assistFiltersProvider = FutureProvider.family
@@ -86,8 +99,6 @@ final assistFiltersProvider = FutureProvider.family
 
   await ref.watch(lintResultsCompleterProvider.future);
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
-  //todo filter out assist results, not LintResult
-  // returns [] if unit == null or if visitor doesnt find anything
   unit?.unit.accept(visitor);
   return visitor.results;
 });
@@ -104,9 +115,14 @@ final quickFixResultsProvider = FutureProvider.family
     .autoDispose<List<LintResultWithEdits>, AnalyzedFileWithContext>(
         (ref, file) async {
   // calculate the quick fixes from the lint result
+  final analyzer = ref.watch(fileAnalyzerServiceProvider);
   await ref.watch(lintResultsCompleterProvider.future);
   final lintResults = await ref.watch(lintResultsProvider(file).future);
-  // lintResults.map((e) => e.)
+  // final withFixes = lintResults.map((e) {
+  //   analyzer.computeLintResults(file: file, rules: rules, context: context)
+  //   e.copyWithEdits(edits: edits)
+  //   return ;
+  // });
   return [];
   // calculate edits
 });
