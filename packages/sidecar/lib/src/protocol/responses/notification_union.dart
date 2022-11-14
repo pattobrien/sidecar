@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../analyzer/context/context.dart';
-import '../models/analysis_result.dart';
+import '../protocol.dart';
 
 part 'notification_union.freezed.dart';
 part 'notification_union.g.dart';

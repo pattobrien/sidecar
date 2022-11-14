@@ -1,10 +1,7 @@
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../utils/duration_ext.dart';
-import '../context/analyzed_file.dart';
-import '../context/unit_context.dart';
-import 'project_configuration_provider.dart';
+import '../../protocol/analyzed_file.dart';
 
 final resolvedUnitForFileProvider =
     FutureProvider.family<ResolvedUnitResult?, AnalyzedFileWithContext>(

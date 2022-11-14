@@ -1,12 +1,7 @@
-import 'package:analyzer_plugin/channel/channel.dart' as plugin;
-import 'package:analyzer_plugin/plugin/plugin.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
-import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
 
-import '../protocol.dart';
+import '../responses/responses.dart';
+import 'result_exts.dart';
 
 extension QuickFixX on QuickFixResponse {
   plugin.EditGetFixesResult toPluginResponse() {

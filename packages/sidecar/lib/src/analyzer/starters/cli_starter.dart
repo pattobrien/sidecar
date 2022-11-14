@@ -11,7 +11,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../cli/options/cli_options.dart';
 import '../../protocol/logging/log_record.dart';
 import '../../rules/rules.dart';
-import '../../services/active_project_service_new.dart';
+import '../../services/active_project_service.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/printer/lint_printer.dart';
@@ -46,7 +46,7 @@ Future<void> startSidecarCli(
         final directory = Directory.current;
         final path = directory.path;
 
-        final service = container.read(activeProjectServiceNewProvider);
+        final service = container.read(activeProjectServiceProvider);
         final collection = AnalysisContextCollection(includedPaths: [path]);
         final context = collection.contextFor(path);
         final activeContext = service.getActivePackageFromContext(context);

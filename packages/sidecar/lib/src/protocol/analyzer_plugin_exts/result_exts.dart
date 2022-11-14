@@ -4,7 +4,9 @@ import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
 import '../../rules/lint_severity.dart';
 import '../../utils/utils.dart';
-import '../protocol.dart';
+import '../models/models.dart';
+import '../responses/responses.dart';
+import 'source_exts.dart';
 
 extension LintResultX on AnalysisResult {
   plugin.AnalysisError toAnalysisError() {

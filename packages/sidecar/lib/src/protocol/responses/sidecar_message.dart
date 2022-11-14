@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../utils/json_utils/json_utils.dart';
 import '../logging/log_record.dart';
-import '../protocol.dart';
+import '../requests/requests.dart';
+import 'responses.dart';
 
 part 'sidecar_message.freezed.dart';
 part 'sidecar_message.g.dart';

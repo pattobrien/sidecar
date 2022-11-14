@@ -10,9 +10,8 @@ import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
-import '../../../../sidecar.dart';
+import '../../../analyzer/starters/starters.dart';
 import '../../../services/active_project_service.dart';
-import '../../../services/active_project_service_new.dart';
 import '../../../services/isolate_builder_service.dart';
 import '../../../utils/duration_ext.dart';
 import '../exit_codes.dart';
@@ -33,7 +32,6 @@ class AnalyzeCommand extends Command<int> {
   FutureOr<int> run() async {
     final ansi = Ansi(true);
     final xLogger = Logger.standard(ansi: ansi);
-    // final progress = xLogger.progress('sidecar - Analyzing project');
     final watch = Stopwatch()..start();
     xLogger.write('sidecar - Analyzing project...');
     try {
@@ -43,8 +41,7 @@ class AnalyzeCommand extends Command<int> {
 
       final root = Directory.current.absolute.uri;
       final container = ProviderContainer();
-      final activeProjectService =
-          container.read(activeProjectServiceNewProvider);
+      final activeProjectService = container.read(activeProjectServiceProvider);
       final activeProject = activeProjectService.getActivePackageFromUri(root);
 
       if (activeProject == null) {

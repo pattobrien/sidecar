@@ -1,7 +1,6 @@
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-import 'package:source_span/source_span.dart';
 
-import '../protocol.dart';
+import '../source/source.dart';
 
 extension SourceFileEditX on SourceFileEdit {
   plugin.SourceFileEdit toPluginFileEdit() =>

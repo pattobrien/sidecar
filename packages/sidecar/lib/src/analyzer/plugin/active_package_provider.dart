@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
-import '../context/active_package.dart';
 import 'plugin.dart';
 
 final activePackageProvider = FutureProvider<ActivePackage>((ref) async {

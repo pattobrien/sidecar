@@ -1,7 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/ast/ast.dart';
-import '../analyzer/context/context.dart';
 import '../analyzer/context/unit_context.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';

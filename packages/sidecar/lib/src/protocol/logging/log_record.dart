@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
-import '../../analyzer/context/active_package.dart';
+import '../active_package.dart';
 import '../../utils/json_utils/json_utils.dart';
 import '../models/models.dart';
 

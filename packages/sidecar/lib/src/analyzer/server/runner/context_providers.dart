@@ -1,8 +1,7 @@
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../context/active_context.dart';
-import '../../context/active_package.dart';
+import '../../../protocol/active_package.dart';
 
 part 'context_providers.g.dart';
 

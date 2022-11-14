@@ -1,7 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../utils/glob_utils.dart';
-import '../context/analyzed_file.dart';
+import '../../protocol/analyzed_file.dart';
 import 'collection_provider.dart';
 import 'project_configuration_provider.dart';
 

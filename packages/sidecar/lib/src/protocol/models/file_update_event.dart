@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../analyzer/context/analyzed_file.dart';
+import '../analyzed_file.dart';
 import '../source/source_file_edit.dart';
 
 part 'file_update_event.freezed.dart';

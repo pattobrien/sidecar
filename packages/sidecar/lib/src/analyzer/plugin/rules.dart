@@ -1,6 +1,6 @@
 import '../../configurations/configurations.dart';
+import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
-import '../context/context.dart';
 
 bool _isPathIncludedForRule({
   required AnalyzedFile file,

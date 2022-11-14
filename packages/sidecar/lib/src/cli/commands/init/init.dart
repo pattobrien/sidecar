@@ -5,7 +5,6 @@ import 'package:args/command_runner.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../../services/active_project_service.dart';
-import '../../../services/active_project_service_new.dart';
 import '../exit_codes.dart';
 
 class InitCommand extends Command<int> {
@@ -21,7 +20,7 @@ class InitCommand extends Command<int> {
   FutureOr<int> run() async {
     try {
       final ref = ProviderContainer();
-      final projectService = ref.read(activeProjectServiceNewProvider);
+      final projectService = ref.read(activeProjectServiceProvider);
       await projectService.createDefaultSidecarYaml(Directory.current.uri);
       return ExitCode.success;
     } catch (e) {

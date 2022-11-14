@@ -11,21 +11,19 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
+import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 
 import '../../cli/options/cli_options.dart';
+import '../../protocol/analyzer_plugin_exts/analyzer_plugin_exts.dart';
 import '../../protocol/constants/constants.dart';
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../services/active_project_service.dart';
-import '../../services/active_project_service_new.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/utils.dart';
-import '../context/active_context.dart';
-import '../context/analyzed_file.dart';
 import '../options_provider.dart';
-import 'analysis_context_providers.dart';
 import 'middleman_resource_provider.dart';
 import 'plugin_channel_provider.dart';
 import 'runner/context_providers.dart';
@@ -147,27 +145,31 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     }
   }
 
-  // /// Handle an 'edit.getFixes' request.
-  // ///
-  // /// Throw a [plugin.RequestFailure] if the request could not be handled.
-  // @override
-  // Future<plugin.EditGetFixesResult> handleEditGetFixes(
-  //   plugin.EditGetFixesParams parameters,
-  // ) async {
-  //   final runners = ref.watch(runnersProvider);
-  //   final responses = await Future.wait(runners.map((runner) async {
-  //     final file = runner.getAnalyzedFile(parameters.file);
-  //     if (file == null) return null;
-  //     final request = QuickFixRequest(file: file, offset: parameters.offset);
-  //     return runner.asyncRequest<QuickFixResponse>(request);
-  //   }));
-  //   final fixes = responses
-  //       .whereType<QuickFixResponse>()
-  //       .map((response) => response.toPluginResponse())
-  //       .expand((result) => result.fixes)
-  //       .toList();
-  //   return plugin.EditGetFixesResult(fixes);
-  // }
+  /// Handle an 'edit.getFixes' request.
+  ///
+  /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  @override
+  Future<plugin.EditGetFixesResult> handleEditGetFixes(
+    plugin.EditGetFixesParams parameters,
+  ) async {
+    final runnersForFile = getRunnersForPath(parameters.file);
+
+    final responses =
+        await Future.wait(runnersForFile.entries.map((entry) async {
+      final file = entry.value;
+      final runner = entry.key;
+      final request = QuickFixRequest(file: file, offset: parameters.offset);
+      return runner.asyncRequest<QuickFixResponse>(request);
+    })).then((value) => value.whereNotNull());
+
+    // we need to aggregate responses from all runners into one server response
+    final fixes = responses
+        .whereType<QuickFixResponse>()
+        .map((response) => response.toPluginResponse())
+        .expand((result) => result.fixes)
+        .toList();
+    return plugin.EditGetFixesResult(fixes);
+  }
 
   /// Handle an 'analysis.handleWatchEvents' request.
   ///
@@ -304,7 +306,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   }) async {
     logger.finer(
         'MIDDLEMAN afterNewContextCollection || ${contextCollection.contexts.length} contexts');
-    final service = ref.read(activeProjectServiceNewProvider);
+    final service = ref.read(activeProjectServiceProvider);
     final activeContexts =
         service.getActivePackagesFromCollection(contextCollection);
     ref.read(runnerActiveContextsProvider.notifier).update =
@@ -327,9 +329,9 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
       isRunnerInitialized[runner] = true;
     }));
     dumpRequests();
-    ref
-        .read(allContextsProvider.state)
-        .update((_) => contextCollection.contexts);
+    // ref
+    //     .read(allContextsProvider.state)
+    //     .update((_) => contextCollection.contexts);
   }
 
   List<SidecarRunner> get runners => ref.read(runnersProvider);
@@ -343,7 +345,6 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   ) async {
     priorityPaths = parameters.files.toSet();
     final filesForRunners = getRunnersForPaths(parameters.files);
-    assert(filesForRunners.length >= 3, 'toSet() isnt working for runners');
 
     for (final runnerFiles in filesForRunners.entries) {
       final files = runnerFiles.value;
@@ -388,7 +389,7 @@ final middlemanPluginProvider = Provider<MiddlemanPlugin>(
   dependencies: [
     cliOptionsProvider,
     masterPluginChannelProvider,
-    allContextsProvider,
+    // allContextsProvider,
     middlemanResourceProvider,
   ],
 );

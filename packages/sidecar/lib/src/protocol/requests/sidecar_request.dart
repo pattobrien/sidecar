@@ -1,15 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../analyzer/context/active_package.dart';
-import '../../analyzer/context/analyzed_file.dart';
+import '../active_package.dart';
+import '../analyzed_file.dart';
 import '../models/file_update_event.dart';
 
 part 'sidecar_request.freezed.dart';
 part 'sidecar_request.g.dart';
-
-//TODO: make all of the requests more type-safe, where applicable
-// e.g. AnalyzedFile might be better to use instead of filePath
-// but how can we serialize an ActiveContext instance?
 
 @freezed
 class SidecarRequest with _$SidecarRequest {

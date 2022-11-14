@@ -1,8 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:package_config/package_config.dart';
-
-import '../../configurations/configurations.dart';
-import '../../protocol/protocol.dart';
 
 part 'active_package.freezed.dart';
 part 'active_package.g.dart';

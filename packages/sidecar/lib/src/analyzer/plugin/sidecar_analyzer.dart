@@ -13,7 +13,7 @@ import '../../protocol/requests/requests.dart';
 import '../../protocol/responses/responses.dart';
 import '../../protocol/source/source_edit.dart';
 import '../../utils/duration_ext.dart';
-import '../context/analyzed_file.dart';
+import '../../protocol/analyzed_file.dart';
 import 'active_package_provider.dart';
 import 'collection_provider.dart';
 import 'files_provider.dart';

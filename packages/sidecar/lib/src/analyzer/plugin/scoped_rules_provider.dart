@@ -3,7 +3,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../rules/enabled_rule.dart';
 import '../../rules/rules.dart';
-import '../context/analyzed_file.dart';
+import '../../protocol/analyzed_file.dart';
 import 'plugin.dart';
 import 'rule_provider.dart';
 

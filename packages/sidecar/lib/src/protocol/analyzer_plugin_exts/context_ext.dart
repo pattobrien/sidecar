@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_root.dart';
 
-import '../../analyzer/context/analyzed_file.dart';
+import '../analyzed_file.dart';
 
 extension AnalysisContextXX on AnalysisContext {
   List<AnalyzedFile> typedAnalyzedFiles() => contextRoot.typedAnalyzedFiles();

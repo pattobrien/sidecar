@@ -1,16 +1,14 @@
-// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
-
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
 
-import '../../utils/file_paths.dart';
-import 'active_context.dart';
+import '../utils/utils.dart';
 
 part 'analyzed_file.freezed.dart';
 part 'analyzed_file.g.dart';
 
 @freezed
+@immutable
 
 /// Represents a file that is within some context currently under analysis.
 ///
@@ -42,10 +40,8 @@ class AnalyzedFile with _$AnalyzedFile {
   String get relativePath => p.relative(path, from: contextRoot.path);
 }
 
-// Uri contextToUri(AnalysisContext context) => context.contextRoot.root.toUri();
-// AnalysisContext contextFromUri(Uri root) => context.contextRoot.root.toUri();
-
 @freezed
+@immutable
 class AnalyzedFileWithContext with _$AnalyzedFileWithContext {
   const factory AnalyzedFileWithContext(
     Uri fileUri, {

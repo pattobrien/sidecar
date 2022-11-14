@@ -7,7 +7,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:meta/meta.dart';
 import 'package:source_span/source_span.dart';
 
-import '../analyzer/context/analyzed_file.dart';
+import '../protocol/analyzed_file.dart';
 import '../configurations/configurations.dart';
 import '../protocol/models/models.dart';
 import '../utils/utils.dart';

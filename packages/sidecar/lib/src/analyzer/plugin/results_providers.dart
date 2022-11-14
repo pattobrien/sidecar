@@ -3,11 +3,11 @@ import 'dart:developer';
 
 import 'package:riverpod/riverpod.dart';
 
+import '../../protocol/analyzed_file.dart';
 import '../../protocol/models/analysis_result.dart';
 import '../../protocol/models/assist_result.dart';
 import '../../services/file_analyzer_service.dart';
 import '../ast/general_visitor.dart';
-import '../context/analyzed_file.dart';
 import '../visitors/annotation_visitor.dart';
 import 'files_provider.dart';
 import 'plugin.dart';
