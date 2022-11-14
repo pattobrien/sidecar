@@ -2,14 +2,17 @@ import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
+import 'package:analyzer/file_system/file_system.dart';
 import 'package:collection/collection.dart';
 import 'package:package_config/package_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
+import '../analyzer/plugin/plugin.dart';
 import '../configurations/project/project_configuration.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
 import '../protocol/active_package.dart';
+import '../protocol/active_package_root.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
 import '../protocol/protocol.dart';
@@ -17,7 +20,11 @@ import '../utils/logger/logger.dart';
 import '../utils/utils.dart';
 
 class ActiveProjectService {
-  const ActiveProjectService();
+  const ActiveProjectService({
+    required this.resourceProvider,
+  });
+
+  final ResourceProvider resourceProvider;
 
   List<ActivePackage> getActivePackagesFromCollection(
     AnalysisContextCollection collection,
@@ -28,8 +35,10 @@ class ActiveProjectService {
         .map((e) => e.copyWith(
             workspaceScope: collection.contexts
                 .map((e) => e.contextRoot.root.toUri())
-                .where((contextUri) => e.dependencies
-                    .any((dependency) => dependency == contextUri))
+                .where((contextUri) =>
+                    e.packageConfig?.packages
+                        .any((dependency) => dependency.root == contextUri) ??
+                    false)
                 .toList()))
         .toList();
   }
@@ -58,11 +67,11 @@ class ActiveProjectService {
       return null;
     }
     return ActivePackage(
-      root: root,
-      sidecarOptionsFile: root.resolve(kSidecarYaml),
-      sidecarPluginPackage: pluginUri.root,
-      sidecarPackages: packages.map((e) => e.uri).toList(),
-      dependencies: packageConfigJson.packages.map((e) => e.root).toList(),
+      packageRoot: ActivePackageRoot(root),
+      sidecarOptionsFile: projectConfig,
+      sidecarPluginPackage: pluginUri,
+      // sidecarPackages: packages,
+      packageConfig: packageConfigJson,
     );
   }
 
@@ -108,9 +117,9 @@ class ActiveProjectService {
   }
 
   String? _getSidecarFile(Uri root) {
-    final sidecarYamlPath = p.join(root.path, kSidecarYaml);
-    final sidecarYamlFile = io.File(sidecarYamlPath);
-    if (!sidecarYamlFile.existsSync()) return null;
+    final sidecarYamlUri = Uri.parse(p.join(root.path, kSidecarYaml));
+    final sidecarYamlFile = resourceProvider.getFile(sidecarYamlUri.path);
+    if (!sidecarYamlFile.exists) return null;
     return sidecarYamlFile.readAsStringSync();
   }
 
@@ -131,7 +140,12 @@ class ActiveProjectService {
 }
 
 final activeProjectServiceProvider = Provider(
-  (ref) => const ActiveProjectService(),
+  (ref) {
+    final resourceProvider = ref.watch(analyzerResourceProvider);
+    return ActiveProjectService(resourceProvider: resourceProvider);
+  },
   name: 'activeProjectServiceNewProvider',
-  dependencies: const [],
+  dependencies: [
+    analyzerResourceProvider,
+  ],
 );

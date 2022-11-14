@@ -84,7 +84,7 @@ Future<void> startSidecarCli(
               print('\u001b[31m\n$timestamp RELOADING...\n\u001b[0m');
               final events = c.events ?? [];
               for (final runner in runners) {
-                final rootPath = runner.activePackage.root.path;
+                final rootPath = runner.activePackage.packageRoot.root.path;
                 for (final event in events) {
                   final filePath = event.path;
                   if (p.isWithin(rootPath, event.path)) {
@@ -92,7 +92,7 @@ Future<void> startSidecarCli(
                     if (file == null) continue;
 
                     await runner.requestLintsForFile(file);
-                  } else if (p.isWithin(pluginUri.path, filePath)) {
+                  } else if (p.isWithin(pluginUri.root.path, filePath)) {
                     // TODO: refresh runner / analyzer
                     // container.refresh(runnersProvider);
                     // await runner.initialize();

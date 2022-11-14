@@ -1,10 +1,8 @@
-import 'dart:developer';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
-import '../active_package.dart';
 import '../../utils/json_utils/json_utils.dart';
+import '../active_package_root.dart';
 import '../models/models.dart';
 
 part 'log_record.freezed.dart';
@@ -20,7 +18,7 @@ class LogRecord with _$LogRecord {
   const factory LogRecord.fromAnalyzer(
     String message,
     DateTime timestamp, {
-    ActivePackage? context,
+    ActivePackageRoot? root,
     required LogSeverity severity,
     @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
         StackTrace? stackTrace,
@@ -46,8 +44,8 @@ extension LogRecordX on LogRecord {
         simple: (message, timestamp) {
           return '[SIMPLE-LOG] ${timestamp.toIso8601String()} $message';
         },
-        fromAnalyzer: (message, timestamp, context, severity, stackTrace) {
-          return '[${context?.root.pathSegments.reversed.toList()[1] ?? 'UNKNOWN'}] ${timestamp.toIso8601String()} $message $stackTrace';
+        fromAnalyzer: (message, timestamp, root, severity, stackTrace) {
+          return '[${root?.root.pathSegments.reversed.toList()[1] ?? 'UNKNOWN'}] ${timestamp.toIso8601String()} $message $stackTrace';
         },
         fromRule: (lintCode, timestamp, severity, message, stackTrace) {
           return '[${lintCode.package}.${lintCode.code}] ${timestamp.toIso8601String()} $message $stackTrace';

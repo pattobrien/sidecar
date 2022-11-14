@@ -28,7 +28,9 @@ Future<void> analyzerStarter({
   }, (error, stack) {
     final context = container.read(activePackageProvider).valueOrNull;
     final log = LogRecord.fromAnalyzer(error.toString(), DateTime.now(),
-        context: context, severity: LogSeverity.error, stackTrace: stack);
+        root: context?.packageRoot,
+        severity: LogSeverity.error,
+        stackTrace: stack);
     final message = SidecarMessage.log(log).toEncodedJson();
     sendPort.send(message);
     throw UnimplementedError('INVALID ERROR: $error $stack');
@@ -41,7 +43,7 @@ Future<void> analyzerStarter({
       // otherwise, SidecarRunner will not be able to parse the object correctly.
       final context = container.read(activePackageProvider).valueOrNull;
       final log = LogRecord.fromAnalyzer(line, DateTime.now(),
-          context: context, severity: LogSeverity.info);
+          root: context?.packageRoot, severity: LogSeverity.info);
       final msg = SidecarMessage.log(log);
       return sendPort.send(msg.toEncodedJson());
     },

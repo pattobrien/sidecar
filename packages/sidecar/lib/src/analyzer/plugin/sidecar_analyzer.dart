@@ -8,12 +8,12 @@ import 'package:collection/collection.dart';
 import 'package:logging/logging.dart' hide LogRecord;
 import 'package:riverpod/riverpod.dart';
 
+import '../../protocol/analyzed_file.dart';
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/requests/requests.dart';
 import '../../protocol/responses/responses.dart';
 import '../../protocol/source/source_edit.dart';
 import '../../utils/duration_ext.dart';
-import '../../protocol/analyzed_file.dart';
 import 'active_package_provider.dart';
 import 'collection_provider.dart';
 import 'files_provider.dart';
@@ -38,10 +38,7 @@ class SidecarAnalyzer {
   OverlayResourceProvider get resourceProvider =>
       _ref.read(analyzerResourceProvider);
 
-  Future<void> setup(
-      // CommunicationChannel channel,
-      ) async {
-    // this.channel = channel;
+  Future<void> setup() async {
     _initLogger();
     _setupListeners();
     await afterNewContextCollection();
@@ -52,7 +49,9 @@ class SidecarAnalyzer {
       final severity = LogSeverity.fromLogLevel(log.level);
       final package = _ref.read(activePackageProvider).value!;
       final record = LogRecord.fromAnalyzer(log.message, log.time,
-          context: package, severity: severity, stackTrace: log.stackTrace);
+          root: package.packageRoot,
+          severity: severity,
+          stackTrace: log.stackTrace);
       final message = SidecarMessage.log(record);
       _sendToRunner(message);
     });
@@ -63,7 +62,9 @@ class SidecarAnalyzer {
   void _handleError(Object error, StackTrace stack) {
     final package = _ref.read(activePackageProvider).value!;
     final log = LogRecord.fromAnalyzer(error.toString(), DateTime.now(),
-        severity: LogSeverity.error, context: package, stackTrace: stack);
+        severity: LogSeverity.error,
+        root: package.packageRoot,
+        stackTrace: stack);
     final message = SidecarMessage.log(log);
     channel.sendMessage(message);
   }

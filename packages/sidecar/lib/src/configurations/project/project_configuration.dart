@@ -24,8 +24,8 @@ class ProjectConfiguration {
     this.lintPackages,
     this.assistPackages,
     List<Glob>? includes,
-  })  : _includes = includes,
-        errors = const <SidecarNewException>[];
+  })  : errors = const <SidecarNewException>[],
+        _includes = includes;
 
   const ProjectConfiguration._({
     this.lintPackages,
@@ -147,14 +147,11 @@ class ProjectConfiguration {
   @JsonKey(defaultValue: <SidecarNewException>[])
   final List<SidecarNewException> errors;
 
-  List<Glob> get includeGlobs => _includes ?? [Glob('bin/**'), Glob('lib/**')];
-  Set<Glob> get projectGlobs {
-    final projectGlobs = _includes;
-    return projectGlobs?.toSet() ?? <Glob>{};
-  }
+  Set<Glob> get projectGlobs =>
+      (_includes ?? [Glob('bin/**'), Glob('lib/**')]).toSet();
 
-  bool includes(String relativePath) =>
-      includeGlobs.any((glob) => glob.matches(relativePath));
+  bool doesInclude(String relativePath) =>
+      _includes?.any((glob) => glob.matches(relativePath)) ?? false;
 
   AnalysisConfiguration? getConfigurationForRule(BaseRule rule) {
     if (rule is AssistRule) {

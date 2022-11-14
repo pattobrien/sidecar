@@ -29,18 +29,23 @@ class SidecarRunner {
   final ReceivePort receivePort;
 
   void _setContexts() {
-    final paths =
-        activePackage.dependencies.map((e) => e.path).toList().map((path) {
-      if (path.endsWith('/')) {
-        return path.substring(0, path.length - 1);
-      } else {
-        return path;
-      }
-    }).toList();
+    final paths = activePackage.packageConfig?.packages
+            .map((e) => e.root.path)
+            .toList()
+            .map((path) {
+          if (path.endsWith('/')) {
+            return path.substring(0, path.length - 1);
+          } else {
+            return path;
+          }
+        }).toList() ??
+        [];
     final contexts = AnalysisContextCollection(includedPaths: paths)
         .contexts
-        .where((element) => activePackage.dependencies.any(
-            (dependency) => dependency == element.contextRoot.root.toUri()))
+        .where((context) =>
+            activePackage.packageConfig?.packages
+                .any((dep) => dep.root == context.contextRoot.root.toUri()) ??
+            false)
         .toList();
     allContexts.addAll(contexts);
   }
@@ -83,7 +88,7 @@ class SidecarRunner {
     isolateBuilder.setupPluginSourceFiles(activePackage);
     isolateBuilder.setupBootstrapper(activePackage);
     await serverSideStarter(
-        sendPort: receivePort.sendPort, root: activePackage.root);
+        sendPort: receivePort.sendPort, root: activePackage.packageRoot.root);
 
     notifications.listen((event) => event.map(
           initComplete: (_) => handleStartupNotification(),
@@ -164,7 +169,7 @@ class SidecarRunner {
   }
 
   Future<void> requestSetActiveRoot() async {
-    final request = SetActivePackageRequest(activePackage);
+    final request = SetActivePackageRequest(activePackage.packageRoot);
     await asyncRequest(request);
   }
 

@@ -5,6 +5,7 @@
 import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart';
@@ -35,6 +36,7 @@ Set<String> getFilePaths(
   Iterable<String> folders,
   AnalysisContext context,
   String rootFolder, {
+  required FileSystem fileSystem,
   required Iterable<Glob> includes,
   required Iterable<Glob> excludes,
 }) {
@@ -47,19 +49,22 @@ Set<String> getFilePaths(
   }).toList();
 
   return extractDartFilesFromFolders(contextFolders, rootFolder,
-      globalIncludes: includes, globalExcludes: excludes);
+      fileSystem: fileSystem,
+      globalIncludes: includes,
+      globalExcludes: excludes);
 }
 
 Set<String> extractDartFilesFromFolders(
   Iterable<String> folders,
   String rootFolder, {
+  required FileSystem fileSystem,
   required Iterable<Glob> globalIncludes,
   required Iterable<Glob> globalExcludes,
 }) =>
     folders
         .expand((directory) => Glob('$directory/**.dart')
             .listFileSystemSync(
-              const LocalFileSystem(),
+              fileSystem,
               root: rootFolder,
               followLinks: false,
             )

@@ -1,8 +1,8 @@
 String createAnalysisOptionsContents({
-  bool isSidecarPluginEnabled = true,
+  bool isPluginEnabled = true,
 }) =>
     '''
 analyzer:
   plugins:
-    ${isSidecarPluginEnabled ? '- sidecar' : ''}
+    ${isPluginEnabled ? '- sidecar' : ''}
 ''';

@@ -16,7 +16,8 @@ final contextCollectionProvider = Provider((ref) {
   final contentCache = ref.watch(createFileContentCacheProvider);
   final resourceProvider = ref.watch(analyzerResourceProvider);
   // final includes = [activePackage.root];
-  final scope = activePackage.workspaceScope ?? [activePackage.root];
+  final scope =
+      activePackage.workspaceScope ?? [activePackage.packageRoot.root];
   final includesPaths = scope.map((uri) {
     if (uri.path.endsWith('/')) {
       return uri.path.substring(0, uri.path.length - 1);
@@ -45,7 +46,10 @@ final contextCollectionProvider = Provider((ref) {
   if (collection == null) throw UnimplementedError();
 
   final contexts = collection.contexts.where((context) {
-    return scope.any((uri) => context.contextRoot.root.toUri() == uri);
+    return scope.any((uri) {
+      final contextUri = context.contextRoot.root;
+      return contextUri.path == uri.path;
+    });
   }).toList();
   return contexts;
 });

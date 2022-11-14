@@ -1,7 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:package_config/package_config_types.dart';
+
+import '../configurations/configurations.dart';
+import 'active_package_root.dart';
 
 part 'active_package.freezed.dart';
-part 'active_package.g.dart';
 
 @freezed
 
@@ -13,15 +16,11 @@ part 'active_package.g.dart';
 /// - ```sidecar.yaml``` file at root directory
 class ActivePackage with _$ActivePackage {
   const factory ActivePackage({
-    required Uri root,
-    required Uri sidecarOptionsFile,
-    required Uri sidecarPluginPackage,
-    required List<Uri> sidecarPackages,
-    required List<Uri> dependencies,
+    required ActivePackageRoot packageRoot,
+    required ProjectConfiguration sidecarOptionsFile,
+    required Package sidecarPluginPackage,
+    PackageConfig? packageConfig,
     List<Uri>? workspaceScope,
   }) = _ActivePackage;
   const ActivePackage._();
-
-  factory ActivePackage.fromJson(Map<String, dynamic> json) =>
-      _$ActivePackageFromJson(json);
 }

@@ -9,14 +9,19 @@ part of 'sidecar_request.dart';
 _$SetActivePackageRequest _$$SetActivePackageRequestFromJson(
         Map<String, dynamic> json) =>
     _$SetActivePackageRequest(
-      ActivePackage.fromJson(json['package'] as Map<String, dynamic>),
+      ActivePackageRoot.fromJson(json['root'] as Map<String, dynamic>),
+      workspaceScope: (json['workspaceScope'] as List<dynamic>?)
+          ?.map((e) => Uri.parse(e as String))
+          .toList(),
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$SetActivePackageRequestToJson(
         _$SetActivePackageRequest instance) =>
     <String, dynamic>{
-      'package': instance.package.toJson(),
+      'root': instance.root.toJson(),
+      'workspaceScope':
+          instance.workspaceScope?.map((e) => e.toString()).toList(),
       'runtimeType': instance.$type,
     };
 

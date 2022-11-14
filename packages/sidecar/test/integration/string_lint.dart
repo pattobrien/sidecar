@@ -1,13 +1,12 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar/src/analyzer/ast/general_visitor.dart';
 
 const kPackage = 'test_lint';
+const kName = 'avoid_string_literals';
 
 class AvoidStringLiterals extends LintRule with LintVisitor {
   @override
-  RuleCode get code =>
-      const LintCode('avoid_string_literals', package: kPackage);
+  RuleCode get code => const LintCode(kName, package: kPackage);
 
   @override
   SidecarVisitor initializeVisitor(NodeRegistry registry) {

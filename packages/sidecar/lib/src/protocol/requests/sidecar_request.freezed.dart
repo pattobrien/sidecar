@@ -39,7 +39,8 @@ SidecarRequest _$SidecarRequestFromJson(Map<String, dynamic> json) {
 mixin _$SidecarRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ActivePackage package) setActivePackage,
+    required TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)
+        setActivePackage,
     required TResult Function(List<String> files) lint,
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
@@ -49,7 +50,8 @@ mixin _$SidecarRequest {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -59,7 +61,8 @@ mixin _$SidecarRequest {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -124,9 +127,9 @@ abstract class _$$SetActivePackageRequestCopyWith<$Res> {
   factory _$$SetActivePackageRequestCopyWith(_$SetActivePackageRequest value,
           $Res Function(_$SetActivePackageRequest) then) =
       __$$SetActivePackageRequestCopyWithImpl<$Res>;
-  $Res call({ActivePackage package});
+  $Res call({ActivePackageRoot root, List<Uri>? workspaceScope});
 
-  $ActivePackageCopyWith<$Res> get package;
+  $ActivePackageRootCopyWith<$Res> get root;
 }
 
 /// @nodoc
@@ -143,20 +146,25 @@ class __$$SetActivePackageRequestCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? package = freezed,
+    Object? root = freezed,
+    Object? workspaceScope = freezed,
   }) {
     return _then(_$SetActivePackageRequest(
-      package == freezed
-          ? _value.package
-          : package // ignore: cast_nullable_to_non_nullable
-              as ActivePackage,
+      root == freezed
+          ? _value.root
+          : root // ignore: cast_nullable_to_non_nullable
+              as ActivePackageRoot,
+      workspaceScope: workspaceScope == freezed
+          ? _value._workspaceScope
+          : workspaceScope // ignore: cast_nullable_to_non_nullable
+              as List<Uri>?,
     ));
   }
 
   @override
-  $ActivePackageCopyWith<$Res> get package {
-    return $ActivePackageCopyWith<$Res>(_value.package, (value) {
-      return _then(_value.copyWith(package: value));
+  $ActivePackageRootCopyWith<$Res> get root {
+    return $ActivePackageRootCopyWith<$Res>(_value.root, (value) {
+      return _then(_value.copyWith(root: value));
     });
   }
 }
@@ -164,22 +172,32 @@ class __$$SetActivePackageRequestCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$SetActivePackageRequest extends SetActivePackageRequest {
-  const _$SetActivePackageRequest(this.package, {final String? $type})
-      : $type = $type ?? 'setActivePackage',
+  const _$SetActivePackageRequest(this.root,
+      {final List<Uri>? workspaceScope, final String? $type})
+      : _workspaceScope = workspaceScope,
+        $type = $type ?? 'setActivePackage',
         super._();
 
   factory _$SetActivePackageRequest.fromJson(Map<String, dynamic> json) =>
       _$$SetActivePackageRequestFromJson(json);
 
   @override
-  final ActivePackage package;
+  final ActivePackageRoot root;
+  final List<Uri>? _workspaceScope;
+  @override
+  List<Uri>? get workspaceScope {
+    final value = _workspaceScope;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'SidecarRequest.setActivePackage(package: $package)';
+    return 'SidecarRequest.setActivePackage(root: $root, workspaceScope: $workspaceScope)';
   }
 
   @override
@@ -187,13 +205,17 @@ class _$SetActivePackageRequest extends SetActivePackageRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SetActivePackageRequest &&
-            const DeepCollectionEquality().equals(other.package, package));
+            const DeepCollectionEquality().equals(other.root, root) &&
+            const DeepCollectionEquality()
+                .equals(other._workspaceScope, _workspaceScope));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(package));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(root),
+      const DeepCollectionEquality().hash(_workspaceScope));
 
   @JsonKey(ignore: true)
   @override
@@ -204,33 +226,36 @@ class _$SetActivePackageRequest extends SetActivePackageRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ActivePackage package) setActivePackage,
+    required TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)
+        setActivePackage,
     required TResult Function(List<String> files) lint,
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
     required TResult Function(List<FileUpdateEvent> updates) updateFiles,
     required TResult Function(Set<AnalyzedFile> files) setPriorityFiles,
   }) {
-    return setActivePackage(package);
+    return setActivePackage(root, workspaceScope);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
     TResult Function(List<FileUpdateEvent> updates)? updateFiles,
     TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
-    return setActivePackage?.call(package);
+    return setActivePackage?.call(root, workspaceScope);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -239,7 +264,7 @@ class _$SetActivePackageRequest extends SetActivePackageRequest {
     required TResult orElse(),
   }) {
     if (setActivePackage != null) {
-      return setActivePackage(package);
+      return setActivePackage(root, workspaceScope);
     }
     return orElse();
   }
@@ -296,14 +321,15 @@ class _$SetActivePackageRequest extends SetActivePackageRequest {
 }
 
 abstract class SetActivePackageRequest extends SidecarRequest {
-  const factory SetActivePackageRequest(final ActivePackage package) =
-      _$SetActivePackageRequest;
+  const factory SetActivePackageRequest(final ActivePackageRoot root,
+      {final List<Uri>? workspaceScope}) = _$SetActivePackageRequest;
   const SetActivePackageRequest._() : super._();
 
   factory SetActivePackageRequest.fromJson(Map<String, dynamic> json) =
       _$SetActivePackageRequest.fromJson;
 
-  ActivePackage get package;
+  ActivePackageRoot get root;
+  List<Uri>? get workspaceScope;
   @JsonKey(ignore: true)
   _$$SetActivePackageRequestCopyWith<_$SetActivePackageRequest> get copyWith =>
       throw _privateConstructorUsedError;
@@ -388,7 +414,8 @@ class _$LintRequest extends LintRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ActivePackage package) setActivePackage,
+    required TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)
+        setActivePackage,
     required TResult Function(List<String> files) lint,
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
@@ -401,7 +428,8 @@ class _$LintRequest extends LintRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -414,7 +442,8 @@ class _$LintRequest extends LintRequest {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -598,7 +627,8 @@ class _$AssistRequest extends AssistRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ActivePackage package) setActivePackage,
+    required TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)
+        setActivePackage,
     required TResult Function(List<String> files) lint,
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
@@ -611,7 +641,8 @@ class _$AssistRequest extends AssistRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -624,7 +655,8 @@ class _$AssistRequest extends AssistRequest {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -801,7 +833,8 @@ class _$QuickFixRequest extends QuickFixRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ActivePackage package) setActivePackage,
+    required TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)
+        setActivePackage,
     required TResult Function(List<String> files) lint,
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
@@ -814,7 +847,8 @@ class _$QuickFixRequest extends QuickFixRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -827,7 +861,8 @@ class _$QuickFixRequest extends QuickFixRequest {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -988,7 +1023,8 @@ class _$FileUpdateRequest extends FileUpdateRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ActivePackage package) setActivePackage,
+    required TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)
+        setActivePackage,
     required TResult Function(List<String> files) lint,
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
@@ -1001,7 +1037,8 @@ class _$FileUpdateRequest extends FileUpdateRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -1014,7 +1051,8 @@ class _$FileUpdateRequest extends FileUpdateRequest {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -1175,7 +1213,8 @@ class _$SetPriorityFilesRequest extends SetPriorityFilesRequest {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ActivePackage package) setActivePackage,
+    required TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)
+        setActivePackage,
     required TResult Function(List<String> files) lint,
     required TResult Function(AnalyzedFile file, int offset, int length) assist,
     required TResult Function(AnalyzedFile file, int offset) quickFix,
@@ -1188,7 +1227,8 @@ class _$SetPriorityFilesRequest extends SetPriorityFilesRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,
@@ -1201,7 +1241,8 @@ class _$SetPriorityFilesRequest extends SetPriorityFilesRequest {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ActivePackage package)? setActivePackage,
+    TResult Function(ActivePackageRoot root, List<Uri>? workspaceScope)?
+        setActivePackage,
     TResult Function(List<String> files)? lint,
     TResult Function(AnalyzedFile file, int offset, int length)? assist,
     TResult Function(AnalyzedFile file, int offset)? quickFix,

@@ -51,7 +51,7 @@ class AnalyzeCommand extends Command<int> {
       final pluginPackage = activeProject.sidecarPluginPackage;
       stdout.writeln();
       stdout.writeln('project:\u001b[35m ${root.toFilePath()} \u001b[0m');
-      stdout.writeln('plugin:  ${pluginPackage.toFilePath()}');
+      stdout.writeln('plugin:  ${pluginPackage.root.toFilePath()}');
       stdout.writeln();
       final isolateBuilder = container.read(isolateBuilderServiceProvider);
       isolateBuilder.setupPluginSourceFiles(activeProject);

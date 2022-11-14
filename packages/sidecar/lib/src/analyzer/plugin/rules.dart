@@ -31,5 +31,5 @@ bool _isPathIncludedForRule({
   // TODO: #4 check default LintPackage includes from LintPackage definition
 
   // #5 check project configuration
-  return projectConfiguration.includes(file.relativePath);
+  return projectConfiguration.doesInclude(file.relativePath);
 }

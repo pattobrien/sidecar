@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../active_package.dart';
+import '../active_package_root.dart';
 import '../analyzed_file.dart';
 import '../models/file_update_event.dart';
 
@@ -11,8 +11,10 @@ part 'sidecar_request.g.dart';
 class SidecarRequest with _$SidecarRequest {
   const SidecarRequest._();
 
-  const factory SidecarRequest.setActivePackage(ActivePackage package) =
-      SetActivePackageRequest;
+  const factory SidecarRequest.setActivePackage(
+    ActivePackageRoot root, {
+    List<Uri>? workspaceScope,
+  }) = SetActivePackageRequest;
 
   // const factory SidecarRequest.setContextCollection({
   //   required List<Uri> roots,

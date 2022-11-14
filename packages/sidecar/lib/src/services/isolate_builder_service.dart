@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
@@ -10,13 +11,14 @@ import '../protocol/constants/constants.dart';
 import '../protocol/protocol.dart';
 import '../utils/file_paths.dart';
 import '../utils/logger/logger.dart';
+import 'active_project_service.dart';
 
 class IsolateBuilderService {
   const IsolateBuilderService();
 
   void setupPluginSourceFiles(ActivePackage activeContext) {
     final sourceExecutableDirectory = Directory(p.join(
-        activeContext.sidecarPluginPackage
+        activeContext.sidecarPluginPackage.root
             .toFilePath(windows: Platform.isWindows),
         'tools',
         'analyzer_plugin',
@@ -33,9 +35,10 @@ class IsolateBuilderService {
     pluginFileEntities.whereType<File>().forEach((sourceFileEntity) {
       Directory(_pluginPath(
         sourceFileEntity.absolute.parent.path,
-        newDirectory: _packageToolDirectory(activeContext.root),
+        newDirectory: _packageToolDirectory(activeContext.packageRoot.root),
       )).createSync(recursive: true);
-      final newDirectory = _packageToolDirectory(activeContext.root);
+      final newDirectory =
+          _packageToolDirectory(activeContext.packageRoot.root);
       final newPath = _pluginPath(sourceFileEntity.absolute.path,
           newDirectory: newDirectory);
 
@@ -46,17 +49,21 @@ class IsolateBuilderService {
   // @visibleForTesting
   void setupBootstrapper(ActivePackage activeContext) {
     final bootstrapperPath = p.join(
-        _packageToolDirectory(activeContext.root).path, 'constructors.dart');
+        _packageToolDirectory(activeContext.packageRoot.root).path,
+        'constructors.dart');
     final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
     final listBuffer = StringBuffer()..writeln(constructorListBegin);
-
-    final sidecarPackages = activeContext.sidecarPackages;
+    final root = activeContext.packageRoot.root;
+    final resourceProvider = PhysicalResourceProvider.INSTANCE;
+    final sidecarPackages =
+        ActiveProjectService(resourceProvider: resourceProvider)
+            .getSidecarDependencies(root);
     logger.finer(
         'setupBootstrapper || adding ${sidecarPackages.length} packages');
 
     for (final sidecarPackage in sidecarPackages) {
-      final name = sidecarPackage.pathSegments.reversed.toList()[1];
-      final package = parseLintPackage(name, sidecarPackage)!;
+      final name = sidecarPackage.packageName;
+      final package = parseLintPackage(name, sidecarPackage.uri)!;
       importsBuffer.writeln("import 'package:$name/$name.dart' as $name;");
       final rules = [
         ...?package.lints,
