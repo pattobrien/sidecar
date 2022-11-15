@@ -55,7 +55,7 @@ class SidecarPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    logger.info('PLUGIN STARTING.... ');
+    logger.info('STARTING PLUGIN.... ');
     ref.read(masterPluginChannelProvider).listen(handleAllRequests);
   }
 

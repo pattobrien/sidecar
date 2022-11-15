@@ -59,6 +59,7 @@ class CliClient extends AnalyzerClient {
     final directory = Directory.current;
     reporter.init(directory.uri);
     final path = directory.path;
+
     final activeContext =
         activeProjectService.getActivePackageFromUri(directory.uri);
 

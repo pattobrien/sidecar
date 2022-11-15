@@ -25,7 +25,7 @@ class StdoutReport extends Report {
 
   @override
   void handleError(Object object, StackTrace stackTrace) {
-    throw UnimplementedError();
+    stderr.addError(object, stackTrace);
   }
 
   @override
