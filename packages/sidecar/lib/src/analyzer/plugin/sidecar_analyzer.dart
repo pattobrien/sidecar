@@ -159,24 +159,33 @@ class SidecarAnalyzer {
   // Overridden to allow for non-Dart files to be analyzed for changes
   Future<void> contentChanged(Set<AnalyzedFile> files) async {
     final filesWithContexts = files.map(_getFileWithContext).whereNotNull();
+    print('filesWContexts: ${filesWithContexts}');
 
     Future<void> handleContexts(List<AnalysisContext> contexts) async {
+      print('handleContexts: ${contexts}');
       for (final context in contexts) {
         final contextPath = context.contextRoot.root.path;
         final filesInContext = filesWithContexts
             .where((file) => file.context.contextRoot.root.path == contextPath)
             .toList();
+        print('analyzeFiles0-${contextPath}: ${filesInContext}');
 
-        // ignore: avoid_function_literals_in_foreach_calls
-        filesInContext.forEach((e) => context.changeFile(e.path));
+        filesInContext.forEach((e) {
+          print('changing file: ${e.path} - context = ${contextPath}');
+          context.changeFile(e.path);
+        });
         final affected = await context.applyPendingFileChanges();
         final affectedWithoutOriginalPaths = affected.toSet()
           ..removeAll(filesInContext.map((e) => e.path));
+        print('analyzeFiles0-${contextPath}: affected ${affected}');
+        print(
+            'analyzeFiles0-${contextPath}: affectedWo ${affectedWithoutOriginalPaths}');
 
         final affectedOriginalPaths = filesInContext
             .where(
                 (f) => affected.any((affectedPath) => affectedPath == f.path))
             .toList();
+        print('analyzeFiles1-${contextPath}: ${affectedOriginalPaths}');
 
         // for a better user experience:
         // first we handle the changed files, then we handle all affected files
@@ -191,6 +200,7 @@ class SidecarAnalyzer {
             .whereNotNull()
             .toList();
 
+        print('analyzeFiles2-${contextPath}: ${affectedFiles}');
         await analyzeFiles(files: affectedFiles);
       }
     }
@@ -280,7 +290,7 @@ class SidecarAnalyzer {
     for (final update in request.updates) {
       final watch = Stopwatch()..start();
       final filePath = update.filePath;
-      // print('handleUpdateFiles $filePath');
+      print('handleUpdateFiles $filePath ${update}');
       final oldContents = resourceProvider.hasOverlay(filePath)
           ? resourceProvider.getFile(filePath).readAsStringSync()
           : null;
@@ -312,7 +322,8 @@ class SidecarAnalyzer {
       );
 
       changedPaths.add(update.file);
-      print('handleUpdateFiles $filePath - ${watch.elapsed.prettified()}');
+      print(
+          'handleUpdateFiles $filePath - completed in ${watch.elapsed.prettified()}');
     }
     await contentChanged(changedPaths);
     // print('handleUpdateFiles completed - ${watch.elapsed.prettified()}');

@@ -11,7 +11,6 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final icon = Icon(Icons.abc);
-
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Colors.amber,

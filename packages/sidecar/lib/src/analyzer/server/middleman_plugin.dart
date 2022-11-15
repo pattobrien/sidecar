@@ -1,7 +1,6 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:async';
-import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -12,8 +11,8 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
-import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:sidecar/src/reports/plugin_reporter.dart';
 import 'package:source_span/source_span.dart';
 
 import '../../cli/options/cli_options.dart';
@@ -31,8 +30,8 @@ import 'runner/context_providers.dart';
 import 'runner/runner_providers.dart';
 import 'runner/sidecar_runner.dart';
 
-class MiddlemanPlugin extends plugin.ServerPlugin {
-  MiddlemanPlugin(this.ref)
+class SidecarPlugin extends plugin.ServerPlugin {
+  SidecarPlugin(this.ref)
       : super(resourceProvider: ref.read(middlemanResourceProvider));
 
   final Ref ref;
@@ -52,9 +51,11 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
 
   CliOptions get options => ref.read(cliOptionsProvider);
 
+  PluginReporter? reporter;
+
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    print('PLUGIN STARTING.... ');
+    logger.info('PLUGIN STARTING.... ');
     ref.read(masterPluginChannelProvider).listen(handleAllRequests);
   }
 
@@ -232,7 +233,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   ) async {
     final runners = ref.read(runnersProvider);
     await Future.wait(runners.map((runner) async {
-      print('MM handleAnalysisUpdateContent');
+      logger.info('MM handleAnalysisUpdateContent');
       final events = parameters.files.entries
           .map((entry) {
             final analyzedFile = runner.getAnalyzedFile(entry.key);
@@ -271,20 +272,20 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
           return runner.allContexts.contextForPath(event.filePath) != null;
         }).toList();
 
-        // for (final event in runnerEvents) {
-        //   final sWatch = Stopwatch()..start();
-        //   final path = event.filePath;
-        //   runner.lints.listen((event) {
-        //     if (event.file.path == path) {
-        //       print('lint received in ${sWatch.elapsed.prettified()}');
-        //     }
-        //   });
-        // }
-        print(
+        for (final event in runnerEvents) {
+          final sWatch = Stopwatch()..start();
+          final path = event.filePath;
+          runner.lints.listen((event) {
+            if (event.file.path == path) {
+              logger.info('lint received in ${sWatch.elapsed.prettified()}');
+            }
+          });
+        }
+        logger.info(
             'updateFilesRequest: ${runnerEvents.map((e) => e.filePath).toList()}');
         final sidecarRequest = SidecarRequest.updateFiles(runnerEvents);
 
-        print('MM handleAnalysisUpdateContent asyncRequest start');
+        logger.info('MM handleAnalysisUpdateContent asyncRequest start');
         return runner.asyncRequest<UpdateFilesResponse>(sidecarRequest);
       }));
     }));
@@ -295,7 +296,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   final isRunnerInitialized = <SidecarRunner, bool>{};
 
   void dumpRequests() {
-    logger.finer('dumpRequests = ${queuedRequests.length}');
+    logger.info('dumpRequests = ${queuedRequests.length}');
     final orderedRequests = queuedRequests
       ..sort((a, b) => a.id.compareTo(b.id));
     orderedRequests.forEach(handleAllRequests);
@@ -305,7 +306,11 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   Future<void> afterNewContextCollection({
     required AnalysisContextCollection contextCollection,
   }) async {
-    logger.finer(
+    if (contextCollection.contexts.isNotEmpty) {
+      final uri = contextCollection.contexts.first.contextRoot.root.toUri();
+      reporter = PluginReporter(uri);
+    }
+    logger.info(
         'MIDDLEMAN afterNewContextCollection || ${contextCollection.contexts.length} contexts');
     final service = ref.read(activeProjectServiceProvider);
     final activeContexts =
@@ -327,8 +332,14 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
           _log(runner, LogRecord.simple(event.toString(), DateTime.now())));
 
       await runner.initialize();
+      final roots = contextCollection.contexts
+          .map((e) => e.contextRoot.root.toUri())
+          .toList();
+      final request = SetContextCollectionRequest(roots);
+      await runner.asyncRequest<SetWorkspaceResponse>(request);
       isRunnerInitialized[runner] = true;
     }));
+    logger.info('afterNewContextCollection COMPLETE');
     dumpRequests();
     // ref
     //     .read(allContextsProvider.state)
@@ -372,8 +383,10 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     };
   }
 
-  void _log(SidecarRunner runner, LogRecord log) =>
-      channel.sendError(log.prettified());
+  void _log(SidecarRunner runner, LogRecord log) {
+    reporter?.handleLog(log);
+    channel.sendError(log.prettified());
+  }
 
   @override
   Future<void> analyzeFile({
@@ -382,15 +395,14 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   }) async {}
 }
 
-final analyzerPluginProvider = Provider<MiddlemanPlugin>(
+final analyzerPluginProvider = Provider<SidecarPlugin>(
   (ref) {
-    return MiddlemanPlugin(ref);
+    return SidecarPlugin(ref);
   },
   name: 'middlemanPluginProvider',
   dependencies: [
     cliOptionsProvider,
     masterPluginChannelProvider,
-    // allContextsProvider,
     middlemanResourceProvider,
   ],
 );

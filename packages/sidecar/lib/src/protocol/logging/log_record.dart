@@ -45,10 +45,10 @@ extension LogRecordX on LogRecord {
           return '[SIMPLE-LOG] ${timestamp.toIso8601String()} $message';
         },
         fromAnalyzer: (message, timestamp, root, severity, stackTrace) {
-          return '[${root?.root.pathSegments.reversed.toList()[1] ?? 'UNKNOWN'}] ${timestamp.toIso8601String()} $message $stackTrace';
+          return '[${root?.root.pathSegments.reversed.toList()[1] ?? 'UNKNOWN'}] ${timestamp.toIso8601String()} $message ${stackTrace ?? ''}';
         },
         fromRule: (lintCode, timestamp, severity, message, stackTrace) {
-          return '[${lintCode.package}.${lintCode.code}] ${timestamp.toIso8601String()} $message $stackTrace';
+          return '[${lintCode.package}.${lintCode.code}] ${timestamp.toIso8601String()} $message ${stackTrace ?? ''}';
         },
       );
 }
