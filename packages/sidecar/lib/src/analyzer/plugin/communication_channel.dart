@@ -2,6 +2,7 @@ import 'dart:isolate';
 
 import 'package:riverpod/riverpod.dart';
 
+import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 
 final communicationChannelProvider =
@@ -33,6 +34,15 @@ class CommunicationChannel {
 
   void initialize() {
     _sendPort.send(_receivePort.sendPort);
-    sendNotification(const InitCompleteNotification());
+    // sendNotification(const InitCompleteNotification());
+  }
+
+  void handleError(ActivePackage package, Object error, StackTrace stack) {
+    final log = LogRecord.fromAnalyzer(error.toString(), DateTime.now(),
+        severity: LogSeverity.error,
+        root: package.packageRoot,
+        stackTrace: stack);
+    final message = SidecarMessage.log(log);
+    sendMessage(message);
   }
 }

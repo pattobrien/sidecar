@@ -6,22 +6,19 @@ part of 'sidecar_request.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SetActivePackageRequest _$$SetActivePackageRequestFromJson(
+_$SetContextCollectionRequest _$$SetContextCollectionRequestFromJson(
         Map<String, dynamic> json) =>
-    _$SetActivePackageRequest(
-      ActivePackageRoot.fromJson(json['root'] as Map<String, dynamic>),
-      workspaceScope: (json['workspaceScope'] as List<dynamic>?)
+    _$SetContextCollectionRequest(
+      (json['roots'] as List<dynamic>?)
           ?.map((e) => Uri.parse(e as String))
           .toList(),
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$SetActivePackageRequestToJson(
-        _$SetActivePackageRequest instance) =>
+Map<String, dynamic> _$$SetContextCollectionRequestToJson(
+        _$SetContextCollectionRequest instance) =>
     <String, dynamic>{
-      'root': instance.root.toJson(),
-      'workspaceScope':
-          instance.workspaceScope?.map((e) => e.toString()).toList(),
+      'roots': instance.roots?.map((e) => e.toString()).toList(),
       'runtimeType': instance.$type,
     };
 

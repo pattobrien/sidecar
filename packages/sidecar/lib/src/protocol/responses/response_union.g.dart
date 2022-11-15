@@ -6,6 +6,18 @@ part of 'response_union.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$SetWorkspaceResponse _$$SetWorkspaceResponseFromJson(
+        Map<String, dynamic> json) =>
+    _$SetWorkspaceResponse(
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$SetWorkspaceResponseToJson(
+        _$SetWorkspaceResponse instance) =>
+    <String, dynamic>{
+      'runtimeType': instance.$type,
+    };
+
 _$AssistResponse _$$AssistResponseFromJson(Map<String, dynamic> json) =>
     _$AssistResponse(
       (json['results'] as List<dynamic>)
@@ -56,18 +68,6 @@ _$UpdateFilesResponse _$$UpdateFilesResponseFromJson(
 
 Map<String, dynamic> _$$UpdateFilesResponseToJson(
         _$UpdateFilesResponse instance) =>
-    <String, dynamic>{
-      'runtimeType': instance.$type,
-    };
-
-_$SetActivePackageResponse _$$SetActivePackageResponseFromJson(
-        Map<String, dynamic> json) =>
-    _$SetActivePackageResponse(
-      $type: json['runtimeType'] as String?,
-    );
-
-Map<String, dynamic> _$$SetActivePackageResponseToJson(
-        _$SetActivePackageResponse instance) =>
     <String, dynamic>{
       'runtimeType': instance.$type,
     };

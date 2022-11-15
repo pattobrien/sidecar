@@ -45,6 +45,7 @@ extension LintResultsPrinter on List<LintResult> {
   String? prettyPrint() {
     if (length == 0) return null;
     if (length == 1) return single.prettyPrint();
+    sort();
     final prints = map((e) => e.prettyPrint()).toList();
     return prints.reduce((value, element) => '$value$element');
   }

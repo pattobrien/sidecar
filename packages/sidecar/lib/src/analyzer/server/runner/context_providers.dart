@@ -1,3 +1,4 @@
+import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,7 +16,7 @@ class RunnerActiveContexts extends _$RunnerActiveContexts {
   set update(List<ActivePackage> contexts) => state = contexts;
 }
 
-final runnerResourceProvider = Provider(
+final runnerResourceProvider = Provider<ResourceProvider>(
   (ref) => PhysicalResourceProvider.INSTANCE,
   name: 'runnerResourceProviderProvider',
 );

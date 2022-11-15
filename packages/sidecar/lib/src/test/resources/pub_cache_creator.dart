@@ -6,7 +6,7 @@ import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer/src/test_utilities/mock_sdk.dart';
 import 'package:analyzer/src/test_utilities/resource_provider_mixin.dart';
 
-import 'sidecar_yaml.dart';
+import '../../../sidecar.dart';
 
 class PubCacheCreator with ResourceProviderMixin {
   PubCacheCreator({
@@ -29,7 +29,7 @@ class PubCacheCreator with ResourceProviderMixin {
   }
 
   File newSidecarOptionsFile(String directoryPath, String content) {
-    final path = join(directoryPath, sidecarYamlPath);
+    final path = join(directoryPath, kSidecarYaml);
     return newFile(path, content);
   }
 

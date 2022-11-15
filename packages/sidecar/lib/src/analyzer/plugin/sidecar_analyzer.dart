@@ -8,11 +8,8 @@ import 'package:collection/collection.dart';
 import 'package:logging/logging.dart' hide LogRecord;
 import 'package:riverpod/riverpod.dart';
 
-import '../../protocol/analyzed_file.dart';
 import '../../protocol/logging/log_record.dart';
-import '../../protocol/requests/requests.dart';
-import '../../protocol/responses/responses.dart';
-import '../../protocol/source/source_edit.dart';
+import '../../protocol/protocol.dart';
 import '../../utils/duration_ext.dart';
 import 'active_package_provider.dart';
 import 'collection_provider.dart';
@@ -41,13 +38,12 @@ class SidecarAnalyzer {
   Future<void> setup() async {
     _initLogger();
     _setupListeners();
-    await afterNewContextCollection();
+    channel.sendNotification(const InitCompleteNotification());
   }
 
   void _initLogger() {
     logger.onRecord.listen((log) {
       final severity = LogSeverity.fromLogLevel(log.level);
-      final package = _ref.read(activePackageProvider).value!;
       final record = LogRecord.fromAnalyzer(log.message, log.time,
           root: package.packageRoot,
           severity: severity,
@@ -58,16 +54,7 @@ class SidecarAnalyzer {
   }
 
   void _sendToRunner(SidecarMessage message) => channel.sendMessage(message);
-
-  void _handleError(Object error, StackTrace stack) {
-    final package = _ref.read(activePackageProvider).value!;
-    final log = LogRecord.fromAnalyzer(error.toString(), DateTime.now(),
-        severity: LogSeverity.error,
-        root: package.packageRoot,
-        stackTrace: stack);
-    final message = SidecarMessage.log(log);
-    channel.sendMessage(message);
-  }
+  ActivePackage get package => _ref.read(activePackageProvider);
 
   final setupCompleter = Completer<void>();
 
@@ -84,14 +71,17 @@ class SidecarAnalyzer {
           throw UnimplementedError('invalid message type: $e');
         }
       },
-      onError: _handleError,
+      // ignore: avoid_types_on_closure_parameters
+      onError: (Object error, StackTrace stackTrace) =>
+          channel.handleError(package, error, stackTrace),
     );
     setupCompleter.complete();
   }
 
   Future<void> _handleRequest(RequestMessage msg) async {
     final response = await msg.request.map<FutureOr<SidecarResponse?>>(
-      setActivePackage: handleSetActivePackage,
+      // setActivePackage: handleSetActivePackage,
+      setWorkspaceScope: handleSetCollectionRequest,
       setPriorityFiles: handleSetPriorityFiles,
       updateFiles: handleUpdateFiles,
       quickFix: handleEditGetFixes,
@@ -105,18 +95,29 @@ class SidecarAnalyzer {
     }
   }
 
+  FutureOr<SetWorkspaceResponse> handleSetCollectionRequest(
+    SetContextCollectionRequest request,
+  ) async {
+    if (request.roots == null) {
+      // scope = the entire package_config.json of the active package
+      final activePackage = _ref.read(activePackageProvider).packageRoot.root;
+      _ref.read(workspaceScopeProvider.state).update((_) => [activePackage]);
+      await afterNewContextCollection();
+    } else {
+      // scope = roots
+      final roots = request.roots!;
+      _ref.read(workspaceScopeProvider.state).update((_) => roots);
+
+      await afterNewContextCollection();
+    }
+    return const SetWorkspaceResponse();
+  }
+
   SetPriorityFilesResponse handleSetPriorityFiles(
     SetPriorityFilesRequest request,
   ) {
     priorityFiles = request.files.toSet();
     return const SetPriorityFilesResponse();
-  }
-
-  Future<SetActivePackageResponse> handleSetActivePackage(
-    SetActivePackageRequest request,
-  ) async {
-    _setupListeners();
-    return const SetActivePackageResponse();
   }
 
   Future<LintResponse> handleLint(LintRequest request) {

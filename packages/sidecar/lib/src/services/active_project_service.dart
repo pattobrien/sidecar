@@ -1,4 +1,4 @@
-import 'dart:io' as io;
+import 'dart:convert';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -9,6 +9,7 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/plugin/plugin.dart';
+import '../analyzer/server/runner/context_providers.dart';
 import '../configurations/project/project_configuration.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
 import '../protocol/active_package.dart';
@@ -48,7 +49,8 @@ class ActiveProjectService {
     if (path.endsWith('/')) {
       path = path.substring(0, path.length - 1);
     }
-    final collection = AnalysisContextCollection(includedPaths: [path]);
+    final collection = AnalysisContextCollection(
+        includedPaths: [path], resourceProvider: resourceProvider);
     final rootContext = collection.contextFor(path);
     return getActivePackageFromContext(rootContext);
   }
@@ -77,21 +79,24 @@ class ActiveProjectService {
 
   Future<bool> createDefaultSidecarYaml(Uri root) async {
     const contents = defaultSidecarContent;
-    final file = io.File(p.join(root.path, kSidecarYaml));
-    if (file.existsSync()) {
+    final path = p.join(root.path, kSidecarYaml);
+    final file = resourceProvider.getFile(path);
+    if (file.exists) {
       return false;
     } else {
-      await file.writeAsString(contents);
+      file.writeAsStringSync(contents);
+      return true;
     }
-    return true;
   }
 
   // is this needed for any external functions ?
   PackageConfig _getPackageConfig(Uri root) {
-    final path = p.join(root.toFilePath(), '.dart_tool', 'package_config.json');
-    final file = io.File(path);
-    final contents = file.readAsBytesSync();
-    return PackageConfig.parseBytes(contents, file.uri);
+    final path = p.join(root.path, '.dart_tool', 'package_config.json');
+    final file = resourceProvider.getFile(path);
+    assert(file.exists, 'config file does not exist');
+    final contents = file.readAsStringSync();
+    final json = jsonDecode(contents) as Map<String, dynamic>;
+    return PackageConfig.parseJson(json, file.toUri());
   }
 
   List<RulePackageConfiguration> getSidecarDependencies(Uri root) {
@@ -141,11 +146,11 @@ class ActiveProjectService {
 
 final activeProjectServiceProvider = Provider(
   (ref) {
-    final resourceProvider = ref.watch(analyzerResourceProvider);
+    final resourceProvider = ref.watch(runnerResourceProvider);
     return ActiveProjectService(resourceProvider: resourceProvider);
   },
   name: 'activeProjectServiceNewProvider',
   dependencies: [
-    analyzerResourceProvider,
+    runnerResourceProvider,
   ],
 );

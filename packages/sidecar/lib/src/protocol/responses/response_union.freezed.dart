@@ -16,6 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 SidecarResponse _$SidecarResponseFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType']) {
+    case 'contextCollection':
+      return SetWorkspaceResponse.fromJson(json);
     case 'assist':
       return AssistResponse.fromJson(json);
     case 'quickFix':
@@ -24,8 +26,6 @@ SidecarResponse _$SidecarResponseFromJson(Map<String, dynamic> json) {
       return LintResponse.fromJson(json);
     case 'updateFiles':
       return UpdateFilesResponse.fromJson(json);
-    case 'setActivePackage':
-      return SetActivePackageResponse.fromJson(json);
     case 'setPriorityFiles':
       return SetPriorityFilesResponse.fromJson(json);
 
@@ -39,62 +39,62 @@ SidecarResponse _$SidecarResponseFromJson(Map<String, dynamic> json) {
 mixin _$SidecarResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() contextCollection,
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
-    required TResult Function() setActivePackage,
     required TResult Function() setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(SetWorkspaceResponse value) contextCollection,
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
-    required TResult Function(SetActivePackageResponse value) setActivePackage,
     required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) =>
@@ -117,6 +117,155 @@ class _$SidecarResponseCopyWithImpl<$Res>
   final SidecarResponse _value;
   // ignore: unused_field
   final $Res Function(SidecarResponse) _then;
+}
+
+/// @nodoc
+abstract class _$$SetWorkspaceResponseCopyWith<$Res> {
+  factory _$$SetWorkspaceResponseCopyWith(_$SetWorkspaceResponse value,
+          $Res Function(_$SetWorkspaceResponse) then) =
+      __$$SetWorkspaceResponseCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SetWorkspaceResponseCopyWithImpl<$Res>
+    extends _$SidecarResponseCopyWithImpl<$Res>
+    implements _$$SetWorkspaceResponseCopyWith<$Res> {
+  __$$SetWorkspaceResponseCopyWithImpl(_$SetWorkspaceResponse _value,
+      $Res Function(_$SetWorkspaceResponse) _then)
+      : super(_value, (v) => _then(v as _$SetWorkspaceResponse));
+
+  @override
+  _$SetWorkspaceResponse get _value => super._value as _$SetWorkspaceResponse;
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SetWorkspaceResponse extends SetWorkspaceResponse {
+  const _$SetWorkspaceResponse({final String? $type})
+      : $type = $type ?? 'contextCollection',
+        super._();
+
+  factory _$SetWorkspaceResponse.fromJson(Map<String, dynamic> json) =>
+      _$$SetWorkspaceResponseFromJson(json);
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'SidecarResponse.contextCollection()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$SetWorkspaceResponse);
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() contextCollection,
+    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(List<LintResultWithEdits> results) quickFix,
+    required TResult Function(List<LintResult> lints) lint,
+    required TResult Function() updateFiles,
+    required TResult Function() setPriorityFiles,
+  }) {
+    return contextCollection();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? contextCollection,
+    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(List<LintResultWithEdits> results)? quickFix,
+    TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
+    TResult Function()? setPriorityFiles,
+  }) {
+    return contextCollection?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? contextCollection,
+    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(List<LintResultWithEdits> results)? quickFix,
+    TResult Function(List<LintResult> lints)? lint,
+    TResult Function()? updateFiles,
+    TResult Function()? setPriorityFiles,
+    required TResult orElse(),
+  }) {
+    if (contextCollection != null) {
+      return contextCollection();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SetWorkspaceResponse value) contextCollection,
+    required TResult Function(AssistResponse value) assist,
+    required TResult Function(QuickFixResponse value) quickFix,
+    required TResult Function(LintResponse value) lint,
+    required TResult Function(UpdateFilesResponse value) updateFiles,
+    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
+  }) {
+    return contextCollection(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
+    TResult Function(AssistResponse value)? assist,
+    TResult Function(QuickFixResponse value)? quickFix,
+    TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+  }) {
+    return contextCollection?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
+    TResult Function(AssistResponse value)? assist,
+    TResult Function(QuickFixResponse value)? quickFix,
+    TResult Function(LintResponse value)? lint,
+    TResult Function(UpdateFilesResponse value)? updateFiles,
+    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+    required TResult orElse(),
+  }) {
+    if (contextCollection != null) {
+      return contextCollection(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SetWorkspaceResponseToJson(
+      this,
+    );
+  }
+}
+
+abstract class SetWorkspaceResponse extends SidecarResponse {
+  const factory SetWorkspaceResponse() = _$SetWorkspaceResponse;
+  const SetWorkspaceResponse._() : super._();
+
+  factory SetWorkspaceResponse.fromJson(Map<String, dynamic> json) =
+      _$SetWorkspaceResponse.fromJson;
 }
 
 /// @nodoc
@@ -199,11 +348,11 @@ class _$AssistResponse extends AssistResponse {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() contextCollection,
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
-    required TResult Function() setActivePackage,
     required TResult Function() setPriorityFiles,
   }) {
     return assist(results);
@@ -212,11 +361,11 @@ class _$AssistResponse extends AssistResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
   }) {
     return assist?.call(results);
@@ -225,11 +374,11 @@ class _$AssistResponse extends AssistResponse {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
@@ -242,11 +391,11 @@ class _$AssistResponse extends AssistResponse {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(SetWorkspaceResponse value) contextCollection,
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
-    required TResult Function(SetActivePackageResponse value) setActivePackage,
     required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return assist(this);
@@ -255,11 +404,11 @@ class _$AssistResponse extends AssistResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return assist?.call(this);
@@ -268,11 +417,11 @@ class _$AssistResponse extends AssistResponse {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
@@ -384,11 +533,11 @@ class _$QuickFixResponse extends QuickFixResponse {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() contextCollection,
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
-    required TResult Function() setActivePackage,
     required TResult Function() setPriorityFiles,
   }) {
     return quickFix(results);
@@ -397,11 +546,11 @@ class _$QuickFixResponse extends QuickFixResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
   }) {
     return quickFix?.call(results);
@@ -410,11 +559,11 @@ class _$QuickFixResponse extends QuickFixResponse {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
@@ -427,11 +576,11 @@ class _$QuickFixResponse extends QuickFixResponse {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(SetWorkspaceResponse value) contextCollection,
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
-    required TResult Function(SetActivePackageResponse value) setActivePackage,
     required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return quickFix(this);
@@ -440,11 +589,11 @@ class _$QuickFixResponse extends QuickFixResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return quickFix?.call(this);
@@ -453,11 +602,11 @@ class _$QuickFixResponse extends QuickFixResponse {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
@@ -568,11 +717,11 @@ class _$LintResponse extends LintResponse {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() contextCollection,
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
-    required TResult Function() setActivePackage,
     required TResult Function() setPriorityFiles,
   }) {
     return lint(lints);
@@ -581,11 +730,11 @@ class _$LintResponse extends LintResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
   }) {
     return lint?.call(lints);
@@ -594,11 +743,11 @@ class _$LintResponse extends LintResponse {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
@@ -611,11 +760,11 @@ class _$LintResponse extends LintResponse {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(SetWorkspaceResponse value) contextCollection,
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
-    required TResult Function(SetActivePackageResponse value) setActivePackage,
     required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return lint(this);
@@ -624,11 +773,11 @@ class _$LintResponse extends LintResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return lint?.call(this);
@@ -637,11 +786,11 @@ class _$LintResponse extends LintResponse {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
@@ -722,11 +871,11 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() contextCollection,
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
-    required TResult Function() setActivePackage,
     required TResult Function() setPriorityFiles,
   }) {
     return updateFiles();
@@ -735,11 +884,11 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
   }) {
     return updateFiles?.call();
@@ -748,11 +897,11 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
@@ -765,11 +914,11 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(SetWorkspaceResponse value) contextCollection,
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
-    required TResult Function(SetActivePackageResponse value) setActivePackage,
     required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return updateFiles(this);
@@ -778,11 +927,11 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return updateFiles?.call(this);
@@ -791,11 +940,11 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {
@@ -819,157 +968,6 @@ abstract class UpdateFilesResponse extends SidecarResponse {
 
   factory UpdateFilesResponse.fromJson(Map<String, dynamic> json) =
       _$UpdateFilesResponse.fromJson;
-}
-
-/// @nodoc
-abstract class _$$SetActivePackageResponseCopyWith<$Res> {
-  factory _$$SetActivePackageResponseCopyWith(_$SetActivePackageResponse value,
-          $Res Function(_$SetActivePackageResponse) then) =
-      __$$SetActivePackageResponseCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$SetActivePackageResponseCopyWithImpl<$Res>
-    extends _$SidecarResponseCopyWithImpl<$Res>
-    implements _$$SetActivePackageResponseCopyWith<$Res> {
-  __$$SetActivePackageResponseCopyWithImpl(_$SetActivePackageResponse _value,
-      $Res Function(_$SetActivePackageResponse) _then)
-      : super(_value, (v) => _then(v as _$SetActivePackageResponse));
-
-  @override
-  _$SetActivePackageResponse get _value =>
-      super._value as _$SetActivePackageResponse;
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$SetActivePackageResponse extends SetActivePackageResponse {
-  const _$SetActivePackageResponse({final String? $type})
-      : $type = $type ?? 'setActivePackage',
-        super._();
-
-  factory _$SetActivePackageResponse.fromJson(Map<String, dynamic> json) =>
-      _$$SetActivePackageResponseFromJson(json);
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
-
-  @override
-  String toString() {
-    return 'SidecarResponse.setActivePackage()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SetActivePackageResponse);
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(List<AssistResult> results) assist,
-    required TResult Function(List<LintResultWithEdits> results) quickFix,
-    required TResult Function(List<LintResult> lints) lint,
-    required TResult Function() updateFiles,
-    required TResult Function() setActivePackage,
-    required TResult Function() setPriorityFiles,
-  }) {
-    return setActivePackage();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<AssistResult> results)? assist,
-    TResult Function(List<LintResultWithEdits> results)? quickFix,
-    TResult Function(List<LintResult> lints)? lint,
-    TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
-    TResult Function()? setPriorityFiles,
-  }) {
-    return setActivePackage?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<AssistResult> results)? assist,
-    TResult Function(List<LintResultWithEdits> results)? quickFix,
-    TResult Function(List<LintResult> lints)? lint,
-    TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
-    TResult Function()? setPriorityFiles,
-    required TResult orElse(),
-  }) {
-    if (setActivePackage != null) {
-      return setActivePackage();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(AssistResponse value) assist,
-    required TResult Function(QuickFixResponse value) quickFix,
-    required TResult Function(LintResponse value) lint,
-    required TResult Function(UpdateFilesResponse value) updateFiles,
-    required TResult Function(SetActivePackageResponse value) setActivePackage,
-    required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
-  }) {
-    return setActivePackage(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(AssistResponse value)? assist,
-    TResult Function(QuickFixResponse value)? quickFix,
-    TResult Function(LintResponse value)? lint,
-    TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
-    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
-  }) {
-    return setActivePackage?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(AssistResponse value)? assist,
-    TResult Function(QuickFixResponse value)? quickFix,
-    TResult Function(LintResponse value)? lint,
-    TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
-    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
-    required TResult orElse(),
-  }) {
-    if (setActivePackage != null) {
-      return setActivePackage(this);
-    }
-    return orElse();
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$SetActivePackageResponseToJson(
-      this,
-    );
-  }
-}
-
-abstract class SetActivePackageResponse extends SidecarResponse {
-  const factory SetActivePackageResponse() = _$SetActivePackageResponse;
-  const SetActivePackageResponse._() : super._();
-
-  factory SetActivePackageResponse.fromJson(Map<String, dynamic> json) =
-      _$SetActivePackageResponse.fromJson;
 }
 
 /// @nodoc
@@ -1024,11 +1022,11 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() contextCollection,
     required TResult Function(List<AssistResult> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
-    required TResult Function() setActivePackage,
     required TResult Function() setPriorityFiles,
   }) {
     return setPriorityFiles();
@@ -1037,11 +1035,11 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
   }) {
     return setPriorityFiles?.call();
@@ -1050,11 +1048,11 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? contextCollection,
     TResult Function(List<AssistResult> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
-    TResult Function()? setActivePackage,
     TResult Function()? setPriorityFiles,
     required TResult orElse(),
   }) {
@@ -1067,11 +1065,11 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(SetWorkspaceResponse value) contextCollection,
     required TResult Function(AssistResponse value) assist,
     required TResult Function(QuickFixResponse value) quickFix,
     required TResult Function(LintResponse value) lint,
     required TResult Function(UpdateFilesResponse value) updateFiles,
-    required TResult Function(SetActivePackageResponse value) setActivePackage,
     required TResult Function(SetPriorityFilesResponse value) setPriorityFiles,
   }) {
     return setPriorityFiles(this);
@@ -1080,11 +1078,11 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return setPriorityFiles?.call(this);
@@ -1093,11 +1091,11 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetWorkspaceResponse value)? contextCollection,
     TResult Function(AssistResponse value)? assist,
     TResult Function(QuickFixResponse value)? quickFix,
     TResult Function(LintResponse value)? lint,
     TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetActivePackageResponse value)? setActivePackage,
     TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
     required TResult orElse(),
   }) {

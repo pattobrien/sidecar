@@ -2,109 +2,41 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:hotreloader/hotreloader.dart';
-import 'package:logging/logging.dart';
-import 'package:path/path.dart' as p;
+import 'package:cli_util/cli_logging.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
-import '../../protocol/logging/log_record.dart';
-import '../../rules/rules.dart';
-import '../../services/active_project_service.dart';
+import '../../protocol/analyzed_file.dart';
+import '../../protocol/models/models.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/printer/lint_printer.dart';
-import '../options_provider.dart';
-import '../plugin/plugin.dart';
-import '../server/log_delegate.dart';
-import '../server/runner/context_providers.dart';
-import '../server/runner/runner_providers.dart';
+import '../client/cli_client.dart';
+import '../client/client.dart';
+import '../client/hot_reloader.dart';
 import '../server/server.dart';
 
 Future<void> startSidecarCli(
   SendPort sendPort,
-  List<String> args, {
-  List<SidecarBaseConstructor>? constructors,
-}) async {
+  List<String> args,
+) async {
+  final progress = Logger.standard().progress('analyzing...');
   final cliOptions = CliOptions.fromArgs(args, isPlugin: false);
   final logDelegate = DebuggerLogDelegate(cliOptions);
   await runZonedGuarded<Future<void>>(
     () async {
-      final container = ProviderContainer(
-        overrides: [
-          ruleConstructorProvider.overrideWithValue(constructors ?? []),
-          cliOptionsProvider.overrideWithValue(cliOptions),
-          logDelegateProvider.overrideWithValue(logDelegate),
-        ],
-        observers: [
-          // CliObserver(cliOptions),
-        ],
-      );
+      final container = ProviderContainer(overrides: [
+        analyzerClientProvider.overrideWithProvider(cliClientProvider),
+      ]);
 
-      try {
-        final directory = Directory.current;
-        final path = directory.path;
+      final client = container.read(analyzerClientProvider);
 
-        final service = container.read(activeProjectServiceProvider);
-        final collection = AnalysisContextCollection(includedPaths: [path]);
-        final context = collection.contextFor(path);
-        final activeContext = service.getActivePackageFromContext(context);
-
-        if (activeContext == null) {
-          throw StateError('Invalid Sidecar directory: $path');
-        }
-        container.read(runnerActiveContextsProvider.notifier).update = [
-          activeContext
-        ];
-
-        final pluginUri = activeContext.sidecarPluginPackage;
-        final runners = container.read(runnersProvider);
-        for (final runner in runners) {
-          runner.lints.listen((event) {
-            if (event.lints.isNotEmpty) {
-              final numberResults = event.lints.length;
-              print('${event.file.relativePath}: $numberResults results\n');
-              print(event.lints.toList().prettyPrint());
-            }
-          });
-          runner.logs.listen((event) => print(event.prettified()));
-          await runner.initialize();
-        }
-
-        logDelegate.dumpResults();
-        if (cliOptions.mode.isCli) exit(0);
-        if (cliOptions.mode.isDebug) {
-          hierarchicalLoggingEnabled = true;
-          HotReloader.logLevel = Level.OFF;
-          final hotReloader = await HotReloader.create(
-            onAfterReload: (c) async {
-              final watch = Stopwatch()..start();
-              final timestamp = DateTime.now().toIso8601String();
-              print('\u001b[31m\n$timestamp RELOADING...\n\u001b[0m');
-              final events = c.events ?? [];
-              for (final runner in runners) {
-                final rootPath = runner.activePackage.packageRoot.root.path;
-                for (final event in events) {
-                  final filePath = event.path;
-                  if (p.isWithin(rootPath, event.path)) {
-                    final file = runner.getAnalyzedFile(filePath);
-                    if (file == null) continue;
-
-                    await runner.requestLintsForFile(file);
-                  } else if (p.isWithin(pluginUri.root.path, filePath)) {
-                    // TODO: refresh runner / analyzer
-                    // container.refresh(runnersProvider);
-                    // await runner.initialize();
-                  }
-                }
-              }
-              print('total time to reload: ${watch.elapsed.prettified()}');
-            },
-          );
-        }
-      } catch (error, stackTrace) {
-        logDelegate.sidecarError(error, stackTrace);
+      await client.openWorkspace();
+      printReport(client.lintResults, progress);
+      logDelegate.dumpResults();
+      if (cliOptions.mode.isCli) exit(0);
+      if (cliOptions.mode.isDebug) {
+        await container.read(hotReloaderProvider.future);
       }
     },
     logDelegate.sidecarError,
@@ -112,4 +44,30 @@ Future<void> startSidecarCli(
       print: (self, parent, zone, line) => stdout.writeln(line),
     ),
   );
+}
+
+void printReport(
+  Map<AnalyzedFile, Set<LintResult>> results,
+  Progress timer,
+) {
+  final stringBuffer = StringBuffer();
+
+  // stringBuffer.writeln();
+  // stringBuffer.writeln('project:\u001b[35m ${root.toFilePath()} \u001b[0m');
+  // stringBuffer.writeln('plugin:  ${pluginPackage.root.toFilePath()}');
+  // stringBuffer.writeln();
+
+  for (final resultEntry in results.entries) {
+    final lintResults = resultEntry.value;
+    final relativePath = resultEntry.key.relativePath;
+
+    if (lintResults.isNotEmpty) {
+      stringBuffer.writeln('$relativePath: ${lintResults.length} results\n');
+      stringBuffer.writeln(lintResults.toList().prettyPrint());
+    }
+  }
+  timer.finish();
+  stringBuffer.writeln('analysis completed in:  ${timer.elapsed.prettified()}');
+  stdout.writeln();
+  stdout.write(stringBuffer.toString());
 }

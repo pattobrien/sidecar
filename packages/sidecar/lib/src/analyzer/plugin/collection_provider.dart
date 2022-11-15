@@ -11,7 +11,7 @@ import '../plugin/analyzer_resource_provider.dart';
 import 'active_package_provider.dart';
 
 final contextCollectionProvider = Provider((ref) {
-  final activePackage = ref.watch(activePackageProvider).value!;
+  final activePackage = ref.watch(activePackageProvider);
   final byteStore = ref.watch(createByteStoreProvider);
   final contentCache = ref.watch(createFileContentCacheProvider);
   final resourceProvider = ref.watch(analyzerResourceProvider);
@@ -47,8 +47,8 @@ final contextCollectionProvider = Provider((ref) {
 
   final contexts = collection.contexts.where((context) {
     return scope.any((uri) {
-      final contextUri = context.contextRoot.root;
-      return contextUri.path == uri.path;
+      final contextUri = context.contextRoot.root.toUri();
+      return contextUri == uri;
     });
   }).toList();
   return contexts;

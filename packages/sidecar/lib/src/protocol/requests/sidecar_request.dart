@@ -11,14 +11,14 @@ part 'sidecar_request.g.dart';
 class SidecarRequest with _$SidecarRequest {
   const SidecarRequest._();
 
-  const factory SidecarRequest.setActivePackage(
-    ActivePackageRoot root, {
-    List<Uri>? workspaceScope,
-  }) = SetActivePackageRequest;
+  // const factory SidecarRequest.setActivePackage(
+  //   ActivePackageRoot root, {
+  //   List<Uri>? workspaceScope,
+  // }) = SetActivePackageRequest;
 
-  // const factory SidecarRequest.setContextCollection({
-  //   required List<Uri> roots,
-  // }) = SetContextCollectionRequest;
+  const factory SidecarRequest.setWorkspaceScope(
+    List<Uri>? roots,
+  ) = SetContextCollectionRequest;
 
   const factory SidecarRequest.lint(List<String> files) = LintRequest;
 

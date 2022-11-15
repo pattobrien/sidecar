@@ -80,15 +80,17 @@ class SidecarRunner {
 
   /// Starts the plugin and sends the necessary requests for initializing it.
   Future<void> initialize() async {
-    print('initializing analysis...');
+    // print('initializing analysis...');
 
     _setContexts();
     _initStream();
     final isolateBuilder = _ref.read(isolateBuilderServiceProvider);
     isolateBuilder.setupPluginSourceFiles(activePackage);
     isolateBuilder.setupBootstrapper(activePackage);
-    await serverSideStarter(
-        sendPort: receivePort.sendPort, root: activePackage.packageRoot.root);
+    await analyzerIsolateStarter(
+        resourceProvider: resourceProvider,
+        sendPort: receivePort.sendPort,
+        root: activePackage.packageRoot.root);
 
     notifications.listen((event) => event.map(
           initComplete: (_) => handleStartupNotification(),
@@ -96,7 +98,11 @@ class SidecarRunner {
         ));
 
     await _initializationCompleter.future;
-    await requestSetActiveRoot();
+    // await requestSetActiveRoot();
+  }
+
+  void requestSetWorkspaceScope(List<Uri>? roots) {
+    //
   }
 
   void _initStream() {
@@ -166,11 +172,6 @@ class SidecarRunner {
     // return conditionCompleter.isCompleted ? null : parsedMessage;
     // print('file reload 3: ${watch.elapsed.prettified()}');
     return msg;
-  }
-
-  Future<void> requestSetActiveRoot() async {
-    final request = SetActivePackageRequest(activePackage.packageRoot);
-    await asyncRequest(request);
   }
 
   Future<T> asyncRequest<T extends SidecarResponse>(

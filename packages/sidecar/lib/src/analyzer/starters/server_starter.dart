@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'dart:isolate';
 
+import 'package:analyzer/file_system/file_system.dart';
 import 'package:path/path.dart';
 // import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -9,9 +9,10 @@ import '../../utils/file_paths.dart';
 // part 'server_starter.g.dart';
 
 // @riverpod
-Future<Isolate> serverSideStarter({
+Future<Isolate> analyzerIsolateStarter({
   required SendPort sendPort,
   required Uri root,
+  required ResourceProvider resourceProvider,
   Uri? executable,
   Uri? packageConfig,
   List<String> args = const [],
@@ -21,15 +22,21 @@ Future<Isolate> serverSideStarter({
   // - have a package_config.json file
   // - start an isolate
   final rootPackageConfig =
-      Uri.parse(join(root.path, kDartTool, kPackageConfigJson));
+      Uri.parse(join(root.path, kDartTool, kPackageConfigJson)).normalizePath();
   final rootExecutable =
-      Uri.parse(join(root.path, kDartTool, 'sidecar', 'analyzer.dart'));
+      Uri.parse(join(root.path, kDartTool, 'sidecar', 'analyzer.dart'))
+          .normalizePath();
 
-  assert(File.fromUri(rootExecutable).existsSync(), 'executable doesnt exist.');
-  assert(File.fromUri(rootPackageConfig).existsSync(), 'config doesnt exist.');
+  assert(resourceProvider.getFile(rootExecutable.path).exists,
+      'executable doesnt exist.');
+  assert(resourceProvider.getFile(rootPackageConfig.path).exists,
+      'config doesnt exist.');
+
+  final argsWithRoot = <String>[root.path, ...args];
+
   return Isolate.spawnUri(
     executable ?? rootExecutable,
-    args,
+    argsWithRoot,
     sendPort,
     onError: sendPort,
     onExit: sendPort,

@@ -1,9 +1,12 @@
-import 'dart:io';
+import 'dart:io' as io;
 
+import 'package:analyzer/file_system/file_system.dart';
+import 'package:analyzer/file_system/overlay_file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
+import '../analyzer/server/middleman_resource_provider.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
 import '../protocol/active_package.dart';
 import '../protocol/constants/bootstrap_constants.dart';
@@ -14,35 +17,40 @@ import '../utils/logger/logger.dart';
 import 'active_project_service.dart';
 
 class IsolateBuilderService {
-  const IsolateBuilderService();
+  const IsolateBuilderService({
+    required this.resourceProvider,
+  });
+
+  final ResourceProvider resourceProvider;
 
   void setupPluginSourceFiles(ActivePackage activeContext) {
-    final sourceExecutableDirectory = Directory(p.join(
+    final sourceExecutablePath = p.join(
         activeContext.sidecarPluginPackage.root
-            .toFilePath(windows: Platform.isWindows),
+            .toFilePath(windows: io.Platform.isWindows),
         'tools',
         'analyzer_plugin',
-        'bin'));
+        'bin');
+    final sourceExecutableFolder =
+        resourceProvider.getFolder(sourceExecutablePath);
 
-    final pluginFileEntities =
-        sourceExecutableDirectory.listSync(recursive: true);
+    final pluginFileResources = sourceExecutableFolder.getChildren();
 
     String _pluginPath(String path, {required Uri newDirectory}) {
-      return p.join(newDirectory.path,
-          p.relative(path, from: sourceExecutableDirectory.path));
+      return p.join(
+          newDirectory.path, p.relative(path, from: sourceExecutablePath));
     }
 
-    pluginFileEntities.whereType<File>().forEach((sourceFileEntity) {
-      Directory(_pluginPath(
-        sourceFileEntity.absolute.parent.path,
-        newDirectory: _packageToolDirectory(activeContext.packageRoot.root),
-      )).createSync(recursive: true);
+    pluginFileResources.whereType<File>().forEach((sourceFileEntity) {
+      // resourceProvider.getFile(_pluginPath(
+      //   sourceFileEntity.parent.path,
+      //   newDirectory: _packageToolDirectory(activeContext.packageRoot.root),
+      // ));
       final newDirectory =
           _packageToolDirectory(activeContext.packageRoot.root);
-      final newPath = _pluginPath(sourceFileEntity.absolute.path,
-          newDirectory: newDirectory);
-
-      sourceFileEntity.copySync(newPath);
+      final newPath =
+          _pluginPath(sourceFileEntity.path, newDirectory: newDirectory);
+      final newFile = resourceProvider.getFile(newPath);
+      sourceFileEntity.copyTo(newFile.parent);
     });
   }
 
@@ -54,7 +62,6 @@ class IsolateBuilderService {
     final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
     final listBuffer = StringBuffer()..writeln(constructorListBegin);
     final root = activeContext.packageRoot.root;
-    final resourceProvider = PhysicalResourceProvider.INSTANCE;
     final sidecarPackages =
         ActiveProjectService(resourceProvider: resourceProvider)
             .getSidecarDependencies(root);
@@ -74,29 +81,35 @@ class IsolateBuilderService {
       }
     }
 
-    final fullContents = StringBuffer()
+    final fullContentsBuffer = StringBuffer()
       ..writeln(importsBuffer.toString())
       ..writeln(listBuffer.toString())
       ..writeln(constructorListEnd);
 
-    File(bootstrapperPath).writeAsStringSync(fullContents.toString());
+    final file = resourceProvider.getFile(bootstrapperPath);
+    file.writeAsStringSync(fullContentsBuffer.toString());
   }
 
-  Uri _packagesUri(Uri projectRoot) =>
-      Uri.file(p.join(projectRoot.path, kDartTool, kPackageConfigJson),
-          windows: Platform.isWindows);
+  Uri _packagesUri(Uri projectRoot) => Uri.file(
+        p.join(projectRoot.path, kDartTool, kPackageConfigJson),
+      );
 
   Uri _executableUri(Uri projectRoot) => Uri.file(
-      p.join(projectRoot.path, kDartTool, kSidecarPluginName, 'sidecar.dart'),
-      windows: Platform.isWindows);
+        p.join(projectRoot.path, kDartTool, kSidecarPluginName, 'sidecar.dart'),
+      );
 
-  Uri _packageToolDirectory(Uri projectRoot) =>
-      Uri.directory(p.join(projectRoot.path, kDartTool, kSidecarPluginName),
-          windows: Platform.isWindows);
+  Uri _packageToolDirectory(Uri projectRoot) => Uri.directory(
+        p.join(projectRoot.path, kDartTool, kSidecarPluginName),
+      );
 }
 
 final isolateBuilderServiceProvider = Provider(
-  (ref) => const IsolateBuilderService(),
+  (ref) {
+    final resourceProvider = ref.watch(middlemanResourceProvider);
+    return IsolateBuilderService(resourceProvider: resourceProvider);
+  },
   name: 'isolateBuilderServiceProvider',
-  dependencies: const [],
+  dependencies: [
+    middlemanResourceProvider,
+  ],
 );
