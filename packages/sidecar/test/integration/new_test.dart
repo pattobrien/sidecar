@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:file/memory.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:package_config/package_config_types.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' hide equals;
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar/src/analyzer/plugin/active_package_provider.dart';
@@ -13,7 +13,7 @@ import 'package:sidecar/src/analyzer/plugin/sidecar_analyzer.dart';
 import 'package:sidecar/src/configurations/configurations.dart';
 import 'package:sidecar/src/protocol/active_package_root.dart';
 import 'package:sidecar/src/protocol/constants/constants.dart';
-import 'package:sidecar/src/test/assets/project_creator.dart';
+import 'package:sidecar/src/test/assets/dart_project.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
@@ -22,45 +22,41 @@ import 'string_lint.dart';
 
 Future<void> main() async {
   final constructors = <SidecarBaseConstructor>[AvoidStringLiterals.new];
-  final rules = constructors.map((e) => e());
-  final configuration = ProjectConfiguration(
-    lintPackages: {
-      kPackage: LintPackageConfiguration(
-        //
-        lints: {
-          for (final code in rules.map((e) => e.code)) code.code: null,
-        },
-      )
-    },
-  );
+  final configuration = ProjectConfiguration.fromCodes([
+    kAvoidStringLiteralsCode,
+  ]);
   await setUpAnalyzer(constructors, configuration);
   group('test lint', () {
     final analyzedFile = AnalyzedFile(
         Uri.parse('/workspace/my_app/lib/main.dart'),
         contextRoot: Uri.parse('/workspace/my_app/'));
-    registerFallbackValue(SidecarNotification.lint(analyzedFile, {}));
-    registerFallbackValue(SidecarNotification.lint(analyzedFile, {}));
+    registerFallbackValue(LintNotification(analyzedFile, {}));
     test('test', () async {
       final update = FileUpdateEvent.add(analyzedFile, '// test');
       final request = FileUpdateRequest([update]);
       final analyzer = _container.read(sidecarAnalyzerProvider);
-      final stream =
-          _container.read(communitcationChannelStreamProvider.stream);
-      stream.listen((dynamic event) {
-        print(event.toString());
-      });
-      final response = await analyzer.handleUpdateFiles(request);
-      final x = verify(() => _mockChannel.sendNotification(captureAny()));
-
-      print(x.callCount);
-      print(x.captured);
-      expect(x.captured.length, 1);
+      final stream = _container.read(communicationChannelStreamProvider.stream);
+      stream.listen((dynamic event) => print(event.toString()));
+      await analyzer.handleUpdateFiles(request);
+      final result = verify(
+          () => _mockChannel.sendNotification(captureAny<LintNotification>()));
+      // final notifications = result.captured;
+      // print(x.callCount);
+      expect(result.captured.length, 1);
+      // expectLint(notifications[0], 28, 14, kAvoidStringLiteralsCode);
       // expect(captured, matcher);
       // print(captured.toString());
       // expect(response, matcher);
     });
   });
 }
+
+// void expectLint(dynamic actual, int offset, int length, RuleCode code) {
+//   expect(actual, [
+//     isA<SidecarNotification>()
+//       ..having((p0) => p0.lints.first.rule.code, 'matches code', code),
+//   ]);
+// }
 
 Future<void> setUpAnalyzer(
   List<SidecarBaseConstructor> constructors,
@@ -93,7 +89,7 @@ Future<void> setUpAnalyzer(
   final resourceProvider = container.read(analyzerResourceProvider);
   _container = container;
 
-  final projectCreator = ProjectCreator(
+  final project = createDartProject(
     parentDirectoryPath: workspaceUri.path,
     resourceProvider: resourceProvider,
     fileSystem: fileSystem,

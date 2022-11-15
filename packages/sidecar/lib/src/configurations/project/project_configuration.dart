@@ -34,6 +34,31 @@ class ProjectConfiguration {
     this.errors = const <SidecarNewException>[],
   }) : _includes = includes;
 
+  factory ProjectConfiguration.fromCodes(List<RuleCode> codes) {
+    final lintCodes = codes.whereType<LintCode>();
+    final assistCodes = codes.whereType<AssistCode>();
+    final assistPackages = assistCodes.map((e) => e.package).toSet();
+    final lintPackages = lintCodes.map((e) => e.package).toSet();
+    return ProjectConfiguration(
+      assistPackages: {
+        for (final assistPackage in assistPackages)
+          assistPackage: AssistPackageConfiguration(assists: {
+            for (final assistCode in assistCodes
+                .where((element) => element.package == assistPackage))
+              assistCode.code: null,
+          }),
+      },
+      lintPackages: {
+        for (final lintPackage in lintPackages)
+          lintPackage: LintPackageConfiguration(lints: {
+            for (final lintCode in lintCodes
+                .where((lintCode) => lintCode.package == lintPackage))
+              lintCode.code: null,
+          }),
+      },
+    );
+  }
+
   factory ProjectConfiguration.fromYaml(
     String contents, {
     Uri? fileUri,

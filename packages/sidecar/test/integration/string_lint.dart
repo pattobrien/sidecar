@@ -3,10 +3,11 @@ import 'package:sidecar/sidecar.dart';
 
 const kPackage = 'test_lint';
 const kName = 'avoid_string_literals';
+const kAvoidStringLiteralsCode = LintCode(kName, package: kPackage);
 
 class AvoidStringLiterals extends LintRule with LintVisitor {
   @override
-  RuleCode get code => const LintCode(kName, package: kPackage);
+  RuleCode get code => kAvoidStringLiteralsCode;
 
   @override
   SidecarVisitor initializeVisitor(NodeRegistry registry) {

@@ -18,8 +18,24 @@ import 'analysis_options.dart';
 import 'package_config_extensions.dart';
 import 'sidecar_yaml.dart';
 
-class ProjectCreator {
-  ProjectCreator({
+DartProject createDartProject({
+  required String parentDirectoryPath,
+  required OverlayResourceProvider resourceProvider,
+  required String projectName,
+  required FileSystem fileSystem,
+  bool isSidecarEnabled = true,
+  ProjectConfiguration? sidecarProjectConfiguration,
+}) =>
+    DartProject(
+        parentDirectoryPath: parentDirectoryPath,
+        resourceProvider: resourceProvider,
+        projectName: projectName,
+        fileSystem: fileSystem,
+        isSidecarEnabled: isSidecarEnabled,
+        sidecarProjectConfiguration: sidecarProjectConfiguration);
+
+class DartProject {
+  DartProject({
     required this.parentDirectoryPath,
     required this.resourceProvider,
     required this.projectName,

@@ -33,7 +33,7 @@ class SidecarAnalyzer {
   CommunicationChannel get channel => _ref.read(communicationChannelProvider);
 
   Stream<dynamic> get stream =>
-      _ref.read(communitcationChannelStreamProvider.stream);
+      _ref.read(communicationChannelStreamProvider.stream);
 
   OverlayResourceProvider get resourceProvider =>
       _ref.read(analyzerResourceProvider);

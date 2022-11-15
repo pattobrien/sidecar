@@ -7,7 +7,7 @@ import '../../protocol/protocol.dart';
 final communicationChannelProvider =
     Provider<CommunicationChannel>((ref) => throw UnimplementedError());
 
-final communitcationChannelStreamProvider = StreamProvider<dynamic>(
+final communicationChannelStreamProvider = StreamProvider<dynamic>(
     (ref) => ref.watch(communicationChannelProvider).stream);
 
 class CommunicationChannel {

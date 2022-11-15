@@ -11,7 +11,7 @@ final activePackageProvider = FutureProvider<ActivePackage>((ref) async {
   final completer = Completer<RequestMessage>();
   final comm = ref.watch(communicationChannelProvider);
   final service = ref.watch(activeProjectServiceProvider);
-  ref.listen<AsyncValue<dynamic>>(communitcationChannelStreamProvider,
+  ref.listen<AsyncValue<dynamic>>(communicationChannelStreamProvider,
       (_, event) {
     final dynamic value = event.value;
     if (value is String) {
