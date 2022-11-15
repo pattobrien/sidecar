@@ -20,8 +20,9 @@ class GenerateCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     try {
-      final cont = ProviderContainer();
-      await cont.read(packageGeneratorProvider).generate(Directory.current);
+      final container = ProviderContainer();
+      final packageGenerator = container.read(packageGeneratorProvider);
+      await packageGenerator.generate(Directory.current);
       return ExitCode.success;
     } catch (e, stackTrace) {
       logger.severe('CLI ERROR', e, stackTrace);

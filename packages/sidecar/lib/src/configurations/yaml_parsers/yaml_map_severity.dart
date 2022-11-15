@@ -1,7 +1,7 @@
 import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
-import '../builders/config_exceptions.dart';
+import '../exceptions/exceptions.dart';
 import '../project/errors.dart';
 
 extension YamlMapSeverity on YamlMap {

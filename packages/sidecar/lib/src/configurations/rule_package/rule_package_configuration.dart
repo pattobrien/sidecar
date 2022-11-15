@@ -8,6 +8,14 @@ import 'rule_yaml_nodes.dart';
 
 // @JsonSerializable(anyMap: true)
 class RulePackageConfiguration {
+  RulePackageConfiguration(
+    this.yamlLints,
+    this.yamlAssists, {
+    required this.source,
+    required this.packageName,
+    required this.uri,
+  });
+
   factory RulePackageConfiguration.fromYamlMap(
     YamlMap map, {
     required Uri uri,
@@ -21,14 +29,6 @@ class RulePackageConfiguration {
       packageName: packageName,
     );
   }
-
-  RulePackageConfiguration(
-    this.yamlLints,
-    this.yamlAssists, {
-    required this.source,
-    required this.packageName,
-    required this.uri,
-  });
 
   final YamlList? yamlLints;
   final YamlList? yamlAssists;

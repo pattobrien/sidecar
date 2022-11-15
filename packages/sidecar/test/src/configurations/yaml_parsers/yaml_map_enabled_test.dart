@@ -1,5 +1,4 @@
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar/src/configurations/builders/config_exceptions.dart';
 import 'package:test/test.dart';
 
 void main() {

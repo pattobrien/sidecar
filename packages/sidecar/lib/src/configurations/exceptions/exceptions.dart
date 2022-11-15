@@ -5,8 +5,8 @@ import '../../protocol/models/models.dart';
 import '../../rules/rules.dart';
 import '../../utils/json_utils/source_span_utils.dart';
 
-part 'config_exceptions.freezed.dart';
-part 'config_exceptions.g.dart';
+part 'exceptions.freezed.dart';
+part 'exceptions.g.dart';
 
 @freezed
 class SidecarNewException with _$SidecarNewException {

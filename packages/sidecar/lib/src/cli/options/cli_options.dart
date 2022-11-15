@@ -10,6 +10,7 @@ class CliOptions with _$CliOptions {
     required bool isVerboseEnabled,
     required SidecarAnalyzerMode mode,
   }) = _CliOptions;
+
   const CliOptions._();
 
   factory CliOptions.fromArgs(

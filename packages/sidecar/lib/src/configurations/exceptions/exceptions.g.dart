@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'config_exceptions.dart';
+part of 'exceptions.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

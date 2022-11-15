@@ -1,6 +1,7 @@
 // ignore_for_file: implementation_imports
 
 import 'dart:async';
+import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -53,7 +54,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    logger.info('PLUGIN STARTING....');
+    print('PLUGIN STARTING.... ');
     ref.read(masterPluginChannelProvider).listen(handleAllRequests);
   }
 
@@ -145,31 +146,31 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
     }
   }
 
-  /// Handle an 'edit.getFixes' request.
-  ///
-  /// Throw a [plugin.RequestFailure] if the request could not be handled.
-  @override
-  Future<plugin.EditGetFixesResult> handleEditGetFixes(
-    plugin.EditGetFixesParams parameters,
-  ) async {
-    final runnersForFile = getRunnersForPath(parameters.file);
+  // /// Handle an 'edit.getFixes' request.
+  // ///
+  // /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  // @override
+  // Future<plugin.EditGetFixesResult> handleEditGetFixes(
+  //   plugin.EditGetFixesParams parameters,
+  // ) async {
+  //   final runnersForFile = getRunnersForPath(parameters.file);
 
-    final responses =
-        await Future.wait(runnersForFile.entries.map((entry) async {
-      final file = entry.value;
-      final runner = entry.key;
-      final request = QuickFixRequest(file: file, offset: parameters.offset);
-      return runner.asyncRequest<QuickFixResponse>(request);
-    })).then((value) => value.whereNotNull());
+  //   final responses =
+  //       await Future.wait(runnersForFile.entries.map((entry) async {
+  //     final file = entry.value;
+  //     final runner = entry.key;
+  //     final request = QuickFixRequest(file: file, offset: parameters.offset);
+  //     return runner.asyncRequest<QuickFixResponse>(request);
+  //   })).then((value) => value.whereNotNull());
 
-    // we need to aggregate responses from all runners into one server response
-    final fixes = responses
-        .whereType<QuickFixResponse>()
-        .map((response) => response.toPluginResponse())
-        .expand((result) => result.fixes)
-        .toList();
-    return plugin.EditGetFixesResult(fixes);
-  }
+  //   // we need to aggregate responses from all runners into one server response
+  //   final fixes = responses
+  //       .whereType<QuickFixResponse>()
+  //       .map((response) => response.toPluginResponse())
+  //       .expand((result) => result.fixes)
+  //       .toList();
+  //   return plugin.EditGetFixesResult(fixes);
+  // }
 
   /// Handle an 'analysis.handleWatchEvents' request.
   ///
@@ -381,7 +382,7 @@ class MiddlemanPlugin extends plugin.ServerPlugin {
   }) async {}
 }
 
-final middlemanPluginProvider = Provider<MiddlemanPlugin>(
+final analyzerPluginProvider = Provider<MiddlemanPlugin>(
   (ref) {
     return MiddlemanPlugin(ref);
   },

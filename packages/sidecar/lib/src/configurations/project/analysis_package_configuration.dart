@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../utils/json_utils/glob_json_util.dart';
-import '../builders/config_exceptions.dart';
+import '../exceptions/exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 

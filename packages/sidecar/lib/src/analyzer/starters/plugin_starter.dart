@@ -1,14 +1,15 @@
-// ignore_for_file: implementation_imports
-
 import 'dart:async';
 import 'dart:isolate';
 
+// ignore: implementation_imports
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../cli/options/cli_options.dart';
+import '../../reports/plugin_reporter.dart';
 import '../../utils/logger/logger.dart';
 import '../options_provider.dart';
+import '../server/log_delegate.dart';
 import '../server/server.dart';
 
 Future<void> startSidecarPlugin(
@@ -19,26 +20,18 @@ Future<void> startSidecarPlugin(
   final cliOptions = CliOptions.fromArgs(args, isPlugin: true);
 
   final LogDelegateBase delegate = PluginChannelDelegate(cliOptions, channel);
-  await runZonedGuarded<Future<void>>(
-    () async {
+  runZonedGuarded(
+    () {
       final container = ProviderContainer(
         overrides: [
           masterPluginChannelProvider.overrideWithValue(channel),
           cliOptionsProvider.overrideWithValue(cliOptions),
-          // logDelegateProvider.overrideWithValue(delegate),
-        ],
-        observers: [
-          // PluginObserver(cliOptions, channel),
+          logDelegateProvider.overrideWithValue(delegate),
         ],
       );
-
-      try {
-        logger.info('sidecar - plugin initialization....');
-        final middlemanPlugin = container.read(middlemanPluginProvider);
-        middlemanPlugin.start(channel);
-      } catch (error, stackTrace) {
-        delegate.sidecarError(error, stackTrace);
-      }
+      logger.info('sidecar - plugin initialization....');
+      final analyzerPlugin = container.read(analyzerPluginProvider);
+      analyzerPlugin.start(channel);
     },
     delegate.sidecarError,
     zoneSpecification: ZoneSpecification(

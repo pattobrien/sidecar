@@ -8,7 +8,7 @@ import '../../rules/rules.dart';
 import '../../utils/json_utils/glob_json_util.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/yaml_writer.dart';
-import '../builders/config_exceptions.dart';
+import '../exceptions/exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'analysis_configuration.dart';
 import 'analysis_package_configuration.dart';

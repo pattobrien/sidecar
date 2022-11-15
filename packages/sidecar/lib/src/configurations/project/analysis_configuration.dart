@@ -4,7 +4,7 @@ import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
 import '../../utils/json_utils/glob_json_util.dart';
-import '../builders/config_exceptions.dart';
+import '../exceptions/exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 
 part 'analysis_configuration.g.dart';
