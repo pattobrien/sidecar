@@ -1,35 +1,25 @@
 // ignore_for_file: close_sinks, implementation_imports
 
 import 'dart:async';
-import 'dart:io' as io;
 
+import 'package:analyzer/dart/analysis/context_locator.dart';
 import 'package:analyzer/file_system/file_system.dart';
-import 'package:analyzer/file_system/physical_file_system.dart';
-import 'package:analyzer/src/test_utilities/mock_sdk.dart';
 import 'package:file/file.dart';
-import 'package:file/memory.dart';
-import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../analyzer/plugin/files_provider.dart';
 import '../../analyzer/plugin/plugin.dart';
-import '../../analyzer/plugin/sidecar_analyzer.dart';
 import '../../analyzer/server/runner/context_providers.dart';
-import '../../analyzer/server/runner/runner_providers.dart';
-import '../../analyzer/server/server.dart';
 import '../../configurations/configurations.dart';
-import '../../protocol/constants/constants.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
-import '../../utils/utils.dart';
-import 'mock_communication_channel.dart';
 import 'package_resource.dart';
 import 'resource_mixin.dart';
 
 const defaultWorkspacePath = 'workspace';
 
 late ProviderContainer workspaceContainer;
-final mockChannel = MockCommunicationChannel();
+// final mockChannel = MockCommunicationChannel();
 
 Future<WorkspaceResource> createWorkspace({
   required List<SidecarBaseConstructor> constructors,
@@ -38,26 +28,19 @@ Future<WorkspaceResource> createWorkspace({
   ProviderContainer? container,
   String? rootPath,
 }) async {
-  final fileSystem = MemoryFileSystem();
-  // final hybridProvider = HybridResourceProvider(
-  //     physical: PhysicalResourceProvider.INSTANCE,
-  //     memory: MemoryResourceProvider());
-  // final provider = PhysicalResourceProvider.INSTANCE;
+  // final fileSystem = MemoryFileSystem();
   workspaceContainer = ProviderContainer(overrides: [
-    communicationChannelProvider.overrideWithValue(mockChannel),
+    // communicationChannelProvider.overrideWithValue(mockChannel),
     ruleConstructorProvider.overrideWithValue(constructors),
-    // middlemanResourceProvider.overrideWithValue(provider),
-    // runnerResourceProvider.overrideWithValue(provider),
-    // activePackageProvider.overrideWithProvider(packageProvider),
-    // analyzerResourceProvider.overrideWithValue(pro),
-    fileSystemProvider.overrideWithValue(fileSystem),
+    // fileSystemProvider.overrideWithValue(fileSystem),
   ]);
+  final fileSystem = workspaceContainer.read(fileSystemProvider);
   final defaultProvider = workspaceContainer.read(runnerResourceProvider);
   final provider = resourceProvider ?? defaultProvider;
-  final stateFolder = provider.getStateLocation(kSidecarPluginName)!;
-  final path = join(stateFolder.path, defaultWorkspacePath);
+  // final stateFolder = provider.getStateLocation(kSidecarPluginName)!;
+  // final path = join(stateFolder.path, defaultWorkspacePath);
   final workspace = WorkspaceResource(
-      resourceProvider: provider, fileSystem: fileSystem, rootPath: path);
+      resourceProvider: provider, fileSystem: fileSystem, rootPath: rootPath!);
 
   await workspace.init();
   return workspace;
@@ -85,15 +68,21 @@ class WorkspaceResource with ResourceMixin {
 
   Future<void> init() async {
     //
+    folder.create();
   }
 
-  Future<void> refreshRunners() async {
-    final runners = container.read(runnersProvider);
-    for (final runner in runners) {
-      runner.lints.listen(_controller.add);
-      await runner.initialize();
-    }
-  }
+  ContextLocator get locator =>
+      ContextLocator(resourceProvider: resourceProvider);
+
+  // Future<void> refreshRunners() async {
+  //   final runners = container.read(runnersProvider);
+  //   for (final runner in runners) {
+  //     runner.lints.listen(_controller.add);
+  //     await runner.initialize();
+  //     final roots = locator.locateRoots(includedPaths: [rootPath]);
+  //     await runner.asyncRequest(request);
+  //   }
+  // }
 
   final _controller = StreamController<LintNotification>();
 
@@ -112,7 +101,7 @@ class WorkspaceResource with ResourceMixin {
         fileSystem: fileSystem,
         isSidecarEnabled: isSidecarEnabled,
         sidecarProjectConfiguration: sidecarYaml);
-    await refreshRunners();
+    // await refreshRunners();
     return package;
   }
 }

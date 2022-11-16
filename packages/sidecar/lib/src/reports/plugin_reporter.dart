@@ -19,6 +19,7 @@ class PluginReporter extends Report {
   late int timestamp;
   late io.File logFile;
 
+  @override
   void init() {
     timestamp = DateTime.now().millisecondsSinceEpoch;
     logFile = io.File.fromUri(workspaceRoot

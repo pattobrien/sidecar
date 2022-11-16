@@ -7,6 +7,7 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:sidecar/src/services/active_project_service.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/logging/log_record.dart';
@@ -80,13 +81,18 @@ class SidecarRunner {
 
   /// Starts the plugin and sends the necessary requests for initializing it.
   Future<void> initialize() async {
-    // print('initializing analysis...');
-
     _setContexts();
     _initStream();
     final isolateBuilder = _ref.read(isolateBuilderServiceProvider);
-    isolateBuilder.setupPluginSourceFiles(activePackage);
-    isolateBuilder.setupBootstrapper(activePackage);
+    final activeProjectService = _ref.read(activeProjectServiceProvider);
+
+    final packageRoot = activePackage.packageRoot.root;
+    final pluginRoot = activePackage.sidecarPluginPackage.root;
+    final deps = activeProjectService.getSidecarDependencies(packageRoot);
+
+    isolateBuilder.setupPluginSourceFiles(packageRoot, pluginRoot);
+    isolateBuilder.setupBootstrapper(packageRoot, deps);
+
     await analyzerIsolateStarter(
         resourceProvider: resourceProvider,
         sendPort: receivePort.sendPort,
@@ -157,20 +163,13 @@ class SidecarRunner {
       }
     });
 
-    // final responseCompleter = Completer<SidecarMessage>();
-    // final conditionCompleter = Completer<void>();
-    // await completer?.call().then((value) async {
-    //   conditionCompleter.complete();
-    // });
     final response = await _responses.firstWhere((resp) => resp.id == id);
     await sub.cancel();
-    // .then(responseCompleter.complete);
-    // final response = await responseCompleter.future;
+
     final msg = response.mapOrNull(response: (response) => response)?.response;
     if (msg == null) throw UnimplementedError();
     if (msg is! UpdateFilesResponse) throw UnimplementedError();
-    // return conditionCompleter.isCompleted ? null : parsedMessage;
-    // print('file reload 3: ${watch.elapsed.prettified()}');
+
     return msg;
   }
 

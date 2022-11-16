@@ -17,6 +17,8 @@ class StdoutReport extends Report {
 
   final Stopwatch watch = Stopwatch();
 
+  void testStub() {}
+
   void init(Uri uri) {
     this.uri = uri;
     progress = Logger.standard().progress('Analyzing');

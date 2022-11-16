@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:sidecar/sidecar.dart';
 
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
@@ -30,6 +31,7 @@ class CliClient extends AnalyzerClient {
   Stream<LogRecord> get logs => _logController.stream.asBroadcastStream();
 
   StdoutReport get reporter => _ref.read(stdoutReportProvider);
+  Uri get directory => _ref.read(cliDirectoryProvider);
 
   final _lintController = StreamController<LintNotification>();
   final _logController = StreamController<LogRecord>();
@@ -56,16 +58,15 @@ class CliClient extends AnalyzerClient {
 
   @override
   Future<void> openWorkspace() async {
-    final directory = Directory.current;
-    reporter.init(directory.uri);
+    reporter.init(directory);
     final path = directory.path;
 
     final activeContext =
-        activeProjectService.getActivePackageFromUri(directory.uri);
+        activeProjectService.getActivePackageFromUri(directory);
 
-    final logFile = File.fromUri(
-        directory.uri.resolve(join(kDartTool, 'logs', 'session.txt')))
-      ..createSync(recursive: true);
+    final logFile =
+        File.fromUri(directory.resolve(join(kDartTool, 'logs', 'session.txt')))
+          ..createSync(recursive: true);
     logFileSink = logFile.openWrite(mode: FileMode.append);
     final logSub = logs.listen((log) => logFileSink.write(log.prettified()));
     _subscriptions.add(logSub);

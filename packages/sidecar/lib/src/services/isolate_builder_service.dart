@@ -1,17 +1,11 @@
-import 'dart:io' as io;
-
 import 'package:analyzer/file_system/file_system.dart';
-import 'package:analyzer/file_system/overlay_file_system.dart';
-import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/server/middleman_resource_provider.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
-import '../protocol/active_package.dart';
 import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
-import '../protocol/protocol.dart';
 import '../utils/file_paths.dart';
 import '../utils/logger/logger.dart';
 import 'active_project_service.dart';
@@ -23,30 +17,24 @@ class IsolateBuilderService {
 
   final ResourceProvider resourceProvider;
 
-  void setupPluginSourceFiles(ActivePackage activeContext) {
-    final sourceExecutablePath = p.join(
-        activeContext.sidecarPluginPackage.root
-            .toFilePath(windows: io.Platform.isWindows),
-        'tools',
-        'analyzer_plugin',
-        'bin');
+  void setupPluginSourceFiles(
+    Uri packageRoot,
+    Uri pluginRoot,
+  ) {
+    final pluginSourceFolder =
+        pluginRoot.resolve(p.join('tools', 'analyzer_plugin', 'bin'));
     final sourceExecutableFolder =
-        resourceProvider.getFolder(sourceExecutablePath);
+        resourceProvider.getFolder(pluginSourceFolder.path);
 
     final pluginFileResources = sourceExecutableFolder.getChildren();
 
     String _pluginPath(String path, {required Uri newDirectory}) {
       return p.join(
-          newDirectory.path, p.relative(path, from: sourceExecutablePath));
+          newDirectory.path, p.relative(path, from: pluginSourceFolder.path));
     }
 
     pluginFileResources.whereType<File>().forEach((sourceFileEntity) {
-      // resourceProvider.getFile(_pluginPath(
-      //   sourceFileEntity.parent.path,
-      //   newDirectory: _packageToolDirectory(activeContext.packageRoot.root),
-      // ));
-      final newDirectory =
-          _packageToolDirectory(activeContext.packageRoot.root);
+      final newDirectory = _packageToolDirectory(packageRoot);
       final newPath =
           _pluginPath(sourceFileEntity.path, newDirectory: newDirectory);
       final newFile = resourceProvider.getFile(newPath);
@@ -55,16 +43,17 @@ class IsolateBuilderService {
   }
 
   // @visibleForTesting
-  void setupBootstrapper(ActivePackage activeContext) {
-    final bootstrapperPath = p.join(
-        _packageToolDirectory(activeContext.packageRoot.root).path,
-        'constructors.dart');
+  void setupBootstrapper(
+    Uri packageRoot,
+    List<RulePackageConfiguration> lintPackageConfigurations,
+  ) {
+    final bootstrapperPath =
+        p.join(_packageToolDirectory(packageRoot).path, 'constructors.dart');
     final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
     final listBuffer = StringBuffer()..writeln(constructorListBegin);
-    final root = activeContext.packageRoot.root;
     final sidecarPackages =
         ActiveProjectService(resourceProvider: resourceProvider)
-            .getSidecarDependencies(root);
+            .getSidecarDependencies(packageRoot);
     logger.finer(
         'setupBootstrapper || adding ${sidecarPackages.length} packages');
 
@@ -89,14 +78,6 @@ class IsolateBuilderService {
     final file = resourceProvider.getFile(bootstrapperPath);
     file.writeAsStringSync(fullContentsBuffer.toString());
   }
-
-  Uri _packagesUri(Uri projectRoot) => Uri.file(
-        p.join(projectRoot.path, kDartTool, kPackageConfigJson),
-      );
-
-  Uri _executableUri(Uri projectRoot) => Uri.file(
-        p.join(projectRoot.path, kDartTool, kSidecarPluginName, 'sidecar.dart'),
-      );
 
   Uri _packageToolDirectory(Uri projectRoot) => Uri.directory(
         p.join(projectRoot.path, kDartTool, kSidecarPluginName),

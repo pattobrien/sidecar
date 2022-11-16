@@ -93,7 +93,7 @@ class ActiveProjectService {
   PackageConfig _getPackageConfig(Uri root) {
     final path = p.join(root.path, '.dart_tool', 'package_config.json');
     final file = resourceProvider.getFile(path);
-    assert(file.exists, 'config file does not exist');
+    assert(file.exists, 'config file does not exist at path $path');
     final contents = file.readAsStringSync();
     final json = jsonDecode(contents) as Map<String, dynamic>;
     return PackageConfig.parseJson(json, file.toUri());

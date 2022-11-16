@@ -36,3 +36,5 @@ Future<void> startSidecarCli(
     ),
   );
 }
+
+final cliDirectoryProvider = Provider<Uri>((ref) => Directory.current.uri);
