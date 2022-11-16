@@ -45,6 +45,8 @@ dev_dependencies:
   json_serializable: ^6.3.1
   mockito: ^5.3.2
   # mocktail: ^0.3.0
+  intl_lints:
+    path: /Users/pattobrien/Development/lints/packages/intl_lints/
   riverpod_generator: ^1.0.4
   test: ^1.16.0
 

@@ -64,7 +64,7 @@ class PackageResource with ResourceMixin {
       final sidecarYamlContents = sidecarProjectConfiguration!.toYamlContent();
       newSidecarOptionsFile(rootPath, sidecarYamlContents);
     }
-    _createMainFile();
+    // _createMainFile();
     final thisPackageConfigUri =
         io.Directory.current.uri.resolve(p.join(kDartTool, kPackageConfigJson));
     final contents =
@@ -101,30 +101,45 @@ class PackageResource with ResourceMixin {
   }
 
   File newAnalysisOptionsYamlFile(String directoryPath, String content) {
-    return newFile(kAnalysisOptionsYaml, content);
+    return modifyFile(kAnalysisOptionsYaml, content);
   }
 
   File newPubspecYamlFile(Pubspec pubspec) {
-    return newFile(kPubspecYaml, pubspec.toString());
+    final content = '''
+name: north_app
+
+environment:
+  sdk: ">=2.17.5 <3.0.0"
+
+dependencies:
+  path: ^1.8.0
+  intl_lints:
+    path: /Users/pattobrien/Development/lints/packages/intl_lints/
+''';
+    return modifyFile(kPubspecYaml, content);
   }
 
   File newSidecarOptionsFile(String directoryPath, String content) {
-    return newFile(kSidecarYaml, content);
+    return modifyFile(kSidecarYaml, content);
   }
 
   void modifySidecarYaml(ProjectConfiguration configuration) {
     final content = configuration.toYamlContent();
-    newFile(kSidecarYaml, content);
+    modifyFile(kSidecarYaml, content);
   }
 
   void _createMainFile() {
-    newFile(p.join('lib', 'main.dart'), mainContent);
+    modifyFile(p.join('lib', 'main.dart'), mainContent);
   }
 
   void addPackageConfig(PackageConfig packageConfig) {
     final json = PackageConfig.toJson(packageConfig);
     final encodedJson = jsonEncode(json);
-    newFile(p.join(kDartTool, kPackageConfigJson), encodedJson);
+    modifyFile(p.join(kDartTool, kPackageConfigJson), encodedJson);
+  }
+
+  File newPackageConfigJsonFile(String content) {
+    return modifyFile(p.join(rootPath, kDartTool, kPackageConfigJson), content);
   }
 
   // void addPackages(
@@ -153,9 +168,6 @@ class PackageResource with ResourceMixin {
   //   }
   // }
 
-  File newPackageConfigJsonFile(String content) {
-    return newFile(p.join(rootPath, kDartTool, kPackageConfigJson), content);
-  }
 }
 
 const mainContent = '''

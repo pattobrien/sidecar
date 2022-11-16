@@ -119,17 +119,19 @@ class MockStdoutReport extends _i1.Mock implements _i3.StdoutReport {
   void handleError(
     Object? object,
     StackTrace? stackTrace,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #handleError,
-          [
-            object,
-            stackTrace,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
+  ) {
+    super.noSuchMethod(
+      Invocation.method(
+        #handleError,
+        [
+          object,
+          stackTrace,
+        ],
+      ),
+      returnValueForMissingStub: null,
+    );
+  }
+
   @override
   void handleLintNotification(_i4.LintNotification? notification) =>
       super.noSuchMethod(

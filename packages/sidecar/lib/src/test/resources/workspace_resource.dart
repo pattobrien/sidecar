@@ -1,6 +1,9 @@
 // ignore_for_file: close_sinks, implementation_imports
 
 import 'dart:async';
+import 'dart:io' as io;
+import 'package:package_config/package_config_types.dart';
+import 'package:path/path.dart' as p;
 
 import 'package:analyzer/dart/analysis/context_locator.dart';
 import 'package:analyzer/file_system/file_system.dart';
@@ -19,7 +22,6 @@ import 'resource_mixin.dart';
 const defaultWorkspacePath = 'workspace';
 
 late ProviderContainer workspaceContainer;
-// final mockChannel = MockCommunicationChannel();
 
 Future<WorkspaceResource> createWorkspace({
   required List<SidecarBaseConstructor> constructors,
@@ -28,19 +30,18 @@ Future<WorkspaceResource> createWorkspace({
   ProviderContainer? container,
   String? rootPath,
 }) async {
-  // final fileSystem = MemoryFileSystem();
   workspaceContainer = ProviderContainer(overrides: [
-    // communicationChannelProvider.overrideWithValue(mockChannel),
     ruleConstructorProvider.overrideWithValue(constructors),
-    // fileSystemProvider.overrideWithValue(fileSystem),
   ]);
   final fileSystem = workspaceContainer.read(fileSystemProvider);
   final defaultProvider = workspaceContainer.read(runnerResourceProvider);
   final provider = resourceProvider ?? defaultProvider;
-  // final stateFolder = provider.getStateLocation(kSidecarPluginName)!;
-  // final path = join(stateFolder.path, defaultWorkspacePath);
+  final root =
+      io.Directory.systemTemp.uri.resolve(p.join(defaultWorkspacePath));
   final workspace = WorkspaceResource(
-      resourceProvider: provider, fileSystem: fileSystem, rootPath: rootPath!);
+      resourceProvider: provider,
+      fileSystem: fileSystem,
+      rootPath: rootPath ?? root.path);
 
   await workspace.init();
   return workspace;
@@ -64,10 +65,13 @@ class WorkspaceResource with ResourceMixin {
   @override
   final String rootPath;
 
+  final List<PackageResource> _packages = [];
+
+  List<PackageResource> get packages => _packages;
+
   Folder get folder => resourceProvider.getFolder(rootPath);
 
   Future<void> init() async {
-    //
     folder.create();
   }
 
@@ -88,8 +92,8 @@ class WorkspaceResource with ResourceMixin {
 
   Stream<LintNotification> get lintStream => _controller.stream;
 
-  Future<PackageResource> createDartPackage(
-    String name, {
+  Future<PackageResource> createDartPackage({
+    String? name,
     String? parentDirectoryPath,
     bool isSidecarEnabled = true,
     ProjectConfiguration? sidecarYaml,
@@ -97,11 +101,18 @@ class WorkspaceResource with ResourceMixin {
     final package = PackageResource(
         parentDirectoryPath: parentDirectoryPath ?? rootPath,
         resourceProvider: resourceProvider,
-        projectName: name,
+        projectName: name ?? randomNames.removeAt(0),
         fileSystem: fileSystem,
         isSidecarEnabled: isSidecarEnabled,
         sidecarProjectConfiguration: sidecarYaml);
-    // await refreshRunners();
+    _packages.add(package);
     return package;
   }
+
+  void deleteDartPackage(PackageResource package) {
+    final packageFolder = package.projectFolder;
+    packageFolder.delete();
+  }
 }
+
+final randomNames = <String>['north_app', 'west_app', 'east_app', 'south_app'];
