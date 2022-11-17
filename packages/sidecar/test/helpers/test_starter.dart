@@ -35,16 +35,8 @@ Future<AnalyzerClient> analyzeTestResources(
     // },
     zoneSpecification: ZoneSpecification(
       print: (self, parent, zone, line) => stdout.writeln(line),
-      // handleUncaughtError: (self, parent, zone, error, stackTrace) {
-      //   print('handleUncaughtError does this happen');
-      //   throw error;
-      // },
-      // errorCallback: (self, parent, zone, error, stackTrace) {
-      //   return null;
-      // },
     ),
   );
-  print('this doesnt happen');
   return client;
 }
 

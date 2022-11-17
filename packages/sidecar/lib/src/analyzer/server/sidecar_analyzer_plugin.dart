@@ -12,7 +12,6 @@ import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/src/reports/plugin_reporter.dart';
 import 'package:source_span/source_span.dart';
 
 import '../../cli/options/cli_options.dart';
@@ -20,6 +19,7 @@ import '../../protocol/analyzer_plugin_exts/analyzer_plugin_exts.dart';
 import '../../protocol/constants/constants.dart';
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
+import '../../reports/plugin_reporter.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/utils.dart';
@@ -30,8 +30,8 @@ import 'runner/context_providers.dart';
 import 'runner/runner_providers.dart';
 import 'runner/sidecar_runner.dart';
 
-class SidecarPlugin extends plugin.ServerPlugin {
-  SidecarPlugin(this.ref)
+class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
+  SidecarAnalyzerPlugin(this.ref)
       : super(resourceProvider: ref.read(middlemanResourceProvider));
 
   final Ref ref;
@@ -47,7 +47,7 @@ class SidecarPlugin extends plugin.ServerPlugin {
 
   @override
   plugin.PluginCommunicationChannel get channel =>
-      ref.read(masterPluginChannelProvider);
+      ref.read(analyzerPluginChannelProvider);
 
   CliOptions get options => ref.read(cliOptionsProvider);
 
@@ -56,7 +56,7 @@ class SidecarPlugin extends plugin.ServerPlugin {
   @override
   void start(plugin.PluginCommunicationChannel channel) {
     logger.info('STARTING PLUGIN.... ');
-    ref.read(masterPluginChannelProvider).listen(handleAllRequests);
+    ref.read(analyzerPluginChannelProvider).listen(handleAllRequests);
   }
 
   Future<void> handleAllRequests(
@@ -395,14 +395,14 @@ class SidecarPlugin extends plugin.ServerPlugin {
   }) async {}
 }
 
-final analyzerPluginProvider = Provider<SidecarPlugin>(
+final analyzerPluginProvider = Provider<SidecarAnalyzerPlugin>(
   (ref) {
-    return SidecarPlugin(ref);
+    return SidecarAnalyzerPlugin(ref);
   },
   name: 'middlemanPluginProvider',
   dependencies: [
     cliOptionsProvider,
-    masterPluginChannelProvider,
+    analyzerPluginChannelProvider,
     middlemanResourceProvider,
   ],
 );

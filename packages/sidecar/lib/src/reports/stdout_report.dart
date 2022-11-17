@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:cli_util/cli_logging.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../protocol/communication/communication.dart';
 import '../protocol/logging/log_record.dart';
-import '../protocol/responses/notification_union.dart';
 import '../utils/printer/lint_printer.dart';
 import '../utils/utils.dart';
 import 'report.dart';

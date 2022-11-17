@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../logging/log_record.dart';
-import '../requests/requests.dart';
+import 'requests.dart';
+import 'notifications.dart';
 import 'responses.dart';
 
-part 'sidecar_message.freezed.dart';
-part 'sidecar_message.g.dart';
+part 'messages.freezed.dart';
+part 'messages.g.dart';
 
 @freezed
 class SidecarMessage with _$SidecarMessage {
@@ -26,11 +27,6 @@ class SidecarMessage with _$SidecarMessage {
   const factory SidecarMessage.notification({
     required SidecarNotification notification,
   }) = NotificationMessage;
-
-  // const factory SidecarMessage.error(
-  //   Object error,
-  //   @JsonKey(toJson: stackToString, fromJson: stringToStack) StackTrace stack,
-  // ) = ErrorMessage;
 
   const factory SidecarMessage.log(
     LogRecord record,

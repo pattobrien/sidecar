@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sidecar_message.dart';
+part of 'messages.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

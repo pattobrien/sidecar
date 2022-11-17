@@ -1,18 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/sidecar.dart';
 
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../reports/stdout_report.dart';
 import '../../services/active_project_service.dart';
-import '../../utils/file_paths.dart';
+import '../../utils/logger/logger.dart';
 import '../server/runner/context_providers.dart';
 import '../server/runner/runner_providers.dart';
 import '../server/runner/sidecar_runner.dart';
+import '../starters/starters.dart';
 import 'client.dart';
 
 class CliClient extends AnalyzerClient {
@@ -31,7 +30,7 @@ class CliClient extends AnalyzerClient {
   Stream<LogRecord> get logs => _logController.stream.asBroadcastStream();
 
   StdoutReport get reporter => _ref.read(stdoutReportProvider);
-  Uri get directory => _ref.read(cliDirectoryProvider);
+  Uri get root => _ref.read(cliDirectoryProvider);
 
   final _lintController = StreamController<LintNotification>();
   final _logController = StreamController<LogRecord>();
@@ -54,24 +53,14 @@ class CliClient extends AnalyzerClient {
 
   SidecarRunner get runner => _ref.read(runnersProvider).single;
 
-  late IOSink logFileSink;
-
   @override
   Future<void> openWorkspace() async {
-    reporter.init(directory);
-    final path = directory.path;
+    reporter.init(root);
+    final activeContext = activeProjectService.getActivePackageFromUri(root);
 
-    final activeContext =
-        activeProjectService.getActivePackageFromUri(directory);
-
-    final logFile =
-        File.fromUri(directory.resolve(join(kDartTool, 'logs', 'session.txt')))
-          ..createSync(recursive: true);
-    logFileSink = logFile.openWrite(mode: FileMode.append);
-    final logSub = logs.listen((log) => logFileSink.write(log.prettified()));
-    _subscriptions.add(logSub);
     if (activeContext == null) {
-      throw StateError('Invalid Sidecar directory: $path');
+      logger.severe('invalid Sidecar directory.');
+      return;
     }
     _ref.read(runnerActiveContextsProvider.notifier).update = [activeContext];
 
@@ -90,7 +79,6 @@ class CliClient extends AnalyzerClient {
     reporter.save();
     _logController.close();
     _lintController.close();
-    logFileSink.close();
     for (final subscription in _subscriptions) {
       subscription.cancel();
     }

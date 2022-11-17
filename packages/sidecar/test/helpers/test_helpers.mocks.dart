@@ -5,8 +5,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:cli_util/cli_logging.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:sidecar/src/protocol/communication/communication.dart' as _i4;
 import 'package:sidecar/src/protocol/logging/log_record.dart' as _i5;
-import 'package:sidecar/src/protocol/responses/notification_union.dart' as _i4;
 import 'package:sidecar/src/reports/report.dart' as _i6;
 import 'package:sidecar/src/reports/stdout_report.dart' as _i3;
 
@@ -119,19 +119,17 @@ class MockStdoutReport extends _i1.Mock implements _i3.StdoutReport {
   void handleError(
     Object? object,
     StackTrace? stackTrace,
-  ) {
-    super.noSuchMethod(
-      Invocation.method(
-        #handleError,
-        [
-          object,
-          stackTrace,
-        ],
-      ),
-      returnValueForMissingStub: null,
-    );
-  }
-
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #handleError,
+          [
+            object,
+            stackTrace,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
   @override
   void handleLintNotification(_i4.LintNotification? notification) =>
       super.noSuchMethod(

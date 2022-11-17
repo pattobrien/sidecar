@@ -4,8 +4,8 @@ import '../active_package_root.dart';
 import '../analyzed_file.dart';
 import '../models/file_update_event.dart';
 
-part 'sidecar_request.freezed.dart';
-part 'sidecar_request.g.dart';
+part 'requests.freezed.dart';
+part 'requests.g.dart';
 
 @freezed
 class SidecarRequest with _$SidecarRequest {

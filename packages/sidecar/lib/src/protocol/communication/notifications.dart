@@ -2,8 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../protocol.dart';
 
-part 'notification_union.freezed.dart';
-part 'notification_union.g.dart';
+part 'notifications.freezed.dart';
+part 'notifications.g.dart';
 
 @freezed
 class SidecarNotification with _$SidecarNotification {

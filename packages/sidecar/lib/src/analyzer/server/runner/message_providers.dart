@@ -1,7 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../../protocol/communication/communication.dart';
 import '../../../protocol/logging/log_record.dart';
-import '../../../protocol/responses/responses.dart';
 import 'sidecar_runner.dart';
 
 final analyzerMessageStreamProvider =
@@ -29,7 +29,7 @@ final analyzerLogStreamProvider =
       .watch(analyzerMessageStreamProvider(runner).stream)
       .where((event) => event is LogMessage)
       .map((event) => (event as LogMessage).record),
-  name: 'analyzerNotificationStreamProvider',
+  name: 'analyzerLogStreamProvider',
 );
 
 final analyzerResponseStreamProvider =

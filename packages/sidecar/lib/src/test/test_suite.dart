@@ -15,7 +15,6 @@ import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 
 import '../../sidecar.dart';
 import '../cli/options/cli_options.dart';
-import '../utils/logger/debugger_delegate.dart';
 import '../utils/logger/logger.dart';
 import 'project.dart';
 import 'project_notifier.dart';

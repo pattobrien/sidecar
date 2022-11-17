@@ -7,9 +7,7 @@ import 'package:collection/collection.dart';
 import 'package:package_config/package_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/src/protocol/exceptions/active_project_exceptions.dart';
 
-import '../analyzer/plugin/plugin.dart';
 import '../analyzer/server/runner/context_providers.dart';
 import '../configurations/project/project_configuration.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
@@ -62,12 +60,16 @@ class ActiveProjectService {
     //
     final root = context.contextRoot.root.toUri();
     final isSidecarEnabled = context.isSidecarEnabled;
-    if (!isSidecarEnabled) throw SidecarPluginNotActivated(root);
     final pluginUri = _getSidecarPluginUriForPackage(root);
     final packages = getSidecarDependencies(root);
     final projectConfig = getSidecarOptions(root);
     final packageConfigJson = _getPackageConfig(root);
     if (pluginUri == null || !isSidecarEnabled || projectConfig == null) {
+      logger.info('context at ${root.path} is not an active sidecar context.');
+      if (!isSidecarEnabled) {
+        logger.info(
+            '${root.path} does not have sidecar enabled in analysis_options.yaml');
+      }
       return null;
     }
     return ActivePackage(

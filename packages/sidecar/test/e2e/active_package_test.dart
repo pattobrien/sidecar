@@ -28,11 +28,11 @@ void main() {
       app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
     });
 
-    setUp(() async {
+    setUp(() {
       reporter = MockStdoutReport();
     });
 
-    test('sidecar is enabled', () async {
+    test('sidecar plugin is enabled', () async {
       app.modifyFile(kMainFilePath, kContentWithString);
       app.modifyFile(kAnalysisOptionsYaml, kAnalysisYamlContentWithSidecar);
       await analyzeTestResources(app.root, reporter);
@@ -41,13 +41,47 @@ void main() {
       expectLints(results.first, [lint(kStringLiteralsCode, 28, 14)]);
     });
 
-    //TODO: this is correctly throwing an error: how do we handle it though?
-    test('sidecar is not enabled', () async {
+    test('sidecar plugin is not enabled', () async {
       app.modifyFile(kMainFilePath, kContentWithString);
       app.modifyFile(kAnalysisOptionsYaml, kAnalysisYamlContentWithoutSidecar);
+      await analyzeTestResources(app.root, reporter);
 
-      expect(analyzeTestResources(app.root, reporter),
-          throwsA(isA<SidecarAnalyzerException>()));
+      verifyNever(reporter.handleLintNotification(captureAny));
+    });
+  });
+
+  group('active package - sidecar.yaml:', () {
+    final constructors = [StringLiterals.new];
+    final sidecarYaml = ProjectConfiguration.fromCodes([kStringLiteralsCode]);
+
+    late PackageResource app;
+    late WorkspaceResource workspace;
+    late MockStdoutReport reporter;
+
+    setUpAll(() async {
+      workspace = await createWorkspace(constructors: constructors);
+      app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
+    });
+
+    setUp(() {
+      reporter = MockStdoutReport();
+    });
+
+    test('sidecar plugin is enabled', () async {
+      app.modifyFile(kMainFilePath, kContentWithString);
+      app.modifyFile(kAnalysisOptionsYaml, kAnalysisYamlContentWithSidecar);
+      await analyzeTestResources(app.root, reporter);
+      final results =
+          verify(reporter.handleLintNotification(captureAny)).captured;
+      expectLints(results.first, [lint(kStringLiteralsCode, 28, 14)]);
+    });
+
+    test('sidecar plugin is not enabled', () async {
+      app.modifyFile(kMainFilePath, kContentWithString);
+      app.modifyFile(kAnalysisOptionsYaml, kAnalysisYamlContentWithoutSidecar);
+      await analyzeTestResources(app.root, reporter);
+
+      verifyNever(reporter.handleLintNotification(captureAny));
     });
   });
 }

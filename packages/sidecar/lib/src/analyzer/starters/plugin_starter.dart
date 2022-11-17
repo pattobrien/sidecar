@@ -24,7 +24,7 @@ Future<void> startSidecarPlugin(
     () {
       final container = ProviderContainer(
         overrides: [
-          masterPluginChannelProvider.overrideWithValue(channel),
+          analyzerPluginChannelProvider.overrideWithValue(channel),
           cliOptionsProvider.overrideWithValue(cliOptions),
           logDelegateProvider.overrideWithValue(delegate),
         ],

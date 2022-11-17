@@ -2,8 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../models/models.dart';
 
-part 'response_union.freezed.dart';
-part 'response_union.g.dart';
+part 'responses.freezed.dart';
+part 'responses.g.dart';
 
 @freezed
 class SidecarResponse with _$SidecarResponse {
@@ -20,7 +20,6 @@ class SidecarResponse with _$SidecarResponse {
 
   const factory SidecarResponse.updateFiles() = UpdateFilesResponse;
 
-  // const factory SidecarResponse.setActivePackage() = SetActivePackageResponse;
   const factory SidecarResponse.setPriorityFiles() = SetPriorityFilesResponse;
 
   factory SidecarResponse.fromJson(Map<String, dynamic> json) =>

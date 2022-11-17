@@ -1,6 +1,6 @@
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
-import '../responses/responses.dart';
+import '../communication/responses.dart';
 import 'result_exts.dart';
 
 extension QuickFixX on QuickFixResponse {
