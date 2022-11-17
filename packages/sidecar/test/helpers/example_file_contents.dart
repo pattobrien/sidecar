@@ -10,6 +10,13 @@ void main() {
 }
 ''';
 
+const kContentWithTwoStrings = '''
+void main() {
+  final abc = 'string value';
+  final abcd = 'second string value';
+}
+''';
+
 final kMainFilePath = p.join('lib', 'main.dart');
 
 const kAnalysisYamlContentWithoutSidecar = '''

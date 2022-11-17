@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:sidecar/src/protocol/protocol.dart';
 import 'package:test/test.dart';
 
@@ -21,9 +23,13 @@ void expectLintResult(
   LintResult actual,
   ExpectedLint expectedLint,
 ) {
-  if (actual.rule != expectedLint.code) fail('code');
-  if (actual.span.start.offset != expectedLint.offset) fail('offset');
-  if (actual.span.length != expectedLint.length) fail('length');
+  // if (actual.rule != expectedLint.code) fail('code');
+  // if (actual.span.start.offset != expectedLint.offset) fail('offset');
+  // if (actual.span.length != expectedLint.length) fail('length');
+  expect(actual.rule, expectedLint.code, reason: 'code does not match');
+  expect(actual.span.start.offset, expectedLint.offset,
+      reason: 'offset doesnt match');
+  expect(actual.span.length, expectedLint.length, reason: 'invalid length');
 }
 
 // void expectLint(

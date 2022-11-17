@@ -1,6 +1,4 @@
 import 'package:mockito/mockito.dart';
-import 'package:path/path.dart';
-import 'package:sidecar/sidecar.dart';
 import 'package:sidecar/src/configurations/configurations.dart';
 import 'package:sidecar/src/test/resources/package_resource.dart';
 import 'package:sidecar/src/test/resources/workspace_resource.dart';
@@ -14,7 +12,7 @@ import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
 
 void main() {
-  group('single project lint results', () {
+  group('single project lint results:', () {
     final constructors = [StringLiterals.new];
     final sidecarYaml = ProjectConfiguration.fromCodes([kStringLiteralsCode]);
 
@@ -31,7 +29,7 @@ void main() {
       reporter = MockStdoutReport();
     });
 
-    test('single lint result', () async {
+    test('1 lint result', () async {
       app.modifyFile(kMainFilePath, kContentWithString);
       await analyzeTestResources(app.root, reporter);
       final results =
@@ -39,7 +37,18 @@ void main() {
       expectLints(results.first, [lint(kStringLiteralsCode, 28, 14)]);
     });
 
-    test('no lint results', () async {
+    test('2 lint results', () async {
+      app.modifyFile(kMainFilePath, kContentWithTwoStrings);
+      await analyzeTestResources(app.root, reporter);
+      final results =
+          verify(reporter.handleLintNotification(captureAny)).captured;
+      expectLints(results.first, [
+        lint(kStringLiteralsCode, 28, 14),
+        lint(kStringLiteralsCode, 59, 21),
+      ]);
+    });
+
+    test('0 lint results', () async {
       app.modifyFile(kMainFilePath, kContentWithoutString);
       await analyzeTestResources(app.root, reporter);
       final results =
