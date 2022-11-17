@@ -14,7 +14,6 @@ import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
 import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 
-import '../../cli/options/cli_options.dart';
 import '../../protocol/analyzer_plugin_exts/analyzer_plugin_exts.dart';
 import '../../protocol/constants/constants.dart';
 import '../../protocol/logging/log_record.dart';
@@ -23,7 +22,6 @@ import '../../reports/plugin_reporter.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/utils.dart';
-import '../options_provider.dart';
 import 'middleman_resource_provider.dart';
 import 'plugin_channel_provider.dart';
 import 'runner/context_providers.dart';
@@ -48,8 +46,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   @override
   plugin.PluginCommunicationChannel get channel =>
       ref.read(analyzerPluginChannelProvider);
-
-  CliOptions get options => ref.read(cliOptionsProvider);
 
   PluginReporter? reporter;
 
@@ -399,9 +395,8 @@ final analyzerPluginProvider = Provider<SidecarAnalyzerPlugin>(
   (ref) {
     return SidecarAnalyzerPlugin(ref);
   },
-  name: 'middlemanPluginProvider',
+  name: 'analyzerPluginProvider',
   dependencies: [
-    cliOptionsProvider,
     analyzerPluginChannelProvider,
     middlemanResourceProvider,
   ],

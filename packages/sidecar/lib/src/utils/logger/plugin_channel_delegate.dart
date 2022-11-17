@@ -1,17 +1,12 @@
-import 'dart:io' as io;
-
 import 'package:analyzer_plugin/channel/channel.dart';
-import 'package:path/path.dart' as p;
 
-import '../../cli/options/cli_options.dart';
 import '../../protocol/protocol.dart';
 import '../../utils/utils.dart';
 import 'log_delegate_base.dart';
 
 class PluginChannelDelegate implements LogDelegateBase {
-  PluginChannelDelegate(this.options, this.channel);
+  PluginChannelDelegate(this.channel);
 
-  final CliOptions options;
   final PluginCommunicationChannel channel;
 
   void _log(String message) {

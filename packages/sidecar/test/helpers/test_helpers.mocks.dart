@@ -7,8 +7,8 @@ import 'package:cli_util/cli_logging.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:sidecar/src/protocol/communication/communication.dart' as _i4;
 import 'package:sidecar/src/protocol/logging/log_record.dart' as _i5;
-import 'package:sidecar/src/reports/report.dart' as _i6;
-import 'package:sidecar/src/reports/stdout_report.dart' as _i3;
+import 'package:sidecar/src/reports/reporter.dart' as _i6;
+import 'package:sidecar/src/reports/stdout_reporter.dart' as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -41,21 +41,11 @@ class _FakeProgress_1 extends _i1.SmartFake implements _i2.Progress {
         );
 }
 
-class _FakeStopwatch_2 extends _i1.SmartFake implements Stopwatch {
-  _FakeStopwatch_2(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-/// A class which mocks [StdoutReport].
+/// A class which mocks [StdoutReporter].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockStdoutReport extends _i1.Mock implements _i3.StdoutReport {
-  MockStdoutReport() {
+class MockStdoutReporter extends _i1.Mock implements _i3.StdoutReporter {
+  MockStdoutReporter() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -83,30 +73,6 @@ class MockStdoutReport extends _i1.Mock implements _i3.StdoutReport {
           Invocation.getter(#progress),
         ),
       ) as _i2.Progress);
-  @override
-  set progress(_i2.Progress? _progress) => super.noSuchMethod(
-        Invocation.setter(
-          #progress,
-          _progress,
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  Stopwatch get watch => (super.noSuchMethod(
-        Invocation.getter(#watch),
-        returnValue: _FakeStopwatch_2(
-          this,
-          Invocation.getter(#watch),
-        ),
-      ) as Stopwatch);
-  @override
-  void testStub() => super.noSuchMethod(
-        Invocation.method(
-          #testStub,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
   @override
   void init(Uri? uri) => super.noSuchMethod(
         Invocation.method(
@@ -157,11 +123,11 @@ class MockStdoutReport extends _i1.Mock implements _i3.StdoutReport {
       );
 }
 
-/// A class which mocks [Report].
+/// A class which mocks [Reporter].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockReport extends _i1.Mock implements _i6.Report {
-  MockReport() {
+class MockReporter extends _i1.Mock implements _i6.Reporter {
+  MockReporter() {
     _i1.throwOnMissingStub(this);
   }
 

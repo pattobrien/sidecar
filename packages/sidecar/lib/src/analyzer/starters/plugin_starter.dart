@@ -5,10 +5,7 @@ import 'dart:isolate';
 import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../cli/options/cli_options.dart';
-import '../../reports/plugin_reporter.dart';
 import '../../utils/logger/logger.dart';
-import '../options_provider.dart';
 import '../server/log_delegate.dart';
 import '../server/server.dart';
 
@@ -17,15 +14,13 @@ Future<void> startSidecarPlugin(
   List<String> args,
 ) async {
   final channel = PluginIsolateChannel(sendPort);
-  final cliOptions = CliOptions.fromArgs(args, isPlugin: true);
 
-  final LogDelegateBase delegate = PluginChannelDelegate(cliOptions, channel);
+  final LogDelegateBase delegate = PluginChannelDelegate(channel);
   runZonedGuarded(
     () {
       final container = ProviderContainer(
         overrides: [
           analyzerPluginChannelProvider.overrideWithValue(channel),
-          cliOptionsProvider.overrideWithValue(cliOptions),
           logDelegateProvider.overrideWithValue(delegate),
         ],
       );

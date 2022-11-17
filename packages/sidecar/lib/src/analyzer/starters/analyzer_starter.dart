@@ -11,7 +11,7 @@ import '../plugin/communication_channel.dart';
 import '../plugin/rule_constructors_provider.dart';
 import '../plugin/sidecar_analyzer.dart';
 
-Future<void> analyzerStarter(
+Future<void> startAnalyzer(
   List<String> args,
   SendPort sendPort, {
   List<SidecarBaseConstructor> constructors = const [],

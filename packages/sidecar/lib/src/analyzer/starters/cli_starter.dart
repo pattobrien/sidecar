@@ -4,18 +4,16 @@ import 'dart:isolate';
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../cli/options/cli_options.dart';
-import '../../reports/stdout_report.dart';
+import '../../reports/stdout_reporter.dart';
 import '../client/cli_client.dart';
 import '../client/client.dart';
 import '../client/hot_reloader.dart';
-import '../server/server.dart';
 
 Future<void> startSidecarCli(
   SendPort sendPort,
   List<String> args,
 ) async {
-  final cliOptions = CliOptions.fromArgs(args, isPlugin: false);
+  final isDebug = args.any((arg) => arg == 'debug' || arg == '--debug');
   final container = ProviderContainer(overrides: [
     analyzerClientProvider.overrideWithProvider(cliClientProvider),
   ]);
@@ -23,12 +21,11 @@ Future<void> startSidecarCli(
     () async {
       final client = container.read(analyzerClientProvider);
       await client.openWorkspace();
-      client.closeWorkspace();
+      // client.closeWorkspace();
 
-      if (cliOptions.mode.isCli) exit(0);
-      if (cliOptions.mode.isDebug) {
-        await container.read(hotReloaderProvider.future);
-      }
+      if (!isDebug) exit(0);
+
+      await container.read(hotReloaderProvider.future);
     },
     container.read(stdoutReportProvider).handleError,
     zoneSpecification: ZoneSpecification(

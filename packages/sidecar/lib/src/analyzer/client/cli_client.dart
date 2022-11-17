@@ -5,7 +5,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
-import '../../reports/stdout_report.dart';
+import '../../reports/stdout_reporter.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/logger/logger.dart';
 import '../server/runner/context_providers.dart';
@@ -29,7 +29,7 @@ class CliClient extends AnalyzerClient {
   @override
   Stream<LogRecord> get logs => _logController.stream.asBroadcastStream();
 
-  StdoutReport get reporter => _ref.read(stdoutReportProvider);
+  StdoutReporter get reporter => _ref.read(stdoutReportProvider);
   Uri get root => _ref.read(cliDirectoryProvider);
 
   final _lintController = StreamController<LintNotification>();

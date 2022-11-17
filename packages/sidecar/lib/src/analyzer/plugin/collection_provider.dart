@@ -15,7 +15,7 @@ final contextCollectionProvider = Provider((ref) {
   final byteStore = ref.watch(createByteStoreProvider);
   final contentCache = ref.watch(createFileContentCacheProvider);
   final resourceProvider = ref.watch(analyzerResourceProvider);
-  // final includes = [activePackage.root];
+
   final scope =
       activePackage.workspaceScope ?? [activePackage.packageRoot.root];
   final includesPaths = scope.map((uri) {

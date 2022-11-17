@@ -2,12 +2,13 @@ import 'dart:io' as io;
 
 import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/sidecar.dart';
 
+import '../protocol/communication/communication.dart';
 import '../protocol/logging/log_record.dart';
-import 'report.dart';
+import '../utils/utils.dart';
+import 'reporter.dart';
 
-class PluginReporter extends Report {
+class PluginReporter extends Reporter {
   PluginReporter(
     this.workspaceRoot,
   ) {
@@ -19,7 +20,6 @@ class PluginReporter extends Report {
   late int timestamp;
   late io.File logFile;
 
-  @override
   void init() {
     timestamp = DateTime.now().millisecondsSinceEpoch;
     logFile = io.File.fromUri(workspaceRoot
@@ -31,24 +31,16 @@ class PluginReporter extends Report {
   @override
   void handleError(Object object, StackTrace stackTrace) {
     sink.writeln('${object.toString()} || ${stackTrace.toString()}');
-    // print('PRINTING LOGS');
-    // logFile.writeAsString('${object.toString()} || ${stackTrace.toString()}\n',
-    //     mode: io.FileMode.append);
   }
 
   @override
   void handleLintNotification(LintNotification notification) {
     sink.writeln(notification.toString());
-    // print('PRINTING LOGS');
-    // logFile.writeAsString('${notification.toString()}\n',
-    //     mode: io.FileMode.append);
   }
 
   @override
   void handleLog(LogRecord log) {
-    // print('PRINTING LOGS');
     sink.writeln(log.prettified());
-    // logFile.writeAsString('${log.toString()}\n', mode: io.FileMode.append);
   }
 
   void close() => sink.close();

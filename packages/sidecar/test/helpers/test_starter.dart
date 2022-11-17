@@ -5,13 +5,13 @@ import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/src/analyzer/client/cli_client.dart';
 import 'package:sidecar/src/analyzer/client/client.dart';
 import 'package:sidecar/src/analyzer/starters/cli_starter.dart';
-import 'package:sidecar/src/reports/stdout_report.dart';
+import 'package:sidecar/src/reports/stdout_reporter.dart';
 
 late ProviderContainer container;
 
 Future<AnalyzerClient> analyzeTestResources(
   Uri root,
-  StdoutReport reporter,
+  StdoutReporter reporter,
 ) async {
   // final cliOptions = CliOptions.fromArgs(['--cli'], isPlugin: false);
   container = ProviderContainer(overrides: [

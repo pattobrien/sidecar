@@ -4,14 +4,13 @@ import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/file_system/file_system.dart';
 import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/src/services/active_project_service.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
+import '../../../services/active_project_service.dart';
 import '../../../services/isolate_builder_service.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
@@ -61,8 +60,6 @@ class SidecarRunner {
 
   late final SendPort sendPort;
 
-  ResourceProvider get resourceProvider => _ref.read(runnerResourceProvider);
-
   final _controller = StreamController<Object>();
   Stream<Object> get _stream => _controller.stream;
 
@@ -79,12 +76,13 @@ class SidecarRunner {
       .where((e) => e is LintNotification)
       .map((e) => e as LintNotification);
 
-  /// Starts the plugin and sends the necessary requests for initializing it.
+  /// Starts the server isolate and sends the necessary requests for initializing it.
   Future<void> initialize() async {
     _setContexts();
     _initStream();
     final isolateBuilder = _ref.read(isolateBuilderServiceProvider);
     final activeProjectService = _ref.read(activeProjectServiceProvider);
+    final resourceProvider = _ref.read(runnerResourceProvider);
 
     final packageRoot = activePackage.packageRoot.root;
     final pluginRoot = activePackage.sidecarPluginPackage.root;
@@ -98,17 +96,7 @@ class SidecarRunner {
         sendPort: receivePort.sendPort,
         root: activePackage.packageRoot.root);
 
-    notifications.listen((event) => event.map(
-          initComplete: (_) => handleStartupNotification(),
-          lint: (_) => null,
-        ));
-
-    await _initializationCompleter.future;
-    // await requestSetActiveRoot();
-  }
-
-  void requestSetWorkspaceScope(List<Uri>? roots) {
-    //
+    await notifications.firstWhere((e) => e is InitCompleteNotification);
   }
 
   void _initStream() {
@@ -129,50 +117,6 @@ class SidecarRunner {
     );
   }
 
-  void handleStartupNotification() {
-    // print('isolate startup completed\n');
-    _initializationCompleter.complete();
-  }
-
-  final _initializationCompleter = Completer<void>();
-
-  AnalysisContext? getContextForPath(String path) {
-    return allContexts
-        .firstWhereOrNull((element) => element.contextRoot.isAnalyzed(path));
-  }
-
-  Future<UpdateFilesResponse?> requestLintsForFile(
-    AnalyzedFile file,
-  ) async {
-    final watch = Stopwatch()..start();
-
-    // print('file reload 1: ${watch.elapsed.prettified()}');
-    final contents = resourceProvider.getFile(file.path).readAsStringSync();
-    final fileUpdateEvent = FileUpdateEvent.add(file, contents);
-    final request = FileUpdateRequest([fileUpdateEvent]);
-    final id = const Uuid().v4();
-    final wrappedRequest = SidecarMessage.request(request: request, id: id);
-    final json = wrappedRequest.toJson();
-    final encoded = jsonEncode(json);
-    // print('request: $encoded');
-    sendPort.send(encoded);
-    final sub = lints.listen((event) {
-      if (event.file.path == file.path) {
-        // print(
-        //     '${DateTime.now().toIso8601String()} LINT RECEIVED for ${file.relativePath} in ${watch.elapsed.prettified()}');
-      }
-    });
-
-    final response = await _responses.firstWhere((resp) => resp.id == id);
-    await sub.cancel();
-
-    final msg = response.mapOrNull(response: (response) => response)?.response;
-    if (msg == null) throw UnimplementedError();
-    if (msg is! UpdateFilesResponse) throw UnimplementedError();
-
-    return msg;
-  }
-
   Future<T> asyncRequest<T extends SidecarResponse>(
     SidecarRequest request,
   ) async {
@@ -182,8 +126,8 @@ class SidecarRunner {
     sendPort.send(message);
     final response = await _responses.firstWhere((resp) => resp.id == id);
     final msg = response.mapOrNull(response: (response) => response)?.response;
-    if (msg == null) throw UnimplementedError();
-    if (msg is! T) throw UnimplementedError();
+    assert(msg == null || msg is! T, 'Response was an unexpected type');
+    if (msg == null || msg is! T) throw UnimplementedError();
     return msg;
   }
 }
