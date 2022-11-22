@@ -42,6 +42,8 @@ jobs:
         run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
       - name: Install dependencies
         run: flutter pub get
+      - name: install coverage
+        run: dart pub global activate coverage
 
       # - name: Check format
       #   run: flutter format --set-exit-if-changed .
