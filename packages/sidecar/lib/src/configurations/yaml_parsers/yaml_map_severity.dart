@@ -1,13 +1,14 @@
 import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
-import '../builders/new_exceptions.dart';
+import '../exceptions/exceptions.dart';
 import '../project/errors.dart';
 
 extension YamlMapSeverity on YamlMap {
   SidecarExceptionTuple<LintSeverity?> parseSeverity() {
     const key = 'severity';
     try {
+      final doesContainKey = containsKey(key);
       final severityValue = containsKey(key)
           ? LintSeverityX.fromString(value[key] as String)
           : null;

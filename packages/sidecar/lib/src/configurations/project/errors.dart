@@ -1,6 +1,6 @@
 import 'package:tuple/tuple.dart';
 
-import '../builders/new_exceptions.dart';
+import '../exceptions/exceptions.dart';
 
 typedef SidecarExceptionTuple<T> = Tuple2<T, List<SidecarNewException>>;
 

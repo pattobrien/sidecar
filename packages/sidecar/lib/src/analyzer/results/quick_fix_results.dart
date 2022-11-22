@@ -1,76 +1,59 @@
-import 'package:analyzer_plugin/protocol/protocol_generated.dart';
-import 'package:riverpod/riverpod.dart';
+// import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../protocol/protocol.dart';
-import '../../services/services.dart';
-import '../context/context.dart';
-import '../plugin/plugin.dart';
-import 'analysis_result.dart';
-import 'analysis_results_provider.dart';
+// import '../../protocol/protocol.dart';
+// import '../../services/services.dart';
+// import '../plugin/plugin.dart';
+// import 'analysis_results_provider.dart';
 
-final quickFixForRequestProvider =
-    FutureProvider.family<List<AnalysisErrorFixes>, EditRequest>(
-  (ref, request) async {
-    final fileService = ref.watch(fileAnalyzerServiceProvider);
-    final context = ref.watch(activeContextForRootProvider(request.file.root));
-    final lintResults =
-        await ref.watch(lintResultsForFileProvider(request.file).future);
+// part 'quick_fix_results.g.dart';
 
-    final analysisResultsForOffset = lintResults.where(
-        (element) => element.isWithinOffset(request.file.path, request.offset));
-    return Future.wait(analysisResultsForOffset.map((e) async {
-      final resultWithEdits =
-          await fileService.computeEditResultsForAnalysisResult(context, e);
-      return resultWithEdits.toAnalysisErrorFixes();
-    }));
-  },
-  name: 'quickFixForRequestProvider',
-  dependencies: [
-    activeContextForRootProvider,
-    fileAnalyzerServiceProvider,
-    analysisResultsForFileProvider,
-    lintResultsForFileProvider,
-  ],
-);
+// @riverpod
+// Future<List<LintResultWithEdits>> requestQuickFixes(
+//   RequestQuickFixesRef ref,
+//   QuickFixRequest request,
+// ) async {
+//   final fileService = ref.watch(fileAnalyzerServiceProvider);
+//   final rules = ref.watch(lintRulesForFileProvider(request.file));
+//   final lintResults =
+//       await ref.watch(lintResultsForFileProvider(request.file).future);
+//   final filteredResults =
+//       fileService.getAnalysisResultsAtOffset(lintResults, request);
 
-final analysisQuickFixResultsProvider =
-    FutureProvider.family<List<LintResult>, ActiveContextRoot>(
-  (ref, root) async {
-    final fileService = ref.watch(fileAnalyzerServiceProvider);
+//   return Future.wait(filteredResults.map((e) async {
+//     final resultWithEdits =
+//         await fileService.computeEditResultsForAnalysisResult(e, rules);
+//     return resultWithEdits;
+//   }));
+// }
 
-    // wait for all analysis results to be computed before calculating quick fixes
-    // await ref.watch(_isContextAnalyzingFilesProvider(root).future);
-    final results = await ref.watch(lintResultsForContextProvider(root).future);
+// // @riverpod
+// // Future<List<LintResultWithEdits>> quickFixResultsForRoot(
+// //   QuickFixResultsForRootRef ref,
+// //   Context root,
+// // ) async {
+// //   final fileService = ref.watch(fileAnalyzerServiceProvider);
+// //   final files = ref.watch(analyzedFilesForRootProvider(root));
 
-    final context = ref.watch(activeContextForRootProvider(root));
-    final resultsWithEdits = await Future.wait(results.map((e) async {
-      return fileService.computeEditResultsForAnalysisResult(context, e);
-    }));
+// //   // wait for all analysis results to be computed before calculating quick fixes
+// //   // await ref.watch(_isContextAnalyzingFilesProvider(root).future);
+// //   final results = await ref.watch(requestQuickFixes(root).future);
 
-    return resultsWithEdits;
-  },
-  name: 'analysisQuickFixResultsProvider',
-  dependencies: [
-    lintResultsForContextProvider,
-    fileAnalyzerServiceProvider,
-    analysisResultsForContextProvider,
-    activeContextForRootProvider,
-    _isContextAnalyzingFilesProvider,
-  ],
-);
+// //   // final context = ref.watch(activeContextForRootProvider(root));
+// //   final resultsWithEdits = await Future.wait(results.map((e) async {
+// //     return fileService.computeEditResultsForAnalysisResult(e);
+// //   }));
 
-final _isContextAnalyzingFilesProvider =
-    FutureProvider.family<void, ActiveContextRoot>(
-  (ref, activeRoot) async {
-    final allContextFiles = ref.watch(analyzedFilesProvider(activeRoot));
-    await Future.wait(allContextFiles.map(
-      (analyzedFile) async =>
-          ref.watch(analysisResultsForFileProvider(analyzedFile).future),
-    ));
-  },
-  name: '_isContextAnalyzingFilesProvider',
-  dependencies: [
-    analyzedFilesProvider,
-    analysisResultsForFileProvider,
-  ],
-);
+// //   return resultsWithEdits;
+// // }
+
+// // @riverpod
+// // Future<void> awaitContextStillAnalyzing(
+// //   AwaitContextStillAnalyzingRef ref,
+// //   ActiveContextRoot root,
+// // ) async {
+// //   final allContextFiles = ref.watch(analyzedFilesForRootProvider(root));
+// //   await Future.wait(allContextFiles.map(
+// //     (analyzedFile) async =>
+// //         ref.watch(analysisResultsForFileProvider(analyzedFile).future),
+// //   ));
+// // }

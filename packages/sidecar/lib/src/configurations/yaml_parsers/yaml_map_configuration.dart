@@ -1,8 +1,7 @@
 import 'package:yaml/yaml.dart';
 
-import '../builders/builders.dart';
-import '../builders/new_exceptions.dart';
 import '../configurations.dart';
+import '../exceptions/exceptions.dart';
 
 extension YamlMapConfigurationParse on YamlMap {
   SidecarExceptionTuple<YamlMap?> parseConfiguration() {

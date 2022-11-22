@@ -16,13 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Project {
-  Uri get root => throw _privateConstructorUsedError;
-  List<File> get files => throw _privateConstructorUsedError;
-  List<Package> get dependencies => throw _privateConstructorUsedError;
-  List<LintPackageConfiguration> get lintPackages =>
-      throw _privateConstructorUsedError;
-  List<AssistPackageConfiguration> get assistPackages =>
-      throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  Uri get parent => throw _privateConstructorUsedError;
+  ResourceProvider get resourceProvider => throw _privateConstructorUsedError;
+  SidecarSpec? get sidecarConfiguration => throw _privateConstructorUsedError;
+  Map<String, String>? get source => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProjectCopyWith<Project> get copyWith => throw _privateConstructorUsedError;
@@ -33,11 +31,11 @@ abstract class $ProjectCopyWith<$Res> {
   factory $ProjectCopyWith(Project value, $Res Function(Project) then) =
       _$ProjectCopyWithImpl<$Res>;
   $Res call(
-      {Uri root,
-      List<File> files,
-      List<Package> dependencies,
-      List<LintPackageConfiguration> lintPackages,
-      List<AssistPackageConfiguration> assistPackages});
+      {String name,
+      Uri parent,
+      ResourceProvider resourceProvider,
+      SidecarSpec? sidecarConfiguration,
+      Map<String, String>? source});
 }
 
 /// @nodoc
@@ -50,33 +48,33 @@ class _$ProjectCopyWithImpl<$Res> implements $ProjectCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? root = freezed,
-    Object? files = freezed,
-    Object? dependencies = freezed,
-    Object? lintPackages = freezed,
-    Object? assistPackages = freezed,
+    Object? name = freezed,
+    Object? parent = freezed,
+    Object? resourceProvider = freezed,
+    Object? sidecarConfiguration = freezed,
+    Object? source = freezed,
   }) {
     return _then(_value.copyWith(
-      root: root == freezed
-          ? _value.root
-          : root // ignore: cast_nullable_to_non_nullable
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      parent: parent == freezed
+          ? _value.parent
+          : parent // ignore: cast_nullable_to_non_nullable
               as Uri,
-      files: files == freezed
-          ? _value.files
-          : files // ignore: cast_nullable_to_non_nullable
-              as List<File>,
-      dependencies: dependencies == freezed
-          ? _value.dependencies
-          : dependencies // ignore: cast_nullable_to_non_nullable
-              as List<Package>,
-      lintPackages: lintPackages == freezed
-          ? _value.lintPackages
-          : lintPackages // ignore: cast_nullable_to_non_nullable
-              as List<LintPackageConfiguration>,
-      assistPackages: assistPackages == freezed
-          ? _value.assistPackages
-          : assistPackages // ignore: cast_nullable_to_non_nullable
-              as List<AssistPackageConfiguration>,
+      resourceProvider: resourceProvider == freezed
+          ? _value.resourceProvider
+          : resourceProvider // ignore: cast_nullable_to_non_nullable
+              as ResourceProvider,
+      sidecarConfiguration: sidecarConfiguration == freezed
+          ? _value.sidecarConfiguration
+          : sidecarConfiguration // ignore: cast_nullable_to_non_nullable
+              as SidecarSpec?,
+      source: source == freezed
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>?,
     ));
   }
 }
@@ -88,11 +86,11 @@ abstract class _$$_ProjectCopyWith<$Res> implements $ProjectCopyWith<$Res> {
       __$$_ProjectCopyWithImpl<$Res>;
   @override
   $Res call(
-      {Uri root,
-      List<File> files,
-      List<Package> dependencies,
-      List<LintPackageConfiguration> lintPackages,
-      List<AssistPackageConfiguration> assistPackages});
+      {String name,
+      Uri parent,
+      ResourceProvider resourceProvider,
+      SidecarSpec? sidecarConfiguration,
+      Map<String, String>? source});
 }
 
 /// @nodoc
@@ -106,33 +104,33 @@ class __$$_ProjectCopyWithImpl<$Res> extends _$ProjectCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? root = freezed,
-    Object? files = freezed,
-    Object? dependencies = freezed,
-    Object? lintPackages = freezed,
-    Object? assistPackages = freezed,
+    Object? name = freezed,
+    Object? parent = freezed,
+    Object? resourceProvider = freezed,
+    Object? sidecarConfiguration = freezed,
+    Object? source = freezed,
   }) {
     return _then(_$_Project(
-      root: root == freezed
-          ? _value.root
-          : root // ignore: cast_nullable_to_non_nullable
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      parent: parent == freezed
+          ? _value.parent
+          : parent // ignore: cast_nullable_to_non_nullable
               as Uri,
-      files: files == freezed
-          ? _value._files
-          : files // ignore: cast_nullable_to_non_nullable
-              as List<File>,
-      dependencies: dependencies == freezed
-          ? _value._dependencies
-          : dependencies // ignore: cast_nullable_to_non_nullable
-              as List<Package>,
-      lintPackages: lintPackages == freezed
-          ? _value._lintPackages
-          : lintPackages // ignore: cast_nullable_to_non_nullable
-              as List<LintPackageConfiguration>,
-      assistPackages: assistPackages == freezed
-          ? _value._assistPackages
-          : assistPackages // ignore: cast_nullable_to_non_nullable
-              as List<AssistPackageConfiguration>,
+      resourceProvider: resourceProvider == freezed
+          ? _value.resourceProvider
+          : resourceProvider // ignore: cast_nullable_to_non_nullable
+              as ResourceProvider,
+      sidecarConfiguration: sidecarConfiguration == freezed
+          ? _value.sidecarConfiguration
+          : sidecarConfiguration // ignore: cast_nullable_to_non_nullable
+              as SidecarSpec?,
+      source: source == freezed
+          ? _value._source
+          : source // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>?,
     ));
   }
 }
@@ -141,56 +139,34 @@ class __$$_ProjectCopyWithImpl<$Res> extends _$ProjectCopyWithImpl<$Res>
 
 class _$_Project extends _Project {
   const _$_Project(
-      {required this.root,
-      final List<File> files = const <File>[],
-      final List<Package> dependencies = const <Package>[],
-      final List<LintPackageConfiguration> lintPackages =
-          const <LintPackageConfiguration>[],
-      final List<AssistPackageConfiguration> assistPackages =
-          const <AssistPackageConfiguration>[]})
-      : _files = files,
-        _dependencies = dependencies,
-        _lintPackages = lintPackages,
-        _assistPackages = assistPackages,
+      {required this.name,
+      required this.parent,
+      required this.resourceProvider,
+      this.sidecarConfiguration,
+      final Map<String, String>? source})
+      : _source = source,
         super._();
 
   @override
-  final Uri root;
-  final List<File> _files;
+  final String name;
   @override
-  @JsonKey()
-  List<File> get files {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_files);
-  }
-
-  final List<Package> _dependencies;
+  final Uri parent;
   @override
-  @JsonKey()
-  List<Package> get dependencies {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_dependencies);
-  }
-
-  final List<LintPackageConfiguration> _lintPackages;
+  final ResourceProvider resourceProvider;
   @override
-  @JsonKey()
-  List<LintPackageConfiguration> get lintPackages {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_lintPackages);
-  }
-
-  final List<AssistPackageConfiguration> _assistPackages;
+  final SidecarSpec? sidecarConfiguration;
+  final Map<String, String>? _source;
   @override
-  @JsonKey()
-  List<AssistPackageConfiguration> get assistPackages {
+  Map<String, String>? get source {
+    final value = _source;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_assistPackages);
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
   String toString() {
-    return 'Project(root: $root, files: $files, dependencies: $dependencies, lintPackages: $lintPackages, assistPackages: $assistPackages)';
+    return 'Project(name: $name, parent: $parent, resourceProvider: $resourceProvider, sidecarConfiguration: $sidecarConfiguration, source: $source)';
   }
 
   @override
@@ -198,24 +174,23 @@ class _$_Project extends _Project {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Project &&
-            const DeepCollectionEquality().equals(other.root, root) &&
-            const DeepCollectionEquality().equals(other._files, _files) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.parent, parent) &&
             const DeepCollectionEquality()
-                .equals(other._dependencies, _dependencies) &&
+                .equals(other.resourceProvider, resourceProvider) &&
             const DeepCollectionEquality()
-                .equals(other._lintPackages, _lintPackages) &&
-            const DeepCollectionEquality()
-                .equals(other._assistPackages, _assistPackages));
+                .equals(other.sidecarConfiguration, sidecarConfiguration) &&
+            const DeepCollectionEquality().equals(other._source, _source));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(root),
-      const DeepCollectionEquality().hash(_files),
-      const DeepCollectionEquality().hash(_dependencies),
-      const DeepCollectionEquality().hash(_lintPackages),
-      const DeepCollectionEquality().hash(_assistPackages));
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(parent),
+      const DeepCollectionEquality().hash(resourceProvider),
+      const DeepCollectionEquality().hash(sidecarConfiguration),
+      const DeepCollectionEquality().hash(_source));
 
   @JsonKey(ignore: true)
   @override
@@ -225,23 +200,23 @@ class _$_Project extends _Project {
 
 abstract class _Project extends Project {
   const factory _Project(
-      {required final Uri root,
-      final List<File> files,
-      final List<Package> dependencies,
-      final List<LintPackageConfiguration> lintPackages,
-      final List<AssistPackageConfiguration> assistPackages}) = _$_Project;
+      {required final String name,
+      required final Uri parent,
+      required final ResourceProvider resourceProvider,
+      final SidecarSpec? sidecarConfiguration,
+      final Map<String, String>? source}) = _$_Project;
   const _Project._() : super._();
 
   @override
-  Uri get root;
+  String get name;
   @override
-  List<File> get files;
+  Uri get parent;
   @override
-  List<Package> get dependencies;
+  ResourceProvider get resourceProvider;
   @override
-  List<LintPackageConfiguration> get lintPackages;
+  SidecarSpec? get sidecarConfiguration;
   @override
-  List<AssistPackageConfiguration> get assistPackages;
+  Map<String, String>? get source;
   @override
   @JsonKey(ignore: true)
   _$$_ProjectCopyWith<_$_Project> get copyWith =>

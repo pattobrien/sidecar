@@ -1,14 +1,16 @@
 import 'package:analyzer/dart/ast/ast.dart';
 
-import '../../rules/rules.dart';
+import '../../../rules/rules.dart' hide Configuration;
+import '../../protocol/protocol.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';
 
-class LintVisitor extends AstVisitor<void> {
-  LintVisitor(this.registry);
+class RegisteredLintVisitor extends AstVisitor<void> {
+  RegisteredLintVisitor(this.registry);
 
-  final NodeLintRegistry registry;
+  final NodeRegistry registry;
+  final results = <LintResult>{};
 
   @override
   void visitAdjacentStrings(AdjacentStrings node) {
@@ -829,7 +831,8 @@ class LintVisitor extends AstVisitor<void> {
       timer?.start();
       try {
         node.accept<dynamic>(subscription.visitor);
-      } catch (exception) {
+        results.addAll(subscription.visitor.results.whereType<LintResult>());
+      } catch (e, stack) {
         // if (!exceptionHandler(
         //     node, subscription.linter, exception, stackTrace)) {
         rethrow;

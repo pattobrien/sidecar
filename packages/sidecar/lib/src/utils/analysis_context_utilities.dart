@@ -5,6 +5,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 import 'package:analyzer/src/dart/micro/utils.dart';
+import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
@@ -57,4 +58,27 @@ extension AnalysisContextX on AnalysisContext {
       .where((pluginName) => pluginName == kSidecarPluginName)
       .toList()
       .isNotEmpty;
+}
+
+extension AnalysisContextsX on List<AnalysisContext> {
+  AnalysisContext? contextForPath(String path) {
+    return firstWhereOrNull((context) => context.contextRoot
+        .analyzedFiles()
+        .any((filePath) => filePath == path));
+  }
+
+  AnalysisContext? contextForRoot(Uri root) {
+    return firstWhereOrNull((context) {
+      final contextRoot = context.contextRoot.root.toUri();
+      return contextRoot == root;
+    });
+  }
+
+  // Context? contextRootForPath(String path) {
+  //   final analysisContext = firstWhereOrNull((context) => context.contextRoot
+  //       .analyzedFiles()
+  //       .any((filePath) => filePath == path));
+  //   if (analysisContext == null) return null;
+  //   return Context(root: analysisContext.contextRoot.root.toUri());
+  // }
 }

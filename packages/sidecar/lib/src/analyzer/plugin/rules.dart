@@ -1,100 +1,35 @@
-import 'package:path/path.dart' as p;
-import 'package:riverpod/riverpod.dart';
+// import '../../configurations/sidecar_spec/sidecar_spec.dart';
+// import '../../protocol/protocol.dart';
+// import '../../rules/rules.dart';
 
-import '../../configurations/configurations.dart';
-import '../../rules/rules.dart';
-import '../../services/services.dart';
-import '../context/context.dart';
-import 'active_contexts_provider.dart';
-import 'rule_constructors_provider.dart';
+// bool _isPathIncludedForRule({
+//   required AnalyzedFile file,
+//   required BaseRule rule,
+//   required SidecarSpec projectConfiguration,
+// }) {
+//   // print(relativePath);
+//   // #1 check explicit LintRule/CodeEdit includes from project config
+//   final ruleConfig = projectConfiguration.getConfigurationForCode(rule.code);
 
-final lintRulesForFileProvider = Provider.family<List<LintRule>, AnalyzedFile>(
-  (ref, analyzedFile) {
-    return ref.watch(filteredRulesProvider(analyzedFile).select(
-      (rules) => rules.whereType<LintRule>().toList(),
-    ));
-  },
-  name: 'lintRulesForFileProvider',
-  dependencies: [
-    filteredRulesProvider,
-  ],
-);
+//   if (ruleConfig != null && ruleConfig.includes != null) {
+//     return ruleConfig.includesMatch(file.relativePath);
+//   }
 
-final assistRulesForFileProvider =
-    Provider.family<List<AssistRule>, AnalyzedFile>(
-  (ref, analyzedFile) {
-    return ref.watch(filteredRulesProvider(analyzedFile)
-        .select((value) => value.whereType<AssistRule>().toList()));
-  },
-  name: 'assistRulesForFileProvider',
-  dependencies: [
-    filteredRulesProvider,
-  ],
-);
+//   // #2 check default LintRule/CodeEdit includes from lint/edit definition
+//   if (rule.includes != null) {
+//     return rule.includes!.any((glob) => glob.matches(file.relativePath));
+//   }
 
-final activatedRulesProvider =
-    Provider.family<List<BaseRule>, ActiveContextRoot>(
-  (ref, activeRoot) {
-    final context = ref.watch(activeContextForRootProvider(activeRoot));
-    final ruleConstructors = ref.watch(ruleConstructorProvider);
-    final ruleService = ref.watch(ruleInitializationServiceProvider);
+//   final rulePackageConfig =
+//       projectConfiguration.getPackageConfigurationForCode(rule.code);
 
-    return ruleService.constructRules(
-      context.sidecarOptions,
-      ruleConstructors,
-      activeRoot,
-    );
-  },
-  name: '_activatedRulesProvider',
-  dependencies: [
-    activeContextForRootProvider,
-    ruleInitializationServiceProvider,
-    ruleConstructorProvider,
-  ],
-);
+//   // check explicit LintPackage includes from project config
+//   if (rulePackageConfig != null && rulePackageConfig.includes != null) {
+//     return rulePackageConfig.includesMatch(file.relativePath);
+//   }
 
-/// Filter rules based on globs defined in project configuration
-final filteredRulesProvider = Provider.family<List<BaseRule>, AnalyzedFile>(
-  (ref, analyzedFile) {
-    final allRules = ref.watch(activatedRulesProvider(analyzedFile.root));
-    final context = ref.watch(activeContextsProvider).contextFor(analyzedFile)!;
+//   // TODO: #4 check default LintPackage includes from LintPackage definition
 
-    return allRules
-        .where((rule) => _isPathIncludedForRule(
-            file: analyzedFile,
-            rule: rule,
-            projectConfiguration: context.sidecarOptions))
-        .toList();
-  },
-  name: 'filteredRulesProvider',
-  dependencies: [
-    activeContextsProvider,
-    activatedRulesProvider,
-  ],
-);
-
-bool _isPathIncludedForRule({
-  required AnalyzedFile file,
-  required BaseRule rule,
-  required ProjectConfiguration projectConfiguration,
-}) {
-  final relativePath = p.relative(file.path, from: file.root.root.path);
-
-  // #1 check explicit LintRule/CodeEdit includes from project config
-  final ruleConfig = projectConfiguration.getConfigurationForRule(rule);
-
-  if (ruleConfig != null && ruleConfig.includes != null) {
-    return ruleConfig.includes!.any((glob) => glob.matches(relativePath));
-  }
-
-  // #2 check default LintRule/CodeEdit includes from lint/edit definition
-  if (rule.includes != null) {
-    return rule.includes!.any((glob) => glob.matches(relativePath));
-  }
-
-  // TODO: #3 check explicit LintPackage includes from project config
-  // TODO: #4 check default LintPackage includes from LintPackage definition
-
-  // #5 check project configuration
-  return projectConfiguration.includes(relativePath);
-}
+//   // #5 check project configuration
+//   return projectConfiguration.doesInclude(file.relativePath);
+// }

@@ -1,8 +1,3 @@
-const defaultSidecarConfiguration = <dynamic, dynamic>{
-  'includes': <String>['bin/**', 'lib/**'],
-  '': ''
-};
-
 const defaultSidecarContent = '''
 
 # generated sidecar.yaml configuration
