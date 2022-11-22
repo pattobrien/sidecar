@@ -13,8 +13,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     defaults:
       run:
@@ -45,15 +45,8 @@ jobs:
       - name: install coverage
         run: dart pub global activate coverage
 
-      # - name: Check format
-      #   run: flutter format --set-exit-if-changed .
-      #   if: matrix.package_path != 'website'
-      # - name: Analyze
-      #   run: flutter analyze
       - name: Run tests
-        # run: flutter test --coverage
         run: dart test --coverage="coverage"
-        # run: dart test
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3.1.1

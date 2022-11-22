@@ -91,12 +91,14 @@ class PackageResource with ResourceMixin {
     final activeContext = service.getActivePackageFromContext(context);
 
     if (activeContext == null) {
-      throw StateError('Invalid Sidecar directory: $rootPath');
+      // throw StateError('Invalid Sidecar directory: $rootPath');
+      workspaceContainer.read(runnerActiveContextsProvider.notifier).update =
+          [];
+    } else {
+      workspaceContainer.read(runnerActiveContextsProvider.notifier).update = [
+        activeContext
+      ];
     }
-
-    workspaceContainer.read(runnerActiveContextsProvider.notifier).update = [
-      activeContext
-    ];
   }
 
   File newAnalysisOptionsYamlFile(String directoryPath, String content) {
