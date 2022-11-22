@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -48,6 +49,7 @@ class ActiveProjectService {
 
   ActivePackage? getActivePackageFromUri(Uri root) {
     final path = root.pathNoTrailingSlash;
+    // print('SDK PATH : ${p.dirname(p.dirname(Platform.resolvedExecutable))}');
     final collection = AnalysisContextCollection(
         includedPaths: [path], resourceProvider: resourceProvider);
     final rootContext = collection.contextFor(path);
