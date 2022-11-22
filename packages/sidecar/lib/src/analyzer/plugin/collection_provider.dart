@@ -1,10 +1,10 @@
-// ignore_for_file: implementation_imports
-
 import 'dart:async';
 
+// ignore: implementation_imports
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../utils/logger/logger.dart';
 import '../handlers/byte_store.dart';
 import '../handlers/file_content_cache.dart';
 import '../plugin/analyzer_resource_provider.dart';
@@ -34,9 +34,7 @@ final contextCollectionProvider = Provider((ref) {
       fileContentCache: contentCache,
       // sdkPath: sdkPath,
     ),
-    (e, s) {
-      print('collection error: $e $s');
-    },
+    (e, s) => logger.severe('collection error: $e $s'),
     zoneSpecification: ZoneSpecification(print: (_, __, ___, line) {}),
   );
 
@@ -46,10 +44,7 @@ final contextCollectionProvider = Provider((ref) {
   if (collection == null) throw UnimplementedError();
 
   final contexts = collection.contexts.where((context) {
-    return scope.any((uri) {
-      final contextUri = context.contextRoot.root.toUri();
-      return contextUri == uri;
-    });
+    return scope.any((uri) => context.contextRoot.root.toUri() == uri);
   }).toList();
   return contexts;
 });

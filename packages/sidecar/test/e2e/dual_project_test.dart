@@ -11,6 +11,7 @@
 // import '../helpers/test_helpers.mocks.dart';
 // import '../helpers/test_starter.dart';
 
+void main() {}
 // void main() {
 //   group('two projects', () {
 //     final constructors = [StringLiterals.new];

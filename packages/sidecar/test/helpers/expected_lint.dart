@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:sidecar/src/protocol/protocol.dart';
 import 'package:test/test.dart';
 
@@ -7,10 +5,12 @@ void expectLints(
   dynamic actual,
   List<ExpectedLint> expectedLints,
 ) {
-  if (actual is! LintNotification) fail('Not lint notification');
+  expect(actual, isA<LintNotification>(), reason: 'Not lint notification');
 
-  if (actual.lints.length != expectedLints.length)
-    fail('Number of lints != number of expected lints');
+  actual as LintNotification;
+
+  expect(actual.lints.length, expectedLints.length,
+      reason: 'Number of lints != number of expected lints');
 
   for (var i = 0; i < expectedLints.length; i++) {
     final actualLint = actual.lints.toList()[i];

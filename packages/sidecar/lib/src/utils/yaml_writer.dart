@@ -21,7 +21,7 @@ class YamlWriter {
     } else if (yaml is Map) {
       str += _writeMap(yaml, indent: indent);
     } else if (yaml is String) {
-      str += "\"${yaml.replaceAll("\"", "\\\"")}\"";
+      str += '"${yaml.replaceAll('"', '\\\"')}"';
     } else {
       str += yaml.toString();
     }
@@ -50,7 +50,7 @@ class YamlWriter {
     for (final key in yaml.keys) {
       final dynamic value = yaml[key];
       buffer.write(
-          "${_indent(indent)}${key.toString()}: ${_writeInternal(value, indent: indent + 1)}\n");
+          '${_indent(indent)}${key.toString()}: ${_writeInternal(value, indent: indent + 1)}\n');
     }
 
     return buffer.toString();

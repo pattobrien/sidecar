@@ -10,13 +10,13 @@ class RuleCode with _$RuleCode {
   const factory RuleCode.lint(
     String code, {
     required String package,
-    String? url,
+    Uri? url,
   }) = LintCode;
 
   const factory RuleCode.assist(
     String code, {
     required String package,
-    String? url,
+    Uri? url,
   }) = AssistCode;
 
   const RuleCode._();

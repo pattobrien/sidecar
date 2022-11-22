@@ -5,19 +5,12 @@ import 'package:riverpod/riverpod.dart';
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 
-final communicationChannelProvider =
-    Provider<CommunicationChannel>((ref) => throw UnimplementedError());
-
-final communicationChannelStreamProvider = StreamProvider<dynamic>(
-    (ref) => ref.watch(communicationChannelProvider).stream);
-
 class CommunicationChannel {
   CommunicationChannel(this._sendPort) {
     initialize();
   }
 
-  final SendPort _sendPort;
-  final ReceivePort _receivePort = ReceivePort();
+  void initialize() => _sendPort.send(_receivePort.sendPort);
 
   Stream<dynamic> get stream => _receivePort.asBroadcastStream();
 
@@ -25,16 +18,9 @@ class CommunicationChannel {
     _sendPort.send(message.toEncodedJson());
   }
 
-  void sendNotification(
-    SidecarNotification notification,
-  ) {
+  void sendNotification(SidecarNotification notification) {
     final response = SidecarMessage.notification(notification: notification);
     sendMessage(response);
-  }
-
-  void initialize() {
-    _sendPort.send(_receivePort.sendPort);
-    // sendNotification(const InitCompleteNotification());
   }
 
   void handleError(ActivePackage package, Object error, StackTrace stack) {
@@ -45,4 +31,13 @@ class CommunicationChannel {
     final message = SidecarMessage.log(log);
     sendMessage(message);
   }
+
+  final SendPort _sendPort;
+  final ReceivePort _receivePort = ReceivePort();
 }
+
+final communicationChannelProvider =
+    Provider<CommunicationChannel>((ref) => throw UnimplementedError());
+
+final communicationChannelStreamProvider = StreamProvider<dynamic>(
+    (ref) => ref.watch(communicationChannelProvider).stream);

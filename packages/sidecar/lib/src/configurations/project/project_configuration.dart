@@ -45,7 +45,7 @@ class ProjectConfiguration {
           assistPackage: AssistPackageConfiguration(assists: {
             for (final assistCode in assistCodes
                 .where((element) => element.package == assistPackage))
-              assistCode.code: null,
+              assistCode.code: const AssistConfiguration(),
           }),
       },
       lintPackages: {
@@ -53,7 +53,7 @@ class ProjectConfiguration {
           lintPackage: LintPackageConfiguration(lints: {
             for (final lintCode in lintCodes
                 .where((lintCode) => lintCode.package == lintPackage))
-              lintCode.code: null,
+              lintCode.code: const LintConfiguration(),
           }),
       },
     );
@@ -179,19 +179,21 @@ class ProjectConfiguration {
       _includes?.any((glob) => glob.matches(relativePath)) ?? false;
 
   AnalysisConfiguration? getConfigurationForRule(BaseRule rule) {
-    if (rule is AssistRule) {
-      return assistPackages?[rule.code.package]?.assists?[rule.code];
-    } else if (rule is LintRule) {
-      return lintPackages?[rule.code.package]?.lints?[rule.code];
+    if (rule is AssistMixin) {
+      return assistPackages?[rule.code.package]?.assists?[rule.code.code];
+    } else if (rule is LintMixin) {
+      final packageConfig = lintPackages?[rule.code.package];
+      final ruleConfig = packageConfig?.lints?[rule.code.code];
+      return ruleConfig;
     } else {
       throw UnimplementedError('getConfigurationForRule: unknown base type');
     }
   }
 
   AnalysisPackageConfiguration? getPackageConfigurationForRule(BaseRule rule) {
-    if (rule is AssistRule) {
+    if (rule is AssistMixin) {
       return assistPackages?[rule.code.package];
-    } else if (rule is LintRule) {
+    } else if (rule is LintMixin) {
       return lintPackages?[rule.code.package];
     } else {
       throw UnimplementedError('getConfigurationForRule: unknown base type');

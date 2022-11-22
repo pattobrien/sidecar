@@ -18,7 +18,7 @@ class ActivePackage with _$ActivePackage {
   const factory ActivePackage({
     required ActivePackageRoot packageRoot,
     required ProjectConfiguration sidecarOptionsFile,
-    required Package sidecarPluginPackage,
+    required Uri sidecarPluginPackage,
     PackageConfig? packageConfig,
     List<Uri>? workspaceScope,
   }) = _ActivePackage;

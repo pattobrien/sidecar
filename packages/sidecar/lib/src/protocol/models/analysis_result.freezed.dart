@@ -45,7 +45,9 @@ mixin _$AnalysisResult {
                 SourceSpan span,
             String message,
             LintSeverity severity,
-            String? correction)
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
         $default, {
     required TResult Function(
             RuleCode rule,
@@ -68,7 +70,9 @@ mixin _$AnalysisResult {
                 SourceSpan span,
             String message,
             LintSeverity severity,
-            String? correction)?
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
         $default, {
     TResult Function(
             RuleCode rule,
@@ -91,7 +95,9 @@ mixin _$AnalysisResult {
                 SourceSpan span,
             String message,
             LintSeverity severity,
-            String? correction)?
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
         $default, {
     TResult Function(
             RuleCode rule,
@@ -211,7 +217,9 @@ abstract class _$$LintResultCopyWith<$Res>
           SourceSpan span,
       String message,
       LintSeverity severity,
-      String? correction});
+      String? correction,
+      @JsonKey(ignore: true)
+          EditsComputer? editsComputer});
 
   @override
   $RuleCodeCopyWith<$Res> get rule;
@@ -235,6 +243,7 @@ class __$$LintResultCopyWithImpl<$Res>
     Object? message = freezed,
     Object? severity = freezed,
     Object? correction = freezed,
+    Object? editsComputer = freezed,
   }) {
     return _then(_$LintResult(
       rule: rule == freezed
@@ -257,6 +266,10 @@ class __$$LintResultCopyWithImpl<$Res>
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
               as String?,
+      editsComputer: editsComputer == freezed
+          ? _value.editsComputer
+          : editsComputer // ignore: cast_nullable_to_non_nullable
+              as EditsComputer?,
     ));
   }
 }
@@ -272,6 +285,8 @@ class _$LintResult extends LintResult {
       required this.message,
       required this.severity,
       this.correction,
+      @JsonKey(ignore: true)
+          this.editsComputer,
       final String? $type})
       : $type = $type ?? 'default',
         super._();
@@ -291,13 +306,16 @@ class _$LintResult extends LintResult {
   final LintSeverity severity;
   @override
   final String? correction;
+  @override
+  @JsonKey(ignore: true)
+  final EditsComputer? editsComputer;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'AnalysisResult(rule: $rule, span: $span, message: $message, severity: $severity, correction: $correction)';
+    return 'AnalysisResult(rule: $rule, span: $span, message: $message, severity: $severity, correction: $correction, editsComputer: $editsComputer)';
   }
 
   @override
@@ -310,7 +328,9 @@ class _$LintResult extends LintResult {
             const DeepCollectionEquality().equals(other.message, message) &&
             const DeepCollectionEquality().equals(other.severity, severity) &&
             const DeepCollectionEquality()
-                .equals(other.correction, correction));
+                .equals(other.correction, correction) &&
+            (identical(other.editsComputer, editsComputer) ||
+                other.editsComputer == editsComputer));
   }
 
   @JsonKey(ignore: true)
@@ -321,7 +341,8 @@ class _$LintResult extends LintResult {
       const DeepCollectionEquality().hash(span),
       const DeepCollectionEquality().hash(message),
       const DeepCollectionEquality().hash(severity),
-      const DeepCollectionEquality().hash(correction));
+      const DeepCollectionEquality().hash(correction),
+      editsComputer);
 
   @JsonKey(ignore: true)
   @override
@@ -338,7 +359,9 @@ class _$LintResult extends LintResult {
                 SourceSpan span,
             String message,
             LintSeverity severity,
-            String? correction)
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
         $default, {
     required TResult Function(
             RuleCode rule,
@@ -351,7 +374,7 @@ class _$LintResult extends LintResult {
             List<EditResult> edits)
         withEdits,
   }) {
-    return $default(rule, span, message, severity, correction);
+    return $default(rule, span, message, severity, correction, editsComputer);
   }
 
   @override
@@ -364,7 +387,9 @@ class _$LintResult extends LintResult {
                 SourceSpan span,
             String message,
             LintSeverity severity,
-            String? correction)?
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
         $default, {
     TResult Function(
             RuleCode rule,
@@ -377,7 +402,8 @@ class _$LintResult extends LintResult {
             List<EditResult> edits)?
         withEdits,
   }) {
-    return $default?.call(rule, span, message, severity, correction);
+    return $default?.call(
+        rule, span, message, severity, correction, editsComputer);
   }
 
   @override
@@ -390,7 +416,9 @@ class _$LintResult extends LintResult {
                 SourceSpan span,
             String message,
             LintSeverity severity,
-            String? correction)?
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
         $default, {
     TResult Function(
             RuleCode rule,
@@ -405,7 +433,7 @@ class _$LintResult extends LintResult {
     required TResult orElse(),
   }) {
     if ($default != null) {
-      return $default(rule, span, message, severity, correction);
+      return $default(rule, span, message, severity, correction, editsComputer);
     }
     return orElse();
   }
@@ -458,7 +486,9 @@ abstract class LintResult extends AnalysisResult
           required final SourceSpan span,
       required final String message,
       required final LintSeverity severity,
-      final String? correction}) = _$LintResult;
+      final String? correction,
+      @JsonKey(ignore: true)
+          final EditsComputer? editsComputer}) = _$LintResult;
   const LintResult._() : super._();
 
   factory LintResult.fromJson(Map<String, dynamic> json) =
@@ -476,6 +506,8 @@ abstract class LintResult extends AnalysisResult
   LintSeverity get severity;
   @override
   String? get correction;
+  @JsonKey(ignore: true)
+  EditsComputer? get editsComputer;
   @override
   @JsonKey(ignore: true)
   _$$LintResultCopyWith<_$LintResult> get copyWith =>
@@ -640,7 +672,9 @@ class _$LintResultWithEdits extends LintResultWithEdits {
                 SourceSpan span,
             String message,
             LintSeverity severity,
-            String? correction)
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
         $default, {
     required TResult Function(
             RuleCode rule,
@@ -666,7 +700,9 @@ class _$LintResultWithEdits extends LintResultWithEdits {
                 SourceSpan span,
             String message,
             LintSeverity severity,
-            String? correction)?
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
         $default, {
     TResult Function(
             RuleCode rule,
@@ -692,7 +728,9 @@ class _$LintResultWithEdits extends LintResultWithEdits {
                 SourceSpan span,
             String message,
             LintSeverity severity,
-            String? correction)?
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
         $default, {
     TResult Function(
             RuleCode rule,

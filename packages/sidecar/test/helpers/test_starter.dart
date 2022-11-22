@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/src/analyzer/client/cli_client.dart';
 import 'package:sidecar/src/analyzer/client/client.dart';
+import 'package:sidecar/src/analyzer/plugin/rule_constructors_provider.dart';
 import 'package:sidecar/src/analyzer/starters/cli_starter.dart';
 import 'package:sidecar/src/reports/stdout_reporter.dart';
 

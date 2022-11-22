@@ -80,7 +80,6 @@ class SidecarAnalyzer {
 
   Future<void> _handleRequest(RequestMessage msg) async {
     final response = await msg.request.map<FutureOr<SidecarResponse?>>(
-      // setActivePackage: handleSetActivePackage,
       setWorkspaceScope: handleSetCollectionRequest,
       setPriorityFiles: handleSetPriorityFiles,
       updateFiles: handleUpdateFiles,
@@ -102,14 +101,13 @@ class SidecarAnalyzer {
       // scope = the entire package_config.json of the active package
       final activePackage = _ref.read(activePackageProvider).packageRoot.root;
       _ref.read(workspaceScopeProvider.state).update((_) => [activePackage]);
-      await afterNewContextCollection();
     } else {
       // scope = roots
       final roots = request.roots!;
       _ref.read(workspaceScopeProvider.state).update((_) => roots);
-
-      await afterNewContextCollection();
     }
+    final files = _ref.refresh(activeProjectScopedFilesProvider);
+    await analyzeFiles(files: files);
     return const SetWorkspaceResponse();
   }
 
@@ -122,15 +120,6 @@ class SidecarAnalyzer {
 
   Future<LintResponse> handleLint(LintRequest request) {
     throw StateError('LintRequest is an invalid request');
-  }
-
-  /// This method is invoked when a new instance of [AnalysisContextCollection]
-  /// is created, so the plugin can perform initial analysis of analyzed files.
-  ///
-  /// By default analyzes every [AnalysisContext] with [analyzeFiles].
-  Future<void> afterNewContextCollection() async {
-    final files = _ref.refresh(activeProjectScopedFilesProvider);
-    await analyzeFiles(files: files);
   }
 
   AnalyzedFileWithContext? _getFileWithContext(AnalyzedFile file) {
@@ -159,33 +148,25 @@ class SidecarAnalyzer {
   // Overridden to allow for non-Dart files to be analyzed for changes
   Future<void> contentChanged(Set<AnalyzedFile> files) async {
     final filesWithContexts = files.map(_getFileWithContext).whereNotNull();
-    print('filesWContexts: ${filesWithContexts}');
 
     Future<void> handleContexts(List<AnalysisContext> contexts) async {
-      print('handleContexts: ${contexts}');
       for (final context in contexts) {
         final contextPath = context.contextRoot.root.path;
         final filesInContext = filesWithContexts
             .where((file) => file.context.contextRoot.root.path == contextPath)
             .toList();
-        print('analyzeFiles0-${contextPath}: ${filesInContext}');
 
-        filesInContext.forEach((e) {
-          print('changing file: ${e.path} - context = ${contextPath}');
-          context.changeFile(e.path);
-        });
+        for (final file in filesInContext) {
+          context.changeFile(file.path);
+        }
         final affected = await context.applyPendingFileChanges();
         final affectedWithoutOriginalPaths = affected.toSet()
           ..removeAll(filesInContext.map((e) => e.path));
-        print('analyzeFiles0-${contextPath}: affected ${affected}');
-        print(
-            'analyzeFiles0-${contextPath}: affectedWo ${affectedWithoutOriginalPaths}');
 
         final affectedOriginalPaths = filesInContext
             .where(
                 (f) => affected.any((affectedPath) => affectedPath == f.path))
             .toList();
-        print('analyzeFiles1-${contextPath}: ${affectedOriginalPaths}');
 
         // for a better user experience:
         // first we handle the changed files, then we handle all affected files
@@ -193,14 +174,12 @@ class SidecarAnalyzer {
 
         await analyzeFiles(files: affectedOriginalPaths);
 
-        // print('contentChanged abcde');
         // analyze files that may have been affected by the files that explicitly changed
         final affectedFiles = affectedWithoutOriginalPaths
             .map((e) => _getFileWithContextFromPath(e, context))
             .whereNotNull()
             .toList();
 
-        print('analyzeFiles2-${contextPath}: ${affectedFiles}');
         await analyzeFiles(files: affectedFiles);
       }
     }
@@ -282,6 +261,7 @@ class SidecarAnalyzer {
   }
 
   int _overlayModificationStamp = 0;
+
   Future<UpdateFilesResponse> handleUpdateFiles(
     FileUpdateRequest request,
   ) async {

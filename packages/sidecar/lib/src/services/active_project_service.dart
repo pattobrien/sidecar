@@ -60,10 +60,11 @@ class ActiveProjectService {
     //
     final root = context.contextRoot.root.toUri();
     final isSidecarEnabled = context.isSidecarEnabled;
-    final pluginUri = _getSidecarPluginUriForPackage(root);
-    final packages = getSidecarDependencies(root);
+    final packageConfig = getPackageConfig(root);
+    final pluginUri = getSidecarDependencyUri(packageConfig);
+    final packages = getSidecarDependencies(packageConfig);
     final projectConfig = getSidecarOptions(root);
-    final packageConfigJson = _getPackageConfig(root);
+    final packageConfigJson = getPackageConfig(root);
     if (pluginUri == null || !isSidecarEnabled || projectConfig == null) {
       logger.info('context at ${root.path} is not an active sidecar context.');
       if (!isSidecarEnabled) {
@@ -94,8 +95,8 @@ class ActiveProjectService {
   }
 
   // is this needed for any external functions ?
-  PackageConfig _getPackageConfig(Uri root) {
-    final path = p.join(root.path, '.dart_tool', 'package_config.json');
+  PackageConfig getPackageConfig(Uri root) {
+    final path = p.join(root.path, kDartTool, kPackageConfigJson);
     final file = resourceProvider.getFile(path);
     assert(file.exists, 'config file does not exist at path $path');
     final contents = file.readAsStringSync();
@@ -103,26 +104,18 @@ class ActiveProjectService {
     return PackageConfig.parseJson(json, file.toUri());
   }
 
-  List<RulePackageConfiguration> getSidecarDependencies(Uri root) {
-    return _getPackageConfig(root)
-        .packages
-        .map<RulePackageConfiguration?>((package) {
-          try {
-            return parseLintPackage(package.name, package.root);
-          } catch (e, stackTrace) {
-            logger.shout('ActivePackageService NON-FATAL', e, stackTrace);
-            return null;
-          }
-        })
-        .whereType<RulePackageConfiguration>()
+  List<RulePackageConfiguration> getSidecarDependencies(PackageConfig config) {
+    return config.packages
+        .map((package) => parseLintPackage(package.name, package.root))
+        .whereNotNull()
         .toList();
   }
 
-  /// Get the plugin package uri for the current Dart project.
-  Package? _getSidecarPluginUriForPackage(Uri root) {
-    return _getPackageConfig(root).packages.firstWhereOrNull((package) {
+  /// Parse a project's package_config.json file for ```sidecar``` dependency.
+  Uri? getSidecarDependencyUri(PackageConfig config) {
+    return config.packages.firstWhereOrNull((package) {
       return package.name == kSidecarPluginName;
-    });
+    })?.root;
   }
 
   String? _getSidecarFile(Uri root) {

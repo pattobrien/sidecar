@@ -1,6 +1,7 @@
 import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../../rules/rules.dart';
 import '../../rules/enabled_rule.dart';
 import '../../rules/rules.dart';
 import '../../protocol/analyzed_file.dart';
@@ -31,22 +32,22 @@ final _scopedRulesForFileProvider =
 });
 
 final scopedVisitorForFileProvider =
-    Provider.family<List<SidecarVisitor>, AnalyzedFileWithContext>((ref, file) {
+    Provider.family<List<LintMixin>, AnalyzedFileWithContext>((ref, file) {
   // initialize rules with visitors
   final scopedRules = ref.watch(_scopedRulesForFileProvider(file));
   final registry = ref.watch(nodeRegistryForFileProvider(file));
-  final visitorRules = scopedRules.where((e) => e.rule is LintVisitor);
+  final visitorRules = scopedRules.where((e) => e.rule is LintMixin);
   return visitorRules.map((rule) {
-    final baseRule = rule.rule as LintVisitor;
+    final baseRule = rule.rule as BaseRuleVisitorMixin;
 
-    final visitor = baseRule.initializeVisitor(registry);
+    final visitor = baseRule..initializeVisitor(registry);
 
-    visitor.init(rule.rule,
-        config: rule.configuration,
-        packageConfig: rule.packageConfiguration,
-        file: file);
+    visitor.refresh(
+      config: rule.configuration,
+      packageConfig: rule.packageConfiguration,
+    );
 
-    return visitor;
+    return visitor as LintMixin;
   }).toList();
 });
 
@@ -55,7 +56,7 @@ final scopedLintRulesForFileProvider =
   (ref, file) {
     // final registry = ref.watch(nodeRegistryForFileProvider(file));
     return ref.watch(_scopedRulesForFileProvider(file)
-        .select((value) => value.where((e) => e.rule is LintRule).toList()));
+        .select((value) => value.where((e) => e.rule is LintMixin).toList()));
     // for (final rule in scopedRules.whereType<LintVisitor>()) {
     //   rule.initializeVisitor(registry);
     // }
@@ -66,12 +67,12 @@ final scopedAssistRulesForFileProvider =
     Provider.family<List<EnabledRule>, AnalyzedFileWithContext>(
   (ref, arg) {
     return ref.watch(_scopedRulesForFileProvider(arg)
-        .select((value) => value.where((e) => e.rule is AssistRule).toList()));
+        .select((value) => value.where((e) => e.rule is AssistMixin).toList()));
   },
 );
 
 final scopedLintRulesWithVisitorsProvider =
-    Provider.family<List<LintVisitor>, AnalyzedFileWithContext>((ref, file) {
+    Provider.family<List<SidecarVisitor>, AnalyzedFileWithContext>((ref, file) {
   final scopedLintRules = ref.watch(scopedLintRulesForFileProvider(file));
-  return scopedLintRules.whereType<LintVisitor>().toList();
+  return scopedLintRules.whereType<SidecarVisitor>().toList();
 });

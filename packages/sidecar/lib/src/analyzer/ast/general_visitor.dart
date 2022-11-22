@@ -1,8 +1,9 @@
 import 'package:analyzer/dart/ast/ast.dart';
 
+import '../../../rules/rules.dart' hide Configuration;
 import '../../protocol/protocol.dart';
-import '../../rules/lint_rule.dart';
-import '../../rules/visitor.dart';
+import '../../rules/all_rules.dart';
+import '../../rules/rules.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';

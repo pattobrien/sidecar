@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:source_span/source_span.dart';
 
+import '../../analyzer/context/unit_context.dart';
 import '../../rules/rules.dart';
 import '../../utils/json_utils/json_utils.dart';
 import 'edit_result.dart';
@@ -20,6 +21,7 @@ class AnalysisResult with _$AnalysisResult {
     required String message,
     required LintSeverity severity,
     String? correction,
+    @JsonKey(ignore: true) EditsComputer? editsComputer,
   }) = LintResult;
 
   @Implements<Comparable<AnalysisResult>>()
@@ -66,3 +68,5 @@ class AnalysisResult with _$AnalysisResult {
     );
   }
 }
+
+typedef EditsComputer = Future<List<EditResult>> Function(UnitContext context);

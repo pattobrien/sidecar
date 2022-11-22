@@ -1,10 +1,16 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../rules/visitors.dart';
 import '../analyzer/ast/ast.dart';
 import '../analyzer/context/unit_context.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
+
+abstract class IFileAnalyzerService {
+  //
+
+}
 
 class FileAnalyzerService {
   const FileAnalyzerService(this.ref);
@@ -12,9 +18,9 @@ class FileAnalyzerService {
   final Ref ref;
 
   Set<LintResult> visitLintResults({
-    required AnalyzedFile file,
+    // required AnalyzedFile file,
     required UnitContext context,
-    required List<LintVisitor> rules,
+    required List<BaseRuleVisitorMixin> rules,
     required NodeRegistry registry,
   }) {
     rules.map((e) => e.initializeVisitor(registry));
@@ -23,28 +29,28 @@ class FileAnalyzerService {
     return visitor.results;
   }
 
-  Future<List<LintResult>> computeLintResults({
-    required AnalyzedFile file,
-    required List<LintRule> rules,
-    required UnitContext context,
-  }) async {
-    //TODO: allow analysis of other file extensions
-    if (!file.isDartFile) return [];
+  // Future<List<LintResult>> computeLintResults({
+  //   required AnalyzedFile file,
+  //   required List<LintRule> rules,
+  //   required UnitContext context,
+  // }) async {
+  //   //TODO: allow analysis of other file extensions
+  //   if (!file.isDartFile) return [];
 
-    final lintRulesBasicCompute = rules.whereType<Compute>();
+  //   final lintRulesBasicCompute = rules.whereType<Compute>();
 
-    final results = await Future.wait(lintRulesBasicCompute.map((rule) async {
-      try {
-        final results = await rule.computeLints(context);
-        return results;
-      } catch (e, stackTrace) {
-        logger.severe('LintRule Error', e, stackTrace);
-        return Future.value(<LintResult>[]);
-      }
-    }));
+  //   final results = await Future.wait(lintRulesBasicCompute.map((rule) async {
+  //     try {
+  //       final results = await rule.computeLints(context);
+  //       return results;
+  //     } catch (e, stackTrace) {
+  //       logger.severe('LintRule Error', e, stackTrace);
+  //       return Future.value(<LintResult>[]);
+  //     }
+  //   }));
 
-    return results.expand((e) => e).toList()..sort();
-  }
+  //   return results.expand((e) => e).toList()..sort();
+  // }
 
   Iterable<LintResult> getAnalysisResultsAtOffset(
     Iterable<LintResult> analysisResults,

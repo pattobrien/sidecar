@@ -2,11 +2,8 @@
 // copied from dart-code-metrics package
 //
 
-import 'dart:io';
-
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:file/file.dart';
-import 'package:file/local.dart';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart';
 import 'package:path/path.dart' as p;

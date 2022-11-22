@@ -19,7 +19,7 @@ mixin _$ActivePackage {
   ActivePackageRoot get packageRoot => throw _privateConstructorUsedError;
   ProjectConfiguration get sidecarOptionsFile =>
       throw _privateConstructorUsedError;
-  Package get sidecarPluginPackage => throw _privateConstructorUsedError;
+  Uri get sidecarPluginPackage => throw _privateConstructorUsedError;
   PackageConfig? get packageConfig => throw _privateConstructorUsedError;
   List<Uri>? get workspaceScope => throw _privateConstructorUsedError;
 
@@ -36,7 +36,7 @@ abstract class $ActivePackageCopyWith<$Res> {
   $Res call(
       {ActivePackageRoot packageRoot,
       ProjectConfiguration sidecarOptionsFile,
-      Package sidecarPluginPackage,
+      Uri sidecarPluginPackage,
       PackageConfig? packageConfig,
       List<Uri>? workspaceScope});
 
@@ -72,7 +72,7 @@ class _$ActivePackageCopyWithImpl<$Res>
       sidecarPluginPackage: sidecarPluginPackage == freezed
           ? _value.sidecarPluginPackage
           : sidecarPluginPackage // ignore: cast_nullable_to_non_nullable
-              as Package,
+              as Uri,
       packageConfig: packageConfig == freezed
           ? _value.packageConfig
           : packageConfig // ignore: cast_nullable_to_non_nullable
@@ -102,7 +102,7 @@ abstract class _$$_ActivePackageCopyWith<$Res>
   $Res call(
       {ActivePackageRoot packageRoot,
       ProjectConfiguration sidecarOptionsFile,
-      Package sidecarPluginPackage,
+      Uri sidecarPluginPackage,
       PackageConfig? packageConfig,
       List<Uri>? workspaceScope});
 
@@ -141,7 +141,7 @@ class __$$_ActivePackageCopyWithImpl<$Res>
       sidecarPluginPackage: sidecarPluginPackage == freezed
           ? _value.sidecarPluginPackage
           : sidecarPluginPackage // ignore: cast_nullable_to_non_nullable
-              as Package,
+              as Uri,
       packageConfig: packageConfig == freezed
           ? _value.packageConfig
           : packageConfig // ignore: cast_nullable_to_non_nullable
@@ -171,7 +171,7 @@ class _$_ActivePackage extends _ActivePackage {
   @override
   final ProjectConfiguration sidecarOptionsFile;
   @override
-  final Package sidecarPluginPackage;
+  final Uri sidecarPluginPackage;
   @override
   final PackageConfig? packageConfig;
   final List<Uri>? _workspaceScope;
@@ -224,7 +224,7 @@ abstract class _ActivePackage extends ActivePackage {
   const factory _ActivePackage(
       {required final ActivePackageRoot packageRoot,
       required final ProjectConfiguration sidecarOptionsFile,
-      required final Package sidecarPluginPackage,
+      required final Uri sidecarPluginPackage,
       final PackageConfig? packageConfig,
       final List<Uri>? workspaceScope}) = _$_ActivePackage;
   const _ActivePackage._() : super._();
@@ -234,7 +234,7 @@ abstract class _ActivePackage extends ActivePackage {
   @override
   ProjectConfiguration get sidecarOptionsFile;
   @override
-  Package get sidecarPluginPackage;
+  Uri get sidecarPluginPackage;
   @override
   PackageConfig? get packageConfig;
   @override

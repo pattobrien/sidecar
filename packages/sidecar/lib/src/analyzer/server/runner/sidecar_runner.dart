@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
 import '../../../services/active_project_service.dart';
-import '../../../services/isolate_builder_service.dart';
+import '../../../services/entrypoint_builder_service.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
 import 'message_providers.dart';
@@ -85,8 +85,9 @@ class SidecarRunner {
     final resourceProvider = _ref.read(runnerResourceProvider);
 
     final packageRoot = activePackage.packageRoot.root;
-    final pluginRoot = activePackage.sidecarPluginPackage.root;
-    final deps = activeProjectService.getSidecarDependencies(packageRoot);
+    final pluginRoot = activePackage.sidecarPluginPackage;
+    final config = activeProjectService.getPackageConfig(packageRoot);
+    final deps = activeProjectService.getSidecarDependencies(config);
 
     isolateBuilder.setupPluginSourceFiles(packageRoot, pluginRoot);
     isolateBuilder.setupBootstrapper(packageRoot, deps);
@@ -126,7 +127,7 @@ class SidecarRunner {
     sendPort.send(message);
     final response = await _responses.firstWhere((resp) => resp.id == id);
     final msg = response.mapOrNull(response: (response) => response)?.response;
-    assert(msg == null || msg is! T, 'Response was an unexpected type');
+    assert(msg != null && msg is T, 'Response was an unexpected type');
     if (msg == null || msg is! T) throw UnimplementedError();
     return msg;
   }

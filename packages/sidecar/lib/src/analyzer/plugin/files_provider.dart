@@ -9,10 +9,10 @@ import 'project_configuration_provider.dart';
 
 final activeProjectScopedFilesProvider =
     Provider<List<AnalyzedFileWithContext>>((ref) {
-  // project globs update only when sidecar.yaml is saved
   final activeProjectGlobs = ref.watch(activeProjectGlobSetProvider);
   final contexts = ref.watch(contextCollectionProvider);
   final fileSystem = ref.watch(fileSystemProvider);
+
   final activeProjectScopedFiles = contexts
       .map((context) {
         final filesInScope = extractDartFilesFromFolders(

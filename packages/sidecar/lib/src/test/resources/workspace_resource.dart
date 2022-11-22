@@ -2,12 +2,11 @@
 
 import 'dart:async';
 import 'dart:io' as io;
-import 'package:package_config/package_config_types.dart';
-import 'package:path/path.dart' as p;
 
 import 'package:analyzer/dart/analysis/context_locator.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:file/file.dart';
+import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../analyzer/plugin/files_provider.dart';

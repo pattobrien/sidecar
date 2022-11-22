@@ -1,5 +1,6 @@
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:path/path.dart' as p;
+import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/server/middleman_resource_provider.dart';
@@ -10,8 +11,8 @@ import '../utils/file_paths.dart';
 import '../utils/logger/logger.dart';
 import 'active_project_service.dart';
 
-class IsolateBuilderService {
-  const IsolateBuilderService({
+class EntrypointBuilderService {
+  const EntrypointBuilderService({
     required this.resourceProvider,
   });
 
@@ -34,7 +35,8 @@ class IsolateBuilderService {
     }
 
     pluginFileResources.whereType<File>().forEach((sourceFileEntity) {
-      final newDirectory = _packageToolDirectory(packageRoot);
+      final newDirectory =
+          packageRoot.resolve(p.join(kDartTool, kSidecarPluginName));
       final newPath =
           _pluginPath(sourceFileEntity.path, newDirectory: newDirectory);
       final newFile = resourceProvider.getFile(newPath);
@@ -47,17 +49,25 @@ class IsolateBuilderService {
     Uri packageRoot,
     List<RulePackageConfiguration> lintPackageConfigurations,
   ) {
-    final bootstrapperPath =
-        p.join(_packageToolDirectory(packageRoot).path, 'constructors.dart');
-    final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
-    final listBuffer = StringBuffer()..writeln(constructorListBegin);
-    final sidecarPackages =
-        ActiveProjectService(resourceProvider: resourceProvider)
-            .getSidecarDependencies(packageRoot);
+    final constructorUri = packageRoot
+        .resolve(p.join(kDartTool, kSidecarPluginName, 'constructors.dart'));
+    final service = ActiveProjectService(resourceProvider: resourceProvider);
+    final config = service.getPackageConfig(packageRoot);
+    final sidecarPackages = service.getSidecarDependencies(config);
     logger.finer(
         'setupBootstrapper || adding ${sidecarPackages.length} packages');
+    final content = generateEntrypointContent(sidecarPackages);
+    final file = resourceProvider.getFile(constructorUri.path);
+    file.writeAsStringSync(content);
+  }
 
-    for (final sidecarPackage in sidecarPackages) {
+  String generateEntrypointContent(
+    List<RulePackageConfiguration> sidecarPackageConfigs,
+  ) {
+    final importsBuffer = StringBuffer()..writeln(constructorFileHeader);
+    final listBuffer = StringBuffer()..writeln(constructorListBegin);
+
+    for (final sidecarPackage in sidecarPackageConfigs) {
       final name = sidecarPackage.packageName;
       final package = parseLintPackage(name, sidecarPackage.uri)!;
       importsBuffer.writeln("import 'package:$name/$name.dart' as $name;");
@@ -75,19 +85,18 @@ class IsolateBuilderService {
       ..writeln(listBuffer.toString())
       ..writeln(constructorListEnd);
 
-    final file = resourceProvider.getFile(bootstrapperPath);
-    file.writeAsStringSync(fullContentsBuffer.toString());
+    return fullContentsBuffer.toString();
   }
 
-  Uri _packageToolDirectory(Uri projectRoot) => Uri.directory(
-        p.join(projectRoot.path, kDartTool, kSidecarPluginName),
-      );
+  // Uri _packageToolDirectory(Uri projectRoot) => projectRoot.resolve(
+  //       p.join(kDartTool, kSidecarPluginName),
+  //     );
 }
 
 final isolateBuilderServiceProvider = Provider(
   (ref) {
     final resourceProvider = ref.watch(middlemanResourceProvider);
-    return IsolateBuilderService(resourceProvider: resourceProvider);
+    return EntrypointBuilderService(resourceProvider: resourceProvider);
   },
   name: 'isolateBuilderServiceProvider',
   dependencies: [

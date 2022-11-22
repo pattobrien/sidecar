@@ -23,6 +23,10 @@ class RuleInitializationService {
           // so it shouldnt be initialized
           if (ruleConfig == null || ruleConfig.enabled == false) return null;
 
+          // if (rule is Configuration) {
+          //   //
+          // }
+
           logger.finer('activating ${rule.code}');
 
           return rule;

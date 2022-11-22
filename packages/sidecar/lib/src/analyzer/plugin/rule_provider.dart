@@ -1,5 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../../rules/rules.dart';
 import '../../rules/enabled_rule.dart';
 import '../../rules/rules.dart';
 import 'project_configuration_provider.dart';
@@ -18,7 +19,7 @@ final _enabledRulesProvider = Provider<List<EnabledRule>>((ref) {
 
   final enabledRules = constructors.map((constructor) {
     final rule = constructor();
-    if (rule is LintRule) {
+    if (rule is LintMixin) {
       final packageConfig =
           projectConfiguration.lintPackages?[rule.code.package];
 
@@ -26,7 +27,7 @@ final _enabledRulesProvider = Provider<List<EnabledRule>>((ref) {
       return EnabledRule(rule,
           configuration: ruleConfig, packageConfiguration: packageConfig);
     }
-    if (rule is AssistRule) {
+    if (rule is AssistMixin) {
       final packageConfig =
           projectConfiguration.assistPackages?[rule.code.package];
 
@@ -57,7 +58,9 @@ final activeRulesProvider = Provider((ref) {
     // is the below efficient enough?
     final ruleConfig = ref.watch(projectConfigurationProvider
         .select((value) => value.getConfigurationForRule(baseRule)));
-    baseRule.init(ruleConfiguration: ruleConfig?.configuration);
+    final packageConfig = ref.watch(projectConfigurationProvider
+        .select((value) => value.getPackageConfigurationForRule(baseRule)));
+    baseRule.refresh(config: ruleConfig, packageConfig: packageConfig);
     return true;
   });
 
