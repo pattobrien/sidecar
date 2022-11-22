@@ -46,14 +46,12 @@ jobs:
       # - name: Check format
       #   run: flutter format --set-exit-if-changed .
       #   if: matrix.package_path != 'website'
-
       # - name: Analyze
       #   run: flutter analyze
-
       - name: Run tests
         # run: flutter test --coverage
-        # run: dart pub global run coverage:test_with_coverage
-        run: dart test
+        run: dart pub global run coverage:test_with_coverage
+        # run: dart test
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3.1.1
