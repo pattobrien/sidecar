@@ -6,6 +6,7 @@ import '../../rules/enabled_rule.dart';
 import '../../rules/rules.dart';
 import '../../protocol/analyzed_file.dart';
 import 'plugin.dart';
+import 'project_configuration_provider.dart';
 import 'rule_provider.dart';
 
 /// Given a particular file, get the rules whose globs permit analysis
@@ -36,16 +37,17 @@ final scopedVisitorForFileProvider =
   // initialize rules with visitors
   final scopedRules = ref.watch(_scopedRulesForFileProvider(file));
   final registry = ref.watch(nodeRegistryForFileProvider(file));
+  final sidecarSpec = ref.watch(projectSidecarSpecProvider);
   final visitorRules = scopedRules.where((e) => e.rule is LintMixin);
   return visitorRules.map((rule) {
     final baseRule = rule.rule as BaseRuleVisitorMixin;
 
     final visitor = baseRule..initializeVisitor(registry);
-
-    visitor.refresh(
-      config: rule.configuration,
-      packageConfig: rule.packageConfiguration,
-    );
+    visitor.refresh(sidecarSpec: sidecarSpec);
+    // visitor.refresh(
+    //   sidecarSpec: rule.configuration,
+    //   packageConfig: rule.packageConfiguration,
+    // );
 
     return visitor as LintMixin;
   }).toList();

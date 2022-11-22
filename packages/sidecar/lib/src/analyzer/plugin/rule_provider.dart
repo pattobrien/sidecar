@@ -58,7 +58,8 @@ final activeRulesProvider = Provider((ref) {
         .select((value) => value.getConfigurationForCode(baseRule.code)));
     final packageConfig = ref.watch(projectSidecarSpecProvider.select(
         (value) => value.getPackageConfigurationForCode(baseRule.code)));
-    baseRule.refresh(config: ruleConfig, packageConfig: packageConfig);
+    final spec = ref.watch(projectSidecarSpecProvider);
+    baseRule.refresh(sidecarSpec: spec);
     return true;
   });
 

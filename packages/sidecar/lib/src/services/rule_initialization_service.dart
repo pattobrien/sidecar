@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../rules/mixins.dart';
 import '../configurations/sidecar_spec/sidecar_spec_base.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
@@ -24,7 +25,7 @@ class RuleInitializationService {
           if (ruleConfig == null || ruleConfig.enabled == false) return null;
 
           // if (rule is Configuration) {
-          //   //
+          rule.refresh(sidecarSpec: config);
           // }
 
           logger.finer('activating ${rule.code}');

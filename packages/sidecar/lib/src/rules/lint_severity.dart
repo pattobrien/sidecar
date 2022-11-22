@@ -19,13 +19,16 @@ extension LintSeverityX on LintSeverity {
   }
 
   static LintSeverity fromString(String string) {
-    if (string == LintSeverity.error.name) {
+    if (string == LintSeverity.error.name ||
+        string == '"${LintSeverity.error.name}"') {
       return LintSeverity.error;
     }
-    if (string == LintSeverity.warning.name) {
+    if (string == LintSeverity.warning.name ||
+        string == '"${LintSeverity.warning.name}"') {
       return LintSeverity.warning;
     }
-    if (string == LintSeverity.info.name) {
+    if (string == LintSeverity.info.name ||
+        string == '"${LintSeverity.info.name}"') {
       return LintSeverity.info;
     }
     throw InvalidSeverityException(string);

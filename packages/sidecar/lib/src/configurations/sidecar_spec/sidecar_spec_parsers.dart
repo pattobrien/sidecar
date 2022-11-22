@@ -112,7 +112,9 @@ SidecarExceptionTuple<PackageOptions> parseLintPackageOptions(
   final includes = yamlMap?.parseGlobIncludes();
   final excludes = yamlMap?.parseGlobExcludes();
 
-  final lintMap = yamlMap?.nodes.map((dynamic key, value) {
+  final rulesNode = yamlMap?.nodes['rules'] as YamlMap?;
+
+  final lintMap = rulesNode?.nodes.map((dynamic key, value) {
     final options = parseRuleOptions(value, fileUri, RuleType.lint);
     errors.addAll(options.item2);
     return MapEntry(

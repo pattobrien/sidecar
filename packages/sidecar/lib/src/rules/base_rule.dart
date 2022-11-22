@@ -10,8 +10,7 @@ import 'package:source_span/source_span.dart';
 
 import '../analyzer/ast/ast.dart';
 import '../analyzer/ast/general_visitor.dart';
-import '../configurations/sidecar_spec/package_options.dart';
-import '../configurations/sidecar_spec/rule_options.dart';
+import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/protocol.dart';
 import '../utils/utils.dart';
 import 'lint_severity.dart';
@@ -29,27 +28,30 @@ mixin BaseRule {
   List<Glob>? get includes => null;
   List<Glob>? get excludes => null;
 
+  SidecarSpec? sidecarSpec;
+
   @internal
-  @mustCallSuper
   void refresh({
-    required RuleOptions? config,
-    required PackageOptions? packageConfig,
-  }) {}
+    required SidecarSpec sidecarSpec,
+  }) {
+    this.sidecarSpec = sidecarSpec;
+  }
 
   void _reportSourceSpan(
     SourceSpan span,
     String message, {
     String? correction,
     EditsComputer? editsComputer,
-    LintOptions? config,
   }) {
     if (this is LintMixin) {
+      final thisConfig =
+          sidecarSpec?.getConfigurationForCode(code) as LintOptions?;
       final result = LintResult(
         rule: code,
         span: span,
         message: message,
         correction: correction,
-        severity: config?.severity ?? (this as LintMixin).defaultSeverity,
+        severity: thisConfig?.severity ?? (this as LintMixin).defaultSeverity,
         editsComputer: editsComputer,
       );
       results.add(result);
@@ -84,24 +86,6 @@ mixin LintMixin on BaseRule {
   @override
   LintCode get code;
   LintSeverity get defaultSeverity => LintSeverity.info;
-
-  Map<dynamic, dynamic>? get configuration => _config?.configuration;
-
-  late PackageOptions? _packageConfig;
-  late RuleOptions? _config;
-
-  @override
-  @internal
-  @mustCallSuper
-  void refresh({
-    required RuleOptions? config,
-    required PackageOptions? packageConfig,
-  }) {
-    results.clear();
-    _packageConfig = packageConfig;
-    _config = config;
-    super.refresh(config: config, packageConfig: packageConfig);
-  }
 
   void reportAstNode(
     AstNode node, {
