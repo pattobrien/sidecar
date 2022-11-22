@@ -9,7 +9,12 @@ final projectSidecarSpecProvider = Provider<SidecarSpec>((ref) {
   return activePackage.sidecarSpec;
 });
 
-final activeProjectGlobSetProvider = Provider<Set<Glob>>((ref) {
+final activeProjectIncludeGlobsProvider = Provider<Set<Glob>>((ref) {
   final projectConfiguration = ref.watch(projectSidecarSpecProvider);
   return projectConfiguration.includes?.toSet() ?? SidecarSpec.defaultIncludes;
+});
+
+final activeProjectExcludeGlobsProvider = Provider<Set<Glob>>((ref) {
+  final projectConfiguration = ref.watch(projectSidecarSpecProvider);
+  return projectConfiguration.excludes?.toSet() ?? SidecarSpec.defaultExcludes;
 });

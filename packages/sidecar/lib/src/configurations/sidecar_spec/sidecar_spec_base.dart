@@ -23,6 +23,7 @@ class SidecarSpec {
   Map<String, dynamic> toJson() => _$SidecarSpecToJson(this);
 
   static final defaultIncludes = {Glob('lib/**'), Glob('bin/**')};
+  static final defaultExcludes = <Glob>{};
 
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   final List<Glob>? includes;
