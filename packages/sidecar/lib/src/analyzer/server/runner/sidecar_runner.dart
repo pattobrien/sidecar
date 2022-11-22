@@ -31,9 +31,7 @@ class SidecarRunner {
 
   void _setContexts([List<Uri>? roots]) {
     if (roots == null) {
-      final packagePaths = [
-        activePackage.packageRoot.root.pathWithoutTrailingSlash
-      ];
+      final packagePaths = [activePackage.packageRoot.root.pathNoTrailingSlash];
       final contexts = AnalysisContextCollection(includedPaths: packagePaths)
           .contexts
           .where((context) =>
@@ -44,7 +42,7 @@ class SidecarRunner {
       allContexts.addAll(contexts);
     } else {
       final contexts = AnalysisContextCollection(
-              includedPaths: roots.map((e) => e.path).toList())
+              includedPaths: roots.map((e) => e.pathNoTrailingSlash).toList())
           .contexts
           .where((context) =>
               activePackage.packageConfig?.packages
