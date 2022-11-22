@@ -12,6 +12,7 @@ import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
 import '../../../services/active_project_service.dart';
 import '../../../services/entrypoint_builder_service.dart';
+import '../../../utils/uri_ext.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
 import 'message_providers.dart';
@@ -28,26 +29,30 @@ class SidecarRunner {
   final List<AnalysisContext> allContexts;
   final ReceivePort receivePort;
 
-  void _setContexts() {
-    final paths = activePackage.packageConfig?.packages
-            .map((e) => e.root.path)
-            .toList()
-            .map((path) {
-          if (path.endsWith('/')) {
-            return path.substring(0, path.length - 1);
-          } else {
-            return path;
-          }
-        }).toList() ??
-        [];
-    final contexts = AnalysisContextCollection(includedPaths: paths)
-        .contexts
-        .where((context) =>
-            activePackage.packageConfig?.packages
-                .any((dep) => dep.root == context.contextRoot.root.toUri()) ??
-            false)
-        .toList();
-    allContexts.addAll(contexts);
+  void _setContexts([List<Uri>? roots]) {
+    if (roots == null) {
+      final packagePaths = [
+        activePackage.packageRoot.root.pathWithoutTrailingSlash
+      ];
+      final contexts = AnalysisContextCollection(includedPaths: packagePaths)
+          .contexts
+          .where((context) =>
+              activePackage.packageConfig?.packages
+                  .any((dep) => dep.root == context.contextRoot.root.toUri()) ??
+              false)
+          .toList();
+      allContexts.addAll(contexts);
+    } else {
+      final contexts = AnalysisContextCollection(
+              includedPaths: roots.map((e) => e.path).toList())
+          .contexts
+          .where((context) =>
+              activePackage.packageConfig?.packages
+                  .any((dep) => dep.root == context.contextRoot.root.toUri()) ??
+              false)
+          .toList();
+      allContexts.addAll(contexts);
+    }
   }
 
   AnalyzedFile? getAnalyzedFile(String path) {
@@ -77,8 +82,8 @@ class SidecarRunner {
       .map((e) => e as LintNotification);
 
   /// Starts the server isolate and sends the necessary requests for initializing it.
-  Future<void> initialize() async {
-    _setContexts();
+  Future<void> initialize([List<Uri>? roots]) async {
+    _setContexts(roots);
     _initStream();
     final isolateBuilder = _ref.read(isolateBuilderServiceProvider);
     final activeProjectService = _ref.read(activeProjectServiceProvider);

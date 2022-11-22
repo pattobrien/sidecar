@@ -327,10 +327,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       logger.onRecord.listen((event) =>
           _log(runner, LogRecord.simple(event.toString(), DateTime.now())));
 
-      await runner.initialize();
       final roots = contextCollection.contexts
           .map((e) => e.contextRoot.root.toUri())
           .toList();
+      await runner.initialize(roots);
       final request = SetContextCollectionRequest(roots);
       await runner.asyncRequest<SetWorkspaceResponse>(request);
       isRunnerInitialized[runner] = true;

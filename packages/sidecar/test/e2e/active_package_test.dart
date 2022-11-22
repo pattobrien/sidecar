@@ -12,6 +12,7 @@ import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
 
+@Tags(['e2e'])
 void main() {
   group('active package test - analysis_options.yaml', () {
     final constructors = [StringLiterals.new];

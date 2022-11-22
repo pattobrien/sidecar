@@ -64,23 +64,23 @@ extension AstNodeX on AstNode {
     final startOffset = offset;
     final endOffset = end;
 
-    final startLocation = unit.lineInfo.getLocation(startOffset);
-    final endLocation = unit.lineInfo.getLocation(endOffset);
+    final startLocation = unit.currentUnit.lineInfo.getLocation(startOffset);
+    final endLocation = unit.currentUnit.lineInfo.getLocation(endOffset);
 
     return SourceSpan(
       SourceLocation(
         startOffset,
-        sourceUrl: unit.sourceUri,
+        sourceUrl: unit.currentUnit.path,
         column: startLocation.columnNumber,
         line: startLocation.lineNumber,
       ),
       SourceLocation(
         endOffset,
-        sourceUrl: unit.sourceUri,
+        sourceUrl: unit.currentUnit.path,
         column: endLocation.columnNumber,
         line: endLocation.lineNumber,
       ),
-      unit.contents.substring(startOffset, endOffset),
+      unit.currentUnit.content.substring(startOffset, endOffset),
     );
   }
 

@@ -21,7 +21,7 @@ Future<void> startSidecarCli(
     () async {
       final client = container.read(analyzerClientProvider);
       await client.openWorkspace();
-      // client.closeWorkspace();
+      client.closeWorkspace();
 
       if (!isDebug) exit(0);
 

@@ -19,6 +19,11 @@ import 'rules.dart';
 
 mixin BaseRule {
   final Set<AnalysisResult> results = {};
+  late ResolvedUnitResult _unit;
+
+  ResolvedUnitResult get unit => _unit;
+
+  void setUnit(ResolvedUnitResult unit) => _unit = unit;
 
   RuleCode get code;
   List<Glob>? get includes => null;
@@ -57,8 +62,6 @@ mixin BaseRuleVisitorMixin on BaseRule {
 }
 
 mixin AssistMixin on BaseRule {
-  late ResolvedUnitResult _unit;
-
   void reportAssistForNode(
     AstNode node, {
     required String message,
@@ -84,8 +87,8 @@ mixin LintMixin on BaseRule {
 
   Map<dynamic, dynamic>? get configuration => _config?.configuration;
 
-  late final AnalysisPackageConfiguration? _packageConfig;
-  late final AnalysisConfiguration? _config;
+  late AnalysisPackageConfiguration? _packageConfig;
+  late AnalysisConfiguration? _config;
 
   @override
   @internal
@@ -99,10 +102,6 @@ mixin LintMixin on BaseRule {
     _config = config;
     super.refresh(config: config, packageConfig: packageConfig);
   }
-
-  late ResolvedUnitResult _unit;
-
-  void setUnit(ResolvedUnitResult unit) => _unit = unit;
 
   void reportAstNode(
     AstNode node, {

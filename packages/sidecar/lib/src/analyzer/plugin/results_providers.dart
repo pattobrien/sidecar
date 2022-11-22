@@ -55,18 +55,21 @@ final lintResultsProvider =
 
   // - applyPendingFileChanges: 4.61ms
   final visitor = ref.watch(registryVisitorProvider(file));
-  final visitors = ref.watch(scopedVisitorForFileProvider(file));
   final rules = ref.watch(scopedLintRulesForFileProvider(file));
   final visitorRules = ref.watch(scopedVisitorForFileProvider(file));
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
+  final analyzerService = ref.watch(fileAnalyzerServiceProvider);
+  final registry = ref.watch(nodeRegistryForFileProvider(file));
   return runZonedGuarded<Set<LintResult>>(
         () {
-          if (unit == null) return {};
-          for (final visitor in visitors) {
-            visitor.setUnit(unit);
-          }
-          unit.unit.accept(visitor);
-          return visitor.results;
+          return analyzerService.visitLintResults(
+              unitResult: unit, rules: visitorRules, registry: registry);
+          // if (unit == null) return {};
+          // for (final visitor in visitors) {
+          //   visitor.setUnit(unit);
+          // }
+          // unit.unit.accept(visitor);
+          // return visitor.results;
         },
         (error, stack) {
           log(

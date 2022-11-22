@@ -1,11 +1,9 @@
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../rules/visitors.dart';
 import '../analyzer/ast/ast.dart';
-import '../analyzer/context/unit_context.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
-import '../utils/logger/logger.dart';
 
 abstract class IFileAnalyzerService {
   //
@@ -13,20 +11,33 @@ abstract class IFileAnalyzerService {
 }
 
 class FileAnalyzerService {
-  const FileAnalyzerService(this.ref);
-
-  final Ref ref;
+  const FileAnalyzerService();
 
   Set<LintResult> visitLintResults({
-    // required AnalyzedFile file,
-    required UnitContext context,
-    required List<BaseRuleVisitorMixin> rules,
+    required ResolvedUnitResult? unitResult,
+    required List<LintMixin> rules,
     required NodeRegistry registry,
   }) {
-    rules.map((e) => e.initializeVisitor(registry));
+    final visitorRules = rules.whereType<BaseRuleVisitorMixin>().toList();
+    registerVisitorsWithRegistry(visitorRules, registry);
+
+    if (unitResult == null) return {};
+    for (final visitor in rules) {
+      visitor.setUnit(unitResult);
+    }
+
     final visitor = RegisteredLintVisitor(registry);
-    context.currentUnit.accept(visitor);
+    unitResult.unit.accept(visitor);
     return visitor.results;
+  }
+
+  void registerVisitorsWithRegistry(
+    List<BaseRuleVisitorMixin> rules,
+    NodeRegistry registry,
+  ) {
+    // ignore: prefer_iterable_wheretype
+    final lintRules = rules.where((e) => e is LintMixin);
+    lintRules.map((e) => e.initializeVisitor(registry));
   }
 
   // Future<List<LintResult>> computeLintResults({
@@ -60,15 +71,17 @@ class FileAnalyzerService {
         .where((res) => res.isWithinOffset(request.file.path, request.offset));
   }
 
-  // Future<LintResultWithEdits> computeEditResultsForAnalysisResult(
-  //   LintResult analysisResult,
-  //   List<LintRule> rules,
-  // ) async {
+  // Future<LintResultWithEdits> computeEditResultsForAnalysisResult({
+  //   required UnitContext context,
+  //   required LintResult analysisResult,
+  //   required List<LintMixin> rules,
+  // }) async {
   //   final code = analysisResult.rule;
   //   final rule = rules.firstWhere((r) => r.code == code);
-  //   if (rule is! QuickFix) return analysisResult.copyWithNoEdits();
-  //   final editResults = await rule.computeQuickFixes(analysisResult.span);
-  //   return analysisResult.copyWithEdits(edits: editResults);
+  //   if (rule is! QuickFixMixin) return analysisResult.copyWithNoEdits();
+  //   final edits = await analysisResult.editsComputer!(context);
+  //   // final editResults = await rule.computeQuickFixes(analysisResult.span);
+  //   return analysisResult.copyWithEdits(edits: edits);
   // }
 
   // Future<List<AssistResult>> computeAssistResults({
@@ -115,7 +128,7 @@ class FileAnalyzerService {
 }
 
 final fileAnalyzerServiceProvider = Provider(
-  FileAnalyzerService.new,
+  (ref) => const FileAnalyzerService(),
   name: 'fileAnalyzerServiceProvider',
   dependencies: const [],
 );

@@ -8,6 +8,7 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:file/file.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../analyzer/plugin/files_provider.dart';
 import '../../analyzer/plugin/plugin.dart';
@@ -37,10 +38,11 @@ Future<WorkspaceResource> createWorkspace({
   final provider = resourceProvider ?? defaultProvider;
   final root =
       io.Directory.systemTemp.uri.resolve(p.join(defaultWorkspacePath));
+  // final uuidPath = const Uuid().v4();
   final workspace = WorkspaceResource(
       resourceProvider: provider,
       fileSystem: fileSystem,
-      rootPath: rootPath ?? root.path);
+      rootPath: p.join(rootPath ?? root.path));
 
   await workspace.init();
   return workspace;
