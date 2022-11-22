@@ -41,16 +41,16 @@ Future<AnalyzerClient> analyzeTestResources(
 }
 
 Future<int> runPubGet(Uri root) async {
-  Process process;
+  Process? process;
   try {
     process = await Process.start(
       'dart',
       ['pub', 'get'],
       workingDirectory: root.path,
     );
-  } finally {
+  } catch (e) {
     //
   }
-  return process.exitCode;
+  return process?.exitCode ?? Future.value(1);
   // process.stdout.listen((event) => stdout.add(event));
 }
