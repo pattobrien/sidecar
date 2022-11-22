@@ -2,6 +2,9 @@ import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar/src/configurations/configurations.dart';
+import 'package:sidecar/src/configurations/sidecar_spec/package_options.dart';
+import 'package:sidecar/src/configurations/sidecar_spec/rule_options.dart';
+import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec_base.dart';
 import 'package:sidecar/src/test/resources/package_resource.dart';
 import 'package:sidecar/src/test/resources/workspace_resource.dart';
 import 'package:test/scaffolding.dart';
@@ -13,10 +16,17 @@ import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
 
 @Tags(['e2e'])
+@Timeout(Duration(minutes: 15))
 void main() {
   group('active package test - analysis_options.yaml', () {
     final constructors = [StringLiterals.new];
-    final sidecarYaml = ProjectConfiguration.fromCodes([kStringLiteralsCode]);
+    final sidecarYaml = SidecarSpec(lints: {
+      kStringLiteralsCode.package: LintPackageOptions(rules: {
+        kStringLiteralsCode.code: const LintOptions(
+          enabled: true,
+        ),
+      }),
+    });
 
     late PackageResource app;
     late WorkspaceResource workspace;
@@ -51,7 +61,11 @@ void main() {
 
   group('active package - sidecar.yaml:', () {
     final constructors = [StringLiterals.new];
-    final sidecarYaml = ProjectConfiguration.fromCodes([kStringLiteralsCode]);
+    final sidecarYaml = SidecarSpec(lints: {
+      kStringLiteralsCode.package: LintPackageOptions(rules: {
+        kStringLiteralsCode.code: const LintOptions(),
+      }),
+    });
 
     late PackageResource app;
     late WorkspaceResource workspace;

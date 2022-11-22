@@ -6,18 +6,76 @@ part of 'package_options.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_PackageOptions _$$_PackageOptionsFromJson(Map<String, dynamic> json) =>
-    _$_PackageOptions(
+PackageOptions _$PackageOptionsFromJson(Map json) => PackageOptions(
       includes: globsFromStrings(json['includes'] as List<String>?),
       excludes: globsFromStrings(json['excludes'] as List<String>?),
-      rules: (json['rules'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, RuleOptions.fromJson(e as Map<String, dynamic>)),
+      rules: (json['rules'] as Map?)?.map(
+        (k, e) => MapEntry(k as String,
+            RuleOptions.fromJson(Map<String, dynamic>.from(e as Map))),
       ),
     );
 
-Map<String, dynamic> _$$_PackageOptionsToJson(_$_PackageOptions instance) =>
-    <String, dynamic>{
-      'includes': globsToStrings(instance.includes),
-      'excludes': globsToStrings(instance.excludes),
-      'rules': instance.rules?.map((k, e) => MapEntry(k, e.toJson())),
-    };
+Map<String, dynamic> _$PackageOptionsToJson(PackageOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('includes', globsToStrings(instance.includes));
+  writeNotNull('excludes', globsToStrings(instance.excludes));
+  writeNotNull('rules', instance.rules?.map((k, e) => MapEntry(k, e.toJson())));
+  return val;
+}
+
+AssistPackageOptions _$AssistPackageOptionsFromJson(Map json) =>
+    AssistPackageOptions(
+      excludes: globsFromStrings(json['excludes'] as List<String>?),
+      includes: globsFromStrings(json['includes'] as List<String>?),
+      rules: (json['rules'] as Map?)?.map(
+        (k, e) => MapEntry(k as String,
+            AssistOptions.fromJson(Map<String, dynamic>.from(e as Map))),
+      ),
+    );
+
+Map<String, dynamic> _$AssistPackageOptionsToJson(
+    AssistPackageOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('includes', globsToStrings(instance.includes));
+  writeNotNull('excludes', globsToStrings(instance.excludes));
+  writeNotNull('rules', instance.rules?.map((k, e) => MapEntry(k, e.toJson())));
+  return val;
+}
+
+LintPackageOptions _$LintPackageOptionsFromJson(Map json) => LintPackageOptions(
+      excludes: globsFromStrings(json['excludes'] as List<String>?),
+      includes: globsFromStrings(json['includes'] as List<String>?),
+      rules: (json['rules'] as Map?)?.map(
+        (k, e) => MapEntry(k as String,
+            LintOptions.fromJson(Map<String, dynamic>.from(e as Map))),
+      ),
+    );
+
+Map<String, dynamic> _$LintPackageOptionsToJson(LintPackageOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('includes', globsToStrings(instance.includes));
+  writeNotNull('excludes', globsToStrings(instance.excludes));
+  writeNotNull('rules', instance.rules?.map((k, e) => MapEntry(k, e.toJson())));
+  return val;
+}

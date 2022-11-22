@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../configurations/project/project.dart';
+import '../configurations/sidecar_spec/sidecar_spec_base.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
 
@@ -9,15 +9,15 @@ class RuleInitializationService {
   const RuleInitializationService();
 
   List<BaseRule> constructRules(
-    ProjectConfiguration config,
+    SidecarSpec config,
     List<SidecarBaseConstructor> ruleConstructors,
   ) {
-    logger.finer('lint packages init: ${config.lintPackages?.length ?? 0}');
-    logger.finer('assist packages init: ${config.assistPackages?.length ?? 0}');
+    logger.finer('lint packages init: ${config.lints?.length ?? 0}');
+    logger.finer('assist packages init: ${config.assists?.length ?? 0}');
     return ruleConstructors
         .map((ruleConstructor) {
           final rule = ruleConstructor();
-          final ruleConfig = config.getConfigurationForRule(rule);
+          final ruleConfig = config.getConfigurationForCode(rule.code);
 
           // rule was not included in yaml, or was explicitly disabled,
           // so it shouldnt be initialized

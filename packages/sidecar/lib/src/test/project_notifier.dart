@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:analyzer/src/context/packages.dart';
 
 import '../configurations/configurations.dart';
+import '../configurations/sidecar_spec/sidecar_spec_base.dart';
 import 'project.dart';
 
 part 'project_notifier.g.dart';
@@ -13,7 +14,7 @@ class ProjectNotifier extends _$ProjectNotifier {
   Project build(
     String name,
     Folder folder, {
-    ProjectConfiguration? sidecarConfiguration,
+    SidecarSpec? sidecarConfiguration,
     Map<String, String>? source,
   }) {
     // create project

@@ -1,14 +1,15 @@
+import 'package:glob/glob.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../../configurations/configurations.dart';
+import '../../configurations/sidecar_spec/sidecar_spec_base.dart';
 import 'active_package_provider.dart';
 
-final projectConfigurationProvider = Provider<ProjectConfiguration>((ref) {
+final projectSidecarSpecProvider = Provider<SidecarSpec>((ref) {
   final activePackage = ref.watch(activePackageProvider);
-  return activePackage.sidecarOptionsFile;
+  return activePackage.sidecarSpec;
 });
 
-final activeProjectGlobSetProvider = Provider((ref) {
-  final projectConfiguration = ref.watch(projectConfigurationProvider);
-  return projectConfiguration.projectGlobs;
+final activeProjectGlobSetProvider = Provider<Set<Glob>>((ref) {
+  final projectConfiguration = ref.watch(projectSidecarSpecProvider);
+  return projectConfiguration.includes?.toSet() ?? SidecarSpec.defaultIncludes;
 });

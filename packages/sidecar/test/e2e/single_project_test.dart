@@ -1,6 +1,6 @@
 import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sidecar/src/configurations/configurations.dart';
+import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec.dart';
 import 'package:sidecar/src/test/resources/package_resource.dart';
 import 'package:sidecar/src/test/resources/workspace_resource.dart';
 import 'package:test/expect.dart';
@@ -12,10 +12,15 @@ import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
 
 @Tags(['e2e'])
+@Timeout(Duration(minutes: 15))
 void main() {
   group('single project lint results:', () {
     final constructors = [StringLiterals.new];
-    final sidecarYaml = ProjectConfiguration.fromCodes([kStringLiteralsCode]);
+    final sidecarYaml = SidecarSpec(lints: {
+      kStringLiteralsCode.package: LintPackageOptions(rules: {
+        kStringLiteralsCode.code: const LintOptions(),
+      }),
+    });
 
     late PackageResource app;
     late WorkspaceResource workspace;

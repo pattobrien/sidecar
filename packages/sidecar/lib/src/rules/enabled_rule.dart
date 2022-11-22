@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../configurations/configurations.dart';
+import '../configurations/sidecar_spec/package_options.dart';
+import '../configurations/sidecar_spec/rule_options.dart';
 import 'rules.dart';
 
 @immutable
@@ -12,8 +13,8 @@ class EnabledRule {
   });
 
   final BaseRule rule;
-  final AnalysisPackageConfiguration? packageConfiguration;
-  final AnalysisConfiguration? configuration;
+  final PackageOptions? packageConfiguration;
+  final RuleOptions? configuration;
 
   @override
   bool operator ==(Object other) =>

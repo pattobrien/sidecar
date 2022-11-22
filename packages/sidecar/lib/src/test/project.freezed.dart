@@ -19,8 +19,7 @@ mixin _$Project {
   String get name => throw _privateConstructorUsedError;
   Uri get parent => throw _privateConstructorUsedError;
   ResourceProvider get resourceProvider => throw _privateConstructorUsedError;
-  ProjectConfiguration? get sidecarConfiguration =>
-      throw _privateConstructorUsedError;
+  SidecarSpec? get sidecarConfiguration => throw _privateConstructorUsedError;
   Map<String, String>? get source => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -35,7 +34,7 @@ abstract class $ProjectCopyWith<$Res> {
       {String name,
       Uri parent,
       ResourceProvider resourceProvider,
-      ProjectConfiguration? sidecarConfiguration,
+      SidecarSpec? sidecarConfiguration,
       Map<String, String>? source});
 }
 
@@ -71,7 +70,7 @@ class _$ProjectCopyWithImpl<$Res> implements $ProjectCopyWith<$Res> {
       sidecarConfiguration: sidecarConfiguration == freezed
           ? _value.sidecarConfiguration
           : sidecarConfiguration // ignore: cast_nullable_to_non_nullable
-              as ProjectConfiguration?,
+              as SidecarSpec?,
       source: source == freezed
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
@@ -90,7 +89,7 @@ abstract class _$$_ProjectCopyWith<$Res> implements $ProjectCopyWith<$Res> {
       {String name,
       Uri parent,
       ResourceProvider resourceProvider,
-      ProjectConfiguration? sidecarConfiguration,
+      SidecarSpec? sidecarConfiguration,
       Map<String, String>? source});
 }
 
@@ -127,7 +126,7 @@ class __$$_ProjectCopyWithImpl<$Res> extends _$ProjectCopyWithImpl<$Res>
       sidecarConfiguration: sidecarConfiguration == freezed
           ? _value.sidecarConfiguration
           : sidecarConfiguration // ignore: cast_nullable_to_non_nullable
-              as ProjectConfiguration?,
+              as SidecarSpec?,
       source: source == freezed
           ? _value._source
           : source // ignore: cast_nullable_to_non_nullable
@@ -155,7 +154,7 @@ class _$_Project extends _Project {
   @override
   final ResourceProvider resourceProvider;
   @override
-  final ProjectConfiguration? sidecarConfiguration;
+  final SidecarSpec? sidecarConfiguration;
   final Map<String, String>? _source;
   @override
   Map<String, String>? get source {
@@ -204,7 +203,7 @@ abstract class _Project extends Project {
       {required final String name,
       required final Uri parent,
       required final ResourceProvider resourceProvider,
-      final ProjectConfiguration? sidecarConfiguration,
+      final SidecarSpec? sidecarConfiguration,
       final Map<String, String>? source}) = _$_Project;
   const _Project._() : super._();
 
@@ -215,7 +214,7 @@ abstract class _Project extends Project {
   @override
   ResourceProvider get resourceProvider;
   @override
-  ProjectConfiguration? get sidecarConfiguration;
+  SidecarSpec? get sidecarConfiguration;
   @override
   Map<String, String>? get source;
   @override

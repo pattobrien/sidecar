@@ -8,10 +8,10 @@ import 'package:glob/glob.dart';
 import 'package:meta/meta.dart';
 import 'package:source_span/source_span.dart';
 
-import '../../rules/visitors.dart';
 import '../analyzer/ast/ast.dart';
 import '../analyzer/ast/general_visitor.dart';
-import '../configurations/configurations.dart';
+import '../configurations/sidecar_spec/package_options.dart';
+import '../configurations/sidecar_spec/rule_options.dart';
 import '../protocol/protocol.dart';
 import '../utils/utils.dart';
 import 'lint_severity.dart';
@@ -32,8 +32,8 @@ mixin BaseRule {
   @internal
   @mustCallSuper
   void refresh({
-    required AnalysisConfiguration? config,
-    required AnalysisPackageConfiguration? packageConfig,
+    required RuleOptions? config,
+    required PackageOptions? packageConfig,
   }) {}
 
   void _reportSourceSpan(
@@ -41,7 +41,7 @@ mixin BaseRule {
     String message, {
     String? correction,
     EditsComputer? editsComputer,
-    LintConfiguration? config,
+    LintOptions? config,
   }) {
     if (this is LintMixin) {
       final result = LintResult(
@@ -87,15 +87,15 @@ mixin LintMixin on BaseRule {
 
   Map<dynamic, dynamic>? get configuration => _config?.configuration;
 
-  late AnalysisPackageConfiguration? _packageConfig;
-  late AnalysisConfiguration? _config;
+  late PackageOptions? _packageConfig;
+  late RuleOptions? _config;
 
   @override
   @internal
   @mustCallSuper
   void refresh({
-    required AnalysisConfiguration? config,
-    required AnalysisPackageConfiguration? packageConfig,
+    required RuleOptions? config,
+    required PackageOptions? packageConfig,
   }) {
     results.clear();
     _packageConfig = packageConfig;

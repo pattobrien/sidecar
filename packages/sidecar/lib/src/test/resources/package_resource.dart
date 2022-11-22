@@ -13,7 +13,7 @@ import 'package:path/path.dart' as p;
 import 'package:pubspec_parse/pubspec_parse.dart';
 
 import '../../analyzer/server/runner/context_providers.dart';
-import '../../configurations/configurations.dart';
+import '../../configurations/sidecar_spec/sidecar_spec_base.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/file_paths.dart';
 import 'analysis_options.dart';
@@ -27,7 +27,7 @@ class PackageResource with ResourceMixin {
     required this.projectName,
     required this.fileSystem,
     this.isSidecarEnabled = true,
-    ProjectConfiguration? sidecarProjectConfiguration,
+    SidecarSpec? sidecarProjectConfiguration,
   }) : _sidecarProjectConfiguration = sidecarProjectConfiguration {
     build();
   }
@@ -46,12 +46,11 @@ class PackageResource with ResourceMixin {
   final String parentDirectoryPath;
   final String projectName;
 
-  final ProjectConfiguration? _sidecarProjectConfiguration;
+  final SidecarSpec? _sidecarProjectConfiguration;
 
   final bool isSidecarEnabled;
 
-  ProjectConfiguration? get sidecarProjectConfiguration =>
-      _sidecarProjectConfiguration;
+  SidecarSpec? get sidecarProjectConfiguration => _sidecarProjectConfiguration;
 
   Folder get projectFolder =>
       resourceProvider.getFolder(p.join(parentDirectoryPath, projectName));
@@ -105,7 +104,7 @@ class PackageResource with ResourceMixin {
   }
 
   File newPubspecYamlFile(Pubspec pubspec) {
-    final content = '''
+    const content = '''
 name: north_app
 
 environment:
@@ -123,7 +122,7 @@ dependencies:
     return modifyFile(kSidecarYaml, content);
   }
 
-  void modifySidecarYaml(ProjectConfiguration configuration) {
+  void modifySidecarYaml(SidecarSpec configuration) {
     final content = configuration.toYamlContent();
     modifyFile(kSidecarYaml, content);
   }

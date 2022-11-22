@@ -15,23 +15,21 @@ final _enabledRulesProvider = Provider<List<EnabledRule>>((ref) {
   // TODO: can we make this more efficient?
   //TODO: if one detail in the project config changes, do we need to
   // re-initialize every single rule? or does riverpod not work like that?
-  final projectConfiguration = ref.watch(projectConfigurationProvider);
+  final projectConfiguration = ref.watch(projectSidecarSpecProvider);
 
   final enabledRules = constructors.map((constructor) {
     final rule = constructor();
     if (rule is LintMixin) {
-      final packageConfig =
-          projectConfiguration.lintPackages?[rule.code.package];
+      final packageConfig = projectConfiguration.lints?[rule.code.package];
 
-      final ruleConfig = packageConfig?.lints?[rule.code.code];
+      final ruleConfig = packageConfig?.rules?[rule.code.code];
       return EnabledRule(rule,
           configuration: ruleConfig, packageConfiguration: packageConfig);
     }
     if (rule is AssistMixin) {
-      final packageConfig =
-          projectConfiguration.assistPackages?[rule.code.package];
+      final packageConfig = projectConfiguration.assists?[rule.code.package];
 
-      final ruleConfig = packageConfig?.assists?[rule.code.code];
+      final ruleConfig = packageConfig?.rules?[rule.code.code];
       return EnabledRule(rule,
           configuration: ruleConfig, packageConfiguration: packageConfig);
     }
@@ -56,10 +54,10 @@ final activeRulesProvider = Provider((ref) {
 
     if (baseRule is! Configuration) return false;
     // is the below efficient enough?
-    final ruleConfig = ref.watch(projectConfigurationProvider
-        .select((value) => value.getConfigurationForRule(baseRule)));
-    final packageConfig = ref.watch(projectConfigurationProvider
-        .select((value) => value.getPackageConfigurationForRule(baseRule)));
+    final ruleConfig = ref.watch(projectSidecarSpecProvider
+        .select((value) => value.getConfigurationForCode(baseRule.code)));
+    final packageConfig = ref.watch(projectSidecarSpecProvider.select(
+        (value) => value.getPackageConfigurationForCode(baseRule.code)));
     baseRule.refresh(config: ruleConfig, packageConfig: packageConfig);
     return true;
   });

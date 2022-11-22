@@ -21,7 +21,7 @@ lints:
       includes:
         - "lib/**"
     avoid_border_radius_literal:
-      severity: info
+      severity: warning
     avoid_box_shadow_literal:
     # avoid_edge_insets_literal:
 #

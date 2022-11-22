@@ -4,6 +4,7 @@ import 'package:checked_yaml/checked_yaml.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+import '../../utils/file_paths.dart';
 import 'rule_yaml_nodes.dart';
 
 // @JsonSerializable(anyMap: true)
@@ -44,7 +45,7 @@ class RulePackageConfiguration {
 
 RulePackageConfiguration? parseLintPackage(String name, Uri root) {
   final rootPath = root.toFilePath(windows: Platform.isWindows);
-  final pubspecPath = p.join(rootPath, 'pubspec.yaml');
+  final pubspecPath = p.join(rootPath, kPubspecYaml);
   final pubspecContent = File(pubspecPath).readAsStringSync();
   try {
     return checkedYamlDecode<RulePackageConfiguration?>(pubspecContent,

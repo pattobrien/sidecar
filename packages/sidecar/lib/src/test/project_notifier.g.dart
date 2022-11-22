@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $ProjectNotifierHash() => r'4d0f261982b1c524c934550b416b7638ee66c956';
+String $ProjectNotifierHash() => r'26f258b976974adfae612825d7da5f9291c3039f';
 
 /// See also [ProjectNotifier].
 class ProjectNotifierProvider
@@ -55,7 +55,7 @@ class ProjectNotifierProvider
 
   final String name;
   final Folder folder;
-  final ProjectConfiguration? sidecarConfiguration;
+  final SidecarSpec? sidecarConfiguration;
   final Map<String, String>? source;
 
   @override
@@ -102,7 +102,7 @@ class ProjectNotifierFamily extends Family<Project> {
   ProjectNotifierProvider call(
     String name,
     Folder folder, {
-    ProjectConfiguration? sidecarConfiguration,
+    SidecarSpec? sidecarConfiguration,
     Map<String, String>? source,
   }) {
     return ProjectNotifierProvider(
@@ -138,13 +138,13 @@ class ProjectNotifierFamily extends Family<Project> {
 abstract class _$ProjectNotifier extends BuildlessAutoDisposeNotifier<Project> {
   late final String name;
   late final Folder folder;
-  late final ProjectConfiguration? sidecarConfiguration;
+  late final SidecarSpec? sidecarConfiguration;
   late final Map<String, String>? source;
 
   Project build(
     String name,
     Folder folder, {
-    ProjectConfiguration? sidecarConfiguration,
+    SidecarSpec? sidecarConfiguration,
     Map<String, String>? source,
   });
 }

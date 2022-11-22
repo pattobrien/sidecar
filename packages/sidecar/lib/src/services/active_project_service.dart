@@ -11,12 +11,15 @@ import 'package:riverpod/riverpod.dart';
 import '../analyzer/server/runner/context_providers.dart';
 import '../configurations/project/project_configuration.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
+import '../configurations/sidecar_spec/sidecar_spec_base.dart';
+import '../configurations/sidecar_spec/sidecar_spec_parsers.dart';
 import '../protocol/active_package.dart';
 import '../protocol/active_package_root.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
 import '../protocol/protocol.dart';
 import '../utils/logger/logger.dart';
+import '../utils/uri_ext.dart';
 import '../utils/utils.dart';
 
 class ActiveProjectService {
@@ -44,10 +47,7 @@ class ActiveProjectService {
   }
 
   ActivePackage? getActivePackageFromUri(Uri root) {
-    var path = root.path;
-    if (path.endsWith('/')) {
-      path = path.substring(0, path.length - 1);
-    }
+    final path = root.pathNoTrailingSlash;
     final collection = AnalysisContextCollection(
         includedPaths: [path], resourceProvider: resourceProvider);
     final rootContext = collection.contextFor(path);
@@ -63,9 +63,9 @@ class ActiveProjectService {
     final packageConfig = getPackageConfig(root);
     final pluginUri = getSidecarDependencyUri(packageConfig);
     final packages = getSidecarDependencies(packageConfig);
-    final projectConfig = getSidecarOptions(root);
+    final projectSidecarSpec = getSidecarOptions(root);
     final packageConfigJson = getPackageConfig(root);
-    if (pluginUri == null || !isSidecarEnabled || projectConfig == null) {
+    if (pluginUri == null || !isSidecarEnabled || projectSidecarSpec == null) {
       logger.info('context at ${root.path} is not an active sidecar context.');
       if (!isSidecarEnabled) {
         logger.info(
@@ -75,9 +75,8 @@ class ActiveProjectService {
     }
     return ActivePackage(
       packageRoot: ActivePackageRoot(root),
-      sidecarOptionsFile: projectConfig,
+      sidecarSpec: projectSidecarSpec,
       sidecarPluginPackage: pluginUri,
-      // sidecarPackages: packages,
       packageConfig: packageConfigJson,
     );
   }
@@ -125,15 +124,15 @@ class ActiveProjectService {
     return sidecarYamlFile.readAsStringSync();
   }
 
-  ProjectConfiguration? getSidecarOptions(Uri root) {
+  SidecarSpec? getSidecarOptions(Uri root) {
     logger.finer('getSidecarOptions started');
     try {
       final contents = _getSidecarFile(root);
       if (contents == null) return null;
-      return ProjectConfiguration.fromYaml(
+      return parseSidecarSpecFromYaml(
         contents,
         fileUri: Uri.parse(p.canonicalize(p.join(root.path, kSidecarYaml))),
-      );
+      ).item1;
     } catch (e, stackTrace) {
       logger.shout('ISOLATE NON-FATAL: ', e, stackTrace);
       return null;

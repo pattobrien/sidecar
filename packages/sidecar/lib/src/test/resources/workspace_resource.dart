@@ -14,6 +14,7 @@ import '../../analyzer/plugin/files_provider.dart';
 import '../../analyzer/plugin/plugin.dart';
 import '../../analyzer/server/runner/context_providers.dart';
 import '../../configurations/configurations.dart';
+import '../../configurations/sidecar_spec/sidecar_spec.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
 import 'package_resource.dart';
@@ -42,7 +43,7 @@ Future<WorkspaceResource> createWorkspace({
   final workspace = WorkspaceResource(
       resourceProvider: provider,
       fileSystem: fileSystem,
-      rootPath: p.join(rootPath ?? root.path));
+      rootPath: rootPath ?? root.path);
 
   await workspace.init();
   return workspace;
@@ -97,7 +98,7 @@ class WorkspaceResource with ResourceMixin {
     String? name,
     String? parentDirectoryPath,
     bool isSidecarEnabled = true,
-    ProjectConfiguration? sidecarYaml,
+    SidecarSpec? sidecarYaml,
   }) async {
     final package = PackageResource(
         parentDirectoryPath: parentDirectoryPath ?? rootPath,

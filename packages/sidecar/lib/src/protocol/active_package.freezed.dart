@@ -17,8 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ActivePackage {
   ActivePackageRoot get packageRoot => throw _privateConstructorUsedError;
-  ProjectConfiguration get sidecarOptionsFile =>
-      throw _privateConstructorUsedError;
+  SidecarSpec get sidecarSpec => throw _privateConstructorUsedError;
   Uri get sidecarPluginPackage => throw _privateConstructorUsedError;
   PackageConfig? get packageConfig => throw _privateConstructorUsedError;
   List<Uri>? get workspaceScope => throw _privateConstructorUsedError;
@@ -35,7 +34,7 @@ abstract class $ActivePackageCopyWith<$Res> {
       _$ActivePackageCopyWithImpl<$Res>;
   $Res call(
       {ActivePackageRoot packageRoot,
-      ProjectConfiguration sidecarOptionsFile,
+      SidecarSpec sidecarSpec,
       Uri sidecarPluginPackage,
       PackageConfig? packageConfig,
       List<Uri>? workspaceScope});
@@ -55,7 +54,7 @@ class _$ActivePackageCopyWithImpl<$Res>
   @override
   $Res call({
     Object? packageRoot = freezed,
-    Object? sidecarOptionsFile = freezed,
+    Object? sidecarSpec = freezed,
     Object? sidecarPluginPackage = freezed,
     Object? packageConfig = freezed,
     Object? workspaceScope = freezed,
@@ -65,10 +64,10 @@ class _$ActivePackageCopyWithImpl<$Res>
           ? _value.packageRoot
           : packageRoot // ignore: cast_nullable_to_non_nullable
               as ActivePackageRoot,
-      sidecarOptionsFile: sidecarOptionsFile == freezed
-          ? _value.sidecarOptionsFile
-          : sidecarOptionsFile // ignore: cast_nullable_to_non_nullable
-              as ProjectConfiguration,
+      sidecarSpec: sidecarSpec == freezed
+          ? _value.sidecarSpec
+          : sidecarSpec // ignore: cast_nullable_to_non_nullable
+              as SidecarSpec,
       sidecarPluginPackage: sidecarPluginPackage == freezed
           ? _value.sidecarPluginPackage
           : sidecarPluginPackage // ignore: cast_nullable_to_non_nullable
@@ -101,7 +100,7 @@ abstract class _$$_ActivePackageCopyWith<$Res>
   @override
   $Res call(
       {ActivePackageRoot packageRoot,
-      ProjectConfiguration sidecarOptionsFile,
+      SidecarSpec sidecarSpec,
       Uri sidecarPluginPackage,
       PackageConfig? packageConfig,
       List<Uri>? workspaceScope});
@@ -124,7 +123,7 @@ class __$$_ActivePackageCopyWithImpl<$Res>
   @override
   $Res call({
     Object? packageRoot = freezed,
-    Object? sidecarOptionsFile = freezed,
+    Object? sidecarSpec = freezed,
     Object? sidecarPluginPackage = freezed,
     Object? packageConfig = freezed,
     Object? workspaceScope = freezed,
@@ -134,10 +133,10 @@ class __$$_ActivePackageCopyWithImpl<$Res>
           ? _value.packageRoot
           : packageRoot // ignore: cast_nullable_to_non_nullable
               as ActivePackageRoot,
-      sidecarOptionsFile: sidecarOptionsFile == freezed
-          ? _value.sidecarOptionsFile
-          : sidecarOptionsFile // ignore: cast_nullable_to_non_nullable
-              as ProjectConfiguration,
+      sidecarSpec: sidecarSpec == freezed
+          ? _value.sidecarSpec
+          : sidecarSpec // ignore: cast_nullable_to_non_nullable
+              as SidecarSpec,
       sidecarPluginPackage: sidecarPluginPackage == freezed
           ? _value.sidecarPluginPackage
           : sidecarPluginPackage // ignore: cast_nullable_to_non_nullable
@@ -159,7 +158,7 @@ class __$$_ActivePackageCopyWithImpl<$Res>
 class _$_ActivePackage extends _ActivePackage {
   const _$_ActivePackage(
       {required this.packageRoot,
-      required this.sidecarOptionsFile,
+      required this.sidecarSpec,
       required this.sidecarPluginPackage,
       this.packageConfig,
       final List<Uri>? workspaceScope})
@@ -169,7 +168,7 @@ class _$_ActivePackage extends _ActivePackage {
   @override
   final ActivePackageRoot packageRoot;
   @override
-  final ProjectConfiguration sidecarOptionsFile;
+  final SidecarSpec sidecarSpec;
   @override
   final Uri sidecarPluginPackage;
   @override
@@ -185,7 +184,7 @@ class _$_ActivePackage extends _ActivePackage {
 
   @override
   String toString() {
-    return 'ActivePackage(packageRoot: $packageRoot, sidecarOptionsFile: $sidecarOptionsFile, sidecarPluginPackage: $sidecarPluginPackage, packageConfig: $packageConfig, workspaceScope: $workspaceScope)';
+    return 'ActivePackage(packageRoot: $packageRoot, sidecarSpec: $sidecarSpec, sidecarPluginPackage: $sidecarPluginPackage, packageConfig: $packageConfig, workspaceScope: $workspaceScope)';
   }
 
   @override
@@ -196,7 +195,7 @@ class _$_ActivePackage extends _ActivePackage {
             const DeepCollectionEquality()
                 .equals(other.packageRoot, packageRoot) &&
             const DeepCollectionEquality()
-                .equals(other.sidecarOptionsFile, sidecarOptionsFile) &&
+                .equals(other.sidecarSpec, sidecarSpec) &&
             const DeepCollectionEquality()
                 .equals(other.sidecarPluginPackage, sidecarPluginPackage) &&
             const DeepCollectionEquality()
@@ -209,7 +208,7 @@ class _$_ActivePackage extends _ActivePackage {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(packageRoot),
-      const DeepCollectionEquality().hash(sidecarOptionsFile),
+      const DeepCollectionEquality().hash(sidecarSpec),
       const DeepCollectionEquality().hash(sidecarPluginPackage),
       const DeepCollectionEquality().hash(packageConfig),
       const DeepCollectionEquality().hash(_workspaceScope));
@@ -223,7 +222,7 @@ class _$_ActivePackage extends _ActivePackage {
 abstract class _ActivePackage extends ActivePackage {
   const factory _ActivePackage(
       {required final ActivePackageRoot packageRoot,
-      required final ProjectConfiguration sidecarOptionsFile,
+      required final SidecarSpec sidecarSpec,
       required final Uri sidecarPluginPackage,
       final PackageConfig? packageConfig,
       final List<Uri>? workspaceScope}) = _$_ActivePackage;
@@ -232,7 +231,7 @@ abstract class _ActivePackage extends ActivePackage {
   @override
   ActivePackageRoot get packageRoot;
   @override
-  ProjectConfiguration get sidecarOptionsFile;
+  SidecarSpec get sidecarSpec;
   @override
   Uri get sidecarPluginPackage;
   @override

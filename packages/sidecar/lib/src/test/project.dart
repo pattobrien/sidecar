@@ -4,7 +4,7 @@ import 'package:package_config/package_config_types.dart';
 import 'package:path/path.dart' as p;
 
 import '../../sidecar.dart';
-import '../configurations/configurations.dart';
+import '../configurations/sidecar_spec/sidecar_spec_base.dart';
 
 part 'project.freezed.dart';
 
@@ -14,7 +14,7 @@ class Project with _$Project {
     required String name,
     required Uri parent,
     required ResourceProvider resourceProvider,
-    ProjectConfiguration? sidecarConfiguration,
+    SidecarSpec? sidecarConfiguration,
     Map<String, String>? source,
     // @Default(<Package>[]) List<Package> dependencies,
   }) = _Project;
@@ -39,7 +39,7 @@ class Project with _$Project {
     return modifyFile(kAnalysisOptionsYaml, contents);
   }
 
-  File modifySidecarConfigYaml(ProjectConfiguration config) {
+  File modifySidecarConfigYaml(SidecarSpec config) {
     final content = config.toYamlContent();
     return modifyFile(kSidecarYaml, content);
   }

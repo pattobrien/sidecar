@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:package_config/package_config_types.dart';
 
-import '../configurations/configurations.dart';
+import '../configurations/sidecar_spec/sidecar_spec_base.dart';
 import 'active_package_root.dart';
 
 part 'active_package.freezed.dart';
@@ -17,7 +17,7 @@ part 'active_package.freezed.dart';
 class ActivePackage with _$ActivePackage {
   const factory ActivePackage({
     required ActivePackageRoot packageRoot,
-    required ProjectConfiguration sidecarOptionsFile,
+    required SidecarSpec sidecarSpec,
     required Uri sidecarPluginPackage,
     PackageConfig? packageConfig,
     List<Uri>? workspaceScope,

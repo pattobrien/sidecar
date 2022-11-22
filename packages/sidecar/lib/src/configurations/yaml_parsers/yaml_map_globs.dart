@@ -5,9 +5,14 @@ import '../configurations.dart';
 import '../exceptions/exceptions.dart';
 
 extension YamlMapIncludeGlobs on YamlMap {
-  SidecarExceptionTuple<List<Glob>?> parseGlobIncludes() {
+  SidecarExceptionTuple<List<Glob>?> parseGlobIncludes() =>
+      _parseGlobs('includes');
+
+  SidecarExceptionTuple<List<Glob>?> parseGlobExcludes() =>
+      _parseGlobs('excludes');
+
+  SidecarExceptionTuple<List<Glob>?> _parseGlobs(String key) {
     YamlList? yamlList;
-    const key = 'includes';
     try {
       yamlList = containsKey(key) ? (value[key] as YamlList) : null;
     } catch (e) {

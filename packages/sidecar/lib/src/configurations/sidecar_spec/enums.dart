@@ -1,0 +1,1 @@
+enum RuleType { assist, lint }
