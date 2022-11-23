@@ -218,8 +218,8 @@ class SidecarAnalyzer {
 
     for (final file in dartFiles) {
       _ref.invalidate(nodeRegistryForFileProvider(file));
-      _ref.invalidate(resolvedUnitForFileProvider(file));
-      final lints = await _ref.refresh(lintResultsProvider(file).future);
+      await _ref.refresh(resolvedUnitForFileProvider(file).future);
+      final lints = await _ref.read(lintResultsProvider(file).future);
       final notification = LintNotification(file.toAnalyzedFile(), lints);
 
       channel.sendNotification(notification);

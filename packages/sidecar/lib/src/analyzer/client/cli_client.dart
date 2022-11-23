@@ -36,9 +36,15 @@ class CliClient extends AnalyzerClient {
   final _logController = StreamController<LogRecord>();
 
   @override
-  void handleFileChange(Uri file, String content) {
+  Future<void> handleFileChange(Uri file, String content) async {
     // if file = package_config.json file of any runners, then rebuild runner
     // else, send file change to all applicable runners
+    final analyzedFile = runner.getAnalyzedFile(file.path);
+    if (analyzedFile == null) return;
+    final changedFileRequest = FileUpdateEvent.add(analyzedFile, content);
+    final request = SidecarRequest.updateFiles([changedFileRequest]);
+    await runner.asyncRequest<UpdateFilesResponse>(request);
+    reporter.print();
   }
 
   @override
@@ -69,6 +75,7 @@ class CliClient extends AnalyzerClient {
     await runner.initialize();
     const request = SetContextCollectionRequest(null);
     await runner.asyncRequest<SetWorkspaceResponse>(request);
+    reporter.print();
   }
 
   final List<StreamSubscription> _subscriptions = [];
@@ -76,7 +83,7 @@ class CliClient extends AnalyzerClient {
 
   @override
   void closeWorkspace() {
-    reporter.save();
+    reporter.print();
     _logController.close();
     _lintController.close();
     for (final subscription in _subscriptions) {

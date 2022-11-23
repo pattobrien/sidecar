@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../logging/log_record.dart';
-import 'requests.dart';
 import 'notifications.dart';
+import 'requests.dart';
 import 'responses.dart';
 
 part 'messages.freezed.dart';

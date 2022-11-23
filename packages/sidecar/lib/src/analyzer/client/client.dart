@@ -13,7 +13,7 @@ abstract class AnalyzerClient {
   List<Uri> get roots;
   Map<AnalyzedFile, Set<LintResult>> get lintResults;
   Future<void> openWorkspace();
-  void handleFileChange(Uri file, String content);
+  Future<void> handleFileChange(Uri file, String content);
   void handleDeletedFile(Uri file);
   void handleOpenFileChange(Uri file, String content);
   void closeWorkspace();

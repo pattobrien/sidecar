@@ -21,9 +21,11 @@ Future<void> startSidecarCli(
     () async {
       final client = container.read(analyzerClientProvider);
       await client.openWorkspace();
-      client.closeWorkspace();
 
-      if (!isDebug) exit(0);
+      if (!isDebug) {
+        client.closeWorkspace();
+        exit(0);
+      }
 
       await container.read(hotReloaderProvider.future);
     },

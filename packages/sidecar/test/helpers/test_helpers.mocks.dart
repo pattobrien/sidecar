@@ -114,7 +114,7 @@ class MockStdoutReporter extends _i1.Mock implements _i3.StdoutReporter {
         returnValueForMissingStub: null,
       );
   @override
-  void save() => super.noSuchMethod(
+  void print() => super.noSuchMethod(
         Invocation.method(
           #save,
           [],

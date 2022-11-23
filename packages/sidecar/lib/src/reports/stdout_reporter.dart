@@ -13,10 +13,15 @@ class StdoutReporter extends Reporter {
   StdoutReporter();
 
   late Uri uri;
-  final Progress progress = Logger.standard().progress('Analyzing');
+  late Progress progress;
 
   void init(Uri uri) {
     this.uri = uri;
+    progress = Logger.standard().progress('Analyzing');
+  }
+
+  void refresh() {
+    progress = Logger.standard().progress('Analyzing');
   }
 
   @override
@@ -36,7 +41,7 @@ class StdoutReporter extends Reporter {
     throw UnimplementedError();
   }
 
-  void save() {
+  void print() {
     // progress.finish();
     final buffer = StringBuffer();
 
@@ -51,6 +56,7 @@ class StdoutReporter extends Reporter {
     }
     buffer.writeln('analysis completed in: ${progress.elapsed.prettified()}\n');
     stdout.write(buffer.toString());
+    _notifications.clear();
   }
 }
 

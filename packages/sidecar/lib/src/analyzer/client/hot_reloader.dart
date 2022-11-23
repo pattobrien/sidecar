@@ -2,10 +2,9 @@ import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../utils/utils.dart';
+import '../../reports/stdout_reporter.dart';
 import 'client.dart';
 
 part 'hot_reloader.g.dart';
@@ -15,7 +14,6 @@ final hotReloaderProvider = FutureProvider<HotReloader>((ref) async {
   HotReloader.logLevel = Level.OFF;
   final hotReloader = await HotReloader.create(
     onAfterReload: (c) async {
-      print('reloading');
       await ref.read(hotReloadNotifierProvider.notifier).reload(c);
     },
   );
@@ -31,9 +29,12 @@ class HotReloadNotifier extends _$HotReloadNotifier {
   }
 
   Future<void> reload(AfterReloadContext c) async {
-    print('rebuilding...');
-    state = AsyncValue.loading();
+    // print('rebuilding...');
+
+    state = const AsyncValue.loading();
     final client = ref.watch(analyzerClientProvider);
+    final reporter = ref.watch(stdoutReportProvider);
+    reporter.refresh();
     final files = c.events?.map((e) => e.path).toSet() ?? {};
     final fileContents = {
       for (final file in files)
@@ -53,7 +54,7 @@ class HotReloadNotifier extends _$HotReloadNotifier {
         if (fileContents == null) {
           client.handleDeletedFile(Uri.parse(filePath));
         } else {
-          client.handleFileChange(Uri.parse(filePath), fileContents);
+          await client.handleFileChange(Uri.parse(filePath), fileContents);
         }
         //   final pluginUri = runner.activePackage.sidecarPluginPackage;
         // } else if (p.isWithin(pluginUri.root.path, filePath)) {
@@ -62,8 +63,7 @@ class HotReloadNotifier extends _$HotReloadNotifier {
         //   // await runner.initialize();
       }
     }
-    print('total time to reload: ${watch.elapsed.prettified()}');
+    // print('total time to reload: ${watch.elapsed.prettified()}');
     state = AsyncValue.data(null);
-    print('rebuilding complete');
   }
 }
