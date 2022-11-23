@@ -10,19 +10,20 @@ lints:
   #       prefix: "AppLocalizations.of(context)"
 
   design_system_lints:
-    avoid_icon_literal:
-      severity: warning
-      enabled: true
-    avoid_sized_box_height_width_literals:
-      severity: info
-    avoid_text_style_literal:
-      severity: warning
-      enabled: true
-      includes:
-        - "lib/**"
-    avoid_border_radius_literal:
-      severity: warning
-    avoid_box_shadow_literal:
+    rules:
+      avoid_icon_literal:
+        severity: warning
+        enabled: true
+      avoid_sized_box_height_width_literals:
+        severity: info
+      avoid_text_style_literal:
+        severity: warning
+        enabled: true
+        includes:
+          - "lib/**"
+      avoid_border_radius_literal:
+        severity: warning
+      avoid_box_shadow_literal:
     # avoid_edge_insets_literal:
 #
 # assists:

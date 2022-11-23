@@ -1,4 +1,9 @@
 
+## 0.1.0-dev.6
+- feat: New API with Visitor-based rules
+- tests: 15% test coverage
+- fix: Performance improvements, ~10s for ```sidecar analyze```
+
 ## 0.1.0-dev.5
 
 - feat: quick fixes
