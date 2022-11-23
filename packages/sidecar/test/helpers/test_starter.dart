@@ -22,7 +22,6 @@ Future<AnalyzerClient> analyzeTestResources(
   final client = await runZoned<Future<AnalyzerClient>>(
     () async {
       final exitcode = await runPubGet(root);
-      if (exitcode != 0) throw StateError('pub get failed');
       final client = container.read(cliClientProvider);
       await client.openWorkspace();
       client.closeWorkspace();
@@ -48,8 +47,9 @@ Future<int> runPubGet(Uri root) async {
       ['pub', 'get'],
       workingDirectory: root.path,
     );
-  } catch (e) {
+  } catch (e, stack) {
     //
+    print('pub get failed: $e $stack');
   }
   return process?.exitCode ?? Future.value(1);
   // process.stdout.listen((event) => stdout.add(event));
