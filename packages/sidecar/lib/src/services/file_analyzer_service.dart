@@ -17,18 +17,19 @@ class FileAnalyzerService {
     required ResolvedUnitResult? unitResult,
     required List<LintMixin> rules,
     required NodeRegistry registry,
+    // required RegisteredLintVisitor mainVisitor,
   }) {
-    final visitorRules = rules.whereType<BaseRuleVisitorMixin>().toList();
-    registerVisitorsWithRegistry(visitorRules, registry);
+    // registerVisitorsWithRegistry(visitorRules, registry);
 
     if (unitResult == null) return {};
     for (final visitor in rules) {
       visitor.setUnit(unitResult);
     }
 
-    final visitor = RegisteredLintVisitor(registry);
-    unitResult.unit.accept(visitor);
-    return visitor.results;
+    final mainVisitor = RegisteredLintVisitor(registry);
+    unitResult.unit.accept(mainVisitor);
+    final results = mainVisitor.results;
+    return results;
   }
 
   void registerVisitorsWithRegistry(

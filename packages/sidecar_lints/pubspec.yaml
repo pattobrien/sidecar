@@ -20,5 +20,5 @@ dev_dependencies:
 
 sidecar:
   assists:
-    - output_ast_node_tree
-    - output_source_span
+    # - output_ast_node_tree
+    # - output_source_span

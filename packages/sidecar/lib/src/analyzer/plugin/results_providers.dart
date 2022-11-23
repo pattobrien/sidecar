@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:riverpod/riverpod.dart';
 
+import '../../../sidecar.dart';
 import '../../protocol/analyzed_file.dart';
 import '../../protocol/models/analysis_result.dart';
 import '../../protocol/models/assist_result.dart';
@@ -33,16 +34,10 @@ final annotationResultsProvider = Provider.autoDispose((ref) {
       .toList();
 });
 
-final registryVisitorProvider =
-    Provider.family<RegisteredLintVisitor, AnalyzedFileWithContext>(
-        (ref, file) {
-  final registry = ref.watch(nodeRegistryForFileProvider(file));
-  return RegisteredLintVisitor(registry);
-});
-
 final lintResultsProvider =
     FutureProvider.family<Set<LintResult>, AnalyzedFileWithContext>(
         (ref, file) async {
+  // ref.onDispose(() => ref.invalidate(registryVisitorProvider(file)));
   // benchmark for file: upgrade_options.dart
   // total time: 59.537ms
   //
@@ -54,7 +49,6 @@ final lintResultsProvider =
   // communication / data transfer: ??
 
   // - applyPendingFileChanges: 4.61ms
-  final visitor = ref.watch(registryVisitorProvider(file));
   final rules = ref.watch(scopedLintRulesForFileProvider(file));
   final visitorRules = ref.watch(scopedVisitorForFileProvider(file));
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
@@ -62,8 +56,13 @@ final lintResultsProvider =
   final registry = ref.watch(nodeRegistryForFileProvider(file));
   return runZonedGuarded<Set<LintResult>>(
         () {
-          return analyzerService.visitLintResults(
-              unitResult: unit, rules: visitorRules, registry: registry);
+          final results = analyzerService.visitLintResults(
+            unitResult: unit,
+            rules: visitorRules,
+            registry: registry,
+          );
+          final sources = results.map((e) => e.span.sourceUrl).toList();
+          return results;
           // if (unit == null) return {};
           // for (final visitor in visitors) {
           //   visitor.setUnit(unit);

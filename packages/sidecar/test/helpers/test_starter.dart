@@ -13,7 +13,6 @@ Future<AnalyzerClient> analyzeTestResources(
   Uri root,
   StdoutReporter reporter,
 ) async {
-  // final cliOptions = CliOptions.fromArgs(['--cli'], isPlugin: false);
   container = ProviderContainer(overrides: [
     analyzerClientProvider.overrideWithProvider(cliClientProvider),
     cliDirectoryProvider.overrideWithValue(root),
@@ -27,11 +26,6 @@ Future<AnalyzerClient> analyzeTestResources(
       client.closeWorkspace();
       return client;
     },
-    // (e, stack) {
-    //   container.read(stdoutReportProvider).handleError(e, stack);
-    //   print('does this happen either?');
-    //   return null;
-    // },
     zoneSpecification: ZoneSpecification(
       print: (self, parent, zone, line) => stdout.writeln(line),
     ),

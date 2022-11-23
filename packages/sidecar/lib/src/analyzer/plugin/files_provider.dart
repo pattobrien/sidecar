@@ -1,9 +1,8 @@
-import 'package:file/file.dart';
-import 'package:file/local.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/analyzed_file.dart';
 import '../../utils/glob_utils.dart';
+import 'analyzer_resource_provider.dart';
 import 'collection_provider.dart';
 import 'project_configuration_provider.dart';
 
@@ -32,6 +31,3 @@ final activeProjectScopedFilesProvider =
       .toList();
   return activeProjectScopedFiles;
 });
-
-final fileSystemProvider =
-    Provider<FileSystem>((ref) => const LocalFileSystem());

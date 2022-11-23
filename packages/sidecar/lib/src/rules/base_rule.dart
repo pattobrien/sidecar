@@ -35,6 +35,7 @@ mixin BaseRule {
     required SidecarSpec sidecarSpec,
   }) {
     this.sidecarSpec = sidecarSpec;
+    results.clear();
   }
 
   void _reportSourceSpan(
