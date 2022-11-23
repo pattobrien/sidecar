@@ -17,7 +17,7 @@ extension LintResultX on AnalysisResult {
       span.location,
       message,
       concatenatedLintCode,
-      url: rule.url?.path,
+      url: rule.url?.toString(),
       correction: correction,
       //TODO: hasFix does not seem to work properly (plugin bug?)
       hasFix: hasCalculatedEdits,
