@@ -33,17 +33,17 @@ final _scopedRulesForFileProvider =
 });
 
 final scopedLintVisitorRuleForFileProvider =
-    Provider.family<List<LintMixin>, AnalyzedFile>((ref, file) {
+    Provider.family<List<Lint>, AnalyzedFile>((ref, file) {
   // initialize rules with visitors
   final scopedRules = ref.watch(_scopedRulesForFileProvider(file));
   final registry = ref.watch(nodeRegistryForFileLintsProvider(file));
   final sidecarSpec = ref.watch(projectSidecarSpecProvider);
-  final visitorRules = scopedRules.where((e) => e.rule is LintMixin);
+  final visitorRules = scopedRules.where((e) => e.rule is Lint);
   return visitorRules.map((rule) {
     final baseRule = rule.rule as BaseRuleVisitorMixin;
     final visitor = baseRule..initializeVisitor(registry);
     visitor.refresh(sidecarSpec: sidecarSpec);
-    return visitor as LintMixin;
+    return visitor as Lint;
   }).toList();
 });
 
@@ -52,7 +52,7 @@ final scopedLintRulesForFileProvider =
   (ref, file) {
     // final registry = ref.watch(nodeRegistryForFileProvider(file));
     return ref.watch(_scopedRulesForFileProvider(file)
-        .select((value) => value.where((e) => e.rule is LintMixin).toList()));
+        .select((value) => value.where((e) => e.rule is Lint).toList()));
     // for (final rule in scopedRules.whereType<LintVisitor>()) {
     //   rule.initializeVisitor(registry);
     // }
@@ -63,28 +63,28 @@ final scopedAssistRulesForFileProvider =
     Provider.family<List<EnabledRule>, AnalyzedFile>(
   (ref, arg) {
     return ref.watch(_scopedRulesForFileProvider(arg)
-        .select((value) => value.where((e) => e.rule is AssistMixin).toList()));
+        .select((value) => value.where((e) => e.rule is QuickAssist).toList()));
   },
 );
 
 final scopedAssistVisitorRulesForFileProvider =
-    Provider.family<List<AssistMixin>, AnalyzedFile>(
+    Provider.family<List<QuickAssist>, AnalyzedFile>(
   (ref, file) {
     final scopedRules = ref.watch(_scopedRulesForFileProvider(file));
     final registry = ref.watch(nodeRegistryForFileAssistsProvider(file));
     final sidecarSpec = ref.watch(projectSidecarSpecProvider);
-    final visitorRules = scopedRules.where((e) => e.rule is AssistMixin);
+    final visitorRules = scopedRules.where((e) => e.rule is QuickAssist);
     return visitorRules.map((rule) {
       final baseRule = rule.rule as BaseRuleVisitorMixin;
       final visitor = baseRule..initializeVisitor(registry);
       visitor.refresh(sidecarSpec: sidecarSpec);
-      return visitor as AssistMixin;
+      return visitor as QuickAssist;
     }).toList();
   },
 );
 
-final scopedLintRulesWithVisitorsProvider =
-    Provider.family<List<SidecarVisitor>, AnalyzedFile>((ref, file) {
-  final scopedLintRules = ref.watch(scopedLintRulesForFileProvider(file));
-  return scopedLintRules.whereType<SidecarVisitor>().toList();
-});
+// final scopedLintRulesWithVisitorsProvider =
+//     Provider.family<List<SidecarVisitor>, AnalyzedFile>((ref, file) {
+//   final scopedLintRules = ref.watch(scopedLintRulesForFileProvider(file));
+//   return scopedLintRules.whereType<SidecarVisitor>().toList();
+// });

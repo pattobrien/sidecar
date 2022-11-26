@@ -15,7 +15,7 @@ class FileAnalyzerServiceImpl {
 
   Set<LintResult> visitLintResults({
     required ResolvedUnitResult? unitResult,
-    required List<LintMixin> rules,
+    required List<Lint> rules,
     required NodeRegistry registry,
   }) {
     if (unitResult == null) return {};
@@ -31,7 +31,7 @@ class FileAnalyzerServiceImpl {
 
   Set<LintResult> visitAssistFilters({
     required ResolvedUnitResult? unitResult,
-    required List<AssistMixin> rules,
+    required List<QuickAssist> rules,
     required NodeRegistry registry,
   }) {
     if (unitResult == null) return {};
@@ -50,13 +50,13 @@ class FileAnalyzerServiceImpl {
     NodeRegistry registry,
   ) {
     // ignore: prefer_iterable_wheretype
-    final lintRules = rules.where((e) => e is LintMixin);
+    final lintRules = rules.where((e) => e is Lint);
     lintRules.map((e) => e.initializeVisitor(registry));
   }
 
   Set<LintResult> visitAssistResults({
     required ResolvedUnitResult? unitResult,
-    required List<AssistMixin> rules,
+    required List<QuickAssist> rules,
     required NodeRegistry registry,
   }) {
     if (unitResult == null) return {};

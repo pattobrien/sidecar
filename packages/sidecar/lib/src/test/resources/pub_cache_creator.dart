@@ -1,12 +1,9 @@
-// ignore_for_file: implementation_imports, overridden_fields
-
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/memory_file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
-import 'package:analyzer/src/test_utilities/mock_sdk.dart';
 import 'package:analyzer/src/test_utilities/resource_provider_mixin.dart';
 
-import '../../../sidecar.dart';
+import '../../utils/utils.dart';
 
 class PubCacheCreator with ResourceProviderMixin {
   PubCacheCreator({

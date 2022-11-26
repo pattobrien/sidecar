@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:package_config/package_config_types.dart';
 import 'package:sidecar/src/services/active_project_service.dart';

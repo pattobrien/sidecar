@@ -1,5 +1,7 @@
 import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/src/configurations/configurations.dart';
 import 'package:test/test.dart';
+import 'package:yaml/yaml.dart';
 
 void main() {
   group('lint configuration parse (enabled):', () {

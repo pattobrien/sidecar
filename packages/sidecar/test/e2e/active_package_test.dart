@@ -1,16 +1,15 @@
-import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sidecar/sidecar.dart';
-import 'package:sidecar/src/configurations/configurations.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/package_options.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/rule_options.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec_base.dart';
 import 'package:sidecar/src/test/resources/package_resource.dart';
 import 'package:sidecar/src/test/resources/workspace_resource.dart';
+import 'package:sidecar/src/utils/utils.dart';
 import 'package:test/scaffolding.dart';
 import 'package:test/test.dart';
 
 import '../helpers/example_file_contents.dart';
+import '../helpers/example_lints.dart';
 import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';

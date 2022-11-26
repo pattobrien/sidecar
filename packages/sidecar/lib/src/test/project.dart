@@ -3,8 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:package_config/package_config_types.dart';
 import 'package:path/path.dart' as p;
 
-import '../../sidecar.dart';
 import '../configurations/sidecar_spec/sidecar_spec_base.dart';
+import '../utils/utils.dart';
 
 part 'project.freezed.dart';
 
@@ -16,7 +16,6 @@ class Project with _$Project {
     required ResourceProvider resourceProvider,
     SidecarSpec? sidecarConfiguration,
     Map<String, String>? source,
-    // @Default(<Package>[]) List<Package> dependencies,
   }) = _Project;
 
   const Project._();

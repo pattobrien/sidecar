@@ -1,10 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:sidecar/rules/visitors.dart';
-import 'package:sidecar/src/analyzer/ast/general_visitor.dart';
-import 'package:sidecar/src/protocol/models/rule_code.dart';
-import 'package:sidecar/src/rules/base_rule.dart';
+import 'package:sidecar/sidecar.dart';
 
-class SomeLintVisitor extends SidecarAstVisitor with LintMixin, QuickFixMixin {
+class SomeLintVisitor extends SidecarAstVisitor with Lint, QuickFix {
   @override
   LintCode get code => throw UnimplementedError();
 

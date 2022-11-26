@@ -194,602 +194,602 @@ class NodeRegistry {
       _forRecordTypeAnnotationPositionalField = [];
   final List<VisitorSubscription<AstNode>> _forNode = [];
 
-  void addNode(SidecarVisitor visitor) {
+  void addNode(SidecarAstVisitor visitor) {
     _forNode.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAdjacentStrings(SidecarVisitor visitor) {
+  void addAdjacentStrings(SidecarAstVisitor visitor) {
     _forAdjacentStrings.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAnnotation(SidecarVisitor visitor) {
+  void addAnnotation(SidecarAstVisitor visitor) {
     _forAnnotation.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addArgumentList(SidecarVisitor visitor) {
+  void addArgumentList(SidecarAstVisitor visitor) {
     _forArgumentList.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAsExpression(SidecarVisitor visitor) {
+  void addAsExpression(SidecarAstVisitor visitor) {
     _forAsExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAssertInitializer(SidecarVisitor visitor) {
+  void addAssertInitializer(SidecarAstVisitor visitor) {
     _forAssertInitializer.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAssertStatement(SidecarVisitor visitor) {
+  void addAssertStatement(SidecarAstVisitor visitor) {
     _forAssertStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAssignmentExpression(SidecarVisitor visitor) {
+  void addAssignmentExpression(SidecarAstVisitor visitor) {
     _forAssignmentExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAugmentationImportDirective(SidecarVisitor visitor) {
+  void addAugmentationImportDirective(SidecarAstVisitor visitor) {
     _forAugmentationImportDirective
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAwaitExpression(SidecarVisitor visitor) {
+  void addAwaitExpression(SidecarAstVisitor visitor) {
     _forAwaitExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBinaryExpression(SidecarVisitor visitor) {
+  void addBinaryExpression(SidecarAstVisitor visitor) {
     _forBinaryExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBlock(SidecarVisitor visitor) {
+  void addBlock(SidecarAstVisitor visitor) {
     _forBlock.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBlockFunctionBody(SidecarVisitor visitor) {
+  void addBlockFunctionBody(SidecarAstVisitor visitor) {
     _forBlockFunctionBody.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBooleanLiteral(SidecarVisitor visitor) {
+  void addBooleanLiteral(SidecarAstVisitor visitor) {
     _forBooleanLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBreakStatement(SidecarVisitor visitor) {
+  void addBreakStatement(SidecarAstVisitor visitor) {
     _forBreakStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCascadeExpression(SidecarVisitor visitor) {
+  void addCascadeExpression(SidecarAstVisitor visitor) {
     _forCascadeExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCatchClause(SidecarVisitor visitor) {
+  void addCatchClause(SidecarAstVisitor visitor) {
     _forCatchClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCatchClauseParameter(SidecarVisitor visitor) {
+  void addCatchClauseParameter(SidecarAstVisitor visitor) {
     _forCatchClauseParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addClassDeclaration(SidecarVisitor visitor) {
+  void addClassDeclaration(SidecarAstVisitor visitor) {
     _forClassDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addClassTypeAlias(SidecarVisitor visitor) {
+  void addClassTypeAlias(SidecarAstVisitor visitor) {
     _forClassTypeAlias.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addComment(SidecarVisitor visitor) {
+  void addComment(SidecarAstVisitor visitor) {
     _forComment.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCommentReference(SidecarVisitor visitor) {
+  void addCommentReference(SidecarAstVisitor visitor) {
     _forCommentReference.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCompilationUnit(SidecarVisitor visitor) {
+  void addCompilationUnit(SidecarAstVisitor visitor) {
     _forCompilationUnit.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConditionalExpression(SidecarVisitor visitor) {
+  void addConditionalExpression(SidecarAstVisitor visitor) {
     _forConditionalExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConfiguration(SidecarVisitor visitor) {
+  void addConfiguration(SidecarAstVisitor visitor) {
     _forConfiguration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorDeclaration(SidecarVisitor visitor) {
+  void addConstructorDeclaration(SidecarAstVisitor visitor) {
     _forConstructorDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorFieldInitializer(SidecarVisitor visitor) {
+  void addConstructorFieldInitializer(SidecarAstVisitor visitor) {
     _forConstructorFieldInitializer
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorName(SidecarVisitor visitor) {
+  void addConstructorName(SidecarAstVisitor visitor) {
     _forConstructorName.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorReference(SidecarVisitor visitor) {
+  void addConstructorReference(SidecarAstVisitor visitor) {
     _forConstructorReference
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorSelector(SidecarVisitor visitor) {
+  void addConstructorSelector(SidecarAstVisitor visitor) {
     _forConstructorSelector
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addContinueStatement(SidecarVisitor visitor) {
+  void addContinueStatement(SidecarAstVisitor visitor) {
     _forContinueStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDeclaredIdentifier(SidecarVisitor visitor) {
+  void addDeclaredIdentifier(SidecarAstVisitor visitor) {
     _forDeclaredIdentifier
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDefaultFormalParameter(SidecarVisitor visitor) {
+  void addDefaultFormalParameter(SidecarAstVisitor visitor) {
     _forDefaultFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDoStatement(SidecarVisitor visitor) {
+  void addDoStatement(SidecarAstVisitor visitor) {
     _forDoStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDottedName(SidecarVisitor visitor) {
+  void addDottedName(SidecarAstVisitor visitor) {
     _forDottedName.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDoubleLiteral(SidecarVisitor visitor) {
+  void addDoubleLiteral(SidecarAstVisitor visitor) {
     _forDoubleLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEmptyFunctionBody(SidecarVisitor visitor) {
+  void addEmptyFunctionBody(SidecarAstVisitor visitor) {
     _forEmptyFunctionBody.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEmptyStatement(SidecarVisitor visitor) {
+  void addEmptyStatement(SidecarAstVisitor visitor) {
     _forEmptyStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEnumConstantArguments(SidecarVisitor visitor) {
+  void addEnumConstantArguments(SidecarAstVisitor visitor) {
     _forEnumConstantArguments
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEnumConstantDeclaration(SidecarVisitor visitor) {
+  void addEnumConstantDeclaration(SidecarAstVisitor visitor) {
     _forEnumConstantDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEnumDeclaration(SidecarVisitor visitor) {
+  void addEnumDeclaration(SidecarAstVisitor visitor) {
     _forEnumDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExportDirective(SidecarVisitor visitor) {
+  void addExportDirective(SidecarAstVisitor visitor) {
     _forExportDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExpressionFunctionBody(SidecarVisitor visitor) {
+  void addExpressionFunctionBody(SidecarAstVisitor visitor) {
     _forExpressionFunctionBody
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExpressionStatement(SidecarVisitor visitor) {
+  void addExpressionStatement(SidecarAstVisitor visitor) {
     _forExpressionStatement
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExtendsClause(SidecarVisitor visitor) {
+  void addExtendsClause(SidecarAstVisitor visitor) {
     _forExtendsClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExtensionDeclaration(SidecarVisitor visitor) {
+  void addExtensionDeclaration(SidecarAstVisitor visitor) {
     _forExtensionDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExtensionOverride(SidecarVisitor visitor) {
+  void addExtensionOverride(SidecarAstVisitor visitor) {
     _forExtensionOverride.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFieldDeclaration(SidecarVisitor visitor) {
+  void addFieldDeclaration(SidecarAstVisitor visitor) {
     _forFieldDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFieldFormalParameter(SidecarVisitor visitor) {
+  void addFieldFormalParameter(SidecarAstVisitor visitor) {
     _forFieldFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForEachPartsWithDeclaration(SidecarVisitor visitor) {
+  void addForEachPartsWithDeclaration(SidecarAstVisitor visitor) {
     _forForEachPartsWithDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForEachPartsWithIdentifier(SidecarVisitor visitor) {
+  void addForEachPartsWithIdentifier(SidecarAstVisitor visitor) {
     _forForEachPartsWithIdentifier
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForElement(SidecarVisitor visitor) {
+  void addForElement(SidecarAstVisitor visitor) {
     _forForElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFormalParameterList(SidecarVisitor visitor) {
+  void addFormalParameterList(SidecarAstVisitor visitor) {
     _forFormalParameterList
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForPartsWithDeclarations(SidecarVisitor visitor) {
+  void addForPartsWithDeclarations(SidecarAstVisitor visitor) {
     _forForPartsWithDeclarations
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForPartsWithExpression(SidecarVisitor visitor) {
+  void addForPartsWithExpression(SidecarAstVisitor visitor) {
     _forForPartsWithExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForStatement(SidecarVisitor visitor) {
+  void addForStatement(SidecarAstVisitor visitor) {
     _forForStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionDeclaration(SidecarVisitor visitor) {
+  void addFunctionDeclaration(SidecarAstVisitor visitor) {
     _forFunctionDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionDeclarationStatement(SidecarVisitor visitor) {
+  void addFunctionDeclarationStatement(SidecarAstVisitor visitor) {
     _forFunctionDeclarationStatement
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionExpression(SidecarVisitor visitor) {
+  void addFunctionExpression(SidecarAstVisitor visitor) {
     _forFunctionExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionExpressionInvocation(SidecarVisitor visitor) {
+  void addFunctionExpressionInvocation(SidecarAstVisitor visitor) {
     _forFunctionExpressionInvocation
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionReference(SidecarVisitor visitor) {
+  void addFunctionReference(SidecarAstVisitor visitor) {
     _forFunctionReference.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionTypeAlias(SidecarVisitor visitor) {
+  void addFunctionTypeAlias(SidecarAstVisitor visitor) {
     _forFunctionTypeAlias.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionTypedFormalParameter(SidecarVisitor visitor) {
+  void addFunctionTypedFormalParameter(SidecarAstVisitor visitor) {
     _forFunctionTypedFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addGenericFunctionType(SidecarVisitor visitor) {
+  void addGenericFunctionType(SidecarAstVisitor visitor) {
     _forGenericFunctionType
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addGenericTypeAlias(SidecarVisitor visitor) {
+  void addGenericTypeAlias(SidecarAstVisitor visitor) {
     _forGenericTypeAlias.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addHideClause(SidecarVisitor visitor) {
+  void addHideClause(SidecarAstVisitor visitor) {
     _forHideClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addHideCombinator(SidecarVisitor visitor) {
+  void addHideCombinator(SidecarAstVisitor visitor) {
     _forHideCombinator.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIfElement(SidecarVisitor visitor) {
+  void addIfElement(SidecarAstVisitor visitor) {
     _forIfElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIfStatement(SidecarVisitor visitor) {
+  void addIfStatement(SidecarAstVisitor visitor) {
     _forIfStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addImplementsClause(SidecarVisitor visitor) {
+  void addImplementsClause(SidecarAstVisitor visitor) {
     _forImplementsClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addImplicitCallReference(SidecarVisitor visitor) {
+  void addImplicitCallReference(SidecarAstVisitor visitor) {
     _forImplicitCallReference
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addImportDirective(SidecarVisitor visitor) {
+  void addImportDirective(SidecarAstVisitor visitor) {
     _forImportDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIndexExpression(SidecarVisitor visitor) {
+  void addIndexExpression(SidecarAstVisitor visitor) {
     _forIndexExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addInstanceCreationExpression(SidecarVisitor visitor) {
+  void addInstanceCreationExpression(SidecarAstVisitor visitor) {
     _forInstanceCreationExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIntegerLiteral(SidecarVisitor visitor) {
+  void addIntegerLiteral(SidecarAstVisitor visitor) {
     _forIntegerLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addInterpolationExpression(SidecarVisitor visitor) {
+  void addInterpolationExpression(SidecarAstVisitor visitor) {
     _forInterpolationExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addInterpolationString(SidecarVisitor visitor) {
+  void addInterpolationString(SidecarAstVisitor visitor) {
     _forInterpolationString
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIsExpression(SidecarVisitor visitor) {
+  void addIsExpression(SidecarAstVisitor visitor) {
     _forIsExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLabel(SidecarVisitor visitor) {
+  void addLabel(SidecarAstVisitor visitor) {
     _forLabel.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLabeledStatement(SidecarVisitor visitor) {
+  void addLabeledStatement(SidecarAstVisitor visitor) {
     _forLabeledStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLibraryAugmentationDirective(SidecarVisitor visitor) {
+  void addLibraryAugmentationDirective(SidecarAstVisitor visitor) {
     _forLibraryAugmentationDirective
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLibraryDirective(SidecarVisitor visitor) {
+  void addLibraryDirective(SidecarAstVisitor visitor) {
     _forLibraryDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLibraryIdentifier(SidecarVisitor visitor) {
+  void addLibraryIdentifier(SidecarAstVisitor visitor) {
     _forLibraryIdentifier.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addListLiteral(SidecarVisitor visitor) {
+  void addListLiteral(SidecarAstVisitor visitor) {
     _forListLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addMapLiteralEntry(SidecarVisitor visitor) {
+  void addMapLiteralEntry(SidecarAstVisitor visitor) {
     _forMapLiteralEntry.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addMethodDeclaration(SidecarVisitor visitor) {
+  void addMethodDeclaration(SidecarAstVisitor visitor) {
     _forMethodDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addMethodInvocation(SidecarVisitor visitor) {
+  void addMethodInvocation(SidecarAstVisitor visitor) {
     _forMethodInvocation.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addMixinDeclaration(SidecarVisitor visitor) {
+  void addMixinDeclaration(SidecarAstVisitor visitor) {
     _forMixinDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNamedExpression(SidecarVisitor visitor) {
+  void addNamedExpression(SidecarAstVisitor visitor) {
     _forNamedExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNamedType(SidecarVisitor visitor) {
+  void addNamedType(SidecarAstVisitor visitor) {
     _forNamedType.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNativeClause(SidecarVisitor visitor) {
+  void addNativeClause(SidecarAstVisitor visitor) {
     _forNativeClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNativeFunctionBody(SidecarVisitor visitor) {
+  void addNativeFunctionBody(SidecarAstVisitor visitor) {
     _forNativeFunctionBody
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNullLiteral(SidecarVisitor visitor) {
+  void addNullLiteral(SidecarAstVisitor visitor) {
     _forNullLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addOnClause(SidecarVisitor visitor) {
+  void addOnClause(SidecarAstVisitor visitor) {
     _forOnClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addParenthesizedExpression(SidecarVisitor visitor) {
+  void addParenthesizedExpression(SidecarAstVisitor visitor) {
     _forParenthesizedExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPartDirective(SidecarVisitor visitor) {
+  void addPartDirective(SidecarAstVisitor visitor) {
     _forPartDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPartOfDirective(SidecarVisitor visitor) {
+  void addPartOfDirective(SidecarAstVisitor visitor) {
     _forPartOfDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPostfixExpression(SidecarVisitor visitor) {
+  void addPostfixExpression(SidecarAstVisitor visitor) {
     _forPostfixExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPrefixedIdentifier(SidecarVisitor visitor) {
+  void addPrefixedIdentifier(SidecarAstVisitor visitor) {
     _forPrefixedIdentifier
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPrefixExpression(SidecarVisitor visitor) {
+  void addPrefixExpression(SidecarAstVisitor visitor) {
     _forPrefixExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPropertyAccess(SidecarVisitor visitor) {
+  void addPropertyAccess(SidecarAstVisitor visitor) {
     _forPropertyAccess.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  // void addRecordLiteral(LintError linter, SidecarVisitor visitor) {
+  // void addRecordLiteral(LintError linter, SidecarAstVisitor visitor) {
   //   _forRecordLiterals.add(VisitorSubscription(visitor, _getTimer(visitor)));
   // }
 
-  void addRedirectingConstructorInvocation(SidecarVisitor visitor) {
+  void addRedirectingConstructorInvocation(SidecarAstVisitor visitor) {
     _forRedirectingConstructorInvocation
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addRethrowExpression(SidecarVisitor visitor) {
+  void addRethrowExpression(SidecarAstVisitor visitor) {
     _forRethrowExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addReturnStatement(SidecarVisitor visitor) {
+  void addReturnStatement(SidecarAstVisitor visitor) {
     _forReturnStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addScriptTag(SidecarVisitor visitor) {
+  void addScriptTag(SidecarAstVisitor visitor) {
     _forScriptTag.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSetOrMapLiteral(SidecarVisitor visitor) {
+  void addSetOrMapLiteral(SidecarAstVisitor visitor) {
     _forSetOrMapLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addShowClause(SidecarVisitor visitor) {
+  void addShowClause(SidecarAstVisitor visitor) {
     _forShowClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addShowCombinator(SidecarVisitor visitor) {
+  void addShowCombinator(SidecarAstVisitor visitor) {
     _forShowCombinator.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addShowHideElement(SidecarVisitor visitor) {
+  void addShowHideElement(SidecarAstVisitor visitor) {
     _forShowHideElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSimpleFormalParameter(SidecarVisitor visitor) {
+  void addSimpleFormalParameter(SidecarAstVisitor visitor) {
     _forSimpleFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSimpleIdentifier(SidecarVisitor visitor) {
+  void addSimpleIdentifier(SidecarAstVisitor visitor) {
     _forSimpleIdentifier.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSimpleStringLiteral(SidecarVisitor visitor) {
+  void addSimpleStringLiteral(SidecarAstVisitor visitor) {
     _forSimpleStringLiteral
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSpreadElement(SidecarVisitor visitor) {
+  void addSpreadElement(SidecarAstVisitor visitor) {
     _forSpreadElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addStringInterpolation(SidecarVisitor visitor) {
+  void addStringInterpolation(SidecarAstVisitor visitor) {
     _forStringInterpolation
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSuperConstructorInvocation(SidecarVisitor visitor) {
+  void addSuperConstructorInvocation(SidecarAstVisitor visitor) {
     _forSuperConstructorInvocation
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSuperExpression(SidecarVisitor visitor) {
+  void addSuperExpression(SidecarAstVisitor visitor) {
     _forSuperExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSuperFormalParameter(SidecarVisitor visitor) {
+  void addSuperFormalParameter(SidecarAstVisitor visitor) {
     _forSuperFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSwitchCase(SidecarVisitor visitor) {
+  void addSwitchCase(SidecarAstVisitor visitor) {
     _forSwitchCase.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSwitchDefault(SidecarVisitor visitor) {
+  void addSwitchDefault(SidecarAstVisitor visitor) {
     _forSwitchDefault.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSwitchStatement(SidecarVisitor visitor) {
+  void addSwitchStatement(SidecarAstVisitor visitor) {
     _forSwitchStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSymbolLiteral(SidecarVisitor visitor) {
+  void addSymbolLiteral(SidecarAstVisitor visitor) {
     _forSymbolLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addThisExpression(SidecarVisitor visitor) {
+  void addThisExpression(SidecarAstVisitor visitor) {
     _forThisExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addThrowExpression(SidecarVisitor visitor) {
+  void addThrowExpression(SidecarAstVisitor visitor) {
     _forThrowExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTopLevelVariableDeclaration(SidecarVisitor visitor) {
+  void addTopLevelVariableDeclaration(SidecarAstVisitor visitor) {
     _forTopLevelVariableDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTryStatement(SidecarVisitor visitor) {
+  void addTryStatement(SidecarAstVisitor visitor) {
     _forTryStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTypeArgumentList(SidecarVisitor visitor) {
+  void addTypeArgumentList(SidecarAstVisitor visitor) {
     _forTypeArgumentList.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTypeLiteral(SidecarVisitor visitor) {
+  void addTypeLiteral(SidecarAstVisitor visitor) {
     _forTypeLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
   @Deprecated('Use addNamedType() instead')
-  void addTypeName(SidecarVisitor visitor) {
+  void addTypeName(SidecarAstVisitor visitor) {
     addNamedType(visitor);
   }
 
-  void addTypeParameter(SidecarVisitor visitor) {
+  void addTypeParameter(SidecarAstVisitor visitor) {
     _forTypeParameter.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTypeParameterList(SidecarVisitor visitor) {
+  void addTypeParameterList(SidecarAstVisitor visitor) {
     _forTypeParameterList.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addVariableDeclaration(SidecarVisitor visitor) {
+  void addVariableDeclaration(SidecarAstVisitor visitor) {
     _forVariableDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addVariableDeclarationList(SidecarVisitor visitor) {
+  void addVariableDeclarationList(SidecarAstVisitor visitor) {
     _forVariableDeclarationList
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addVariableDeclarationStatement(SidecarVisitor visitor) {
+  void addVariableDeclarationStatement(SidecarAstVisitor visitor) {
     _forVariableDeclarationStatement
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addWhileStatement(SidecarVisitor visitor) {
+  void addWhileStatement(SidecarAstVisitor visitor) {
     _forWhileStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addWithClause(SidecarVisitor visitor) {
+  void addWithClause(SidecarAstVisitor visitor) {
     _forWithClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addYieldStatement(SidecarVisitor linter) {
+  void addYieldStatement(SidecarAstVisitor linter) {
     _forYieldStatement.add(VisitorSubscription(linter, _getTimer(linter)));
   }
 
   /// Get the timer associated with the given [linter].
-  Stopwatch? _getTimer(SidecarVisitor linter) {
+  Stopwatch? _getTimer(SidecarAstVisitor linter) {
     // if (enableTiming) {
     //   return registry.getTimer(linter);
     // } else {

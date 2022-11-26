@@ -44,7 +44,7 @@ mixin BaseRule {
     String? correction,
     EditsComputer? editsComputer,
   }) {
-    if (this is LintMixin) {
+    if (this is Lint) {
       final thisConfig =
           sidecarSpec?.getConfigurationForCode(code) as LintOptions?;
       final result = LintResult(
@@ -52,7 +52,7 @@ mixin BaseRule {
         span: span,
         message: message,
         correction: correction,
-        severity: thisConfig?.severity ?? (this as LintMixin).defaultSeverity,
+        severity: thisConfig?.severity ?? (this as Lint).defaultSeverity,
         editsComputer: editsComputer,
       );
       results.add(result);
@@ -64,7 +64,7 @@ mixin BaseRuleVisitorMixin on BaseRule {
   void initializeVisitor(NodeRegistry registry);
 }
 
-mixin AssistMixin on BaseRule {
+mixin QuickAssist on BaseRule {
   void reportAssistForNode(
     AstNode node, {
     required String message,
@@ -82,7 +82,7 @@ mixin AssistMixin on BaseRule {
           editsComputer: editsComputer);
 }
 
-mixin LintMixin on BaseRule {
+mixin Lint on BaseRule {
   @override
   LintCode get code;
   LintSeverity get defaultSeverity => LintSeverity.info;
@@ -104,7 +104,7 @@ mixin LintMixin on BaseRule {
           correction: correction);
 }
 
-mixin QuickFixMixin on LintMixin {
+mixin QuickFix on Lint {
   @override
   void reportAstNode(
     AstNode node, {

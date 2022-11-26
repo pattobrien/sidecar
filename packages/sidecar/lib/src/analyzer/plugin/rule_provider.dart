@@ -19,14 +19,14 @@ final _enabledRulesProvider = Provider<List<EnabledRule>>((ref) {
 
   final enabledRules = constructors.map((constructor) {
     final rule = constructor();
-    if (rule is LintMixin) {
+    if (rule is Lint) {
       final packageConfig = projectConfiguration.lints?[rule.code.package];
 
       final ruleConfig = packageConfig?.rules?[rule.code.code];
       return EnabledRule(rule,
           configuration: ruleConfig, packageConfiguration: packageConfig);
     }
-    if (rule is AssistMixin) {
+    if (rule is QuickAssist) {
       final packageConfig = projectConfiguration.assists?[rule.code.package];
 
       final ruleConfig = packageConfig?.rules?[rule.code.code];

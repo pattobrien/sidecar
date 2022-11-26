@@ -1,7 +1,8 @@
-import 'package:intl_lints/intl_lints.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec.dart';
 import 'package:sidecar/src/services/rule_initialization_service.dart';
 import 'package:test/test.dart';
+
+import '../../helpers/example_lints.dart';
 
 void main() {
   group('rule initialization service:', () {

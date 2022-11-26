@@ -1,5 +1,5 @@
 import 'package:analyzer/dart/analysis/utilities.dart';
-import 'package:intl_lints/intl_lints.dart';
+
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar/src/analyzer/context/unit_context.dart';
 import 'package:sidecar/src/configurations/configurations.dart';
