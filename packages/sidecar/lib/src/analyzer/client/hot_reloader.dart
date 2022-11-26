@@ -29,8 +29,6 @@ class HotReloadNotifier extends _$HotReloadNotifier {
   }
 
   Future<void> reload(AfterReloadContext c) async {
-    // print('rebuilding...');
-
     state = const AsyncValue.loading();
     final client = ref.watch(analyzerClientProvider);
     final reporter = ref.watch(stdoutReportProvider);
@@ -42,7 +40,6 @@ class HotReloadNotifier extends _$HotReloadNotifier {
             ? hotreloadResourceProvider.getFile(file).readAsStringSync()
             : null,
     };
-    final watch = Stopwatch()..start();
     final timestamp = DateTime.now().toIso8601String();
     print('\u001b[31m\n$timestamp RELOADING...\n\u001b[0m');
 

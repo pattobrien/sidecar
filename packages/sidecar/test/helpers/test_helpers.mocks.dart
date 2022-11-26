@@ -74,10 +74,26 @@ class MockStdoutReporter extends _i1.Mock implements _i3.StdoutReporter {
         ),
       ) as _i2.Progress);
   @override
+  set progress(_i2.Progress? _progress) => super.noSuchMethod(
+        Invocation.setter(
+          #progress,
+          _progress,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void init(Uri? uri) => super.noSuchMethod(
         Invocation.method(
           #init,
           [uri],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void refresh() => super.noSuchMethod(
+        Invocation.method(
+          #refresh,
+          [],
         ),
         returnValueForMissingStub: null,
       );
@@ -116,7 +132,7 @@ class MockStdoutReporter extends _i1.Mock implements _i3.StdoutReporter {
   @override
   void print() => super.noSuchMethod(
         Invocation.method(
-          #save,
+          #print,
           [],
         ),
         returnValueForMissingStub: null,

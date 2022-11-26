@@ -62,5 +62,21 @@ void main() {
       expect(results.length, 1);
       expectLints(results.first, []);
     });
+
+    test('1 quick assist results', () async {
+      final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
+      final client = await analyzeTestResources(app.root, reporter);
+      final results = await client.getQuickFixes(mainFile.toUri(), 30);
+      expect(results.length, 1);
+      // expectLints(results.first, []);
+    });
+
+    test('0 quick assist results', () async {
+      final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
+      final client = await analyzeTestResources(app.root, reporter);
+      final results = await client.getQuickFixes(mainFile.toUri(), 20);
+      expect(results.length, 0);
+      // expectLints(results.first, []);
+    });
   });
 }

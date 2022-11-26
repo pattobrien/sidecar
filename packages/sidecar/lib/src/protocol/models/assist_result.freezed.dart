@@ -15,16 +15,97 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 AssistResult _$AssistResultFromJson(Map<String, dynamic> json) {
-  return _AssistResult.fromJson(json);
+  switch (json['runtimeType']) {
+    case 'default':
+      return AssistFilterResult.fromJson(json);
+    case 'withEdits':
+      return AssistResultWithEdits.fromJson(json);
+
+    default:
+      throw CheckedFromJsonException(json, 'runtimeType', 'AssistResult',
+          'Invalid union type "${json['runtimeType']}"!');
+  }
 }
 
 /// @nodoc
 mixin _$AssistResult {
-  RuleCode get code => throw _privateConstructorUsedError;
+  @Assert('span.sourceUrl != null')
   @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
   SourceSpan get span => throw _privateConstructorUsedError;
-  List<EditResult> get edits => throw _privateConstructorUsedError;
-
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            RuleCode rule,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        $default, {
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        withEdits,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(
+            RuleCode rule,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        $default, {
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        withEdits,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            RuleCode rule,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        $default, {
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        withEdits,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(AssistFilterResult value) $default, {
+    required TResult Function(AssistResultWithEdits value) withEdits,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(AssistFilterResult value)? $default, {
+    TResult Function(AssistResultWithEdits value)? withEdits,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(AssistFilterResult value)? $default, {
+    TResult Function(AssistResultWithEdits value)? withEdits,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $AssistResultCopyWith<AssistResult> get copyWith =>
@@ -37,12 +118,9 @@ abstract class $AssistResultCopyWith<$Res> {
           AssistResult value, $Res Function(AssistResult) then) =
       _$AssistResultCopyWithImpl<$Res>;
   $Res call(
-      {RuleCode code,
+      {@Assert('span.sourceUrl != null')
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
-          SourceSpan span,
-      List<EditResult> edits});
-
-  $RuleCodeCopyWith<$Res> get code;
+          SourceSpan span});
 }
 
 /// @nodoc
@@ -55,40 +133,274 @@ class _$AssistResultCopyWithImpl<$Res> implements $AssistResultCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? code = freezed,
     Object? span = freezed,
-    Object? edits = freezed,
   }) {
     return _then(_value.copyWith(
-      code: code == freezed
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
+      span: span == freezed
+          ? _value.span
+          : span // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$AssistFilterResultCopyWith<$Res>
+    implements $AssistResultCopyWith<$Res> {
+  factory _$$AssistFilterResultCopyWith(_$AssistFilterResult value,
+          $Res Function(_$AssistFilterResult) then) =
+      __$$AssistFilterResultCopyWithImpl<$Res>;
+  @override
+  $Res call(
+      {RuleCode rule,
+      @Assert('span.sourceUrl != null')
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          SourceSpan span,
+      @JsonKey(ignore: true)
+          EditsComputer? editsComputer});
+
+  $RuleCodeCopyWith<$Res> get rule;
+}
+
+/// @nodoc
+class __$$AssistFilterResultCopyWithImpl<$Res>
+    extends _$AssistResultCopyWithImpl<$Res>
+    implements _$$AssistFilterResultCopyWith<$Res> {
+  __$$AssistFilterResultCopyWithImpl(
+      _$AssistFilterResult _value, $Res Function(_$AssistFilterResult) _then)
+      : super(_value, (v) => _then(v as _$AssistFilterResult));
+
+  @override
+  _$AssistFilterResult get _value => super._value as _$AssistFilterResult;
+
+  @override
+  $Res call({
+    Object? rule = freezed,
+    Object? span = freezed,
+    Object? editsComputer = freezed,
+  }) {
+    return _then(_$AssistFilterResult(
+      rule: rule == freezed
+          ? _value.rule
+          : rule // ignore: cast_nullable_to_non_nullable
               as RuleCode,
       span: span == freezed
           ? _value.span
           : span // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-      edits: edits == freezed
-          ? _value.edits
-          : edits // ignore: cast_nullable_to_non_nullable
-              as List<EditResult>,
+      editsComputer: editsComputer == freezed
+          ? _value.editsComputer
+          : editsComputer // ignore: cast_nullable_to_non_nullable
+              as EditsComputer?,
     ));
   }
 
   @override
-  $RuleCodeCopyWith<$Res> get code {
-    return $RuleCodeCopyWith<$Res>(_value.code, (value) {
-      return _then(_value.copyWith(code: value));
+  $RuleCodeCopyWith<$Res> get rule {
+    return $RuleCodeCopyWith<$Res>(_value.rule, (value) {
+      return _then(_value.copyWith(rule: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$_AssistResultCopyWith<$Res>
+@JsonSerializable()
+class _$AssistFilterResult extends AssistFilterResult {
+  const _$AssistFilterResult(
+      {required this.rule,
+      @Assert('span.sourceUrl != null')
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          required this.span,
+      @JsonKey(ignore: true)
+          this.editsComputer,
+      final String? $type})
+      : $type = $type ?? 'default',
+        super._();
+
+  factory _$AssistFilterResult.fromJson(Map<String, dynamic> json) =>
+      _$$AssistFilterResultFromJson(json);
+
+  @override
+  final RuleCode rule;
+  @override
+  @Assert('span.sourceUrl != null')
+  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+  final SourceSpan span;
+  @override
+  @JsonKey(ignore: true)
+  final EditsComputer? editsComputer;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'AssistResult(rule: $rule, span: $span, editsComputer: $editsComputer)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AssistFilterResult &&
+            const DeepCollectionEquality().equals(other.rule, rule) &&
+            const DeepCollectionEquality().equals(other.span, span) &&
+            (identical(other.editsComputer, editsComputer) ||
+                other.editsComputer == editsComputer));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(rule),
+      const DeepCollectionEquality().hash(span),
+      editsComputer);
+
+  @JsonKey(ignore: true)
+  @override
+  _$$AssistFilterResultCopyWith<_$AssistFilterResult> get copyWith =>
+      __$$AssistFilterResultCopyWithImpl<_$AssistFilterResult>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            RuleCode rule,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        $default, {
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        withEdits,
+  }) {
+    return $default(rule, span, editsComputer);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(
+            RuleCode rule,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        $default, {
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        withEdits,
+  }) {
+    return $default?.call(rule, span, editsComputer);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            RuleCode rule,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        $default, {
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        withEdits,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(rule, span, editsComputer);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(AssistFilterResult value) $default, {
+    required TResult Function(AssistResultWithEdits value) withEdits,
+  }) {
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(AssistFilterResult value)? $default, {
+    TResult Function(AssistResultWithEdits value)? withEdits,
+  }) {
+    return $default?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(AssistFilterResult value)? $default, {
+    TResult Function(AssistResultWithEdits value)? withEdits,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AssistFilterResultToJson(
+      this,
+    );
+  }
+}
+
+abstract class AssistFilterResult extends AssistResult {
+  const factory AssistFilterResult(
+      {required final RuleCode rule,
+      @Assert('span.sourceUrl != null')
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          required final SourceSpan span,
+      @JsonKey(ignore: true)
+          final EditsComputer? editsComputer}) = _$AssistFilterResult;
+  const AssistFilterResult._() : super._();
+
+  factory AssistFilterResult.fromJson(Map<String, dynamic> json) =
+      _$AssistFilterResult.fromJson;
+
+  RuleCode get rule;
+  @override
+  @Assert('span.sourceUrl != null')
+  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+  SourceSpan get span;
+  @JsonKey(ignore: true)
+  EditsComputer? get editsComputer;
+  @override
+  @JsonKey(ignore: true)
+  _$$AssistFilterResultCopyWith<_$AssistFilterResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AssistResultWithEditsCopyWith<$Res>
     implements $AssistResultCopyWith<$Res> {
-  factory _$$_AssistResultCopyWith(
-          _$_AssistResult value, $Res Function(_$_AssistResult) then) =
-      __$$_AssistResultCopyWithImpl<$Res>;
+  factory _$$AssistResultWithEditsCopyWith(_$AssistResultWithEdits value,
+          $Res Function(_$AssistResultWithEdits) then) =
+      __$$AssistResultWithEditsCopyWithImpl<$Res>;
   @override
   $Res call(
       {RuleCode code,
@@ -96,20 +408,19 @@ abstract class _$$_AssistResultCopyWith<$Res>
           SourceSpan span,
       List<EditResult> edits});
 
-  @override
   $RuleCodeCopyWith<$Res> get code;
 }
 
 /// @nodoc
-class __$$_AssistResultCopyWithImpl<$Res>
+class __$$AssistResultWithEditsCopyWithImpl<$Res>
     extends _$AssistResultCopyWithImpl<$Res>
-    implements _$$_AssistResultCopyWith<$Res> {
-  __$$_AssistResultCopyWithImpl(
-      _$_AssistResult _value, $Res Function(_$_AssistResult) _then)
-      : super(_value, (v) => _then(v as _$_AssistResult));
+    implements _$$AssistResultWithEditsCopyWith<$Res> {
+  __$$AssistResultWithEditsCopyWithImpl(_$AssistResultWithEdits _value,
+      $Res Function(_$AssistResultWithEdits) _then)
+      : super(_value, (v) => _then(v as _$AssistResultWithEdits));
 
   @override
-  _$_AssistResult get _value => super._value as _$_AssistResult;
+  _$AssistResultWithEdits get _value => super._value as _$AssistResultWithEdits;
 
   @override
   $Res call({
@@ -117,7 +428,7 @@ class __$$_AssistResultCopyWithImpl<$Res>
     Object? span = freezed,
     Object? edits = freezed,
   }) {
-    return _then(_$_AssistResult(
+    return _then(_$AssistResultWithEdits(
       code: code == freezed
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -132,21 +443,30 @@ class __$$_AssistResultCopyWithImpl<$Res>
               as List<EditResult>,
     ));
   }
+
+  @override
+  $RuleCodeCopyWith<$Res> get code {
+    return $RuleCodeCopyWith<$Res>(_value.code, (value) {
+      return _then(_value.copyWith(code: value));
+    });
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_AssistResult extends _AssistResult {
-  const _$_AssistResult(
+class _$AssistResultWithEdits extends AssistResultWithEdits {
+  const _$AssistResultWithEdits(
       {required this.code,
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           required this.span,
-      final List<EditResult> edits = const <EditResult>[]})
+      final List<EditResult> edits = const <EditResult>[],
+      final String? $type})
       : _edits = edits,
+        $type = $type ?? 'withEdits',
         super._();
 
-  factory _$_AssistResult.fromJson(Map<String, dynamic> json) =>
-      _$$_AssistResultFromJson(json);
+  factory _$AssistResultWithEdits.fromJson(Map<String, dynamic> json) =>
+      _$$AssistResultWithEditsFromJson(json);
 
   @override
   final RuleCode code;
@@ -161,16 +481,19 @@ class _$_AssistResult extends _AssistResult {
     return EqualUnmodifiableListView(_edits);
   }
 
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
   @override
   String toString() {
-    return 'AssistResult(code: $code, span: $span, edits: $edits)';
+    return 'AssistResult.withEdits(code: $code, span: $span, edits: $edits)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AssistResult &&
+            other is _$AssistResultWithEdits &&
             const DeepCollectionEquality().equals(other.code, code) &&
             const DeepCollectionEquality().equals(other.span, span) &&
             const DeepCollectionEquality().equals(other._edits, _edits));
@@ -186,37 +509,134 @@ class _$_AssistResult extends _AssistResult {
 
   @JsonKey(ignore: true)
   @override
-  _$$_AssistResultCopyWith<_$_AssistResult> get copyWith =>
-      __$$_AssistResultCopyWithImpl<_$_AssistResult>(this, _$identity);
+  _$$AssistResultWithEditsCopyWith<_$AssistResultWithEdits> get copyWith =>
+      __$$AssistResultWithEditsCopyWithImpl<_$AssistResultWithEdits>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            RuleCode rule,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        $default, {
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        withEdits,
+  }) {
+    return withEdits(code, span, edits);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(
+            RuleCode rule,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        $default, {
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        withEdits,
+  }) {
+    return withEdits?.call(code, span, edits);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            RuleCode rule,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        $default, {
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        withEdits,
+    required TResult orElse(),
+  }) {
+    if (withEdits != null) {
+      return withEdits(code, span, edits);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(AssistFilterResult value) $default, {
+    required TResult Function(AssistResultWithEdits value) withEdits,
+  }) {
+    return withEdits(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(AssistFilterResult value)? $default, {
+    TResult Function(AssistResultWithEdits value)? withEdits,
+  }) {
+    return withEdits?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(AssistFilterResult value)? $default, {
+    TResult Function(AssistResultWithEdits value)? withEdits,
+    required TResult orElse(),
+  }) {
+    if (withEdits != null) {
+      return withEdits(this);
+    }
+    return orElse();
+  }
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AssistResultToJson(
+    return _$$AssistResultWithEditsToJson(
       this,
     );
   }
 }
 
-abstract class _AssistResult extends AssistResult {
-  const factory _AssistResult(
+abstract class AssistResultWithEdits extends AssistResult {
+  const factory AssistResultWithEdits(
       {required final RuleCode code,
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           required final SourceSpan span,
-      final List<EditResult> edits}) = _$_AssistResult;
-  const _AssistResult._() : super._();
+      final List<EditResult> edits}) = _$AssistResultWithEdits;
+  const AssistResultWithEdits._() : super._();
 
-  factory _AssistResult.fromJson(Map<String, dynamic> json) =
-      _$_AssistResult.fromJson;
+  factory AssistResultWithEdits.fromJson(Map<String, dynamic> json) =
+      _$AssistResultWithEdits.fromJson;
 
-  @override
   RuleCode get code;
   @override
   @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
   SourceSpan get span;
-  @override
   List<EditResult> get edits;
   @override
   @JsonKey(ignore: true)
-  _$$_AssistResultCopyWith<_$_AssistResult> get copyWith =>
+  _$$AssistResultWithEditsCopyWith<_$AssistResultWithEdits> get copyWith =>
       throw _privateConstructorUsedError;
 }

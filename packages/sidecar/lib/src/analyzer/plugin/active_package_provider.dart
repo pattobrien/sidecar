@@ -14,7 +14,7 @@ final activePackageProvider = Provider<ActivePackage>((ref) {
   final service = ref.watch(activeProjectServiceProvider);
   final activePackage = service.getActivePackageFromUri(root);
   assert(activePackage != null,
-      'active package should never be null on analyzer perspective.');
+      "active package should never be null from the analyzer's perspective.");
   return scope.isNotEmpty
       ? activePackage!.copyWith(workspaceScope: scope)
       : activePackage!;

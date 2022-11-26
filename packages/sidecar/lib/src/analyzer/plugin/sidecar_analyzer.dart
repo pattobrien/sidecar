@@ -121,20 +121,20 @@ class SidecarAnalyzer {
     throw StateError('LintRequest is an invalid request');
   }
 
-  AnalyzedFileWithContext? _getFileWithContext(AnalyzedFile file) {
-    return _ref.read(activeProjectScopedFilesProvider).firstWhereOrNull((e) =>
-        file.path == e.path &&
-        file.contextRoot == e.context.contextRoot.root.toUri());
-  }
+  // AnalyzedFileWithContext? _getFileWithContext(AnalyzedFile file) {
+  //   return _ref.read(activeProjectScopedFilesProvider).firstWhereOrNull((e) =>
+  //       file.path == e.path &&
+  //       file.contextRoot == e.context.contextRoot.root.toUri());
+  // }
 
-  AnalyzedFileWithContext? _getFileWithContextFromPath(
-    String path,
-    AnalysisContext context,
-  ) {
-    return _ref.read(activeProjectScopedFilesProvider).firstWhereOrNull((e) =>
-        path == e.path &&
-        context.contextRoot.root.toUri() == e.context.contextRoot.root.toUri());
-  }
+  // AnalyzedFileWithContext? _getFileWithContextFromPath(
+  //   String path,
+  //   AnalysisContext context,
+  // ) {
+  //   return _ref.read(activeProjectScopedFilesProvider).firstWhereOrNull((e) =>
+  //       path == e.path &&
+  //       context.contextRoot.root.toUri() == e.context.contextRoot.root.toUri());
+  // }
 
   /// PATTOBRIEN:
   /// this is where we should handle the order of events that happen post-content change
@@ -146,14 +146,16 @@ class SidecarAnalyzer {
   /// - fifth, proactively calculate edits (assists and quick fixes)
   // Overridden to allow for non-Dart files to be analyzed for changes
   Future<void> contentChanged(Set<AnalyzedFile> files) async {
-    final filesWithContexts = files.map(_getFileWithContext).whereNotNull();
+    // final filesWithContexts = files.map(_getFileWithContext).whereNotNull();
 
     Future<void> handleContexts(List<AnalysisContext> contexts) async {
       for (final context in contexts) {
-        final contextPath = context.contextRoot.root.path;
-        final filesInContext = filesWithContexts
-            .where((file) => file.context.contextRoot.root.path == contextPath)
-            .toList();
+        final contextPath = context.contextRoot.root.toUri();
+        final filesInContext = files.where((file) {
+          final isEqual = file.contextRoot == contextPath;
+          // print('compared paths: $isEqual $contextPath || ${file.contextRoot}');
+          return isEqual;
+        }).toList();
 
         for (final file in filesInContext) {
           context.changeFile(file.path);
@@ -175,8 +177,8 @@ class SidecarAnalyzer {
 
         // analyze files that may have been affected by the files that explicitly changed
         final affectedFiles = affectedWithoutOriginalPaths
-            .map((e) => _getFileWithContextFromPath(e, context))
-            .whereNotNull()
+            .map((e) => AnalyzedFile(Uri.parse(e),
+                contextRoot: context.contextRoot.root.toUri()))
             .toList();
 
         await analyzeFiles(files: affectedFiles);
@@ -210,53 +212,76 @@ class SidecarAnalyzer {
   Set<AnalyzedFile> priorityFiles = {};
 
   Future<void> analyzeFiles({
-    required List<AnalyzedFileWithContext> files,
+    required List<AnalyzedFile> files,
   }) async {
     // TODO: remove only analyzing dart files
     final dartFiles = files.where((file) => file.isDartFile);
     logger.info('starting analyzeFiles: $files');
 
     for (final file in dartFiles) {
-      _ref.invalidate(nodeRegistryForFileProvider(file));
+      _ref.invalidate(nodeRegistryForFileLintsProvider(file));
       await _ref.refresh(resolvedUnitForFileProvider(file).future);
       final lints = await _ref.read(lintResultsProvider(file).future);
-      final notification = LintNotification(file.toAnalyzedFile(), lints);
+      final notification = LintNotification(file, lints);
 
       channel.sendNotification(notification);
     }
-
+    for (final file in dartFiles) {
+      _ref.refresh(quickFixResultsProvider(file));
+      _ref.refresh(assistFiltersProvider(file));
+    }
     logger.finest('finished analyzeFiles');
   }
 
   Future<QuickFixResponse> handleEditGetFixes(
     QuickFixRequest request,
   ) async {
-    final contexts = _ref.read(contextCollectionProvider);
-    final file = AnalyzedFileWithContext.fromFile(request.file, contexts);
+    // final file = _getFileWithContext(request.file)!;
+    final file = request.file;
     final fixes = await _ref.read(quickFixResultsProvider(file).future);
-    return QuickFixResponse(fixes);
+    final withinOffset = fixes.where(
+        (element) => element.isWithinOffset(request.file.path, request.offset));
+    return QuickFixResponse(withinOffset.toList());
+    // return QuickFixResponse([]);
   }
 
   Future<AssistResponse> handleEditGetAssists(
     AssistRequest request,
   ) async {
+    print('ASSISTS START ');
     final file = _ref
         .read(activeProjectScopedFilesProvider)
         .firstWhereOrNull((file) => file.path == request.file.path);
 
-    if (file == null) return const AssistResponse([]);
+    if (file == null) return const AssistResponse({});
 
     try {
-      final results = await _ref.read(assistFiltersProvider(file).future);
-      final resultsAtOffset = results
-          .where((result) => result.isWithinOffset(file.path, request.offset));
-      final resultsWithCalculations = await Future.wait(resultsAtOffset
-          .map((e) async => _ref.read(assistResultsProvider(e).future)));
-      return AssistResponse(resultsWithCalculations.expand((e) => e).toList());
+      // final results = await _ref.read(assistResultsProvider(file).future);
+      final assistFilterResults =
+          await _ref.read(assistFiltersProvider(file).future);
+      print('ASSIST FILTERREESULTS ${assistFilterResults.length}');
+      print(
+          'ASSIST FILTERREESULTS SAME CODE ${assistFilterResults.map((e) => e.rule.code)}');
+      final resultsInOffest = assistFilterResults.where((element) =>
+          element.isWithinOffset(request.file.path, request.offset));
+      final resultsWithFixes =
+          resultsInOffest.where((element) => element.editsComputer != null);
+      print('ASSIST resultsWithFixes ${resultsWithFixes.length}');
+      final results = await Future.wait(resultsWithFixes.map((e) async {
+        final edits = await e.editsComputer!();
+        return AssistResultWithEdits(code: e.rule, span: e.span, edits: edits);
+      }));
+      return AssistResponse(results.toSet());
+      // logger.info('GETASSISTS TOTAL ${results.length}');
+      // final resultsAtOffset = results
+      //     .where((result) => result.isWithinOffset(file.path, request.offset));
+      // logger.info('GETASSISTS AT OFFSET ${resultsAtOffset.length}');
+      // return AssistResponse(resultsAtOffset.toList());
     } catch (e, stack) {
       logger.severe('handleEditGetAssists ${file.relativePath}', e, stack);
       rethrow;
     }
+    // return AssistResponse([]);
   }
 
   int _overlayModificationStamp = 0;

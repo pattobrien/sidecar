@@ -9,3 +9,9 @@ extension QuickFixX on QuickFixResponse {
     return plugin.EditGetFixesResult(edits);
   }
 }
+
+// extension QuickFixesX on List<QuickFixResponse> {
+//   plugin.EditGetFixesResult toPluginResponse() {
+//     final edits = this.map((e) => e.to)
+//   }
+// }

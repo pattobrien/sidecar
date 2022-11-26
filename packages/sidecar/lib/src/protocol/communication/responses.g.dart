@@ -21,8 +21,8 @@ Map<String, dynamic> _$$SetWorkspaceResponseToJson(
 _$AssistResponse _$$AssistResponseFromJson(Map<String, dynamic> json) =>
     _$AssistResponse(
       (json['results'] as List<dynamic>)
-          .map((e) => AssistResult.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          .map((e) => AssistResultWithEdits.fromJson(e as Map<String, dynamic>))
+          .toSet(),
       $type: json['runtimeType'] as String?,
     );
 

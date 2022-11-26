@@ -3,11 +3,9 @@ includes:
   - "lib/**"
 lints:
   # l10n_lints:
-  #   avoid_string_literals:
-  #     severity: info
-  #     enabled: true
-  #     configuration:
-  #       prefix: "AppLocalizations.of(context)"
+  intl_lints:
+    rules:
+      string_literals:
 
   design_system_lints:
     rules:
@@ -17,7 +15,7 @@ lints:
       avoid_sized_box_height_width_literals:
         severity: info
       avoid_text_style_literal:
-        severity: warning
+        severity: info
         enabled: true
         includes:
           - "lib/**"
@@ -26,7 +24,8 @@ lints:
       avoid_box_shadow_literal:
     # avoid_edge_insets_literal:
 #
-# assists:
-#   sidecar_lints:
-#     output_ast_node_tree:
-#     output_source_span:
+assists:
+  sidecar_lints:
+    rules:
+      output_ast_node_tree:
+      output_source_span:

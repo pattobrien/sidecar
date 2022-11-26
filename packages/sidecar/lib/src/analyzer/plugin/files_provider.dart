@@ -6,8 +6,7 @@ import 'analyzer_resource_provider.dart';
 import 'collection_provider.dart';
 import 'project_configuration_provider.dart';
 
-final activeProjectScopedFilesProvider =
-    Provider<List<AnalyzedFileWithContext>>((ref) {
+final activeProjectScopedFilesProvider = Provider<List<AnalyzedFile>>((ref) {
   final activeProjectIncludes = ref.watch(activeProjectIncludeGlobsProvider);
   final activeProjectExcludes = ref.watch(activeProjectExcludeGlobsProvider);
   final contexts = ref.watch(contextCollectionProvider);
@@ -22,8 +21,8 @@ final activeProjectScopedFilesProvider =
             globalExcludes: activeProjectExcludes);
 
         final files = filesInScope
-            .map((e) => AnalyzedFileWithContext(Uri.parse(e), context: context))
-            .whereType<AnalyzedFileWithContext>()
+            .map((e) => AnalyzedFile(Uri.parse(e),
+                contextRoot: context.contextRoot.root.toUri()))
             .toList();
         return files;
       })

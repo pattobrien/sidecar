@@ -6,23 +6,6 @@ import '../src/rules/rules.dart';
 abstract class SidecarVisitor extends AstVisitor<void>
     with BaseRule, BaseRuleVisitorMixin {}
 
-abstract class SidecarGeneralizingAstVisitor
-    extends GeneralizingAstVisitor<void>
-    with BaseRule, BaseRuleVisitorMixin
-    implements SidecarVisitor {}
-
-abstract class SidecarRecursiveAstVisitor extends RecursiveAstVisitor<void>
-    with BaseRule, BaseRuleVisitorMixin
-    implements SidecarVisitor {}
-
-abstract class SidecarThrowingAstVisitor extends ThrowingAstVisitor<void>
-    with BaseRule, BaseRuleVisitorMixin
-    implements SidecarVisitor {}
-
-abstract class SidecarUnifyingAstVisitor extends UnifyingAstVisitor<void>
-    with BaseRule, BaseRuleVisitorMixin
-    implements SidecarVisitor {}
-
-abstract class SidecarSimpleAstVisitor extends SimpleAstVisitor<void>
+abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void>
     with BaseRule, BaseRuleVisitorMixin
     implements SidecarVisitor {}

@@ -7,7 +7,7 @@ part 'source_file_edit.g.dart';
 
 @freezed
 class SourceFileEdit with _$SourceFileEdit {
-  const factory SourceFileEdit({
+  const factory SourceFileEdit._({
     /// The file containing the code to be modified.
     required Uri file,
 
@@ -20,7 +20,17 @@ class SourceFileEdit with _$SourceFileEdit {
     /// changed since then, so it is safe to apply the change.
     required DateTime fileStamp,
   }) = _SourceFileEdit;
-  const SourceFileEdit._();
+
+  factory SourceFileEdit({
+    required String filePath,
+    required List<SourceEdit> edits,
+  }) {
+    return SourceFileEdit._(
+      file: Uri.parse(filePath),
+      edits: edits,
+      fileStamp: DateTime.now(),
+    );
+  }
 
   factory SourceFileEdit.fromJson(Map<String, dynamic> json) =>
       _$SourceFileEditFromJson(json);

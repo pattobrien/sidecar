@@ -192,6 +192,11 @@ class NodeRegistry {
       _forRecordTypeAnnotationNamedFields = [];
   final List<VisitorSubscription<RecordTypeAnnotationPositionalField>>
       _forRecordTypeAnnotationPositionalField = [];
+  final List<VisitorSubscription<AstNode>> _forNode = [];
+
+  void addNode(SidecarVisitor visitor) {
+    _forNode.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  }
 
   void addAdjacentStrings(SidecarVisitor visitor) {
     _forAdjacentStrings.add(VisitorSubscription(visitor, _getTimer(visitor)));

@@ -68,11 +68,10 @@ mixin AssistMixin on BaseRule {
   void reportAssistForNode(
     AstNode node, {
     required String message,
-    String? correction,
     EditsComputer? editsComputer,
   }) =>
       _reportSourceSpan(node.toSourceSpan(_unit), message,
-          correction: correction, editsComputer: editsComputer);
+          editsComputer: editsComputer);
 
   void reportAssistForToken(
     Token token, {

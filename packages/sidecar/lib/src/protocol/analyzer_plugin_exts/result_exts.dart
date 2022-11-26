@@ -40,7 +40,7 @@ extension LintResultWithEditsX on LintResultWithEdits {
   }
 }
 
-extension AssistResultX on AssistResult {
+extension AssistResultX on AssistResultWithEdits {
   List<plugin.PrioritizedSourceChange> toPrioritizedSourceChanges() {
     return edits.map((e) => e.toPrioritizedSourceChange()).toList();
   }

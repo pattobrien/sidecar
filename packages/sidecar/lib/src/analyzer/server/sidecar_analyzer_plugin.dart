@@ -11,6 +11,7 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_constants.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 import 'package:analyzer_plugin/src/protocol/protocol_internal.dart' as plugin;
+import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 
@@ -143,31 +144,33 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     }
   }
 
-  // /// Handle an 'edit.getFixes' request.
-  // ///
-  // /// Throw a [plugin.RequestFailure] if the request could not be handled.
-  // @override
-  // Future<plugin.EditGetFixesResult> handleEditGetFixes(
-  //   plugin.EditGetFixesParams parameters,
-  // ) async {
-  //   final runnersForFile = getRunnersForPath(parameters.file);
+  /// Handle an 'edit.getFixes' request.
+  ///
+  /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  @override
+  Future<plugin.EditGetFixesResult> handleEditGetFixes(
+    plugin.EditGetFixesParams parameters,
+  ) async {
+    logger.info('handleEditGetFixes');
+    final runnersForFile = getRunnersForPath(parameters.file);
+    final responses =
+        await Future.wait(runnersForFile.entries.map((entry) async {
+      final file = entry.value;
+      final runner = entry.key;
+      final request = QuickFixRequest(file: file, offset: parameters.offset);
+      return runner.asyncRequest<QuickFixResponse>(request);
+    })).then((value) => value.whereNotNull());
+    logger.info('handleEditGetFixes = responses: ${responses}');
 
-  //   final responses =
-  //       await Future.wait(runnersForFile.entries.map((entry) async {
-  //     final file = entry.value;
-  //     final runner = entry.key;
-  //     final request = QuickFixRequest(file: file, offset: parameters.offset);
-  //     return runner.asyncRequest<QuickFixResponse>(request);
-  //   })).then((value) => value.whereNotNull());
-
-  //   // we need to aggregate responses from all runners into one server response
-  //   final fixes = responses
-  //       .whereType<QuickFixResponse>()
-  //       .map((response) => response.toPluginResponse())
-  //       .expand((result) => result.fixes)
-  //       .toList();
-  //   return plugin.EditGetFixesResult(fixes);
-  // }
+    // we need to aggregate responses from all runners into one server response
+    final fixes = responses
+        .whereType<QuickFixResponse>()
+        .map((response) => response.toPluginResponse())
+        .expand((result) => result.fixes)
+        .toList();
+    logger.info('handleEditGetFixes = fixes: ${fixes}');
+    return plugin.EditGetFixesResult(fixes);
+  }
 
   /// Handle an 'analysis.handleWatchEvents' request.
   ///
@@ -196,32 +199,51 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     return plugin.AnalysisHandleWatchEventsResult();
   }
 
-  // /// Handle an 'edit.getAssists' request.
-  // ///
-  // /// Throw a [plugin.RequestFailure] if the request could not be handled.
-  // @override
-  // Future<plugin.EditGetAssistsResult> handleEditGetAssists(
-  //   plugin.EditGetAssistsParams parameters,
-  // ) async {
-  //   final runnerFiles = getRunnersForPath(parameters.file);
-  //   final responses =
-  //       await Future.wait(runnerFiles.entries.map((runnerFile) async {
-  //     final request = AssistRequest(
-  //         file: runnerFile.value,
-  //         offset: parameters.offset,
-  //         length: parameters.length);
-  //     return runnerFile.key.asyncRequest<AssistResponse>(request);
-  //   }));
+  /// Handle an 'edit.getAssists' request.
+  ///
+  /// Throw a [plugin.RequestFailure] if the request could not be handled.
+  @override
+  Future<plugin.EditGetAssistsResult> handleEditGetAssists(
+    plugin.EditGetAssistsParams parameters,
+  ) async {
+    final runnerFiles = getRunnersForPath(parameters.file);
+    final responses =
+        await Future.wait(runnerFiles.entries.map((runnerFile) async {
+      final request = AssistRequest(
+          file: runnerFile.value,
+          offset: parameters.offset,
+          length: parameters.length);
+      return runnerFile.key.asyncRequest<AssistResponse>(request);
+    }));
 
-  //   final parsedResponses = responses
-  //       .whereType<AssistResponse>()
-  //       .map((response) => response.results
-  //           .map((e) => e.toPrioritizedSourceChanges())
-  //           .expand((e) => e)
-  //           .toList())
-  //       .expand((e) => e);
-  //   return plugin.EditGetAssistsResult(parsedResponses.toList());
-  // }
+    final paths = responses
+        .map((e) => e.results.map((e) => e.sourceUrl))
+        .expand((element) => element);
+
+    final offsets = responses
+        .map((e) => e.results)
+        .expand((element) => element)
+        .map((e) => e.span.start.offset);
+
+    final lengths = responses
+        .map((e) => e.results)
+        .expand((element) => element)
+        .map((e) => e.span.length);
+    print(
+        'ASSIST URIS ${paths.length} ${paths.every((element) => element == Uri.parse(parameters.file))} ${paths}');
+    print('ASSIST OFFSETS ${offsets}');
+    print('ASSIST LENGTHS ${lengths}');
+
+    final parsedResponses = responses
+        .whereType<AssistResponse>()
+        .map((response) => response.results
+            .map((e) => e.toPrioritizedSourceChanges())
+            .expand((e) => e)
+            .toList())
+        .expand((e) => e);
+    final x = parsedResponses.map((e) => e.change.edits);
+    return plugin.EditGetAssistsResult(parsedResponses.toList());
+  }
 
   @override
   Future<plugin.AnalysisUpdateContentResult> handleAnalysisUpdateContent(
@@ -249,10 +271,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
                 return SourceEdit(
                     originalSourceSpan: span, replacement: e.replacement);
               }).toList();
-              final sourceFileEdit = SourceFileEdit(
-                  file: analyzedFile.fileUri,
-                  fileStamp: DateTime.now(),
-                  edits: edits);
+              final sourceFileEdit =
+                  SourceFileEdit(filePath: analyzedFile.path, edits: edits);
               return FileUpdateEvent.modify(analyzedFile, sourceFileEdit);
             } else if (contentOverlay is plugin.RemoveContentOverlay) {
               return FileUpdateEvent.delete(analyzedFile);

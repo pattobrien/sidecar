@@ -124,13 +124,12 @@ class __$$_SourceFileEditCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SourceFileEdit extends _SourceFileEdit {
+class _$_SourceFileEdit implements _SourceFileEdit {
   const _$_SourceFileEdit(
       {required this.file,
       required final List<SourceEdit> edits,
       required this.fileStamp})
-      : _edits = edits,
-        super._();
+      : _edits = edits;
 
   factory _$_SourceFileEdit.fromJson(Map<String, dynamic> json) =>
       _$$_SourceFileEditFromJson(json);
@@ -158,7 +157,7 @@ class _$_SourceFileEdit extends _SourceFileEdit {
 
   @override
   String toString() {
-    return 'SourceFileEdit(file: $file, edits: $edits, fileStamp: $fileStamp)';
+    return 'SourceFileEdit._(file: $file, edits: $edits, fileStamp: $fileStamp)';
   }
 
   @override
@@ -192,12 +191,11 @@ class _$_SourceFileEdit extends _SourceFileEdit {
   }
 }
 
-abstract class _SourceFileEdit extends SourceFileEdit {
+abstract class _SourceFileEdit implements SourceFileEdit {
   const factory _SourceFileEdit(
       {required final Uri file,
       required final List<SourceEdit> edits,
       required final DateTime fileStamp}) = _$_SourceFileEdit;
-  const _SourceFileEdit._() : super._();
 
   factory _SourceFileEdit.fromJson(Map<String, dynamic> json) =
       _$_SourceFileEdit.fromJson;

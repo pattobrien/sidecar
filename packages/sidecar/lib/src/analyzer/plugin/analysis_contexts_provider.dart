@@ -1,12 +1,18 @@
+// import 'dart:async';
+
 // import 'package:riverpod/riverpod.dart';
+// import 'package:path/path.dart' as p;
+
+// import '../../utils/utils.dart';
+// import 'analyzer_resource_provider.dart';
 
 
-// final rootUriProvider = Provider<Uri>((ref) => Uri());
+// // final rootUriProvider = Provider<Uri>((ref) => Uri());
 
 
 // StreamSubscription? _listenToConfigForChanges(
 //   Ref ref,
-//   Context context,
+//   Uri context,
 // ) {
 //   final path = p.join(context.root.path, kSidecarYaml);
 //   final resourceProvider = ref.watch(analyzerResourceProvider);

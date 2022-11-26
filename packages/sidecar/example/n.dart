@@ -3,8 +3,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:sidecar/rules/rules.dart';
 import 'package:sidecar/sidecar.dart';
 
-class SomeLintVisitor extends SidecarSimpleAstVisitor
-    with LintMixin, QuickFixMixin {
+class SomeLintVisitor extends SidecarAstVisitor with LintMixin, QuickFixMixin {
   @override
   void initializeVisitor(NodeRegistry registry) {
     registry.addAdjacentStrings(this);
@@ -16,8 +15,8 @@ class SomeLintVisitor extends SidecarSimpleAstVisitor
 
   @override
   void visitAdjacentStrings(AdjacentStrings node) {
-    reportAstNode(node, message: '', editsComputer: (context) async {
-      final unit = context.currentUnit;
+    reportAstNode(node, message: '', editsComputer: () async {
+      // final unit = context.currentUnit;
       return [];
     });
     super.visitAdjacentStrings(node);

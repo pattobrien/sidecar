@@ -1,11 +1,16 @@
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 
+import '../../utils/uri_ext.dart';
 import '../source/source.dart';
 
 extension SourceFileEditX on SourceFileEdit {
-  plugin.SourceFileEdit toPluginFileEdit() =>
-      plugin.SourceFileEdit(file.path, fileStamp.millisecondsSinceEpoch,
-          edits: edits.toPluginEdits());
+  plugin.SourceFileEdit toPluginFileEdit() {
+    final normalizedFile = file.normalizePath();
+    print('FILE PATH: ${normalizedFile.pathNoTrailingSlash}');
+    return plugin.SourceFileEdit(
+        file.pathNoTrailingSlash, fileStamp.millisecondsSinceEpoch,
+        edits: edits.toPluginEdits());
+  }
 }
 
 extension SourceFileEditsX on List<SourceFileEdit> {
@@ -20,10 +25,7 @@ extension PluginSourceFileEditX on plugin.SourceFileEdit {
           replacement: e.replacement, sourceUri: Uri.parse(file));
       return sourceSpan;
     }).toList();
-    return SourceFileEdit(
-        file: Uri.parse(file),
-        edits: sourceEdits,
-        fileStamp: DateTime.fromMillisecondsSinceEpoch(fileStamp));
+    return SourceFileEdit(filePath: file, edits: sourceEdits);
   }
 }
 

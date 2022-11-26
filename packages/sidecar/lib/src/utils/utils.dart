@@ -9,6 +9,5 @@ export 'duration_ext.dart';
 export 'file_paths.dart';
 export 'glob_utils.dart';
 export 'source_span_utilities.dart';
-export 'token_utilities.dart';
 export 'type_checker.dart';
 export 'yaml_writer.dart';

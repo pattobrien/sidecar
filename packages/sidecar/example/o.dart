@@ -4,8 +4,7 @@ import 'package:sidecar/src/analyzer/ast/general_visitor.dart';
 import 'package:sidecar/src/protocol/models/rule_code.dart';
 import 'package:sidecar/src/rules/base_rule.dart';
 
-class SomeLintVisitor extends SidecarSimpleAstVisitor
-    with LintMixin, QuickFixMixin {
+class SomeLintVisitor extends SidecarAstVisitor with LintMixin, QuickFixMixin {
   @override
   LintCode get code => throw UnimplementedError();
 
@@ -20,7 +19,7 @@ class SomeLintVisitor extends SidecarSimpleAstVisitor
       node,
       message: 'message',
       correction: '',
-      editsComputer: (context) async {
+      editsComputer: () async {
         return [];
       },
     );

@@ -6,21 +6,34 @@ import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 
 abstract class IFileAnalyzerService {
-  //
-
+  Set<LintResult> computeLintResults();
+  Set<LintResultWithEdits> computeQuickFixes();
 }
 
-class FileAnalyzerService {
-  const FileAnalyzerService();
+class FileAnalyzerServiceImpl {
+  const FileAnalyzerServiceImpl();
 
   Set<LintResult> visitLintResults({
     required ResolvedUnitResult? unitResult,
     required List<LintMixin> rules,
     required NodeRegistry registry,
-    // required RegisteredLintVisitor mainVisitor,
   }) {
-    // registerVisitorsWithRegistry(visitorRules, registry);
+    if (unitResult == null) return {};
+    for (final visitor in rules) {
+      visitor.setUnit(unitResult);
+    }
 
+    final mainVisitor = RegisteredLintVisitor(registry);
+    unitResult.unit.accept(mainVisitor);
+    final results = mainVisitor.results;
+    return results;
+  }
+
+  Set<LintResult> visitAssistFilters({
+    required ResolvedUnitResult? unitResult,
+    required List<AssistMixin> rules,
+    required NodeRegistry registry,
+  }) {
     if (unitResult == null) return {};
     for (final visitor in rules) {
       visitor.setUnit(unitResult);
@@ -39,6 +52,22 @@ class FileAnalyzerService {
     // ignore: prefer_iterable_wheretype
     final lintRules = rules.where((e) => e is LintMixin);
     lintRules.map((e) => e.initializeVisitor(registry));
+  }
+
+  Set<LintResult> visitAssistResults({
+    required ResolvedUnitResult? unitResult,
+    required List<AssistMixin> rules,
+    required NodeRegistry registry,
+  }) {
+    if (unitResult == null) return {};
+    for (final visitor in rules) {
+      visitor.setUnit(unitResult);
+    }
+
+    final mainVisitor = RegisteredLintVisitor(registry);
+    unitResult.unit.accept(mainVisitor);
+    final results = mainVisitor.results;
+    return results;
   }
 
   // Future<List<LintResult>> computeLintResults({
@@ -129,7 +158,7 @@ class FileAnalyzerService {
 }
 
 final fileAnalyzerServiceProvider = Provider(
-  (ref) => const FileAnalyzerService(),
+  (ref) => const FileAnalyzerServiceImpl(),
   name: 'fileAnalyzerServiceProvider',
   dependencies: const [],
 );

@@ -1,55 +1,51 @@
-// import 'package:analyzer/dart/ast/ast.dart';
-// import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
-// import 'package:sidecar/sidecar.dart';
-// import 'package:source_span/source_span.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
+import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/src/protocol/analyzer_plugin_exts/source_exts.dart';
 
-// import 'constants.dart';
+import 'constants.dart';
 
-// class OutputAstNodeTree extends AssistRule with AssistVisitor {
-//   @override
-//   String get code => 'output_ast_node_tree';
+class OutputAstNodeTree extends SidecarAstVisitor with AssistMixin {
+  @override
+  AssistCode get code =>
+      const AssistCode('output_ast_node_tree', package: kPackageName);
 
-//   @override
-//   String get packageName => kPackageName;
+  @override
+  void initializeVisitor(NodeRegistry registry) {
+    registry.addNode(this);
+  }
 
-//   @override
-//   Future<List<EditResult>> computeSourceChanges(
-//     SourceSpan source,
-//   ) async {
-//     final unit = await getResolvedUnitResult(source.sourceUrl!.path);
-//     final changeBuilder = ChangeBuilder(session: session);
+  @override
+  void visitNode(AstNode node) {
+    reportAssistForNode(
+      node,
+      message: 'message',
+      editsComputer: () => nodeChangeComputer(node),
+    );
+  }
 
-//     final node = source.toAstNode(unit);
-//     if (node == null) return [];
+  Future<List<EditResult>> nodeChangeComputer(
+    AstNode node,
+  ) async {
+    final changeBuilder = ChangeBuilder(session: unit.session);
 
-//     await changeBuilder.addDartFileEdit(
-//       unit.path,
-//       (builder) {
-//         builder.addInsertion(
-//           unit.unit.length,
-//           (builder) {
-//             builder.write(
-//                 '\n// ${node.beginToken} (node => parents): ${node.runtimeType} => ${node.parent.runtimeType} => ${node.parent?.parent.runtimeType} => ${node.parent?.parent?.parent.runtimeType}\n');
-//           },
-//         );
-//       },
-//     );
-//     return [
-//       EditResult(
-//         message: 'Output AstNode info into a comment',
-//         sourceChanges: changeBuilder.sourceChange.edits.fromPluginFileEdits(),
-//       ),
-//     ];
-//   }
-
-//   @override
-//   SidecarAssistVisitor Function() get visitorCreator => _Visitor.new;
-// }
-
-// class _Visitor extends SidecarAssistVisitor {
-//   @override
-//   void visitNode(AstNode node) {
-//     // node.visitChildren(this);
-//     // reportAstNode(node);
-//   }
-// }
+    await changeBuilder.addDartFileEdit(
+      unit.path,
+      (builder) {
+        builder.addInsertion(
+          unit.unit.length,
+          (builder) {
+            builder.write(
+                '\n// ${node.beginToken} (node => parents): ${node.runtimeType} => ${node.parent.runtimeType} => ${node.parent?.parent.runtimeType} => ${node.parent?.parent?.parent.runtimeType}\n');
+          },
+        );
+      },
+    );
+    return [
+      EditResult(
+        message: 'Output AstNode info into a comment',
+        sourceChanges: changeBuilder.sourceChange.edits.fromPluginFileEdits(),
+      ),
+    ];
+  }
+}

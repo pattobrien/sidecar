@@ -69,4 +69,4 @@ class AnalysisResult with _$AnalysisResult {
   }
 }
 
-typedef EditsComputer = Future<List<EditResult>> Function(UnitContext context);
+typedef EditsComputer = Future<List<EditResult>> Function();

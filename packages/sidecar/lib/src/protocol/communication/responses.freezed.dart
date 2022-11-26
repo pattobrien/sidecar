@@ -40,7 +40,7 @@ mixin _$SidecarResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() contextCollection,
-    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(Set<AssistResultWithEdits> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
@@ -50,7 +50,7 @@ mixin _$SidecarResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -60,7 +60,7 @@ mixin _$SidecarResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -170,7 +170,7 @@ class _$SetWorkspaceResponse extends SetWorkspaceResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() contextCollection,
-    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(Set<AssistResultWithEdits> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
@@ -183,7 +183,7 @@ class _$SetWorkspaceResponse extends SetWorkspaceResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -196,7 +196,7 @@ class _$SetWorkspaceResponse extends SetWorkspaceResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -273,7 +273,7 @@ abstract class _$$AssistResponseCopyWith<$Res> {
   factory _$$AssistResponseCopyWith(
           _$AssistResponse value, $Res Function(_$AssistResponse) then) =
       __$$AssistResponseCopyWithImpl<$Res>;
-  $Res call({List<AssistResult> results});
+  $Res call({Set<AssistResultWithEdits> results});
 }
 
 /// @nodoc
@@ -295,7 +295,7 @@ class __$$AssistResponseCopyWithImpl<$Res>
       results == freezed
           ? _value._results
           : results // ignore: cast_nullable_to_non_nullable
-              as List<AssistResult>,
+              as Set<AssistResultWithEdits>,
     ));
   }
 }
@@ -303,7 +303,7 @@ class __$$AssistResponseCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AssistResponse extends AssistResponse {
-  const _$AssistResponse(final List<AssistResult> results,
+  const _$AssistResponse(final Set<AssistResultWithEdits> results,
       {final String? $type})
       : _results = results,
         $type = $type ?? 'assist',
@@ -312,11 +312,11 @@ class _$AssistResponse extends AssistResponse {
   factory _$AssistResponse.fromJson(Map<String, dynamic> json) =>
       _$$AssistResponseFromJson(json);
 
-  final List<AssistResult> _results;
+  final Set<AssistResultWithEdits> _results;
   @override
-  List<AssistResult> get results {
+  Set<AssistResultWithEdits> get results {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_results);
+    return EqualUnmodifiableSetView(_results);
   }
 
   @JsonKey(name: 'runtimeType')
@@ -349,7 +349,7 @@ class _$AssistResponse extends AssistResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() contextCollection,
-    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(Set<AssistResultWithEdits> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
@@ -362,7 +362,7 @@ class _$AssistResponse extends AssistResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -375,7 +375,7 @@ class _$AssistResponse extends AssistResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -440,14 +440,14 @@ class _$AssistResponse extends AssistResponse {
 }
 
 abstract class AssistResponse extends SidecarResponse {
-  const factory AssistResponse(final List<AssistResult> results) =
+  const factory AssistResponse(final Set<AssistResultWithEdits> results) =
       _$AssistResponse;
   const AssistResponse._() : super._();
 
   factory AssistResponse.fromJson(Map<String, dynamic> json) =
       _$AssistResponse.fromJson;
 
-  List<AssistResult> get results;
+  Set<AssistResultWithEdits> get results;
   @JsonKey(ignore: true)
   _$$AssistResponseCopyWith<_$AssistResponse> get copyWith =>
       throw _privateConstructorUsedError;
@@ -534,7 +534,7 @@ class _$QuickFixResponse extends QuickFixResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() contextCollection,
-    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(Set<AssistResultWithEdits> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
@@ -547,7 +547,7 @@ class _$QuickFixResponse extends QuickFixResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -560,7 +560,7 @@ class _$QuickFixResponse extends QuickFixResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -718,7 +718,7 @@ class _$LintResponse extends LintResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() contextCollection,
-    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(Set<AssistResultWithEdits> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
@@ -731,7 +731,7 @@ class _$LintResponse extends LintResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -744,7 +744,7 @@ class _$LintResponse extends LintResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -872,7 +872,7 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() contextCollection,
-    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(Set<AssistResultWithEdits> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
@@ -885,7 +885,7 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -898,7 +898,7 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -1023,7 +1023,7 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() contextCollection,
-    required TResult Function(List<AssistResult> results) assist,
+    required TResult Function(Set<AssistResultWithEdits> results) assist,
     required TResult Function(List<LintResultWithEdits> results) quickFix,
     required TResult Function(List<LintResult> lints) lint,
     required TResult Function() updateFiles,
@@ -1036,7 +1036,7 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,
@@ -1049,7 +1049,7 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? contextCollection,
-    TResult Function(List<AssistResult> results)? assist,
+    TResult Function(Set<AssistResultWithEdits> results)? assist,
     TResult Function(List<LintResultWithEdits> results)? quickFix,
     TResult Function(List<LintResult> lints)? lint,
     TResult Function()? updateFiles,

@@ -62,7 +62,7 @@ class AnalyzedFileWithContext with _$AnalyzedFileWithContext {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AnalyzedFileWithContext &&
+            (other is AnalyzedFileWithContext) &&
             const DeepCollectionEquality().equals(other.fileUri, fileUri) &&
             const DeepCollectionEquality().equals(
                 other.context.contextRoot.root.path,

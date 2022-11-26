@@ -1,53 +1,47 @@
-// import 'package:analyzer/dart/ast/ast.dart';
-// import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
-// import 'package:sidecar/sidecar.dart';
-// import 'package:source_span/source_span.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
+import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/src/protocol/analyzer_plugin_exts/source_exts.dart';
 
-// import 'constants.dart';
+import 'constants.dart';
 
-// class OutputSourceSpan extends AssistRule with AssistVisitor {
-//   @override
-//   String get code => 'output_source_span';
+class OutputSourceSpan extends SidecarAstVisitor with AssistMixin {
+  @override
+  RuleCode get code =>
+      const AssistCode('output_source_span', package: kPackageName);
 
-//   @override
-//   String get packageName => kPackageName;
+  @override
+  void initializeVisitor(NodeRegistry registry) {
+    registry.addNode(this);
+  }
 
-//   @override
-//   Future<List<EditResult>> computeSourceChanges(
-//     SourceSpan source,
-//   ) async {
-//     final unit = await getResolvedUnitResult(source.sourceUrl!.path);
-//     final changeBuilder = ChangeBuilder(session: session);
+  @override
+  void visitNode(AstNode node) {
+    reportAssistForNode(
+      node,
+      message: 'message',
+      editsComputer: () async {
+        final changeBuilder = ChangeBuilder(session: unit.session);
 
-//     final node = source.toAstNode(unit);
-//     if (node == null) return [];
-//     final sourceSpanString =
-//         '// span(${node.offset}, ${node.offset + node.length}, \'${node.toSource()}\');';
+        final sourceSpanString =
+            "// span(${node.offset}, ${node.offset + node.length}, '${node.toSource()}');";
 
-//     await changeBuilder.addDartFileEdit(
-//       unit.path,
-//       (builder) => builder.addInsertion(
-//         unit.unit.length,
-//         (builder) => builder.writeln(sourceSpanString),
-//       ),
-//     );
+        await changeBuilder.addDartFileEdit(
+          unit.path,
+          (builder) => builder.addInsertion(
+            unit.unit.length,
+            (builder) => builder.writeln(sourceSpanString),
+          ),
+        );
 
-//     return [
-//       EditResult(
-//         message: 'Output SourceSpan into a comment',
-//         sourceChanges: changeBuilder.sourceChange.edits.fromPluginFileEdits(),
-//       ),
-//     ];
-//   }
-
-//   @override
-//   SidecarAssistVisitor Function() get visitorCreator => _Visitor.new;
-// }
-
-// class _Visitor extends SidecarAssistVisitor {
-//   @override
-//   void visitNode(AstNode node) {
-//     // node.visitChildren(this);
-//     // reportAstNode(node);
-//   }
-// }
+        return [
+          EditResult(
+            message: 'Output SourceSpan into a comment',
+            sourceChanges:
+                changeBuilder.sourceChange.edits.fromPluginFileEdits(),
+          ),
+        ];
+      },
+    );
+  }
+}

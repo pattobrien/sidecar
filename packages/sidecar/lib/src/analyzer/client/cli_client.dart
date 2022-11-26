@@ -96,6 +96,17 @@ class CliClient extends AnalyzerClient {
 
   @override
   Map<AnalyzedFile, Set<LintResult>> get lintResults => _results;
+
+  @override
+  Future<List<EditResult>> getQuickFixes(Uri file, int offset) async {
+    final analyzedFile = runner.getAnalyzedFile(file.path)!;
+    final request = QuickFixRequest(file: analyzedFile, offset: offset);
+    final response = await runner.asyncRequest<QuickFixResponse>(request);
+    return response.results
+        .map((e) => e.edits)
+        .expand((element) => element)
+        .toList();
+  }
 }
 
 final cliClientProvider = Provider<AnalyzerClient>((ref) {

@@ -1,9 +1,8 @@
 // ignore_for_file: implementation_imports
 
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
-import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/syntactic_entity.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/source/line_info.dart';
 import 'package:analyzer/source/source_range.dart';
 import 'package:analyzer/src/dart/ast/element_locator.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
@@ -13,21 +12,12 @@ import '../analyzer/context/unit_context.dart';
 import 'source_span_utilities.dart';
 
 /// Used to translate a single AST node into a SourceSpan (i.e. start and end location within source code)
-extension AstNodeX on AstNode {
+extension SyntacticEntityX on SyntacticEntity {
   SourceRange toSourceRange(ResolvedUnitResult unit) {
     return toSourceSpan(unit).toSourceRange();
   }
 
   SourceSpan toSourceSpan(ResolvedUnitResult unit) {
-    // TODO: integrate endNode functionality here
-
-    // final offset = !withCommentOrMetadata && node is AnnotatedNode
-    //     ? node.firstTokenAfterCommentAndMetadata.offset
-    //     : node.offset;
-    // final end = endNode?.end ?? node.end;
-
-    // final sourceUrl = Uri.file(unit.path);
-
     final startOffset = offset;
     final endOffset = end;
 
@@ -84,7 +74,7 @@ extension AstNodeX on AstNode {
     );
   }
 
-  SourceSpan toSourceSpanFromPath(String path) {
+  SourceSpan toSourceSpanFromPath(String path, String source) {
     // TODO: integrate endNode functionality here
 
     // final offset = !withCommentOrMetadata && node is AnnotatedNode
@@ -92,12 +82,9 @@ extension AstNodeX on AstNode {
     //     : node.offset;
     // final end = endNode?.end ?? node.end;
 
-    // final sourceUrl = Uri.file(unit.path);
-
     final startOffset = offset;
     final endOffset = end;
     final len = length;
-    final source = toSource();
     // final sourceLength = source.length;
     // final startLocation = unit.lineInfo.getLocation(startOffset);
     // final endLocation = unit.lineInfo.getLocation(endOffset);
