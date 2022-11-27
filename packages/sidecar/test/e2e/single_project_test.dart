@@ -45,7 +45,7 @@ void main() {
 
     test('2 lint results', () async {
       app.modifyFile(kMainFilePath, kContentWithTwoStrings);
-      await analyzeTestResources(app.root, reporter);
+      final client = await analyzeTestResources(app.root, reporter);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
@@ -68,7 +68,6 @@ void main() {
       final client = await analyzeTestResources(app.root, reporter);
       final results = await client.getQuickFixes(mainFile.toUri(), 30);
       expect(results.length, 1);
-      // expectLints(results.first, []);
     });
 
     test('0 quick assist results', () async {
@@ -76,7 +75,6 @@ void main() {
       final client = await analyzeTestResources(app.root, reporter);
       final results = await client.getQuickFixes(mainFile.toUri(), 20);
       expect(results.length, 0);
-      // expectLints(results.first, []);
     });
   });
 }

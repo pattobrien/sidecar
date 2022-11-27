@@ -12,23 +12,19 @@ part 'hot_reloader.g.dart';
 final hotReloaderProvider = FutureProvider<HotReloader>((ref) async {
   hierarchicalLoggingEnabled = true;
   HotReloader.logLevel = Level.OFF;
-  final hotReloader = await HotReloader.create(
-    onAfterReload: (c) async {
-      await ref.read(hotReloadNotifierProvider.notifier).reload(c);
-    },
+  return HotReloader.create(
+    onAfterReload: ref.read(hotReloadNotifierProvider.notifier).onAfterReload,
   );
-  return hotReloader;
 });
 
 @Riverpod(keepAlive: true)
 class HotReloadNotifier extends _$HotReloadNotifier {
   final hotreloadResourceProvider = PhysicalResourceProvider.INSTANCE;
-  @override
-  FutureOr<void> build() async {
-    //
-  }
 
-  Future<void> reload(AfterReloadContext c) async {
+  @override
+  FutureOr<void> build() async {}
+
+  Future<void> onAfterReload(AfterReloadContext c) async {
     state = const AsyncValue.loading();
     final client = ref.watch(analyzerClientProvider);
     final reporter = ref.watch(stdoutReportProvider);

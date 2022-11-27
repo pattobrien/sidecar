@@ -5,7 +5,6 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/token.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
-import 'package:meta/meta.dart';
 import 'package:source_span/source_span.dart';
 
 import '../analyzer/ast/ast.dart';
@@ -16,26 +15,42 @@ import '../utils/utils.dart';
 import 'lint_severity.dart';
 import 'rules.dart';
 
+/// Base class for constructing any Sidecar rule.
+@internal
 mixin BaseRule {
-  final Set<AnalysisResult> results = {};
-  late ResolvedUnitResult _unit;
-
-  ResolvedUnitResult get unit => _unit;
-
-  void setUnit(ResolvedUnitResult unit) => _unit = unit;
-
   RuleCode get code;
   List<Glob>? get includes => null;
   List<Glob>? get excludes => null;
 
-  SidecarSpec? sidecarSpec;
+  final Set<LintResult> lintResults = {};
+  final Set<LintResult> assistFilterResults = {};
+  late ResolvedUnitResult _unit;
+  late SidecarSpec sidecarSpec;
+
+  ResolvedUnitResult get unit => _unit;
+
+  void initializeVisitor(NodeRegistry registry);
+
+  // Rule initialization happens in multiple phases
+  // 1. Configuration Phase: triggered on SidecarSpec changes
+  // 2. Unit Contex Phase: on every file change
+  // 3. Annotation Phase:
 
   @internal
-  void refresh({
+  void setConfig({
     required SidecarSpec sidecarSpec,
   }) {
     this.sidecarSpec = sidecarSpec;
-    results.clear();
+    // TODO: results should be cleared during the setUnitContext stage
+    // lintResults.clear();
+    // assistFilterResults.clear();
+  }
+
+  @internal
+  void setUnitContext(ResolvedUnitResult unit) {
+    _unit = unit;
+    lintResults.clear();
+    assistFilterResults.clear();
   }
 
   void _reportSourceSpan(
@@ -46,7 +61,7 @@ mixin BaseRule {
   }) {
     if (this is Lint) {
       final thisConfig =
-          sidecarSpec?.getConfigurationForCode(code) as LintOptions?;
+          sidecarSpec.getConfigurationForCode(code) as LintOptions?;
       final result = LintResult(
         rule: code,
         span: span,
@@ -55,33 +70,25 @@ mixin BaseRule {
         severity: thisConfig?.severity ?? (this as Lint).defaultSeverity,
         editsComputer: editsComputer,
       );
-      results.add(result);
+      lintResults.add(result);
     }
   }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is BaseRule &&
+            const DeepCollectionEquality().equals(other.code, code));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        runtimeType,
+        const DeepCollectionEquality().hash(code),
+      );
 }
 
-mixin BaseRuleVisitorMixin on BaseRule {
-  void initializeVisitor(NodeRegistry registry);
-}
-
-mixin QuickAssist on BaseRule {
-  void reportAssistForNode(
-    AstNode node, {
-    required String message,
-    EditsComputer? editsComputer,
-  }) =>
-      _reportSourceSpan(node.toSourceSpan(_unit), message,
-          editsComputer: editsComputer);
-
-  void reportAssistForToken(
-    Token token, {
-    required String message,
-    EditsComputer? editsComputer,
-  }) =>
-      _reportSourceSpan(token.toSourceSpan(_unit), message,
-          editsComputer: editsComputer);
-}
-
+/// Display a message, warning, or error in the IDE.
 mixin Lint on BaseRule {
   @override
   LintCode get code;
@@ -104,6 +111,9 @@ mixin Lint on BaseRule {
           correction: correction);
 }
 
+/// Suggested code edits for a particular Lint
+///
+/// To provide code edits without lints, use the Assist mixin.
 mixin QuickFix on Lint {
   @override
   void reportAstNode(
@@ -124,4 +134,25 @@ mixin QuickFix on Lint {
   }) =>
       _reportSourceSpan(token.toSourceSpan(_unit), message,
           correction: correction, editsComputer: editsComputer);
+}
+
+/// Suggested code edits within a single file.
+///
+/// For multi-file edits, prefer using Refactorings (TBD).
+mixin QuickAssist on BaseRule {
+  void reportAssistForNode(
+    AstNode node, {
+    @Deprecated('only use EditResult message') required String message,
+    EditsComputer? editsComputer,
+  }) =>
+      _reportSourceSpan(node.toSourceSpan(_unit), message,
+          editsComputer: editsComputer);
+
+  void reportAssistForToken(
+    Token token, {
+    @Deprecated('only use EditResult message') required String message,
+    EditsComputer? editsComputer,
+  }) =>
+      _reportSourceSpan(token.toSourceSpan(_unit), message,
+          editsComputer: editsComputer);
 }

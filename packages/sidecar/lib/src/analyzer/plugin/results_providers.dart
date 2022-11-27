@@ -19,20 +19,20 @@ import 'scoped_rules_provider.dart';
 const proactiveAssistFilter = true;
 const proactiveFixComputes = true;
 
-final annotationResultsProvider = Provider.autoDispose((ref) {
-  //TODO: what if an annotation is in a file thats outside the project scope?
-  // do we still not want to analyze those files for metadata?
-  final scopedFiles = ref.watch(activeProjectScopedFilesProvider);
-  return scopedFiles
-      .map((file) {
-        final unit = ref.watch(resolvedUnitForFileProvider(file)).valueOrNull;
-        final visitor = AnnotationVisitor();
-        unit?.unit.accept(visitor);
-        return visitor.annotatedNodes;
-      })
-      .expand((e) => e)
-      .toList();
-});
+// final annotationResultsProvider = Provider.autoDispose((ref) {
+//   //TODO: what if an annotation is in a file thats outside the project scope?
+//   // do we still not want to analyze those files for metadata?
+//   final scopedFiles = ref.watch(activeProjectScopedFilesProvider);
+//   return scopedFiles
+//       .map((file) {
+//         final unit = ref.watch(resolvedUnitForFileProvider(file)).valueOrNull;
+//         final visitor = AnnotationVisitor();
+//         unit?.unit.accept(visitor);
+//         return visitor.annotatedNodes;
+//       })
+//       .expand((e) => e)
+//       .toList();
+// });
 
 final lintResultsProvider =
     FutureProvider.family<Set<LintResult>, AnalyzedFile>((ref, file) async {
@@ -56,18 +56,18 @@ final lintResultsProvider =
   // communication / data transfer: ??
 
   // - applyPendingFileChanges: 4.61ms
-  final rules = ref.watch(scopedLintRulesForFileProvider(file));
-  final visitorRules = ref.watch(scopedLintVisitorRuleForFileProvider(file));
+  // services
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
-  final registry = ref.watch(nodeRegistryForFileLintsProvider(file));
+
+  // file-dependent objects
+  final registry = ref.watch(nodeLintRegistryForFileAssistsProvider(file));
+  final rulesForFile = ref.watch(scopedLintRulesForFileProvider(file));
+  print('rulesForFile: ${rulesForFile.map((e) => e.code)}');
 
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
   return runZonedGuarded<Set<LintResult>>(
-        () {
-          final results = analyzerService.visitLintResults(
-              unitResult: unit, rules: visitorRules, registry: registry);
-          return results;
-        },
+        () => analyzerService.visitLintResults(
+            unitResult: unit, rules: rulesForFile, registry: registry),
         (error, stack) {
           log(
             'lintResultsProvider error',
@@ -81,22 +81,22 @@ final lintResultsProvider =
       {};
 });
 
-// final lintResultsCompleterProvider = FutureProvider((ref) async {
-//   final lintResults = ref.container
-//       .getAllProviderElements()
-//       .where((base) => base.origin.from == lintResultsProvider)
-//       .map((e) => e.origin as FutureProvider<Set<LintResult>>);
-//   print('lintResultsCompleterProvider rebuilding...');
-//   // we want to await for all lints to be computed before proceeding with any
-//   // pro-active quick-fix computing
-//   await Future.wait(lintResults.map((e) async => ref.watch(e.future)));
-// });
+final lintResultsCompleterProvider = FutureProvider((ref) async {
+  final lintResults = ref.container
+      .getAllProviderElements()
+      .where((base) => base.origin.from == lintResultsProvider)
+      .map((e) => e.origin as FutureProvider<Set<LintResult>>);
+  print('lintResultsCompleterProvider rebuilding...');
+  // we want to await for all lints to be computed before proceeding with any
+  // pro-active quick-fix computing
+  await Future.wait(lintResults.map((e) async => ref.watch(e.future)));
+});
 
 final assistFiltersProvider = FutureProvider.family
     .autoDispose<Set<LintResult>, AnalyzedFile>((ref, file) async {
-  final rules = ref.watch(scopedAssistVisitorRulesForFileProvider(file));
+  final rules = ref.watch(scopedAssistRulesForFileProvider(file));
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
-  final registry = ref.watch(nodeRegistryForFileAssistsProvider(file));
+  final registry = ref.watch(nodeAssistRegistryForFileAssistsProvider(file));
   // print('REGISTRY ${registry}');
   print('ASSIST FILTERS RULES: ${rules.length}');
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);

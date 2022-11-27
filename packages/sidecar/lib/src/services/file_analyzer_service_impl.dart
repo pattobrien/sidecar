@@ -5,53 +5,39 @@ import '../analyzer/ast/ast.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 
-abstract class IFileAnalyzerService {
-  Set<LintResult> computeLintResults();
-  Set<LintResultWithEdits> computeQuickFixes();
-}
-
 class FileAnalyzerServiceImpl {
   const FileAnalyzerServiceImpl();
 
   Set<LintResult> visitLintResults({
     required ResolvedUnitResult? unitResult,
-    required List<Lint> rules,
+    required Set<Lint> rules,
     required NodeRegistry registry,
   }) {
     if (unitResult == null) return {};
-    for (final visitor in rules) {
-      visitor.setUnit(unitResult);
+    for (final rule in rules) {
+      rule.setUnitContext(unitResult);
     }
 
     final mainVisitor = RegisteredLintVisitor(registry);
     unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.results;
+    final results = mainVisitor.lintResults;
     return results;
   }
 
   Set<LintResult> visitAssistFilters({
     required ResolvedUnitResult? unitResult,
-    required List<QuickAssist> rules,
+    required Set<QuickAssist> rules,
     required NodeRegistry registry,
   }) {
     if (unitResult == null) return {};
-    for (final visitor in rules) {
-      visitor.setUnit(unitResult);
+    for (final rule in rules) {
+      rule.setUnitContext(unitResult);
     }
 
     final mainVisitor = RegisteredLintVisitor(registry);
     unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.results;
+    final results = mainVisitor.lintResults;
     return results;
-  }
-
-  void registerVisitorsWithRegistry(
-    List<BaseRuleVisitorMixin> rules,
-    NodeRegistry registry,
-  ) {
-    // ignore: prefer_iterable_wheretype
-    final lintRules = rules.where((e) => e is Lint);
-    lintRules.map((e) => e.initializeVisitor(registry));
   }
 
   Set<LintResult> visitAssistResults({
@@ -61,12 +47,12 @@ class FileAnalyzerServiceImpl {
   }) {
     if (unitResult == null) return {};
     for (final visitor in rules) {
-      visitor.setUnit(unitResult);
+      visitor.setUnitContext(unitResult);
     }
 
     final mainVisitor = RegisteredLintVisitor(registry);
     unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.results;
+    final results = mainVisitor.lintResults;
     return results;
   }
 

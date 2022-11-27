@@ -10,13 +10,14 @@ final resolvedUnitForFileProvider =
     FutureProvider.family<ResolvedUnitResult?, AnalyzedFile>((ref, file) async {
   if (!file.isDartFile && !file.isSidecarYamlFile) return null;
   final context = ref.watch(contextForFileProvider(file));
+  if (context == null) return null;
   final result = await context.currentSession.getResolvedUnit(file.path);
   return result as ResolvedUnitResult;
 });
 
-final contextForFileProvider = Provider.family<AnalysisContext, AnalyzedFile>(
+final contextForFileProvider = Provider.family<AnalysisContext?, AnalyzedFile>(
   (ref, file) {
     final contexts = ref.watch(contextCollectionProvider);
-    return contexts.contextForPath(file.fileUri.toString())!;
+    return contexts.contextForPath(file.fileUri.toString());
   },
 );

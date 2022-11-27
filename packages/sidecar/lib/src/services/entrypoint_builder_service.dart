@@ -1,6 +1,5 @@
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:path/path.dart' as p;
-import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/server/middleman_resource_provider.dart';

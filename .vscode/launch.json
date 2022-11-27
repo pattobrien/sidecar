@@ -15,6 +15,16 @@
             ]
         },
         {
+            "name": "Inpower+Sidecar Lint Debugger",
+            "program": "/Users/pattobrien/Development/fine_designs/InPower/subprojects/InPower-frontend/.dart_tool/sidecar/debug.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--enable-vm-service",
+                "--debug",
+            ]
+        },
+        {
             "name": "Benchmark Debugger",
             "program": "examples/benchmark/bin/debug.dart",
             "request": "launch",

@@ -9,6 +9,7 @@ import 'package:file/file.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
+import 'package:test/test.dart';
 
 import '../../analyzer/plugin/files_provider.dart';
 import '../../analyzer/plugin/plugin.dart';
@@ -45,6 +46,7 @@ Future<WorkspaceResource> createWorkspace({
       fileSystem: fileSystem,
       rootPath: rootPath ?? root.path);
 
+  addTearDown(() => workspace.delete());
   await workspace.init();
   return workspace;
 }
@@ -114,6 +116,10 @@ class WorkspaceResource with ResourceMixin {
   void deleteDartPackage(PackageResource package) {
     final packageFolder = package.projectFolder;
     packageFolder.delete();
+  }
+
+  void delete() {
+    folder.delete();
   }
 }
 

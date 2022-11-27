@@ -4,7 +4,7 @@ import '../../protocol/analyzed_file.dart';
 import '../../utils/glob_utils.dart';
 import 'analyzer_resource_provider.dart';
 import 'collection_provider.dart';
-import 'project_configuration_provider.dart';
+import 'sidecar_spec_providers.dart';
 
 final activeProjectScopedFilesProvider = Provider<List<AnalyzedFile>>((ref) {
   final activeProjectIncludes = ref.watch(activeProjectIncludeGlobsProvider);
@@ -14,6 +14,7 @@ final activeProjectScopedFilesProvider = Provider<List<AnalyzedFile>>((ref) {
 
   final activeProjectScopedFiles = contexts
       .map((context) {
+        //TODO: add rule/package includes and excludes
         final filesInScope = extractDartFilesFromFolders(
             ['lib'], context.contextRoot.root.path,
             fileSystem: fileSystem,

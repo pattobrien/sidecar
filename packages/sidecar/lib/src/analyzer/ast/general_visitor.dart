@@ -10,7 +10,8 @@ class RegisteredLintVisitor extends AstVisitor<void> {
   RegisteredLintVisitor(this.registry);
 
   final NodeRegistry registry;
-  final results = <LintResult>{};
+  final lintResults = <LintResult>{};
+  final assistResults = <LintResult>{};
 
   @override
   void visitAdjacentStrings(AdjacentStrings node) {
@@ -824,15 +825,18 @@ class RegisteredLintVisitor extends AstVisitor<void> {
   }
 
   void _runSubscriptions<T extends AstNode>(
-      T node, List<VisitorSubscription<T>> subscriptions) {
+    T node,
+    List<VisitorSubscription<T>> subscriptions,
+  ) {
     for (var i = 0; i < subscriptions.length; i++) {
       final subscription = subscriptions[i];
       final timer = subscription.timer;
       timer?.start();
       try {
         node.accept<dynamic>(subscription.visitor);
-        results.addAll(subscription.visitor.results.whereType<LintResult>());
-      } catch (e, stack) {
+        lintResults.addAll(subscription.visitor.lintResults);
+        assistResults.addAll(subscription.visitor.assistFilterResults);
+      } catch (e) {
         // if (!exceptionHandler(
         //     node, subscription.linter, exception, stackTrace)) {
         rethrow;

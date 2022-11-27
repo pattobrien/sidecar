@@ -23,7 +23,7 @@ Future<AnalyzerClient> analyzeTestResources(
       final exitcode = await runPubGet(root);
       final client = container.read(cliClientProvider);
       await client.openWorkspace();
-      client.closeWorkspace();
+      // client.closeWorkspace();
       return client;
     },
     zoneSpecification: ZoneSpecification(
