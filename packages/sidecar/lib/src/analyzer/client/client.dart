@@ -14,7 +14,7 @@ abstract class AnalyzerClient {
   Map<AnalyzedFile, Set<LintResult>> get lintResults;
   Future<void> openWorkspace();
   Future<UpdateFilesResponse?> handleFileChange(Uri file, String content);
-  Future<List<EditResult>> getQuickFixes(Uri file, int offset);
+  Future<List<EditResult>> getQuickFixes(String file, int offset);
   void handleDeletedFile(Uri file);
   void handleOpenFileChange(Uri file, String content);
   void closeWorkspace();

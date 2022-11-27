@@ -69,14 +69,15 @@ void main() {
     test('1 quick fix results', () async {
       final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
       final client = await analyzeTestResources(app.root, reporter);
-      final results = await client.getQuickFixes(mainFile.toUri(), 30);
+      print('getting file with path ${mainFile.path}');
+      final results = await client.getQuickFixes(mainFile.path, 30);
       expect(results.length, 1);
     });
 
     test('0 quick fix results', () async {
       final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
       final client = await analyzeTestResources(app.root, reporter);
-      final results = await client.getQuickFixes(mainFile.toUri(), 20);
+      final results = await client.getQuickFixes(mainFile.path, 20);
       expect(results.length, 0);
     });
 

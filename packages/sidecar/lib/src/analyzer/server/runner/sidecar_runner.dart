@@ -12,6 +12,7 @@ import '../../../protocol/logging/log_record.dart';
 import '../../../protocol/protocol.dart';
 import '../../../services/active_project_service.dart';
 import '../../../services/entrypoint_builder_service.dart';
+import '../../../utils/analysis_context_utilities.dart';
 import '../../../utils/uri_ext.dart';
 import '../../starters/server_starter.dart';
 import 'context_providers.dart';
@@ -54,8 +55,7 @@ class SidecarRunner {
   }
 
   AnalyzedFile? getAnalyzedFile(String path) {
-    final context = allContexts
-        .firstWhereOrNull((context) => context.contextRoot.isAnalyzed(path));
+    final context = allContexts.contextForPath(path);
     if (context == null) return null;
     return AnalyzedFile(Uri.parse(path),
         contextRoot: context.contextRoot.root.toUri());
