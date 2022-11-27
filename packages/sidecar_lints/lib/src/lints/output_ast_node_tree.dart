@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
 import 'package:sidecar/sidecar.dart';
+// ignore: implementation_imports
 import 'package:sidecar/src/protocol/analyzer_plugin_exts/source_exts.dart';
 
 import 'constants.dart';

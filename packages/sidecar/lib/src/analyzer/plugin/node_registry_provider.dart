@@ -1,11 +1,11 @@
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/src/analyzer/plugin/rule_constructors_provider.dart';
-import 'package:sidecar/src/analyzer/plugin/sidecar_spec_providers.dart';
-import 'package:sidecar/src/services/rule_initialization_service.dart';
 
 import '../../protocol/analyzed_file.dart';
 import '../../rules/base_rule.dart';
+import '../../services/rule_initialization_service.dart';
 import '../ast/ast.dart';
+import 'rule_constructors_provider.dart';
+import 'sidecar_spec_providers.dart';
 
 final _scopedRulesForActiveProjectProvider = Provider<Set<BaseRule>>((ref) {
   final ruleService = ref.watch(ruleInitializationServiceProvider);

@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../../rules/rules.dart';
 
-/// A single subscription for a node type, by the specified [rule].
+/// A single subscription for a node type, by the specified [visitor].
 @internal
 class VisitorSubscription<T> {
   VisitorSubscription(this.visitor, this.timer);

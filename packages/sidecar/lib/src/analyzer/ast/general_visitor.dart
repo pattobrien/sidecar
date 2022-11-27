@@ -648,9 +648,9 @@ class RegisteredLintVisitor extends GeneralizingAstVisitor<void> {
   }
 
   @override
-  void visitScriptTag(ScriptTag node) {
-    _runSubscriptions(node, registry._forScriptTag);
-    node.visitChildren(this);
+  void visitScriptTag(ScriptTag scriptTag) {
+    _runSubscriptions(scriptTag, registry._forScriptTag);
+    scriptTag.visitChildren(this);
   }
 
   @override

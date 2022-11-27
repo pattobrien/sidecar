@@ -45,7 +45,7 @@ void main() {
 
     test('2 lint results', () async {
       app.modifyFile(kMainFilePath, kContentWithTwoStrings);
-      final client = await analyzeTestResources(app.root, reporter);
+      await analyzeTestResources(app.root, reporter);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [

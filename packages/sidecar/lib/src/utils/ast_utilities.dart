@@ -84,7 +84,7 @@ extension SyntacticEntityX on SyntacticEntity {
 
     final startOffset = offset;
     final endOffset = end;
-    final len = length;
+    // final len = length;
     // final sourceLength = source.length;
     // final startLocation = unit.lineInfo.getLocation(startOffset);
     // final endLocation = unit.lineInfo.getLocation(endOffset);

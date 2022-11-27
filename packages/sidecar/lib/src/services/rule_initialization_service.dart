@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/src/protocol/analyzed_file.dart';
 
 import '../analyzer/ast/ast.dart';
 import '../configurations/sidecar_spec/sidecar_spec_base.dart';
+import '../protocol/analyzed_file.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
 import '../utils/utils.dart';

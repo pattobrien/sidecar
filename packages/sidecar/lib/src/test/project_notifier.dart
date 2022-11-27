@@ -1,8 +1,7 @@
 import 'package:analyzer/file_system/file_system.dart';
+// import 'package:analyzer/src/context/packages.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:analyzer/src/context/packages.dart';
 
-import '../configurations/configurations.dart';
 import '../configurations/sidecar_spec/sidecar_spec_base.dart';
 import 'project.dart';
 
@@ -26,14 +25,9 @@ class ProjectNotifier extends _$ProjectNotifier {
       source: source,
     );
     // create package_config.json file
-    final packageFile = project.packageConfig;
-    final packages = parsePackageConfigJsonFile(folder.provider, packageFile);
+    // final packageFile = project.packageConfig;
+    // final packages = parsePackageConfigJsonFile(folder.provider, packageFile);
     return project;
-  }
-
-  void _createProjectFiles(String name, Folder folder) {
-    // create package_config.json
-    // create analysis_options.yaml
   }
 
   void addDependency(Folder folder) {

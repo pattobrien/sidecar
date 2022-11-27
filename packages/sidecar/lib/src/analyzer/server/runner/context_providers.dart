@@ -13,6 +13,7 @@ class RunnerActiveContexts extends _$RunnerActiveContexts {
     return [];
   }
 
+  // ignore: avoid_setters_without_getters
   set update(List<ActivePackage> contexts) => state = contexts;
 }
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -10,7 +9,6 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/server/runner/context_providers.dart';
-import '../configurations/project/project_configuration.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
 import '../configurations/sidecar_spec/sidecar_spec_base.dart';
 import '../configurations/sidecar_spec/sidecar_spec_parsers.dart';
@@ -64,7 +62,7 @@ class ActiveProjectService {
     final isSidecarEnabled = context.isSidecarEnabled;
     final packageConfig = getPackageConfig(root);
     final pluginUri = getSidecarDependencyUri(packageConfig);
-    final packages = getSidecarDependencies(packageConfig);
+    // final packages = getSidecarDependencies(packageConfig);
     final projectSidecarSpec = getSidecarOptions(root);
     final packageConfigJson = getPackageConfig(root);
     if (pluginUri == null || !isSidecarEnabled || projectSidecarSpec == null) {

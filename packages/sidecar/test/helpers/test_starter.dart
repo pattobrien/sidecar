@@ -20,7 +20,7 @@ Future<AnalyzerClient> analyzeTestResources(
   ]);
   final client = await runZoned<Future<AnalyzerClient>>(
     () async {
-      final exitcode = await runPubGet(root);
+      await runPubGet(root);
       final client = container.read(cliClientProvider);
       await client.openWorkspace();
       // client.closeWorkspace();

@@ -57,6 +57,6 @@ class HotReloadNotifier extends _$HotReloadNotifier {
       }
     }
     // print('total time to reload: ${watch.elapsed.prettified()}');
-    state = AsyncValue.data(null);
+    state = const AsyncValue.data(null);
   }
 }

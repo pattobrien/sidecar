@@ -1,13 +1,13 @@
-export 'mixins.dart';
-export '../src/rules/lint_severity.dart';
-export '../src/rules/base_rule.dart' hide BaseRule;
-export '../src/rules/typedefs.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../src/rules/rules.dart';
+
+export '../src/rules/base_rule.dart' hide BaseRule;
+export '../src/rules/lint_severity.dart';
+export '../src/rules/typedefs.dart';
+export 'mixins.dart';
 
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void>
     with BaseRule {

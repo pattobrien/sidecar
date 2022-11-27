@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/sidecar.dart';
 
+import '../../protocol/protocol.dart';
 import '../../services/file_analyzer_service_impl.dart';
 import 'plugin.dart';
 import 'resolved_unit_provider.dart';

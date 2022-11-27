@@ -8,7 +8,6 @@ extension YamlMapSeverity on YamlMap {
   SidecarExceptionTuple<LintSeverity?> parseSeverity() {
     const key = 'severity';
     try {
-      final doesContainKey = containsKey(key);
       final severityValue = containsKey(key)
           ? LintSeverityX.fromString(value[key] as String)
           : null;

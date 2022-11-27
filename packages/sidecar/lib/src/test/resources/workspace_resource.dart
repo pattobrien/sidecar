@@ -1,5 +1,3 @@
-// ignore_for_file: close_sinks, implementation_imports
-
 import 'dart:async';
 import 'dart:io' as io;
 
@@ -8,13 +6,9 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:file/file.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-import 'package:uuid/uuid.dart';
-import 'package:test/test.dart';
 
-import '../../analyzer/plugin/files_provider.dart';
 import '../../analyzer/plugin/plugin.dart';
 import '../../analyzer/server/runner/context_providers.dart';
-import '../../configurations/configurations.dart';
 import '../../configurations/sidecar_spec/sidecar_spec.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
@@ -46,7 +40,7 @@ Future<WorkspaceResource> createWorkspace({
       fileSystem: fileSystem,
       rootPath: rootPath ?? root.path);
 
-  addTearDown(() => workspace.delete());
+  // addTearDown(() => workspace.delete());
   await workspace.init();
   return workspace;
 }
@@ -120,6 +114,7 @@ class WorkspaceResource with ResourceMixin {
 
   void delete() {
     folder.delete();
+    _controller.close();
   }
 }
 

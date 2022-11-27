@@ -139,7 +139,8 @@ SidecarExceptionTuple<RuleOptions> parseRuleOptions(
 ) {
   if (yamlNode is YamlScalar) {
     if (yamlNode.value == null) {
-      final options = type == RuleType.lint ? LintOptions() : AssistOptions();
+      final options =
+          type == RuleType.lint ? const LintOptions() : const AssistOptions();
       return SidecarExceptionTuple(options, []);
     } else if (yamlNode.value is bool) {
       final options = type == RuleType.lint

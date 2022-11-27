@@ -1,10 +1,10 @@
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/src/analyzer/plugin/collection_provider.dart';
-import '../../utils/utils.dart';
 
 import '../../protocol/analyzed_file.dart';
+import '../../utils/utils.dart';
+import 'collection_provider.dart';
 
 final resolvedUnitForFileProvider =
     FutureProvider.family<ResolvedUnitResult?, AnalyzedFile>((ref, file) async {

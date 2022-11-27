@@ -6,12 +6,10 @@ import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart' hide LogRecord;
-import 'package:riverpod/riverpod.dart';
-import 'package:sidecar/src/analyzer/plugin/sidecar_spec_providers.dart';
-import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec_parsers.dart';
-import 'package:sidecar/src/protocol/analyzer_plugin_exts/analyzer_plugin_exts.dart';
 import 'package:path/path.dart' as p;
+import 'package:riverpod/riverpod.dart';
 
+import '../../configurations/sidecar_spec/sidecar_spec_parsers.dart';
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../utils/duration_ext.dart';
@@ -22,6 +20,7 @@ import 'files_provider.dart';
 import 'plugin.dart';
 import 'resolved_unit_provider.dart';
 import 'results_providers.dart';
+import 'sidecar_spec_providers.dart';
 
 final logger = Logger('sidecar-plugin');
 
@@ -164,12 +163,8 @@ class SidecarAnalyzer {
 
     Future<void> handleContexts(List<AnalysisContext> contexts) async {
       for (final context in contexts) {
-        final contextPath = context.contextRoot.root.toUri();
-        final filesInContext = files.where((file) {
-          final isEqual = file.contextRoot == contextPath;
-          // print('compared paths: $isEqual $contextPath || ${file.contextRoot}');
-          return isEqual;
-        }).toList();
+        final contextUri = context.contextRoot.root.toUri();
+        final filesInContext = files.where((f) => f.contextRoot == contextUri);
 
         for (final file in filesInContext) {
           context.changeFile(file.path);
@@ -178,16 +173,10 @@ class SidecarAnalyzer {
         final affectedWithoutOriginalPaths = affected.toSet()
           ..removeAll(filesInContext.map((e) => e.path));
 
-        // final affectedOriginalPaths = filesInContext
-        //     .where(
-        //         (f) => affected.any((affectedPath) => affectedPath == f.path))
-        //     .toList();
-
         // for a better user experience:
-        // first we handle the changed files, then we handle all affected files
+        // first we handle the changed files, then we handle all affected files.
         // this allows us to also include any changed non-dart files in our analysis
-
-        await analyzeFiles(files: filesInContext);
+        await analyzeFiles(files: filesInContext.toList());
 
         // analyze files that may have been affected by the files that explicitly changed
         final affectedFiles = affectedWithoutOriginalPaths
@@ -286,7 +275,6 @@ class SidecarAnalyzer {
     if (file == null) return const AssistResponse({});
 
     try {
-      // final results = await _ref.read(assistResultsProvider(file).future);
       final assistFilterResults =
           await _ref.read(assistFiltersProvider(file).future);
       print('ASSIST FILTERREESULTS ${assistFilterResults.length}');
@@ -304,7 +292,6 @@ class SidecarAnalyzer {
       logger.severe('handleEditGetAssists ${file.relativePath}', e, stack);
       rethrow;
     }
-    // return AssistResponse([]);
   }
 
   int _overlayModificationStamp = 0;
