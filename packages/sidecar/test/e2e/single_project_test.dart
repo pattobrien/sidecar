@@ -1,3 +1,5 @@
+import 'package:glob/glob.dart';
+import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec.dart';
 import 'package:sidecar/src/test/resources/package_resource.dart';
@@ -6,7 +8,6 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
 import '../helpers/example_file_contents.dart';
-import '../helpers/example_lints.dart';
 import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
@@ -16,7 +17,9 @@ import '../helpers/test_starter.dart';
 void main() {
   group('single project lint results:', () {
     final constructors = [StringLiterals.new];
-    final sidecarYaml = SidecarSpec(lints: {
+    final sidecarYaml = SidecarSpec(includes: [
+      Glob('lib/**')
+    ], lints: {
       kStringLiteralsCode.package: LintPackageOptions(rules: {
         kStringLiteralsCode.code: const LintOptions(),
       }),
@@ -68,6 +71,13 @@ void main() {
       final client = await analyzeTestResources(app.root, reporter);
       final results = await client.getQuickFixes(mainFile.toUri(), 30);
       expect(results.length, 1);
+    });
+
+    test('0 quick assist results', () async {
+      final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
+      final client = await analyzeTestResources(app.root, reporter);
+      final results = await client.getQuickFixes(mainFile.toUri(), 20);
+      expect(results.length, 0);
     });
 
     test('0 quick assist results', () async {

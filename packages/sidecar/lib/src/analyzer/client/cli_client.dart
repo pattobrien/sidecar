@@ -36,15 +36,17 @@ class CliClient extends AnalyzerClient {
   final _logController = StreamController<LogRecord>();
 
   @override
-  Future<void> handleFileChange(Uri file, String content) async {
+  Future<UpdateFilesResponse?> handleFileChange(
+      Uri file, String content) async {
     // if file = package_config.json file of any runners, then rebuild runner
     // else, send file change to all applicable runners
     final analyzedFile = runner.getAnalyzedFile(file.path);
-    if (analyzedFile == null) return;
+    if (analyzedFile == null) return null;
     final changedFileRequest = FileUpdateEvent.add(analyzedFile, content);
     final request = SidecarRequest.updateFiles([changedFileRequest]);
-    await runner.asyncRequest<UpdateFilesResponse>(request);
+    final response = await runner.asyncRequest<UpdateFilesResponse>(request);
     reporter.print();
+    return response;
   }
 
   @override

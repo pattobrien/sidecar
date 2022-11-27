@@ -34,6 +34,7 @@ Future<WorkspaceResource> createWorkspace({
   final provider = resourceProvider ?? defaultProvider;
   final root =
       io.Directory.systemTemp.uri.resolve(p.join(defaultWorkspacePath));
+  print('workspace root: ${root.path}');
   // final uuidPath = const Uuid().v4();
   final workspace = WorkspaceResource(
       resourceProvider: provider,

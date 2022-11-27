@@ -1,3 +1,5 @@
+import 'package:glob/glob.dart';
+import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/package_options.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/rule_options.dart';
@@ -9,7 +11,6 @@ import 'package:test/scaffolding.dart';
 import 'package:test/test.dart';
 
 import '../helpers/example_file_contents.dart';
-import '../helpers/example_lints.dart';
 import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
@@ -19,7 +20,9 @@ import '../helpers/test_starter.dart';
 void main() {
   group('active package test - analysis_options.yaml', () {
     final constructors = [StringLiterals.new];
-    final sidecarYaml = SidecarSpec(lints: {
+    final sidecarYaml = SidecarSpec(includes: [
+      Glob('lib/**')
+    ], lints: {
       kStringLiteralsCode.package: LintPackageOptions(rules: {
         kStringLiteralsCode.code: const LintOptions(
           enabled: true,
@@ -41,12 +44,14 @@ void main() {
     });
 
     test('sidecar plugin is enabled', () async {
-      app.modifyFile(kMainFilePath, kContentWithString);
+      final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
       app.modifyFile(kAnalysisOptionsYaml, kAnalysisYamlContentWithSidecar);
-      await analyzeTestResources(app.root, reporter);
+      final client = await analyzeTestResources(app.root, reporter);
+      final responses =
+          await client.handleFileChange(mainFile.toUri(), kContentWithString);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
-      expectLints(results.first, [lint(kStringLiteralsCode, 28, 14)]);
+      expectLints(results[1], [lint(kStringLiteralsCode, 28, 14)]);
     });
 
     test('sidecar plugin is not enabled', () async {
@@ -60,7 +65,9 @@ void main() {
 
   group('active package - sidecar.yaml:', () {
     final constructors = [StringLiterals.new];
-    final sidecarYaml = SidecarSpec(lints: {
+    final sidecarYaml = SidecarSpec(includes: [
+      Glob('lib/**')
+    ], lints: {
       kStringLiteralsCode.package: LintPackageOptions(rules: {
         kStringLiteralsCode.code: const LintOptions(),
       }),
