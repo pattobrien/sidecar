@@ -68,6 +68,8 @@ class CliClient extends AnalyzerClient {
 
     if (activeContext == null) {
       logger.severe('invalid Sidecar directory.');
+      print('invalid sidecar directory');
+      // throw StateError('invalid Sidecar directory');
       return;
     }
     _ref.read(runnerActiveContextsProvider.notifier).update = [activeContext];
