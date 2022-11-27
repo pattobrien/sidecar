@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $ProjectNotifierHash() => r'26f258b976974adfae612825d7da5f9291c3039f';
+String $ProjectNotifierHash() => r'3ca27ec2aa071e564e77d5890439ed8f34af2966';
 
 /// See also [ProjectNotifier].
 class ProjectNotifierProvider

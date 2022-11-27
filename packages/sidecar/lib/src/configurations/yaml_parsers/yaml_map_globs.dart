@@ -1,8 +1,8 @@
 import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 
-import '../configurations.dart';
 import '../exceptions/exceptions.dart';
+import '../sidecar_spec/errors.dart';
 
 extension YamlMapIncludeGlobs on YamlMap {
   SidecarExceptionTuple<List<Glob>?> parseGlobIncludes() =>

@@ -6,7 +6,7 @@ part of 'log_record.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_LogRecord _$$_LogRecordFromJson(Map<String, dynamic> json) => _$_LogRecord(
+_$_LogRecord _$$_LogRecordFromJson(Map json) => _$_LogRecord(
       json['message'] as String,
       DateTime.parse(json['timestamp'] as String),
       $type: json['runtimeType'] as String?,
@@ -19,13 +19,14 @@ Map<String, dynamic> _$$_LogRecordToJson(_$_LogRecord instance) =>
       'runtimeType': instance.$type,
     };
 
-_$AnalyzerLogRecord _$$AnalyzerLogRecordFromJson(Map<String, dynamic> json) =>
+_$AnalyzerLogRecord _$$AnalyzerLogRecordFromJson(Map json) =>
     _$AnalyzerLogRecord(
       json['message'] as String,
       DateTime.parse(json['timestamp'] as String),
       root: json['root'] == null
           ? null
-          : ActivePackageRoot.fromJson(json['root'] as Map<String, dynamic>),
+          : ActivePackageRoot.fromJson(
+              Map<String, dynamic>.from(json['root'] as Map)),
       severity: $enumDecode(_$LogSeverityEnumMap, json['severity']),
       stackTrace: stringToStackNullable(json['stackTrace'] as String?),
       $type: json['runtimeType'] as String?,
@@ -35,8 +36,6 @@ Map<String, dynamic> _$$AnalyzerLogRecordToJson(_$AnalyzerLogRecord instance) {
   final val = <String, dynamic>{
     'message': instance.message,
     'timestamp': instance.timestamp.toIso8601String(),
-    'root': instance.root?.toJson(),
-    'severity': _$LogSeverityEnumMap[instance.severity]!,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -45,6 +44,8 @@ Map<String, dynamic> _$$AnalyzerLogRecordToJson(_$AnalyzerLogRecord instance) {
     }
   }
 
+  writeNotNull('root', instance.root?.toJson());
+  val['severity'] = _$LogSeverityEnumMap[instance.severity]!;
   writeNotNull('stackTrace', stackToStringNullable(instance.stackTrace));
   val['runtimeType'] = instance.$type;
   return val;
@@ -58,9 +59,8 @@ const _$LogSeverityEnumMap = {
   LogSeverity.unknown: 'unknown',
 };
 
-_$RuleLogRecord _$$RuleLogRecordFromJson(Map<String, dynamic> json) =>
-    _$RuleLogRecord(
-      RuleCode.fromJson(json['lintCode'] as Map<String, dynamic>),
+_$RuleLogRecord _$$RuleLogRecordFromJson(Map json) => _$RuleLogRecord(
+      RuleCode.fromJson(Map<String, dynamic>.from(json['lintCode'] as Map)),
       DateTime.parse(json['timestamp'] as String),
       $enumDecode(_$LogSeverityEnumMap, json['severity']),
       json['message'] as String,

@@ -6,11 +6,10 @@ part of 'source_file_edit.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SourceFileEdit _$$_SourceFileEditFromJson(Map<String, dynamic> json) =>
-    _$_SourceFileEdit(
+_$_SourceFileEdit _$$_SourceFileEditFromJson(Map json) => _$_SourceFileEdit(
       file: Uri.parse(json['file'] as String),
       edits: (json['edits'] as List<dynamic>)
-          .map((e) => SourceEdit.fromJson(e as Map<String, dynamic>))
+          .map((e) => SourceEdit.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       fileStamp: DateTime.parse(json['fileStamp'] as String),
     );

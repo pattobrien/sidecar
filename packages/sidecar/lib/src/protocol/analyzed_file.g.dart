@@ -6,8 +6,7 @@ part of 'analyzed_file.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_AnalyzedFile _$$_AnalyzedFileFromJson(Map<String, dynamic> json) =>
-    _$_AnalyzedFile(
+_$_AnalyzedFile _$$_AnalyzedFileFromJson(Map json) => _$_AnalyzedFile(
       Uri.parse(json['fileUri'] as String),
       contextRoot: Uri.parse(json['contextRoot'] as String),
     );

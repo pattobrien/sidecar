@@ -2,7 +2,7 @@ import 'package:yaml/yaml.dart';
 
 import '../../rules/rules.dart';
 import '../exceptions/exceptions.dart';
-import '../project/errors.dart';
+import '../sidecar_spec/errors.dart';
 
 extension YamlMapSeverity on YamlMap {
   SidecarExceptionTuple<LintSeverity?> parseSeverity() {

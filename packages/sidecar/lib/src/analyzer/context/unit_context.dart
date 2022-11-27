@@ -2,6 +2,7 @@ import 'package:analyzer/dart/analysis/results.dart';
 
 import '../../configurations/sidecar_spec/sidecar_spec_base.dart';
 
+/// Context for a single unit, including info about the workspace as a whole.
 abstract class UnitContext {
   ResolvedUnitResult get currentUnit;
   SidecarSpec get configuration;

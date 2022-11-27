@@ -6,9 +6,9 @@ part of 'messages.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$RequestMessage _$$RequestMessageFromJson(Map<String, dynamic> json) =>
-    _$RequestMessage(
-      request: SidecarRequest.fromJson(json['request'] as Map<String, dynamic>),
+_$RequestMessage _$$RequestMessageFromJson(Map json) => _$RequestMessage(
+      request: SidecarRequest.fromJson(
+          Map<String, dynamic>.from(json['request'] as Map)),
       id: json['id'] as String,
       $type: json['runtimeType'] as String?,
     );
@@ -20,9 +20,9 @@ Map<String, dynamic> _$$RequestMessageToJson(_$RequestMessage instance) =>
       'runtimeType': instance.$type,
     };
 
-_$ResponseMessage _$$ResponseMessageFromJson(Map<String, dynamic> json) =>
-    _$ResponseMessage(
-      SidecarResponse.fromJson(json['response'] as Map<String, dynamic>),
+_$ResponseMessage _$$ResponseMessageFromJson(Map json) => _$ResponseMessage(
+      SidecarResponse.fromJson(
+          Map<String, dynamic>.from(json['response'] as Map)),
       id: json['id'] as String,
       $type: json['runtimeType'] as String?,
     );
@@ -34,11 +34,10 @@ Map<String, dynamic> _$$ResponseMessageToJson(_$ResponseMessage instance) =>
       'runtimeType': instance.$type,
     };
 
-_$NotificationMessage _$$NotificationMessageFromJson(
-        Map<String, dynamic> json) =>
+_$NotificationMessage _$$NotificationMessageFromJson(Map json) =>
     _$NotificationMessage(
       notification: SidecarNotification.fromJson(
-          json['notification'] as Map<String, dynamic>),
+          Map<String, dynamic>.from(json['notification'] as Map)),
       $type: json['runtimeType'] as String?,
     );
 
@@ -49,8 +48,8 @@ Map<String, dynamic> _$$NotificationMessageToJson(
       'runtimeType': instance.$type,
     };
 
-_$LogMessage _$$LogMessageFromJson(Map<String, dynamic> json) => _$LogMessage(
-      LogRecord.fromJson(json['record'] as Map<String, dynamic>),
+_$LogMessage _$$LogMessageFromJson(Map json) => _$LogMessage(
+      LogRecord.fromJson(Map<String, dynamic>.from(json['record'] as Map)),
       $type: json['runtimeType'] as String?,
     );
 

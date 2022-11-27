@@ -21,7 +21,7 @@ class RuleInitializationService {
     final rulesForFile = <BaseRule>{};
     for (final packageOption in packageOptions) {
       final packageId = packageOption.key;
-      final ruleOptionEntries = packageOption.value.rules?.entries ?? [];
+      final ruleOptionEntries = packageOption.value.ruleOptions?.entries ?? [];
 
       for (final ruleEntry in ruleOptionEntries) {
         final ruleId = ruleEntry.key;

@@ -3,13 +3,14 @@ import 'package:yaml/yaml.dart';
 
 import '../../utils/logger/logger.dart';
 import '../exceptions/exceptions.dart';
-import '../project/errors.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'enums.dart';
+import 'errors.dart';
 import 'package_options.dart';
 import 'rule_options.dart';
 import 'sidecar_spec_base.dart';
 
+/// Create a SidecarSpec instance from raw file contents.
 SidecarExceptionTuple<SidecarSpec> parseSidecarSpecFromYaml(
   String contents, {
   Uri? fileUri,
@@ -27,7 +28,7 @@ SidecarExceptionTuple<SidecarSpec> parseSidecarSpecFromYaml(
             ?.nodes
             .map((dynamic key, value) {
           final parsedPackage =
-              parsePackageOptions(value, fileUri, RuleType.assist);
+              _parsePackageOptions(value, fileUri, RuleType.assist);
           parsedErrors.addAll(parsedPackage.item2);
           return MapEntry((key as YamlScalar).value as String,
               parsedPackage.item1 as AssistPackageOptions);
@@ -36,7 +37,7 @@ SidecarExceptionTuple<SidecarSpec> parseSidecarSpecFromYaml(
         final lintPackages =
             (contentMap?['lints'] as YamlMap?)?.nodes.map((dynamic key, value) {
           final parsedPackage =
-              parsePackageOptions(value, fileUri, RuleType.lint);
+              _parsePackageOptions(value, fileUri, RuleType.lint);
           parsedErrors.addAll(parsedPackage.item2);
           final entry = MapEntry((key as YamlScalar).value as String,
               parsedPackage.item1 as LintPackageOptions);
@@ -64,7 +65,7 @@ SidecarExceptionTuple<SidecarSpec> parseSidecarSpecFromYaml(
   );
 }
 
-SidecarExceptionTuple<PackageOptions> parsePackageOptions(
+SidecarExceptionTuple<PackageOptions> _parsePackageOptions(
   YamlNode? yamlNode,
   Uri? fileUri,
   RuleType ruleType,
@@ -72,13 +73,13 @@ SidecarExceptionTuple<PackageOptions> parsePackageOptions(
   final dynamic value = yamlNode?.value;
   if (value is YamlMap?) {
     return ruleType == RuleType.lint
-        ? parseLintPackageOptions(value, fileUri)
-        : parseAssistPackageOptions(value, fileUri);
+        ? _parseLintPackageOptions(value, fileUri)
+        : _parseAssistPackageOptions(value, fileUri);
   }
   throw StateError('unexpected lint rule package options type');
 }
 
-SidecarExceptionTuple<PackageOptions> parseAssistPackageOptions(
+SidecarExceptionTuple<PackageOptions> _parseAssistPackageOptions(
   YamlMap? yamlMap,
   Uri? fileUri,
 ) {
@@ -90,7 +91,7 @@ SidecarExceptionTuple<PackageOptions> parseAssistPackageOptions(
   final rulesNode = yamlMap?.nodes['rules'] as YamlMap?;
 
   final assistPackages = rulesNode?.nodes.map((dynamic key, value) {
-    final options = parseRuleOptions(value, fileUri, RuleType.assist);
+    final options = _parseRuleOptions(value, fileUri, RuleType.assist);
     errors.addAll(options.item2);
     return MapEntry(
         (key as YamlScalar).value as String, options.item1 as AssistOptions);
@@ -105,7 +106,7 @@ SidecarExceptionTuple<PackageOptions> parseAssistPackageOptions(
   return SidecarExceptionTuple(packageOptions, errors);
 }
 
-SidecarExceptionTuple<PackageOptions> parseLintPackageOptions(
+SidecarExceptionTuple<PackageOptions> _parseLintPackageOptions(
   YamlMap? yamlMap,
   Uri? fileUri,
 ) {
@@ -117,7 +118,7 @@ SidecarExceptionTuple<PackageOptions> parseLintPackageOptions(
   final rulesNode = yamlMap?.nodes['rules'] as YamlMap?;
 
   final lintMap = rulesNode?.nodes.map((dynamic key, value) {
-    final options = parseRuleOptions(value, fileUri, RuleType.lint);
+    final options = _parseRuleOptions(value, fileUri, RuleType.lint);
     errors.addAll(options.item2);
     return MapEntry(
         (key as YamlScalar).value as String, options.item1 as LintOptions);
@@ -132,7 +133,7 @@ SidecarExceptionTuple<PackageOptions> parseLintPackageOptions(
   return SidecarExceptionTuple(packageOptions, errors);
 }
 
-SidecarExceptionTuple<RuleOptions> parseRuleOptions(
+SidecarExceptionTuple<RuleOptions> _parseRuleOptions(
   YamlNode? yamlNode,
   Uri? fileUri,
   RuleType type,
@@ -151,13 +152,13 @@ SidecarExceptionTuple<RuleOptions> parseRuleOptions(
   }
   if (yamlNode is YamlMap) {
     return type == RuleType.lint
-        ? parseLintRuleOptions(yamlNode, fileUri)
-        : parseAssistRuleOptions(yamlNode, fileUri);
+        ? _parseLintRuleOptions(yamlNode, fileUri)
+        : _parseAssistRuleOptions(yamlNode, fileUri);
   }
   throw StateError('unexpected lint rule options type');
 }
 
-SidecarExceptionTuple<LintOptions> parseLintRuleOptions(
+SidecarExceptionTuple<LintOptions> _parseLintRuleOptions(
   YamlMap yamlMap,
   Uri? fileUri,
 ) {
@@ -183,7 +184,7 @@ SidecarExceptionTuple<LintOptions> parseLintRuleOptions(
   );
 }
 
-SidecarExceptionTuple<AssistOptions> parseAssistRuleOptions(
+SidecarExceptionTuple<AssistOptions> _parseAssistRuleOptions(
   YamlMap yamlMap,
   Uri? fileUri,
 ) {

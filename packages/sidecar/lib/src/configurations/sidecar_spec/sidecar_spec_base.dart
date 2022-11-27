@@ -9,7 +9,7 @@ import 'rule_options.dart';
 
 part 'sidecar_spec_base.g.dart';
 
-@JsonSerializable(anyMap: true, includeIfNull: false)
+@JsonSerializable()
 class SidecarSpec {
   const SidecarSpec({
     this.includes,

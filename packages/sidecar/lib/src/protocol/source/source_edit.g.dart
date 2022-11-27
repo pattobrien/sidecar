@@ -6,8 +6,7 @@ part of 'source_edit.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SourceEdit _$$_SourceEditFromJson(Map<String, dynamic> json) =>
-    _$_SourceEdit(
+_$_SourceEdit _$$_SourceEditFromJson(Map json) => _$_SourceEdit(
       originalSourceSpan: sourceSpanFromJson(
           json['originalSourceSpan'] as Map<String, dynamic>),
       replacement: json['replacement'] as String,

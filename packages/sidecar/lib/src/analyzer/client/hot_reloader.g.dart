@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $HotReloadNotifierHash() => r'07b3d2999593879499977c98976fc921b62b4e28';
+String $HotReloadNotifierHash() => r'5fe563b4965e4cc77d1bfb84767957d7c19e1551';
 
 /// See also [HotReloadNotifier].
 final hotReloadNotifierProvider =

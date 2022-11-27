@@ -6,32 +6,50 @@ part of 'rule_code.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$LintCode _$$LintCodeFromJson(Map<String, dynamic> json) => _$LintCode(
+_$LintCode _$$LintCodeFromJson(Map json) => _$LintCode(
       json['code'] as String,
       package: json['package'] as String,
       url: json['url'] == null ? null : Uri.parse(json['url'] as String),
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$LintCodeToJson(_$LintCode instance) =>
-    <String, dynamic>{
-      'code': instance.code,
-      'package': instance.package,
-      'url': instance.url?.toString(),
-      'runtimeType': instance.$type,
-    };
+Map<String, dynamic> _$$LintCodeToJson(_$LintCode instance) {
+  final val = <String, dynamic>{
+    'code': instance.code,
+    'package': instance.package,
+  };
 
-_$AssistCode _$$AssistCodeFromJson(Map<String, dynamic> json) => _$AssistCode(
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('url', instance.url?.toString());
+  val['runtimeType'] = instance.$type;
+  return val;
+}
+
+_$AssistCode _$$AssistCodeFromJson(Map json) => _$AssistCode(
       json['code'] as String,
       package: json['package'] as String,
       url: json['url'] == null ? null : Uri.parse(json['url'] as String),
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$AssistCodeToJson(_$AssistCode instance) =>
-    <String, dynamic>{
-      'code': instance.code,
-      'package': instance.package,
-      'url': instance.url?.toString(),
-      'runtimeType': instance.$type,
-    };
+Map<String, dynamic> _$$AssistCodeToJson(_$AssistCode instance) {
+  final val = <String, dynamic>{
+    'code': instance.code,
+    'package': instance.package,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('url', instance.url?.toString());
+  val['runtimeType'] = instance.$type;
+  return val;
+}

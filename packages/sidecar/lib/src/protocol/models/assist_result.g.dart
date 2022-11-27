@@ -6,9 +6,9 @@ part of 'assist_result.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AssistFilterResult _$$AssistFilterResultFromJson(Map<String, dynamic> json) =>
+_$AssistFilterResult _$$AssistFilterResultFromJson(Map json) =>
     _$AssistFilterResult(
-      rule: RuleCode.fromJson(json['rule'] as Map<String, dynamic>),
+      rule: RuleCode.fromJson(Map<String, dynamic>.from(json['rule'] as Map)),
       span: sourceSpanFromJson(json['span'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
@@ -21,13 +21,13 @@ Map<String, dynamic> _$$AssistFilterResultToJson(
       'runtimeType': instance.$type,
     };
 
-_$AssistResultWithEdits _$$AssistResultWithEditsFromJson(
-        Map<String, dynamic> json) =>
+_$AssistResultWithEdits _$$AssistResultWithEditsFromJson(Map json) =>
     _$AssistResultWithEdits(
-      code: RuleCode.fromJson(json['code'] as Map<String, dynamic>),
+      code: RuleCode.fromJson(Map<String, dynamic>.from(json['code'] as Map)),
       span: sourceSpanFromJson(json['span'] as Map<String, dynamic>),
       edits: (json['edits'] as List<dynamic>?)
-              ?.map((e) => EditResult.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  EditResult.fromJson(Map<String, dynamic>.from(e as Map)))
               .toList() ??
           const <EditResult>[],
       $type: json['runtimeType'] as String?,

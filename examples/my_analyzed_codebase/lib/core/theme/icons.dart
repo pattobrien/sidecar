@@ -20,3 +20,7 @@ final y = 1;
 class ProjectIcons3 {
   static const abc = Icons.shield_outlined;
 }
+
+class ProjectTextStyles {
+  static const main = TextStyle();
+}

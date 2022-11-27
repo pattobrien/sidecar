@@ -7,7 +7,7 @@ part of 'requests.dart';
 // **************************************************************************
 
 _$SetContextCollectionRequest _$$SetContextCollectionRequestFromJson(
-        Map<String, dynamic> json) =>
+        Map json) =>
     _$SetContextCollectionRequest(
       (json['roots'] as List<dynamic>?)
           ?.map((e) => Uri.parse(e as String))
@@ -16,14 +16,21 @@ _$SetContextCollectionRequest _$$SetContextCollectionRequestFromJson(
     );
 
 Map<String, dynamic> _$$SetContextCollectionRequestToJson(
-        _$SetContextCollectionRequest instance) =>
-    <String, dynamic>{
-      'roots': instance.roots?.map((e) => e.toString()).toList(),
-      'runtimeType': instance.$type,
-    };
+    _$SetContextCollectionRequest instance) {
+  final val = <String, dynamic>{};
 
-_$LintRequest _$$LintRequestFromJson(Map<String, dynamic> json) =>
-    _$LintRequest(
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('roots', instance.roots?.map((e) => e.toString()).toList());
+  val['runtimeType'] = instance.$type;
+  return val;
+}
+
+_$LintRequest _$$LintRequestFromJson(Map json) => _$LintRequest(
       (json['files'] as List<dynamic>).map((e) => e as String).toList(),
       $type: json['runtimeType'] as String?,
     );
@@ -34,9 +41,9 @@ Map<String, dynamic> _$$LintRequestToJson(_$LintRequest instance) =>
       'runtimeType': instance.$type,
     };
 
-_$AssistRequest _$$AssistRequestFromJson(Map<String, dynamic> json) =>
-    _$AssistRequest(
-      file: AnalyzedFile.fromJson(json['file'] as Map<String, dynamic>),
+_$AssistRequest _$$AssistRequestFromJson(Map json) => _$AssistRequest(
+      file:
+          AnalyzedFile.fromJson(Map<String, dynamic>.from(json['file'] as Map)),
       offset: json['offset'] as int,
       length: json['length'] as int,
       $type: json['runtimeType'] as String?,
@@ -50,9 +57,9 @@ Map<String, dynamic> _$$AssistRequestToJson(_$AssistRequest instance) =>
       'runtimeType': instance.$type,
     };
 
-_$QuickFixRequest _$$QuickFixRequestFromJson(Map<String, dynamic> json) =>
-    _$QuickFixRequest(
-      file: AnalyzedFile.fromJson(json['file'] as Map<String, dynamic>),
+_$QuickFixRequest _$$QuickFixRequestFromJson(Map json) => _$QuickFixRequest(
+      file:
+          AnalyzedFile.fromJson(Map<String, dynamic>.from(json['file'] as Map)),
       offset: json['offset'] as int,
       $type: json['runtimeType'] as String?,
     );
@@ -64,10 +71,11 @@ Map<String, dynamic> _$$QuickFixRequestToJson(_$QuickFixRequest instance) =>
       'runtimeType': instance.$type,
     };
 
-_$FileUpdateRequest _$$FileUpdateRequestFromJson(Map<String, dynamic> json) =>
+_$FileUpdateRequest _$$FileUpdateRequestFromJson(Map json) =>
     _$FileUpdateRequest(
       (json['updates'] as List<dynamic>)
-          .map((e) => FileUpdateEvent.fromJson(e as Map<String, dynamic>))
+          .map((e) =>
+              FileUpdateEvent.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       $type: json['runtimeType'] as String?,
     );
@@ -78,11 +86,11 @@ Map<String, dynamic> _$$FileUpdateRequestToJson(_$FileUpdateRequest instance) =>
       'runtimeType': instance.$type,
     };
 
-_$SetPriorityFilesRequest _$$SetPriorityFilesRequestFromJson(
-        Map<String, dynamic> json) =>
+_$SetPriorityFilesRequest _$$SetPriorityFilesRequestFromJson(Map json) =>
     _$SetPriorityFilesRequest(
       (json['files'] as List<dynamic>)
-          .map((e) => AnalyzedFile.fromJson(e as Map<String, dynamic>))
+          .map(
+              (e) => AnalyzedFile.fromJson(Map<String, dynamic>.from(e as Map)))
           .toSet(),
       $type: json['runtimeType'] as String?,
     );

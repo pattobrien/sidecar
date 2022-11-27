@@ -9,6 +9,7 @@ export '../src/rules/lint_severity.dart';
 export '../src/rules/typedefs.dart';
 export 'mixins.dart';
 
+/// Base for all Sidecar Rules.
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void>
     with BaseRule {
   @override

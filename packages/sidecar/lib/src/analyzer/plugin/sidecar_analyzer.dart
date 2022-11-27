@@ -105,12 +105,12 @@ class SidecarAnalyzer {
     final roots = request.roots;
     if (roots == null) {
       // scope = the entire package_config.json of the active package
-      final pubCache = Platform.environment['PUB_CACHE'];
+      // final pubCache = Platform.environment['PUB_CACHE'];
       final activePackage = _ref.read(activePackageProvider).packageRoot.root;
       _ref.read(workspaceScopeProvider.state).update((_) => [activePackage]);
     } else {
       // scope = roots
-      print('SET ROOTS: ${roots}');
+      print('SET ROOTS: $roots');
       _ref.read(workspaceScopeProvider.state).update((_) => roots);
     }
     final files = _ref.refresh(activeProjectScopedFilesProvider);

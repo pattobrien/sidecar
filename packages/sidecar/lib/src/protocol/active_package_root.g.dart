@@ -6,7 +6,7 @@ part of 'active_package_root.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ActivePackageRoot _$$_ActivePackageRootFromJson(Map<String, dynamic> json) =>
+_$_ActivePackageRoot _$$_ActivePackageRootFromJson(Map json) =>
     _$_ActivePackageRoot(
       Uri.parse(json['root'] as String),
     );

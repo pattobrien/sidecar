@@ -6,8 +6,7 @@ part of 'responses.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SetWorkspaceResponse _$$SetWorkspaceResponseFromJson(
-        Map<String, dynamic> json) =>
+_$SetWorkspaceResponse _$$SetWorkspaceResponseFromJson(Map json) =>
     _$SetWorkspaceResponse(
       $type: json['runtimeType'] as String?,
     );
@@ -18,10 +17,10 @@ Map<String, dynamic> _$$SetWorkspaceResponseToJson(
       'runtimeType': instance.$type,
     };
 
-_$AssistResponse _$$AssistResponseFromJson(Map<String, dynamic> json) =>
-    _$AssistResponse(
+_$AssistResponse _$$AssistResponseFromJson(Map json) => _$AssistResponse(
       (json['results'] as List<dynamic>)
-          .map((e) => AssistResultWithEdits.fromJson(e as Map<String, dynamic>))
+          .map((e) => AssistResultWithEdits.fromJson(
+              Map<String, dynamic>.from(e as Map)))
           .toSet(),
       $type: json['runtimeType'] as String?,
     );
@@ -32,10 +31,10 @@ Map<String, dynamic> _$$AssistResponseToJson(_$AssistResponse instance) =>
       'runtimeType': instance.$type,
     };
 
-_$QuickFixResponse _$$QuickFixResponseFromJson(Map<String, dynamic> json) =>
-    _$QuickFixResponse(
+_$QuickFixResponse _$$QuickFixResponseFromJson(Map json) => _$QuickFixResponse(
       (json['results'] as List<dynamic>)
-          .map((e) => LintResultWithEdits.fromJson(e as Map<String, dynamic>))
+          .map((e) =>
+              LintResultWithEdits.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       $type: json['runtimeType'] as String?,
     );
@@ -46,10 +45,9 @@ Map<String, dynamic> _$$QuickFixResponseToJson(_$QuickFixResponse instance) =>
       'runtimeType': instance.$type,
     };
 
-_$LintResponse _$$LintResponseFromJson(Map<String, dynamic> json) =>
-    _$LintResponse(
+_$LintResponse _$$LintResponseFromJson(Map json) => _$LintResponse(
       (json['lints'] as List<dynamic>)
-          .map((e) => LintResult.fromJson(e as Map<String, dynamic>))
+          .map((e) => LintResult.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       $type: json['runtimeType'] as String?,
     );
@@ -60,8 +58,7 @@ Map<String, dynamic> _$$LintResponseToJson(_$LintResponse instance) =>
       'runtimeType': instance.$type,
     };
 
-_$UpdateFilesResponse _$$UpdateFilesResponseFromJson(
-        Map<String, dynamic> json) =>
+_$UpdateFilesResponse _$$UpdateFilesResponseFromJson(Map json) =>
     _$UpdateFilesResponse(
       $type: json['runtimeType'] as String?,
     );
@@ -72,8 +69,7 @@ Map<String, dynamic> _$$UpdateFilesResponseToJson(
       'runtimeType': instance.$type,
     };
 
-_$SetPriorityFilesResponse _$$SetPriorityFilesResponseFromJson(
-        Map<String, dynamic> json) =>
+_$SetPriorityFilesResponse _$$SetPriorityFilesResponseFromJson(Map json) =>
     _$SetPriorityFilesResponse(
       $type: json['runtimeType'] as String?,
     );
