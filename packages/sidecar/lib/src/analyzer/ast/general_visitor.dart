@@ -11,7 +11,7 @@ class RegisteredLintVisitor extends AstVisitor<void> {
 
   final NodeRegistry registry;
   final lintResults = <LintResult>{};
-  final assistResults = <LintResult>{};
+  final assistResults = <AssistFilterResult>{};
 
   @override
   void visitAdjacentStrings(AdjacentStrings node) {

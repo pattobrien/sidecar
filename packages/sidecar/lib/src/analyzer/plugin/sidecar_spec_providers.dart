@@ -8,6 +8,7 @@ import '../../protocol/models/rule_code.dart';
 import 'active_package_provider.dart';
 
 final projectSidecarSpecProvider = Provider<SidecarSpec>((ref) {
+  //TODO: listen to sidecar.yaml config file for changes via resourceProvider
   final activePackage = ref.watch(activePackageProvider);
   return activePackage.sidecarSpec;
 });

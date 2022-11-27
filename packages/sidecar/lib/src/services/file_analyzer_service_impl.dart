@@ -24,7 +24,7 @@ class FileAnalyzerServiceImpl {
     return results;
   }
 
-  Set<LintResult> visitAssistFilters({
+  Set<AssistFilterResult> visitAssistFilters({
     required ResolvedUnitResult? unitResult,
     required Set<QuickAssist> rules,
     required NodeRegistry registry,
@@ -36,7 +36,7 @@ class FileAnalyzerServiceImpl {
 
     final mainVisitor = RegisteredLintVisitor(registry);
     unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.lintResults;
+    final results = mainVisitor.assistResults;
     return results;
   }
 

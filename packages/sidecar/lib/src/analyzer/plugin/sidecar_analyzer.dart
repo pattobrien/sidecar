@@ -228,7 +228,7 @@ class SidecarAnalyzer {
     }
     for (final file in dartFiles) {
       _ref.refresh(quickFixResultsProvider(file));
-      _ref.refresh(assistFiltersProvider(file));
+      await _ref.refresh(assistFiltersProvider(file));
     }
     logger.finest('finished analyzeFiles');
   }
@@ -272,11 +272,6 @@ class SidecarAnalyzer {
         return AssistResultWithEdits(code: e.rule, span: e.span, edits: edits);
       }));
       return AssistResponse(results.toSet());
-      // logger.info('GETASSISTS TOTAL ${results.length}');
-      // final resultsAtOffset = results
-      //     .where((result) => result.isWithinOffset(file.path, request.offset));
-      // logger.info('GETASSISTS AT OFFSET ${resultsAtOffset.length}');
-      // return AssistResponse(resultsAtOffset.toList());
     } catch (e, stack) {
       logger.severe('handleEditGetAssists ${file.relativePath}', e, stack);
       rethrow;

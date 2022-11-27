@@ -2,18 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:riverpod/riverpod.dart';
+import 'package:sidecar/sidecar.dart';
 
-import '../../../sidecar.dart';
 import '../../protocol/analyzed_file.dart';
 import '../../protocol/models/analysis_result.dart';
-import '../../protocol/models/assist_result.dart';
 import '../../services/file_analyzer_service_impl.dart';
-import '../ast/general_visitor.dart';
-import '../visitors/annotation_visitor.dart';
-import 'files_provider.dart';
 import 'plugin.dart';
 import 'resolved_unit_provider.dart';
-import 'scoped_rules_provider.dart';
 
 //
 const proactiveAssistFilter = true;
@@ -68,15 +63,8 @@ final lintResultsProvider =
   return runZonedGuarded<Set<LintResult>>(
         () => analyzerService.visitLintResults(
             unitResult: unit, rules: rulesForFile, registry: registry),
-        (error, stack) {
-          log(
-            'lintResultsProvider error',
-            error: error,
-            stackTrace: stack,
-            time: DateTime.now(),
-            name: 'lintResults',
-          );
-        },
+        (error, stack) => log('lintResultsProvider error',
+            error: error, stackTrace: stack, name: 'lintResults'),
       ) ??
       {};
 });
@@ -93,7 +81,7 @@ final lintResultsCompleterProvider = FutureProvider((ref) async {
 });
 
 final assistFiltersProvider = FutureProvider.family
-    .autoDispose<Set<LintResult>, AnalyzedFile>((ref, file) async {
+    .autoDispose<Set<AssistFilterResult>, AnalyzedFile>((ref, file) async {
   final rules = ref.watch(scopedAssistRulesForFileProvider(file));
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
   final registry = ref.watch(nodeAssistRegistryForFileAssistsProvider(file));
@@ -101,20 +89,15 @@ final assistFiltersProvider = FutureProvider.family
   print('ASSIST FILTERS RULES: ${rules.length}');
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
 
-  return runZonedGuarded<Set<LintResult>>(
+  return runZonedGuarded<Set<AssistFilterResult>>(
         () {
           final results = analyzerService.visitAssistFilters(
-            unitResult: unit,
-            rules: rules,
-            registry: registry,
-          );
+              unitResult: unit, rules: rules, registry: registry);
           print('ASSIST FILTERS RESULTS: ${results.length}');
           return results;
         },
-        (error, stack) {
-          log('lintResultsProvider error',
-              error: error, stackTrace: stack, name: 'lintResults');
-        },
+        (error, stack) => log('lintResultsProvider error',
+            error: error, stackTrace: stack, name: 'lintResults'),
       ) ??
       {};
 });

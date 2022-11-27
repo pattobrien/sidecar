@@ -13,6 +13,7 @@ class OutputAstNodeTree extends SidecarAstVisitor with QuickAssist {
   @override
   void initializeVisitor(NodeRegistry registry) {
     registry.addNode(this);
+    registry.addSimpleStringLiteral(this);
   }
 
   @override
@@ -20,6 +21,15 @@ class OutputAstNodeTree extends SidecarAstVisitor with QuickAssist {
     reportAssistForNode(
       node,
       message: 'message',
+      editsComputer: () => nodeChangeComputer(node),
+    );
+  }
+
+  @override
+  void visitStringLiteral(StringLiteral node) {
+    reportAssistForNode(
+      node,
+      message: 'STRING ASSIST',
       editsComputer: () => nodeChangeComputer(node),
     );
   }

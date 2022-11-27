@@ -23,7 +23,7 @@ mixin BaseRule {
   List<Glob>? get excludes => null;
 
   final Set<LintResult> lintResults = {};
-  final Set<LintResult> assistFilterResults = {};
+  final Set<AssistFilterResult> assistFilterResults = {};
   late ResolvedUnitResult _unit;
   late SidecarSpec sidecarSpec;
 
@@ -71,6 +71,14 @@ mixin BaseRule {
         editsComputer: editsComputer,
       );
       lintResults.add(result);
+    }
+    if (this is QuickAssist) {
+      final result = AssistFilterResult(
+        rule: code,
+        span: span,
+        editsComputer: editsComputer,
+      );
+      assistFilterResults.add(result);
     }
   }
 
