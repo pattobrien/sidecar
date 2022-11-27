@@ -74,7 +74,7 @@ class CliClient extends AnalyzerClient {
 
     final subscription = runner.lints.listen(reporter.handleLintNotification);
     _subscriptions.add(subscription);
-    await runner.initialize();
+    await runner.initialize([root]);
     const request = SetContextCollectionRequest(null);
     await runner.asyncRequest<SetWorkspaceResponse>(request);
     reporter.print();
