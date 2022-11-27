@@ -8,20 +8,16 @@ import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
 import '../utils/utils.dart';
 
+/// Service for initializing Sidecar Rules based on SidecarSpec configuration.
 class RuleInitializationService {
-  const RuleInitializationService();
-
   /// Returns all of the rules that match sidecar spec for a particular file.
   Set<BaseRule> getRulesForFile({
     required AnalyzedFile file,
-    required SidecarSpec sidecarSpec,
+    required SidecarSpec spec,
     required List<SidecarBaseConstructor> constructors,
   }) {
     final rules = constructors.map((e) => e());
-    final packageOptions = [
-      ...?sidecarSpec.assists?.entries,
-      ...?sidecarSpec.lints?.entries,
-    ];
+    final packageOptions = [...?spec.assists?.entries, ...?spec.lints?.entries];
     final rulesForFile = <BaseRule>{};
     for (final packageOption in packageOptions) {
       final packageId = packageOption.key;
@@ -30,9 +26,7 @@ class RuleInitializationService {
       for (final ruleEntry in ruleOptionEntries) {
         final ruleId = ruleEntry.key;
         final thisRule = rules.firstWhereOrNull((rule) {
-          final isMatch =
-              rule.code.code == ruleId && rule.code.package == packageId;
-          return isMatch;
+          return rule.code.code == ruleId && rule.code.package == packageId;
         });
 
         if (thisRule == null) {
@@ -42,22 +36,22 @@ class RuleInitializationService {
 
         // check if rules are configured
 
-        final rootExcludes = sidecarSpec.excludes;
-        final rootIncludes = sidecarSpec.includes;
+        final rootExcludes = spec.excludes ?? SidecarSpec.defaultExcludes;
+        final rootIncludes = spec.includes ?? SidecarSpec.defaultIncludes;
         final packageIncludes = packageOption.value.includes;
         final packageExcludes = packageOption.value.excludes;
         final ruleIncludes = ruleEntry.value.includes ?? thisRule.includes;
         final ruleExcludes = ruleEntry.value.excludes ?? thisRule.excludes;
 
         final isFileIncluded = isIncluded(file.relativePath,
-            [...?rootIncludes, ...?packageIncludes, ...?ruleIncludes]);
+            [...rootIncludes, ...?packageIncludes, ...?ruleIncludes]);
         if (!isFileIncluded) {
           print('getRulesForFile $ruleId is not included');
           continue;
         }
 
         final isFileExcluded = isExcluded(file.relativePath,
-            [...?rootExcludes, ...?packageExcludes, ...?ruleExcludes]);
+            [...rootExcludes, ...?packageExcludes, ...?ruleExcludes]);
         if (isFileExcluded) {
           print('getRulesForFile $ruleId is excluded');
           continue;
@@ -146,7 +140,7 @@ class RuleInitializationService {
 }
 
 final ruleInitializationServiceProvider = Provider(
-  (_) => const RuleInitializationService(),
+  (_) => RuleInitializationService(),
   name: 'ruleInitializationServiceProvider',
   dependencies: const [],
 );

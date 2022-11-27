@@ -1,23 +1,22 @@
-import 'package:analyzer/error/error.dart';
-import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:cli_util/cli_logging.dart';
 
 import '../configurations/configurations.dart';
 
-enum LintSeverity { info, warning, error }
+/// Severity level for Lint rules.
+enum LintSeverity {
+  /// Lowest severity, equates to a blue underline in an IDE.
+  info,
 
+  /// A yellow underline in an IDE.
+  warning,
+
+  /// A red underline in an IDE, code will not compile with an error.
+  error,
+}
+
+/// Utilities for outputing LintSeverity.
 extension LintSeverityX on LintSeverity {
-  plugin.AnalysisErrorSeverity get analysisError {
-    switch (this) {
-      case LintSeverity.info:
-        return plugin.AnalysisErrorSeverity.INFO;
-      case LintSeverity.warning:
-        return plugin.AnalysisErrorSeverity.WARNING;
-      case LintSeverity.error:
-        return plugin.AnalysisErrorSeverity.ERROR;
-    }
-  }
-
+  /// Generate enum from it's string representation.
   static LintSeverity fromString(String string) {
     if (string == LintSeverity.error.name ||
         string == '"${LintSeverity.error.name}"') {
@@ -46,22 +45,6 @@ extension LintSeverityX on LintSeverity {
         return '${ansi.bold}${ansi.red}$name${ansi.none}';
       default:
         throw UnimplementedError();
-    }
-  }
-}
-
-extension AnalysisErrorSeverityX on ErrorSeverity {
-  LintSeverity toSidecarSeverity() {
-    switch (name) {
-      case 'INFO':
-        return LintSeverity.info;
-      case 'WARNING':
-        return LintSeverity.warning;
-      case 'ERROR':
-        return LintSeverity.error;
-      default:
-        throw UnimplementedError(
-            'invalid analysis error conversion from sidecar.');
     }
   }
 }

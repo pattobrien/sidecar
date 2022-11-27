@@ -6,6 +6,7 @@ import '../../rules/lint_severity.dart';
 import '../../utils/utils.dart';
 import '../communication/communication.dart';
 import '../models/models.dart';
+import 'severity_ext.dart';
 import 'source_exts.dart';
 
 extension LintResultX on AnalysisResult {

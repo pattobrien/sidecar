@@ -71,14 +71,9 @@ mixin BaseRule {
         editsComputer: editsComputer,
       );
       lintResults.add(result);
-    }
-    if (this is QuickAssist) {
-      final result = AssistFilterResult(
-        rule: code,
-        span: span,
-        editsComputer: editsComputer,
-      );
-      assistFilterResults.add(result);
+    } else {
+      throw UnimplementedError(
+          '_reportAssistSourceSpan should receive QuickAssist rules only.');
     }
   }
 

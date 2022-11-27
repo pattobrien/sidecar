@@ -1,3 +1,0 @@
-class ScopeService {
-  ScopeService();
-}

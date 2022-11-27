@@ -5,7 +5,9 @@ import '../analyzer/ast/ast.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 
+/// Service for generating Analysis Results for a particular file.
 class FileAnalyzerServiceImpl {
+  /// Service for generating Analysis Results for a particular file.
   const FileAnalyzerServiceImpl();
 
   Set<LintResult> visitLintResults({
@@ -40,22 +42,6 @@ class FileAnalyzerServiceImpl {
     return results;
   }
 
-  Set<LintResult> visitAssistResults({
-    required ResolvedUnitResult? unitResult,
-    required List<QuickAssist> rules,
-    required NodeRegistry registry,
-  }) {
-    if (unitResult == null) return {};
-    for (final visitor in rules) {
-      visitor.setUnitContext(unitResult);
-    }
-
-    final mainVisitor = RegisteredLintVisitor(registry);
-    unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.lintResults;
-    return results;
-  }
-
   Iterable<LintResult> getAnalysisResultsAtOffset(
     Iterable<LintResult> analysisResults,
     QuickFixRequest request,
@@ -65,6 +51,7 @@ class FileAnalyzerServiceImpl {
   }
 }
 
+/// Service for generating Analysis Results for a particular file.
 final fileAnalyzerServiceProvider = Provider(
   (ref) => const FileAnalyzerServiceImpl(),
   name: 'fileAnalyzerServiceProvider',

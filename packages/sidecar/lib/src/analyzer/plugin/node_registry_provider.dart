@@ -26,7 +26,7 @@ final _scopedRulesForFileProvider =
   final activeProjectRules = ref.watch(_scopedRulesForActiveProjectProvider);
   final rulesForFile = ruleService
       .getRulesForFile(
-          file: file, sidecarSpec: sidecarSpec, constructors: constructors)
+          file: file, spec: sidecarSpec, constructors: constructors)
       .intersection(activeProjectRules);
 
   print('_scopedRulesForFileProvider ${rulesForFile.map((e) => e.code)}');

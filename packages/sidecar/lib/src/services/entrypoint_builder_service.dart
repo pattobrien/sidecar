@@ -10,12 +10,14 @@ import '../utils/file_paths.dart';
 import '../utils/logger/logger.dart';
 import 'active_project_service.dart';
 
+/// Service for creating entrypoint files for Sidecar Analyzer.
 class EntrypointBuilderService {
+  /// Service for creating entrypoint files for Sidecar Analyzer.
   const EntrypointBuilderService({
-    required this.resourceProvider,
-  });
+    required ResourceProvider resourceProvider,
+  }) : _resourceProvider = resourceProvider;
 
-  final ResourceProvider resourceProvider;
+  final ResourceProvider _resourceProvider;
 
   void setupPluginSourceFiles(
     Uri packageRoot,
@@ -24,7 +26,7 @@ class EntrypointBuilderService {
     final pluginSourceFolder =
         pluginRoot.resolve(p.join('tools', 'analyzer_plugin', 'bin'));
     final sourceExecutableFolder =
-        resourceProvider.getFolder(pluginSourceFolder.path);
+        _resourceProvider.getFolder(pluginSourceFolder.path);
 
     final pluginFileResources = sourceExecutableFolder.getChildren();
 
@@ -38,7 +40,7 @@ class EntrypointBuilderService {
           packageRoot.resolve(p.join(kDartTool, kSidecarPluginName));
       final newPath =
           _pluginPath(sourceFileEntity.path, newDirectory: newDirectory);
-      final newFile = resourceProvider.getFile(newPath);
+      final newFile = _resourceProvider.getFile(newPath);
       sourceFileEntity.copyTo(newFile.parent);
     });
   }
@@ -50,13 +52,13 @@ class EntrypointBuilderService {
   ) {
     final constructorUri = packageRoot
         .resolve(p.join(kDartTool, kSidecarPluginName, 'constructors.dart'));
-    final service = ActiveProjectService(resourceProvider: resourceProvider);
+    final service = ActiveProjectService(resourceProvider: _resourceProvider);
     final config = service.getPackageConfig(packageRoot);
     final sidecarPackages = service.getSidecarDependencies(config);
     logger.finer(
         'setupBootstrapper || adding ${sidecarPackages.length} packages');
     final content = generateEntrypointContent(sidecarPackages);
-    final file = resourceProvider.getFile(constructorUri.path);
+    final file = _resourceProvider.getFile(constructorUri.path);
     file.writeAsStringSync(content);
   }
 
@@ -86,10 +88,6 @@ class EntrypointBuilderService {
 
     return fullContentsBuffer.toString();
   }
-
-  // Uri _packageToolDirectory(Uri projectRoot) => projectRoot.resolve(
-  //       p.join(kDartTool, kSidecarPluginName),
-  //     );
 }
 
 final isolateBuilderServiceProvider = Provider(
