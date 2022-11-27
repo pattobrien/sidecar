@@ -2,16 +2,21 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:meta/meta.dart';
 
-import '../../../rules/rules.dart' hide Configuration;
+import '../../../rules/rules.dart';
 import '../../protocol/protocol.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';
 
-class RegisteredLintVisitor extends GeneralizingAstVisitor<void> {
-  RegisteredLintVisitor(this.registry);
+/// Visitor that executes all visit methods of a given NodeRegistry.
+class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
+  /// Visitor that executes all visit methods of a given NodeRegistry.
+  RegisteredRuleVisitor(this.registry);
 
+  /// Contains aggregated lists of Sidecar Rule visitor methods for a given file.
   final NodeRegistry registry;
+
+  //TODO: can we combine lintResults and assistResults ?
   @internal
   final lintResults = <LintResult>{};
   @internal

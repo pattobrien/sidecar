@@ -5,10 +5,12 @@ import '../../../rules/rules.dart';
 /// A single subscription for a node type, by the specified [visitor].
 @internal
 class VisitorSubscription<T> {
-  VisitorSubscription(this.visitor, this.timer);
+  /// A single subscription for a node type, by the specified [visitor].
+  const VisitorSubscription(this.visitor, this.timer);
 
-  // @Deprecated('message')
-  // final LintMixin rule;
+  /// BaseRule of the subscription.
   final SidecarAstVisitor visitor;
+
+  /// Timer to record how long it takes to run a given visit method.
   final Stopwatch? timer;
 }

@@ -20,7 +20,7 @@ class FileAnalyzerServiceImpl {
       rule.setUnitContext(unitResult);
     }
 
-    final mainVisitor = RegisteredLintVisitor(registry);
+    final mainVisitor = RegisteredRuleVisitor(registry);
     unitResult.unit.accept(mainVisitor);
     final results = mainVisitor.lintResults;
     return results;
@@ -36,7 +36,7 @@ class FileAnalyzerServiceImpl {
       rule.setUnitContext(unitResult);
     }
 
-    final mainVisitor = RegisteredLintVisitor(registry);
+    final mainVisitor = RegisteredRuleVisitor(registry);
     unitResult.unit.accept(mainVisitor);
     final results = mainVisitor.assistResults;
     return results;
