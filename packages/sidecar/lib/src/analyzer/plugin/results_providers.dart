@@ -4,8 +4,6 @@ import 'dart:developer';
 import 'package:riverpod/riverpod.dart';
 import 'package:sidecar/sidecar.dart';
 
-import '../../protocol/analyzed_file.dart';
-import '../../protocol/models/analysis_result.dart';
 import '../../services/file_analyzer_service_impl.dart';
 import 'plugin.dart';
 import 'resolved_unit_provider.dart';

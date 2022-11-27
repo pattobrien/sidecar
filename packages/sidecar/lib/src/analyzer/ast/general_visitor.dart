@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
 
 import '../../../rules/rules.dart' hide Configuration;
 import '../../protocol/protocol.dart';
@@ -6,12 +7,20 @@ import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';
 
-class RegisteredLintVisitor extends AstVisitor<void> {
+class RegisteredLintVisitor extends GeneralizingAstVisitor<void> {
   RegisteredLintVisitor(this.registry);
 
   final NodeRegistry registry;
+
   final lintResults = <LintResult>{};
   final assistResults = <AssistFilterResult>{};
+
+  @override
+  void visitNode(AstNode node) {
+    _runSubscriptions(node, registry._forNode);
+    node.visitChildren(this);
+    super.visitNode(node);
+  }
 
   @override
   void visitAdjacentStrings(AdjacentStrings node) {

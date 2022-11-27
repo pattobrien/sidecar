@@ -1,0 +1,3 @@
+class ScopeService {
+  ScopeService();
+}

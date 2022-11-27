@@ -82,6 +82,23 @@ mixin BaseRule {
     }
   }
 
+  void _reportAssistSourceSpan(
+    SourceSpan span, {
+    EditsComputer? editsComputer,
+  }) {
+    if (this is QuickAssist) {
+      final result = AssistFilterResult(
+        rule: code,
+        span: span,
+        editsComputer: editsComputer,
+      );
+      assistFilterResults.add(result);
+    } else {
+      throw UnimplementedError(
+          '_reportAssistSourceSpan should receive QuickAssist rules only.');
+    }
+  }
+
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
@@ -150,17 +167,17 @@ mixin QuickFix on Lint {
 mixin QuickAssist on BaseRule {
   void reportAssistForNode(
     AstNode node, {
-    @Deprecated('only use EditResult message') required String message,
+    @Deprecated('only use EditResult message') String? message,
     EditsComputer? editsComputer,
   }) =>
-      _reportSourceSpan(node.toSourceSpan(_unit), message,
+      _reportAssistSourceSpan(node.toSourceSpan(_unit),
           editsComputer: editsComputer);
 
   void reportAssistForToken(
     Token token, {
-    @Deprecated('only use EditResult message') required String message,
+    @Deprecated('only use EditResult message') String? message,
     EditsComputer? editsComputer,
   }) =>
-      _reportSourceSpan(token.toSourceSpan(_unit), message,
+      _reportAssistSourceSpan(token.toSourceSpan(_unit),
           editsComputer: editsComputer);
 }

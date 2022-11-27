@@ -206,6 +206,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetAssistsResult> handleEditGetAssists(
     plugin.EditGetAssistsParams parameters,
   ) async {
+    print('handleEditGetAssists');
     final runnerFiles = getRunnersForPath(parameters.file);
     final responses =
         await Future.wait(runnerFiles.entries.map((runnerFile) async {

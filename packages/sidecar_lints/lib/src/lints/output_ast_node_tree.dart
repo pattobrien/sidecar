@@ -20,16 +20,15 @@ class OutputAstNodeTree extends SidecarAstVisitor with QuickAssist {
   void visitNode(AstNode node) {
     reportAssistForNode(
       node,
-      message: 'message',
       editsComputer: () => nodeChangeComputer(node),
     );
+    super.visitNode(node);
   }
 
   @override
   void visitStringLiteral(StringLiteral node) {
     reportAssistForNode(
       node,
-      message: 'STRING ASSIST',
       editsComputer: () => nodeChangeComputer(node),
     );
   }
