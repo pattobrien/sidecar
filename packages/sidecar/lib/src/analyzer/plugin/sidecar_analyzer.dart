@@ -7,12 +7,15 @@ import 'package:analyzer/file_system/overlay_file_system.dart';
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart' hide LogRecord;
 import 'package:riverpod/riverpod.dart';
+import 'package:sidecar/src/analyzer/plugin/sidecar_spec_providers.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec_parsers.dart';
 import 'package:sidecar/src/protocol/analyzer_plugin_exts/analyzer_plugin_exts.dart';
+import 'package:path/path.dart' as p;
 
 import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../utils/duration_ext.dart';
+import '../../utils/file_paths.dart';
 import 'active_package_provider.dart';
 import 'collection_provider.dart';
 import 'files_provider.dart';
@@ -77,6 +80,7 @@ class SidecarAnalyzer {
       onError: (Object error, StackTrace stackTrace) =>
           channel.handleError(package, error, stackTrace),
     );
+    _listenForConfigChanges();
     setupCompleter.complete();
   }
 
@@ -113,6 +117,26 @@ class SidecarAnalyzer {
     final files = _ref.refresh(activeProjectScopedFilesProvider);
     await analyzeFiles(files: files);
     return const SetWorkspaceResponse();
+  }
+
+  void _listenForConfigChanges() {
+    final resourceProvider = _ref.watch(analyzerResourceProvider);
+    final activePackage = _ref.read(activePackageProvider).packageRoot.root;
+    final sidecarYamlFile =
+        resourceProvider.getFile(p.join(activePackage.path, kSidecarYaml));
+    sidecarYamlFile.watch().changes.listen((event) {
+      // print('SIDECAR.YAML REFRESHING');
+      _ref.invalidate(projectSidecarSpecProvider);
+      // _ref.invalidate(packageConfigurationForCodeProvider);
+      // _ref.invalidate(ruleConfigurationForCodeProvider);
+      // _ref.invalidate(scopedLintRulesForFileProvider);
+      // _ref.invalidate(scopedAssistRulesForFileProvider);
+      // _ref.invalidate(nodeLintRegistryForFileAssistsProvider);
+      // _ref.invalidate(nodeAssistRegistryForFileAssistsProvider);
+      // _ref.invalidate(lintResultsProvider);
+      final files = _ref.refresh(activeProjectScopedFilesProvider);
+      analyzeFiles(files: files);
+    });
   }
 
   SetPriorityFilesResponse handleSetPriorityFiles(

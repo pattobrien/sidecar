@@ -35,6 +35,12 @@ final _scopedRulesForFileProvider =
 
 final scopedLintRulesForFileProvider =
     Provider.family<Set<Lint>, AnalyzedFile>((ref, file) {
+  ref.onDispose(() {
+    print('onDispose scopedLintRulesForFileProvider');
+  });
+  ref.onCancel(() {
+    print('onCancel scopedLintRulesForFileProvider');
+  });
   final rules = ref.watch(_scopedRulesForFileProvider(file));
   final lints = rules.whereType<Lint>().toSet();
 
