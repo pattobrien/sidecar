@@ -66,25 +66,30 @@ void main() {
       expectLints(results.first, []);
     });
 
-    test('1 quick assist results', () async {
+    test('1 quick fix results', () async {
       final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
       final client = await analyzeTestResources(app.root, reporter);
       final results = await client.getQuickFixes(mainFile.toUri(), 30);
       expect(results.length, 1);
     });
 
-    test('0 quick assist results', () async {
+    test('0 quick fix results', () async {
       final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
       final client = await analyzeTestResources(app.root, reporter);
       final results = await client.getQuickFixes(mainFile.toUri(), 20);
       expect(results.length, 0);
     });
 
-    test('0 quick assist results', () async {
-      final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
+    test('file is updated with an extra character', () async {
+      // start with a basic file with no lintable string
+      final mainFile = app.modifyFile(kMainFilePath, kContentWithoutString);
       final client = await analyzeTestResources(app.root, reporter);
-      final results = await client.getQuickFixes(mainFile.toUri(), 20);
-      expect(results.length, 0);
+      final results = verify(reporter.handleLintNotification(captureAny));
+      expectLints(results.captured.first, []);
+      // update file with a lintable string
+      await client.handleFileChange(mainFile.toUri(), ' $kContentWithString');
+      final results2 = verify(reporter.handleLintNotification(captureAny));
+      expectLints(results2.captured.first, [lint(kStringLiteralsCode, 29, 14)]);
     });
   });
 }
