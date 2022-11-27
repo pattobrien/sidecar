@@ -15,7 +15,7 @@ class SourceEdit with _$SourceEdit {
   }) = _SourceEdit;
   const SourceEdit._();
 
-  factory SourceEdit.simple(
+  factory SourceEdit.fromOffset(
     int offset,
     int length, {
     Uri? sourceUri,

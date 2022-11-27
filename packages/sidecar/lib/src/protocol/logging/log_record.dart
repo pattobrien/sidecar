@@ -79,5 +79,3 @@ enum LogSeverity {
     }
   }
 }
-
-extension LogSeverityX on LogSeverity {}

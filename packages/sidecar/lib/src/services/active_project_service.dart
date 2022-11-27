@@ -83,7 +83,7 @@ class ActiveProjectService {
   }
 
   Future<bool> createDefaultSidecarYaml(Uri root) async {
-    const contents = defaultSidecarContent;
+    const contents = templateSidecarContent;
     final path = p.join(root.path, kSidecarYaml);
     final file = resourceProvider.getFile(path);
     if (file.exists) {

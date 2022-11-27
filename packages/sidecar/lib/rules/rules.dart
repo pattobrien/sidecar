@@ -7,7 +7,6 @@ import '../src/rules/rules.dart';
 export '../src/rules/base_rule.dart' hide BaseRule;
 export '../src/rules/lint_severity.dart';
 export '../src/rules/typedefs.dart';
-export 'mixins.dart';
 
 /// Base for all Sidecar Rules.
 abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void>
@@ -31,3 +30,9 @@ abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void>
         const DeepCollectionEquality().hash(code),
       );
 }
+
+
+// mixin Configuration on BaseRule {
+//   Map<dynamic, dynamic>? get ruleConfiguration =>
+//       sidecarSpec.getConfigurationForCode(code)?.configuration;
+// }

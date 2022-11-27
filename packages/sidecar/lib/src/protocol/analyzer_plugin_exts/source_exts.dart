@@ -21,7 +21,7 @@ extension SourceFileEditsX on List<SourceFileEdit> {
 extension PluginSourceFileEditX on plugin.SourceFileEdit {
   SourceFileEdit fromPluginFileEdit() {
     final sourceEdits = edits.map((e) {
-      final sourceSpan = SourceEdit.simple(e.offset, e.length,
+      final sourceSpan = SourceEdit.fromOffset(e.offset, e.length,
           replacement: e.replacement, sourceUri: Uri.parse(file));
       return sourceSpan;
     }).toList();
@@ -48,7 +48,7 @@ extension SourceEditXX on SourceEdit {
 
 extension PluginSourceEditX on plugin.SourceEdit {
   SourceEdit fromPluginEdit() {
-    return SourceEdit.simple(offset, length, replacement: replacement);
+    return SourceEdit.fromOffset(offset, length, replacement: replacement);
   }
 }
 
