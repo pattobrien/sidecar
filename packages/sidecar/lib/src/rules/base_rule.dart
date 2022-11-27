@@ -29,6 +29,29 @@ mixin BaseRule {
 
   ResolvedUnitResult get unit => _unit;
 
+  /// Register all of the visit methods of a Sidecar Rule.
+  ///
+  /// For example, if you have a Lint rule that visits String Literals, then
+  /// you must add the visitor to the NodeRegistry's StringLiteral register:
+  /// ```dart
+  /// class StringLiterals extends SidecarAstVisitor with Lint {
+  ///   ...
+  ///
+  ///   @override
+  ///   void initializeVisitor(NodeRegistry registry) {
+  ///     // add SimpleStringLiteral to registry,
+  ///     // otherwise visitStringLiteral() will not be called
+  ///     registry.addSimpleStringLiteral(this);
+  ///   }
+  ///
+  ///   @override
+  ///   void visitStringLiteral(StringLiteral node) {
+  ///     reportAstNode(node,
+  ///       message: 'Avoid any hardcoded Strings.',
+  ///       correction: 'Use an intl message instead.');
+  ///   }
+  /// }
+  /// ```
   void initializeVisitor(NodeRegistry registry);
 
   // Rule initialization happens in multiple phases

@@ -21,6 +21,7 @@ import '../utils/logger/logger.dart';
 import '../utils/uri_ext.dart';
 import '../utils/utils.dart';
 
+/// Interact with a package to determine if its capable of Sidecar analysis.
 class ActiveProjectService {
   const ActiveProjectService({
     required this.resourceProvider,
