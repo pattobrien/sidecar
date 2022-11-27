@@ -6,6 +6,7 @@ import 'package:sidecar/src/analyzer/client/cli_client.dart';
 import 'package:sidecar/src/analyzer/client/client.dart';
 import 'package:sidecar/src/analyzer/starters/cli_starter.dart';
 import 'package:sidecar/src/reports/stdout_reporter.dart';
+import 'package:test/scaffolding.dart';
 
 late ProviderContainer container;
 
@@ -20,10 +21,11 @@ Future<AnalyzerClient> analyzeTestResources(
   ]);
   final client = await runZoned<Future<AnalyzerClient>>(
     () async {
-      final exitcode = await runPubGet(root);
+      await runPubGet(root);
       final client = container.read(cliClientProvider);
       await client.openWorkspace();
-      client.closeWorkspace();
+      // client.closeWorkspace();
+      addTearDown(client.closeWorkspace);
       return client;
     },
     zoneSpecification: ZoneSpecification(

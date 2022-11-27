@@ -160,7 +160,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       final request = QuickFixRequest(file: file, offset: parameters.offset);
       return runner.asyncRequest<QuickFixResponse>(request);
     })).then((value) => value.whereNotNull());
-    logger.info('handleEditGetFixes = responses: ${responses}');
+    logger.info('handleEditGetFixes = responses: $responses');
 
     // we need to aggregate responses from all runners into one server response
     final fixes = responses
@@ -168,7 +168,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         .map((response) => response.toPluginResponse())
         .expand((result) => result.fixes)
         .toList();
-    logger.info('handleEditGetFixes = fixes: ${fixes}');
+    logger.info('handleEditGetFixes = fixes: $fixes');
     return plugin.EditGetFixesResult(fixes);
   }
 
@@ -206,6 +206,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetAssistsResult> handleEditGetAssists(
     plugin.EditGetAssistsParams parameters,
   ) async {
+    print('handleEditGetAssists');
     final runnerFiles = getRunnersForPath(parameters.file);
     final responses =
         await Future.wait(runnerFiles.entries.map((runnerFile) async {
@@ -230,9 +231,9 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         .expand((element) => element)
         .map((e) => e.span.length);
     print(
-        'ASSIST URIS ${paths.length} ${paths.every((element) => element == Uri.parse(parameters.file))} ${paths}');
-    print('ASSIST OFFSETS ${offsets}');
-    print('ASSIST LENGTHS ${lengths}');
+        'ASSIST URIS ${paths.length} ${paths.every((element) => element == Uri.parse(parameters.file))} $paths');
+    print('ASSIST OFFSETS $offsets');
+    print('ASSIST LENGTHS $lengths');
 
     final parsedResponses = responses
         .whereType<AssistResponse>()
@@ -241,7 +242,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
             .expand((e) => e)
             .toList())
         .expand((e) => e);
-    final x = parsedResponses.map((e) => e.change.edits);
     return plugin.EditGetAssistsResult(parsedResponses.toList());
   }
 

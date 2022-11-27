@@ -87,7 +87,9 @@ SidecarExceptionTuple<PackageOptions> parseAssistPackageOptions(
   final includes = yamlMap?.parseGlobIncludes();
   final excludes = yamlMap?.parseGlobExcludes();
 
-  final assistPackages = yamlMap?.nodes.map((dynamic key, value) {
+  final rulesNode = yamlMap?.nodes['rules'] as YamlMap?;
+
+  final assistPackages = rulesNode?.nodes.map((dynamic key, value) {
     final options = parseRuleOptions(value, fileUri, RuleType.assist);
     errors.addAll(options.item2);
     return MapEntry(
@@ -137,12 +139,14 @@ SidecarExceptionTuple<RuleOptions> parseRuleOptions(
 ) {
   if (yamlNode is YamlScalar) {
     if (yamlNode.value == null) {
-      return const SidecarExceptionTuple(LintOptions(), []);
+      final options =
+          type == RuleType.lint ? const LintOptions() : const AssistOptions();
+      return SidecarExceptionTuple(options, []);
     } else if (yamlNode.value is bool) {
-      return SidecarExceptionTuple(
-        LintOptions(enabled: yamlNode.value as bool),
-        [],
-      );
+      final options = type == RuleType.lint
+          ? LintOptions(enabled: yamlNode.value as bool)
+          : AssistOptions(enabled: yamlNode.value as bool);
+      return SidecarExceptionTuple(options, []);
     }
   }
   if (yamlNode is YamlMap) {

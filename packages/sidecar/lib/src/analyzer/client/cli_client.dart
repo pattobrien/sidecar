@@ -36,15 +36,17 @@ class CliClient extends AnalyzerClient {
   final _logController = StreamController<LogRecord>();
 
   @override
-  Future<void> handleFileChange(Uri file, String content) async {
+  Future<UpdateFilesResponse?> handleFileChange(
+      Uri file, String content) async {
     // if file = package_config.json file of any runners, then rebuild runner
     // else, send file change to all applicable runners
     final analyzedFile = runner.getAnalyzedFile(file.path);
-    if (analyzedFile == null) return;
+    if (analyzedFile == null) return null;
     final changedFileRequest = FileUpdateEvent.add(analyzedFile, content);
     final request = SidecarRequest.updateFiles([changedFileRequest]);
-    await runner.asyncRequest<UpdateFilesResponse>(request);
+    final response = await runner.asyncRequest<UpdateFilesResponse>(request);
     reporter.print();
+    return response;
   }
 
   @override
@@ -66,13 +68,15 @@ class CliClient extends AnalyzerClient {
 
     if (activeContext == null) {
       logger.severe('invalid Sidecar directory.');
+      print('invalid sidecar directory');
+      // throw StateError('invalid Sidecar directory');
       return;
     }
     _ref.read(runnerActiveContextsProvider.notifier).update = [activeContext];
 
     final subscription = runner.lints.listen(reporter.handleLintNotification);
     _subscriptions.add(subscription);
-    await runner.initialize();
+    await runner.initialize([root]);
     const request = SetContextCollectionRequest(null);
     await runner.asyncRequest<SetWorkspaceResponse>(request);
     reporter.print();
@@ -98,8 +102,13 @@ class CliClient extends AnalyzerClient {
   Map<AnalyzedFile, Set<LintResult>> get lintResults => _results;
 
   @override
-  Future<List<EditResult>> getQuickFixes(Uri file, int offset) async {
-    final analyzedFile = runner.getAnalyzedFile(file.path)!;
+  Future<List<EditResult>> getQuickFixes(String file, int offset) async {
+    final analyzedFile = runner.getAnalyzedFile(file);
+    if (analyzedFile == null) {
+      final contexts = runner.allContexts.map((e) => e.contextRoot.root.path);
+      throw StateError(
+          'file doesnt have an analysis context; file: $file || contexts: $contexts');
+    }
     final request = QuickFixRequest(file: analyzedFile, offset: offset);
     final response = await runner.asyncRequest<QuickFixResponse>(request);
     return response.results

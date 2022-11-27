@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
 import 'package:sidecar/sidecar.dart';
+// ignore: implementation_imports
 import 'package:sidecar/src/protocol/analyzer_plugin_exts/source_exts.dart';
 
 import 'constants.dart';
@@ -13,13 +14,22 @@ class OutputAstNodeTree extends SidecarAstVisitor with QuickAssist {
   @override
   void initializeVisitor(NodeRegistry registry) {
     registry.addNode(this);
+    registry.addSimpleStringLiteral(this);
   }
 
   @override
   void visitNode(AstNode node) {
     reportAssistForNode(
       node,
-      message: 'message',
+      editsComputer: () => nodeChangeComputer(node),
+    );
+    super.visitNode(node);
+  }
+
+  @override
+  void visitStringLiteral(StringLiteral node) {
+    reportAssistForNode(
+      node,
       editsComputer: () => nodeChangeComputer(node),
     );
   }

@@ -1,3 +1,5 @@
+import 'package:glob/glob.dart';
+import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sidecar/sidecar.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec.dart';
@@ -6,7 +8,6 @@ import 'package:sidecar/src/test/resources/workspace_resource.dart';
 import 'package:test/scaffolding.dart';
 
 import '../helpers/example_file_contents.dart';
-import '../helpers/example_lints.dart';
 import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
@@ -32,7 +33,9 @@ void main() {
 
     test('default severity', () async {
       app.modifyFile(kMainFilePath, kContentWithString);
-      final sidecarYamlError = SidecarSpec(lints: {
+      final sidecarYamlError = SidecarSpec(includes: [
+        Glob('lib/**')
+      ], lints: {
         kStringLiteralsCode.package: LintPackageOptions(rules: {
           kStringLiteralsCode.code: const LintOptions(),
         }),
@@ -49,7 +52,9 @@ void main() {
 
     test('info-level severity', () async {
       app.modifyFile(kMainFilePath, kContentWithString);
-      final sidecarYamlError = SidecarSpec(lints: {
+      final sidecarYamlError = SidecarSpec(includes: [
+        Glob('lib/**')
+      ], lints: {
         kStringLiteralsCode.package: LintPackageOptions(rules: {
           kStringLiteralsCode.code: const LintOptions(
             severity: LintSeverity.info,
@@ -67,7 +72,9 @@ void main() {
 
     test('warning-level severity', () async {
       app.modifyFile(kMainFilePath, kContentWithString);
-      final sidecarYamlError = SidecarSpec(lints: {
+      final sidecarYamlError = SidecarSpec(includes: [
+        Glob('lib/**')
+      ], lints: {
         kStringLiteralsCode.package: LintPackageOptions(rules: {
           kStringLiteralsCode.code: const LintOptions(
             severity: LintSeverity.warning,
@@ -85,7 +92,9 @@ void main() {
 
     test('error-level severity', () async {
       app.modifyFile(kMainFilePath, kContentWithString);
-      final sidecarYamlError = SidecarSpec(lints: {
+      final sidecarYamlError = SidecarSpec(includes: [
+        Glob('lib/**')
+      ], lints: {
         kStringLiteralsCode.package: LintPackageOptions(rules: {
           kStringLiteralsCode.code: const LintOptions(
             severity: LintSeverity.error,

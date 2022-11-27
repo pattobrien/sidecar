@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../active_package_root.dart';
 import '../analyzed_file.dart';
 import '../models/file_update_event.dart';
 

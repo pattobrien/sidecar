@@ -137,20 +137,20 @@ abstract class TypeChecker {
   //   return element.name == type && element.source?.uri == uri;
   // }
 
-  /// Create a new [TypeChecker] backed by a library [url].
-  ///
-  /// Example of referring to a `LinkedHashMap` from `dart:collection`:
-  /// ```dart
-  /// const linkedHashMap = const TypeChecker.fromUrl(
-  ///   'dart:collection#LinkedHashMap',
-  /// );
-  /// ```
-  ///
-  /// **NOTE**: This is considered a more _brittle_ way of determining the type
-  /// because it relies on knowing the _absolute_ path (i.e. after resolved
-  /// `export` directives). You should ideally only use `fromUrl` when you know
-  /// the full path (likely you own/control the package) or it is in a stable
-  /// package like in the `dart:` SDK.
+  // / Create a new [TypeChecker] backed by a library [url].
+  // /
+  // / Example of referring to a `LinkedHashMap` from `dart:collection`:
+  // / ```dart
+  // / const linkedHashMap = const TypeChecker.fromUrl(
+  // /   'dart:collection#LinkedHashMap',
+  // / );
+  // / ```
+  // /
+  // / **NOTE**: This is considered a more _brittle_ way of determining the type
+  // / because it relies on knowing the _absolute_ path (i.e. after resolved
+  // / `export` directives). You should ideally only use `fromUrl` when you know
+  // / the full path (likely you own/control the package) or it is in a stable
+  // / package like in the `dart:` SDK.
   // const factory TypeChecker.fromUrl(dynamic url) = _UriTypeChecker;
 
   /// Returns the first constant annotating [element] assignable to this type.
@@ -402,9 +402,9 @@ class _NamedChecker extends TypeChecker {
 // }
 
 class _AnyChecker extends TypeChecker {
-  final Iterable<TypeChecker> _checkers;
-
   const _AnyChecker(this._checkers) : super._();
+
+  final Iterable<TypeChecker> _checkers;
 
   @override
   bool isExactly(Element element) => _checkers.any((c) => c.isExactly(element));
@@ -417,6 +417,21 @@ class _AnyChecker extends TypeChecker {
 /// something was misspelled, an import is missing, or a dependency was not
 /// defined (for build systems such as Bazel).
 class UnresolvedAnnotationException implements Exception {
+  /// Creates an exception from an annotation ([annotationIndex]) that was not
+  /// resolvable while traversing [Element.metadata] on [annotatedElement].
+  factory UnresolvedAnnotationException._from(
+    Element annotatedElement,
+    int annotationIndex,
+  ) {
+    final sourceSpan = _findSpan(annotatedElement, annotationIndex);
+    return UnresolvedAnnotationException._(annotatedElement, sourceSpan);
+  }
+
+  const UnresolvedAnnotationException._(
+    this.annotatedElement,
+    this.annotationSource,
+  );
+
   /// Element that was annotated with something we could not resolve.
   final Element annotatedElement;
 
@@ -457,7 +472,7 @@ class UnresolvedAnnotationException implements Exception {
         SourceLocation(end, sourceUrl: parsedUnit.uri),
         parsedUnit.content.substring(start, end),
       );
-    } catch (e, stack) {
+    } catch (e) {
       // Trying to get more information on https://github.com/dart-lang/sdk/issues/45127
 //       log.warning(
 //         '''
@@ -473,21 +488,6 @@ class UnresolvedAnnotationException implements Exception {
       return null;
     }
   }
-
-  /// Creates an exception from an annotation ([annotationIndex]) that was not
-  /// resolvable while traversing [Element.metadata] on [annotatedElement].
-  factory UnresolvedAnnotationException._from(
-    Element annotatedElement,
-    int annotationIndex,
-  ) {
-    final sourceSpan = _findSpan(annotatedElement, annotationIndex);
-    return UnresolvedAnnotationException._(annotatedElement, sourceSpan);
-  }
-
-  const UnresolvedAnnotationException._(
-    this.annotatedElement,
-    this.annotationSource,
-  );
 
   @override
   String toString() {

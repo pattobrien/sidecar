@@ -9,6 +9,7 @@ import '../client/cli_client.dart';
 import '../client/client.dart';
 import '../client/hot_reloader.dart';
 
+/// Run Sidecar from CLI or Debugger.
 Future<void> startSidecarCli(
   SendPort sendPort,
   List<String> args,

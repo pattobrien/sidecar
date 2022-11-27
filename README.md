@@ -17,6 +17,7 @@
 
 - Motivations
 - Getting Started
+- Sidecar CLI
 - Next steps
 
 # Motivations and Objective
@@ -53,17 +54,18 @@ dev_dependencies:
 
 ```yaml
 # sidecar.yaml
-# file can also be created by running 'sidecar init' (sidecar cli needs to be installed)
+# template file can be generated via cli by running 'sidecar init'
 includes:
   - "bin/**"
   - "lib/**"
 lints:
   design_system_lints:
-    avoid_sized_box_height_width_literals:
-    avoid_text_style_literal:
-    avoid_border_radius_literal:
-    avoid_box_shadow_literal:
-    avoid_edge_insets_literal:
+    rules: 
+      avoid_sized_box_height_width_literals:
+      avoid_text_style_literal:
+      avoid_border_radius_literal:
+      avoid_box_shadow_literal:
+      avoid_edge_insets_literal:
 ```
 
 3. Enable the ```sidecar``` plugin to run, by adding it to the list of plugins in ```analysis_options.yaml```.

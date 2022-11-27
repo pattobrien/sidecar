@@ -1,5 +1,4 @@
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar/src/protocol/protocol.dart';
 import 'package:test/test.dart';
 
 void expectLints(

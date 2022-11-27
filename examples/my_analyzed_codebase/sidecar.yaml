@@ -1,8 +1,8 @@
 includes:
   - "bin/**"
   - "lib/**"
+
 lints:
-  # l10n_lints:
   intl_lints:
     rules:
       string_literals:
@@ -10,20 +10,13 @@ lints:
   design_system_lints:
     rules:
       avoid_icon_literal:
-        severity: warning
-        enabled: true
       avoid_sized_box_height_width_literals:
-        severity: info
       avoid_text_style_literal:
-        severity: info
-        enabled: true
-        includes:
-          - "lib/**"
-      avoid_border_radius_literal:
         severity: warning
+      avoid_border_radius_literal:
       avoid_box_shadow_literal:
-    # avoid_edge_insets_literal:
-#
+      avoid_edge_insets_literal:
+
 assists:
   sidecar_lints:
     rules:

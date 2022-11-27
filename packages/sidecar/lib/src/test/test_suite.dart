@@ -1,8 +1,5 @@
 // ignore_for_file: overridden_fields, implementation_imports
 
-import 'dart:io';
-
-import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/memory_file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
@@ -10,13 +7,6 @@ import 'package:analyzer/src/test_utilities/resource_provider_mixin.dart';
 import 'package:cli_util/cli_util.dart';
 import 'package:package_config/package_config.dart';
 import 'package:path/path.dart';
-import 'package:riverpod/riverpod.dart';
-import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
-
-import '../../sidecar.dart';
-import '../utils/logger/logger.dart';
-import 'project.dart';
-import 'project_notifier.dart';
 
 // void main() async {
 //   final cliOptions = CliOptions.fromArgs(['--cli'], isPlugin: false);

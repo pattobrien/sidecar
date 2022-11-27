@@ -1,9 +1,6 @@
-// import 'base_rule_mixin.dart';
-
-// typedef PackageId = String;
-
-// typedef MapDecoder = Object Function(Map json);
-
 import 'base_rule.dart';
 
+/// Function for creating a rule.
+///
+/// Constructor is used in the entrypoint generation for SidecarAnalyzer.
 typedef SidecarBaseConstructor = BaseRule Function();

@@ -8,14 +8,14 @@ import 'package:glob/glob.dart';
 import 'package:path/path.dart';
 import 'package:path/path.dart' as p;
 
-bool isExcluded(String absolutePath, Iterable<Glob> excludes) {
-  final path = absolutePath.replaceAll(r'\', '/');
+bool isExcluded(String relativePath, Iterable<Glob> excludes) {
+  final path = relativePath.replaceAll(r'\', '/');
 
   return excludes.any((exclude) => exclude.matches(path));
 }
 
-bool isIncluded(String absolutePath, Iterable<Glob> includes) {
-  final path = absolutePath.replaceAll(r'\', '/');
+bool isIncluded(String relativePath, Iterable<Glob> includes) {
+  final path = relativePath.replaceAll(r'\', '/');
 
   return includes.any((exclude) => exclude.matches(path));
 }

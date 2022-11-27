@@ -9,6 +9,9 @@ import '../../utils/logger/logger.dart';
 import '../server/log_delegate.dart';
 import '../server/server.dart';
 
+/// Run Sidecar via analyzer_plugin package.
+///
+/// This function is called from tools/analyzer_plugin/bin/plugin.dart
 Future<void> startSidecarPlugin(
   SendPort sendPort,
   List<String> args,

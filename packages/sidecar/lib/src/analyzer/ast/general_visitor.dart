@@ -1,4 +1,6 @@
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
+import 'package:meta/meta.dart';
 
 import '../../../rules/rules.dart' hide Configuration;
 import '../../protocol/protocol.dart';
@@ -6,11 +8,21 @@ import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';
 
-class RegisteredLintVisitor extends AstVisitor<void> {
+class RegisteredLintVisitor extends GeneralizingAstVisitor<void> {
   RegisteredLintVisitor(this.registry);
 
   final NodeRegistry registry;
-  final results = <LintResult>{};
+  @internal
+  final lintResults = <LintResult>{};
+  @internal
+  final assistResults = <AssistFilterResult>{};
+
+  @override
+  void visitNode(AstNode node) {
+    _runSubscriptions(node, registry._forNode);
+    node.visitChildren(this);
+    super.visitNode(node);
+  }
 
   @override
   void visitAdjacentStrings(AdjacentStrings node) {
@@ -638,9 +650,9 @@ class RegisteredLintVisitor extends AstVisitor<void> {
   }
 
   @override
-  void visitScriptTag(ScriptTag node) {
-    _runSubscriptions(node, registry._forScriptTag);
-    node.visitChildren(this);
+  void visitScriptTag(ScriptTag scriptTag) {
+    _runSubscriptions(scriptTag, registry._forScriptTag);
+    scriptTag.visitChildren(this);
   }
 
   @override
@@ -824,15 +836,18 @@ class RegisteredLintVisitor extends AstVisitor<void> {
   }
 
   void _runSubscriptions<T extends AstNode>(
-      T node, List<VisitorSubscription<T>> subscriptions) {
+    T node,
+    List<VisitorSubscription<T>> subscriptions,
+  ) {
     for (var i = 0; i < subscriptions.length; i++) {
       final subscription = subscriptions[i];
       final timer = subscription.timer;
       timer?.start();
       try {
         node.accept<dynamic>(subscription.visitor);
-        results.addAll(subscription.visitor.results.whereType<LintResult>());
-      } catch (e, stack) {
+        lintResults.addAll(subscription.visitor.lintResults);
+        assistResults.addAll(subscription.visitor.assistFilterResults);
+      } catch (e) {
         // if (!exceptionHandler(
         //     node, subscription.linter, exception, stackTrace)) {
         rethrow;

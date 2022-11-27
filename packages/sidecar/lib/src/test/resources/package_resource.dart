@@ -81,8 +81,8 @@ class PackageResource with ResourceMixin {
     assert(isSidecarEnabled, 'sidecar isnt enabled');
 
     final service = workspaceContainer.read(activeProjectServiceProvider);
-    final root = Uri(scheme: 'file', path: rootPath);
-    final activePackage = service.getActivePackageFromUri(root);
+    // final root = Uri(scheme: 'file', path: rootPath);
+    // final activePackage = service.getActivePackageFromUri(root);
     final collection = AnalysisContextCollection(
       includedPaths: [rootPath],
       resourceProvider: resourceProvider,
@@ -127,10 +127,6 @@ dependencies:
   void modifySidecarYaml(SidecarSpec configuration) {
     final content = configuration.toYamlContent();
     modifyFile(kSidecarYaml, content);
-  }
-
-  void _createMainFile() {
-    modifyFile(p.join('lib', 'main.dart'), mainContent);
   }
 
   void addPackageConfig(PackageConfig packageConfig) {

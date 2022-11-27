@@ -45,7 +45,6 @@ class RuleOptions {
   factory RuleOptions.fromJson(Map<String, dynamic> json) =>
       _$RuleOptionsFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$RuleOptionsToJson(this);
 
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)

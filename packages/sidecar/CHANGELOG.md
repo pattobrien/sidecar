@@ -1,4 +1,9 @@
 
+## 0.1.0-dev.7
+- feat: Assists, QuickFix
+- feat: sidecar.yaml configuration warnings appear in real-time
+- feat: sidecar.yaml changes affect visible lints on file save
+
 ## 0.1.0-dev.6
 - feat: New API with Visitor-based rules
 - tests: 15% test coverage
