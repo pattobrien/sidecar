@@ -103,7 +103,9 @@ class CliClient extends AnalyzerClient {
   Future<List<EditResult>> getQuickFixes(String file, int offset) async {
     final analyzedFile = runner.getAnalyzedFile(file);
     if (analyzedFile == null) {
-      throw StateError('file doesnt have an analysis context $file');
+      final contexts = runner.allContexts.map((e) => e.contextRoot.root.path);
+      throw StateError(
+          'file doesnt have an analysis context; file: $file || contexts: $contexts');
     }
     final request = QuickFixRequest(file: analyzedFile, offset: offset);
     final response = await runner.asyncRequest<QuickFixResponse>(request);
