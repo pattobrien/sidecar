@@ -15,7 +15,7 @@ import '../../protocol/protocol.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/file_paths.dart';
 import 'active_package_provider.dart';
-import 'collection_provider.dart';
+import 'context_collection_provider.dart';
 import 'files_provider.dart';
 import 'plugin.dart';
 import 'resolved_unit_provider.dart';

@@ -10,7 +10,10 @@ import '../plugin/active_package_provider.dart';
 import '../plugin/communication_channel.dart';
 import '../plugin/rule_constructors_provider.dart';
 import '../plugin/sidecar_analyzer.dart';
+import 'server_starter.dart';
 
+/// Initializes the Sidecar analyzer from generated entrypoint
+/// (see [analyzerIsolateStarter] for server-side equivalent)
 Future<void> startAnalyzer(
   List<String> args,
   SendPort sendPort, {

@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 
 import '../../utils/file_paths.dart';
 
+/// Initialize a Sidecar Analyzer isolate from an executable file.
 Future<Isolate> analyzerIsolateStarter({
   required SendPort sendPort,
   required Uri root,

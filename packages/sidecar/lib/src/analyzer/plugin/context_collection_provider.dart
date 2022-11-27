@@ -1,16 +1,23 @@
 import 'dart:async';
 
 // ignore: implementation_imports
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../utils/logger/logger.dart';
+import '../../utils/uri_ext.dart';
 import '../handlers/byte_store.dart';
 import '../handlers/file_content_cache.dart';
 import '../plugin/analyzer_resource_provider.dart';
 import 'active_package_provider.dart';
 
-final contextCollectionProvider = Provider((ref) {
+/// List of AnalysisContexts for the current Active Package scope.
+///
+/// Analysis scope is defined based on different Sidecar modes:
+/// - Plugin mode: scope = all contexts within the IDE's open workspace
+/// - CLI / Debugger mode: scope = single context at the ActivePackage root
+final contextCollectionProvider = Provider<List<AnalysisContext>>((ref) {
   final activePackage = ref.watch(activePackageProvider);
   final byteStore = ref.watch(createByteStoreProvider);
   final contentCache = ref.watch(createFileContentCacheProvider);
@@ -18,17 +25,10 @@ final contextCollectionProvider = Provider((ref) {
 
   final scope =
       activePackage.workspaceScope ?? [activePackage.packageRoot.root];
-  final includesPaths = scope.map((uri) {
-    if (uri.path.endsWith('/')) {
-      return uri.path.substring(0, uri.path.length - 1);
-    } else {
-      return uri.path;
-    }
-  }).toList();
 
   final collection = runZonedGuarded(
     () => AnalysisContextCollectionImpl(
-      includedPaths: includesPaths,
+      includedPaths: scope.map((uri) => uri.pathNoTrailingSlash).toList(),
       byteStore: byteStore,
       resourceProvider: resourceProvider,
       fileContentCache: contentCache,
@@ -38,13 +38,11 @@ final contextCollectionProvider = Provider((ref) {
     zoneSpecification: ZoneSpecification(print: (_, __, ___, line) {}),
   );
 
-  print(
-      'collection complete: ${collection?.contexts.map((e) => e.contextRoot.root.path)}');
+  print('collection: ${collection?.contexts.map((e) => e.contextRoot.root)}');
 
   if (collection == null) throw UnimplementedError();
 
-  final contexts = collection.contexts.where((context) {
+  return collection.contexts.where((context) {
     return scope.any((uri) => context.contextRoot.root.toUri() == uri);
   }).toList();
-  return contexts;
 });

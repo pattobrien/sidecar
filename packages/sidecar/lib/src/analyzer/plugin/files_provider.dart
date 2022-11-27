@@ -3,9 +3,10 @@ import 'package:riverpod/riverpod.dart';
 import '../../protocol/analyzed_file.dart';
 import '../../utils/glob_utils.dart';
 import 'analyzer_resource_provider.dart';
-import 'collection_provider.dart';
+import 'context_collection_provider.dart';
 import 'sidecar_spec_providers.dart';
 
+/// Generates in-scope files based on sidecar.yaml top-level includes/excludes globs.
 final activeProjectScopedFilesProvider = Provider<List<AnalyzedFile>>((ref) {
   final activeProjectIncludes = ref.watch(activeProjectIncludeGlobsProvider);
   final activeProjectExcludes = ref.watch(activeProjectExcludeGlobsProvider);
@@ -14,7 +15,7 @@ final activeProjectScopedFilesProvider = Provider<List<AnalyzedFile>>((ref) {
 
   final activeProjectScopedFiles = contexts
       .map((context) {
-        //TODO: add rule/package includes and excludes
+        //TODO: what to do with 'lib' folder
         final filesInScope = extractDartFilesFromFolders(
             ['lib'], context.contextRoot.root.path,
             fileSystem: fileSystem,

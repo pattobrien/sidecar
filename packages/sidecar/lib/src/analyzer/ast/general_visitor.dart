@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
+import 'package:meta/meta.dart';
 
 import '../../../rules/rules.dart' hide Configuration;
 import '../../protocol/protocol.dart';
@@ -11,8 +12,9 @@ class RegisteredLintVisitor extends GeneralizingAstVisitor<void> {
   RegisteredLintVisitor(this.registry);
 
   final NodeRegistry registry;
-
+  @internal
   final lintResults = <LintResult>{};
+  @internal
   final assistResults = <AssistFilterResult>{};
 
   @override
