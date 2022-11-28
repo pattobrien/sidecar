@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs
+// coverage:ignore-file
 
 part of 'registered_rule_visitor.dart';
 
@@ -200,7 +201,6 @@ class NodeRegistry {
     _forNode.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  // coverage:ignore-start
   void addAdjacentStrings(SidecarAstVisitor visitor) {
     _forAdjacentStrings.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
@@ -790,7 +790,6 @@ class NodeRegistry {
   void addYieldStatement(SidecarAstVisitor linter) {
     _forYieldStatement.add(VisitorSubscription(linter, _getTimer(linter)));
   }
-  // coverage:ignore-end
 
   /// Get the timer associated with the given [linter].
   Stopwatch? _getTimer(SidecarAstVisitor linter) {
