@@ -1,4 +1,9 @@
 
+## 0.1.0-dev.8
+
+- docs: Documentation added to some public APIs
+- refactor: Removed static analysis errors to improve pub score.
+
 ## 0.1.0-dev.7
 - feat: Assists, QuickFix
 - feat: sidecar.yaml configuration warnings appear in real-time
