@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/file_system/overlay_file_system.dart';
@@ -304,7 +303,7 @@ class SidecarAnalyzer {
     final watch = Stopwatch()..start();
     for (final update in request.updates) {
       final filePath = update.filePath;
-      print('handleUpdateFiles $filePath ${update}');
+      print('handleUpdateFiles $filePath $update');
       final oldContents = resourceProvider.hasOverlay(filePath)
           ? resourceProvider.getFile(filePath).readAsStringSync()
           : null;

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-// ignore: implementation_imports
 import 'package:analyzer/dart/analysis/analysis_context.dart';
+// ignore: implementation_imports
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

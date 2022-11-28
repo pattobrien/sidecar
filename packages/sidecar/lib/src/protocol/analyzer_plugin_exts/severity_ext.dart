@@ -1,9 +1,6 @@
 import 'package:analyzer/error/error.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
-import 'package:cli_util/cli_logging.dart';
-import 'package:sidecar/src/rules/rules.dart';
-
-import '../../configurations/configurations.dart';
+import '../../rules/rules.dart';
 
 extension LintSeverityPluginX on LintSeverity {
   plugin.AnalysisErrorSeverity get analysisError {

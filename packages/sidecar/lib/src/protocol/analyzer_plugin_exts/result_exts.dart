@@ -2,7 +2,6 @@ import 'package:analyzer_plugin/protocol/protocol.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_common.dart' as plugin;
 import 'package:analyzer_plugin/protocol/protocol_generated.dart' as plugin;
 
-import '../../rules/lint_severity.dart';
 import '../../utils/utils.dart';
 import '../communication/communication.dart';
 import '../models/models.dart';

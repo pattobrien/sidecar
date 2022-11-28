@@ -47,8 +47,8 @@ void main() {
       final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
       app.modifyFile(kAnalysisOptionsYaml, kAnalysisYamlContentWithSidecar);
       final client = await analyzeTestResources(app.root, reporter);
-      final responses =
-          await client.handleFileChange(mainFile.toUri(), kContentWithString);
+
+      await client.handleFileChange(mainFile.toUri(), kContentWithString);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results[1], [lint(kStringLiteralsCode, 28, 14)]);
