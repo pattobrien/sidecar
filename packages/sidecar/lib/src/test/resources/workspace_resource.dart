@@ -15,7 +15,7 @@ import '../../rules/rules.dart';
 import 'package_resource.dart';
 import 'resource_mixin.dart';
 
-const defaultWorkspacePath = 'workspace';
+const _defaultWorkspacePath = 'workspace';
 
 late ProviderContainer workspaceContainer;
 
@@ -33,7 +33,7 @@ Future<WorkspaceResource> createWorkspace({
   final defaultProvider = workspaceContainer.read(runnerResourceProvider);
   final provider = resourceProvider ?? defaultProvider;
   final root =
-      io.Directory.systemTemp.uri.resolve(p.join(defaultWorkspacePath));
+      io.Directory.systemTemp.uri.resolve(p.join(_defaultWorkspacePath));
   print('workspace root: ${root.path}');
   // final uuidPath = const Uuid().v4();
   final workspace = WorkspaceResource(
@@ -48,7 +48,7 @@ Future<WorkspaceResource> createWorkspace({
 
 class WorkspaceResource with ResourceMixin {
   WorkspaceResource({
-    this.rootPath = defaultWorkspacePath,
+    this.rootPath = _defaultWorkspacePath,
     required this.resourceProvider,
     required this.fileSystem,
   });

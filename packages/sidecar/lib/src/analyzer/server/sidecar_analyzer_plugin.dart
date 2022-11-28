@@ -29,6 +29,9 @@ import 'runner/context_providers.dart';
 import 'runner/runner_providers.dart';
 import 'runner/sidecar_runner.dart';
 
+/// Plugin API for use with official Dart analysis server.
+///
+/// For more info, see: package:analyzer_plugin.
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin(this.ref)
       : super(resourceProvider: ref.read(middlemanResourceProvider));

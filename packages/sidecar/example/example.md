@@ -28,11 +28,12 @@ includes:
   - "lib/**"
 lints:
   design_system_lints:
-    avoid_sized_box_height_width_literals:
-    avoid_text_style_literal:
-    avoid_border_radius_literal:
-    avoid_box_shadow_literal:
-    avoid_edge_insets_literal:
+    rules:
+      avoid_sized_box_height_width_literals:
+      avoid_text_style_literal:
+      avoid_border_radius_literal:
+      avoid_box_shadow_literal:
+      avoid_edge_insets_literal:
 ```
 
 3. Enable the ```sidecar``` plugin to run, by adding it to the list of plugins in ```analysis_options.yaml```.

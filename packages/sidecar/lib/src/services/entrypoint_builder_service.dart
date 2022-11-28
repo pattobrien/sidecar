@@ -90,6 +90,7 @@ class EntrypointBuilderService {
   }
 }
 
+/// Service provider for creating entrypoint files for Sidecar Analyzer.
 final isolateBuilderServiceProvider = Provider(
   (ref) {
     final resourceProvider = ref.watch(middlemanResourceProvider);

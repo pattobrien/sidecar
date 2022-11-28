@@ -23,6 +23,7 @@ import '../utils/utils.dart';
 
 /// Interact with a package to determine if its capable of Sidecar analysis.
 class ActiveProjectService {
+  /// Interact with a package to determine if its capable of Sidecar analysis.
   const ActiveProjectService({
     required this.resourceProvider,
   });
