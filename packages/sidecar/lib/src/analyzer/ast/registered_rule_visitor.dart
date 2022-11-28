@@ -29,6 +29,7 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
     super.visitNode(node);
   }
 
+// coverage:ignore-start
   @override
   void visitAdjacentStrings(AdjacentStrings node) {
     _runSubscriptions(node, registry._forAdjacentStrings);
@@ -840,28 +841,6 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
     node.visitChildren(this);
   }
 
-  void _runSubscriptions<T extends AstNode>(
-    T node,
-    List<VisitorSubscription<T>> subscriptions,
-  ) {
-    for (var i = 0; i < subscriptions.length; i++) {
-      final subscription = subscriptions[i];
-      final timer = subscription.timer;
-      timer?.start();
-      try {
-        node.accept<dynamic>(subscription.visitor);
-        lintResults.addAll(subscription.visitor.lintResults);
-        assistResults.addAll(subscription.visitor.assistFilterResults);
-      } catch (e) {
-        // if (!exceptionHandler(
-        //     node, subscription.linter, exception, stackTrace)) {
-        rethrow;
-        // }
-      }
-      timer?.stop();
-    }
-  }
-
   @override
   void visitRecordLiteral(RecordLiteral node) {
     _runSubscriptions(node, registry._forRecordLiteral);
@@ -893,5 +872,28 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
       RecordTypeAnnotationPositionalField node) {
     _runSubscriptions(node, registry._forRecordTypeAnnotationPositionalField);
     node.visitChildren(this);
+  }
+  // coverage:ignore-end
+
+  void _runSubscriptions<T extends AstNode>(
+    T node,
+    List<VisitorSubscription<T>> subscriptions,
+  ) {
+    for (var i = 0; i < subscriptions.length; i++) {
+      final subscription = subscriptions[i];
+      final timer = subscription.timer;
+      timer?.start();
+      try {
+        node.accept<dynamic>(subscription.visitor);
+        lintResults.addAll(subscription.visitor.lintResults);
+        assistResults.addAll(subscription.visitor.assistFilterResults);
+      } catch (e) {
+        // if (!exceptionHandler(
+        //     node, subscription.linter, exception, stackTrace)) {
+        rethrow;
+        // }
+      }
+      timer?.stop();
+    }
   }
 }

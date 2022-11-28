@@ -361,7 +361,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     logger.info('afterNewContextCollection COMPLETE');
     dumpRequests();
     // ref
-    //     .read(allContextsProvider.state)
+    //     .read(allContextsProvider.notifier)
     //     .update((_) => contextCollection.contexts);
   }
 

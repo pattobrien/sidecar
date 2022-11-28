@@ -1,3 +1,5 @@
+// ignore_for_file: unused_result
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -106,11 +108,11 @@ class SidecarAnalyzer {
       // scope = the entire package_config.json of the active package
       // final pubCache = Platform.environment['PUB_CACHE'];
       final activePackage = _ref.read(activePackageProvider).packageRoot.root;
-      _ref.read(workspaceScopeProvider.state).update((_) => [activePackage]);
+      _ref.read(workspaceScopeProvider.notifier).update((_) => [activePackage]);
     } else {
       // scope = roots
       print('SET ROOTS: $roots');
-      _ref.read(workspaceScopeProvider.state).update((_) => roots);
+      _ref.read(workspaceScopeProvider.notifier).update((_) => roots);
     }
     final files = _ref.refresh(activeProjectScopedFilesProvider);
     await analyzeFiles(files: files);

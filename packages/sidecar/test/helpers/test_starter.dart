@@ -15,7 +15,7 @@ Future<AnalyzerClient> analyzeTestResources(
   StdoutReporter reporter,
 ) async {
   container = ProviderContainer(overrides: [
-    analyzerClientProvider.overrideWithProvider(cliClientProvider),
+    analyzerClientProvider.overrideWith((ref) => ref.watch(cliClientProvider)),
     cliDirectoryProvider.overrideWithValue(root),
     stdoutReportProvider.overrideWithValue(reporter),
   ]);

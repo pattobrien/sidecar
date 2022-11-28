@@ -8,7 +8,7 @@ import 'package:glob/glob.dart';
 import 'package:source_span/source_span.dart';
 
 import '../analyzer/ast/ast.dart';
-import '../analyzer/ast/general_visitor.dart';
+import '../analyzer/ast/registered_rule_visitor.dart';
 import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/protocol.dart';
 import '../utils/utils.dart';

@@ -1,2 +1,2 @@
-export 'general_visitor.dart';
+export 'registered_rule_visitor.dart';
 export 'visitor_subscription.dart';

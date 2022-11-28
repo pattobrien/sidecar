@@ -16,7 +16,7 @@ Future<void> startSidecarCli(
 ) async {
   final isDebug = args.any((arg) => arg == 'debug' || arg == '--debug');
   final container = ProviderContainer(overrides: [
-    analyzerClientProvider.overrideWithProvider(cliClientProvider),
+    analyzerClientProvider.overrideWith((ref) => ref.watch(cliClientProvider)),
   ]);
   await runZonedGuarded<Future<void>>(
     () async {
