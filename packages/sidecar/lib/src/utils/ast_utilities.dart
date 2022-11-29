@@ -8,7 +8,6 @@ import 'package:analyzer/src/dart/ast/element_locator.dart';
 import 'package:analyzer/src/dart/ast/utilities.dart';
 import 'package:source_span/source_span.dart';
 
-import '../analyzer/context/unit_context.dart';
 import 'source_span_utilities.dart';
 
 /// Used to translate a single AST node into a SourceSpan (i.e. start and end location within source code)
@@ -41,38 +40,38 @@ extension SyntacticEntityX on SyntacticEntity {
     );
   }
 
-  SourceSpan toSourceSpanFromUnitContext(UnitContext unit) {
-    // TODO: integrate endNode functionality here
+  // SourceSpan toSourceSpanFromUnitContext(UnitContext unit) {
+  //   // TODO: integrate endNode functionality here
 
-    // final offset = !withCommentOrMetadata && node is AnnotatedNode
-    //     ? node.firstTokenAfterCommentAndMetadata.offset
-    //     : node.offset;
-    // final end = endNode?.end ?? node.end;
+  //   // final offset = !withCommentOrMetadata && node is AnnotatedNode
+  //   //     ? node.firstTokenAfterCommentAndMetadata.offset
+  //   //     : node.offset;
+  //   // final end = endNode?.end ?? node.end;
 
-    // final sourceUrl = Uri.file(unit.path);
+  //   // final sourceUrl = Uri.file(unit.path);
 
-    final startOffset = offset;
-    final endOffset = end;
+  //   final startOffset = offset;
+  //   final endOffset = end;
 
-    final startLocation = unit.currentUnit.lineInfo.getLocation(startOffset);
-    final endLocation = unit.currentUnit.lineInfo.getLocation(endOffset);
+  //   final startLocation = unit.currentUnit.lineInfo.getLocation(startOffset);
+  //   final endLocation = unit.currentUnit.lineInfo.getLocation(endOffset);
 
-    return SourceSpan(
-      SourceLocation(
-        startOffset,
-        sourceUrl: unit.currentUnit.path,
-        column: startLocation.columnNumber,
-        line: startLocation.lineNumber,
-      ),
-      SourceLocation(
-        endOffset,
-        sourceUrl: unit.currentUnit.path,
-        column: endLocation.columnNumber,
-        line: endLocation.lineNumber,
-      ),
-      unit.currentUnit.content.substring(startOffset, endOffset),
-    );
-  }
+  //   return SourceSpan(
+  //     SourceLocation(
+  //       startOffset,
+  //       sourceUrl: unit.currentUnit.path,
+  //       column: startLocation.columnNumber,
+  //       line: startLocation.lineNumber,
+  //     ),
+  //     SourceLocation(
+  //       endOffset,
+  //       sourceUrl: unit.currentUnit.path,
+  //       column: endLocation.columnNumber,
+  //       line: endLocation.lineNumber,
+  //     ),
+  //     unit.currentUnit.content.substring(startOffset, endOffset),
+  //   );
+  // }
 
   SourceSpan toSourceSpanFromPath(String path, String source) {
     // TODO: integrate endNode functionality here

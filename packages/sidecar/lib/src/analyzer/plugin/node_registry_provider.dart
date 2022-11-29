@@ -35,14 +35,8 @@ final _scopedRulesForFileProvider =
 
 final scopedLintRulesForFileProvider =
     Provider.family<Set<Lint>, AnalyzedFile>((ref, file) {
-  ref.onDispose(() {
-    print('onDispose scopedLintRulesForFileProvider');
-  });
-  ref.onCancel(() {
-    print('onCancel scopedLintRulesForFileProvider');
-  });
-  final rules = ref.watch(_scopedRulesForFileProvider(file));
-  final lints = rules.whereType<Lint>().toSet();
+  final lints = ref.watch(_scopedRulesForFileProvider(file)
+      .select((value) => value.whereType<Lint>().toSet()));
 
   for (final lint in lints) {
     //TODO: restrict updates to changes with rule/package config changes
@@ -54,8 +48,8 @@ final scopedLintRulesForFileProvider =
 
 final scopedAssistRulesForFileProvider =
     Provider.family<Set<QuickAssist>, AnalyzedFile>((ref, file) {
-  final rules = ref.watch(_scopedRulesForFileProvider(file));
-  final assists = rules.whereType<QuickAssist>().toSet();
+  final assists = ref.watch(_scopedRulesForFileProvider(file)
+      .select((value) => value.whereType<QuickAssist>().toSet()));
 
   for (final assist in assists) {
     //TODO: restrict updates to changes with rule/package config changes
@@ -65,7 +59,7 @@ final scopedAssistRulesForFileProvider =
   return assists;
 });
 
-final nodeLintRegistryForFileAssistsProvider =
+final nodeRegistryForFileLintsProvider =
     Provider.family<NodeRegistry, AnalyzedFile>((ref, file) {
   final ruleService = ref.watch(ruleInitializationServiceProvider);
   final sidecarSpec = ref.watch(projectSidecarSpecProvider);
@@ -74,7 +68,7 @@ final nodeLintRegistryForFileAssistsProvider =
       file: file.path, config: sidecarSpec, rules: rules);
 });
 
-final nodeAssistRegistryForFileAssistsProvider =
+final nodeRegistryForFileAssistsProvider =
     Provider.family<NodeRegistry, AnalyzedFile>((ref, file) {
   final ruleService = ref.watch(ruleInitializationServiceProvider);
   final sidecarSpec = ref.watch(projectSidecarSpecProvider);

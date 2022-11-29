@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../protocol/communication/communication.dart';
-import '../protocol/logging/log_record.dart';
+import '../protocol/models/log_record.dart';
 import '../utils/utils.dart';
 import 'reporter.dart';
 

@@ -37,7 +37,7 @@ void main() {
         Glob('lib/**')
       ], lints: {
         kStringLiteralsCode.package: LintPackageOptions(rules: {
-          kStringLiteralsCode.code: const LintOptions(),
+          kStringLiteralsCode.id: const LintOptions(),
         }),
       });
       app.modifySidecarYaml(sidecarYamlError);
@@ -56,7 +56,7 @@ void main() {
         Glob('lib/**')
       ], lints: {
         kStringLiteralsCode.package: LintPackageOptions(rules: {
-          kStringLiteralsCode.code: const LintOptions(
+          kStringLiteralsCode.id: const LintOptions(
             severity: LintSeverity.info,
           ),
         }),
@@ -76,7 +76,7 @@ void main() {
         Glob('lib/**')
       ], lints: {
         kStringLiteralsCode.package: LintPackageOptions(rules: {
-          kStringLiteralsCode.code: const LintOptions(
+          kStringLiteralsCode.id: const LintOptions(
             severity: LintSeverity.warning,
           ),
         }),
@@ -96,7 +96,7 @@ void main() {
         Glob('lib/**')
       ], lints: {
         kStringLiteralsCode.package: LintPackageOptions(rules: {
-          kStringLiteralsCode.code: const LintOptions(
+          kStringLiteralsCode.id: const LintOptions(
             severity: LintSeverity.error,
           ),
         }),

@@ -6,7 +6,7 @@ import 'package:sidecar/src/protocol/analyzer_plugin_exts/source_exts.dart';
 
 import 'constants.dart';
 
-class OutputAstNodeTree extends SidecarAstVisitor with QuickAssist {
+class OutputAstNodeTree extends Rule with QuickAssist {
   @override
   AssistCode get code =>
       const AssistCode('output_ast_node_tree', package: kPackageName);

@@ -29,25 +29,25 @@ RuleCode _$RuleCodeFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RuleCode {
-  String get code => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   String get package => throw _privateConstructorUsedError;
   Uri? get url => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String code, String package, Uri? url) lint,
-    required TResult Function(String code, String package, Uri? url) assist,
+    required TResult Function(String id, String package, Uri? url) lint,
+    required TResult Function(String id, String package, Uri? url) assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String code, String package, Uri? url)? lint,
-    TResult Function(String code, String package, Uri? url)? assist,
+    TResult Function(String id, String package, Uri? url)? lint,
+    TResult Function(String id, String package, Uri? url)? assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String code, String package, Uri? url)? lint,
-    TResult Function(String code, String package, Uri? url)? assist,
+    TResult Function(String id, String package, Uri? url)? lint,
+    TResult Function(String id, String package, Uri? url)? assist,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -80,7 +80,7 @@ mixin _$RuleCode {
 abstract class $RuleCodeCopyWith<$Res> {
   factory $RuleCodeCopyWith(RuleCode value, $Res Function(RuleCode) then) =
       _$RuleCodeCopyWithImpl<$Res>;
-  $Res call({String code, String package, Uri? url});
+  $Res call({String id, String package, Uri? url});
 }
 
 /// @nodoc
@@ -93,14 +93,14 @@ class _$RuleCodeCopyWithImpl<$Res> implements $RuleCodeCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? code = freezed,
+    Object? id = freezed,
     Object? package = freezed,
     Object? url = freezed,
   }) {
     return _then(_value.copyWith(
-      code: code == freezed
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       package: package == freezed
           ? _value.package
@@ -120,7 +120,7 @@ abstract class _$$LintCodeCopyWith<$Res> implements $RuleCodeCopyWith<$Res> {
           _$LintCode value, $Res Function(_$LintCode) then) =
       __$$LintCodeCopyWithImpl<$Res>;
   @override
-  $Res call({String code, String package, Uri? url});
+  $Res call({String id, String package, Uri? url});
 }
 
 /// @nodoc
@@ -134,14 +134,14 @@ class __$$LintCodeCopyWithImpl<$Res> extends _$RuleCodeCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? code = freezed,
+    Object? id = freezed,
     Object? package = freezed,
     Object? url = freezed,
   }) {
     return _then(_$LintCode(
-      code == freezed
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
+      id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       package: package == freezed
           ? _value.package
@@ -158,7 +158,7 @@ class __$$LintCodeCopyWithImpl<$Res> extends _$RuleCodeCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LintCode extends LintCode {
-  const _$LintCode(this.code,
+  const _$LintCode(this.id,
       {required this.package, this.url, final String? $type})
       : $type = $type ?? 'lint',
         super._();
@@ -167,7 +167,7 @@ class _$LintCode extends LintCode {
       _$$LintCodeFromJson(json);
 
   @override
-  final String code;
+  final String id;
   @override
   final String package;
   @override
@@ -178,7 +178,7 @@ class _$LintCode extends LintCode {
 
   @override
   String toString() {
-    return 'RuleCode.lint(code: $code, package: $package, url: $url)';
+    return 'RuleCode.lint(id: $id, package: $package, url: $url)';
   }
 
   @override
@@ -186,7 +186,7 @@ class _$LintCode extends LintCode {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LintCode &&
-            const DeepCollectionEquality().equals(other.code, code) &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.package, package) &&
             const DeepCollectionEquality().equals(other.url, url));
   }
@@ -195,7 +195,7 @@ class _$LintCode extends LintCode {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(code),
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(package),
       const DeepCollectionEquality().hash(url));
 
@@ -207,30 +207,30 @@ class _$LintCode extends LintCode {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String code, String package, Uri? url) lint,
-    required TResult Function(String code, String package, Uri? url) assist,
+    required TResult Function(String id, String package, Uri? url) lint,
+    required TResult Function(String id, String package, Uri? url) assist,
   }) {
-    return lint(code, package, url);
+    return lint(id, package, url);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String code, String package, Uri? url)? lint,
-    TResult Function(String code, String package, Uri? url)? assist,
+    TResult Function(String id, String package, Uri? url)? lint,
+    TResult Function(String id, String package, Uri? url)? assist,
   }) {
-    return lint?.call(code, package, url);
+    return lint?.call(id, package, url);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String code, String package, Uri? url)? lint,
-    TResult Function(String code, String package, Uri? url)? assist,
+    TResult Function(String id, String package, Uri? url)? lint,
+    TResult Function(String id, String package, Uri? url)? assist,
     required TResult orElse(),
   }) {
     if (lint != null) {
-      return lint(code, package, url);
+      return lint(id, package, url);
     }
     return orElse();
   }
@@ -275,14 +275,14 @@ class _$LintCode extends LintCode {
 }
 
 abstract class LintCode extends RuleCode {
-  const factory LintCode(final String code,
+  const factory LintCode(final String id,
       {required final String package, final Uri? url}) = _$LintCode;
   const LintCode._() : super._();
 
   factory LintCode.fromJson(Map<String, dynamic> json) = _$LintCode.fromJson;
 
   @override
-  String get code;
+  String get id;
   @override
   String get package;
   @override
@@ -299,7 +299,7 @@ abstract class _$$AssistCodeCopyWith<$Res> implements $RuleCodeCopyWith<$Res> {
           _$AssistCode value, $Res Function(_$AssistCode) then) =
       __$$AssistCodeCopyWithImpl<$Res>;
   @override
-  $Res call({String code, String package, Uri? url});
+  $Res call({String id, String package, Uri? url});
 }
 
 /// @nodoc
@@ -314,14 +314,14 @@ class __$$AssistCodeCopyWithImpl<$Res> extends _$RuleCodeCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? code = freezed,
+    Object? id = freezed,
     Object? package = freezed,
     Object? url = freezed,
   }) {
     return _then(_$AssistCode(
-      code == freezed
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
+      id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       package: package == freezed
           ? _value.package
@@ -338,7 +338,7 @@ class __$$AssistCodeCopyWithImpl<$Res> extends _$RuleCodeCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AssistCode extends AssistCode {
-  const _$AssistCode(this.code,
+  const _$AssistCode(this.id,
       {required this.package, this.url, final String? $type})
       : $type = $type ?? 'assist',
         super._();
@@ -347,7 +347,7 @@ class _$AssistCode extends AssistCode {
       _$$AssistCodeFromJson(json);
 
   @override
-  final String code;
+  final String id;
   @override
   final String package;
   @override
@@ -358,7 +358,7 @@ class _$AssistCode extends AssistCode {
 
   @override
   String toString() {
-    return 'RuleCode.assist(code: $code, package: $package, url: $url)';
+    return 'RuleCode.assist(id: $id, package: $package, url: $url)';
   }
 
   @override
@@ -366,7 +366,7 @@ class _$AssistCode extends AssistCode {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AssistCode &&
-            const DeepCollectionEquality().equals(other.code, code) &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.package, package) &&
             const DeepCollectionEquality().equals(other.url, url));
   }
@@ -375,7 +375,7 @@ class _$AssistCode extends AssistCode {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(code),
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(package),
       const DeepCollectionEquality().hash(url));
 
@@ -387,30 +387,30 @@ class _$AssistCode extends AssistCode {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String code, String package, Uri? url) lint,
-    required TResult Function(String code, String package, Uri? url) assist,
+    required TResult Function(String id, String package, Uri? url) lint,
+    required TResult Function(String id, String package, Uri? url) assist,
   }) {
-    return assist(code, package, url);
+    return assist(id, package, url);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String code, String package, Uri? url)? lint,
-    TResult Function(String code, String package, Uri? url)? assist,
+    TResult Function(String id, String package, Uri? url)? lint,
+    TResult Function(String id, String package, Uri? url)? assist,
   }) {
-    return assist?.call(code, package, url);
+    return assist?.call(id, package, url);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String code, String package, Uri? url)? lint,
-    TResult Function(String code, String package, Uri? url)? assist,
+    TResult Function(String id, String package, Uri? url)? lint,
+    TResult Function(String id, String package, Uri? url)? assist,
     required TResult orElse(),
   }) {
     if (assist != null) {
-      return assist(code, package, url);
+      return assist(id, package, url);
     }
     return orElse();
   }
@@ -455,7 +455,7 @@ class _$AssistCode extends AssistCode {
 }
 
 abstract class AssistCode extends RuleCode {
-  const factory AssistCode(final String code,
+  const factory AssistCode(final String id,
       {required final String package, final Uri? url}) = _$AssistCode;
   const AssistCode._() : super._();
 
@@ -463,7 +463,7 @@ abstract class AssistCode extends RuleCode {
       _$AssistCode.fromJson;
 
   @override
-  String get code;
+  String get id;
   @override
   String get package;
   @override

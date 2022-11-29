@@ -35,11 +35,11 @@ class SidecarSpec {
   RuleOptions? getConfigurationForCode(RuleCode code) {
     if (code is LintCode) {
       final package = lints?[code.package];
-      final ruleConfig = package?.rules?[code.code];
+      final ruleConfig = package?.rules?[code.id];
       return ruleConfig;
     }
     if (code is AssistCode) {
-      return assists?[code.package]?.rules?[code.code];
+      return assists?[code.package]?.rules?[code.id];
     }
     throw UnimplementedError();
   }

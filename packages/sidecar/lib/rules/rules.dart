@@ -8,11 +8,9 @@ import '../src/rules/rules.dart';
 
 export '../src/rules/base_rule.dart' hide BaseRule;
 export '../src/rules/lint_severity.dart';
-export '../src/rules/typedefs.dart';
 
 /// Base for all Sidecar Rules.
-abstract class SidecarAstVisitor extends GeneralizingAstVisitor<void>
-    with BaseRule {
+abstract class Rule extends GeneralizingAstVisitor<void> with BaseRule {
   @override
   @mustCallSuper
   void visitNode(AstNode node) {

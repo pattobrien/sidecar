@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../protocol/logging/log_record.dart';
+import '../../protocol/models/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../reports/stdout_reporter.dart';
 import '../../services/active_project_service.dart';

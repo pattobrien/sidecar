@@ -5,7 +5,7 @@ import 'package:sidecar/src/protocol/analyzer_plugin_exts/source_exts.dart';
 
 import 'constants.dart';
 
-class OutputSourceSpan extends SidecarAstVisitor with QuickAssist {
+class OutputSourceSpan extends Rule with QuickAssist {
   @override
   RuleCode get code =>
       const AssistCode('output_source_span', package: kPackageName);

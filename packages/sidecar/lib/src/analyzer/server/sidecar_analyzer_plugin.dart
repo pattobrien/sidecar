@@ -17,7 +17,7 @@ import 'package:source_span/source_span.dart';
 
 import '../../protocol/analyzer_plugin_exts/analyzer_plugin_exts.dart';
 import '../../protocol/constants/constants.dart';
-import '../../protocol/logging/log_record.dart';
+import '../../protocol/models/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../reports/plugin_reporter.dart';
 import '../../services/active_project_service.dart';

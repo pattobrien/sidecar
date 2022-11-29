@@ -1,4 +1,4 @@
-import '../protocol/logging/log_record.dart';
+import '../protocol/models/log_record.dart';
 import '../protocol/protocol.dart';
 
 abstract class Reporter {

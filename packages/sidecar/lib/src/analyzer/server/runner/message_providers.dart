@@ -1,7 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../../protocol/communication/communication.dart';
-import '../../../protocol/logging/log_record.dart';
+import '../../../protocol/models/log_record.dart';
 import 'sidecar_runner.dart';
 
 final analyzerMessageStreamProvider =

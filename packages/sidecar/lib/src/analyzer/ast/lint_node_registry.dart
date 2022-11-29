@@ -197,442 +197,442 @@ class NodeRegistry {
       _forRecordTypeAnnotationPositionalField = [];
   final List<VisitorSubscription<AstNode>> _forNode = [];
 
-  void addNode(SidecarAstVisitor visitor) {
+  void addNode(Rule visitor) {
     _forNode.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAdjacentStrings(SidecarAstVisitor visitor) {
+  void addAdjacentStrings(Rule visitor) {
     _forAdjacentStrings.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAnnotation(SidecarAstVisitor visitor) {
+  void addAnnotation(Rule visitor) {
     _forAnnotation.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addArgumentList(SidecarAstVisitor visitor) {
+  void addArgumentList(Rule visitor) {
     _forArgumentList.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAsExpression(SidecarAstVisitor visitor) {
+  void addAsExpression(Rule visitor) {
     _forAsExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAssertInitializer(SidecarAstVisitor visitor) {
+  void addAssertInitializer(Rule visitor) {
     _forAssertInitializer.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAssertStatement(SidecarAstVisitor visitor) {
+  void addAssertStatement(Rule visitor) {
     _forAssertStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAssignmentExpression(SidecarAstVisitor visitor) {
+  void addAssignmentExpression(Rule visitor) {
     _forAssignmentExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAugmentationImportDirective(SidecarAstVisitor visitor) {
+  void addAugmentationImportDirective(Rule visitor) {
     _forAugmentationImportDirective
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addAwaitExpression(SidecarAstVisitor visitor) {
+  void addAwaitExpression(Rule visitor) {
     _forAwaitExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBinaryExpression(SidecarAstVisitor visitor) {
+  void addBinaryExpression(Rule visitor) {
     _forBinaryExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBlock(SidecarAstVisitor visitor) {
+  void addBlock(Rule visitor) {
     _forBlock.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBlockFunctionBody(SidecarAstVisitor visitor) {
+  void addBlockFunctionBody(Rule visitor) {
     _forBlockFunctionBody.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBooleanLiteral(SidecarAstVisitor visitor) {
+  void addBooleanLiteral(Rule visitor) {
     _forBooleanLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addBreakStatement(SidecarAstVisitor visitor) {
+  void addBreakStatement(Rule visitor) {
     _forBreakStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCascadeExpression(SidecarAstVisitor visitor) {
+  void addCascadeExpression(Rule visitor) {
     _forCascadeExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCatchClause(SidecarAstVisitor visitor) {
+  void addCatchClause(Rule visitor) {
     _forCatchClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCatchClauseParameter(SidecarAstVisitor visitor) {
+  void addCatchClauseParameter(Rule visitor) {
     _forCatchClauseParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addClassDeclaration(SidecarAstVisitor visitor) {
+  void addClassDeclaration(Rule visitor) {
     _forClassDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addClassTypeAlias(SidecarAstVisitor visitor) {
+  void addClassTypeAlias(Rule visitor) {
     _forClassTypeAlias.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addComment(SidecarAstVisitor visitor) {
+  void addComment(Rule visitor) {
     _forComment.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCommentReference(SidecarAstVisitor visitor) {
+  void addCommentReference(Rule visitor) {
     _forCommentReference.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addCompilationUnit(SidecarAstVisitor visitor) {
+  void addCompilationUnit(Rule visitor) {
     _forCompilationUnit.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConditionalExpression(SidecarAstVisitor visitor) {
+  void addConditionalExpression(Rule visitor) {
     _forConditionalExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConfiguration(SidecarAstVisitor visitor) {
+  void addConfiguration(Rule visitor) {
     _forConfiguration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorDeclaration(SidecarAstVisitor visitor) {
+  void addConstructorDeclaration(Rule visitor) {
     _forConstructorDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorFieldInitializer(SidecarAstVisitor visitor) {
+  void addConstructorFieldInitializer(Rule visitor) {
     _forConstructorFieldInitializer
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorName(SidecarAstVisitor visitor) {
+  void addConstructorName(Rule visitor) {
     _forConstructorName.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorReference(SidecarAstVisitor visitor) {
+  void addConstructorReference(Rule visitor) {
     _forConstructorReference
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addConstructorSelector(SidecarAstVisitor visitor) {
+  void addConstructorSelector(Rule visitor) {
     _forConstructorSelector
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addContinueStatement(SidecarAstVisitor visitor) {
+  void addContinueStatement(Rule visitor) {
     _forContinueStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDeclaredIdentifier(SidecarAstVisitor visitor) {
+  void addDeclaredIdentifier(Rule visitor) {
     _forDeclaredIdentifier
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDefaultFormalParameter(SidecarAstVisitor visitor) {
+  void addDefaultFormalParameter(Rule visitor) {
     _forDefaultFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDoStatement(SidecarAstVisitor visitor) {
+  void addDoStatement(Rule visitor) {
     _forDoStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDottedName(SidecarAstVisitor visitor) {
+  void addDottedName(Rule visitor) {
     _forDottedName.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addDoubleLiteral(SidecarAstVisitor visitor) {
+  void addDoubleLiteral(Rule visitor) {
     _forDoubleLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEmptyFunctionBody(SidecarAstVisitor visitor) {
+  void addEmptyFunctionBody(Rule visitor) {
     _forEmptyFunctionBody.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEmptyStatement(SidecarAstVisitor visitor) {
+  void addEmptyStatement(Rule visitor) {
     _forEmptyStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEnumConstantArguments(SidecarAstVisitor visitor) {
+  void addEnumConstantArguments(Rule visitor) {
     _forEnumConstantArguments
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEnumConstantDeclaration(SidecarAstVisitor visitor) {
+  void addEnumConstantDeclaration(Rule visitor) {
     _forEnumConstantDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addEnumDeclaration(SidecarAstVisitor visitor) {
+  void addEnumDeclaration(Rule visitor) {
     _forEnumDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExportDirective(SidecarAstVisitor visitor) {
+  void addExportDirective(Rule visitor) {
     _forExportDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExpressionFunctionBody(SidecarAstVisitor visitor) {
+  void addExpressionFunctionBody(Rule visitor) {
     _forExpressionFunctionBody
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExpressionStatement(SidecarAstVisitor visitor) {
+  void addExpressionStatement(Rule visitor) {
     _forExpressionStatement
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExtendsClause(SidecarAstVisitor visitor) {
+  void addExtendsClause(Rule visitor) {
     _forExtendsClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExtensionDeclaration(SidecarAstVisitor visitor) {
+  void addExtensionDeclaration(Rule visitor) {
     _forExtensionDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addExtensionOverride(SidecarAstVisitor visitor) {
+  void addExtensionOverride(Rule visitor) {
     _forExtensionOverride.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFieldDeclaration(SidecarAstVisitor visitor) {
+  void addFieldDeclaration(Rule visitor) {
     _forFieldDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFieldFormalParameter(SidecarAstVisitor visitor) {
+  void addFieldFormalParameter(Rule visitor) {
     _forFieldFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForEachPartsWithDeclaration(SidecarAstVisitor visitor) {
+  void addForEachPartsWithDeclaration(Rule visitor) {
     _forForEachPartsWithDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForEachPartsWithIdentifier(SidecarAstVisitor visitor) {
+  void addForEachPartsWithIdentifier(Rule visitor) {
     _forForEachPartsWithIdentifier
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForElement(SidecarAstVisitor visitor) {
+  void addForElement(Rule visitor) {
     _forForElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFormalParameterList(SidecarAstVisitor visitor) {
+  void addFormalParameterList(Rule visitor) {
     _forFormalParameterList
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForPartsWithDeclarations(SidecarAstVisitor visitor) {
+  void addForPartsWithDeclarations(Rule visitor) {
     _forForPartsWithDeclarations
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForPartsWithExpression(SidecarAstVisitor visitor) {
+  void addForPartsWithExpression(Rule visitor) {
     _forForPartsWithExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addForStatement(SidecarAstVisitor visitor) {
+  void addForStatement(Rule visitor) {
     _forForStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionDeclaration(SidecarAstVisitor visitor) {
+  void addFunctionDeclaration(Rule visitor) {
     _forFunctionDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionDeclarationStatement(SidecarAstVisitor visitor) {
+  void addFunctionDeclarationStatement(Rule visitor) {
     _forFunctionDeclarationStatement
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionExpression(SidecarAstVisitor visitor) {
+  void addFunctionExpression(Rule visitor) {
     _forFunctionExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionExpressionInvocation(SidecarAstVisitor visitor) {
+  void addFunctionExpressionInvocation(Rule visitor) {
     _forFunctionExpressionInvocation
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionReference(SidecarAstVisitor visitor) {
+  void addFunctionReference(Rule visitor) {
     _forFunctionReference.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionTypeAlias(SidecarAstVisitor visitor) {
+  void addFunctionTypeAlias(Rule visitor) {
     _forFunctionTypeAlias.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addFunctionTypedFormalParameter(SidecarAstVisitor visitor) {
+  void addFunctionTypedFormalParameter(Rule visitor) {
     _forFunctionTypedFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addGenericFunctionType(SidecarAstVisitor visitor) {
+  void addGenericFunctionType(Rule visitor) {
     _forGenericFunctionType
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addGenericTypeAlias(SidecarAstVisitor visitor) {
+  void addGenericTypeAlias(Rule visitor) {
     _forGenericTypeAlias.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addHideClause(SidecarAstVisitor visitor) {
+  void addHideClause(Rule visitor) {
     _forHideClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addHideCombinator(SidecarAstVisitor visitor) {
+  void addHideCombinator(Rule visitor) {
     _forHideCombinator.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIfElement(SidecarAstVisitor visitor) {
+  void addIfElement(Rule visitor) {
     _forIfElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIfStatement(SidecarAstVisitor visitor) {
+  void addIfStatement(Rule visitor) {
     _forIfStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addImplementsClause(SidecarAstVisitor visitor) {
+  void addImplementsClause(Rule visitor) {
     _forImplementsClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addImplicitCallReference(SidecarAstVisitor visitor) {
+  void addImplicitCallReference(Rule visitor) {
     _forImplicitCallReference
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addImportDirective(SidecarAstVisitor visitor) {
+  void addImportDirective(Rule visitor) {
     _forImportDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIndexExpression(SidecarAstVisitor visitor) {
+  void addIndexExpression(Rule visitor) {
     _forIndexExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addInstanceCreationExpression(SidecarAstVisitor visitor) {
+  void addInstanceCreationExpression(Rule visitor) {
     _forInstanceCreationExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIntegerLiteral(SidecarAstVisitor visitor) {
+  void addIntegerLiteral(Rule visitor) {
     _forIntegerLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addInterpolationExpression(SidecarAstVisitor visitor) {
+  void addInterpolationExpression(Rule visitor) {
     _forInterpolationExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addInterpolationString(SidecarAstVisitor visitor) {
+  void addInterpolationString(Rule visitor) {
     _forInterpolationString
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addIsExpression(SidecarAstVisitor visitor) {
+  void addIsExpression(Rule visitor) {
     _forIsExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLabel(SidecarAstVisitor visitor) {
+  void addLabel(Rule visitor) {
     _forLabel.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLabeledStatement(SidecarAstVisitor visitor) {
+  void addLabeledStatement(Rule visitor) {
     _forLabeledStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLibraryAugmentationDirective(SidecarAstVisitor visitor) {
+  void addLibraryAugmentationDirective(Rule visitor) {
     _forLibraryAugmentationDirective
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLibraryDirective(SidecarAstVisitor visitor) {
+  void addLibraryDirective(Rule visitor) {
     _forLibraryDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addLibraryIdentifier(SidecarAstVisitor visitor) {
+  void addLibraryIdentifier(Rule visitor) {
     _forLibraryIdentifier.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addListLiteral(SidecarAstVisitor visitor) {
+  void addListLiteral(Rule visitor) {
     _forListLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addMapLiteralEntry(SidecarAstVisitor visitor) {
+  void addMapLiteralEntry(Rule visitor) {
     _forMapLiteralEntry.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addMethodDeclaration(SidecarAstVisitor visitor) {
+  void addMethodDeclaration(Rule visitor) {
     _forMethodDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addMethodInvocation(SidecarAstVisitor visitor) {
+  void addMethodInvocation(Rule visitor) {
     _forMethodInvocation.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addMixinDeclaration(SidecarAstVisitor visitor) {
+  void addMixinDeclaration(Rule visitor) {
     _forMixinDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNamedExpression(SidecarAstVisitor visitor) {
+  void addNamedExpression(Rule visitor) {
     _forNamedExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNamedType(SidecarAstVisitor visitor) {
+  void addNamedType(Rule visitor) {
     _forNamedType.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNativeClause(SidecarAstVisitor visitor) {
+  void addNativeClause(Rule visitor) {
     _forNativeClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNativeFunctionBody(SidecarAstVisitor visitor) {
+  void addNativeFunctionBody(Rule visitor) {
     _forNativeFunctionBody
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addNullLiteral(SidecarAstVisitor visitor) {
+  void addNullLiteral(Rule visitor) {
     _forNullLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addOnClause(SidecarAstVisitor visitor) {
+  void addOnClause(Rule visitor) {
     _forOnClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addParenthesizedExpression(SidecarAstVisitor visitor) {
+  void addParenthesizedExpression(Rule visitor) {
     _forParenthesizedExpression
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPartDirective(SidecarAstVisitor visitor) {
+  void addPartDirective(Rule visitor) {
     _forPartDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPartOfDirective(SidecarAstVisitor visitor) {
+  void addPartOfDirective(Rule visitor) {
     _forPartOfDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPostfixExpression(SidecarAstVisitor visitor) {
+  void addPostfixExpression(Rule visitor) {
     _forPostfixExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPrefixedIdentifier(SidecarAstVisitor visitor) {
+  void addPrefixedIdentifier(Rule visitor) {
     _forPrefixedIdentifier
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPrefixExpression(SidecarAstVisitor visitor) {
+  void addPrefixExpression(Rule visitor) {
     _forPrefixExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addPropertyAccess(SidecarAstVisitor visitor) {
+  void addPropertyAccess(Rule visitor) {
     _forPropertyAccess.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
@@ -640,159 +640,159 @@ class NodeRegistry {
   //   _forRecordLiterals.add(VisitorSubscription(visitor, _getTimer(visitor)));
   // }
 
-  void addRedirectingConstructorInvocation(SidecarAstVisitor visitor) {
+  void addRedirectingConstructorInvocation(Rule visitor) {
     _forRedirectingConstructorInvocation
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addRethrowExpression(SidecarAstVisitor visitor) {
+  void addRethrowExpression(Rule visitor) {
     _forRethrowExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addReturnStatement(SidecarAstVisitor visitor) {
+  void addReturnStatement(Rule visitor) {
     _forReturnStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addScriptTag(SidecarAstVisitor visitor) {
+  void addScriptTag(Rule visitor) {
     _forScriptTag.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSetOrMapLiteral(SidecarAstVisitor visitor) {
+  void addSetOrMapLiteral(Rule visitor) {
     _forSetOrMapLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addShowClause(SidecarAstVisitor visitor) {
+  void addShowClause(Rule visitor) {
     _forShowClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addShowCombinator(SidecarAstVisitor visitor) {
+  void addShowCombinator(Rule visitor) {
     _forShowCombinator.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addShowHideElement(SidecarAstVisitor visitor) {
+  void addShowHideElement(Rule visitor) {
     _forShowHideElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSimpleFormalParameter(SidecarAstVisitor visitor) {
+  void addSimpleFormalParameter(Rule visitor) {
     _forSimpleFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSimpleIdentifier(SidecarAstVisitor visitor) {
+  void addSimpleIdentifier(Rule visitor) {
     _forSimpleIdentifier.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSimpleStringLiteral(SidecarAstVisitor visitor) {
+  void addSimpleStringLiteral(Rule visitor) {
     _forSimpleStringLiteral
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSpreadElement(SidecarAstVisitor visitor) {
+  void addSpreadElement(Rule visitor) {
     _forSpreadElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addStringInterpolation(SidecarAstVisitor visitor) {
+  void addStringInterpolation(Rule visitor) {
     _forStringInterpolation
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSuperConstructorInvocation(SidecarAstVisitor visitor) {
+  void addSuperConstructorInvocation(Rule visitor) {
     _forSuperConstructorInvocation
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSuperExpression(SidecarAstVisitor visitor) {
+  void addSuperExpression(Rule visitor) {
     _forSuperExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSuperFormalParameter(SidecarAstVisitor visitor) {
+  void addSuperFormalParameter(Rule visitor) {
     _forSuperFormalParameter
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSwitchCase(SidecarAstVisitor visitor) {
+  void addSwitchCase(Rule visitor) {
     _forSwitchCase.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSwitchDefault(SidecarAstVisitor visitor) {
+  void addSwitchDefault(Rule visitor) {
     _forSwitchDefault.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSwitchStatement(SidecarAstVisitor visitor) {
+  void addSwitchStatement(Rule visitor) {
     _forSwitchStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addSymbolLiteral(SidecarAstVisitor visitor) {
+  void addSymbolLiteral(Rule visitor) {
     _forSymbolLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addThisExpression(SidecarAstVisitor visitor) {
+  void addThisExpression(Rule visitor) {
     _forThisExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addThrowExpression(SidecarAstVisitor visitor) {
+  void addThrowExpression(Rule visitor) {
     _forThrowExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTopLevelVariableDeclaration(SidecarAstVisitor visitor) {
+  void addTopLevelVariableDeclaration(Rule visitor) {
     _forTopLevelVariableDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTryStatement(SidecarAstVisitor visitor) {
+  void addTryStatement(Rule visitor) {
     _forTryStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTypeArgumentList(SidecarAstVisitor visitor) {
+  void addTypeArgumentList(Rule visitor) {
     _forTypeArgumentList.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTypeLiteral(SidecarAstVisitor visitor) {
+  void addTypeLiteral(Rule visitor) {
     _forTypeLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
   @Deprecated('Use addNamedType() instead')
-  void addTypeName(SidecarAstVisitor visitor) {
+  void addTypeName(Rule visitor) {
     addNamedType(visitor);
   }
 
-  void addTypeParameter(SidecarAstVisitor visitor) {
+  void addTypeParameter(Rule visitor) {
     _forTypeParameter.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addTypeParameterList(SidecarAstVisitor visitor) {
+  void addTypeParameterList(Rule visitor) {
     _forTypeParameterList.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addVariableDeclaration(SidecarAstVisitor visitor) {
+  void addVariableDeclaration(Rule visitor) {
     _forVariableDeclaration
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addVariableDeclarationList(SidecarAstVisitor visitor) {
+  void addVariableDeclarationList(Rule visitor) {
     _forVariableDeclarationList
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addVariableDeclarationStatement(SidecarAstVisitor visitor) {
+  void addVariableDeclarationStatement(Rule visitor) {
     _forVariableDeclarationStatement
         .add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addWhileStatement(SidecarAstVisitor visitor) {
+  void addWhileStatement(Rule visitor) {
     _forWhileStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addWithClause(SidecarAstVisitor visitor) {
+  void addWithClause(Rule visitor) {
     _forWithClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
   }
 
-  void addYieldStatement(SidecarAstVisitor linter) {
+  void addYieldStatement(Rule linter) {
     _forYieldStatement.add(VisitorSubscription(linter, _getTimer(linter)));
   }
 
   /// Get the timer associated with the given [linter].
-  Stopwatch? _getTimer(SidecarAstVisitor linter) {
+  Stopwatch? _getTimer(Rule linter) {
     // if (enableTiming) {
     //   return registry.getTimer(linter);
     // } else {

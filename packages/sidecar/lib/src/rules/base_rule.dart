@@ -18,16 +18,30 @@ import 'rules.dart';
 /// Base class for constructing any Sidecar rule.
 @internal
 mixin BaseRule {
+  /// Identification for a particular Sidecar rule
   RuleCode get code;
+
+  /// Set default includes for a particular rule.
+  ///
+  /// Can be overridden in a SidecarSpec file.
   List<Glob>? get includes => null;
+
+  /// Set default excludes for a particular rule.
+  ///
+  /// Can be overridden in a SidecarSpec file.
   List<Glob>? get excludes => null;
+
+  /// Sidecar configuration for the current active project.
+  SidecarSpec get sidecarSpec => _sidecarSpec;
+
+  /// ResolvedUnitResult for a particular file.
+  ResolvedUnitResult get unit => _unit;
 
   final Set<LintResult> lintResults = {};
   final Set<AssistFilterResult> assistFilterResults = {};
-  late ResolvedUnitResult _unit;
-  late SidecarSpec sidecarSpec;
 
-  ResolvedUnitResult get unit => _unit;
+  late ResolvedUnitResult _unit;
+  late SidecarSpec _sidecarSpec;
 
   /// Register all of the visit methods of a Sidecar Rule.
   ///
@@ -63,58 +77,17 @@ mixin BaseRule {
   void setConfig({
     required SidecarSpec sidecarSpec,
   }) {
-    this.sidecarSpec = sidecarSpec;
-    // TODO: results should be cleared during the setUnitContext stage
-    // lintResults.clear();
-    // assistFilterResults.clear();
+    _sidecarSpec = sidecarSpec;
+    // initializeVisitor(registry);
   }
 
   @internal
-  void setUnitContext(ResolvedUnitResult unit) {
+  void setUnitContext(
+    ResolvedUnitResult unit,
+  ) {
     _unit = unit;
     lintResults.clear();
     assistFilterResults.clear();
-  }
-
-  void _reportSourceSpan(
-    SourceSpan span,
-    String message, {
-    String? correction,
-    EditsComputer? editsComputer,
-  }) {
-    if (this is Lint) {
-      final thisConfig =
-          sidecarSpec.getConfigurationForCode(code) as LintOptions?;
-      final result = LintResult(
-        rule: code,
-        span: span,
-        message: message,
-        correction: correction,
-        severity: thisConfig?.severity ?? (this as Lint).defaultSeverity,
-        editsComputer: editsComputer,
-      );
-      lintResults.add(result);
-    } else {
-      throw UnimplementedError(
-          '_reportAssistSourceSpan should receive QuickAssist rules only.');
-    }
-  }
-
-  void _reportAssistSourceSpan(
-    SourceSpan span, {
-    EditsComputer? editsComputer,
-  }) {
-    if (this is QuickAssist) {
-      final result = AssistFilterResult(
-        rule: code,
-        span: span,
-        editsComputer: editsComputer,
-      );
-      assistFilterResults.add(result);
-    } else {
-      throw UnimplementedError(
-          '_reportAssistSourceSpan should receive QuickAssist rules only.');
-    }
   }
 
   @override
@@ -131,27 +104,48 @@ mixin BaseRule {
       );
 }
 
+/// Function for creating a rule.
+///
+/// Constructor is used in the entrypoint generation for SidecarAnalyzer.
+typedef SidecarBaseConstructor = BaseRule Function();
+
 /// Display a message, warning, or error in the IDE.
 mixin Lint on BaseRule {
   @override
   LintCode get code;
   LintSeverity get defaultSeverity => LintSeverity.info;
 
+  void _reportSpan(
+    SourceSpan span,
+    String message, {
+    String? correction,
+    EditsComputer? editsComputer,
+  }) {
+    final config = sidecarSpec.getConfigurationForCode(code) as LintOptions?;
+    final result = LintResult(
+      rule: code,
+      span: span,
+      message: message,
+      correction: correction,
+      severity: config?.severity ?? defaultSeverity,
+      editsComputer: editsComputer,
+    );
+    lintResults.add(result);
+  }
+
   void reportAstNode(
     AstNode node, {
     required String message,
     String? correction,
   }) =>
-      _reportSourceSpan(node.toSourceSpan(_unit), message,
-          correction: correction);
+      _reportSpan(node.toSourceSpan(_unit), message, correction: correction);
 
   void reportToken(
     Token token, {
     required String message,
     String? correction,
   }) =>
-      _reportSourceSpan(token.toSourceSpan(_unit), message,
-          correction: correction);
+      _reportSpan(token.toSourceSpan(_unit), message, correction: correction);
 }
 
 /// Suggested code edits for a particular Lint
@@ -165,7 +159,7 @@ mixin QuickFix on Lint {
     String? correction,
     EditsComputer? editsComputer,
   }) =>
-      _reportSourceSpan(node.toSourceSpan(_unit), message,
+      _reportSpan(node.toSourceSpan(_unit), message,
           correction: correction, editsComputer: editsComputer);
 
   @override
@@ -175,7 +169,7 @@ mixin QuickFix on Lint {
     String? correction,
     EditsComputer? editsComputer,
   }) =>
-      _reportSourceSpan(token.toSourceSpan(_unit), message,
+      _reportSpan(token.toSourceSpan(_unit), message,
           correction: correction, editsComputer: editsComputer);
 }
 
@@ -183,6 +177,18 @@ mixin QuickFix on Lint {
 ///
 /// For multi-file edits, prefer using Refactorings (TBD).
 mixin QuickAssist on BaseRule {
+  void _reportAssistSourceSpan(
+    SourceSpan span, {
+    EditsComputer? editsComputer,
+  }) {
+    final result = AssistFilterResult(
+      rule: code,
+      span: span,
+      editsComputer: editsComputer,
+    );
+    assistFilterResults.add(result);
+  }
+
   void reportAssistForNode(
     AstNode node, {
     @Deprecated('only use EditResult message') String? message,
@@ -199,3 +205,22 @@ mixin QuickAssist on BaseRule {
       _reportAssistSourceSpan(token.toSourceSpan(_unit),
           editsComputer: editsComputer);
 }
+
+// /// Capture metrics for a particular file.
+// ///
+// ///
+// mixin Metric on BaseRule {
+//   void captureMetricForNode(
+//     AstNode node, {
+//     EditsComputer? editsComputer,
+//   }) =>
+//       _reportAssistSourceSpan(node.toSourceSpan(_unit),
+//           editsComputer: editsComputer);
+
+//   void captureMetricForToken(
+//     Token token, {
+//     EditsComputer? editsComputer,
+//   }) =>
+//       _reportAssistSourceSpan(token.toSourceSpan(_unit),
+//           editsComputer: editsComputer);
+// }

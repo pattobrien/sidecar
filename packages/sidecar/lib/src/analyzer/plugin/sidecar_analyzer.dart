@@ -11,7 +11,7 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../../configurations/sidecar_spec/sidecar_spec_parsers.dart';
-import '../../protocol/logging/log_record.dart';
+import '../../protocol/models/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/file_paths.dart';
@@ -239,7 +239,7 @@ class SidecarAnalyzer {
     logger.info('starting analyzeFiles: $files');
 
     for (final file in dartFiles) {
-      _ref.invalidate(nodeLintRegistryForFileAssistsProvider(file));
+      _ref.invalidate(nodeRegistryForFileLintsProvider(file));
       await _ref.refresh(resolvedUnitForFileProvider(file).future);
       final lints = await _ref.read(lintResultsProvider(file).future);
       final notification = LintNotification(file, lints);

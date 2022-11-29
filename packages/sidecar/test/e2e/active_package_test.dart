@@ -24,7 +24,7 @@ void main() {
       Glob('lib/**')
     ], lints: {
       kStringLiteralsCode.package: LintPackageOptions(rules: {
-        kStringLiteralsCode.code: const LintOptions(
+        kStringLiteralsCode.id: const LintOptions(
           enabled: true,
         ),
       }),
@@ -69,7 +69,7 @@ void main() {
       Glob('lib/**')
     ], lints: {
       kStringLiteralsCode.package: LintPackageOptions(rules: {
-        kStringLiteralsCode.code: const LintOptions(),
+        kStringLiteralsCode.id: const LintOptions(),
       }),
     });
 

@@ -9,7 +9,7 @@ class VisitorSubscription<T> {
   const VisitorSubscription(this.visitor, this.timer);
 
   /// BaseRule of the subscription.
-  final SidecarAstVisitor visitor;
+  final Rule visitor;
 
   /// Timer to record how long it takes to run a given visit method.
   final Stopwatch? timer;

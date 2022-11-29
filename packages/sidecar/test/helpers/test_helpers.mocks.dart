@@ -6,7 +6,7 @@
 import 'package:cli_util/cli_logging.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:sidecar/src/protocol/communication/communication.dart' as _i4;
-import 'package:sidecar/src/protocol/logging/log_record.dart' as _i5;
+import 'package:sidecar/src/protocol/models/log_record.dart' as _i5;
 import 'package:sidecar/src/reports/reporter.dart' as _i6;
 import 'package:sidecar/src/reports/stdout_reporter.dart' as _i3;
 

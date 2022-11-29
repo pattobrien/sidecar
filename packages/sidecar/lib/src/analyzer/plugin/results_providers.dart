@@ -36,7 +36,7 @@ final lintResultsProvider =
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
 
   // file-dependent objects
-  final registry = ref.watch(nodeLintRegistryForFileAssistsProvider(file));
+  final registry = ref.watch(nodeRegistryForFileLintsProvider(file));
   final rulesForFile = ref.watch(scopedLintRulesForFileProvider(file));
   logger.info('rulesForFile: ${rulesForFile.map((e) => e.code)}');
 
@@ -70,7 +70,7 @@ final assistFiltersProvider = FutureProvider.family
     .autoDispose<Set<AssistFilterResult>, AnalyzedFile>((ref, file) async {
   final rules = ref.watch(scopedAssistRulesForFileProvider(file));
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
-  final registry = ref.watch(nodeAssistRegistryForFileAssistsProvider(file));
+  final registry = ref.watch(nodeRegistryForFileAssistsProvider(file));
   // print('REGISTRY ${registry}');
   logger.info('ASSIST FILTERS RULES: ${rules.length}');
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);

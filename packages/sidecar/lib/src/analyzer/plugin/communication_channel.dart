@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../protocol/logging/log_record.dart';
+import '../../protocol/models/log_record.dart';
 import '../../protocol/protocol.dart';
 
 class CommunicationChannel {

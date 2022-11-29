@@ -7,7 +7,7 @@ part of 'rule_code.dart';
 // **************************************************************************
 
 _$LintCode _$$LintCodeFromJson(Map json) => _$LintCode(
-      json['code'] as String,
+      json['id'] as String,
       package: json['package'] as String,
       url: json['url'] == null ? null : Uri.parse(json['url'] as String),
       $type: json['runtimeType'] as String?,
@@ -15,7 +15,7 @@ _$LintCode _$$LintCodeFromJson(Map json) => _$LintCode(
 
 Map<String, dynamic> _$$LintCodeToJson(_$LintCode instance) {
   final val = <String, dynamic>{
-    'code': instance.code,
+    'id': instance.id,
     'package': instance.package,
   };
 
@@ -31,7 +31,7 @@ Map<String, dynamic> _$$LintCodeToJson(_$LintCode instance) {
 }
 
 _$AssistCode _$$AssistCodeFromJson(Map json) => _$AssistCode(
-      json['code'] as String,
+      json['id'] as String,
       package: json['package'] as String,
       url: json['url'] == null ? null : Uri.parse(json['url'] as String),
       $type: json['runtimeType'] as String?,
@@ -39,7 +39,7 @@ _$AssistCode _$$AssistCodeFromJson(Map json) => _$AssistCode(
 
 Map<String, dynamic> _$$AssistCodeToJson(_$AssistCode instance) {
   final val = <String, dynamic>{
-    'code': instance.code,
+    'id': instance.id,
     'package': instance.package,
   };
 

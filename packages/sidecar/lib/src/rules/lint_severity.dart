@@ -33,7 +33,7 @@ extension LintSeverityX on LintSeverity {
     throw InvalidSeverityException(string);
   }
 
-  // used to colorize CLI output
+  /// Colorize text dependening on severity
   String get ansi {
     final ansi = Ansi(true);
     switch (this) {

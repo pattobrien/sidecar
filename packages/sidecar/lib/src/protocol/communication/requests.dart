@@ -8,18 +8,13 @@ part 'requests.g.dart';
 
 @freezed
 class SidecarRequest with _$SidecarRequest {
-  const SidecarRequest._();
-
-  // const factory SidecarRequest.setActivePackage(
-  //   ActivePackageRoot root, {
-  //   List<Uri>? workspaceScope,
-  // }) = SetActivePackageRequest;
-
   const factory SidecarRequest.setWorkspaceScope(
     List<Uri>? roots,
   ) = SetContextCollectionRequest;
 
-  const factory SidecarRequest.lint(List<String> files) = LintRequest;
+  const factory SidecarRequest.lint(
+    List<String> files,
+  ) = LintRequest;
 
   const factory SidecarRequest.assist({
     required AnalyzedFile file,
@@ -41,6 +36,8 @@ class SidecarRequest with _$SidecarRequest {
   const factory SidecarRequest.setPriorityFiles(
     Set<AnalyzedFile> files,
   ) = SetPriorityFilesRequest;
+
+  const SidecarRequest._();
 
   factory SidecarRequest.fromJson(Map<String, dynamic> json) =>
       _$SidecarRequestFromJson(json);

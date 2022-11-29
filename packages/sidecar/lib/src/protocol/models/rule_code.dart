@@ -7,14 +7,16 @@ part 'rule_code.g.dart';
 
 /// Identify a particular sidecar rule, for lints, assists, etc.
 class RuleCode with _$RuleCode {
+  /// Identifier for a Sidecar Lint rule
   const factory RuleCode.lint(
-    String code, {
+    String id, {
     required String package,
     Uri? url,
   }) = LintCode;
 
+  /// Identifier for a Sidecar Assist rule
   const factory RuleCode.assist(
-    String code, {
+    String id, {
     required String package,
     Uri? url,
   }) = AssistCode;

@@ -26,7 +26,7 @@ class RuleInitializationService {
       for (final ruleEntry in ruleOptionEntries) {
         final ruleId = ruleEntry.key;
         final thisRule = rules.firstWhereOrNull((rule) {
-          return rule.code.code == ruleId && rule.code.package == packageId;
+          return rule.code.id == ruleId && rule.code.package == packageId;
         });
 
         if (thisRule == null) {

@@ -5,8 +5,6 @@ import '../source/source.dart';
 
 extension SourceFileEditX on SourceFileEdit {
   plugin.SourceFileEdit toPluginFileEdit() {
-    final normalizedFile = file.normalizePath();
-    print('FILE PATH: ${normalizedFile.pathNoTrailingSlash}');
     return plugin.SourceFileEdit(
         file.pathNoTrailingSlash, fileStamp.millisecondsSinceEpoch,
         edits: edits.toPluginEdits());

@@ -27,23 +27,3 @@ final activeProjectExcludeGlobsProvider = Provider<Set<Glob>>((ref) {
   final projectConfiguration = ref.watch(projectSidecarSpecProvider);
   return projectConfiguration.excludes?.toSet() ?? SidecarSpec.defaultExcludes;
 });
-
-// final packageConfigurationForCodeProvider =
-//     Provider.family<PackageOptions?, RuleCode>((ref, code) {
-//   ref.onDispose(() {
-//     print('onDispose projectSidecarSpecProvider');
-//   });
-//   ref.onCancel(() {
-//     print('onCancel projectSidecarSpecProvider');
-//   });
-//   return ref.watch(projectSidecarSpecProvider.select(
-//       (sidecarSpec) => sidecarSpec.getPackageConfigurationForCode(code)));
-// });
-
-// final ruleConfigurationForCodeProvider =
-//     Provider.family<RuleOptions?, RuleCode>((ref, code) {
-//   final config = ref.watch(projectSidecarSpecProvider
-//       .select((sidecarSpec) => sidecarSpec.getConfigurationForCode(code)));
-//   print('SIDECAR.YAML REFRESHING ${code.code} config');
-//   return config;
-// });
