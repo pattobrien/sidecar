@@ -1,8 +1,7 @@
 
-<center>
+
 
 ## Sidecar Analyzer
-
 
 *Enable a more personalized developer experience within the IDE.*
 
@@ -17,26 +16,20 @@
 
 > This is an experimental package which is expected to change slightly (but frequently) until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the official ```package:analyzer```, and therefore any rule packages you may want to experiment with will be easy to port over to any updated APIs.
 
-</center>
+
 
 ## Motivation
 
-Dart lints are incredibly useful for keeping a codebase clean and tidy, but code analysis use cases don't need to end at code clenliness. What if we could use these same tools to create highly-opinionated rules and code edits, for a particular package ecosystem (BloC vs Riverpod), or for a specific app project?
+Dart lints are incredibly useful for keeping a codebase clean and tidy, but code analysis use cases don't need to end at official rules. What if we could use these same tools to enforce highly-opinionated rules for a particular package ecosystem (BloC vs Riverpod) or for a particular app?
 
-The goal of Sidecar is to enable a more personalized developer experience by allowing quick and easy access to the core lint and code assist tools of modern IDEs. In order to meet such a goal, Rules must be:
+The goal of Sidecar is to enable a more personalized developer experience by allowing quick and easy access to the core lint and code assist tools of modern IDEs.
 
-- easy to use: top-tier performance, using familiar Dart tools and terminology
-- easy to customize: tailored for the application, the development phase, and the developer
-- easy to build: straightforward APIs with familiar tooling to aid the creation of rules
-
-Over the next few months of development, we hope to continue to build out the features that will meet these objectives.
 ### Example Sidecar Rule Packages
 
-To explore the use cases Sidecar hopes to facilitate, take a look at the following rule packages:
+To explore how rule packages are created, take a look at the following rule packages:
 
-- design_system_lints
-- intl_lints
-- dart_lints (Sidecar port of the official Dart lints, for benchmarking purposes)
+- [design_system_lints](https://pub.dev/design_system_lints)
+- [dart_lints](https://pub.dev/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
 
 ## Creating a Rule
 
@@ -45,7 +38,7 @@ Below is an example of a Lint rule which highlights any strings within a Dart ap
 ```dart
 // avoid_string_literals.dart
 
-class AvoidStringLiterals extends SidecarAstVisitor with Lint {
+class AvoidStringLiterals extends Rule with Lint {
   @override
   LintCode get code => 
     LintCode('avoid_string_literals', package: 'intl_lints', url: kUri);
@@ -69,8 +62,7 @@ Note the following features and requirements:
 
 
 ### SidecarAstVisitor
-- Every Sidecar Rule should extend SidecarAstVisitor and mixin either Lint or Assist
-- One or more visit methods should be overridden
+- Every Sidecar Rule should extend ```Rule``` and mixin either ```Lint``` or ```Assist```
 - All overridden visit methods should be added to the NodeRegistry via the ```initializeVisitor``` method
 - Lint rules expose methods ```reportAstNode``` and ```reportToken```, which take a lint message and an optional correction message to display to a user
 - A QuickFix mixin can also be added to a Lint mixin, which exposes a parameter ```editsComputer``` on the function ```reportAstNode```
@@ -79,14 +71,14 @@ Note the following features and requirements:
 
 ### RuleCode
 - A RuleCode is the ID of every unique Sidecar Rule
-- The ID of a RuleCode (e.g. 'avoid_string_literals') should be in snake_case format and should match the file name (snake_case) and the class name (PascalCase)
+- The ID of a RuleCode (e.g. 'avoid_string_literals') should be in snake_case format and should match the class name (in PascalCase)
 - The Package ID of a RuleCode should be identical to the package name
 - A URL can be added to the LintCode, which would then appear as a hyperlink in an IDE's lint window
 
 
 ### Rule Packages
 
-- Sidecar rule packages can contain 1+ rules
+- Sidecar rule packages can contain 1 or more rules
 - For a given package 'intl_lints', all rules must be accessible from the file ```lib/intl_lints.dart``` (either directly or via exports)
 - pubspec.yaml should also declare any rules
 
@@ -99,7 +91,7 @@ sidecar:
     - avoid_string_literals # should match the Lint's RuleCode ID
 ```
 
-> NOTE: some of the above API details are complicated or redundant; our intention with the Sidecar package is to reduce as much boilerplate as possible to make creating rules as straightforward as possible. If you have any feedback for how you'd like the APIs to look, please reach out on github, it would be very much appreciated.
+> NOTE: some of the above API details are complicated or redundant; our intention over time is to reduce as much boilerplate as possible in order to make rule creation as straightforward as possible. If you have any feedback for how you'd like the APIs to look, feel free to open an issue on github.
 
 ## Installing the CLI tool
 
@@ -118,9 +110,9 @@ The Dart team maintains analysis servers that run in IDEs like VSCode. In Server
 
 To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
 
-1. Depend on any ```sidecar``` lint packages such as ```design_system_lints```.
+1. Depend on any ```sidecar``` lint packages such as ```design_system_lints```
 
-2. Create a ```sidecar.yaml``` file at the project's root directory and declare any or all lints from the lint package (or use ```sidecar init``` to generate from a template)
+2. Create a ```sidecar.yaml``` file at the project's root directory and declare any or all lints from the lint package
 
 ```yaml
 # sidecar.yaml

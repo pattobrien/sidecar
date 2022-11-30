@@ -7,7 +7,7 @@ import 'context_collection_provider.dart';
 import 'sidecar_spec_providers.dart';
 
 /// Generates in-scope files based on sidecar.yaml top-level includes/excludes globs.
-final activeProjectScopedFilesProvider = Provider<List<AnalyzedFile>>((ref) {
+final activeProjectScopedFilesProvider = Provider<Set<AnalyzedFile>>((ref) {
   final activeProjectIncludes = ref.watch(activeProjectIncludeGlobsProvider);
   final activeProjectExcludes = ref.watch(activeProjectExcludeGlobsProvider);
   final contexts = ref.watch(contextCollectionProvider);
@@ -29,6 +29,6 @@ final activeProjectScopedFilesProvider = Provider<List<AnalyzedFile>>((ref) {
         return files;
       })
       .expand((e) => e)
-      .toList();
+      .toSet();
   return activeProjectScopedFiles;
 });

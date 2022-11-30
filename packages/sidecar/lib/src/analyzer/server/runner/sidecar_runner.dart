@@ -21,13 +21,16 @@ class SidecarRunner {
   SidecarRunner(
     this._ref, {
     required this.activePackage,
-  })  : receivePort = ReceivePort('runner'),
-        allContexts = [];
+  });
 
   final Ref _ref;
+  final ProviderContainer _runnerContainer = ProviderContainer();
   final ActivePackage activePackage;
-  final List<AnalysisContext> allContexts;
-  final ReceivePort receivePort;
+  List<AnalysisContext> get allContexts =>
+      _runnerContainer.read(_runnerContextsProvider);
+  AnalysisContext? contextForFile(AnalyzedFile file) =>
+      _runnerContainer.read(_contextForFileProvider(file));
+  final ReceivePort receivePort = ReceivePort('runner');
 
   void _setContexts([List<Uri>? roots]) {
     if (roots == null) {
@@ -39,7 +42,8 @@ class SidecarRunner {
                   .any((dep) => dep.root == context.contextRoot.root.toUri()) ??
               false)
           .toList();
-      allContexts.addAll(contexts);
+      _runnerContainer.read(_runnerContextsProvider.notifier).state = contexts;
+      // allContexts.addAll(contexts);
     } else {
       final contexts = AnalysisContextCollection(
               includedPaths: roots.map((e) => e.pathNoTrailingSlash).toList())
@@ -49,16 +53,13 @@ class SidecarRunner {
                   .any((dep) => dep.root == context.contextRoot.root.toUri()) ??
               false)
           .toList();
-      allContexts.addAll(contexts);
+      _runnerContainer.read(_runnerContextsProvider.notifier).state = contexts;
+      // allContexts.addAll(contexts);
     }
   }
 
-  AnalyzedFile? getAnalyzedFile(String path) {
-    final context = allContexts.contextForPath(path);
-    if (context == null) return null;
-    return AnalyzedFile(Uri.parse(path),
-        contextRoot: context.contextRoot.root.toUri());
-  }
+  AnalyzedFile? getAnalyzedFile(String path) =>
+      _runnerContainer.read(_fileForPathProvider(path));
 
   late final SendPort sendPort;
 
@@ -143,4 +144,22 @@ final analyzerStreamProvider = StreamProvider.family<Object, SidecarRunner>(
     }
   },
   name: 'serverChannelStreamProvider',
+);
+
+final _runnerContextsProvider =
+    StateProvider<List<AnalysisContext>>((ref) => []);
+
+final _fileForPathProvider =
+    Provider.family<AnalyzedFile?, String>((ref, path) {
+  final context = ref.watch(_runnerContextsProvider).contextForPath(path);
+  if (context == null) return null;
+  return AnalyzedFile(Uri.parse(path),
+      contextRoot: context.contextRoot.root.toUri());
+});
+
+final _contextForFileProvider = Provider.family<AnalysisContext?, AnalyzedFile>(
+  (ref, file) {
+    final contexts = ref.watch(_runnerContextsProvider);
+    return contexts.contextForRoot(file.contextRoot);
+  },
 );

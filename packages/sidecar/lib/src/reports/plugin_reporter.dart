@@ -31,7 +31,7 @@ class PluginReporter extends Reporter {
         workspaceRoot.resolve(join(kDartTool, 'sidecar_logs', currentSession)));
     if (logFile.existsSync()) {
       final firstLine = logFile.readAsLinesSync().first;
-      logFile.renameSync(join(logFile.parent.path, '$firstLine.log'));
+      logFile.renameSync(join(logFile.parent.path, 'log-$firstLine.log'));
     }
     logFile.createSync(recursive: true);
     sink = logFile.openWrite(mode: io.FileMode.append);

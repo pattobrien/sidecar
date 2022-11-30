@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 import '../../../rules/rules.dart';
 import '../../protocol/protocol.dart';
+import '../plugin/sidecar_analyzer.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';
@@ -886,9 +887,12 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
       final timer = subscription.timer;
       timer?.start();
       try {
-        node.accept<dynamic>(subscription.visitor);
-        lintResults.addAll(subscription.visitor.lintResults);
-        assistResults.addAll(subscription.visitor.assistFilterResults);
+        final rule = subscription.visitor;
+        timedLog<dynamic>('runSubscriptions ${rule.code.id}', () {
+          node.accept<dynamic>(rule);
+          lintResults.addAll(rule.lintResults);
+          assistResults.addAll(rule.assistFilterResults);
+        });
       } catch (e) {
         // if (!exceptionHandler(
         //     node, subscription.linter, exception, stackTrace)) {

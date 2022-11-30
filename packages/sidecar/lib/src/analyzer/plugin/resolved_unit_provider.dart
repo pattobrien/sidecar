@@ -4,6 +4,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../protocol/analyzed_file.dart';
 import '../../utils/utils.dart';
 import 'context_collection_provider.dart';
+import 'sidecar_analyzer.dart';
 
 /// Analyze a Dart file and generate the Element/ASTNode/Type structures.
 final resolvedUnitForFileProvider =
@@ -13,6 +14,8 @@ final resolvedUnitForFileProvider =
   final contexts = ref.watch(contextCollectionProvider);
   final context = contexts.contextForRoot(file.contextRoot);
   if (context == null) return null;
-  final result = await context.currentSession.getResolvedUnit(file.path);
+
+  final result = await timedLog('getResolvedUnit',
+      () async => context.currentSession.getResolvedUnit(file.path));
   return result as ResolvedUnitResult;
 });
