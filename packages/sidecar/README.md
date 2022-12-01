@@ -6,7 +6,7 @@
 *Enable a more personalized developer experience within the IDE.*
 
 
-<img src="../../docs/ide_screenshot.png" alt="sidecar lint in IDE" width="600"/>
+<img src="https://github.com/pattobrien/sidecar/blob/master/docs/example_lint.png" alt="A screenshot of a Sidecar lint popup in an IDE" width="600"/>
 
 <a href="https://github.com/pattobrien/sidecar/actions"><img src="https://github.com/pattobrien/sidecar/workflows/Build/badge.svg" alt="Build Status"></a>
 <a href="https://codecov.io/gh/pattobrien/sidecar"><img src="https://codecov.io/gh/pattobrien/sidecar/branch/master/graph/badge.svg" alt="codecov"></a>

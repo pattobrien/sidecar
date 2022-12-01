@@ -7,6 +7,7 @@ linter:
     always_declare_return_types: false
     # - use_key_in_widget_constructors
     # - use_full_hex_values_for_flutter_colors
-# analyzer:
-#   plugins:
-#     - sidecar
+
+analyzer:
+  plugins:
+    - sidecar

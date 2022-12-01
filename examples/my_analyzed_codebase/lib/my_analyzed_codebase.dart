@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'core/theme/icons.dart';
+import 'core/theme/theme.dart';
 
 calculate() {
   final aStringThatShouldBeLinted = 'some string that should be linted';
@@ -34,6 +34,7 @@ class SomePage extends ConsumerWidget {
       padding: EdgeInsets.all(10.0),
       child: Column(
         children: [
+          Text('test'),
           Icon(
             Icons.abc,
             color: x,
