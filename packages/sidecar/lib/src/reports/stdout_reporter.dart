@@ -4,7 +4,7 @@ import 'package:cli_util/cli_logging.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../protocol/communication/communication.dart';
-import '../protocol/logging/log_record.dart';
+import '../protocol/models/log_record.dart';
 import '../utils/duration_ext.dart';
 import '../utils/printer/lint_printer.dart';
 import 'reporter.dart';

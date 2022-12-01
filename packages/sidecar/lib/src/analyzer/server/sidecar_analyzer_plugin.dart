@@ -17,7 +17,6 @@ import 'package:source_span/source_span.dart';
 
 import '../../protocol/analyzer_plugin_exts/analyzer_plugin_exts.dart';
 import '../../protocol/constants/constants.dart';
-import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../reports/plugin_reporter.dart';
 import '../../services/active_project_service.dart';
@@ -62,6 +61,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<void> handleAllRequests(
     plugin.Request request,
   ) async {
+    logger.info('handleAllRequests ${request.id}');
+    final watch = Stopwatch()..start();
     final isIntialized =
         isRunnerInitialized.entries.every((entry) => entry.value == true);
     final requestTime = DateTime.now().microsecondsSinceEpoch;
@@ -145,6 +146,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     } else {
       queuedRequests.add(request);
     }
+    logger.info(
+        'handleAllRequests in ${watch.elapsed.prettified()} ${request.id}');
   }
 
   /// Handle an 'edit.getFixes' request.
@@ -253,61 +256,80 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     plugin.AnalysisUpdateContentParams parameters,
   ) async {
     final runners = ref.read(runnersProvider);
-    await Future.wait(runners.map((runner) async {
-      logger.info('MM handleAnalysisUpdateContent');
-      final events = parameters.files.entries
-          .map((entry) {
-            final analyzedFile = runner.getAnalyzedFile(entry.key);
-            if (analyzedFile == null) return null;
-            final contentOverlay = entry.value;
-            if (contentOverlay is plugin.AddContentOverlay) {
-              return FileUpdateEvent.add(analyzedFile, contentOverlay.content);
-            }
-            if (contentOverlay is plugin.ChangeContentOverlay) {
-              final edits = contentOverlay.edits.map((e) {
-                final start =
-                    SourceLocation(e.offset, sourceUrl: analyzedFile.fileUri);
-                final end = SourceLocation(e.offset + e.length,
-                    sourceUrl: analyzedFile.fileUri);
-                final originalText = ' ' * (e.length);
-                final span = SourceSpan(start, end, originalText);
-                return SourceEdit(
-                    originalSourceSpan: span, replacement: e.replacement);
-              }).toList();
-              final sourceFileEdit =
-                  SourceFileEdit(filePath: analyzedFile.path, edits: edits);
-              return FileUpdateEvent.modify(analyzedFile, sourceFileEdit);
-            } else if (contentOverlay is plugin.RemoveContentOverlay) {
-              return FileUpdateEvent.delete(analyzedFile);
-            } else {
-              throw UnimplementedError('INVALID OVERLAY');
-            }
-          })
-          .whereType<FileUpdateEvent>()
-          .toList();
+    await timedLogAsync(
+        'handleAnalysisUpdateContent all',
+        () async => Future.wait(runners.map((runner) async {
+              // logger.info('handleAnalysisUpdateContent');
 
-      await Future.wait<UpdateFilesResponse>(runners.map((runner) async {
-        final runnerEvents = events.where((event) {
-          return runner.allContexts.contextForPath(event.filePath) != null;
-        }).toList();
+              final events = timedLog(
+                  'handleAnalysisUpdateContent events',
+                  () => parameters.files.entries
+                      .map((entry) {
+                        final analyzedFile = timedLog(
+                            'handleAnalysisUpdateContent getAnalyzedFile',
+                            () => runner.getAnalyzedFile(entry.key));
+                        if (analyzedFile == null) return null;
+                        final contentOverlay = entry.value;
+                        if (contentOverlay is plugin.AddContentOverlay) {
+                          return FileUpdateEvent.add(
+                              analyzedFile, contentOverlay.content);
+                        }
+                        if (contentOverlay is plugin.ChangeContentOverlay) {
+                          final edits = contentOverlay.edits.map((e) {
+                            final start = SourceLocation(e.offset,
+                                sourceUrl: analyzedFile.fileUri);
+                            final end = SourceLocation(e.offset + e.length,
+                                sourceUrl: analyzedFile.fileUri);
+                            final originalText = ' ' * (e.length);
+                            final span = SourceSpan(start, end, originalText);
+                            return SourceEdit(
+                                originalSourceSpan: span,
+                                replacement: e.replacement);
+                          }).toList();
+                          final sourceFileEdit = SourceFileEdit(
+                              filePath: analyzedFile.path, edits: edits);
+                          return FileUpdateEvent.modify(
+                              analyzedFile, sourceFileEdit);
+                        } else if (contentOverlay
+                            is plugin.RemoveContentOverlay) {
+                          return FileUpdateEvent.delete(analyzedFile);
+                        } else {
+                          throw UnimplementedError('INVALID OVERLAY');
+                        }
+                      })
+                      .whereType<FileUpdateEvent>()
+                      .toList());
+              await timedLogAsync(
+                  'handleAnalysisUpdateContent Future wait',
+                  () async =>
+                      Future.wait<UpdateFilesResponse>(runners.map((runner) {
+                        final runnerEvents = timedLog(
+                            'handleAnalysisUpdateContent runnerEvents',
+                            () => events
+                                .where((event) =>
+                                    runner.contextForFile(event.file) != null)
+                                .toList());
 
-        for (final event in runnerEvents) {
-          final sWatch = Stopwatch()..start();
-          final path = event.filePath;
-          runner.lints.listen((event) {
-            if (event.file.path == path) {
-              logger.info('lint received in ${sWatch.elapsed.prettified()}');
-            }
-          });
-        }
-        logger.info(
-            'updateFilesRequest: ${runnerEvents.map((e) => e.filePath).toList()}');
-        final sidecarRequest = SidecarRequest.updateFiles(runnerEvents);
+                        for (final event in runnerEvents) {
+                          final sWatch = Stopwatch()..start();
+                          final path = event.filePath;
+                          unawaited(runner.lints
+                              .firstWhere(
+                                  (element) => element.file.path == path)
+                              .then((value) => logger.info(
+                                  'lint received in ${sWatch.elapsed.prettified()} - ${value.file.relativePath}')));
+                        }
+                        logger.info(
+                            'updateFilesRequest: ${runnerEvents.map((e) => e.filePath).toList()}');
+                        final sidecarRequest =
+                            SidecarRequest.updateFiles(runnerEvents);
 
-        logger.info('MM handleAnalysisUpdateContent asyncRequest start');
-        return runner.asyncRequest<UpdateFilesResponse>(sidecarRequest);
-      }));
-    }));
+                        // logger.info('MM handleAnalysisUpdateContent asyncRequest start');
+                        return runner
+                            .asyncRequest<UpdateFilesResponse>(sidecarRequest);
+                      })));
+            })));
+
     return plugin.AnalysisUpdateContentResult();
   }
 

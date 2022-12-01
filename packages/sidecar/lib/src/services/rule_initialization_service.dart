@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/ast/ast.dart';
-import '../configurations/sidecar_spec/sidecar_spec_base.dart';
+import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/analyzed_file.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
@@ -26,12 +26,12 @@ class RuleInitializationService {
       for (final ruleEntry in ruleOptionEntries) {
         final ruleId = ruleEntry.key;
         final thisRule = rules.firstWhereOrNull((rule) {
-          return rule.code.code == ruleId && rule.code.package == packageId;
+          return rule.code.id == ruleId && rule.code.package == packageId;
         });
 
         if (thisRule == null) {
-          print('getRulesForFile $ruleId is null');
-          continue; // this should throw an error
+          logger.info('getRulesForFile $ruleId is null');
+          continue; // this should throw an error on sidecar.yaml
         }
 
         // check if rules are configured
@@ -46,14 +46,14 @@ class RuleInitializationService {
         final isFileIncluded = isIncluded(file.relativePath,
             [...rootIncludes, ...?packageIncludes, ...?ruleIncludes]);
         if (!isFileIncluded) {
-          print('getRulesForFile $ruleId is not included');
+          logger.info('getRulesForFile $ruleId is not included');
           continue;
         }
 
         final isFileExcluded = isExcluded(file.relativePath,
             [...rootExcludes, ...?packageExcludes, ...?ruleExcludes]);
         if (isFileExcluded) {
-          print('getRulesForFile $ruleId is excluded');
+          logger.info('getRulesForFile $ruleId is excluded');
           continue;
         }
 
@@ -61,7 +61,7 @@ class RuleInitializationService {
       }
     }
 
-    print(
+    logger.info(
         'getRulesForFile $file ${rulesForFile.length} ${rulesForFile.map((e) => e.code)}');
     return rulesForFile;
   }
@@ -96,11 +96,13 @@ class RuleInitializationService {
     required SidecarSpec config,
     required Set<BaseRule> rules,
   }) {
-    final registry = NodeRegistry();
-    registerVisitorsWithRegistry(rules, registry);
+    final registry = NodeRegistry(rules);
+    // removed: registerVisitors is now handled inside registry
+    // registerVisitorsWithRegistry(rules, registry);
     return registry;
   }
 
+  @Deprecated('registerVisitors is now handled inside registry')
   void registerVisitorsWithRegistry(
     Set<BaseRule> rules,
     NodeRegistry registry,
@@ -110,33 +112,6 @@ class RuleInitializationService {
       rule.initializeVisitor(registry);
     }
   }
-
-  // List<BaseRule> constructRules(
-  //   SidecarSpec config,
-  //   List<SidecarBaseConstructor> ruleConstructors,
-  // ) {
-  //   logger.finer('lint packages init: ${config.lints?.length ?? 0}');
-  //   logger.finer('assist packages init: ${config.assists?.length ?? 0}');
-  //   return ruleConstructors
-  //       .map((ruleConstructor) {
-  //         final rule = ruleConstructor();
-  //         final ruleConfig = config.getConfigurationForCode(rule.code);
-
-  //         // rule was not included in yaml, or was explicitly disabled,
-  //         // so it shouldnt be initialized
-  //         if (ruleConfig == null || ruleConfig.enabled == false) return null;
-
-  //         // if (rule is Configuration) {
-  //         rule.setConfig(sidecarSpec: config);
-  //         // }
-
-  //         logger.finer('activating ${rule.code}');
-
-  //         return rule;
-  //       })
-  //       .whereNotNull()
-  //       .toList();
-  // }
 }
 
 final ruleInitializationServiceProvider = Provider(

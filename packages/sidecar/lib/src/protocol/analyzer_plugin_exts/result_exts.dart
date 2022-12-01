@@ -10,7 +10,7 @@ import 'source_exts.dart';
 
 extension LintResultX on AnalysisResult {
   plugin.AnalysisError toAnalysisError() {
-    final concatenatedLintCode = '${rule.package}.${rule.code}';
+    final concatenatedLintCode = '${rule.package}.${rule.id}';
     return plugin.AnalysisError(
       severity.analysisError,
       plugin.AnalysisErrorType.HINT,

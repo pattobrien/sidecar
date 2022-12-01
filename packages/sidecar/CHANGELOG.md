@@ -1,4 +1,17 @@
 
+## 0.1.0-dev.11
+
+- fix: Lint performance improvements to reduce latency while editing code
+
+## 0.1.0-dev.10
+
+- fix: Moved Riverpod dependency to 2.0.0.
+
+## 0.1.0-dev.9
+
+- docs: Documentation added to some public APIs
+- refactor: Removed static analysis errors to improve pub score.
+
 ## 0.1.0-dev.8
 
 - docs: Documentation added to some public APIs

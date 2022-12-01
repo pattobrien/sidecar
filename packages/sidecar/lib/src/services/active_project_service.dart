@@ -131,7 +131,7 @@ class ActiveProjectService {
     try {
       final contents = _getSidecarFile(root);
       if (contents == null) return null;
-      return parseSidecarSpecFromYaml(
+      return parseSidecarSpec(
         contents,
         fileUri: Uri.parse(p.canonicalize(p.join(root.path, kSidecarYaml))),
       ).item1;

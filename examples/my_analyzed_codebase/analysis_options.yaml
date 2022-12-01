@@ -2,11 +2,11 @@ include: package:lints/recommended.yaml
 
 linter:
   rules:
-    - camel_case_types
-    - prefer_relative_imports
+    camel_case_types: true
+    prefer_relative_imports: true
+    always_declare_return_types: false
     # - use_key_in_widget_constructors
     # - use_full_hex_values_for_flutter_colors
-    - always_declare_return_types
 
 analyzer:
   plugins:

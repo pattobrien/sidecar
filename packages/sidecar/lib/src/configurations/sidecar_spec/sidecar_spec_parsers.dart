@@ -11,7 +11,7 @@ import 'rule_options.dart';
 import 'sidecar_spec_base.dart';
 
 /// Create a SidecarSpec instance from raw file contents.
-SidecarExceptionTuple<SidecarSpec> parseSidecarSpecFromYaml(
+SidecarExceptionTuple<SidecarSpec> parseSidecarSpec(
   String contents, {
   Uri? fileUri,
 }) {

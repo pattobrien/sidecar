@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 // ignore: implementation_imports
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../utils/logger/logger.dart';
 import '../../utils/uri_ext.dart';

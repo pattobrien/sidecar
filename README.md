@@ -4,7 +4,7 @@
 # Sidecar Analyzer
 *Enable a more personalized experience within your IDE.*
 
-<img src="docs/ide_screenshot.png" alt="sidecar lint in IDE" width="600"/>
+<img src="https://github.com/pattobrien/sidecar/blob/master/docs/example_lint.png" alt="sidecar lint in IDE" width="600"/>
 
 <a href="https://github.com/pattobrien/sidecar/actions"><img src="https://github.com/pattobrien/sidecar/workflows/Build/badge.svg" alt="Build Status"></a>
 <a href="https://codecov.io/gh/pattobrien/sidecar"><img src="https://codecov.io/gh/pattobrien/sidecar/branch/master/graph/badge.svg" alt="codecov"></a>

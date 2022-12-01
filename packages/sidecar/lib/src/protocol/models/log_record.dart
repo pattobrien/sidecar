@@ -3,7 +3,7 @@ import 'package:logging/logging.dart';
 
 import '../../utils/json_utils/json_utils.dart';
 import '../active_package_root.dart';
-import '../models/models.dart';
+import 'models.dart';
 
 part 'log_record.freezed.dart';
 part 'log_record.g.dart';
@@ -48,7 +48,7 @@ extension LogRecordX on LogRecord {
           return '[${root?.root.pathSegments.reversed.toList()[1] ?? 'UNKNOWN'}] ${timestamp.toIso8601String()} $message ${stackTrace ?? ''}';
         },
         fromRule: (lintCode, timestamp, severity, message, stackTrace) {
-          return '[${lintCode.package}.${lintCode.code}] ${timestamp.toIso8601String()} $message ${stackTrace ?? ''}';
+          return '[${lintCode.package}.${lintCode.id}] ${timestamp.toIso8601String()} $message ${stackTrace ?? ''}';
         },
       );
 }

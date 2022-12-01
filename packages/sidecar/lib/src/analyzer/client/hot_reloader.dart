@@ -2,6 +2,7 @@ import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:hotreloader/hotreloader.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../reports/stdout_reporter.dart';

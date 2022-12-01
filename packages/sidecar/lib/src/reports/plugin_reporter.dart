@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../protocol/communication/communication.dart';
-import '../protocol/logging/log_record.dart';
+import '../protocol/models/log_record.dart';
 import '../utils/utils.dart';
 import 'reporter.dart';
 
@@ -22,10 +22,20 @@ class PluginReporter extends Reporter {
 
   void init() {
     timestamp = DateTime.now().millisecondsSinceEpoch;
-    logFile = io.File.fromUri(workspaceRoot
-        .resolve(join(kDartTool, 'sidecar_logs', '$timestamp.txt')));
+    _createLogFileAndSink();
+  }
+
+  void _createLogFileAndSink() {
+    const currentSession = 'latest.log';
+    logFile = io.File.fromUri(
+        workspaceRoot.resolve(join(kDartTool, 'sidecar_logs', currentSession)));
+    if (logFile.existsSync()) {
+      final firstLine = logFile.readAsLinesSync().first;
+      logFile.renameSync(join(logFile.parent.path, 'log-$firstLine.log'));
+    }
     logFile.createSync(recursive: true);
     sink = logFile.openWrite(mode: io.FileMode.append);
+    sink.writeln(DateTime.now().toIso8601String());
   }
 
   @override

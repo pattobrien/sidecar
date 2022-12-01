@@ -13,7 +13,6 @@
 
 import 'package:test/scaffolding.dart';
 
-@Tags(['e2e'])
 void main() {}
 // void main() {
 //   group('two projects', () {

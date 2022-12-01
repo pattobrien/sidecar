@@ -5,11 +5,18 @@ includes:
 lints:
   intl_lints:
     rules:
-      string_literals:
+      hardcoded_text_string:
+
+  dart_lints:
+    rules:
+      always_declare_return_types:
+      always_put_control_body_on_new_line:
+      always_put_required_named_parameters_first:
+      # always_specify_types:
 
   design_system_lints:
     excludes:
-      - "lib/core/theme/icons.dart"
+      - "lib/core/theme/**.dart"
     rules:
       avoid_icon_literal:
       avoid_sized_box_height_width_literals:

@@ -17,8 +17,8 @@ const _proactiveFixComputes = true;
 /// Compute and cache lint results for a given file.
 final lintResultsProvider =
     FutureProvider.family<Set<LintResult>, AnalyzedFile>((ref, file) async {
-  ref.onDispose(() => logger.info('ONDISPOSE EVENT ${file.relativePath}'));
-  ref.onCancel(() => logger.info('ONCANCEL EVENT ${file.relativePath}'));
+  // ref.onDispose(() => logger.info('ONDISPOSE EVENT ${file.relativePath}'));
+  // ref.onCancel(() => logger.info('ONCANCEL EVENT ${file.relativePath}'));
 
   // benchmark for file: upgrade_options.dart
   // total time: 59.537ms
@@ -36,18 +36,21 @@ final lintResultsProvider =
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
 
   // file-dependent objects
-  final registry = ref.watch(nodeLintRegistryForFileAssistsProvider(file));
+  final registry = ref.watch(nodeRegistryForFileLintsProvider(file));
   final rulesForFile = ref.watch(scopedLintRulesForFileProvider(file));
-  logger.info('rulesForFile: ${rulesForFile.map((e) => e.code)}');
+  // logger.info('rulesForFile: ${rulesForFile.map((e) => e.code)}');
 
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
-  return runZonedGuarded<Set<LintResult>>(
-        () => analyzerService.visitLintResults(
-            unitResult: unit, rules: rulesForFile, registry: registry),
-        (error, stack) => log('lintResultsProvider error',
-            error: error, stackTrace: stack, name: 'lintResults'),
-      ) ??
-      {};
+  return timedLog(
+      'visitLintResults',
+      () =>
+          runZonedGuarded<Set<LintResult>>(
+            () => analyzerService.visitLintResults(
+                unitResult: unit, rules: rulesForFile, registry: registry),
+            (error, stack) => log('lintResultsProvider error',
+                error: error, stackTrace: stack, name: 'lintResults'),
+          ) ??
+          {});
 });
 
 // final lintResultsCompleterProvider = FutureProvider((ref) async {
@@ -70,16 +73,13 @@ final assistFiltersProvider = FutureProvider.family
     .autoDispose<Set<AssistFilterResult>, AnalyzedFile>((ref, file) async {
   final rules = ref.watch(scopedAssistRulesForFileProvider(file));
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
-  final registry = ref.watch(nodeAssistRegistryForFileAssistsProvider(file));
-  // print('REGISTRY ${registry}');
-  logger.info('ASSIST FILTERS RULES: ${rules.length}');
+  final registry = ref.watch(nodeRegistryForFileAssistsProvider(file));
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
 
   return runZonedGuarded<Set<AssistFilterResult>>(
         () {
           final results = analyzerService.visitAssistFilters(
               unitResult: unit, rules: rules, registry: registry);
-          logger.info('ASSIST FILTERS RESULTS: ${results.length}');
           return results;
         },
         (error, stack) => log('lintResultsProvider error',

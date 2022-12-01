@@ -1,6 +1,7 @@
 // ignore_for_file: implementation_imports
 
 import 'package:analyzer/src/dart/analysis/byte_store.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../protocol/constants/constants.dart';

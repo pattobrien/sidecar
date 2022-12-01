@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../protocol/logging/log_record.dart';
 import '../../protocol/protocol.dart';
 
 final analyzerClientProvider =

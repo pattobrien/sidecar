@@ -8,20 +8,19 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
 import '../helpers/example_file_contents.dart';
+import '../helpers/example_lints.dart';
 import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
 
-@Tags(['e2e'])
-@Timeout(Duration(minutes: 15))
 void main() {
   group('single project lint results:', () {
-    final constructors = [StringLiterals.new];
+    final constructors = [AvoidStringLiteral.new];
     final sidecarYaml = SidecarSpec(includes: [
       Glob('lib/**')
     ], lints: {
-      kStringLiteralsCode.package: LintPackageOptions(rules: {
-        kStringLiteralsCode.code: const LintOptions(),
+      exampleRuleCode.package: LintPackageOptions(rules: {
+        exampleRuleCode.id: const LintOptions(),
       }),
     });
 
@@ -43,7 +42,7 @@ void main() {
       await analyzeTestResources(app.root, reporter);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
-      expectLints(results.first, [lint(kStringLiteralsCode, 28, 14)]);
+      expectLints(results.first, [lint(exampleRuleCode, 28, 14)]);
     });
 
     test('2 lint results', () async {
@@ -52,8 +51,8 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
-        lint(kStringLiteralsCode, 28, 14),
-        lint(kStringLiteralsCode, 59, 21),
+        lint(exampleRuleCode, 28, 14),
+        lint(exampleRuleCode, 59, 21),
       ]);
     });
 
@@ -90,7 +89,7 @@ void main() {
       // update file with a lintable string
       await client.handleFileChange(mainFile.toUri(), ' $kContentWithString');
       final results2 = verify(reporter.handleLintNotification(captureAny));
-      expectLints(results2.captured.first, [lint(kStringLiteralsCode, 29, 14)]);
+      expectLints(results2.captured.first, [lint(exampleRuleCode, 29, 14)]);
     });
   });
 }
