@@ -1,6 +1,7 @@
 import 'package:glob/glob.dart';
 import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sidecar/sidecar.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/package_options.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/rule_options.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec_base.dart';
@@ -11,20 +12,19 @@ import 'package:test/scaffolding.dart';
 import 'package:test/test.dart';
 
 import '../helpers/example_file_contents.dart';
+import '../helpers/example_lints.dart';
 import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
 
-@Tags(['e2e'])
-@Timeout(Duration(minutes: 15))
 void main() {
   group('active package test - analysis_options.yaml', () {
-    final constructors = [StringLiterals.new];
+    final constructors = [HardcodedTextString.new];
     final sidecarYaml = SidecarSpec(includes: [
       Glob('lib/**')
     ], lints: {
-      kStringLiteralsCode.package: LintPackageOptions(rules: {
-        kStringLiteralsCode.id: const LintOptions(
+      intlStringRuleCode.package: LintPackageOptions(rules: {
+        intlStringRuleCode.id: const LintOptions(
           enabled: true,
         ),
       }),
@@ -51,7 +51,7 @@ void main() {
       await client.handleFileChange(mainFile.toUri(), kContentWithString);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
-      expectLints(results[1], [lint(kStringLiteralsCode, 28, 14)]);
+      expectLints(results[1], [lint(intlStringRuleCode, 28, 14)]);
     });
 
     test('sidecar plugin is not enabled', () async {
@@ -64,12 +64,12 @@ void main() {
   });
 
   group('active package - sidecar.yaml:', () {
-    final constructors = [StringLiterals.new];
+    final constructors = [HardcodedTextString.new];
     final sidecarYaml = SidecarSpec(includes: [
       Glob('lib/**')
     ], lints: {
-      kStringLiteralsCode.package: LintPackageOptions(rules: {
-        kStringLiteralsCode.id: const LintOptions(),
+      intlStringRuleCode.package: LintPackageOptions(rules: {
+        intlStringRuleCode.id: const LintOptions(),
       }),
     });
 
@@ -92,7 +92,7 @@ void main() {
       await analyzeTestResources(app.root, reporter);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
-      expectLints(results.first, [lint(kStringLiteralsCode, 28, 14)]);
+      expectLints(results.first, [lint(intlStringRuleCode, 28, 14)]);
     });
 
     test('sidecar plugin is not enabled', () async {

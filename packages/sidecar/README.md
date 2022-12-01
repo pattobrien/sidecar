@@ -24,12 +24,42 @@ Dart lints are incredibly useful for keeping a codebase clean and tidy, but code
 
 The goal of Sidecar is to enable a more personalized developer experience by allowing quick and easy access to the core lint and code assist tools of modern IDEs.
 
-### Example Sidecar Rule Packages
 
-To explore how rule packages are created, take a look at the following rule packages:
+## Supported Features
 
-- [design_system_lints](https://pub.dev/packages/design_system_lints)
-- [dart_lints](https://pub.dev/packages/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
+| Lint Rules  | Status |
+| -------------  | ------ |
+| Lint message and correction message | ✅ |
+| Default severity | ✅ |
+| Hyperlink to rule documentation in IDE window | ✅ |
+| Quick Fixes | ✅ |
+| Rule-specific configurations | 🚧 |
+| Ignore statements | |
+
+
+| CodeEdit Rules  | Status |
+| -------------  | ------ |
+| QuickAssists | 🚧 |
+| Refactorings |  |
+| Code Completion |  |
+
+
+| Analyzer Modes | Status |
+| -------- | --- |
+| IDE server (via analyzer_plugin) | ✅ |
+| Debug mode  | 🚧 |
+| CLI mode - basic output format | ✅ |
+| CLI mode - alternate output formats |  |
+
+| SidecarSpec Features  (sidecar.yaml) | Status |
+| -------------  | ------ |
+| Explicitly Enable/Disable rules | ✅ |
+| (Lints) Override default severity | ✅ |
+| Rule-level include/exclude globs | 🚧 |
+| Package-level include/exclude globs | 🚧 |
+| Import inheritance | |
+| Multi-import inheritance | |
+
 
 ## Creating a Rule
 
@@ -92,6 +122,13 @@ sidecar:
 ```
 
 > NOTE: some of the above API details, like the initializeVisitor method that must be overridden for each Rule, are complicated or redundant; our intention over time is to reduce as much redundancy as possible in order to make rule creation as straightforward as possible. If you have any feedback for how you'd like the APIs to look, we encourage you to open an issue against Sidecar on github.
+
+## Example Sidecar Rule Packages
+
+To explore how rule packages are created, take a look at the following rule packages:
+
+- [design_system_lints](https://pub.dev/packages/design_system_lints)
+- [dart_lints](https://pub.dev/packages/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
 
 ## Installing the CLI tool
 
@@ -157,57 +194,7 @@ sidecar analyze
 
 Debug Mode comes equipped with IDE debugger integration and hot reload, which is helpful for when you're developing your own rules. Currently, this functionality is a work-in-progress.
 
-- TODO
 
+## Contributing
 
-## Next Steps
-
-- TODO: Roadmap
-- TODO: Contributions / ways others can help by giving feedback on their use cases
-
-
-## Feature Overview
-
-### creating lint rules
-
-- define a default severity for a lint
-- documentation URLs in lint IDE window
-- SidecarAstVisitor for simpler lint reporting (AstNodes and Tokens)
-- TODO: ignore statements
-
-### rules with code changes
-
-- quick fixes for lints
-- code assists
-- TODO: code completion
-
-### ```sidecar.yaml``` configuration
-
-- define package or lint-specific includes paths
-- explicitly enable or disable a lint
-- override a rule's default severity
-- lints update on ```sidecar.yaml``` changes, without plugin needing to restart
-
-### cli
-
-- output report of entire codebase
-- TODO: output to different formats (e.g. csv)
-- TODO: capture project metrics
-
-### rule configurations
-- TODO: allow rules to declare configurations
-- TODO: display rule configuration errors in ```sidecar.yaml``` file
-- TODO: rule annotations
-
-
-### benchmarks and testing
-
-- DONE: fix memory leaks
-- TODO: Register visitors for better analysis performance
-- TODO: lint unit test toolchain
-- TODO: how can we benchmark against Dart official analysis server?
-- TODO: cli takes ~12 seconds to complete
-
-### extra features
-- TODO: import inheritance
-- TODO: multi-import inheritence
+Suggestions or feature requests would be highly appreciated at this point in the development process, so that as many development use cases can be accounted for as possible. It's encouraged to reach out or open a Github issue against the Sidecar repository.

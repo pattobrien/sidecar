@@ -5,14 +5,14 @@ import 'package:test/scaffolding.dart';
 void main() {
   group('BaseRule SidecarAstVisitor rule equality:', () {
     test('2 instance of the same rule', () {
-      final someRule = StringLiterals();
-      final rule2 = StringLiterals();
+      final someRule = HardcodedTextString();
+      final rule2 = HardcodedTextString();
       expect(someRule, equals(rule2));
     });
 
     test('2 instance of the same rule (hashcode)', () {
-      final someRule = StringLiterals();
-      final rule2 = StringLiterals();
+      final someRule = HardcodedTextString();
+      final rule2 = HardcodedTextString();
       expect(someRule.hashCode, equals(rule2.hashCode));
     });
 

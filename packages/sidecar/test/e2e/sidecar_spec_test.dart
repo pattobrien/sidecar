@@ -8,6 +8,7 @@ import 'package:sidecar/src/test/resources/workspace_resource.dart';
 import 'package:test/scaffolding.dart';
 
 import '../helpers/example_file_contents.dart';
+import '../helpers/example_lints.dart';
 import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
@@ -16,7 +17,7 @@ import '../helpers/test_starter.dart';
 @Timeout(Duration(minutes: 15))
 void main() {
   group('SidecarSpec configured severity:', () {
-    final constructors = [StringLiterals.new];
+    final constructors = [HardcodedTextString.new];
 
     late PackageResource app;
     late WorkspaceResource workspace;
@@ -36,8 +37,8 @@ void main() {
       final sidecarYamlError = SidecarSpec(includes: [
         Glob('lib/**')
       ], lints: {
-        kStringLiteralsCode.package: LintPackageOptions(rules: {
-          kStringLiteralsCode.id: const LintOptions(),
+        intlStringRuleCode.package: LintPackageOptions(rules: {
+          intlStringRuleCode.id: const LintOptions(),
         }),
       });
       app.modifySidecarYaml(sidecarYamlError);
@@ -45,8 +46,8 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
-        lint(kStringLiteralsCode, 28, 14,
-            severity: StringLiterals().defaultSeverity),
+        lint(intlStringRuleCode, 28, 14,
+            severity: HardcodedTextString().defaultSeverity),
       ]);
     });
 
@@ -55,8 +56,8 @@ void main() {
       final sidecarYamlError = SidecarSpec(includes: [
         Glob('lib/**')
       ], lints: {
-        kStringLiteralsCode.package: LintPackageOptions(rules: {
-          kStringLiteralsCode.id: const LintOptions(
+        intlStringRuleCode.package: LintPackageOptions(rules: {
+          intlStringRuleCode.id: const LintOptions(
             severity: LintSeverity.info,
           ),
         }),
@@ -66,7 +67,7 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
-        lint(kStringLiteralsCode, 28, 14, severity: LintSeverity.info),
+        lint(intlStringRuleCode, 28, 14, severity: LintSeverity.info),
       ]);
     });
 
@@ -75,8 +76,8 @@ void main() {
       final sidecarYamlError = SidecarSpec(includes: [
         Glob('lib/**')
       ], lints: {
-        kStringLiteralsCode.package: LintPackageOptions(rules: {
-          kStringLiteralsCode.id: const LintOptions(
+        intlStringRuleCode.package: LintPackageOptions(rules: {
+          intlStringRuleCode.id: const LintOptions(
             severity: LintSeverity.warning,
           ),
         }),
@@ -86,7 +87,7 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
-        lint(kStringLiteralsCode, 28, 14, severity: LintSeverity.warning),
+        lint(intlStringRuleCode, 28, 14, severity: LintSeverity.warning),
       ]);
     });
 
@@ -95,8 +96,8 @@ void main() {
       final sidecarYamlError = SidecarSpec(includes: [
         Glob('lib/**')
       ], lints: {
-        kStringLiteralsCode.package: LintPackageOptions(rules: {
-          kStringLiteralsCode.id: const LintOptions(
+        intlStringRuleCode.package: LintPackageOptions(rules: {
+          intlStringRuleCode.id: const LintOptions(
             severity: LintSeverity.error,
           ),
         }),
@@ -106,7 +107,7 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
-        lint(kStringLiteralsCode, 28, 14, severity: LintSeverity.error),
+        lint(intlStringRuleCode, 28, 14, severity: LintSeverity.error),
       ]);
     });
   });
