@@ -1,7 +1,14 @@
 
+## 0.1.0-dev.12
+
+- docs: Added feature overview to readme
+- docs: Fixed broken lint image
+- docs: Improved examples in Readme
+
 ## 0.1.0-dev.11
 
 - fix: Lint performance improvements to reduce latency while editing code
+
 
 ## 0.1.0-dev.10
 

@@ -1,12 +1,13 @@
 
 
 
-## Sidecar Analyzer
-
-*Enable a more personalized developer experience within the IDE.*
 
 
-<img src="https://github.com/pattobrien/sidecar/blob/master/docs/example_lint.png" alt="A screenshot of a Sidecar lint popup in an IDE" width="600"/>
+Enable a more personalized developer experience within the IDE.
+
+
+
+<img src="https://raw.githubusercontent.com/pattobrien/sidecar/master/docs/example_lint.png" alt="A screenshot of a Sidecar lint popup in an IDE" width="600"/>
 
 <a href="https://github.com/pattobrien/sidecar/actions"><img src="https://github.com/pattobrien/sidecar/workflows/Build/badge.svg" alt="Build Status"></a>
 <a href="https://codecov.io/gh/pattobrien/sidecar"><img src="https://codecov.io/gh/pattobrien/sidecar/branch/master/graph/badge.svg" alt="codecov"></a>
@@ -25,34 +26,33 @@ Dart lints are incredibly useful for keeping a codebase clean and tidy, but code
 The goal of Sidecar is to enable a more personalized developer experience by allowing quick and easy access to the core lint and code assist tools of modern IDEs.
 
 
-## Supported Features
+# Features
 
-| Lint Rules  | Status |
-| -------------  | ------ |
-| Lint reason and correction messages | ✅ |
-| Default severity | ✅ |
-| Hyperlink to rule documentation in IDE window | ✅ |
-| Quick Fixes | ✅ |
-| (CLI) basic lint outputs | ✅ |
-| (CLI) alternate output formats |  |
-| (CLI) apply quick fixes |  |
-| Ignore statements | |
+|             | MacOS | Linux | Windows |
+| ----------  | ----- | ----- | ------- |
+| Support  | ✅ | 🚧 | 🚧 |
 
 
-| CodeEdit Rules  | Status |
-| -------------  | ------ |
-| QuickAssists | 🚧 |
-| Refactorings |  |
-| Code Completion |  |
+| Lint Rules  | IDE | CLI | Debug |
+| ----------  | --- | --- | ----- |
+| Lint reason and correction messages | ✅ | ✅ | ✅ | 
+| Define a default severity | ✅ | ✅ | ✅ |
+| Apply Quick Fix suggestions | ✅ | 🚧 | 🚧 |
+| (IDE) URL links to rule documentation | ✅ | 🚫 | 🚫 |
+| (CLI) Alternate output formats | 🚫 | 🚧 |  |
+| Ignore statements |    |    |    |
 
 
-| Analyzer Modes | Status |
-| -------- | --- |
-| IDE server (via analyzer_plugin) | ✅ |
-| Debug mode  | 🚧 |
+| CodeEdit Rules    | IDE | CLI | Debug |
+| ----------------- | --- | --- | ----- |
+| QuickAssist rules | 🚧  |
+| Refactorings (rename, extract, etc.) |  |
+| Code Completion |  |  |  |
 
-| SidecarSpec Features  (sidecar.yaml) | Status |
-| -------------  | ------ |
+
+
+| Rule Configuration (sidecar.yaml) | IDE | CLI | Debug |
+| -------------  | ------ | ------ | ------ |
 | Explicitly Enable/Disable rules | ✅ |
 | (Lints) Override default severity | ✅ |
 | Rule-level include/exclude globs | 🚧 |
@@ -62,7 +62,73 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | Multi-import inheritance | |
 
 
-## Creating a Rule
+# Sidecar Usage
+## Installing the CLI tool
+
+Some Sidecar tasks are easier with the CLI tool. To install, simply run:
+
+```sh
+dart pub global activate sidecar
+```
+
+## Using Sidecar within a Dart or Flutter Project
+
+There are 3 modes which Sidecar can be run in: server, cli, or debug (WIP).
+### Dart Server + Analyzer Plugin Mode
+
+The Dart team maintains analysis servers that run in IDEs like VSCode. In Server mode, Sidecar boots up using the ```analyzer_plugin``` APIs created by the Dart team. 
+
+To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
+
+1. Depend on any ```sidecar``` lint packages such as ```design_system_lints```
+
+2. Create a ```sidecar.yaml``` file at the project's root directory and declare any or all lints from the lint package
+
+```yaml
+# sidecar.yaml
+includes:
+  - "bin/**"
+  - "lib/**"
+lints:
+  design_system_lints:
+    rules: 
+      avoid_sized_box_height_width_literals:
+      avoid_text_style_literal:
+      avoid_border_radius_literal:
+      avoid_box_shadow_literal:
+      avoid_edge_insets_literal:
+```
+
+3. Enable the ```sidecar``` plugin to run, by adding it to the list of plugins in ```analysis_options.yaml```.
+
+
+```yaml
+analyzer:
+  plugins:
+    - sidecar
+```
+
+After several seconds of start-up (and potentially a restart of your IDE), the lints should begin appearing in your editor.
+### CLI Mode
+
+CLI Mode is useful for running lint rules from a CI/CD pipeline. To use Sidecar in CLI mode, run the following command in your terminal:
+
+```sh
+# activate sidecar
+dart pub global activate sidecar
+
+# run sidecar analyzer in CLI mode
+sidecar analyze
+```
+
+> NOTE: If you have a particular CLI use case in mind and would like to give feedback, feel free to reach out on Github.
+
+### Debug Mode (Work in Progress)
+
+Debug Mode comes equipped with IDE debugger integration and hot reload, which is helpful for when you're developing your own rules. Currently, this functionality is a work-in-progress.
+
+
+# Creating a Lint or QuickAssist Rule
 
 Below is an example of a Lint rule which highlights any strings within a Dart app.
 
@@ -140,70 +206,6 @@ To explore how rule packages are created, take a look at the following rule pack
 
 - [design_system_lints](https://pub.dev/packages/design_system_lints)
 - [dart_lints](https://pub.dev/packages/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
-
-## Installing the CLI tool
-
-Some Sidecar tasks are easier with the CLI tool. To install, simply run:
-
-```sh
-dart pub global activate sidecar
-```
-
-## Using Sidecar within a Dart or Flutter Project
-
-There are 3 modes which Sidecar can be run in: server, cli, or debug (WIP).
-### Dart Server + Analyzer Plugin Mode
-
-The Dart team maintains analysis servers that run in IDEs like VSCode. In Server mode, Sidecar boots up using the ```analyzer_plugin``` APIs created by the Dart team. 
-
-To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
-
-1. Depend on any ```sidecar``` lint packages such as ```design_system_lints```
-
-2. Create a ```sidecar.yaml``` file at the project's root directory and declare any or all lints from the lint package
-
-```yaml
-# sidecar.yaml
-includes:
-  - "bin/**"
-  - "lib/**"
-lints:
-  design_system_lints:
-    rules: 
-      avoid_sized_box_height_width_literals:
-      avoid_text_style_literal:
-      avoid_border_radius_literal:
-      avoid_box_shadow_literal:
-      avoid_edge_insets_literal:
-```
-
-3. Enable the ```sidecar``` plugin to run, by adding it to the list of plugins in ```analysis_options.yaml```.
-
-
-```yaml
-analyzer:
-  plugins:
-    - sidecar
-```
-
-After several seconds of start-up (and potentially a restart of your IDE), the lints should begin appearing in your editor.
-### CLI Mode
-
-CLI Mode is useful for running lint rules from a CI/CD pipeline. To use Sidecar in CLI mode, run the following command in your terminal:
-
-```sh
-# activate sidecar
-dart pub global activate sidecar
-
-# run sidecar analyzer in CLI mode
-sidecar analyze
-```
-
-> NOTE: If you have a particular CLI use case in mind and would like to give feedback, feel free to reach out on Github.
-
-### Debug Mode (Work in Progress)
-
-Debug Mode comes equipped with IDE debugger integration and hot reload, which is helpful for when you're developing your own rules. Currently, this functionality is a work-in-progress.
 
 
 ## Contributing
