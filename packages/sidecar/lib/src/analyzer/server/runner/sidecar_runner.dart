@@ -7,7 +7,6 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../protocol/models/log_record.dart';
 import '../../../protocol/protocol.dart';
 import '../../../services/active_project_service.dart';
 import '../../../services/entrypoint_builder_service.dart';

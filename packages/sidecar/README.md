@@ -28,8 +28,8 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 
 To explore how rule packages are created, take a look at the following rule packages:
 
-- [design_system_lints](https://pub.dev/design_system_lints)
-- [dart_lints](https://pub.dev/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
+- [design_system_lints](https://pub.dev/packages/design_system_lints)
+- [dart_lints](https://pub.dev/packages/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
 
 ## Creating a Rule
 
@@ -71,7 +71,7 @@ Note the following features and requirements:
 
 ### RuleCode
 - A RuleCode is the ID of every unique Sidecar Rule
-- The ID of a RuleCode (e.g. 'avoid_string_literals') should be in snake_case format and should match the class name (in PascalCase)
+- The ID of a RuleCode (e.g. ```avoid_string_literals```) should be in snake_case format and should match the class name (in PascalCase)
 - The Package ID of a RuleCode should be identical to the package name
 - A URL can be added to the LintCode, which would then appear as a hyperlink in an IDE's lint window
 
@@ -91,7 +91,7 @@ sidecar:
     - avoid_string_literals # should match the Lint's RuleCode ID
 ```
 
-> NOTE: some of the above API details are complicated or redundant; our intention over time is to reduce as much boilerplate as possible in order to make rule creation as straightforward as possible. If you have any feedback for how you'd like the APIs to look, feel free to open an issue on github.
+> NOTE: some of the above API details, like the initializeVisitor method that must be overridden for each Rule, are complicated or redundant; our intention over time is to reduce as much redundancy as possible in order to make rule creation as straightforward as possible. If you have any feedback for how you'd like the APIs to look, we encourage you to open an issue against Sidecar on github.
 
 ## Installing the CLI tool
 
@@ -116,7 +116,6 @@ To enable Sidecar to display lints and assist recommendations within your IDE, p
 
 ```yaml
 # sidecar.yaml
-# template file can be generated via cli by running 'sidecar init'
 includes:
   - "bin/**"
   - "lib/**"

@@ -3,7 +3,6 @@ import 'dart:isolate';
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../protocol/models/log_record.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
 import '../plugin/active_package_provider.dart';

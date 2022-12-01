@@ -5,7 +5,6 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../services/file_analyzer_service_impl.dart';
-import '../../utils/duration_ext.dart';
 import '../../utils/logger/logger.dart';
 import 'plugin.dart';
 import 'resolved_unit_provider.dart';
