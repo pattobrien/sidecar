@@ -31,8 +31,14 @@ mixin BaseRule {
   /// Can be overridden in a SidecarSpec file.
   List<Glob>? get excludes => null;
 
-  /// Sidecar configuration for the current active project.
+  /// Sidecar configuration for the active project
   SidecarSpec get sidecarSpec => _sidecarSpec;
+
+  /// SidecarSpec rule configuration for the active project
+  RuleOptions? get ruleOptions => _ruleOptions;
+
+  /// SidecarSpec rule package configuration for the active project
+  PackageOptions? get packageOptions => _packageOptions;
 
   /// ResolvedUnitResult for a particular file.
   ResolvedUnitResult get unit => _unit;
@@ -41,7 +47,10 @@ mixin BaseRule {
   final Set<AssistFilterResult> assistFilterResults = {};
 
   late ResolvedUnitResult _unit;
+
   late SidecarSpec _sidecarSpec;
+  late RuleOptions? _ruleOptions;
+  late PackageOptions? _packageOptions;
 
   /// Register all of the visit methods of a Sidecar Rule.
   ///
@@ -78,7 +87,8 @@ mixin BaseRule {
     required SidecarSpec sidecarSpec,
   }) {
     _sidecarSpec = sidecarSpec;
-    // initializeVisitor(registry);
+    _ruleOptions = sidecarSpec.getConfigurationForCode(code);
+    _packageOptions = sidecarSpec.getPackageConfigurationForCode(code);
   }
 
   @internal
@@ -115,19 +125,25 @@ mixin Lint on BaseRule {
   LintCode get code;
   LintSeverity get defaultSeverity => LintSeverity.info;
 
+  @override
+  LintOptions? get ruleOptions => _ruleOptions as LintOptions?;
+
+  @override
+  LintPackageOptions? get packageOptions =>
+      _packageOptions as LintPackageOptions?;
+
   void _reportSpan(
     SourceSpan span,
     String message, {
     String? correction,
     EditsComputer? editsComputer,
   }) {
-    final config = sidecarSpec.getConfigurationForCode(code) as LintOptions?;
     final result = LintResult(
       rule: code,
       span: span,
       message: message,
       correction: correction,
-      severity: config?.severity ?? defaultSeverity,
+      severity: ruleOptions?.severity ?? defaultSeverity,
       editsComputer: editsComputer,
     );
     lintResults.add(result);

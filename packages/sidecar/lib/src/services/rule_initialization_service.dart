@@ -96,11 +96,13 @@ class RuleInitializationService {
     required SidecarSpec config,
     required Set<BaseRule> rules,
   }) {
-    final registry = NodeRegistry();
-    registerVisitorsWithRegistry(rules, registry);
+    final registry = NodeRegistry(rules);
+    // removed: registerVisitors is now handled inside registry
+    // registerVisitorsWithRegistry(rules, registry);
     return registry;
   }
 
+  @Deprecated('registerVisitors is now handled inside registry')
   void registerVisitorsWithRegistry(
     Set<BaseRule> rules,
     NodeRegistry registry,

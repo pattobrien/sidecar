@@ -1,3 +1,4 @@
+import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -11,11 +12,17 @@ final resolvedUnitForFileProvider =
     FutureProvider.family<ResolvedUnitResult?, AnalyzedFile>((ref, file) async {
   if (!file.isDartFile && !file.isSidecarYamlFile) return null;
 
-  final contexts = ref.watch(contextCollectionProvider);
-  final context = contexts.contextForRoot(file.contextRoot);
+  final context = ref.watch(_contextForFileProvider(file));
   if (context == null) return null;
 
-  final result = await timedLog('getResolvedUnit',
+  final result = await timedLogAsync('getResolvedUnit',
       () async => context.currentSession.getResolvedUnit(file.path));
   return result as ResolvedUnitResult;
 });
+
+final _contextForFileProvider = Provider.family<AnalysisContext?, AnalyzedFile>(
+  (ref, file) {
+    final contexts = ref.watch(contextCollectionProvider);
+    return contexts.contextForRoot(file.contextRoot);
+  },
+);

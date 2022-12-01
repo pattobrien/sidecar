@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
 
-import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -10,12 +9,12 @@ export '../src/rules/base_rule.dart' hide BaseRule;
 export '../src/rules/lint_severity.dart';
 
 /// Base for all Sidecar Rules.
-abstract class Rule extends GeneralizingAstVisitor<void> with BaseRule {
-  @override
-  @mustCallSuper
-  void visitNode(AstNode node) {
-    super.visitNode(node);
-  }
+abstract class Rule extends SimpleAstVisitor<void> with BaseRule {
+  // @override
+  // @mustCallSuper
+  // void visitNode(AstNode node) {
+  //   super.visitNode(node);
+  // }
 
   @override
   bool operator ==(dynamic other) {

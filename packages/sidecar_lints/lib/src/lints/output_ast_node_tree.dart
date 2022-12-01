@@ -17,14 +17,14 @@ class OutputAstNodeTree extends Rule with QuickAssist {
     registry.addSimpleStringLiteral(this);
   }
 
-  @override
-  void visitNode(AstNode node) {
-    reportAssistForNode(
-      node,
-      editsComputer: () => nodeChangeComputer(node),
-    );
-    super.visitNode(node);
-  }
+  // @override
+  // void visitNode(AstNode node) {
+  //   reportAssistForNode(
+  //     node,
+  //     editsComputer: () => nodeChangeComputer(node),
+  //   );
+  //   super.visitNode(node);
+  // }
 
   @override
   void visitStringLiteral(StringLiteral node) {

@@ -4,7 +4,18 @@
 part of 'registered_rule_visitor.dart';
 
 class NodeRegistry {
-  NodeRegistry();
+  NodeRegistry(this.rules) {
+    init();
+  }
+
+  final Set<BaseRule> rules;
+
+  void init() {
+    for (final rule in rules) {
+      rule.initializeVisitor(this);
+    }
+  }
+
   final List<VisitorSubscription<AdjacentStrings>> _forAdjacentStrings = [];
   final List<VisitorSubscription<Annotation>> _forAnnotation = [];
   final List<VisitorSubscription<ArgumentList>> _forArgumentList = [];

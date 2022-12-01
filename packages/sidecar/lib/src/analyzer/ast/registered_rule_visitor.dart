@@ -1,11 +1,14 @@
 // coverage:ignore-file
 
+import 'dart:async';
+
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:meta/meta.dart';
 
 import '../../../rules/rules.dart';
 import '../../protocol/protocol.dart';
+import '../../rules/rules.dart';
 import '../plugin/sidecar_analyzer.dart';
 import 'visitor_subscription.dart';
 
@@ -21,15 +24,23 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
 
   //TODO: can we combine lintResults and assistResults ?
   @internal
-  final lintResults = <LintResult>{};
+  Set<LintResult> get lintResults =>
+      registry.rules.map((e) => e.lintResults).expand((e) => e).toSet();
+
   @internal
-  final assistResults = <AssistFilterResult>{};
+  Set<AssistFilterResult> get assistResults =>
+      registry.rules.map((e) => e.assistFilterResults).expand((e) => e).toSet();
+
+  // @internal
+  // final assistResults = <AssistFilterResult>{};
+  // @internal
+  // final lintResults = <LintResult>{};
 
   @override
   void visitNode(AstNode node) {
     _runSubscriptions(node, registry._forNode);
     node.visitChildren(this);
-    super.visitNode(node);
+    // super.visitNode(node);
   }
 
 // coverage:ignore-start
@@ -888,10 +899,9 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
       timer?.start();
       try {
         final rule = subscription.visitor;
-        timedLog<dynamic>('runSubscriptions ${rule.code.id}', () {
+        timedLog<dynamic>(
+            'runSubscriptions ${rule.code.id} ${node.beginToken.lexeme}', () {
           node.accept<dynamic>(rule);
-          lintResults.addAll(rule.lintResults);
-          assistResults.addAll(rule.assistFilterResults);
         });
       } catch (e) {
         // if (!exceptionHandler(

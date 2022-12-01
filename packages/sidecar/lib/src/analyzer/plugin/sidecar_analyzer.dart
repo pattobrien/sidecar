@@ -13,6 +13,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../configurations/sidecar_spec/sidecar_spec_parsers.dart';
 import '../../protocol/models/log_record.dart';
 import '../../protocol/protocol.dart';
+import '../../utils/analysis_context_utilities.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/file_paths.dart';
 import 'active_package_provider.dart';
@@ -28,6 +29,14 @@ final logger = Logger('sidecar-plugin');
 T timedLog<T>(String message, T Function() function) {
   final watch = Stopwatch()..start();
   final result = function();
+  logger.info('${watch.elapsed.prettified()} $message');
+  return result;
+}
+
+Future<T> timedLogAsync<T>(
+    String message, Future<T> Function() function) async {
+  final watch = Stopwatch()..start();
+  final result = await function();
   logger.info('${watch.elapsed.prettified()} $message');
   return result;
 }
@@ -152,18 +161,7 @@ class SidecarAnalyzer {
     throw StateError('LintRequest is an invalid request');
   }
 
-  /// PATTOBRIEN:
-  /// this is where we should handle the order of events that happen post-content change
-  /// i.e.:
-  /// - first, analyze high priority files
-  /// - second, analyze low priority files
-  /// - third, check for new annotations
-  /// - fourth, proactively refresh assist filters
-  /// - fifth, proactively calculate edits (assists and quick fixes)
-  // Overridden to allow for non-Dart files to be analyzed for changes
   Future<void> contentChanged(Set<AnalyzedFile> files) async {
-    // final filesWithContexts = files.map(_getFileWithContext).whereNotNull();
-
     Future<void> handleContexts(List<AnalysisContext> contexts) async {
       for (final context in contexts) {
         final watch = Stopwatch()..start();
@@ -189,8 +187,8 @@ class SidecarAnalyzer {
             .map((e) => AnalyzedFile(Uri.parse(e),
                 contextRoot: context.contextRoot.root.toUri()))
             .toSet();
-        // TODO: temporarily disabled analysis of affected files
-        // await analyzeFiles(files: affectedFiles.difference(changedFiles));
+
+        await analyzeFiles(files: affectedFiles.difference(changedFiles));
         logger.info(
             'handleContexts in ${watch.elapsed.prettified()} - ${contextUri.path}');
       }
@@ -245,13 +243,14 @@ class SidecarAnalyzer {
 
     for (final file in dartFiles) {
       _ref.invalidate(nodeRegistryForFileLintsProvider(file));
-      await timedLog('unit refresh',
-          () => _ref.refresh(resolvedUnitForFileProvider(file).future));
-      final lints = await timedLog(
-          'lint refresh', () => _ref.read(lintResultsProvider(file).future));
-      final notification = LintNotification(file, lints);
 
-      channel.sendNotification(notification);
+      await timedLogAsync('unit refresh',
+          () => _ref.refresh(resolvedUnitForFileProvider(file).future));
+
+      final lints = await timedLogAsync(
+          'lint refresh', () => _ref.read(lintResultsProvider(file).future));
+
+      channel.sendNotification(LintNotification(file, lints));
     }
     for (final file in dartFiles) {
       _ref.refresh(quickFixResultsProvider(file));
