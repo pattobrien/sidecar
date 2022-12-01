@@ -1,20 +1,18 @@
 // ignore_for_file: public_member_api_docs
-// coverage:ignore-file
 
 part of 'registered_rule_visitor.dart';
 
+/// Initialize and run all visitor methods within rules.
 class NodeRegistry {
+  /// Initialize and run all visitor methods within rules.
   NodeRegistry(this.rules) {
-    init();
-  }
-
-  final Set<BaseRule> rules;
-
-  void init() {
     for (final rule in rules) {
       rule.initializeVisitor(this);
     }
   }
+
+  /// Rules with registered visitor methods
+  final Set<BaseRule> rules;
 
   final List<VisitorSubscription<AdjacentStrings>> _forAdjacentStrings = [];
   final List<VisitorSubscription<Annotation>> _forAnnotation = [];
@@ -208,596 +206,701 @@ class NodeRegistry {
       _forRecordTypeAnnotationPositionalField = [];
   final List<VisitorSubscription<AstNode>> _forNode = [];
 
-  void addNode(Rule visitor) {
-    _forNode.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  void addNode(Rule rule) {
+    _forNode.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addAdjacentStrings(Rule visitor) {
-    _forAdjacentStrings.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitAdjacentStrings method.
+  void addAdjacentStrings(Rule rule) {
+    _forAdjacentStrings.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addAnnotation(Rule visitor) {
-    _forAnnotation.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitAnnotation method.
+  void addAnnotation(Rule rule) {
+    _forAnnotation.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addArgumentList(Rule visitor) {
-    _forArgumentList.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitArgumentList method.
+  void addArgumentList(Rule rule) {
+    _forArgumentList.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addAsExpression(Rule visitor) {
-    _forAsExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitAsExpression method.
+  void addAsExpression(Rule rule) {
+    _forAsExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addAssertInitializer(Rule visitor) {
-    _forAssertInitializer.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitAssertInitializer method.
+  void addAssertInitializer(Rule rule) {
+    _forAssertInitializer.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addAssertStatement(Rule visitor) {
-    _forAssertStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitAssertStatement method.
+  void addAssertStatement(Rule rule) {
+    _forAssertStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addAssignmentExpression(Rule visitor) {
-    _forAssignmentExpression
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitAssignmentExpression method.
+  void addAssignmentExpression(Rule rule) {
+    _forAssignmentExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addAugmentationImportDirective(Rule visitor) {
+  /// Register a rule for visitAugmentationImportDirective method.
+  void addAugmentationImportDirective(Rule rule) {
     _forAugmentationImportDirective
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addAwaitExpression(Rule visitor) {
-    _forAwaitExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitAwaitExpression method.
+  void addAwaitExpression(Rule rule) {
+    _forAwaitExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addBinaryExpression(Rule visitor) {
-    _forBinaryExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitBinaryExpression method.
+  void addBinaryExpression(Rule rule) {
+    _forBinaryExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addBlock(Rule visitor) {
-    _forBlock.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitBlock method.
+  void addBlock(Rule rule) {
+    _forBlock.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addBlockFunctionBody(Rule visitor) {
-    _forBlockFunctionBody.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitBlockFunctionBody method.
+  void addBlockFunctionBody(Rule rule) {
+    _forBlockFunctionBody.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addBooleanLiteral(Rule visitor) {
-    _forBooleanLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitBooleanLiteral method.
+  void addBooleanLiteral(Rule rule) {
+    _forBooleanLiteral.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addBreakStatement(Rule visitor) {
-    _forBreakStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitBreakStatement method.
+  void addBreakStatement(Rule rule) {
+    _forBreakStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addCascadeExpression(Rule visitor) {
-    _forCascadeExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitCascadeExpression method.
+  void addCascadeExpression(Rule rule) {
+    _forCascadeExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addCatchClause(Rule visitor) {
-    _forCatchClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitCatchClause method.
+  void addCatchClause(Rule rule) {
+    _forCatchClause.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addCatchClauseParameter(Rule visitor) {
-    _forCatchClauseParameter
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitCatchClauseParameter method.
+  void addCatchClauseParameter(Rule rule) {
+    _forCatchClauseParameter.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addClassDeclaration(Rule visitor) {
-    _forClassDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitClassDeclaration method.
+  void addClassDeclaration(Rule rule) {
+    _forClassDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addClassTypeAlias(Rule visitor) {
-    _forClassTypeAlias.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitClassTypeAlias method.
+  void addClassTypeAlias(Rule rule) {
+    _forClassTypeAlias.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addComment(Rule visitor) {
-    _forComment.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitComment method.
+  void addComment(Rule rule) {
+    _forComment.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addCommentReference(Rule visitor) {
-    _forCommentReference.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitCommentReference method.
+  void addCommentReference(Rule rule) {
+    _forCommentReference.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addCompilationUnit(Rule visitor) {
-    _forCompilationUnit.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitCompilationUnit method.
+  void addCompilationUnit(Rule rule) {
+    _forCompilationUnit.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addConditionalExpression(Rule visitor) {
-    _forConditionalExpression
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitConditionalExpression method.
+  void addConditionalExpression(Rule rule) {
+    _forConditionalExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addConfiguration(Rule visitor) {
-    _forConfiguration.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitConfiguration method.
+  void addConfiguration(Rule rule) {
+    _forConfiguration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addConstructorDeclaration(Rule visitor) {
-    _forConstructorDeclaration
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitConstructorDeclaration method.
+  void addConstructorDeclaration(Rule rule) {
+    _forConstructorDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addConstructorFieldInitializer(Rule visitor) {
+  /// Register a rule for visitConstructorFieldInitializer method.
+  void addConstructorFieldInitializer(Rule rule) {
     _forConstructorFieldInitializer
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addConstructorName(Rule visitor) {
-    _forConstructorName.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitConstructorName method.
+  void addConstructorName(Rule rule) {
+    _forConstructorName.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addConstructorReference(Rule visitor) {
-    _forConstructorReference
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitConstructorReference method.
+  void addConstructorReference(Rule rule) {
+    _forConstructorReference.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addConstructorSelector(Rule visitor) {
-    _forConstructorSelector
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitConstructorSelector method.
+  void addConstructorSelector(Rule rule) {
+    _forConstructorSelector.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addContinueStatement(Rule visitor) {
-    _forContinueStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitContinueStatement method.
+  void addContinueStatement(Rule rule) {
+    _forContinueStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addDeclaredIdentifier(Rule visitor) {
-    _forDeclaredIdentifier
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitDeclaredIdentifier method.
+  void addDeclaredIdentifier(Rule rule) {
+    _forDeclaredIdentifier.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addDefaultFormalParameter(Rule visitor) {
-    _forDefaultFormalParameter
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitDefaultFormalParameter method.
+  void addDefaultFormalParameter(Rule rule) {
+    _forDefaultFormalParameter.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addDoStatement(Rule visitor) {
-    _forDoStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitDoStatement method.
+  void addDoStatement(Rule rule) {
+    _forDoStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addDottedName(Rule visitor) {
-    _forDottedName.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitDottedName method.
+  void addDottedName(Rule rule) {
+    _forDottedName.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addDoubleLiteral(Rule visitor) {
-    _forDoubleLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitDoubleLiteral method.
+  void addDoubleLiteral(Rule rule) {
+    _forDoubleLiteral.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addEmptyFunctionBody(Rule visitor) {
-    _forEmptyFunctionBody.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitEmptyFunctionBody method.
+  void addEmptyFunctionBody(Rule rule) {
+    _forEmptyFunctionBody.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addEmptyStatement(Rule visitor) {
-    _forEmptyStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitEmptyStatement method.
+  void addEmptyStatement(Rule rule) {
+    _forEmptyStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addEnumConstantArguments(Rule visitor) {
-    _forEnumConstantArguments
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitEnumConstantArguments method.
+  void addEnumConstantArguments(Rule rule) {
+    _forEnumConstantArguments.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addEnumConstantDeclaration(Rule visitor) {
-    _forEnumConstantDeclaration
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitEnumConstantDeclaration method.
+  void addEnumConstantDeclaration(Rule rule) {
+    _forEnumConstantDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addEnumDeclaration(Rule visitor) {
-    _forEnumDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitEnumDeclaration method.
+  void addEnumDeclaration(Rule rule) {
+    _forEnumDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addExportDirective(Rule visitor) {
-    _forExportDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitExportDirective method.
+  void addExportDirective(Rule rule) {
+    _forExportDirective.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addExpressionFunctionBody(Rule visitor) {
-    _forExpressionFunctionBody
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitExpressionFunctionBody method.
+  void addExpressionFunctionBody(Rule rule) {
+    _forExpressionFunctionBody.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addExpressionStatement(Rule visitor) {
-    _forExpressionStatement
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitExpressionStatement method.
+  void addExpressionStatement(Rule rule) {
+    _forExpressionStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addExtendsClause(Rule visitor) {
-    _forExtendsClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitExtendsClause method.
+  void addExtendsClause(Rule rule) {
+    _forExtendsClause.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addExtensionDeclaration(Rule visitor) {
-    _forExtensionDeclaration
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitExtensionDeclaration method.
+  void addExtensionDeclaration(Rule rule) {
+    _forExtensionDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addExtensionOverride(Rule visitor) {
-    _forExtensionOverride.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitExtensionOverride method.
+  void addExtensionOverride(Rule rule) {
+    _forExtensionOverride.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFieldDeclaration(Rule visitor) {
-    _forFieldDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitFieldDeclaration method.
+  void addFieldDeclaration(Rule rule) {
+    _forFieldDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFieldFormalParameter(Rule visitor) {
-    _forFieldFormalParameter
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitFieldFormalParameter method.
+  void addFieldFormalParameter(Rule rule) {
+    _forFieldFormalParameter.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addForEachPartsWithDeclaration(Rule visitor) {
+  /// Register a rule for visitForEachPartsWithDeclaration method.
+  void addForEachPartsWithDeclaration(Rule rule) {
     _forForEachPartsWithDeclaration
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addForEachPartsWithIdentifier(Rule visitor) {
+  /// Register a rule for visitForEachPartsWithIdentifier method.
+  void addForEachPartsWithIdentifier(Rule rule) {
     _forForEachPartsWithIdentifier
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addForElement(Rule visitor) {
-    _forForElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitForElement method.
+  void addForElement(Rule rule) {
+    _forForElement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFormalParameterList(Rule visitor) {
-    _forFormalParameterList
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitFormalParameterList method.
+  void addFormalParameterList(Rule rule) {
+    _forFormalParameterList.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addForPartsWithDeclarations(Rule visitor) {
+  /// Register a rule for visitForPartsWithDeclarations method.
+  void addForPartsWithDeclarations(Rule rule) {
     _forForPartsWithDeclarations
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addForPartsWithExpression(Rule visitor) {
-    _forForPartsWithExpression
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitForPartsWithExpression method.
+  void addForPartsWithExpression(Rule rule) {
+    _forForPartsWithExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addForStatement(Rule visitor) {
-    _forForStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitForStatement method.
+  void addForStatement(Rule rule) {
+    _forForStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFunctionDeclaration(Rule visitor) {
-    _forFunctionDeclaration
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitFunctionDeclaration method.
+  void addFunctionDeclaration(Rule rule) {
+    _forFunctionDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFunctionDeclarationStatement(Rule visitor) {
+  /// Register a rule for visitFunctionDelarationStatement method.
+  void addFunctionDeclarationStatement(Rule rule) {
     _forFunctionDeclarationStatement
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFunctionExpression(Rule visitor) {
-    _forFunctionExpression
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitFunctionExpression method.
+  void addFunctionExpression(Rule rule) {
+    _forFunctionExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFunctionExpressionInvocation(Rule visitor) {
+  /// Register a rule for visitFunctionExpressionInvocation method.
+  void addFunctionExpressionInvocation(Rule rule) {
     _forFunctionExpressionInvocation
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFunctionReference(Rule visitor) {
-    _forFunctionReference.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitFunctionReference method.
+  void addFunctionReference(Rule rule) {
+    _forFunctionReference.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFunctionTypeAlias(Rule visitor) {
-    _forFunctionTypeAlias.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitFunctionTypeAlias method.
+  void addFunctionTypeAlias(Rule rule) {
+    _forFunctionTypeAlias.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addFunctionTypedFormalParameter(Rule visitor) {
+  /// Register a rule for visitFunctionTypedFormalParameter method.
+  void addFunctionTypedFormalParameter(Rule rule) {
     _forFunctionTypedFormalParameter
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addGenericFunctionType(Rule visitor) {
-    _forGenericFunctionType
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitGenericFunctionType method.
+  void addGenericFunctionType(Rule rule) {
+    _forGenericFunctionType.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addGenericTypeAlias(Rule visitor) {
-    _forGenericTypeAlias.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitGenericTypeAlias method.
+  void addGenericTypeAlias(Rule rule) {
+    _forGenericTypeAlias.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addHideClause(Rule visitor) {
-    _forHideClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitHideClause method.
+  void addHideClause(Rule rule) {
+    _forHideClause.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addHideCombinator(Rule visitor) {
-    _forHideCombinator.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitHideCombinator method.
+  void addHideCombinator(Rule rule) {
+    _forHideCombinator.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addIfElement(Rule visitor) {
-    _forIfElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitIfElement method.
+  void addIfElement(Rule rule) {
+    _forIfElement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addIfStatement(Rule visitor) {
-    _forIfStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitIfStatement method.
+  void addIfStatement(Rule rule) {
+    _forIfStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addImplementsClause(Rule visitor) {
-    _forImplementsClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitImplementsClause method.
+  void addImplementsClause(Rule rule) {
+    _forImplementsClause.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addImplicitCallReference(Rule visitor) {
-    _forImplicitCallReference
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitImplicitCallReference method.
+  void addImplicitCallReference(Rule rule) {
+    _forImplicitCallReference.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addImportDirective(Rule visitor) {
-    _forImportDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitImportDirective method.
+  void addImportDirective(Rule rule) {
+    _forImportDirective.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addIndexExpression(Rule visitor) {
-    _forIndexExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitIndexExpression method.
+  void addIndexExpression(Rule rule) {
+    _forIndexExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addInstanceCreationExpression(Rule visitor) {
+  /// Register a rule for visitInstanceCreationExpression method.
+  void addInstanceCreationExpression(Rule rule) {
     _forInstanceCreationExpression
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addIntegerLiteral(Rule visitor) {
-    _forIntegerLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitIntegerLiteral method.
+  void addIntegerLiteral(Rule rule) {
+    _forIntegerLiteral.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addInterpolationExpression(Rule visitor) {
-    _forInterpolationExpression
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitInterpolationExpression method.
+  void addInterpolationExpression(Rule rule) {
+    _forInterpolationExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addInterpolationString(Rule visitor) {
-    _forInterpolationString
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitInterpolationString method.
+  void addInterpolationString(Rule rule) {
+    _forInterpolationString.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addIsExpression(Rule visitor) {
-    _forIsExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitIsExpression method.
+  void addIsExpression(Rule rule) {
+    _forIsExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addLabel(Rule visitor) {
-    _forLabel.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitLabel method.
+  void addLabel(Rule rule) {
+    _forLabel.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addLabeledStatement(Rule visitor) {
-    _forLabeledStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitLabeledStatement method.
+  void addLabeledStatement(Rule rule) {
+    _forLabeledStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addLibraryAugmentationDirective(Rule visitor) {
+  /// Register a rule for visitLibraryAugmentationDirective method.
+  void addLibraryAugmentationDirective(Rule rule) {
     _forLibraryAugmentationDirective
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addLibraryDirective(Rule visitor) {
-    _forLibraryDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitLibraryDirective method.
+  void addLibraryDirective(Rule rule) {
+    _forLibraryDirective.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addLibraryIdentifier(Rule visitor) {
-    _forLibraryIdentifier.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitLibraryIdentifier method.
+  void addLibraryIdentifier(Rule rule) {
+    _forLibraryIdentifier.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addListLiteral(Rule visitor) {
-    _forListLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitListLiteral method.
+  void addListLiteral(Rule rule) {
+    _forListLiteral.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addMapLiteralEntry(Rule visitor) {
-    _forMapLiteralEntry.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitMapLiteralEntry method.
+  void addMapLiteralEntry(Rule rule) {
+    _forMapLiteralEntry.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addMethodDeclaration(Rule visitor) {
-    _forMethodDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitMethodDeclaration method.
+  void addMethodDeclaration(Rule rule) {
+    _forMethodDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addMethodInvocation(Rule visitor) {
-    _forMethodInvocation.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitMethodInvocation method.
+  void addMethodInvocation(Rule rule) {
+    _forMethodInvocation.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addMixinDeclaration(Rule visitor) {
-    _forMixinDeclaration.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitMixinDeclaration method.
+  void addMixinDeclaration(Rule rule) {
+    _forMixinDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addNamedExpression(Rule visitor) {
-    _forNamedExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitNamedExpression method.
+  void addNamedExpression(Rule rule) {
+    _forNamedExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addNamedType(Rule visitor) {
-    _forNamedType.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitNamedType method.
+  void addNamedType(Rule rule) {
+    _forNamedType.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addNativeClause(Rule visitor) {
-    _forNativeClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitNativeClause method.
+  void addNativeClause(Rule rule) {
+    _forNativeClause.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addNativeFunctionBody(Rule visitor) {
-    _forNativeFunctionBody
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for vistiNativeFunctionBody method.
+  void addNativeFunctionBody(Rule rule) {
+    _forNativeFunctionBody.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addNullLiteral(Rule visitor) {
-    _forNullLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitNullLiteral method.
+  void addNullLiteral(Rule rule) {
+    _forNullLiteral.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addOnClause(Rule visitor) {
-    _forOnClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitOnClause method.
+  void addOnClause(Rule rule) {
+    _forOnClause.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addParenthesizedExpression(Rule visitor) {
-    _forParenthesizedExpression
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitParenthesizedExpression method.
+  void addParenthesizedExpression(Rule rule) {
+    _forParenthesizedExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addPartDirective(Rule visitor) {
-    _forPartDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitPartDirective method.
+  void addPartDirective(Rule rule) {
+    _forPartDirective.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addPartOfDirective(Rule visitor) {
-    _forPartOfDirective.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitPartOfDirective method.
+  void addPartOfDirective(Rule rule) {
+    _forPartOfDirective.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addPostfixExpression(Rule visitor) {
-    _forPostfixExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitPostfixExpression method.
+  void addPostfixExpression(Rule rule) {
+    _forPostfixExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addPrefixedIdentifier(Rule visitor) {
-    _forPrefixedIdentifier
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitPrefixedIdentifier method.
+  void addPrefixedIdentifier(Rule rule) {
+    _forPrefixedIdentifier.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addPrefixExpression(Rule visitor) {
-    _forPrefixExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitPrefixExpression method.
+  void addPrefixExpression(Rule rule) {
+    _forPrefixExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addPropertyAccess(Rule visitor) {
-    _forPropertyAccess.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitPropertyAccess method.
+  void addPropertyAccess(Rule rule) {
+    _forPropertyAccess.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  // void addRecordLiteral(LintError linter, SidecarAstVisitor visitor) {
-  //   _forRecordLiterals.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  // void addRecordLiteral(LintError linter, SidecarAstVisitor rule) {
+  //   _forRecordLiterals.add(VisitorSubscription(rule, _getTimer(rule)));
   // }
 
-  void addRedirectingConstructorInvocation(Rule visitor) {
+  /// Register a rule for visitRedirectingConstructorInvocation method.
+  void addRedirectingConstructorInvocation(Rule rule) {
     _forRedirectingConstructorInvocation
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addRethrowExpression(Rule visitor) {
-    _forRethrowExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitRethrowExpression method.
+  void addRethrowExpression(Rule rule) {
+    _forRethrowExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addReturnStatement(Rule visitor) {
-    _forReturnStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitReturnStatement method.
+  void addReturnStatement(Rule rule) {
+    _forReturnStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addScriptTag(Rule visitor) {
-    _forScriptTag.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitScriptTag method.
+  void addScriptTag(Rule rule) {
+    _forScriptTag.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSetOrMapLiteral(Rule visitor) {
-    _forSetOrMapLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSetOrMapLiteral method.
+  void addSetOrMapLiteral(Rule rule) {
+    _forSetOrMapLiteral.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addShowClause(Rule visitor) {
-    _forShowClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitShowClause method.
+  void addShowClause(Rule rule) {
+    _forShowClause.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addShowCombinator(Rule visitor) {
-    _forShowCombinator.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitShowCombinator method.
+  void addShowCombinator(Rule rule) {
+    _forShowCombinator.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addShowHideElement(Rule visitor) {
-    _forShowHideElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitShowHideElement method.
+  void addShowHideElement(Rule rule) {
+    _forShowHideElement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSimpleFormalParameter(Rule visitor) {
-    _forSimpleFormalParameter
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSimpleFormalParameter method.
+  void addSimpleFormalParameter(Rule rule) {
+    _forSimpleFormalParameter.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSimpleIdentifier(Rule visitor) {
-    _forSimpleIdentifier.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSimpleIdentifier method.
+  void addSimpleIdentifier(Rule rule) {
+    _forSimpleIdentifier.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSimpleStringLiteral(Rule visitor) {
-    _forSimpleStringLiteral
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSimpleStringLiteral method.
+  void addSimpleStringLiteral(Rule rule) {
+    _forSimpleStringLiteral.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSpreadElement(Rule visitor) {
-    _forSpreadElement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSpreadElement method.
+  void addSpreadElement(Rule rule) {
+    _forSpreadElement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addStringInterpolation(Rule visitor) {
-    _forStringInterpolation
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitStringInterpolation method.
+  void addStringInterpolation(Rule rule) {
+    _forStringInterpolation.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSuperConstructorInvocation(Rule visitor) {
+  /// Register a rule for visitSuperConstructorInvocation method.
+  void addSuperConstructorInvocation(Rule rule) {
     _forSuperConstructorInvocation
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSuperExpression(Rule visitor) {
-    _forSuperExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSuperExpression method.
+  void addSuperExpression(Rule rule) {
+    _forSuperExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSuperFormalParameter(Rule visitor) {
-    _forSuperFormalParameter
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSuperFormalParameter method.
+  void addSuperFormalParameter(Rule rule) {
+    _forSuperFormalParameter.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSwitchCase(Rule visitor) {
-    _forSwitchCase.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSwitchCase method.
+  void addSwitchCase(Rule rule) {
+    _forSwitchCase.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSwitchDefault(Rule visitor) {
-    _forSwitchDefault.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSwitchDefault method.
+  void addSwitchDefault(Rule rule) {
+    _forSwitchDefault.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSwitchStatement(Rule visitor) {
-    _forSwitchStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSwitchStatement method.
+  void addSwitchStatement(Rule rule) {
+    _forSwitchStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addSymbolLiteral(Rule visitor) {
-    _forSymbolLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitSymbolLiteral method.
+  void addSymbolLiteral(Rule rule) {
+    _forSymbolLiteral.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addThisExpression(Rule visitor) {
-    _forThisExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitThisExpression method.
+  void addThisExpression(Rule rule) {
+    _forThisExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addThrowExpression(Rule visitor) {
-    _forThrowExpression.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitThrowExpression method.
+  void addThrowExpression(Rule rule) {
+    _forThrowExpression.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addTopLevelVariableDeclaration(Rule visitor) {
+  /// Register a rule for visitTopLevelVariableDeclaration method.
+  void addTopLevelVariableDeclaration(Rule rule) {
     _forTopLevelVariableDeclaration
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addTryStatement(Rule visitor) {
-    _forTryStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitTryStatement method.
+  void addTryStatement(Rule rule) {
+    _forTryStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addTypeArgumentList(Rule visitor) {
-    _forTypeArgumentList.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitTypeArgumentList method.
+  void addTypeArgumentList(Rule rule) {
+    _forTypeArgumentList.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addTypeLiteral(Rule visitor) {
-    _forTypeLiteral.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitTypeLiteral method.
+  void addTypeLiteral(Rule rule) {
+    _forTypeLiteral.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
   @Deprecated('Use addNamedType() instead')
-  void addTypeName(Rule visitor) {
-    addNamedType(visitor);
+
+  /// Register a rule for visitTypeName method.
+  void addTypeName(Rule rule) {
+    addNamedType(rule);
   }
 
-  void addTypeParameter(Rule visitor) {
-    _forTypeParameter.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitTypeParameter method.
+  void addTypeParameter(Rule rule) {
+    _forTypeParameter.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addTypeParameterList(Rule visitor) {
-    _forTypeParameterList.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitTypeParameterList method.
+  void addTypeParameterList(Rule rule) {
+    _forTypeParameterList.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addVariableDeclaration(Rule visitor) {
-    _forVariableDeclaration
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitVariableDeclaration method.
+  void addVariableDeclaration(Rule rule) {
+    _forVariableDeclaration.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addVariableDeclarationList(Rule visitor) {
-    _forVariableDeclarationList
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitVariableDeclarationList method.
+  void addVariableDeclarationList(Rule rule) {
+    _forVariableDeclarationList.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addVariableDeclarationStatement(Rule visitor) {
+  /// Register a rule for visitVariableDeclarationStatement method.
+  void addVariableDeclarationStatement(Rule rule) {
     _forVariableDeclarationStatement
-        .add(VisitorSubscription(visitor, _getTimer(visitor)));
+        .add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addWhileStatement(Rule visitor) {
-    _forWhileStatement.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitWhileStatement method.
+  void addWhileStatement(Rule rule) {
+    _forWhileStatement.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
-  void addWithClause(Rule visitor) {
-    _forWithClause.add(VisitorSubscription(visitor, _getTimer(visitor)));
+  /// Register a rule for visitWithClause method.
+  void addWithClause(Rule rule) {
+    _forWithClause.add(VisitorSubscription(rule, _getTimer(rule)));
   }
 
+  /// Register a rule for visitYieldStatement method.
   void addYieldStatement(Rule linter) {
     _forYieldStatement.add(VisitorSubscription(linter, _getTimer(linter)));
   }

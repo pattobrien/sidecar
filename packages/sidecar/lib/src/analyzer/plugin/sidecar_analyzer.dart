@@ -10,10 +10,8 @@ import 'package:logging/logging.dart' hide LogRecord;
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
-import '../../configurations/sidecar_spec/sidecar_spec_parsers.dart';
-import '../../protocol/models/log_record.dart';
+import '../../configurations/sidecar_spec/sidecar_spec.dart';
 import '../../protocol/protocol.dart';
-import '../../utils/analysis_context_utilities.dart';
 import '../../utils/duration_ext.dart';
 import '../../utils/file_paths.dart';
 import 'active_package_provider.dart';

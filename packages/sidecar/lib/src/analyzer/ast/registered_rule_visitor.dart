@@ -1,10 +1,5 @@
-// coverage:ignore-file
-
-import 'dart:async';
-
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:meta/meta.dart';
 
 import '../../../rules/rules.dart';
 import '../../protocol/protocol.dart';
@@ -23,18 +18,11 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
   final NodeRegistry registry;
 
   //TODO: can we combine lintResults and assistResults ?
-  @internal
   Set<LintResult> get lintResults =>
       registry.rules.map((e) => e.lintResults).expand((e) => e).toSet();
 
-  @internal
   Set<AssistFilterResult> get assistResults =>
       registry.rules.map((e) => e.assistFilterResults).expand((e) => e).toSet();
-
-  // @internal
-  // final assistResults = <AssistFilterResult>{};
-  // @internal
-  // final lintResults = <LintResult>{};
 
   @override
   void visitNode(AstNode node) {
@@ -43,7 +31,6 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
     // super.visitNode(node);
   }
 
-// coverage:ignore-start
   @override
   void visitAdjacentStrings(AdjacentStrings node) {
     _runSubscriptions(node, registry._forAdjacentStrings);
@@ -887,7 +874,6 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
     _runSubscriptions(node, registry._forRecordTypeAnnotationPositionalField);
     node.visitChildren(this);
   }
-  // coverage:ignore-end
 
   void _runSubscriptions<T extends AstNode>(
     T node,
@@ -898,7 +884,7 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
       final timer = subscription.timer;
       timer?.start();
       try {
-        final rule = subscription.visitor;
+        final rule = subscription.rule;
         timedLog<dynamic>(
             'runSubscriptions ${rule.code.id} ${node.beginToken.lexeme}', () {
           node.accept<dynamic>(rule);
