@@ -13,11 +13,9 @@ import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
 
-@Tags(['e2e'])
-@Timeout(Duration(minutes: 15))
 void main() {
   group('SidecarSpec configured severity:', () {
-    final constructors = [HardcodedTextString.new];
+    final constructors = [AvoidStringLiteral.new];
 
     late PackageResource app;
     late WorkspaceResource workspace;
@@ -37,8 +35,8 @@ void main() {
       final sidecarYamlError = SidecarSpec(includes: [
         Glob('lib/**')
       ], lints: {
-        intlStringRuleCode.package: LintPackageOptions(rules: {
-          intlStringRuleCode.id: const LintOptions(),
+        exampleRuleCode.package: LintPackageOptions(rules: {
+          exampleRuleCode.id: const LintOptions(),
         }),
       });
       app.modifySidecarYaml(sidecarYamlError);
@@ -46,8 +44,7 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
-        lint(intlStringRuleCode, 28, 14,
-            severity: HardcodedTextString().defaultSeverity),
+        lint(exampleRuleCode, 28, 14, severity: exampleRule.defaultSeverity),
       ]);
     });
 
@@ -56,8 +53,8 @@ void main() {
       final sidecarYamlError = SidecarSpec(includes: [
         Glob('lib/**')
       ], lints: {
-        intlStringRuleCode.package: LintPackageOptions(rules: {
-          intlStringRuleCode.id: const LintOptions(
+        exampleRuleCode.package: LintPackageOptions(rules: {
+          exampleRuleCode.id: const LintOptions(
             severity: LintSeverity.info,
           ),
         }),
@@ -67,7 +64,7 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
-        lint(intlStringRuleCode, 28, 14, severity: LintSeverity.info),
+        lint(exampleRuleCode, 28, 14, severity: LintSeverity.info),
       ]);
     });
 
@@ -76,8 +73,8 @@ void main() {
       final sidecarYamlError = SidecarSpec(includes: [
         Glob('lib/**')
       ], lints: {
-        intlStringRuleCode.package: LintPackageOptions(rules: {
-          intlStringRuleCode.id: const LintOptions(
+        exampleRuleCode.package: LintPackageOptions(rules: {
+          exampleRuleCode.id: const LintOptions(
             severity: LintSeverity.warning,
           ),
         }),
@@ -87,7 +84,7 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
-        lint(intlStringRuleCode, 28, 14, severity: LintSeverity.warning),
+        lint(exampleRuleCode, 28, 14, severity: LintSeverity.warning),
       ]);
     });
 
@@ -96,8 +93,8 @@ void main() {
       final sidecarYamlError = SidecarSpec(includes: [
         Glob('lib/**')
       ], lints: {
-        intlStringRuleCode.package: LintPackageOptions(rules: {
-          intlStringRuleCode.id: const LintOptions(
+        exampleRuleCode.package: LintPackageOptions(rules: {
+          exampleRuleCode.id: const LintOptions(
             severity: LintSeverity.error,
           ),
         }),
@@ -107,7 +104,7 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [
-        lint(intlStringRuleCode, 28, 14, severity: LintSeverity.error),
+        lint(exampleRuleCode, 28, 14, severity: LintSeverity.error),
       ]);
     });
   });

@@ -23,8 +23,8 @@ void main() {
     final sidecarYaml = SidecarSpec(includes: [
       Glob('lib/**')
     ], lints: {
-      intlStringRuleCode.package: LintPackageOptions(rules: {
-        intlStringRuleCode.id: const LintOptions(
+      exampleRuleCode.package: LintPackageOptions(rules: {
+        exampleRuleCode.id: const LintOptions(
           enabled: true,
         ),
       }),
@@ -51,7 +51,7 @@ void main() {
       await client.handleFileChange(mainFile.toUri(), kContentWithString);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
-      expectLints(results[1], [lint(intlStringRuleCode, 28, 14)]);
+      expectLints(results[1], [lint(exampleRuleCode, 28, 14)]);
     });
 
     test('sidecar plugin is not enabled', () async {
@@ -68,8 +68,8 @@ void main() {
     final sidecarYaml = SidecarSpec(includes: [
       Glob('lib/**')
     ], lints: {
-      intlStringRuleCode.package: LintPackageOptions(rules: {
-        intlStringRuleCode.id: const LintOptions(),
+      exampleRuleCode.package: LintPackageOptions(rules: {
+        exampleRuleCode.id: const LintOptions(),
       }),
     });
 
@@ -92,7 +92,7 @@ void main() {
       await analyzeTestResources(app.root, reporter);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
-      expectLints(results.first, [lint(intlStringRuleCode, 28, 14)]);
+      expectLints(results.first, [lint(exampleRuleCode, 28, 14)]);
     });
 
     test('sidecar plugin is not enabled', () async {

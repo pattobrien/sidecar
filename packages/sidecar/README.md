@@ -16,7 +16,7 @@
 
 > This is an experimental package which is expected to change slightly (but frequently) until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the official ```package:analyzer```, and therefore any rule packages you may want to experiment with will be easy to port over to any updated APIs.
 
-
+> Functionality is currently only confirmed on machines running MacOS.
 
 ## Motivation
 
@@ -29,11 +29,13 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 
 | Lint Rules  | Status |
 | -------------  | ------ |
-| Lint message and correction message | ✅ |
+| Lint reason and correction messages | ✅ |
 | Default severity | ✅ |
 | Hyperlink to rule documentation in IDE window | ✅ |
 | Quick Fixes | ✅ |
-| Rule-specific configurations | 🚧 |
+| (CLI) basic lint outputs | ✅ |
+| (CLI) alternate output formats |  |
+| (CLI) apply quick fixes |  |
 | Ignore statements | |
 
 
@@ -48,8 +50,6 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | -------- | --- |
 | IDE server (via analyzer_plugin) | ✅ |
 | Debug mode  | 🚧 |
-| CLI mode - basic output format | ✅ |
-| CLI mode - alternate output formats |  |
 
 | SidecarSpec Features  (sidecar.yaml) | Status |
 | -------------  | ------ |
@@ -57,7 +57,8 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | (Lints) Override default severity | ✅ |
 | Rule-level include/exclude globs | 🚧 |
 | Package-level include/exclude globs | 🚧 |
-| Import inheritance | |
+| Project-level include/exclude globs | 🚧 |
+| Customizable rule configurations | |
 | Multi-import inheritance | |
 
 
@@ -66,23 +67,33 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 Below is an example of a Lint rule which highlights any strings within a Dart app.
 
 ```dart
-// avoid_string_literals.dart
+//  hardcoded_text_string.dart
 
-class AvoidStringLiterals extends Rule with Lint {
+const packageId = 'intl_lints';
+final kUri = Uri.parse('https://github.com/pattobrien/lints/');
+
+class HardcodedTextString extends Rule with Lint {
+  static const _id = 'hardcoded_text_string';
+  static const _message = 'Avoid any hardcoded Strings in Text widgets';
+  static const _correction = 'Prefer to use a translated Intl message instead.';
+
   @override
-  LintCode get code => 
-    LintCode('avoid_string_literals', package: 'intl_lints', url: kUri);
+  LintCode get code => LintCode(_id, package: packageId, url: kUri);
 
   @override
   void initializeVisitor(NodeRegistry registry) {
-    registry.addSimpleStringLiteral(this);
+    registry.addInstanceCreationExpression(this);
   }
 
   @override
-  void visitStringLiteral(StringLiteral node) {
-    reportAstNode(node,
-        message: 'Avoid any hardcoded Strings.',
-        correction: 'Use an intl message instead.');
+  void visitInstanceCreationExpression(InstanceCreationExpression node) {
+    if (textType.isAssignableFromType(node.staticType)) {
+      final textBody = node.argumentList.arguments
+          .firstWhere((arg) => arg is! NamedExpression);
+      if (textBody is SimpleStringLiteral || textBody is SimpleIdentifier) {
+        reportAstNode(textBody, message: _message, correction: _correction);
+      }
+    }
   }
 }
 
@@ -92,16 +103,16 @@ Note the following features and requirements:
 
 
 ### SidecarAstVisitor
-- Every Sidecar Rule should extend ```Rule``` and mixin either ```Lint``` or ```Assist```
-- All overridden visit methods should be added to the NodeRegistry via the ```initializeVisitor``` method
+- All Sidecar rules must extend ```Rule``` as well as mixin either ```Lint``` or ```QuickAssist```
+- All overridden visit methods should be added to the NodeRegistry via the ```initializeVisitor``` method (see above example)
 - Lint rules expose methods ```reportAstNode``` and ```reportToken```, which take a lint message and an optional correction message to display to a user
-- A QuickFix mixin can also be added to a Lint mixin, which exposes a parameter ```editsComputer``` on the function ```reportAstNode```
-- SidecarAstVisitor base class also exposes other fields, such as ```unit``` ( ResolvedUnitResult that is currently being analyzed)
+- A QuickFix mixin can also be added to a Lint mixin, which exposes an extra parameter ```editsComputer``` on the functions ```reportAstNode``` and ```reportToken```
+- The ```Rule``` base class also exposes other fields, for example ```unit``` ( ResolvedUnitResult that is currently being analyzed), ```sidecarSpec```, etc.
 
 
 ### RuleCode
 - A RuleCode is the ID of every unique Sidecar Rule
-- The ID of a RuleCode (e.g. ```avoid_string_literals```) should be in snake_case format and should match the class name (in PascalCase)
+- The ID of a RuleCode (e.g. ```hardcoded_text_string```) should be in snake_case format and should match the class name (in PascalCase)
 - The Package ID of a RuleCode should be identical to the package name
 - A URL can be added to the LintCode, which would then appear as a hyperlink in an IDE's lint window
 
@@ -118,7 +129,7 @@ package: intl_lints
 
 sidecar:
   lints:
-    - avoid_string_literals # should match the Lint's RuleCode ID
+    - hardcoded_text_string # should match the Lint's RuleCode ID
 ```
 
 > NOTE: some of the above API details, like the initializeVisitor method that must be overridden for each Rule, are complicated or redundant; our intention over time is to reduce as much redundancy as possible in order to make rule creation as straightforward as possible. If you have any feedback for how you'd like the APIs to look, we encourage you to open an issue against Sidecar on github.
