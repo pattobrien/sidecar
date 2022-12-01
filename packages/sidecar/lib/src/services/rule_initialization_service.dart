@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/ast/ast.dart';
-import '../configurations/sidecar_spec/sidecar_spec_base.dart';
+import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/analyzed_file.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';

@@ -143,7 +143,7 @@ class SidecarAnalyzer {
     final activePackage = _ref.read(activePackageProvider).packageRoot.root;
     final sidecarYamlFile =
         resourceProvider.getFile(p.join(activePackage.path, kSidecarYaml));
-    sidecarYamlFile.watch().changes.listen((event) {
+    sidecarYamlFile.watch().changes.listen((_) {
       _ref.invalidate(projectSidecarSpecProvider);
       final files = _ref.refresh(activeProjectScopedFilesProvider);
       analyzeFiles(files: files);
@@ -179,7 +179,7 @@ class SidecarAnalyzer {
 
         // for a better user experience:
         // first we handle the changed files, then we handle all affected files.
-        // this allows us to also include any changed non-dart files in our analysis
+        // this also allows us to include any changed non-dart files in our analysis
         await analyzeFiles(files: changedFiles);
 
         // analyze files that may have been affected by the files that explicitly changed
@@ -202,20 +202,16 @@ class SidecarAnalyzer {
 
   List<AnalysisContext> _getLowPriorityContexts() {
     final contexts = _ref.read(contextCollectionProvider);
-    final lowPriorityContexts = contexts
-        .where((context) => priorityFiles.every(
-            (file) => file.contextRoot.path != context.contextRoot.root.path))
-        .toList();
-    return lowPriorityContexts;
+    final lowPriorityContexts = contexts.where((context) => priorityFiles.every(
+        (file) => file.contextRoot.path != context.contextRoot.root.path));
+    return lowPriorityContexts.toList();
   }
 
   List<AnalysisContext> _getPriorityContexts() {
     final contexts = _ref.read(contextCollectionProvider);
-    final priorityContexts = contexts
-        .where((context) => priorityFiles.any(
-            (file) => file.contextRoot.path == context.contextRoot.root.path))
-        .toList();
-    return priorityContexts;
+    final priorityContexts = contexts.where((context) => priorityFiles
+        .any((file) => file.contextRoot.path == context.contextRoot.root.path));
+    return priorityContexts.toList();
   }
 
   Set<AnalyzedFile> priorityFiles = {};
@@ -225,18 +221,15 @@ class SidecarAnalyzer {
   }) async {
     // TODO: remove only analyzing dart files
     final watch = Stopwatch()..start();
-    final sidecarYaml =
-        files.firstWhereOrNull((element) => element.isSidecarYamlFile);
-    if (sidecarYaml != null) {
+    final specYaml = files.firstWhereOrNull((file) => file.isSidecarYamlFile);
+    if (specYaml != null) {
       // handle sidecar.yaml parse
       final contents =
-          resourceProvider.getFile(sidecarYaml.path).readAsStringSync();
-      final specTuple =
-          parseSidecarSpecFromYaml(contents, fileUri: sidecarYaml.fileUri);
-      final exceptions = specTuple.item2;
+          resourceProvider.getFile(specYaml.path).readAsStringSync();
+      final spec = parseSidecarSpec(contents, fileUri: specYaml.fileUri);
+      final exceptions = spec.item2;
       final errors = exceptions.map((e) => e.toLintResult());
-      final notification = LintNotification(sidecarYaml, errors.toSet());
-      channel.sendNotification(notification);
+      channel.sendNotification(LintNotification(specYaml, errors.toSet()));
     }
 
     final dartFiles = files.where((file) => file.isDartFile);
@@ -266,8 +259,8 @@ class SidecarAnalyzer {
     final watch = Stopwatch()..start();
     final file = request.file;
     final fixes = await _ref.read(quickFixResultsProvider(file).future);
-    final withinOffset = fixes.where(
-        (element) => element.isWithinOffset(request.file.path, request.offset));
+    final withinOffset =
+        fixes.where((f) => f.isWithinOffset(file.path, request.offset));
     logger.info(
         'handleEditGetFixes in ${watch.elapsed.prettified()} - ${request.file.relativePath}');
     return QuickFixResponse(withinOffset.toList());

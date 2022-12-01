@@ -1,4 +1,3 @@
-import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
 
@@ -21,21 +20,19 @@ class AnalyzedFile with _$AnalyzedFile {
 
   const AnalyzedFile._();
 
-  factory AnalyzedFile.fromContext(
-    Uri fileUri, {
-    required AnalysisContext context,
-  }) =>
-      AnalyzedFile(fileUri, contextRoot: context.contextRoot.root.toUri());
-
+  /// Create AnalyzedFile from json.
   factory AnalyzedFile.fromJson(Map<String, dynamic> json) =>
       _$AnalyzedFileFromJson(json);
 
+  /// Absolute file path
   String get path => fileUri.path;
 
+  /// File path relative to contextRoot
+  String get relativePath => p.relative(path, from: contextRoot.path);
+
+  /// Check if file ends in ```.dart```
   bool get isDartFile => p.extension(path) == '.dart';
 
-  bool get isAnalysisOptionsFile => relativePath == kAnalysisOptionsYaml;
+  /// Check if file is ```sidecar.yaml``` file at context root
   bool get isSidecarYamlFile => relativePath == kSidecarYaml;
-
-  String get relativePath => p.relative(path, from: contextRoot.path);
 }

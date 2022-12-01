@@ -13,7 +13,7 @@ final projectSidecarSpecProvider = Provider<SidecarSpec>((ref) {
   final sidecarYamlPath =
       p.join(activePackage.packageRoot.root.path, kSidecarYaml);
   final resource = ref.watch(analyzerResourceProvider).getFile(sidecarYamlPath);
-  final sidecarSpec = parseSidecarSpecFromYaml(resource.readAsStringSync());
+  final sidecarSpec = parseSidecarSpec(resource.readAsStringSync());
   // print('SIDECAR.YAML REFRESHING ${code.code} config');
   return sidecarSpec.item1;
 });
