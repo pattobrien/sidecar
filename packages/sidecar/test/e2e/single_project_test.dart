@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:glob/glob.dart';
 import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
