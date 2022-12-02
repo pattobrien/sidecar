@@ -21,10 +21,13 @@ Enable a more personalized developer experience within the IDE.
 
 - [Motivation](#motivation)
 - [Features](#features)
-- [Development Usage](#development-usage)
-  - [Example Sidecar Rule Packages](#example-packages)
-- [Creating your own Lint and QuickAssist rules](#rule-package-usage)
 - [Sidecar CLI Installation](#rule-cli-installation-usage)
+- [Development Usage](#development-usage)
+  - [IDE Server Mode](#server-usage)
+  - [CLI Mode](#cli-usage)
+  - [Debug Mode](#debug-usage)
+- [Example Sidecar Rule Packages](#example-packages)
+- [Creating your own Lint and QuickAssist rules](#rule-package-usage)
 
 
 ## Motivation <a name="motivation"></a>
@@ -35,11 +38,6 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 
 
 ## Features <a name="features"></a>
-
-|             | MacOS | Linux | Windows |
-| ----------  | ----- | ----- | ------- |
-| Environment Support  | ✅ | 🚧 | 🚧 |
-
 
 | Lint Rules  | IDE | CLI | Debug |
 | ----------  | --- | --- | ----- |
@@ -68,6 +66,12 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | Customizable rule configurations | |
 | Multi-import inheritance | |
 
+
+|             | MacOS | Linux | Windows |
+| ----------  | ----- | ----- | ------- |
+| Environment Support  | ✅ | 🚧 | 🚧 |
+
+
 ## Example Sidecar Rule Packages <a name="example-packages"></a>
 
 To explore how rule packages are created, take a look at the following rule packages:
@@ -78,15 +82,13 @@ To explore how rule packages are created, take a look at the following rule pack
 ## Using Sidecar within a Dart or Flutter Project  <a name="development-usage"></a>
 
 There are 3 modes which Sidecar can be run in: server, cli, or debug (WIP).
-### Dart Server + Analyzer Plugin Mode
+### IDE Server Mode <a name="server-usage"></a>
 
-The Dart team maintains analysis servers that run in IDEs like VSCode. In Server mode, Sidecar boots up using the ```analyzer_plugin``` APIs created by the Dart team. 
+In Server mode, Sidecar boots up using the ```analyzer_plugin``` APIs created by the Dart team. To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
 
-To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
+1. Depend on any ```sidecar``` lint packages (e.g. [design_system_lints](https://pub.dev/packages/design_system_lints))
 
-1. Depend on any ```sidecar``` lint packages such as ```design_system_lints```
-
-2. Create a ```sidecar.yaml``` file at the project's root directory and declare any or all lints from the lint package
+2. Create a ```sidecar.yaml``` file at the project's root directory and declare any rules from the package
 
 ```yaml
 # sidecar.yaml
@@ -103,17 +105,19 @@ lints:
       avoid_edge_insets_literal:
 ```
 
-3. Enable the ```sidecar``` plugin to run, by adding it to the list of plugins in ```analysis_options.yaml```.
+3. Enable the plugin to run by adding ```sidecar``` to the list of plugins in ```analysis_options.yaml```
 
 
 ```yaml
+# analysis_options.yaml
+
 analyzer:
   plugins:
     - sidecar
 ```
 
 After several seconds of start-up (and potentially a restart of your IDE), the lints should begin appearing in your editor.
-### CLI Mode
+### CLI Mode <a name="cli-usage"></a>
 
 CLI Mode is useful for running lint rules from a CI/CD pipeline. To use Sidecar in CLI mode, run the following command in your terminal:
 
@@ -127,7 +131,7 @@ sidecar analyze
 
 > NOTE: If you have a particular CLI use case in mind and would like to give feedback, feel free to reach out on Github.
 
-### Debug Mode (Work in Progress)
+### Debug Mode (Work in Progress) <a name="debug-usage"></a>
 
 Debug Mode comes equipped with IDE debugger integration and hot reload, which is helpful for when you're developing your own rules. Currently, this functionality is a work-in-progress.
 
