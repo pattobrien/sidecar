@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:glob/glob.dart';
 import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
@@ -68,7 +70,7 @@ void main() {
     test('1 quick fix results', () async {
       final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
       final client = await analyzeTestResources(app.root, reporter);
-      print('getting file with path ${mainFile.path}');
+      // print('getting file with path ${mainFile.path}');
       final results = await client.getQuickFixes(mainFile.path, 30);
       expect(results.length, 1);
     });

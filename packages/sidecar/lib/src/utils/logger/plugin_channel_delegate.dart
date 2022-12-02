@@ -10,7 +10,6 @@ class PluginChannelDelegate implements LogDelegateBase {
   final PluginCommunicationChannel channel;
 
   void _log(String message) {
-    // const url = '/Users/pattobrien/Development/sidecar';
     // final logFile =
     //     io.File(p.join(url, '.sidecar', 'sidecar_logs', 'middleman.txt'));
     // // if (!logFile.existsSync()) logFile.create(recursive: true);
