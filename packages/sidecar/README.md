@@ -15,22 +15,31 @@ Enable a more personalized developer experience within the IDE.
 [![pub package](https://img.shields.io/pub/v/sidecar.svg)](https://pub.dev/packages/sidecar)
 
 
-> This is an experimental package which is expected to change slightly (but frequently) until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the official ```package:analyzer```, and therefore any rule packages you may want to experiment with will be easy to port over to any updated APIs.
+> This is an experimental package which is expected to change slightly until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the Dart-official ```package:analyzer``` APIs, and therefore any rule packages you may want to experiment with will be easy to port over to any future APIs.
 
-> Functionality is currently only confirmed on machines running MacOS.
+> Functionality is currently only confirmed to be working on MacOS environments.
 
-## Motivation
+# Overview
+
+
+- [Motivation](#motivation)
+- [Features](#features)
+- [Development Usage](#development-usage)
+- [Creating your own Lint and QuickAssist rules](#rule-package-usage)
+
+
+# Motivation <a name="motivation"></a>
 
 Dart lints are incredibly useful for keeping a codebase clean and tidy, but code analysis use cases don't need to end at official rules. What if we could use these same tools to enforce highly-opinionated rules for a particular package ecosystem (BloC vs Riverpod) or for a particular app?
 
 The goal of Sidecar is to enable a more personalized developer experience by allowing quick and easy access to the core lint and code assist tools of modern IDEs.
 
 
-# Features
+# Features <a name="features"></a>
 
 |             | MacOS | Linux | Windows |
 | ----------  | ----- | ----- | ------- |
-| Support  | ✅ | 🚧 | 🚧 |
+| Environment Support  | ✅ | 🚧 | 🚧 |
 
 
 | Lint Rules  | IDE | CLI | Debug |
@@ -50,7 +59,6 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | Code Completion |  |  |  |
 
 
-
 | Rule Configuration (sidecar.yaml) | IDE | CLI | Debug |
 | -------------  | ------ | ------ | ------ |
 | Explicitly Enable/Disable rules | ✅ |
@@ -61,17 +69,16 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | Customizable rule configurations | |
 | Multi-import inheritance | |
 
-
-# Sidecar Usage
+# Development Usage <a name="development-usage"></a>
 ## Installing the CLI tool
 
-Some Sidecar tasks are easier with the CLI tool. To install, simply run:
+Some Sidecar tasks are easier with the CLI tool. To install the CLI, simply run:
 
 ```sh
 dart pub global activate sidecar
 ```
 
-## Using Sidecar within a Dart or Flutter Project
+## Using Sidecar within a Dart or Flutter Project 
 
 There are 3 modes which Sidecar can be run in: server, cli, or debug (WIP).
 ### Dart Server + Analyzer Plugin Mode
@@ -128,7 +135,7 @@ sidecar analyze
 Debug Mode comes equipped with IDE debugger integration and hot reload, which is helpful for when you're developing your own rules. Currently, this functionality is a work-in-progress.
 
 
-# Creating a Lint or QuickAssist Rule
+# Creating a Lint or QuickAssist Rule <a name="rule-package-usage"></a>
 
 Below is an example of a Lint rule which highlights any strings within a Dart app.
 
