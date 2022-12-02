@@ -50,7 +50,6 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Padding(
           // padding: const EdgeInsets.all(8.0),
-
           padding: EdgeInsets.only(
             left: 10.0,
             right: GlobalInsets.medium,
