@@ -106,16 +106,15 @@ class PackageResource with ResourceMixin {
   }
 
   File newPubspecYamlFile(Pubspec pubspec) {
-    const content = '''
-name: north_app
+    final content = '''
+name: $projectName
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
 
 dependencies:
   path: ^1.8.0
-  intl_lints:
-    path: /Users/pattobrien/Development/lints/packages/intl_lints/
+  intl_lints: any
 ''';
     return modifyFile(kPubspecYaml, content);
   }

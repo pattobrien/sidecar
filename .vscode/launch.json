@@ -35,8 +35,7 @@
         },
         {
             "name": "Sidecar Debugger from Port",
-            "program": "/Users/pattobrien/Development/sidecar/packages/sidecar/bin/debug.dart",
-            // "program": ".sidecar/sidecar_analyzer_plugin/bin/debug.dart",
+            "program": "${workspaceFolder}/packages/sidecar/bin/debug.dart",
             "request": "attach",
             "type": "dart",
             "vmServiceUri": "http://127.0.0.1:9990/ws",
