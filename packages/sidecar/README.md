@@ -138,7 +138,7 @@ Debug Mode comes equipped with IDE debugger integration and hot reload, which is
 
 ## Creating a Lint or QuickAssist Rule <a name="rule-package-usage"></a>
 
-Below is an example of a Lint rule which highlights any strings within a Dart app.
+Below is an example of a Lint rule which highlights any string or string variable referenced from a Text widget.
 
 ```dart
 //  hardcoded_text_string.dart
@@ -176,7 +176,7 @@ class HardcodedTextString extends Rule with Lint {
 Note the following features and requirements:
 
 
-### SidecarAstVisitor
+### Rule Base Class
 - All Sidecar rules must extend ```Rule``` as well as mixin either ```Lint``` or ```QuickAssist```
 - All overridden visit methods should be added to the NodeRegistry via the ```initializeVisitor``` method (see above example)
 - Lint rules expose methods ```reportAstNode``` and ```reportToken```, which take a lint message and an optional correction message to display to a user

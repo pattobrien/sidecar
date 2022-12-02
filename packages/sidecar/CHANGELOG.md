@@ -1,3 +1,7 @@
+## 0.1.0-dev.13
+
+- fix: Removed local dependency from tools/analyzer_plugin package
+- docs: Improved readme tables, fixed image screenshot
 
 ## 0.1.0-dev.12
 
