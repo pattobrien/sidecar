@@ -24,16 +24,16 @@ jobs:
         runners:
           - self-hosted
           - ubuntu-latest
-        package_path:
-          # - examples/my_analyzed_codebase
-          - packages/sidecar
-        # channel:
-        #   - stable
         flutter-version:
           - "3.0.0"
           - "3.0.5"
           - "3.3.0"
           - "3.3.9"
+        package_path:
+          # - examples/my_analyzed_codebase
+          - packages/sidecar
+        # channel:
+        #   - stable
 
     steps:
       - uses: actions/checkout@v3.1.0
