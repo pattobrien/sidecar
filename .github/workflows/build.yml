@@ -13,7 +13,6 @@ on:
 
 jobs:
   build:
-    # runs-on: ubuntu-latest
     runs-on: ${{ matrix.runners }}
 
     defaults:
@@ -22,14 +21,14 @@ jobs:
 
     strategy:
       matrix:
-        channel:
-          - stable
-        package_path:
-          # - examples/my_analyzed_codebase
-          - packages/sidecar
         runners:
           - self-hosted
           - ubuntu-latest
+        package_path:
+          # - examples/my_analyzed_codebase
+          - packages/sidecar
+        channel:
+          - stable
 
     steps:
       - uses: actions/checkout@v3.1.0
