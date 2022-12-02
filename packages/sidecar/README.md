@@ -1,10 +1,8 @@
 
 
-
-
+# Sidecar Analyzer
 
 Enable a more personalized developer experience within the IDE.
-
 
 
 <img src="https://raw.githubusercontent.com/pattobrien/sidecar/master/docs/example_lint.png" alt="A screenshot of a Sidecar lint popup in an IDE" width="600"/>
@@ -15,23 +13,31 @@ Enable a more personalized developer experience within the IDE.
 [![pub package](https://img.shields.io/pub/v/sidecar.svg)](https://pub.dev/packages/sidecar)
 
 
-> This is an experimental package which is expected to change slightly (but frequently) until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the official ```package:analyzer```, and therefore any rule packages you may want to experiment with will be easy to port over to any updated APIs.
+> This is an experimental package which is expected to change slightly until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the Dart-official ```package:analyzer``` APIs, and therefore any rule packages you may want to experiment with will be easy to port over to any future APIs.
 
-> Functionality is currently only confirmed on machines running MacOS.
+> Functionality is currently only confirmed to be working on MacOS environments.
 
-## Motivation
+## Overview
+
+- [Motivation](#motivation)
+- [Features](#features)
+- [Sidecar CLI Installation](#rule-cli-installation-usage)
+- [Development Usage](#development-usage)
+  - [IDE Server Mode](#server-usage)
+  - [CLI Mode](#cli-usage)
+  - [Debug Mode](#debug-usage)
+- [Example Sidecar Rule Packages](#example-packages)
+- [Creating your own Lint and QuickAssist rules](#rule-package-usage)
+
+
+## Motivation <a name="motivation"></a>
 
 Dart lints are incredibly useful for keeping a codebase clean and tidy, but code analysis use cases don't need to end at official rules. What if we could use these same tools to enforce highly-opinionated rules for a particular package ecosystem (BloC vs Riverpod) or for a particular app?
 
 The goal of Sidecar is to enable a more personalized developer experience by allowing quick and easy access to the core lint and code assist tools of modern IDEs.
 
 
-# Features
-
-|             | MacOS | Linux | Windows |
-| ----------  | ----- | ----- | ------- |
-| Support  | ✅ | 🚧 | 🚧 |
-
+## Features <a name="features"></a>
 
 | Lint Rules  | IDE | CLI | Debug |
 | ----------  | --- | --- | ----- |
@@ -50,7 +56,6 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | Code Completion |  |  |  |
 
 
-
 | Rule Configuration (sidecar.yaml) | IDE | CLI | Debug |
 | -------------  | ------ | ------ | ------ |
 | Explicitly Enable/Disable rules | ✅ |
@@ -62,27 +67,28 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | Multi-import inheritance | |
 
 
-# Sidecar Usage
-## Installing the CLI tool
+|             | MacOS | Linux | Windows |
+| ----------  | ----- | ----- | ------- |
+| Environment Support  | ✅ | 🚧 | 🚧 |
 
-Some Sidecar tasks are easier with the CLI tool. To install, simply run:
 
-```sh
-dart pub global activate sidecar
-```
+## Example Sidecar Rule Packages <a name="example-packages"></a>
 
-## Using Sidecar within a Dart or Flutter Project
+To explore how rule packages are created, take a look at the following rule packages:
+
+- [design_system_lints](https://pub.dev/packages/design_system_lints)
+- [dart_lints](https://pub.dev/packages/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
+
+## Using Sidecar within a Dart or Flutter Project  <a name="development-usage"></a>
 
 There are 3 modes which Sidecar can be run in: server, cli, or debug (WIP).
-### Dart Server + Analyzer Plugin Mode
+### IDE Server Mode <a name="server-usage"></a>
 
-The Dart team maintains analysis servers that run in IDEs like VSCode. In Server mode, Sidecar boots up using the ```analyzer_plugin``` APIs created by the Dart team. 
+In Server mode, Sidecar boots up using the ```analyzer_plugin``` APIs created by the Dart team. To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
 
-To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
+1. Depend on any ```sidecar``` lint packages (e.g. [design_system_lints](https://pub.dev/packages/design_system_lints))
 
-1. Depend on any ```sidecar``` lint packages such as ```design_system_lints```
-
-2. Create a ```sidecar.yaml``` file at the project's root directory and declare any or all lints from the lint package
+2. Create a ```sidecar.yaml``` file at the project's root directory and declare any rules from the package
 
 ```yaml
 # sidecar.yaml
@@ -99,17 +105,19 @@ lints:
       avoid_edge_insets_literal:
 ```
 
-3. Enable the ```sidecar``` plugin to run, by adding it to the list of plugins in ```analysis_options.yaml```.
+3. Enable the plugin to run by adding ```sidecar``` to the list of plugins in ```analysis_options.yaml```
 
 
 ```yaml
+# analysis_options.yaml
+
 analyzer:
   plugins:
     - sidecar
 ```
 
 After several seconds of start-up (and potentially a restart of your IDE), the lints should begin appearing in your editor.
-### CLI Mode
+### CLI Mode <a name="cli-usage"></a>
 
 CLI Mode is useful for running lint rules from a CI/CD pipeline. To use Sidecar in CLI mode, run the following command in your terminal:
 
@@ -123,12 +131,12 @@ sidecar analyze
 
 > NOTE: If you have a particular CLI use case in mind and would like to give feedback, feel free to reach out on Github.
 
-### Debug Mode (Work in Progress)
+### Debug Mode (Work in Progress) <a name="debug-usage"></a>
 
 Debug Mode comes equipped with IDE debugger integration and hot reload, which is helpful for when you're developing your own rules. Currently, this functionality is a work-in-progress.
 
 
-# Creating a Lint or QuickAssist Rule
+## Creating a Lint or QuickAssist Rule <a name="rule-package-usage"></a>
 
 Below is an example of a Lint rule which highlights any strings within a Dart app.
 
@@ -200,12 +208,13 @@ sidecar:
 
 > NOTE: some of the above API details, like the initializeVisitor method that must be overridden for each Rule, are complicated or redundant; our intention over time is to reduce as much redundancy as possible in order to make rule creation as straightforward as possible. If you have any feedback for how you'd like the APIs to look, we encourage you to open an issue against Sidecar on github.
 
-## Example Sidecar Rule Packages
+## Installing the CLI tool <a name="cli-installation"></a>
 
-To explore how rule packages are created, take a look at the following rule packages:
+Some Sidecar tasks are easier with the CLI tool. To install the CLI, simply run:
 
-- [design_system_lints](https://pub.dev/packages/design_system_lints)
-- [dart_lints](https://pub.dev/packages/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
+```sh
+dart pub global activate sidecar
+```
 
 
 ## Contributing
