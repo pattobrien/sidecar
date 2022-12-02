@@ -15,7 +15,7 @@ Enable a more personalized developer experience within the IDE.
 
 > This is an experimental package which is expected to change slightly until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the Dart-official ```package:analyzer``` APIs, and therefore any rule packages you may want to experiment with will be easy to port over to any future APIs.
 
-> Functionality is currently only confirmed to be working on MacOS environments.
+> Functionality is currently only confirmed to be working on MacOS and Linux environments.
 
 ## Overview
 
@@ -69,7 +69,7 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 
 |             | MacOS | Linux | Windows |
 | ----------  | ----- | ----- | ------- |
-| Environment Support  | ✅ | 🚧 | 🚧 |
+| Environment Support  | ✅ | ✅ | 🚧 |
 
 
 ## Example Sidecar Rule Packages <a name="example-packages"></a>
