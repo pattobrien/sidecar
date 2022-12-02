@@ -3,6 +3,7 @@
 
 .logs/**
 .sidecar/**
+.vscode/**
 
 
 **/pubspec_overrides.yaml

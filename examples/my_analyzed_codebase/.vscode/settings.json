@@ -1,8 +1,0 @@
-{
-    "dart.analyzerAdditionalArgs": [
-        "--port=10000",
-        "--instrumentation-log-file=/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.log",
-    ],
-    "dart.analyzerVmServicePort": 9991,
-    "dart.analyzerInstrumentationLogFile": "/Users/pattobrien/Development/sidecar/examples/my_analyzed_codebase/.sidecar/logs/analysis_instrumentation.txt",
-}
