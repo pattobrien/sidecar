@@ -11,11 +11,11 @@ import '../utils/utils.dart';
 /// Service for initializing Sidecar Rules based on SidecarSpec configuration.
 class RuleInitializationService {
   /// Returns all of the rules that match sidecar spec for a particular file.
-  Set<BaseRule> getRulesForFile({
-    required AnalyzedFile file,
-    required SidecarSpec spec,
-    required List<SidecarBaseConstructor> constructors,
-  }) {
+  Set<BaseRule> constructRulesForFile(
+    AnalyzedFile file,
+    SidecarSpec spec,
+    List<SidecarBaseConstructor> constructors,
+  ) {
     final rules = constructors.map((e) => e());
     final packageOptions = [...?spec.assists?.entries, ...?spec.lints?.entries];
     final rulesForFile = <BaseRule>{};
@@ -66,10 +66,10 @@ class RuleInitializationService {
     return rulesForFile;
   }
 
-  Set<BaseRule> getRulesForActiveProject({
-    required SidecarSpec config,
-    required List<SidecarBaseConstructor> constructors,
-  }) {
+  Set<BaseRule> getRulesForActiveProject(
+    SidecarSpec config,
+    List<SidecarBaseConstructor> constructors,
+  ) {
     final rules = constructors.map((e) => e());
     return rules
         .map((rule) {
@@ -91,16 +91,16 @@ class RuleInitializationService {
         .toSet();
   }
 
-  NodeRegistry createNodeRegistry({
-    required String file,
-    required SidecarSpec config,
-    required Set<BaseRule> rules,
-  }) {
-    final registry = NodeRegistry(rules);
-    // removed: registerVisitors is now handled inside registry
-    // registerVisitorsWithRegistry(rules, registry);
-    return registry;
-  }
+  // NodeRegistry createNodeRegistry({
+  //   required String file,
+  //   required SidecarSpec config,
+  //   required Set<BaseRule> rules,
+  // }) {
+  //   final registry = NodeRegistry(rules);
+  //   // removed: registerVisitors is now handled inside registry
+  //   // registerVisitorsWithRegistry(rules, registry);
+  //   return registry;
+  // }
 
   @Deprecated('registerVisitors is now handled inside registry')
   void registerVisitorsWithRegistry(

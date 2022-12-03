@@ -25,7 +25,7 @@ class CommunicationChannel {
   void handleError(ActivePackage package, Object error, StackTrace stack) {
     final log = LogRecord.fromAnalyzer(error.toString(), DateTime.now(),
         severity: LogSeverity.error,
-        root: package.packageRoot,
+        targetRoot: package.root,
         stackTrace: stack);
     final message = SidecarMessage.log(log);
     sendMessage(message);

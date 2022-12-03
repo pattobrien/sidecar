@@ -7,7 +7,7 @@ import 'package:file/file.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
-import '../../analyzer/plugin/plugin.dart';
+import '../../analyzer/providers/providers.dart';
 import '../../analyzer/server/runner/context_providers.dart';
 import '../../configurations/sidecar_spec/sidecar_spec.dart';
 import '../../protocol/protocol.dart';

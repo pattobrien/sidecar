@@ -5,10 +5,9 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
-import '../plugin/active_package_provider.dart';
-import '../plugin/communication_channel.dart';
-import '../plugin/rule_constructors_provider.dart';
-import '../plugin/sidecar_analyzer.dart';
+import '../providers/providers.dart';
+import '../server/communication_channel.dart';
+import '../sidecar_analyzer.dart';
 import 'server_starter.dart';
 
 /// Initializes the Sidecar analyzer from generated entrypoint
@@ -21,7 +20,7 @@ Future<void> startAnalyzer(
   final root = Uri.parse(args.first);
   final channel = CommunicationChannel(sendPort);
   final container = ProviderContainer(overrides: [
-    activePackageRootProvider.overrideWithValue(root),
+    activeTargetRootProvider.overrideWithValue(root),
     communicationChannelProvider.overrideWithValue(channel),
     ruleConstructorProvider.overrideWithValue(constructors),
   ]);
@@ -42,7 +41,7 @@ Future<void> startAnalyzer(
       // otherwise, SidecarRunner will not be able to parse the object correctly.
       final context = container.read(activePackageProvider);
       final log = LogRecord.fromAnalyzer(line, DateTime.now(),
-          root: context.packageRoot, severity: LogSeverity.info);
+          targetRoot: context.root, severity: LogSeverity.info);
       final msg = SidecarMessage.log(log);
       return sendPort.send(msg.toEncodedJson());
     },

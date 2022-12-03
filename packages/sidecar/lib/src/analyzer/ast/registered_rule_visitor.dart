@@ -4,7 +4,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import '../../../rules/rules.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
-import '../plugin/sidecar_analyzer.dart';
+import '../sidecar_analyzer.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';

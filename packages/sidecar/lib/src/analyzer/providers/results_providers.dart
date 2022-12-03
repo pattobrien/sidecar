@@ -1,13 +1,35 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:analyzer/dart/analysis/analysis_context.dart';
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../services/file_analyzer_service_impl.dart';
-import '../../utils/logger/logger.dart';
-import 'plugin.dart';
-import 'resolved_unit_provider.dart';
+import '../../utils/utils.dart';
+import '../sidecar_analyzer.dart';
+import 'providers.dart';
+
+/// Analyze a Dart file and generate the Element/ASTNode/Type structures.
+final resolvedUnitForFileProvider =
+    FutureProvider.family<ResolvedUnitResult?, AnalyzedFile>((ref, file) async {
+  if (!file.isDartFile && !file.isSidecarYamlFile) return null;
+
+  final context = ref.watch(_contextForFileProvider(file));
+  if (context == null) return null;
+
+  final result = await timedLogAsync('getResolvedUnit',
+      () async => context.currentSession.getResolvedUnit(file.path));
+  return result as ResolvedUnitResult;
+});
+
+final _contextForFileProvider = Provider.family<AnalysisContext?, AnalyzedFile>(
+  (ref, file) {
+    final contexts = ref.watch(contextCollectionProvider);
+    return contexts.contextForRoot(file.contextRoot);
+  },
+);
 
 // ignore: unused_element
 const _proactiveAssistFilter = true;
@@ -17,28 +39,9 @@ const _proactiveFixComputes = true;
 /// Compute and cache lint results for a given file.
 final lintResultsProvider =
     FutureProvider.family<Set<LintResult>, AnalyzedFile>((ref, file) async {
-  // ref.onDispose(() => logger.info('ONDISPOSE EVENT ${file.relativePath}'));
-  // ref.onCancel(() => logger.info('ONCANCEL EVENT ${file.relativePath}'));
-
-  // benchmark for file: upgrade_options.dart
-  // total time: 59.537ms
-  //
-  // lintResultsProvider subtotal:
-  // - get unit: 6.60ms
-  // - unit.unit.accept(visitor): 15.5ms
-  //
-  // append content overlays: ??
-  // communication / data transfer: ??
-
-  // - applyPendingFileChanges: 4.61ms
-
-  // services
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
-
-  // file-dependent objects
   final registry = ref.watch(nodeRegistryForFileLintsProvider(file));
   final rulesForFile = ref.watch(scopedLintRulesForFileProvider(file));
-  // logger.info('rulesForFile: ${rulesForFile.map((e) => e.code)}');
 
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
   return timedLog(

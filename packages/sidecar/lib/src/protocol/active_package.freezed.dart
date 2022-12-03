@@ -16,10 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ActivePackage {
-  ActivePackageRoot get packageRoot => throw _privateConstructorUsedError;
-  SidecarSpec get sidecarSpec => throw _privateConstructorUsedError;
-  Uri get sidecarPluginPackage => throw _privateConstructorUsedError;
-  PackageConfig? get packageConfig => throw _privateConstructorUsedError;
+  Uri get root => throw _privateConstructorUsedError;
+  PackageConfig get packageConfig => throw _privateConstructorUsedError;
   List<Uri>? get workspaceScope => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,14 +30,7 @@ abstract class $ActivePackageCopyWith<$Res> {
   factory $ActivePackageCopyWith(
           ActivePackage value, $Res Function(ActivePackage) then) =
       _$ActivePackageCopyWithImpl<$Res>;
-  $Res call(
-      {ActivePackageRoot packageRoot,
-      SidecarSpec sidecarSpec,
-      Uri sidecarPluginPackage,
-      PackageConfig? packageConfig,
-      List<Uri>? workspaceScope});
-
-  $ActivePackageRootCopyWith<$Res> get packageRoot;
+  $Res call({Uri root, PackageConfig packageConfig, List<Uri>? workspaceScope});
 }
 
 /// @nodoc
@@ -53,41 +44,24 @@ class _$ActivePackageCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? packageRoot = freezed,
-    Object? sidecarSpec = freezed,
-    Object? sidecarPluginPackage = freezed,
+    Object? root = freezed,
     Object? packageConfig = freezed,
     Object? workspaceScope = freezed,
   }) {
     return _then(_value.copyWith(
-      packageRoot: packageRoot == freezed
-          ? _value.packageRoot
-          : packageRoot // ignore: cast_nullable_to_non_nullable
-              as ActivePackageRoot,
-      sidecarSpec: sidecarSpec == freezed
-          ? _value.sidecarSpec
-          : sidecarSpec // ignore: cast_nullable_to_non_nullable
-              as SidecarSpec,
-      sidecarPluginPackage: sidecarPluginPackage == freezed
-          ? _value.sidecarPluginPackage
-          : sidecarPluginPackage // ignore: cast_nullable_to_non_nullable
+      root: root == freezed
+          ? _value.root
+          : root // ignore: cast_nullable_to_non_nullable
               as Uri,
       packageConfig: packageConfig == freezed
           ? _value.packageConfig
           : packageConfig // ignore: cast_nullable_to_non_nullable
-              as PackageConfig?,
+              as PackageConfig,
       workspaceScope: workspaceScope == freezed
           ? _value.workspaceScope
           : workspaceScope // ignore: cast_nullable_to_non_nullable
               as List<Uri>?,
     ));
-  }
-
-  @override
-  $ActivePackageRootCopyWith<$Res> get packageRoot {
-    return $ActivePackageRootCopyWith<$Res>(_value.packageRoot, (value) {
-      return _then(_value.copyWith(packageRoot: value));
-    });
   }
 }
 
@@ -98,15 +72,7 @@ abstract class _$$_ActivePackageCopyWith<$Res>
           _$_ActivePackage value, $Res Function(_$_ActivePackage) then) =
       __$$_ActivePackageCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {ActivePackageRoot packageRoot,
-      SidecarSpec sidecarSpec,
-      Uri sidecarPluginPackage,
-      PackageConfig? packageConfig,
-      List<Uri>? workspaceScope});
-
-  @override
-  $ActivePackageRootCopyWith<$Res> get packageRoot;
+  $Res call({Uri root, PackageConfig packageConfig, List<Uri>? workspaceScope});
 }
 
 /// @nodoc
@@ -122,29 +88,19 @@ class __$$_ActivePackageCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? packageRoot = freezed,
-    Object? sidecarSpec = freezed,
-    Object? sidecarPluginPackage = freezed,
+    Object? root = freezed,
     Object? packageConfig = freezed,
     Object? workspaceScope = freezed,
   }) {
     return _then(_$_ActivePackage(
-      packageRoot: packageRoot == freezed
-          ? _value.packageRoot
-          : packageRoot // ignore: cast_nullable_to_non_nullable
-              as ActivePackageRoot,
-      sidecarSpec: sidecarSpec == freezed
-          ? _value.sidecarSpec
-          : sidecarSpec // ignore: cast_nullable_to_non_nullable
-              as SidecarSpec,
-      sidecarPluginPackage: sidecarPluginPackage == freezed
-          ? _value.sidecarPluginPackage
-          : sidecarPluginPackage // ignore: cast_nullable_to_non_nullable
+      root: root == freezed
+          ? _value.root
+          : root // ignore: cast_nullable_to_non_nullable
               as Uri,
       packageConfig: packageConfig == freezed
           ? _value.packageConfig
           : packageConfig // ignore: cast_nullable_to_non_nullable
-              as PackageConfig?,
+              as PackageConfig,
       workspaceScope: workspaceScope == freezed
           ? _value._workspaceScope
           : workspaceScope // ignore: cast_nullable_to_non_nullable
@@ -157,22 +113,16 @@ class __$$_ActivePackageCopyWithImpl<$Res>
 
 class _$_ActivePackage extends _ActivePackage {
   const _$_ActivePackage(
-      {required this.packageRoot,
-      required this.sidecarSpec,
-      required this.sidecarPluginPackage,
-      this.packageConfig,
+      {required this.root,
+      required this.packageConfig,
       final List<Uri>? workspaceScope})
       : _workspaceScope = workspaceScope,
         super._();
 
   @override
-  final ActivePackageRoot packageRoot;
+  final Uri root;
   @override
-  final SidecarSpec sidecarSpec;
-  @override
-  final Uri sidecarPluginPackage;
-  @override
-  final PackageConfig? packageConfig;
+  final PackageConfig packageConfig;
   final List<Uri>? _workspaceScope;
   @override
   List<Uri>? get workspaceScope {
@@ -184,7 +134,7 @@ class _$_ActivePackage extends _ActivePackage {
 
   @override
   String toString() {
-    return 'ActivePackage(packageRoot: $packageRoot, sidecarSpec: $sidecarSpec, sidecarPluginPackage: $sidecarPluginPackage, packageConfig: $packageConfig, workspaceScope: $workspaceScope)';
+    return 'ActivePackage(root: $root, packageConfig: $packageConfig, workspaceScope: $workspaceScope)';
   }
 
   @override
@@ -192,12 +142,7 @@ class _$_ActivePackage extends _ActivePackage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ActivePackage &&
-            const DeepCollectionEquality()
-                .equals(other.packageRoot, packageRoot) &&
-            const DeepCollectionEquality()
-                .equals(other.sidecarSpec, sidecarSpec) &&
-            const DeepCollectionEquality()
-                .equals(other.sidecarPluginPackage, sidecarPluginPackage) &&
+            const DeepCollectionEquality().equals(other.root, root) &&
             const DeepCollectionEquality()
                 .equals(other.packageConfig, packageConfig) &&
             const DeepCollectionEquality()
@@ -207,9 +152,7 @@ class _$_ActivePackage extends _ActivePackage {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(packageRoot),
-      const DeepCollectionEquality().hash(sidecarSpec),
-      const DeepCollectionEquality().hash(sidecarPluginPackage),
+      const DeepCollectionEquality().hash(root),
       const DeepCollectionEquality().hash(packageConfig),
       const DeepCollectionEquality().hash(_workspaceScope));
 
@@ -221,21 +164,15 @@ class _$_ActivePackage extends _ActivePackage {
 
 abstract class _ActivePackage extends ActivePackage {
   const factory _ActivePackage(
-      {required final ActivePackageRoot packageRoot,
-      required final SidecarSpec sidecarSpec,
-      required final Uri sidecarPluginPackage,
-      final PackageConfig? packageConfig,
+      {required final Uri root,
+      required final PackageConfig packageConfig,
       final List<Uri>? workspaceScope}) = _$_ActivePackage;
   const _ActivePackage._() : super._();
 
   @override
-  ActivePackageRoot get packageRoot;
+  Uri get root;
   @override
-  SidecarSpec get sidecarSpec;
-  @override
-  Uri get sidecarPluginPackage;
-  @override
-  PackageConfig? get packageConfig;
+  PackageConfig get packageConfig;
   @override
   List<Uri>? get workspaceScope;
   @override

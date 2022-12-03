@@ -10,17 +10,15 @@ import 'package:logging/logging.dart' hide LogRecord;
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
-import '../../configurations/sidecar_spec/sidecar_spec.dart';
-import '../../protocol/protocol.dart';
-import '../../utils/duration_ext.dart';
-import '../../utils/file_paths.dart';
-import 'active_package_provider.dart';
-import 'context_collection_provider.dart';
-import 'files_provider.dart';
-import 'plugin.dart';
-import 'resolved_unit_provider.dart';
-import 'results_providers.dart';
-import 'sidecar_spec_providers.dart';
+import '../configurations/sidecar_spec/sidecar_spec.dart';
+import '../protocol/protocol.dart';
+import '../utils/duration_ext.dart';
+import '../utils/file_paths.dart';
+import 'providers/active_target_providers.dart';
+import 'providers/providers.dart';
+import 'providers/results_providers.dart';
+import 'providers/sidecar_spec_providers.dart';
+import 'server/communication_channel.dart';
 
 final logger = Logger('sidecar-plugin');
 
@@ -64,7 +62,7 @@ class SidecarAnalyzer {
     logger.onRecord.listen((log) {
       final severity = LogSeverity.fromLogLevel(log.level);
       final record = LogRecord.fromAnalyzer(log.message, log.time,
-          root: package.packageRoot,
+          targetRoot: package.root,
           severity: severity,
           stackTrace: log.stackTrace);
       final message = SidecarMessage.log(record);
@@ -124,7 +122,7 @@ class SidecarAnalyzer {
     if (roots == null) {
       // scope = the entire package_config.json of the active package
       // final pubCache = Platform.environment['PUB_CACHE'];
-      final activePackage = _ref.read(activePackageProvider).packageRoot.root;
+      final activePackage = _ref.read(activePackageProvider).root;
       _ref.read(workspaceScopeProvider.notifier).update((_) => [activePackage]);
     } else {
       // scope = roots
@@ -138,7 +136,7 @@ class SidecarAnalyzer {
 
   void _listenForConfigChanges() {
     final resourceProvider = _ref.watch(analyzerResourceProvider);
-    final activePackage = _ref.read(activePackageProvider).packageRoot.root;
+    final activePackage = _ref.read(activePackageProvider).root;
     final sidecarYamlFile =
         resourceProvider.getFile(p.join(activePackage.path, kSidecarYaml));
     sidecarYamlFile.watch().changes.listen((_) {

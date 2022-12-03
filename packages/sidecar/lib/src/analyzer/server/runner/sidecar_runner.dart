@@ -33,13 +33,11 @@ class SidecarRunner {
 
   void _setContexts([List<Uri>? roots]) {
     if (roots == null) {
-      final packagePaths = [activePackage.packageRoot.root.pathNoTrailingSlash];
+      final packagePaths = [activePackage.root.pathNoTrailingSlash];
       final contexts = AnalysisContextCollection(includedPaths: packagePaths)
           .contexts
-          .where((context) =>
-              activePackage.packageConfig?.packages
-                  .any((dep) => dep.root == context.contextRoot.root.toUri()) ??
-              false)
+          .where((context) => activePackage.packageConfig.packages
+              .any((dep) => dep.root == context.contextRoot.root.toUri()))
           .toList();
       _runnerContainer.read(_runnerContextsProvider.notifier).state = contexts;
       // allContexts.addAll(contexts);
@@ -47,10 +45,8 @@ class SidecarRunner {
       final contexts = AnalysisContextCollection(
               includedPaths: roots.map((e) => e.pathNoTrailingSlash).toList())
           .contexts
-          .where((context) =>
-              activePackage.packageConfig?.packages
-                  .any((dep) => dep.root == context.contextRoot.root.toUri()) ??
-              false)
+          .where((context) => activePackage.packageConfig.packages
+              .any((dep) => dep.root == context.contextRoot.root.toUri()))
           .toList();
       _runnerContainer.read(_runnerContextsProvider.notifier).state = contexts;
       // allContexts.addAll(contexts);
@@ -86,18 +82,18 @@ class SidecarRunner {
     final activeProjectService = _ref.read(activeProjectServiceProvider);
     final resourceProvider = _ref.read(runnerResourceProvider);
 
-    final packageRoot = activePackage.packageRoot.root;
-    final pluginRoot = activePackage.sidecarPluginPackage;
+    final packageRoot = activePackage.root;
     final config = activeProjectService.getPackageConfig(packageRoot);
+    final pluginRoot = activeProjectService.getSidecarDependencyUri(config);
     final deps = activeProjectService.getSidecarDependencies(config);
 
-    isolateBuilder.setupPluginSourceFiles(packageRoot, pluginRoot);
+    isolateBuilder.setupPluginSourceFiles(packageRoot, pluginRoot!);
     isolateBuilder.setupBootstrapper(packageRoot, deps);
 
     await analyzerIsolateStarter(
         resourceProvider: resourceProvider,
         sendPort: receivePort.sendPort,
-        root: activePackage.packageRoot.root);
+        root: activePackage.root);
 
     await notifications.firstWhere((e) => e is InitCompleteNotification);
   }

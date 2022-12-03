@@ -10,10 +10,8 @@ import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/server/runner/context_providers.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
-import '../configurations/sidecar_spec/sidecar_spec_base.dart';
-import '../configurations/sidecar_spec/sidecar_spec_parsers.dart';
+import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/active_package.dart';
-import '../protocol/active_package_root.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
 import '../protocol/protocol.dart';
@@ -39,17 +37,14 @@ class ActiveProjectService {
         .map((e) => e.copyWith(
             workspaceScope: collection.contexts
                 .map((e) => e.contextRoot.root.toUri())
-                .where((contextUri) =>
-                    e.packageConfig?.packages
-                        .any((dependency) => dependency.root == contextUri) ??
-                    false)
+                .where((contextUri) => e.packageConfig.packages
+                    .any((dependency) => dependency.root == contextUri))
                 .toList()))
         .toList();
   }
 
   ActivePackage? getActivePackageFromUri(Uri root) {
     final path = root.pathNoTrailingSlash;
-    // print('SDK PATH : ${p.dirname(p.dirname(Platform.resolvedExecutable))}');
     final collection = AnalysisContextCollection(
         includedPaths: [path], resourceProvider: resourceProvider);
     final rootContext = collection.contextFor(path);
@@ -59,14 +54,13 @@ class ActiveProjectService {
   ActivePackage? getActivePackageFromContext(
     AnalysisContext context,
   ) {
-    //
     final root = context.contextRoot.root.toUri();
     final isSidecarEnabled = context.isSidecarEnabled;
     final packageConfig = getPackageConfig(root);
     final pluginUri = getSidecarDependencyUri(packageConfig);
-    // final packages = getSidecarDependencies(packageConfig);
     final projectSidecarSpec = getSidecarOptions(root);
     final packageConfigJson = getPackageConfig(root);
+
     if (pluginUri == null || !isSidecarEnabled || projectSidecarSpec == null) {
       logger.info('context at ${root.path} is not an active sidecar context.');
       if (!isSidecarEnabled) {
@@ -75,12 +69,7 @@ class ActiveProjectService {
       }
       return null;
     }
-    return ActivePackage(
-      packageRoot: ActivePackageRoot(root),
-      sidecarSpec: projectSidecarSpec,
-      sidecarPluginPackage: pluginUri,
-      packageConfig: packageConfigJson,
-    );
+    return ActivePackage(root: root, packageConfig: packageConfigJson);
   }
 
   Future<bool> createDefaultSidecarYaml(Uri root) async {
