@@ -1,5 +1,6 @@
 ## 0.1.0-dev.15
 
+- breaking: RuleCode url changed from Uri to String
 - docs: Re-arranged internal API structures
 - docs: Starter APIs are public.
 

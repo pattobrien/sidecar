@@ -1,9 +1,10 @@
 # Terms
-
-
-- ActiveContext / ActiveContextRoot
+ 
 - Rule
 - PackageConfiguration vs ProjectConfiguration
 - Rule types (e.g. difference between a QuickFix and Assist)
 - Package Utilities
-- Target Package
+
+### Active Target Package
+
+A Dart package that is under analysis by Sidecar.
