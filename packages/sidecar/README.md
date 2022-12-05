@@ -21,13 +21,12 @@ Enable a more personalized developer experience within the IDE.
 
 - [Motivation](#motivation)
 - [Features](#features)
-- [Sidecar CLI Installation](#rule-cli-installation-usage)
-- [Development Usage](#development-usage)
-  - [IDE Server Mode](#server-usage)
-  - [CLI Mode](#cli-usage)
-  - [Debug Mode](#debug-usage)
+- [CLI Installation](#cli-installation)
+- [Usage](#usage)
+  - [Creating a Rule](#create-a-rule)
+  - [Using a rule in your Codebase](#using-a-rule)
 - [Example Sidecar Rule Packages](#example-packages)
-- [Creating your own Lint and QuickAssist rules](#rule-package-usage)
+- [Contributing](#contributing)
 
 
 ## Motivation <a name="motivation"></a>
@@ -72,17 +71,20 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | Environment Support  | ✅ | ✅ | 🚧 |
 
 
+### Usage <a name="usage"></a>
+
+See the below guides for information on how to create and use Sidecar packages.
+
+- [Creating a Rule](https://github.com/pattobrien/sidecar/blob/master/docs/usage_guides/creating_a_rule.md) <a name="create-a-rule"></a>
+- [Using Sidecar rules to analyze a Codebase](https://github.com/pattobrien/sidecar/blob/master/docs/usage_guides/using_rules_in_project.md) <a name="using-a-rule"></a>
+
 ## Example Sidecar Rule Packages <a name="example-packages"></a>
 
-To explore how rule packages are created, take a look at the following rule packages:
+To explore how rule packages are created or to use them to work on your codebase, take a look at the following rule packages:
 
 - [design_system_lints](https://pub.dev/packages/design_system_lints)
 - [dart_lints](https://pub.dev/packages/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
 
-### Usage
-
-- Creating a Rule
-- Using Sidecar rules to analyze a Codebase
 
 ## Installing the CLI tool <a name="cli-installation"></a>
 
@@ -93,6 +95,6 @@ dart pub global activate sidecar
 ```
 
 
-## Contributing
+## Contributing <a name="contributing"></a>
 
 Suggestions or feature requests would be highly appreciated at this point in the development process, so that as many development use cases can be accounted for as possible. It's encouraged to reach out or open a Github issue against the Sidecar repository.
