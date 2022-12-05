@@ -1,11 +1,11 @@
-### Alignment with Dart-official Technologies
+# Alignment with Dart-official Technologies (WIP)
 
-the best way to make Sidecar sustainable to maintain is by aligning with Dart-official technologies, including:
+The best way to make Sidecar sustainable to maintain is by aligning with Dart-official technologies, including:
 
-- Dart-official packages
-- Dart APIs (like SourceSpan)
+- Depending on Dart-official packages
+- Dart official APIs (e.g. ```package:analyzer```, ```package:source_span```, ```package:file```)
 - Dart SDK tools (like pub)
 
-It is not in anyone's best interest to unnecessarily re-invent the wheel of any tool. 
+It's in everyone's best interest to prevent unnecessarily re-inventing the wheel of any tool. 
 
 This project has taken steps to maximize the use cases of the tool, while minimizing the amount of code that it takes to do so.

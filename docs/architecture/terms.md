@@ -1,10 +1,40 @@
 # Terms
  
-- Rule
-- PackageConfiguration vs ProjectConfiguration
-- Rule types (e.g. difference between a QuickFix and Assist)
-- Package Utilities
+- [Rule](#rule)
+- [Rule Package](#rule-package)
+- [Active Target](#active-target)
+- [Ecosystem Utility Packages](#ecosystem-utility-packages)
+- [SidecarOptions (sidecar.yaml)](#sidecar-options)
 
-### Active Target Package
+
+## Rule <a name="rule"></a>
+
+The base class of all Sidecar definitions.
+
+### Lint Rule
+
+- TODO
+
+### QuickAssist Rule
+
+- TODO
+
+## Rule Package<a name="rule-package"></a>
+
+- TODO
+
+## Ecosystem Utility Packages <a name="ecosystem-utility-packages"></a>
+
+A package that includes analyzer utilities like TypeCheckers for ecosystem packages such as Flutter, Riverpod, etc. An example of an Ecosystem Utility Package is ```package:flutter_analyzer_utils```, which exposes typeCheckers for all Types declared in the ```flutter``` sdk.
+
+- TODO: example
+
+## Active Target <a name="active-target"></a>
 
 A Dart package that is under analysis by Sidecar.
+
+- TODO: how to enable a package for Sidecar
+
+## Sidecar Options <a name="sidecar-options"></a>
+
+```sidecar.yaml```
