@@ -91,8 +91,7 @@ class SidecarServer {
     final pluginRoot = activeProjectService.getSidecarDependencyUri(config);
     final deps = activeProjectService.getSidecarDependencies(config);
 
-    isolateBuilder.setupPluginSourceFiles(packageRoot, pluginRoot!);
-    isolateBuilder.setupBootstrapper(packageRoot, deps);
+    isolateBuilder.setupEntrypointFiles(packageRoot, pluginRoot!, deps);
 
     await analyzerIsolateStarter(
         resourceProvider: resourceProvider,

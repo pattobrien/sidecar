@@ -114,7 +114,7 @@ environment:
 
 dependencies:
   path: ^1.8.0
-  intl_lints: any
+  intl_lints: 
 
 dependency_overrides:
   sidecar:
