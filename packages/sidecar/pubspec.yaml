@@ -33,7 +33,6 @@ dependencies:
   riverpod_annotation: ^1.0.0
   sidecar_annotations: ^0.1.0-dev.1
   source_span: ^1.8.0
-  tuple: ^2.0.1
   uuid: ^3.0.6 # non-dart official package
   watcher: ^1.0.2
   yaml: ^3.1.1

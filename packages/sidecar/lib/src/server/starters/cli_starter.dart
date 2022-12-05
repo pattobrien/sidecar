@@ -4,10 +4,10 @@ import 'dart:isolate';
 
 import 'package:riverpod/riverpod.dart';
 
+import '../../client/cli_client.dart';
+import '../../client/client.dart';
+import '../../client/hot_reloader.dart';
 import '../../reports/stdout_reporter.dart';
-import '../client/cli_client.dart';
-import '../client/client.dart';
-import '../client/hot_reloader.dart';
 
 /// Run Sidecar from CLI or Debugger.
 Future<void> startSidecarCli(

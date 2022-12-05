@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../protocol/protocol.dart';
+import '../protocol/protocol.dart';
 
 class CommunicationChannel {
   CommunicationChannel(this._sendPort) {

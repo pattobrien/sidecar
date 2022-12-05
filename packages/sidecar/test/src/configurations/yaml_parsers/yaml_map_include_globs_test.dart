@@ -11,8 +11,8 @@ void main() {
       });
       final value = yamlContent.parseGlobIncludes();
 
-      expect(value.item1?.length ?? 0, 2);
-      expect(value.item2.isEmpty, true);
+      expect(value.data?.length ?? 0, 2);
+      expect(value.errors.isEmpty, true);
     });
     test('invalid type', () {
       final yamlContent = YamlMap.wrap(<dynamic, dynamic>{
@@ -21,8 +21,8 @@ void main() {
       });
       final value = yamlContent.parseGlobIncludes();
 
-      expect(value.item1, null);
-      expect(value.item2.isEmpty, false);
+      expect(value.data, null);
+      expect(value.errors.isEmpty, false);
     });
 
     test('set one glob to an invalid value', () {
@@ -31,8 +31,8 @@ void main() {
       });
       final value = yamlContent.parseGlobIncludes();
 
-      expect(value.item1?.length ?? 0, 1);
-      expect(value.item2.length, 1);
+      expect(value.data?.length ?? 0, 1);
+      expect(value.errors.length, 1);
     });
   });
 }

@@ -4,8 +4,8 @@ import 'dart:isolate';
 
 import 'package:args/command_runner.dart';
 
-import '../../analyzer/starters/starters.dart';
-import '../exit_codes.dart';
+import '../../server/starters/cli_starter.dart';
+import 'exit_codes.dart';
 
 class AnalyzeCommand extends Command<int> {
   AnalyzeCommand() {

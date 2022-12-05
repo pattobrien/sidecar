@@ -31,11 +31,6 @@ final _contextForFileProvider = Provider.family<AnalysisContext?, AnalyzedFile>(
   },
 );
 
-// ignore: unused_element
-const _proactiveAssistFilter = true;
-// ignore: unused_element
-const _proactiveFixComputes = true;
-
 /// Compute and cache lint results for a given file.
 final lintResultsProvider =
     FutureProvider.family<Set<LintResult>, AnalyzedFile>((ref, file) async {
@@ -55,17 +50,6 @@ final lintResultsProvider =
           ) ??
           {});
 });
-
-// final lintResultsCompleterProvider = FutureProvider((ref) async {
-//   final lintResults = ref.container
-//       .getAllProviderElements()
-//       .where((base) => base.origin.from == lintResultsProvider)
-//       .map((e) => e.origin as FutureProvider<Set<LintResult>>);
-//   logger.info('lintResultsCompleterProvider rebuilding...');
-//   // we want to await for all lints to be computed before proceeding with any
-//   // pro-active quick-fix computing
-//   await Future.wait(lintResults.map((e) async => ref.watch(e.future)));
-// });
 
 /// Locate all QuickAssist nodes for which code edits can be calculated from.
 ///

@@ -1,6 +1,6 @@
 import 'dart:isolate';
 
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/starters/starters.dart';
 
 Future<void> main(List<String> args) async {
   final receivePort = ReceivePort();

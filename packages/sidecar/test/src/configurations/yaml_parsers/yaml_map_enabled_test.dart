@@ -12,8 +12,8 @@ void main() {
       });
       final value = yamlContent.parseEnabled();
 
-      expect(value.item1, true);
-      expect(value.item2, <SidecarNewException>[]);
+      expect(value.data, true);
+      expect(value.errors, <SidecarNewException>[]);
     });
     test('set to false', () {
       final yamlContent = YamlMap.wrap(<dynamic, dynamic>{
@@ -22,8 +22,8 @@ void main() {
       });
       final value = yamlContent.parseEnabled();
 
-      expect(value.item1, false);
-      expect(value.item2, <SidecarNewException>[]);
+      expect(value.data, false);
+      expect(value.errors, <SidecarNewException>[]);
     });
 
     test('set to an invalid value', () {
@@ -33,8 +33,8 @@ void main() {
       });
       final value = yamlContent.parseEnabled();
 
-      expect(value.item1, null);
-      expect(value.item2.length, 1);
+      expect(value.data, null);
+      expect(value.errors.length, 1);
     });
   });
 }

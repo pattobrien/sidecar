@@ -8,13 +8,13 @@ import 'package:package_config/package_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
-import '../analyzer/server/runner/context_providers.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
 import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/active_package.dart';
 import '../protocol/constants/constants.dart';
 import '../protocol/constants/default_sidecar_yaml.dart';
 import '../protocol/protocol.dart';
+import '../server/server_providers.dart';
 import '../utils/logger/logger.dart';
 import '../utils/uri_ext.dart';
 import '../utils/utils.dart';
@@ -123,7 +123,7 @@ class ActiveProjectService {
       return parseSidecarSpec(
         contents,
         fileUri: Uri.parse(p.canonicalize(p.join(root.path, kSidecarYaml))),
-      ).item1;
+      ).data;
     } catch (e, stackTrace) {
       logger.shout('ISOLATE NON-FATAL: ', e, stackTrace);
       return null;
@@ -133,11 +133,11 @@ class ActiveProjectService {
 
 final activeProjectServiceProvider = Provider(
   (ref) {
-    final resourceProvider = ref.watch(runnerResourceProvider);
+    final resourceProvider = ref.watch(serverResourceProvider);
     return ActiveProjectService(resourceProvider: resourceProvider);
   },
   name: 'activeProjectServiceNewProvider',
   dependencies: [
-    runnerResourceProvider,
+    serverResourceProvider,
   ],
 );

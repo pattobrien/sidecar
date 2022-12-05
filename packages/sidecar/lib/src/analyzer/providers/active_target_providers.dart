@@ -10,9 +10,7 @@ import '../../services/active_project_service.dart';
 import '../../utils/glob_utils.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/uri_ext.dart';
-import '../handlers/byte_store.dart';
-import '../handlers/file_content_cache.dart';
-import 'file_resource_providers.dart';
+import 'resource_providers.dart';
 import 'sidecar_spec_providers.dart';
 
 /// The target of a particular Analyzer instance.
@@ -49,8 +47,8 @@ final workspaceScopeProvider = StateProvider<List<Uri>>((ref) => []);
 /// - CLI / Debugger mode: scope = single context at the ActivePackage root
 final contextCollectionProvider = Provider<List<AnalysisContext>>((ref) {
   final activePackage = ref.watch(activePackageProvider);
-  final byteStore = ref.watch(createByteStoreProvider);
-  final contentCache = ref.watch(createFileContentCacheProvider);
+  final byteStore = ref.watch(byteStoreProvider);
+  final contentCache = ref.watch(fileContentCache);
   final resourceProvider = ref.watch(analyzerResourceProvider);
 
   final scope = activePackage.workspaceScope ?? [activePackage.root];

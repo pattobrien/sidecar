@@ -5,7 +5,7 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../reports/stdout_reporter.dart';
+import '../reports/stdout_reporter.dart';
 import 'client.dart';
 
 part 'hot_reloader.g.dart';

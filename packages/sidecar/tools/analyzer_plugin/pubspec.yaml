@@ -7,4 +7,6 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  sidecar: ^0.1.0-dev.14
+  # sidecar: ^0.1.0-dev.14
+  sidecar:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar/

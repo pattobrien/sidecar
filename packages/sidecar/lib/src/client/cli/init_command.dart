@@ -5,7 +5,7 @@ import 'package:args/command_runner.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../services/active_project_service.dart';
-import '../exit_codes.dart';
+import 'exit_codes.dart';
 
 class InitCommand extends Command<int> {
   InitCommand();

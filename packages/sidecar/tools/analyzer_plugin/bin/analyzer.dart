@@ -1,6 +1,6 @@
 import 'dart:isolate';
 
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/starters/starters.dart';
 
 import 'constructors.dart';
 

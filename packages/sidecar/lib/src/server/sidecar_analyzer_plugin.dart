@@ -15,25 +15,22 @@ import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 
-import '../../protocol/analyzer_plugin_exts/analyzer_plugin_exts.dart';
-import '../../protocol/constants/constants.dart';
-import '../../protocol/protocol.dart';
-import '../../reports/plugin_reporter.dart';
-import '../../services/active_project_service.dart';
-import '../../utils/logger/logger.dart';
-import '../../utils/utils.dart';
-import 'middleman_resource_provider.dart';
-import 'plugin_channel_provider.dart';
-import 'runner/context_providers.dart';
-import 'runner/runner_providers.dart';
-import 'runner/sidecar_runner.dart';
+import '../protocol/analyzer_plugin_exts/analyzer_plugin_exts.dart';
+import '../protocol/constants/constants.dart';
+import '../protocol/protocol.dart';
+import '../reports/plugin_reporter.dart';
+import '../services/active_project_service.dart';
+import '../utils/logger/logger.dart';
+import '../utils/utils.dart';
+import 'server_providers.dart';
+import 'sidecar_server.dart';
 
 /// Plugin API for use with official Dart analysis server.
 ///
 /// For more info, see: package:analyzer_plugin.
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   SidecarAnalyzerPlugin(this.ref)
-      : super(resourceProvider: ref.read(middlemanResourceProvider));
+      : super(resourceProvider: ref.read(serverResourceProvider));
 
   final Ref ref;
 
@@ -334,7 +331,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   }
 
   final queuedRequests = <plugin.Request>[];
-  final isRunnerInitialized = <SidecarRunner, bool>{};
+  final isRunnerInitialized = <SidecarServer, bool>{};
 
   void dumpRequests() {
     logger.info('dumpRequests = ${queuedRequests.length}');
@@ -356,7 +353,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     final service = ref.read(activeProjectServiceProvider);
     final activeContexts =
         service.getActivePackagesFromCollection(contextCollection);
-    ref.read(runnerActiveContextsProvider.notifier).update =
+    ref.read(runnerActiveContextProvider.notifier).state =
         activeContexts.toList();
     final runners = ref.read(runnersProvider);
 
@@ -387,7 +384,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     //     .update((_) => contextCollection.contexts);
   }
 
-  List<SidecarRunner> get runners => ref.read(runnersProvider);
+  List<SidecarServer> get runners => ref.read(runnersProvider);
 
   /// Handle an 'analysis.setPriorityFiles' request.
   ///
@@ -407,7 +404,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     return plugin.AnalysisSetPriorityFilesResult();
   }
 
-  Map<SidecarRunner, Set<AnalyzedFile>> getRunnersForPaths(List<String> paths) {
+  Map<SidecarServer, Set<AnalyzedFile>> getRunnersForPaths(List<String> paths) {
     return {
       for (final runner in runners)
         runner:
@@ -415,7 +412,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     };
   }
 
-  Map<SidecarRunner, AnalyzedFile> getRunnersForPath(String path) {
+  Map<SidecarServer, AnalyzedFile> getRunnersForPath(String path) {
     final runnersWithFiles = {
       for (final runner in runners) runner: runner.getAnalyzedFile(path)
     }..removeWhere((key, value) => value == null);
@@ -424,7 +421,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     };
   }
 
-  void _log(SidecarRunner runner, LogRecord log) {
+  void _log(SidecarServer runner, LogRecord log) {
     reporter?.handleLog(log);
     channel.sendError(log.prettified());
   }
@@ -437,12 +434,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 }
 
 final analyzerPluginProvider = Provider<SidecarAnalyzerPlugin>(
-  (ref) {
-    return SidecarAnalyzerPlugin(ref);
-  },
+  SidecarAnalyzerPlugin.new,
   name: 'analyzerPluginProvider',
   dependencies: [
     analyzerPluginChannelProvider,
-    middlemanResourceProvider,
+    serverResourceProvider,
   ],
 );

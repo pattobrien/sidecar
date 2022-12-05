@@ -3,14 +3,13 @@ import 'dart:io';
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../protocol/protocol.dart';
-import '../../reports/stdout_reporter.dart';
-import '../../services/active_project_service.dart';
-import '../../utils/logger/logger.dart';
-import '../server/runner/context_providers.dart';
-import '../server/runner/runner_providers.dart';
-import '../server/runner/sidecar_runner.dart';
-import '../starters/starters.dart';
+import '../protocol/protocol.dart';
+import '../reports/stdout_reporter.dart';
+import '../server/server_providers.dart';
+import '../server/sidecar_server.dart';
+import '../server/starters/cli_starter.dart';
+import '../services/active_project_service.dart';
+import '../utils/logger/logger.dart';
 import 'client.dart';
 
 class CliClient extends AnalyzerClient {
@@ -58,7 +57,7 @@ class CliClient extends AnalyzerClient {
     // TODO: implement handleDeletedFile
   }
 
-  SidecarRunner get runner => _ref.read(runnersProvider).single;
+  SidecarServer get runner => _ref.read(runnersProvider).single;
 
   @override
   Future<void> openWorkspace() async {
@@ -71,7 +70,7 @@ class CliClient extends AnalyzerClient {
       // throw StateError('invalid Sidecar directory');
       return;
     }
-    _ref.read(runnerActiveContextsProvider.notifier).update = [activeContext];
+    _ref.read(runnerActiveContextProvider.notifier).state = [activeContext];
 
     final subscription = runner.lints.listen(reporter.handleLintNotification);
     _subscriptions.add(subscription);

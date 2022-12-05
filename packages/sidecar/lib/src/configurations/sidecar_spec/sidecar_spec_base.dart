@@ -9,6 +9,7 @@ import 'rule_options.dart';
 
 part 'sidecar_spec_base.g.dart';
 
+/// Sidecar configuration defined at sidecar.yaml of a target package.
 @JsonSerializable()
 class SidecarSpec {
   const SidecarSpec({
@@ -23,13 +24,17 @@ class SidecarSpec {
   Map<String, dynamic> toJson() => _$SidecarSpecToJson(this);
 
   static final defaultIncludes = {Glob('lib/**'), Glob('bin/**')};
+
   static final defaultExcludes = <Glob>{};
 
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   final List<Glob>? includes;
+
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   final List<Glob>? excludes;
+
   final Map<String, LintPackageOptions>? lints;
+
   final Map<String, AssistPackageOptions>? assists;
 
   RuleOptions? getConfigurationForCode(RuleCode code) {

@@ -29,32 +29,32 @@ SidecarExceptionTuple<SidecarSpec> parseSidecarSpec(
             .map((dynamic key, value) {
           final parsedPackage =
               _parsePackageOptions(value, fileUri, RuleType.assist);
-          parsedErrors.addAll(parsedPackage.item2);
+          parsedErrors.addAll(parsedPackage.errors);
           return MapEntry((key as YamlScalar).value as String,
-              parsedPackage.item1 as AssistPackageOptions);
+              parsedPackage.data as AssistPackageOptions);
         });
 
         final lintPackages =
             (contentMap?['lints'] as YamlMap?)?.nodes.map((dynamic key, value) {
           final parsedPackage =
               _parsePackageOptions(value, fileUri, RuleType.lint);
-          parsedErrors.addAll(parsedPackage.item2);
+          parsedErrors.addAll(parsedPackage.errors);
           final entry = MapEntry((key as YamlScalar).value as String,
-              parsedPackage.item1 as LintPackageOptions);
+              parsedPackage.data as LintPackageOptions);
           return entry;
         });
 
         return SidecarExceptionTuple(
             SidecarSpec(
-              includes: includes?.item1,
-              excludes: excludes?.item1,
+              includes: includes?.data,
+              excludes: excludes?.data,
               assists: assistPackages,
               lints: lintPackages,
             ),
             [
               ...parsedErrors,
-              ...?includes?.item2,
-              ...?excludes?.item2,
+              ...?includes?.errors,
+              ...?excludes?.errors,
             ]);
       } catch (e, stackTrace) {
         logger.severe('PROJCONFIG', e, stackTrace);
@@ -92,14 +92,14 @@ SidecarExceptionTuple<PackageOptions> _parseAssistPackageOptions(
 
   final assistPackages = rulesNode?.nodes.map((dynamic key, value) {
     final options = _parseRuleOptions(value, fileUri, RuleType.assist);
-    errors.addAll(options.item2);
+    errors.addAll(options.errors);
     return MapEntry(
-        (key as YamlScalar).value as String, options.item1 as AssistOptions);
+        (key as YamlScalar).value as String, options.data as AssistOptions);
   });
 
   final packageOptions = AssistPackageOptions(
-    includes: includes?.item1,
-    excludes: excludes?.item1,
+    includes: includes?.data,
+    excludes: excludes?.data,
     rules: assistPackages,
   );
 
@@ -119,14 +119,14 @@ SidecarExceptionTuple<PackageOptions> _parseLintPackageOptions(
 
   final lintMap = rulesNode?.nodes.map((dynamic key, value) {
     final options = _parseRuleOptions(value, fileUri, RuleType.lint);
-    errors.addAll(options.item2);
+    errors.addAll(options.errors);
     return MapEntry(
-        (key as YamlScalar).value as String, options.item1 as LintOptions);
+        (key as YamlScalar).value as String, options.data as LintOptions);
   });
 
   final packageOptions = LintPackageOptions(
-    includes: includes?.item1,
-    excludes: excludes?.item1,
+    includes: includes?.data,
+    excludes: excludes?.data,
     rules: lintMap,
   );
 
@@ -169,17 +169,17 @@ SidecarExceptionTuple<LintOptions> _parseLintRuleOptions(
 
   return SidecarExceptionTuple<LintOptions>(
     LintOptions(
-      includes: includes.item1,
-      excludes: excludes.item1,
-      severity: severity.item1,
-      enabled: enabled.item1,
+      includes: includes.data,
+      excludes: excludes.data,
+      severity: severity.data,
+      enabled: enabled.data,
       configuration: yamlMap.nodes['configuration'] as YamlMap?,
     ),
     [
-      ...includes.item2,
-      ...excludes.item2,
-      ...severity.item2,
-      ...enabled.item2,
+      ...includes.errors,
+      ...excludes.errors,
+      ...severity.errors,
+      ...enabled.errors,
     ],
   );
 }
@@ -194,15 +194,15 @@ SidecarExceptionTuple<AssistOptions> _parseAssistRuleOptions(
 
   return SidecarExceptionTuple<AssistOptions>(
     AssistOptions(
-      includes: includes.item1,
-      excludes: excludes.item1,
-      enabled: enabled.item1,
+      includes: includes.data,
+      excludes: excludes.data,
+      enabled: enabled.data,
       configuration: yamlMap.nodes['configuration'] as YamlMap?,
     ),
     [
-      ...includes.item2,
-      ...excludes.item2,
-      ...enabled.item2,
+      ...includes.errors,
+      ...excludes.errors,
+      ...enabled.errors,
     ],
   );
 }

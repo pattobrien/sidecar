@@ -17,7 +17,7 @@ class ServerHelper {
   Map<String, List<AnalysisError>> errors = {};
 
   Future init() {
-    server.analysis.onErrors.listen((AnalysisErrors e) {
+    server.analysis.onErrors.listen((e) {
       if (e.errors.isEmpty) {
         errors.remove(e.file);
       } else {

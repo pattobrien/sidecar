@@ -15,7 +15,7 @@ Future<Isolate> analyzerIsolateStarter({
   List<String> args = const [],
 }) async {
   final config = root.resolve(join(kDartTool, kPackageConfigJson));
-  final exec = root.resolve(join(kDartTool, 'sidecar', 'analyzer.dart'));
+  final exec = root.resolve(join(kDartTool, 'sidecar', kExecutableFile));
 
   assert(
       resourceProvider.getFile(exec.path).exists, 'executable doesnt exist.');

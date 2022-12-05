@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../protocol/protocol.dart';
+import '../protocol/protocol.dart';
 
 final analyzerClientProvider =
     Provider<AnalyzerClient>((ref) => throw UnimplementedError());

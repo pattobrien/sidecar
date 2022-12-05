@@ -3,15 +3,16 @@ import 'dart:isolate';
 
 import 'package:riverpod/riverpod.dart';
 
-import '../../protocol/protocol.dart';
-import '../../rules/rules.dart';
-import '../providers/providers.dart';
+import '../protocol/protocol.dart';
+import '../rules/rules.dart';
 import '../server/communication_channel.dart';
-import '../sidecar_analyzer.dart';
-import 'server_starter.dart';
+import '../server/starters/server_starter.dart';
+import 'providers/providers.dart';
+import 'sidecar_analyzer.dart';
 
 /// Initializes the Sidecar analyzer from generated entrypoint
-/// (see [analyzerIsolateStarter] for server-side equivalent)
+///
+/// See [analyzerIsolateStarter] for server-side equivalent.
 Future<void> startAnalyzer(
   List<String> args,
   SendPort sendPort, {

@@ -28,7 +28,7 @@ class PluginReporter extends Reporter {
   void _createLogFileAndSink() {
     const currentSession = 'latest.log';
     logFile = io.File.fromUri(
-        workspaceRoot.resolve(join(kDartTool, 'sidecar_logs', currentSession)));
+        workspaceRoot.resolve(join(kDartTool, kLogsFolder, currentSession)));
     if (logFile.existsSync()) {
       final firstLine = logFile.readAsLinesSync().first;
       logFile.renameSync(join(logFile.parent.path, 'log-$firstLine.log'));

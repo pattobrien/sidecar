@@ -6,8 +6,8 @@ import 'package:analyzer_plugin/src/channel/isolate_channel.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../utils/logger/logger.dart';
-import '../server/log_delegate.dart';
-import '../server/server.dart';
+import '../server.dart';
+import '../server_providers.dart';
 
 /// Run Sidecar via analyzer_plugin package.
 ///
@@ -24,7 +24,6 @@ Future<void> startSidecarPlugin(
       final container = ProviderContainer(
         overrides: [
           analyzerPluginChannelProvider.overrideWithValue(channel),
-          logDelegateProvider.overrideWithValue(delegate),
         ],
       );
       logger.info('sidecar - plugin initialization....');

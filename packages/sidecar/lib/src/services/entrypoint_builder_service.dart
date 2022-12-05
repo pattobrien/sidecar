@@ -2,10 +2,10 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
-import '../analyzer/server/middleman_resource_provider.dart';
 import '../configurations/rule_package/rule_package_configuration.dart';
 import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
+import '../server/server_providers.dart';
 import '../utils/file_paths.dart';
 import '../utils/logger/logger.dart';
 import 'active_project_service.dart';
@@ -93,11 +93,11 @@ class EntrypointBuilderService {
 /// Service provider for creating entrypoint files for Sidecar Analyzer.
 final isolateBuilderServiceProvider = Provider(
   (ref) {
-    final resourceProvider = ref.watch(middlemanResourceProvider);
+    final resourceProvider = ref.watch(serverResourceProvider);
     return EntrypointBuilderService(resourceProvider: resourceProvider);
   },
   name: 'isolateBuilderServiceProvider',
   dependencies: [
-    middlemanResourceProvider,
+    serverResourceProvider,
   ],
 );

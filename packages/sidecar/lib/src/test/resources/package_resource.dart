@@ -12,8 +12,8 @@ import 'package:package_config/package_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:pubspec_parse/pubspec_parse.dart';
 
-import '../../analyzer/server/server_providers.dart';
 import '../../configurations/sidecar_spec/sidecar_spec_base.dart';
+import '../../server/server_providers.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/file_paths.dart';
 import 'analysis_options.dart';

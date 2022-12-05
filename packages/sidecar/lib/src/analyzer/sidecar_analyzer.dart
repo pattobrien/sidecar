@@ -14,11 +14,8 @@ import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/protocol.dart';
 import '../utils/duration_ext.dart';
 import '../utils/file_paths.dart';
-import 'providers/active_target_providers.dart';
 import 'providers/providers.dart';
-import 'providers/results_providers.dart';
-import 'providers/sidecar_spec_providers.dart';
-import 'server/communication_channel.dart';
+import '../server/communication_channel.dart';
 
 final logger = Logger('sidecar-plugin');
 
@@ -223,7 +220,7 @@ class SidecarAnalyzer {
       final contents =
           resourceProvider.getFile(specYaml.path).readAsStringSync();
       final spec = parseSidecarSpec(contents, fileUri: specYaml.fileUri);
-      final exceptions = spec.item2;
+      final exceptions = spec.errors;
       final errors = exceptions.map((e) => e.toLintResult());
       channel.sendNotification(LintNotification(specYaml, errors.toSet()));
     }

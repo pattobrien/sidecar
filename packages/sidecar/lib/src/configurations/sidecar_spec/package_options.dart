@@ -8,8 +8,10 @@ part 'package_options.g.dart';
 part 'package_options.freezed.dart';
 
 @freezed
+
+/// Base class for Rule Package configurations within sidecar.yaml files.
 class PackageOptions with _$PackageOptions {
-  const PackageOptions._();
+  /// Lint rule package configurations within sidecar.yaml files.
   const factory PackageOptions.lint({
     @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
         List<Glob>? includes,
@@ -18,6 +20,7 @@ class PackageOptions with _$PackageOptions {
     Map<String, LintOptions>? rules,
   }) = LintPackageOptions;
 
+  /// Assist rule package configurations within sidecar.yaml files.
   const factory PackageOptions.assist({
     @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
         List<Glob>? includes,
@@ -26,8 +29,11 @@ class PackageOptions with _$PackageOptions {
     Map<String, AssistOptions>? rules,
   }) = AssistPackageOptions;
 
+  /// Create [PackageOptions] from a json object.
   factory PackageOptions.fromJson(Map<String, dynamic> json) =>
       _$PackageOptionsFromJson(json);
+
+  const PackageOptions._();
 
   Map<String, RuleOptions>? get ruleOptions {
     final package = this;
@@ -40,57 +46,3 @@ class PackageOptions with _$PackageOptions {
     throw StateError('invalid package options');
   }
 }
-
-// @JsonSerializable(anyMap: true, includeIfNull: false)
-// class PackageOptions {
-//   const PackageOptions({
-//     this.includes,
-//     this.excludes,
-//     this.rules,
-//   });
-
-//   factory PackageOptions.fromJson(Map json) => _$PackageOptionsFromJson(json);
-//   Map<String, dynamic> toJson() => _$PackageOptionsToJson(this);
-
-//   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
-//   final List<Glob>? includes;
-//   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
-//   final List<Glob>? excludes;
-//   final Map<String, RuleOptions>? rules;
-// }
-
-// @JsonSerializable(anyMap: true, includeIfNull: false)
-// class AssistPackageOptions extends PackageOptions {
-//   const AssistPackageOptions({
-//     super.excludes,
-//     super.includes,
-//     this.rules,
-//   });
-
-//   factory AssistPackageOptions.fromJson(Map<String, dynamic> json) =>
-//       _$AssistPackageOptionsFromJson(json);
-
-//   @override
-//   Map<String, dynamic> toJson() => _$AssistPackageOptionsToJson(this);
-
-//   @override
-//   final Map<String, AssistOptions>? rules;
-// }
-
-// @JsonSerializable(anyMap: true, includeIfNull: false)
-// class LintPackageOptions extends PackageOptions {
-//   const LintPackageOptions({
-//     super.excludes,
-//     super.includes,
-//     this.rules,
-//   });
-
-//   factory LintPackageOptions.fromJson(Map<String, dynamic> json) =>
-//       _$LintPackageOptionsFromJson(json);
-
-//   @override
-//   Map<String, dynamic> toJson() => _$LintPackageOptionsToJson(this);
-
-//   @override
-//   final Map<String, LintOptions>? rules;
-// }

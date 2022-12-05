@@ -7,29 +7,34 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../protocol/protocol.dart';
-import '../../../services/active_project_service.dart';
-import '../../../services/entrypoint_builder_service.dart';
-import '../../../utils/analysis_context_utilities.dart';
-import '../../../utils/uri_ext.dart';
-import '../../starters/server_starter.dart';
-import 'context_providers.dart';
+import '../protocol/protocol.dart';
+import '../services/active_project_service.dart';
+import '../services/entrypoint_builder_service.dart';
+import '../utils/analysis_context_utilities.dart';
+import '../utils/uri_ext.dart';
 import 'message_providers.dart';
+import 'server_providers.dart';
+import 'starters/server_starter.dart';
 
-class SidecarRunner {
-  SidecarRunner(
+class SidecarServer {
+  SidecarServer(
     this._ref, {
     required this.activePackage,
   });
 
   final Ref _ref;
+
   final ProviderContainer _runnerContainer = ProviderContainer();
+
   final ActivePackage activePackage;
+
+  final ReceivePort receivePort = ReceivePort('runner');
+
   List<AnalysisContext> get allContexts =>
       _runnerContainer.read(_runnerContextsProvider);
+
   AnalysisContext? contextForFile(AnalyzedFile file) =>
       _runnerContainer.read(_contextForFileProvider(file));
-  final ReceivePort receivePort = ReceivePort('runner');
 
   void _setContexts([List<Uri>? roots]) {
     if (roots == null) {
@@ -80,7 +85,7 @@ class SidecarRunner {
     _initStream();
     final isolateBuilder = _ref.read(isolateBuilderServiceProvider);
     final activeProjectService = _ref.read(activeProjectServiceProvider);
-    final resourceProvider = _ref.read(runnerResourceProvider);
+    final resourceProvider = _ref.read(serverResourceProvider);
 
     final packageRoot = activePackage.root;
     final config = activeProjectService.getPackageConfig(packageRoot);
@@ -131,7 +136,7 @@ class SidecarRunner {
   }
 }
 
-final analyzerStreamProvider = StreamProvider.family<Object, SidecarRunner>(
+final analyzerStreamProvider = StreamProvider.family<Object, SidecarServer>(
   (ref, runner) async* {
     final stream = runner._stream;
     await for (final event in stream) {

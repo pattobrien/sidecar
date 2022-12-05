@@ -13,7 +13,7 @@ final projectSidecarSpecProvider = Provider<SidecarSpec>((ref) {
   final resource = ref.watch(analyzerResourceProvider).getFile(sidecarYamlPath);
   final sidecarSpec = parseSidecarSpec(resource.readAsStringSync());
   // print('SIDECAR.YAML REFRESHING ${code.code} config');
-  return sidecarSpec.item1;
+  return sidecarSpec.data;
 });
 
 final activeProjectIncludeGlobsProvider = Provider<Set<Glob>>((ref) {
