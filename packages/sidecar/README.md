@@ -15,7 +15,7 @@ Enable a more personalized developer experience within the IDE.
 
 > This is an experimental package which is expected to change slightly until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the Dart-official ```package:analyzer``` APIs, and therefore any rule packages you may want to experiment with will be easy to port over to any future APIs.
 
-> Functionality is currently only confirmed to be working on MacOS and Linux environments.
+> Functionality is confirmed to be working within MacOS and Linux environments (Windows is unconfirmed)
 
 ## Overview
 
@@ -26,6 +26,7 @@ Enable a more personalized developer experience within the IDE.
   - [Creating a Rule](#create-a-rule)
   - [Using a rule in your Codebase](#using-a-rule)
 - [Example Sidecar Rule Packages](#example-packages)
+- [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 
 
@@ -40,7 +41,7 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 
 | Lint Rules  | IDE | CLI | Debug |
 | ----------  | --- | --- | ----- |
-| Lint reason and correction messages | ✅ | ✅ | ✅ | 
+| Lint messages | ✅ | ✅ | ✅ | 
 | Define a default severity | ✅ | ✅ | ✅ |
 | Apply Quick Fix suggestions | ✅ | 🚧 | 🚧 |
 | (IDE) URL links to rule documentation | ✅ | 🚫 | 🚫 |
@@ -71,7 +72,7 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 | Environment Support  | ✅ | ✅ | 🚧 |
 
 
-### Usage <a name="usage"></a>
+## Usage <a name="usage"></a>
 
 See the below guides for information on how to create and use Sidecar packages.
 
@@ -93,6 +94,11 @@ Some Sidecar tasks are easier with the CLI tool. To install the CLI, simply run:
 ```sh
 dart pub global activate sidecar
 ```
+
+## Troubleshooting <a name="troubleshooting"></a>
+
+- if Lints stop updating in the IDE, try reloading the IDE window or restarting the Dart Analysis Server (can be done via VSCode Dart-Code extension)
+
 
 
 ## Contributing <a name="contributing"></a>
