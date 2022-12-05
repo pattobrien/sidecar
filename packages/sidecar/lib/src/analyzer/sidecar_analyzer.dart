@@ -12,10 +12,10 @@ import 'package:riverpod/riverpod.dart';
 
 import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/protocol.dart';
+import '../server/communication_channel.dart';
 import '../utils/duration_ext.dart';
 import '../utils/file_paths.dart';
 import 'providers/providers.dart';
-import '../server/communication_channel.dart';
 
 final logger = Logger('sidecar-plugin');
 

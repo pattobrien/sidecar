@@ -16,12 +16,16 @@ void main() {
       expect(someRule.hashCode, equals(rule2.hashCode));
     });
 
-    test('2 instance of the different rules', () {
-      //TODO
+    test('2 instances of different rules', () {
+      final someRule = AvoidStringLiteral();
+      final rule2 = HardcodedTextString();
+      expect(someRule, isNot(equals(rule2)));
     });
 
-    test('2 instance of the different rules (hashcode)', () {
-      //TODO
+    test('2 instances of different rules (hashcode)', () {
+      final someRule = AvoidStringLiteral();
+      final rule2 = HardcodedTextString();
+      expect(someRule.hashCode, isNot(equals(rule2.hashCode)));
     });
   });
 }
