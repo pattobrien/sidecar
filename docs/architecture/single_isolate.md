@@ -1,24 +1,26 @@
 
 # Single-Isolate Architecture
 
-*Multiple packages, one lint process.*
-
-In comparison to the bare ```analyzer_plugin``` package, what makes Sidecar extremely powerful is that lints from any number of packages are designed to work together within one isolate / process. By running within one isolate, lints can share RAM and CPU resources, ultimately resulting in top-tier performance.
+Multiple rule packages, one analyzer process.
 
 ## Process Overview
 
-1. When ```sidecar``` is enabled in ```analysis_options.yaml```, a "middleman" plugin is booted up from any direct or transitive ```sidecar``` dependency. 
+In comparison to ```analyzer_plugin``` package, which spins up a new isolate for every plugin, what makes Sidecar more resource efficient is that lints from any number of packages are designed to work together within one isolate / process via a generated entrypoint (```{target_root}/.dart_tool/sidecar/analyzer.dart```). By running within one isolate, all lint rules can share RAM resources and all files only need to be analyzed once, resulting in both reduced time and reduced space complexity.
 
-2. The middleman plugin checks the root package's dependency graph for all packages that both a) depend on ```sidecar``` and b) define ```LintRules``` (TODO: more info on what this entails). After obtaining the list of sidecar lint packages, the middleman plugin generates a series of files within ```.dart_tool/sidecar``` at the active-project root.
+## Logic Overview
 
-These files include a concatenation of all of the ```LintRules``` found in all lint packages:
+1. When ```sidecar``` is enabled in ```analysis_options.yaml```, the Sidecar server plugin is booted up via the Dart analysis server and analyzer_plugin API (via an IDE extension like VSCode extension ```Dart-Code```)
+
+2. The server plugin checks the target's package_config.json for any dependencies that define top-level Sidecar ```Rule``` classes. After obtaining the list of these Sidecar rule packages and their respective Rules, the server plugin generates a series of files within ```{target_root}/.dart_tool/sidecar/```.
+
+The generated files include a concatenation of all ```Rule``` class constructors:
 
 ```dart
 // .dart_tool/sidecar/constructors.dart
-// generated array of lint rules
 
 import 'package:sidecar/sidecar.dart';
 
+// This particular example utilizes two different rule packages:
 import 'package:design_system_lints/design_system_lints.dart' as design_system_lints;
 import 'package:l10n_lints/l10n_lints.dart' as l10n_lints;
 
@@ -41,7 +43,7 @@ List<SidecarBaseConstructor> constructors = [
 
 import 'dart:isolate';
 
-import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/starters/starters.dart';
 
 import 'constructors.dart';
 
@@ -49,19 +51,17 @@ Future<void> main(List<String> args, SendPort sendPort) async {
   await startSidecarPlugin(
     sendPort, 
     args,
-    constructors: constructors,  // takes lint rule constructors as input
-    isMiddleman: false,
+    constructors: constructors,  // takes generated lint rule constructors as input
   );
 }
 
 ```
 
-3. Once the above files are generated, the middleman plugin then launches an isolate using this executable, which launches the Sidecar analyzer plugin together with the array of ```LintRules``` from ```constructors.dart```. The reason this step is required is because in order to run all lint packages within one isolate, we need to dynamically aggregate the multiple packages into one single ```main()``` function.
-
-4. Once everything is up and running, the middleman plugin passes all analysis requests (lint, quick assist, etc.) to the Sidecar analyzer plugin where the requests are then processed.
+3. Once the above files are generated, the server plugin spawns an isolate from the above main() function, which launches the Sidecar Analyzer that in turn handles each analysis server request and aggregates responses from all rules. 
 
 ### Additional Notes
 
-- Both the middleman plugin and the Sidecar analyzer plugin utilize the same package_config.json as the root project - this gaurantees that, as long as ```pub get``` resolves for the root project, so will all of the lints regardless of the dependencies that they're analyzing
-- You can depend on any kind of lint dependency: hosted from pub.dev, hosted from a private repository, git, path, etc.
-- The architecture for the generated files was inspired from how build_runner works behind the scenes, which also generates such entrypoint files. 
+- Both the server plugin and the Sidecar Analyzer utilize the same package_config.json as the Target project - this guarantees that, as long as ```pub get``` resolves for the Target project, so will all of the lints regardless of the dependencies that they're meant to be analyzing
+- Since we utilize ```pub```, Target packages can depend on any Sidecar Rule package from pub.dev, a private repository, git, path, etc.
+- The architecture for generating an aggregated entrypoint file was inspired by build_runner (specifically, how ```.g.dart``` generators from multiple packages are designed to work together)
+- It's possible that a single workspace has multiple Sidecar-enabled target roots with different package_config files; in this case, a single server plugin will forward and aggregate messages to/from 1 or more Analyzers (see [multi_target_workspace.md](multi_target_workspace.md) for more)

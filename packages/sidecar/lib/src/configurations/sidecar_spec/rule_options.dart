@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
 
-import '../../../sidecar.dart';
+import '../../../rules/rules.dart';
 import '../../utils/json_utils/glob_json_util.dart';
 
 part 'rule_options.g.dart';

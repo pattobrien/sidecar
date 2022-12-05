@@ -1,3 +1,14 @@
+## 0.1.0-dev.15
+
+- breaking: RuleCode url changed from Uri to String
+- docs: Re-arranged internal API structures
+- docs: Starter APIs are public.
+
+## 0.1.0-dev.14
+
+- fix: Local absolute paths replaced by dynamic paths
+- feat: Linux environment functionality confirmed
+
 ## 0.1.0-dev.13
 
 - fix: Removed local dependency from tools/analyzer_plugin package

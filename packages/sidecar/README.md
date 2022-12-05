@@ -15,7 +15,7 @@ Enable a more personalized developer experience within the IDE.
 
 > This is an experimental package which is expected to change slightly until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the Dart-official ```package:analyzer``` APIs, and therefore any rule packages you may want to experiment with will be easy to port over to any future APIs.
 
-> Functionality is currently only confirmed to be working on MacOS environments.
+> Functionality is currently only confirmed to be working on MacOS and Linux environments.
 
 ## Overview
 
@@ -69,7 +69,7 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 
 |             | MacOS | Linux | Windows |
 | ----------  | ----- | ----- | ------- |
-| Environment Support  | ✅ | 🚧 | 🚧 |
+| Environment Support  | ✅ | ✅ | 🚧 |
 
 
 ## Example Sidecar Rule Packages <a name="example-packages"></a>
@@ -79,134 +79,10 @@ To explore how rule packages are created, take a look at the following rule pack
 - [design_system_lints](https://pub.dev/packages/design_system_lints)
 - [dart_lints](https://pub.dev/packages/dart_lints) - Sidecar port of the official Dart lints, for benchmarking purposes
 
-## Using Sidecar within a Dart or Flutter Project  <a name="development-usage"></a>
+### Usage
 
-There are 3 modes which Sidecar can be run in: server, cli, or debug (WIP).
-### IDE Server Mode <a name="server-usage"></a>
-
-In Server mode, Sidecar boots up using the ```analyzer_plugin``` APIs created by the Dart team. To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
-
-1. Depend on any ```sidecar``` lint packages (e.g. [design_system_lints](https://pub.dev/packages/design_system_lints))
-
-2. Create a ```sidecar.yaml``` file at the project's root directory and declare any rules from the package
-
-```yaml
-# sidecar.yaml
-includes:
-  - "bin/**"
-  - "lib/**"
-lints:
-  design_system_lints:
-    rules: 
-      avoid_sized_box_height_width_literals:
-      avoid_text_style_literal:
-      avoid_border_radius_literal:
-      avoid_box_shadow_literal:
-      avoid_edge_insets_literal:
-```
-
-3. Enable the plugin to run by adding ```sidecar``` to the list of plugins in ```analysis_options.yaml```
-
-
-```yaml
-# analysis_options.yaml
-
-analyzer:
-  plugins:
-    - sidecar
-```
-
-After several seconds of start-up (and potentially a restart of your IDE), the lints should begin appearing in your editor.
-### CLI Mode <a name="cli-usage"></a>
-
-CLI Mode is useful for running lint rules from a CI/CD pipeline. To use Sidecar in CLI mode, run the following command in your terminal:
-
-```sh
-# activate sidecar
-dart pub global activate sidecar
-
-# run sidecar analyzer in CLI mode
-sidecar analyze
-```
-
-> NOTE: If you have a particular CLI use case in mind and would like to give feedback, feel free to reach out on Github.
-
-### Debug Mode (Work in Progress) <a name="debug-usage"></a>
-
-Debug Mode comes equipped with IDE debugger integration and hot reload, which is helpful for when you're developing your own rules. Currently, this functionality is a work-in-progress.
-
-
-## Creating a Lint or QuickAssist Rule <a name="rule-package-usage"></a>
-
-Below is an example of a Lint rule which highlights any string or string variable referenced from a Text widget.
-
-```dart
-//  hardcoded_text_string.dart
-
-const packageId = 'intl_lints';
-final kUri = Uri.parse('https://github.com/pattobrien/lints/');
-
-class HardcodedTextString extends Rule with Lint {
-  static const _id = 'hardcoded_text_string';
-  static const _message = 'Avoid any hardcoded Strings in Text widgets';
-  static const _correction = 'Prefer to use a translated Intl message instead.';
-
-  @override
-  LintCode get code => LintCode(_id, package: packageId, url: kUri);
-
-  @override
-  void initializeVisitor(NodeRegistry registry) {
-    registry.addInstanceCreationExpression(this);
-  }
-
-  @override
-  void visitInstanceCreationExpression(InstanceCreationExpression node) {
-    if (textType.isAssignableFromType(node.staticType)) {
-      final textBody = node.argumentList.arguments
-          .firstWhere((arg) => arg is! NamedExpression);
-      if (textBody is SimpleStringLiteral || textBody is SimpleIdentifier) {
-        reportAstNode(textBody, message: _message, correction: _correction);
-      }
-    }
-  }
-}
-
-```
-
-Note the following features and requirements:
-
-
-### Rule Base Class
-- All Sidecar rules must extend ```Rule``` as well as mixin either ```Lint``` or ```QuickAssist```
-- All overridden visit methods should be added to the NodeRegistry via the ```initializeVisitor``` method (see above example)
-- Lint rules expose methods ```reportAstNode``` and ```reportToken```, which take a lint message and an optional correction message to display to a user
-- A QuickFix mixin can also be added to a Lint mixin, which exposes an extra parameter ```editsComputer``` on the functions ```reportAstNode``` and ```reportToken```
-- The ```Rule``` base class also exposes other fields, for example ```unit``` ( ResolvedUnitResult that is currently being analyzed), ```sidecarSpec```, etc.
-
-
-### RuleCode
-- A RuleCode is the ID of every unique Sidecar Rule
-- The ID of a RuleCode (e.g. ```hardcoded_text_string```) should be in snake_case format and should match the class name (in PascalCase)
-- The Package ID of a RuleCode should be identical to the package name
-- A URL can be added to the LintCode, which would then appear as a hyperlink in an IDE's lint window
-
-
-### Rule Packages
-
-- Sidecar rule packages can contain 1 or more rules
-- For a given package 'intl_lints', all rules must be accessible from the file ```lib/intl_lints.dart``` (either directly or via exports)
-- pubspec.yaml should also declare any rules
-
-```yaml
-package: intl_lints
-...
-
-sidecar:
-  lints:
-    - hardcoded_text_string # should match the Lint's RuleCode ID
-```
-
-> NOTE: some of the above API details, like the initializeVisitor method that must be overridden for each Rule, are complicated or redundant; our intention over time is to reduce as much redundancy as possible in order to make rule creation as straightforward as possible. If you have any feedback for how you'd like the APIs to look, we encourage you to open an issue against Sidecar on github.
+- Creating a Rule
+- Using Sidecar rules to analyze a Codebase
 
 ## Installing the CLI tool <a name="cli-installation"></a>
 

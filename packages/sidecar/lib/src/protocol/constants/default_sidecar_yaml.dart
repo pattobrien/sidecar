@@ -4,8 +4,8 @@ const templateSidecarContent = '''
 # generated sidecar.yaml configuration
 
 includes:
-  - "bin/**"
-  - "lib/**"
+  - "bin/**.dart"
+  - "lib/**.dart"
 
 lints:
   # the first level is the lint package name

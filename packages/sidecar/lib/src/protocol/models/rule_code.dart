@@ -11,14 +11,14 @@ class RuleCode with _$RuleCode {
   const factory RuleCode.lint(
     String id, {
     required String package,
-    Uri? url,
+    String? url,
   }) = LintCode;
 
   /// Identifier for a Sidecar Assist rule
   const factory RuleCode.assist(
     String id, {
     required String package,
-    Uri? url,
+    String? url,
   }) = AssistCode;
 
   const RuleCode._();

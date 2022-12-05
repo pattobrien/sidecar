@@ -23,10 +23,7 @@ _$AnalyzerLogRecord _$$AnalyzerLogRecordFromJson(Map json) =>
     _$AnalyzerLogRecord(
       json['message'] as String,
       DateTime.parse(json['timestamp'] as String),
-      root: json['root'] == null
-          ? null
-          : ActivePackageRoot.fromJson(
-              Map<String, dynamic>.from(json['root'] as Map)),
+      targetRoot: Uri.parse(json['targetRoot'] as String),
       severity: $enumDecode(_$LogSeverityEnumMap, json['severity']),
       stackTrace: stringToStackNullable(json['stackTrace'] as String?),
       $type: json['runtimeType'] as String?,
@@ -36,6 +33,8 @@ Map<String, dynamic> _$$AnalyzerLogRecordToJson(_$AnalyzerLogRecord instance) {
   final val = <String, dynamic>{
     'message': instance.message,
     'timestamp': instance.timestamp.toIso8601String(),
+    'targetRoot': instance.targetRoot.toString(),
+    'severity': _$LogSeverityEnumMap[instance.severity]!,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -44,8 +43,6 @@ Map<String, dynamic> _$$AnalyzerLogRecordToJson(_$AnalyzerLogRecord instance) {
     }
   }
 
-  writeNotNull('root', instance.root?.toJson());
-  val['severity'] = _$LogSeverityEnumMap[instance.severity]!;
   writeNotNull('stackTrace', stackToStringNullable(instance.stackTrace));
   val['runtimeType'] = instance.$type;
   return val;

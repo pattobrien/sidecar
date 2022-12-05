@@ -39,7 +39,7 @@ mixin _$LogRecord {
     required TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)
@@ -60,7 +60,7 @@ mixin _$LogRecord {
     TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
@@ -81,7 +81,7 @@ mixin _$LogRecord {
     TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
@@ -246,7 +246,7 @@ class _$_LogRecord extends _LogRecord {
     required TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)
@@ -270,7 +270,7 @@ class _$_LogRecord extends _LogRecord {
     TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
@@ -294,7 +294,7 @@ class _$_LogRecord extends _LogRecord {
     TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
@@ -385,12 +385,10 @@ abstract class _$$AnalyzerLogRecordCopyWith<$Res>
   $Res call(
       {String message,
       DateTime timestamp,
-      ActivePackageRoot? root,
+      Uri targetRoot,
       LogSeverity severity,
       @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
           StackTrace? stackTrace});
-
-  $ActivePackageRootCopyWith<$Res>? get root;
 }
 
 /// @nodoc
@@ -408,7 +406,7 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
   $Res call({
     Object? message = freezed,
     Object? timestamp = freezed,
-    Object? root = freezed,
+    Object? targetRoot = freezed,
     Object? severity = freezed,
     Object? stackTrace = freezed,
   }) {
@@ -421,10 +419,10 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      root: root == freezed
-          ? _value.root
-          : root // ignore: cast_nullable_to_non_nullable
-              as ActivePackageRoot?,
+      targetRoot: targetRoot == freezed
+          ? _value.targetRoot
+          : targetRoot // ignore: cast_nullable_to_non_nullable
+              as Uri,
       severity: severity == freezed
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
@@ -435,17 +433,6 @@ class __$$AnalyzerLogRecordCopyWithImpl<$Res>
               as StackTrace?,
     ));
   }
-
-  @override
-  $ActivePackageRootCopyWith<$Res>? get root {
-    if (_value.root == null) {
-      return null;
-    }
-
-    return $ActivePackageRootCopyWith<$Res>(_value.root!, (value) {
-      return _then(_value.copyWith(root: value));
-    });
-  }
 }
 
 /// @nodoc
@@ -454,7 +441,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   const _$AnalyzerLogRecord(
       this.message,
       this.timestamp,
-      {this.root,
+      {required this.targetRoot,
       required this.severity,
       @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
           this.stackTrace,
@@ -470,7 +457,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   @override
   final DateTime timestamp;
   @override
-  final ActivePackageRoot? root;
+  final Uri targetRoot;
   @override
   final LogSeverity severity;
   @override
@@ -485,7 +472,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
 
   @override
   String toString() {
-    return 'LogRecord.fromAnalyzer(message: $message, timestamp: $timestamp, root: $root, severity: $severity, stackTrace: $stackTrace)';
+    return 'LogRecord.fromAnalyzer(message: $message, timestamp: $timestamp, targetRoot: $targetRoot, severity: $severity, stackTrace: $stackTrace)';
   }
 
   @override
@@ -495,7 +482,8 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
             other is _$AnalyzerLogRecord &&
             const DeepCollectionEquality().equals(other.message, message) &&
             const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
-            const DeepCollectionEquality().equals(other.root, root) &&
+            const DeepCollectionEquality()
+                .equals(other.targetRoot, targetRoot) &&
             const DeepCollectionEquality().equals(other.severity, severity) &&
             const DeepCollectionEquality()
                 .equals(other.stackTrace, stackTrace));
@@ -507,7 +495,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
       runtimeType,
       const DeepCollectionEquality().hash(message),
       const DeepCollectionEquality().hash(timestamp),
-      const DeepCollectionEquality().hash(root),
+      const DeepCollectionEquality().hash(targetRoot),
       const DeepCollectionEquality().hash(severity),
       const DeepCollectionEquality().hash(stackTrace));
 
@@ -523,7 +511,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
     required TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)
@@ -537,7 +525,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
                 StackTrace? stackTrace)
         fromRule,
   }) {
-    return fromAnalyzer(message, timestamp, root, severity, stackTrace);
+    return fromAnalyzer(message, timestamp, targetRoot, severity, stackTrace);
   }
 
   @override
@@ -547,7 +535,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
     TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
@@ -561,7 +549,8 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
                 StackTrace? stackTrace)?
         fromRule,
   }) {
-    return fromAnalyzer?.call(message, timestamp, root, severity, stackTrace);
+    return fromAnalyzer?.call(
+        message, timestamp, targetRoot, severity, stackTrace);
   }
 
   @override
@@ -571,7 +560,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
     TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
@@ -587,7 +576,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
     required TResult orElse(),
   }) {
     if (fromAnalyzer != null) {
-      return fromAnalyzer(message, timestamp, root, severity, stackTrace);
+      return fromAnalyzer(message, timestamp, targetRoot, severity, stackTrace);
     }
     return orElse();
   }
@@ -638,7 +627,7 @@ abstract class AnalyzerLogRecord extends LogRecord {
   const factory AnalyzerLogRecord(
       final String message,
       final DateTime timestamp,
-      {final ActivePackageRoot? root,
+      {required final Uri targetRoot,
       required final LogSeverity severity,
       @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
           final StackTrace? stackTrace}) = _$AnalyzerLogRecord;
@@ -651,7 +640,7 @@ abstract class AnalyzerLogRecord extends LogRecord {
   String get message;
   @override
   DateTime get timestamp;
-  ActivePackageRoot? get root;
+  Uri get targetRoot;
   LogSeverity get severity;
   @JsonKey(
       toJson: stackToStringNullable,
@@ -807,7 +796,7 @@ class _$RuleLogRecord extends RuleLogRecord {
     required TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)
@@ -831,7 +820,7 @@ class _$RuleLogRecord extends RuleLogRecord {
     TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
@@ -855,7 +844,7 @@ class _$RuleLogRecord extends RuleLogRecord {
     TResult Function(
             String message,
             DateTime timestamp,
-            ActivePackageRoot? root,
+            Uri targetRoot,
             LogSeverity severity,
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?

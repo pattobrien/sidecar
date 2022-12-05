@@ -32,13 +32,17 @@ class RulePackageConfiguration {
   }
 
   final YamlList? yamlLints;
+
   final YamlList? yamlAssists;
+
   final YamlMap source;
 
   final String packageName;
+
   final Uri uri;
 
   List<LintNode>? get lints => yamlLints?.nodes.map(LintNode.new).toList();
+
   List<AssistNode>? get assists =>
       yamlAssists?.nodes.map(AssistNode.new).toList();
 }

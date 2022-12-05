@@ -7,11 +7,11 @@ import 'package:file/file.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
-import '../../analyzer/plugin/plugin.dart';
-import '../../analyzer/server/runner/context_providers.dart';
+import '../../analyzer/providers/providers.dart';
 import '../../configurations/sidecar_spec/sidecar_spec.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
+import '../../server/server_providers.dart';
 import 'package_resource.dart';
 import 'resource_mixin.dart';
 
@@ -30,7 +30,7 @@ Future<WorkspaceResource> createWorkspace({
     ruleConstructorProvider.overrideWithValue(constructors),
   ]);
   final fileSystem = workspaceContainer.read(fileSystemProvider);
-  final defaultProvider = workspaceContainer.read(runnerResourceProvider);
+  final defaultProvider = workspaceContainer.read(serverResourceProvider);
   final provider = resourceProvider ?? defaultProvider;
   final root =
       io.Directory.systemTemp.uri.resolve(p.join(_defaultWorkspacePath));

@@ -11,7 +11,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:source_span/source_span.dart';
 
 import '../protocol/constants/constants.dart';
-import 'ast_utilities.dart';
+import 'syntactix_entity_utilities.dart';
 
 class AnalysisContextUtilities {
   const AnalysisContextUtilities();

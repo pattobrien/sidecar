@@ -24,8 +24,8 @@ dev_dependencies:
 # sidecar.yaml
 # this file can also be created via the cli: 'sidecar init'
 includes:
-  - "bin/**"
-  - "lib/**"
+  - "bin/**.dart"
+  - "lib/**.dart"
 lints:
   design_system_lints:
     rules:

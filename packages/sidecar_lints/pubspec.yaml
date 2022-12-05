@@ -11,7 +11,7 @@ environment:
 dependencies:
   analyzer: ^4.7.0
   analyzer_plugin: ^0.11.1
-  sidecar: ^0.1.0-dev.5
+  sidecar: ^0.1.0-dev.15
   source_span: ^1.9.1
 
 dev_dependencies:

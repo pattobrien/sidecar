@@ -1,8 +1,14 @@
-import 'package:tuple/tuple.dart';
-
 import '../exceptions/exceptions.dart';
 
-typedef SidecarExceptionTuple<T> = Tuple2<T, List<SidecarNewException>>;
+class SidecarExceptionTuple<T> {
+  const SidecarExceptionTuple(this._data, this._errors);
+
+  final T _data;
+  final List<SidecarNewException> _errors;
+
+  List<SidecarNewException> get errors => _errors;
+  T get data => _data;
+}
 
 class SidecarException implements Exception {}
 

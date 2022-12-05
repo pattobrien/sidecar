@@ -12,8 +12,8 @@ import 'package:package_config/package_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:pubspec_parse/pubspec_parse.dart';
 
-import '../../analyzer/server/runner/context_providers.dart';
 import '../../configurations/sidecar_spec/sidecar_spec_base.dart';
+import '../../server/server_providers.dart';
 import '../../services/active_project_service.dart';
 import '../../utils/file_paths.dart';
 import 'analysis_options.dart';
@@ -92,10 +92,9 @@ class PackageResource with ResourceMixin {
 
     if (activeContext == null) {
       // throw StateError('Invalid Sidecar directory: $rootPath');
-      workspaceContainer.read(runnerActiveContextsProvider.notifier).update =
-          [];
+      workspaceContainer.read(runnerActiveContextProvider.notifier).state = [];
     } else {
-      workspaceContainer.read(runnerActiveContextsProvider.notifier).update = [
+      workspaceContainer.read(runnerActiveContextProvider.notifier).state = [
         activeContext
       ];
     }
@@ -106,6 +105,7 @@ class PackageResource with ResourceMixin {
   }
 
   File newPubspecYamlFile(Pubspec pubspec) {
+    final sidecarPackagePath = io.Directory.current.path;
     final content = '''
 name: $projectName
 
@@ -114,7 +114,11 @@ environment:
 
 dependencies:
   path: ^1.8.0
-  intl_lints: any
+  intl_lints: ^0.1.0-dev.7
+
+dependency_overrides:
+  sidecar:
+    path: $sidecarPackagePath
 ''';
     return modifyFile(kPubspecYaml, content);
   }

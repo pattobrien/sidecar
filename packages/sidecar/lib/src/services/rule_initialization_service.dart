@@ -6,16 +6,16 @@ import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/analyzed_file.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
-import '../utils/utils.dart';
+import 'glob_service.dart';
 
 /// Service for initializing Sidecar Rules based on SidecarSpec configuration.
 class RuleInitializationService {
   /// Returns all of the rules that match sidecar spec for a particular file.
-  Set<BaseRule> getRulesForFile({
-    required AnalyzedFile file,
-    required SidecarSpec spec,
-    required List<SidecarBaseConstructor> constructors,
-  }) {
+  Set<BaseRule> constructRulesForFile(
+    AnalyzedFile file,
+    SidecarSpec spec,
+    List<SidecarBaseConstructor> constructors,
+  ) {
     final rules = constructors.map((e) => e());
     final packageOptions = [...?spec.assists?.entries, ...?spec.lints?.entries];
     final rulesForFile = <BaseRule>{};
@@ -42,15 +42,15 @@ class RuleInitializationService {
         final packageExcludes = packageOption.value.excludes;
         final ruleIncludes = ruleEntry.value.includes ?? thisRule.includes;
         final ruleExcludes = ruleEntry.value.excludes ?? thisRule.excludes;
-
-        final isFileIncluded = isIncluded(file.relativePath,
+        final globService = GlobServiceImpl();
+        final isFileIncluded = globService.isIncluded(file.relativePath,
             [...rootIncludes, ...?packageIncludes, ...?ruleIncludes]);
         if (!isFileIncluded) {
           logger.info('getRulesForFile $ruleId is not included');
           continue;
         }
 
-        final isFileExcluded = isExcluded(file.relativePath,
+        final isFileExcluded = globService.isExcluded(file.relativePath,
             [...rootExcludes, ...?packageExcludes, ...?ruleExcludes]);
         if (isFileExcluded) {
           logger.info('getRulesForFile $ruleId is excluded');
@@ -66,10 +66,10 @@ class RuleInitializationService {
     return rulesForFile;
   }
 
-  Set<BaseRule> getRulesForActiveProject({
-    required SidecarSpec config,
-    required List<SidecarBaseConstructor> constructors,
-  }) {
+  Set<BaseRule> getRulesForActiveProject(
+    SidecarSpec config,
+    List<SidecarBaseConstructor> constructors,
+  ) {
     final rules = constructors.map((e) => e());
     return rules
         .map((rule) {
@@ -91,16 +91,16 @@ class RuleInitializationService {
         .toSet();
   }
 
-  NodeRegistry createNodeRegistry({
-    required String file,
-    required SidecarSpec config,
-    required Set<BaseRule> rules,
-  }) {
-    final registry = NodeRegistry(rules);
-    // removed: registerVisitors is now handled inside registry
-    // registerVisitorsWithRegistry(rules, registry);
-    return registry;
-  }
+  // NodeRegistry createNodeRegistry({
+  //   required String file,
+  //   required SidecarSpec config,
+  //   required Set<BaseRule> rules,
+  // }) {
+  //   final registry = NodeRegistry(rules);
+  //   // removed: registerVisitors is now handled inside registry
+  //   // registerVisitorsWithRegistry(rules, registry);
+  //   return registry;
+  // }
 
   @Deprecated('registerVisitors is now handled inside registry')
   void registerVisitorsWithRegistry(

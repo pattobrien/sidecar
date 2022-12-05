@@ -11,8 +11,8 @@ void main() {
       });
       final value = yamlContent.parseSeverity();
 
-      expect(value.item1, LintSeverity.warning);
-      expect(value.item2.isEmpty, true);
+      expect(value.data, LintSeverity.warning);
+      expect(value.errors.isEmpty, true);
     });
     test('invalid severity', () {
       final yamlContent = YamlMap.wrap(<dynamic, dynamic>{
@@ -20,8 +20,8 @@ void main() {
       });
       final value = yamlContent.parseSeverity();
 
-      expect(value.item1, null);
-      expect(value.item2.length, 1);
+      expect(value.data, null);
+      expect(value.errors.length, 1);
     });
 
     test('invalid severity type', () {
@@ -30,8 +30,8 @@ void main() {
       });
       final value = yamlContent.parseSeverity();
 
-      expect(value.item1, null);
-      expect(value.item2.length, 1);
+      expect(value.data, null);
+      expect(value.errors.length, 1);
     });
   });
 }
