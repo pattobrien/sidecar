@@ -93,8 +93,8 @@ In Server mode, Sidecar boots up using the ```analyzer_plugin``` APIs created by
 ```yaml
 # sidecar.yaml
 includes:
-  - "bin/**"
-  - "lib/**"
+  - "bin/**.dart"
+  - "lib/**.dart"
 lints:
   design_system_lints:
     rules: 

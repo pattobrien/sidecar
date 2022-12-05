@@ -6,7 +6,7 @@ import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/analyzed_file.dart';
 import '../rules/rules.dart';
 import '../utils/logger/logger.dart';
-import '../utils/utils.dart';
+import 'glob_service.dart';
 
 /// Service for initializing Sidecar Rules based on SidecarSpec configuration.
 class RuleInitializationService {
@@ -42,15 +42,15 @@ class RuleInitializationService {
         final packageExcludes = packageOption.value.excludes;
         final ruleIncludes = ruleEntry.value.includes ?? thisRule.includes;
         final ruleExcludes = ruleEntry.value.excludes ?? thisRule.excludes;
-
-        final isFileIncluded = isIncluded(file.relativePath,
+        final globService = GlobServiceImpl();
+        final isFileIncluded = globService.isIncluded(file.relativePath,
             [...rootIncludes, ...?packageIncludes, ...?ruleIncludes]);
         if (!isFileIncluded) {
           logger.info('getRulesForFile $ruleId is not included');
           continue;
         }
 
-        final isFileExcluded = isExcluded(file.relativePath,
+        final isFileExcluded = globService.isExcluded(file.relativePath,
             [...rootExcludes, ...?packageExcludes, ...?ruleExcludes]);
         if (isFileExcluded) {
           logger.info('getRulesForFile $ruleId is excluded');

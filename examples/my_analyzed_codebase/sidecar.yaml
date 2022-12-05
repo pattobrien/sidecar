@@ -1,6 +1,6 @@
 includes:
-  - "bin/**"
-  - "lib/**"
+  - "bin/**.dart"
+  - "lib/**.dart"
 
 lints:
   intl_lints:
@@ -15,8 +15,8 @@ lints:
       # always_specify_types:
 
   design_system_lints:
-    excludes:
-      - "lib/core/theme/**.dart"
+    # excludes:
+    # - "lib/core/theme/**.dart"
     rules:
       avoid_icon_literal:
       avoid_sized_box_height_width_literals:

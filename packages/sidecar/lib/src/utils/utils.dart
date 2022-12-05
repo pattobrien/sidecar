@@ -6,7 +6,6 @@ export 'channel_extension.dart';
 export 'code.dart';
 export 'duration_ext.dart';
 export 'file_paths.dart';
-export 'glob_utils.dart';
 export 'source_span_utilities.dart';
 export 'syntactix_entity_utilities.dart';
 export 'type_checker.dart';

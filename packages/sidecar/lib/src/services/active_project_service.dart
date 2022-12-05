@@ -84,7 +84,6 @@ class ActiveProjectService {
     }
   }
 
-  // is this needed for any external functions ?
   PackageConfig getPackageConfig(Uri root) {
     final path = p.join(root.path, kDartTool, kPackageConfigJson);
     final file = resourceProvider.getFile(path);

@@ -1,3 +1,8 @@
+## 0.1.0-dev.15
+
+- docs: Re-arranged internal API structures
+- docs: Starter APIs are public.
+
 ## 0.1.0-dev.14
 
 - fix: Local absolute paths replaced by dynamic paths

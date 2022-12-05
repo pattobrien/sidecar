@@ -25,7 +25,7 @@ import '../utils/utils.dart';
 import 'server_providers.dart';
 import 'sidecar_server.dart';
 
-/// Plugin API for use with official Dart analysis server.
+/// Plugin for use with official Dart analysis server.
 ///
 /// For more info, see: package:analyzer_plugin.
 class SidecarAnalyzerPlugin extends plugin.ServerPlugin {

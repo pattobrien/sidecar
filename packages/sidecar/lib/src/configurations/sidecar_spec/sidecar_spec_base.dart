@@ -23,7 +23,7 @@ class SidecarSpec {
 
   Map<String, dynamic> toJson() => _$SidecarSpecToJson(this);
 
-  static final defaultIncludes = {Glob('lib/**'), Glob('bin/**')};
+  static final defaultIncludes = {Glob('lib/**.dart'), Glob('bin/**.dart')};
 
   static final defaultExcludes = <Glob>{};
 

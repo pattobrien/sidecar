@@ -7,7 +7,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
 import '../../services/active_project_service.dart';
-import '../../utils/glob_utils.dart';
+import '../../services/glob_service.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/uri_ext.dart';
 import 'resource_providers.dart';
@@ -80,12 +80,13 @@ final activeProjectScopedFilesProvider = Provider<Set<AnalyzedFile>>((ref) {
   final activeProjectExcludes = ref.watch(activeProjectExcludeGlobsProvider);
   final contexts = ref.watch(contextCollectionProvider);
   final fileSystem = ref.watch(fileSystemProvider);
+  final globService = ref.watch(globServiceProvider);
 
-  final activeProjectScopedFiles = contexts
+  return contexts
       .map((context) {
         //TODO: what to do with 'lib' folder
-        final filesInScope = extractDartFilesFromFolders(
-            ['lib'], context.contextRoot.root.path,
+        final filesInScope = globService.extractDartFilesFromFolders(
+            context.contextRoot.root.path,
             fileSystem: fileSystem,
             globalIncludes: activeProjectIncludes,
             globalExcludes: activeProjectExcludes);
@@ -98,5 +99,4 @@ final activeProjectScopedFilesProvider = Provider<Set<AnalyzedFile>>((ref) {
       })
       .expand((e) => e)
       .toSet();
-  return activeProjectScopedFiles;
 });

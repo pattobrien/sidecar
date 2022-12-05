@@ -3,12 +3,9 @@ import 'package:hotreloader/hotreloader.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../reports/stdout_reporter.dart';
 import 'client.dart';
-
-part 'hot_reloader.g.dart';
 
 final hotReloaderProvider = FutureProvider<HotReloader>((ref) async {
   hierarchicalLoggingEnabled = true;
@@ -18,17 +15,19 @@ final hotReloaderProvider = FutureProvider<HotReloader>((ref) async {
   );
 });
 
-@Riverpod(keepAlive: true)
-class HotReloadNotifier extends _$HotReloadNotifier {
+final hotReloadNotifierProvider = StateNotifierProvider(HotReloadNotifier.new);
+
+class HotReloadNotifier extends StateNotifier<AsyncValue<void>> {
+  HotReloadNotifier(this._ref) : super(const AsyncValue.data(null));
+
+  final Ref _ref;
+
   final hotreloadResourceProvider = PhysicalResourceProvider.INSTANCE;
 
-  @override
-  FutureOr<void> build() async {}
-
   Future<void> onAfterReload(AfterReloadContext c) async {
-    state = const AsyncValue.loading();
-    final client = ref.watch(analyzerClientProvider);
-    final reporter = ref.watch(stdoutReportProvider);
+    state = const AsyncValue<void>.loading();
+    final client = _ref.watch(analyzerClientProvider);
+    final reporter = _ref.watch(stdoutReportProvider);
     reporter.refresh();
     final files = c.events?.map((e) => e.path).toSet() ?? {};
     final fileContents = {

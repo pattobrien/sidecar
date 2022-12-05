@@ -12,7 +12,6 @@ import '../services/active_project_service.dart';
 import '../services/entrypoint_builder_service.dart';
 import '../utils/analysis_context_utilities.dart';
 import '../utils/uri_ext.dart';
-import 'message_providers.dart';
 import 'server_providers.dart';
 import 'starters/server_starter.dart';
 
@@ -67,13 +66,13 @@ class SidecarServer {
   Stream<Object> get _stream => _controller.stream;
 
   Stream<ResponseMessage> get _responses =>
-      _ref.read(analyzerResponseStreamProvider(this).stream);
+      _ref.read(_analyzerResponseStreamProvider(this).stream);
 
   Stream<SidecarNotification> get notifications =>
-      _ref.read(analyzerNotificationStreamProvider(this).stream);
+      _ref.read(_analyzerNotificationStreamProvider(this).stream);
 
   Stream<LogRecord> get logs =>
-      _ref.read(analyzerLogStreamProvider(this).stream);
+      _ref.read(_analyzerLogStreamProvider(this).stream);
 
   Stream<LintNotification> get lints => notifications
       .where((e) => e is LintNotification)
@@ -162,4 +161,41 @@ final _contextForFileProvider = Provider.family<AnalysisContext?, AnalyzedFile>(
     final contexts = ref.watch(_runnerContextsProvider);
     return contexts.contextForRoot(file.contextRoot);
   },
+);
+
+final _analyzerMessageStreamProvider =
+    StreamProvider.family<SidecarMessage, SidecarServer>((ref, runner) {
+  final stream = ref.watch(analyzerStreamProvider(runner).stream);
+  return stream.where((event) => event is Map<String, dynamic>).map((event) {
+    final map = event as Map<String, dynamic>;
+    return SidecarMessage.fromJson(map);
+  });
+});
+
+final _analyzerNotificationStreamProvider =
+    StreamProvider.family<SidecarNotification, SidecarServer>(
+  (ref, runner) => ref
+      .watch(_analyzerMessageStreamProvider(runner).stream)
+      .map((event) => event)
+      .where((event) => event is NotificationMessage)
+      .map((event) => (event as NotificationMessage).notification),
+  name: 'analyzerNotificationStreamProvider',
+);
+
+final _analyzerLogStreamProvider =
+    StreamProvider.family<LogRecord, SidecarServer>(
+  (ref, runner) => ref
+      .watch(_analyzerMessageStreamProvider(runner).stream)
+      .where((event) => event is LogMessage)
+      .map((event) => (event as LogMessage).record),
+  name: 'analyzerLogStreamProvider',
+);
+
+final _analyzerResponseStreamProvider =
+    StreamProvider.family<ResponseMessage, SidecarServer>(
+  (ref, runner) => ref
+      .watch(_analyzerMessageStreamProvider(runner).stream)
+      .where((event) => event is ResponseMessage)
+      .map((event) => event as ResponseMessage),
+  name: 'analyzerResponseStreamProvider',
 );
