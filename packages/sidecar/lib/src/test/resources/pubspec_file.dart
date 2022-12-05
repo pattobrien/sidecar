@@ -7,5 +7,3 @@ environment:
 dependencies:
   analyzer: ^4.2.0
 ''';
-
-const pubspecFilePath = 'pubspec.yaml';
