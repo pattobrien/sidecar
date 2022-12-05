@@ -9,7 +9,7 @@ part of 'rule_code.dart';
 _$LintCode _$$LintCodeFromJson(Map json) => _$LintCode(
       json['id'] as String,
       package: json['package'] as String,
-      url: json['url'] == null ? null : Uri.parse(json['url'] as String),
+      url: json['url'] as String?,
       $type: json['runtimeType'] as String?,
     );
 
@@ -25,7 +25,7 @@ Map<String, dynamic> _$$LintCodeToJson(_$LintCode instance) {
     }
   }
 
-  writeNotNull('url', instance.url?.toString());
+  writeNotNull('url', instance.url);
   val['runtimeType'] = instance.$type;
   return val;
 }
@@ -33,7 +33,7 @@ Map<String, dynamic> _$$LintCodeToJson(_$LintCode instance) {
 _$AssistCode _$$AssistCodeFromJson(Map json) => _$AssistCode(
       json['id'] as String,
       package: json['package'] as String,
-      url: json['url'] == null ? null : Uri.parse(json['url'] as String),
+      url: json['url'] as String?,
       $type: json['runtimeType'] as String?,
     );
 
@@ -49,7 +49,7 @@ Map<String, dynamic> _$$AssistCodeToJson(_$AssistCode instance) {
     }
   }
 
-  writeNotNull('url', instance.url?.toString());
+  writeNotNull('url', instance.url);
   val['runtimeType'] = instance.$type;
   return val;
 }
