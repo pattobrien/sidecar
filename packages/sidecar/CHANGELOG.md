@@ -1,3 +1,7 @@
+## 0.1.0-dev.16
+
+- docs: Updated Readme documents and links to how-to guides
+
 ## 0.1.0-dev.15
 
 - breaking: RuleCode url changed from Uri to String
