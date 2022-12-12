@@ -1,9 +1,15 @@
 
-# Ecosystem Packages
+# Ecosystem Packages (WIP)
 
-Because an instance of Sidecar Analyzer is generated using the ```package_config.json``` of the Target package of which it will analyze, we are able to rely on ```pub``` to handle all dependency versioning. 
+## Opportunity 1: Dependency UX
 
-However, one of the biggest (WIP) problems is that the analyzer runs via ```dart``` executables (i.e. no Flutter dependence), and therefore certain Flutter-specific libraries are unable to resolve, such as the ```dart:ui``` package.
+The easiest way to interact with dependencies is to import them directly into your rule code and use types or elements of that package directly.
+
+## Problem: Resolving Flutter dependencies
+
+TODO
+
+One of the remaining architecture questions is that the analyzer is intended to run via ```dart``` executables (i.e. no Flutter dependence), making it rather difficult to write rules that directly import Flutter-based packages. In the current state of Sidecar, if you were to import ```flutter/material.dart``` into your Rule Package, the analyzer would be unable to resolve dependencies due to the absence of the ```dart:ui``` package from the dart-sdk.
 
 There are two possible solutions that can solve this, each with their own pros and cons. 
 
@@ -58,9 +64,13 @@ Though the Analyzer breaks when importing a flutter file, ```flutter_analyzer_ut
 
 ### Proposal 2: Runtime-Package (WIP)
 
-It may be possible to handle the above logic during runtime.
+It may be possible to handle the above logic during runtime, but it would require the following:
 
-- TODO: what would this look like
+- Reflecting the package in question (via ```package:reflectable``` or something similar)
+- Access to the Flutter-SDK in order to resolve packages like ```dart:ui```
+
+
+TODO: what would this look like
 
 ## Concerns
 

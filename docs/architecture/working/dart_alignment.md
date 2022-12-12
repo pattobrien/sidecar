@@ -2,7 +2,7 @@
 
 The best way to make Sidecar sustainable to maintain is by aligning with Dart-official technologies, including:
 
-- Depending on Dart-official packages
+- Reducing the amount of dependencies and preferring to only use Dart-official packages
 - Dart official APIs (e.g. ```package:analyzer```, ```package:source_span```, ```package:file```)
 - Dart SDK tools (like pub)
 

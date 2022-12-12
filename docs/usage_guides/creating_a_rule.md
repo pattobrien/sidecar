@@ -2,6 +2,8 @@
 
 # Creating a Lint or QuickAssist Rule <a name="rule-package-usage"></a>
 
+> Before creating a rule, it may be helpful to understand topics like AST, Elements, Types, etc. - which can be found in the [analyzer guides](analyzer_guides.md).
+
 Below is an example of a Lint rule which highlights any string or string variable referenced from a Text widget.
 
 ```dart
