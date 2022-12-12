@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
+import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
+import 'package:cli_util/cli_util.dart';
+import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -36,18 +40,25 @@ class SidecarServer {
       _runnerContainer.read(_contextForFileProvider(file));
 
   void _setContexts([List<Uri>? roots]) {
+    final activeProjectService = _ref.read(activeProjectServiceProvider);
+    final dartSdk = activeProjectService.getDartSdkPath(activePackage.root);
+
     if (roots == null) {
       final packagePaths = [activePackage.root.pathNoTrailingSlash];
-      final contexts = AnalysisContextCollection(includedPaths: packagePaths)
+
+      final contexts = AnalysisContextCollectionImpl(
+              includedPaths: packagePaths, sdkPath: dartSdk)
           .contexts
-          .where((context) => activePackage.packageConfig.packages
-              .any((dep) => dep.root == context.contextRoot.root.toUri()))
+          .where((context) => activePackage.packageConfig.packages.any(
+                (dep) => dep.root == context.contextRoot.root.toUri(),
+              ))
           .toList();
       _runnerContainer.read(_runnerContextsProvider.notifier).state = contexts;
       // allContexts.addAll(contexts);
     } else {
-      final contexts = AnalysisContextCollection(
-              includedPaths: roots.map((e) => e.pathNoTrailingSlash).toList())
+      final contexts = AnalysisContextCollectionImpl(
+              includedPaths: roots.map((e) => e.pathNoTrailingSlash).toList(),
+              sdkPath: dartSdk)
           .contexts
           .where((context) => activePackage.packageConfig.packages
               .any((dep) => dep.root == context.contextRoot.root.toUri()))

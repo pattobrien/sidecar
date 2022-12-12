@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/file_system.dart';
+// ignore: implementation_imports
+import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
+import 'package:cli_util/cli_util.dart' as util;
 import 'package:collection/collection.dart';
 import 'package:package_config/package_config.dart';
 import 'package:path/path.dart' as p;
@@ -45,10 +49,42 @@ class ActiveProjectService {
 
   ActivePackage? getActivePackageFromUri(Uri root) {
     final path = root.pathNoTrailingSlash;
-    final collection = AnalysisContextCollection(
-        includedPaths: [path], resourceProvider: resourceProvider);
+    final dartSdk = getDartSdkPath(root);
+    // print('DART SDK: $dartSdk');
+    // final sdkSummaryPath =
+    //     p.join(Directory.current.path, kDartTool, 'sidecar', 'sdk.dill');
+    final collection = AnalysisContextCollectionImpl(
+      includedPaths: [path],
+      resourceProvider: resourceProvider,
+      sdkPath: dartSdk,
+      // sdkSummaryPath: sdkSummaryPath,
+    );
     final rootContext = collection.contextFor(path);
     return getActivePackageFromContext(rootContext);
+  }
+
+  Uri? getFlutterSdk(Uri root) {
+    final packageConfig = getPackageConfig(root);
+    final flutterPackage = packageConfig.packages
+        .firstWhereOrNull((package) => package.name == 'flutter')
+        ?.root;
+    if (flutterPackage == null) return null;
+    final flutterPackageDirectory = Directory.fromUri(flutterPackage);
+    final sdkDirectory = flutterPackageDirectory.parent.parent;
+    return sdkDirectory.uri;
+  }
+
+  String getDartSdkPath(Uri root) {
+    final flutterSdk = getFlutterSdk(root);
+    if (flutterSdk == null) return util.getSdkPath();
+    return flutterSdk.resolve(p.join('bin', 'cache', 'dart-sdk')).path;
+    // var dartSdk = util.getSdkPath();
+    // if (dartSdk.contains('engine')) {
+    //   final dartSdkUri = Uri.parse(dartSdk);
+    //   final dartRoot = resourceProvider.getFile(dartSdkUri.path);
+    //   final actualDart = p.join(dartRoot.parent.parent.path, 'dart-sdk');
+    //   dartSdk = actualDart;
+    // }
   }
 
   ActivePackage? getActivePackageFromContext(
