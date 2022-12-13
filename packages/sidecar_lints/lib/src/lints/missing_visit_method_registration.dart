@@ -6,6 +6,9 @@ import 'constants.dart';
 
 class MissingVisitMethodRegistration extends Rule with Lint {
   static const _id = 'missing_visit_method_registration';
+  static const _message = 'Visit method is not added to registry';
+  static const _correction =
+      'Initialize via NodeRegistry in initializeVisitor method';
 
   @override
   LintCode get code => const LintCode(_id, package: kPackageName, url: kUri);
@@ -17,35 +20,48 @@ class MissingVisitMethodRegistration extends Rule with Lint {
 
   @override
   void visitClassDeclaration(ClassDeclaration node) {
-    if (isSidecarRule(node)) {
-      final properties = node.members.whereType<MethodDeclaration>();
+    if (!isSidecarRule(node)) return;
 
-      final initializerMethod = properties.firstWhereOrNull(
-          (element) => element.name.name == 'initializeVisitor');
-      final visitMethods = properties
-          .where((element) => element.name.name.contains('visit'))
-          .map((e) => e.name.name)
-          .toSet();
-      final initializerBody = initializerMethod?.body;
-      if (initializerBody is BlockFunctionBody) {
-        // if (initializerBody.block.statements is! MethodInvocation) return;
+    final properties = node.members.whereType<MethodDeclaration>();
+
+    final initializerMethod = properties.firstWhereOrNull(
+        (element) => element.name.name == 'initializeVisitor');
+
+    final visitMethods = properties
+        .where((element) => element.name.name.contains('visit'))
+        .map((e) => e.name.name)
+        .toSet();
+
+    final initializerBody = initializerMethod?.body;
+
+    if (initializerBody is BlockFunctionBody) {
+      final statements = initializerBody.block.statements;
+
+      // ReturnStatement or ExpressionStatement
+      for (final statement in statements) {
+        if (statement is ExpressionStatement) {
+          final methodNames = getVisitMethodNames(statement.expression);
+          visitMethods.removeAll(methodNames);
+        }
+
+        if (statement is ReturnStatement && statement.expression != null) {
+          final methodNames = getVisitMethodNames(statement.expression!);
+          visitMethods.removeAll(methodNames);
+        }
       }
+    }
 
-      if (initializerBody is ExpressionFunctionBody) {
-        final methodNames = getVisitMethodNames(initializerBody.expression);
-        visitMethods.removeAll(methodNames);
-      }
-      if (visitMethods.isNotEmpty) {
-        // reportToken(node.name2,
-        //     message:
-        //         'found Rule class; initializer: ${initializerMethod?.body.toSource()} visit methods: $visitMethods');
-        reportToken(node.name2,
-            message: 'found Rule class; visit methods: $visitMethods');
-      }
+    if (initializerBody is ExpressionFunctionBody) {
+      final methodNames = getVisitMethodNames(initializerBody.expression);
+      visitMethods.removeAll(methodNames);
+    }
 
-      // check for expressionFunctionBody or blockFunctionBody
+    if (visitMethods.isEmpty) return;
 
-      // node.members.where((element) => false);
+    for (final methodName in visitMethods) {
+      final method =
+          properties.firstWhere((element) => element.name.name == methodName);
+      reportAstNode(method.name, message: _message, correction: _correction);
     }
   }
 }
