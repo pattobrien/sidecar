@@ -96,3 +96,49 @@ To explore how rule packages are created, take a look at the following rule pack
 ## Additional Notes
 
 > Some of the above API details, like the initializeVisitor method that must be overridden for each Rule, are admittedly verbose; our intention over time is to reduce as much redundancy as possible in order to make rule creation as straightforward as possible. If you have any feedback for how you'd like the APIs to look, we encourage you to open a Github issue.
+
+
+## Debugging Lints
+
+> NOTE: debugging is currently a WIP and only enabled for lint rules
+
+Debug Mode is useful for interacting with the IDE debugger and developing using hot reload.
+
+In order to debug lint or quick assist rules as you write them:
+
+1. Add your Rule Package as a dependency to a new or existing Dart/Flutter app or package, and follow all of the other setup requirements in the [usage guide](using_rules_in_project.md). 
+
+  - if you're creating rules to analyze a specific Dart or Flutter app, you can simply use that app as your debug target package
+  - if you're creating rules to publish on ```pub.dev```, it would make most sense to create an example app at the package root, and use that example to test and debug your rules
+
+2. If all was set up properly, you should see generated Sidecar files in the ```{target_root}/.dart_tool/sidecar/``` directory. In order to run Sidecar in debug mode, launch your debugger from the ```debug.dart``` file from within that directory.
+
+For example, in VSCode, add the following content to the file ```{workspace_root}/.vscode/launch.json```:
+
+```json
+{ 
+  [
+    {
+      // change this name to match your package name
+      "name": "Rule Debugger (my_rule_package)",
+      // swap the below path for the path of the app you wish to analyze
+      "program": "packages/sidecar_lints/example/.dart_tool/sidecar/debug.dart", 
+      "request": "launch",
+      "type": "dart",
+      "args": [
+          "--enable-vm-service",
+          "--debug",
+      ],
+    },
+  ],
+}
+```
+
+You should now see this debug option in the 'Run and Debug' menu in VSCode:
+
+<img src="run_and_debug_option.png" alt="VSCode run and debug option" width="500"/>
+
+
+You can now debug your lint rules using breakpoints or any other debug feature included with the IDE's debugger. 
+
+Additionally, every time you make a modification to a Target File under analysis, sidecar will re-compute lint results.

@@ -1,7 +1,7 @@
 
 # Using Sidecar within a Dart or Flutter Project  <a name="development-usage"></a>
 
-There are 3 modes which Sidecar can be run in: server, cli, or debug (WIP).
+There are 2 modes which Sidecar can be run in: IDE Server or Cli mode.
 ## IDE Server Mode <a name="server-usage"></a>
 
 In Server mode, Sidecar boots up using the ```analyzer_plugin``` APIs created by the Dart team. To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
@@ -50,7 +50,3 @@ sidecar analyze
 ```
 
 > NOTE: If you have a particular CLI use case in mind and would like to give feedback, feel free to reach out on Github.
-
-## Debug Mode (Work in Progress) <a name="debug-usage"></a>
-
-Debug Mode comes equipped with IDE debugger integration and hot reload, which is helpful for when you're developing your own rules. Currently, this functionality is a work-in-progress.
