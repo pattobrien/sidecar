@@ -9,7 +9,7 @@ class ExampleLint extends Rule with Lint {
 
   @override
   void initializeVisitor(NodeRegistry registry) =>
-      registry.addAdjacentStrings(this);
+      registry..addAdjacentStrings(this);
 
   @override
   void visitAdjacentStrings(AdjacentStrings node) {

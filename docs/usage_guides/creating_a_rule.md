@@ -41,7 +41,9 @@ class HardcodedTextString extends Rule with Lint {
 
 ## Rule Requirements
 
-The following are requirements for creating Rules:
+The following are requirements for creating Rules that are discoverable by the Sidecar analyzer:
+
+> NOTE: the package ```sidecar_lints``` can be used to enforce the below rules. See the [sidecar_lints](#sidecar_lints) section below for setup instructions.
 
 
 ### Rule Base Class
@@ -142,3 +144,21 @@ You should now see this debug option in the 'Run and Debug' menu in VSCode:
 You can now debug your lint rules using breakpoints or any other debug feature included with the IDE's debugger. 
 
 Additionally, every time you make a modification to a Target File under analysis, sidecar will re-compute lint results.
+
+
+## Enabling sidecar_lints to assist with Rule creation <a name="sidecar_lints"></a>
+
+Rather than relying on memory to follow all of the above rule requirements, the package [sidecar_lints](https://pub.dev/packages/sidecar_lints) will highlight any issues with your Rule definitions. To enable this package, follow the standard [usage guide](using_rules_in_project.md) for your rule package and in your ```sidecar.yaml``` file declare the rules avilable from the package:
+
+```yaml
+# sidecar.yaml at root of my_rule_package
+includes:
+  - "lib/**/*.dart"
+
+lints:
+  sidecar_lints:
+    rules:
+      missing_visit_method_registration:
+      rule_not_declared:
+
+```
