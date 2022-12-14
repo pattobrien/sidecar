@@ -1,6 +1,4 @@
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:collection/collection.dart';
-import 'package:sidecar/sidecar.dart';
 
 Set<String> getVisitMethodNames(Expression expression) {
   if (expression is MethodInvocation) {

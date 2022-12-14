@@ -6,4 +6,4 @@ linter:
 
 analyzer:
   plugins:
-    - sidecar
+    # - sidecar
