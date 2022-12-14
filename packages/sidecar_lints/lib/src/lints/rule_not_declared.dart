@@ -1,6 +1,4 @@
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/dart/ast/syntactic_entity.dart';
-import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:collection/collection.dart';
 import 'package:pubspec/pubspec.dart';
@@ -13,10 +11,14 @@ import '../utils.dart';
 
 class RuleNotDeclared extends Rule with Lint, QuickFix {
   static const _id = 'rule_not_declared';
+
   static const _message = 'Rule is not declared in Pubspec';
   static const _idMessage = 'Rule id does not match Rule class name.';
   static const _packageMessage =
       'Package id does not match package name from pubspec.yaml.';
+
+  @override
+  LintSeverity get defaultSeverity => LintSeverity.warning;
 
   @override
   LintCode get code => const LintCode(_id, package: kPackageName, url: kUri);

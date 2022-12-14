@@ -19,3 +19,4 @@ dev_dependencies:
 sidecar:
   lints:
     - example_lint
+    - example_lint_with_function_block_with_return
