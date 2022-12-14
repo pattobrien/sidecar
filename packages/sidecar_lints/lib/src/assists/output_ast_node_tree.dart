@@ -1,10 +1,8 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
 import 'package:sidecar/sidecar.dart';
-// ignore: implementation_imports
-import 'package:sidecar/src/protocol/analyzer_plugin_exts/source_exts.dart';
 
-import 'constants.dart';
+import '../constants.dart';
 
 class OutputAstNodeTree extends Rule with QuickAssist {
   @override
@@ -27,7 +25,7 @@ class OutputAstNodeTree extends Rule with QuickAssist {
   // }
 
   @override
-  void visitStringLiteral(StringLiteral node) {
+  void visitSimpleStringLiteral(StringLiteral node) {
     reportAssistForNode(
       node,
       editsComputer: () => nodeChangeComputer(node),

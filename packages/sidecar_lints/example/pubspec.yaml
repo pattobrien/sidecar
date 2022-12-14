@@ -15,3 +15,7 @@ dev_dependencies:
   lints: ^2.0.0
   sidecar_lints:
     path: /Users/pattobrien/Development/sidecar/packages/sidecar_lints/
+
+sidecar:
+  lints:
+    - example_lint

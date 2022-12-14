@@ -1,9 +1,8 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
 import 'package:sidecar/sidecar.dart';
-import 'package:sidecar/src/protocol/analyzer_plugin_exts/source_exts.dart';
 
-import 'constants.dart';
+import '../constants.dart';
 
 class OutputSourceSpan extends Rule with QuickAssist {
   @override

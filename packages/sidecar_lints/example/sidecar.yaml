@@ -6,6 +6,8 @@ lints:
     rules:
       missing_visit_method_registration:
         severity: warning
+      rule_not_declared:
+        severity: warning
 
 assists:
   sidecar_lints:

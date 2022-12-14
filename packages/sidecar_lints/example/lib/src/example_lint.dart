@@ -75,7 +75,7 @@ class ExampleLintWithFunctionBlock extends Rule with Lint {
 }
 
 class ExampleLintWithFunctionBlockWithReturn extends Rule with Lint {
-  static const _id = 'example_lint_with_cascade';
+  static const _id = 'example_lint_with_function_block_with_return';
 
   @override
   LintCode get code => LintCode(_id, package: 'example');
