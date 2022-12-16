@@ -1,0 +1,9 @@
+{
+	"image": "cirrusci/flutter:3.0.5",
+	"forwardPorts": [
+		3000
+	],
+	"extensions": [
+		"dart-code.flutter"
+	]
+}
