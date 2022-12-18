@@ -1,6 +1,7 @@
 name: sidecar_package_utilities
-description: Utilities for creating Sidecar packages.
-version: 0.1.0-dev.5
+description: >
+  Type checkers and other utilities for creating Sidecar rule packages.
+version: 0.1.0-dev.6
 repository: https://www.github.com/pattobrien/sidecar
 homepage: https://www.github.com/pattobrien/sidecar
 issue_tracker: https://github.com/pattobrien/sidecar/issues

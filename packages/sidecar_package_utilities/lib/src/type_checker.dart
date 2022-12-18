@@ -42,11 +42,17 @@ abstract class TypeChecker {
   /// Create a new [TypeChecker] backed by a static [type].
   const factory TypeChecker.fromStatic(DartType type) = _LibraryTypeChecker;
 
-  /// Create a new [TypeChecker]
+  /// Create a new [TypeChecker] from a type name and respective package name
   const factory TypeChecker.fromName(
     String name, {
     required String packageName,
   }) = _NamedChecker;
+
+  /// Create a new [TypeChecker] for a ```dart``` package type.
+  const factory TypeChecker.fromDartType(
+    String name, {
+    required String dartPackage,
+  }) = _DartNamedChecker;
 
   /// Create a new [TypeChecker] backed by a library [url].
   ///
@@ -347,6 +353,42 @@ class _NamedChecker extends TypeChecker {
 
   @override
   String toString() => '$packageName#$_name';
+}
+
+@immutable
+class _DartNamedChecker extends TypeChecker {
+  const _DartNamedChecker(
+    this._name, {
+    required this.dartPackage,
+  }) : super._();
+
+  final String _name;
+  final String dartPackage;
+
+  @override
+  bool isExactly(Element? element) {
+    if (element == null) return false;
+    if (element.name != _name) return false;
+
+    final elementUri = element.librarySource?.uri;
+
+    return elementUri != null &&
+        elementUri.scheme == 'dart' &&
+        elementUri.pathSegments.first == dartPackage;
+  }
+
+  @override
+  bool operator ==(Object o) {
+    return o is _NamedChecker &&
+        o._name == _name &&
+        o.packageName == dartPackage;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, _name, dartPackage);
+
+  @override
+  String toString() => 'dart:$dartPackage#$_name';
 }
 
 // // Checks a runtime type against a static type.
