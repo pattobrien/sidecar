@@ -13,10 +13,12 @@ dependencies:
   analyzer: ^4.7.0
   analyzer_plugin: ^0.11.1
   collection: ^1.16.0
+  glob: ^2.1.1
+  path: ^1.8.0
   pubspec: ^2.3.0
   recase: ^4.1.0
   sidecar: ^0.1.0-dev.15
-  source_span: ^1.9.1
+  source_span: ^1.8.2
   yaml: ^3.1.1
 
 dev_dependencies:
@@ -27,6 +29,7 @@ sidecar:
   lints:
     - missing_visit_method_registration
     - rule_not_declared
+    - rule_is_not_accessible
   assists:
     - output_ast_node_tree
     - output_source_span

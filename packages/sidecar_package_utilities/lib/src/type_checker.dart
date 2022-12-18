@@ -51,7 +51,7 @@ abstract class TypeChecker {
   /// Create a new [TypeChecker] for a ```dart``` package type.
   const factory TypeChecker.fromDartType(
     String name, {
-    required String dartPackage,
+    required String package,
   }) = _DartNamedChecker;
 
   /// Create a new [TypeChecker] backed by a library [url].
@@ -359,11 +359,11 @@ class _NamedChecker extends TypeChecker {
 class _DartNamedChecker extends TypeChecker {
   const _DartNamedChecker(
     this._name, {
-    required this.dartPackage,
+    required this.package,
   }) : super._();
 
   final String _name;
-  final String dartPackage;
+  final String package;
 
   @override
   bool isExactly(Element? element) {
@@ -374,21 +374,19 @@ class _DartNamedChecker extends TypeChecker {
 
     return elementUri != null &&
         elementUri.scheme == 'dart' &&
-        elementUri.pathSegments.first == dartPackage;
+        elementUri.pathSegments.first == package;
   }
 
   @override
   bool operator ==(Object o) {
-    return o is _NamedChecker &&
-        o._name == _name &&
-        o.packageName == dartPackage;
+    return o is _NamedChecker && o._name == _name && o.packageName == package;
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, _name, dartPackage);
+  int get hashCode => Object.hash(runtimeType, _name, package);
 
   @override
-  String toString() => 'dart:$dartPackage#$_name';
+  String toString() => 'dart:$package#$_name';
 }
 
 // // Checks a runtime type against a static type.

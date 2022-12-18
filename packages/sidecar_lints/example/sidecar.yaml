@@ -1,11 +1,12 @@
 includes:
-  - "lib/**/**.dart"
+  - "lib/**.dart"
 
 lints:
   sidecar_lints:
     rules:
       missing_visit_method_registration:
       rule_not_declared:
+      rule_is_not_accessible:
 
 assists:
   sidecar_lints:
