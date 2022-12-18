@@ -1,3 +1,7 @@
+## 0.1.0-dev.7
+
+- fix: Renamed Dart checker API
+
 ## 0.1.0-dev.6
 
 - feat: Dart lib type checker
