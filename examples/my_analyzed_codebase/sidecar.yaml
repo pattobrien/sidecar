@@ -6,6 +6,7 @@ lints:
   intl_lints:
     rules:
       hardcoded_text_string:
+      # avoid_string_literal:
 
   dart_lints:
     rules:

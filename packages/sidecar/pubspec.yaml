@@ -1,6 +1,6 @@
 name: sidecar
 description: An analyzer tool that provides more control over your IDE and developer experience.
-version: 0.1.0-dev.16
+version: 0.1.0-dev.18
 repository: https://github.com/pattobrien/sidecar/
 homepage: https://github.com/pattobrien/sidecar/
 issue_tracker: https://github.com/pattobrien/sidecar/issues
@@ -32,6 +32,7 @@ dependencies:
   recase: ^4.0.0 # non-dart official package
   riverpod: ^2.0.0 # non-dart official package
   sidecar_annotations: ^0.1.0-dev.1
+  sidecar_package_utilities: ^0.1.0-dev.5
   source_span: ^1.8.0
   uuid: ^3.0.6 # non-dart official package
   watcher: ^1.0.2

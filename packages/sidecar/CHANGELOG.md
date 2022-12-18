@@ -1,3 +1,13 @@
+## 0.1.0-dev.18
+
+- feat: TypeChecker API removed
+- feat: exporting sidecar_package_utilities
+
+
+## 0.1.0-dev.17
+
+- feat: TypeChecker API exposed
+
 ## 0.1.0-dev.16
 
 - docs: Updated Readme documents and links to how-to guides

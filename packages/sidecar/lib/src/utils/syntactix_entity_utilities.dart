@@ -40,39 +40,6 @@ extension SyntacticEntityX on SyntacticEntity {
     );
   }
 
-  // SourceSpan toSourceSpanFromUnitContext(UnitContext unit) {
-  //   // TODO: integrate endNode functionality here
-
-  //   // final offset = !withCommentOrMetadata && node is AnnotatedNode
-  //   //     ? node.firstTokenAfterCommentAndMetadata.offset
-  //   //     : node.offset;
-  //   // final end = endNode?.end ?? node.end;
-
-  //   // final sourceUrl = Uri.file(unit.path);
-
-  //   final startOffset = offset;
-  //   final endOffset = end;
-
-  //   final startLocation = unit.currentUnit.lineInfo.getLocation(startOffset);
-  //   final endLocation = unit.currentUnit.lineInfo.getLocation(endOffset);
-
-  //   return SourceSpan(
-  //     SourceLocation(
-  //       startOffset,
-  //       sourceUrl: unit.currentUnit.path,
-  //       column: startLocation.columnNumber,
-  //       line: startLocation.lineNumber,
-  //     ),
-  //     SourceLocation(
-  //       endOffset,
-  //       sourceUrl: unit.currentUnit.path,
-  //       column: endLocation.columnNumber,
-  //       line: endLocation.lineNumber,
-  //     ),
-  //     unit.currentUnit.content.substring(startOffset, endOffset),
-  //   );
-  // }
-
   SourceSpan toSourceSpanFromPath(String path, String source) {
     // TODO: integrate endNode functionality here
 
@@ -83,10 +50,6 @@ extension SyntacticEntityX on SyntacticEntity {
 
     final startOffset = offset;
     final endOffset = end;
-    // final len = length;
-    // final sourceLength = source.length;
-    // final startLocation = unit.lineInfo.getLocation(startOffset);
-    // final endLocation = unit.lineInfo.getLocation(endOffset);
 
     return SourceSpan(
       SourceLocation(
