@@ -9,15 +9,21 @@ environment:
 dependencies:
   analyzer: ^4.2.0
   path: ^1.8.0
-  sidecar: ^0.1.0-dev.16
+  sidecar: ^0.1.0-dev.18
 
 dev_dependencies:
   lints: ^2.0.0
-  # sidecar_lints: ^0.1.0-dev.1
-  sidecar_lints:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar_lints/
+  sidecar_lints: ^0.1.0-dev.1
+  # sidecar_lints:
+  #   path: /Users/pattobrien/Development/sidecar/packages/sidecar_lints/
 
 sidecar:
   lints:
     - example_lint
     - example_lint_with_function_block_with_return
+
+dependency_overrides:
+  sidecar_lints:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar_lints/
+  sidecar:
+    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
