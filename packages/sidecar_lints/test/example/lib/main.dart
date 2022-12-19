@@ -1,25 +1,3 @@
-import 'package:sidecar/src/test/utilities/expected_lint.dart';
-import 'package:sidecar/src/test/utilities/utilities.dart';
-import 'package:sidecar_lints/sidecar_lints.dart';
-import 'package:test/test.dart';
-
-void main() {
-  group('A group of tests', () {
-    //
-    test('First Test', () async {
-      final rule = MissingVisitMethodRegistration();
-      await testFile(
-        rule,
-        content,
-        [
-          ExpectedLint(rule.code, 1, 12),
-        ],
-      );
-    });
-  });
-}
-
-const content = '''
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:sidecar/sidecar.dart';
 
@@ -44,4 +22,3 @@ class ExampleLint extends Rule with Lint {
   }
 }
 
-''';

@@ -21,6 +21,29 @@ class SidecarSpec {
 
   factory SidecarSpec.fromJson(Map json) => _$SidecarSpecFromJson(json);
 
+  factory SidecarSpec.fromRuleCodes(
+    List<RuleCode> codes, {
+    List<Glob>? includes,
+  }) {
+    final lintPackages =
+        codes.whereType<LintCode>().map((e) => e.package).toSet();
+    final assistPackages =
+        codes.whereType<AssistCode>().map((e) => e.package).toSet();
+    return SidecarSpec(
+      includes: includes ?? [Glob('lib/**.dart')],
+      lints: {
+        for (final lintPackage in lintPackages)
+          lintPackage: LintPackageOptions(
+            rules: {
+              for (final lint
+                  in codes.where((code) => code.package == lintPackage))
+                lint.id: const LintOptions(),
+            },
+          ),
+      },
+    );
+  }
+
   Map<String, dynamic> toJson() => _$SidecarSpecToJson(this);
 
   static final defaultIncludes = {Glob('lib/**.dart'), Glob('bin/**.dart')};

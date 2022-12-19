@@ -1,4 +1,5 @@
 import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/src/test/utilities/expected_lint.dart';
 import 'package:test/test.dart';
 
 void expectLints(
@@ -40,16 +41,3 @@ ExpectedLint lint(
   LintSeverity? severity,
 }) =>
     ExpectedLint(code, offset, length, severity: severity);
-
-class ExpectedLint {
-  ExpectedLint(
-    this.code,
-    this.offset,
-    this.length, {
-    this.severity,
-  });
-  final RuleCode code;
-  final int offset;
-  final int length;
-  final LintSeverity? severity;
-}
