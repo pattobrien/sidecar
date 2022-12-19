@@ -10,7 +10,7 @@ import '../../configurations/configurations.dart';
 import '../../protocol/models/models.dart';
 import 'expected_lint.dart';
 
-Future<void> testFile(
+Future<void> testLint(
   Rule rule,
   String content,
   List<ExpectedLint> expectedResults, {
@@ -34,10 +34,10 @@ Future<void> testFile(
 
   final results = visitor.lintResults.map((e) => e.toExpectedLint()).toList();
 
-  for (final expectedResult in expectedResults) {
-    // use anyElement or unorderedEquals from package:matcher
-    expect(results, anyElement(expectedResult));
-  }
+  // for (final expectedResult in expectedResults) {
+  // use anyElement or unorderedEquals from package:matcher
+  expect(results, unorderedEquals(expectedResults));
+  // }
 }
 
 extension _ on LintResult {

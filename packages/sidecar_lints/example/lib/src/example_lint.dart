@@ -67,11 +67,10 @@ class ExampleLintWithFunctionBlock extends Rule with Lint {
     super.visitAnnotation(node);
   }
 
-  // @override
-  // void visitArgumentList(ArgumentList node) {
-  //   // TODO: implement visitArgumentList
-  //   super.visitArgumentList(node);
-  // }
+  @override
+  void visitArgumentList(ArgumentList node) {
+    super.visitArgumentList(node);
+  }
 }
 
 class ExampleLintWithFunctionBlockWithReturn extends Rule with Lint {
