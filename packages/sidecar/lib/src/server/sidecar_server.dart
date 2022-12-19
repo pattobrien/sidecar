@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
+import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:cli_util/cli_util.dart';
 import 'package:path/path.dart';
@@ -15,6 +16,7 @@ import '../protocol/protocol.dart';
 import '../services/active_project_service.dart';
 import '../services/entrypoint_builder_service.dart';
 import '../utils/analysis_context_utilities.dart';
+import '../utils/get_sdk.dart';
 import '../utils/uri_ext.dart';
 import 'server_providers.dart';
 import 'starters/server_starter.dart';
@@ -40,8 +42,8 @@ class SidecarServer {
       _runnerContainer.read(_contextForFileProvider(file));
 
   void _setContexts([List<Uri>? roots]) {
-    final activeProjectService = _ref.read(activeProjectServiceProvider);
-    final dartSdk = activeProjectService.getDartSdkPath(activePackage.root);
+    final dartSdk = getDartSdkPathForPackage(
+        activePackage.root, PhysicalResourceProvider.INSTANCE);
 
     if (roots == null) {
       final packagePaths = [activePackage.root.pathNoTrailingSlash];

@@ -8,7 +8,7 @@ void main() {
     final rule = MissingVisitMethodRegistration();
     test('missing method', () async {
       await testLint(
-          rule, contentMissingBasic, [ExpectedLint(rule.code, 442, 15)]);
+          rule, contentMissingBasic, [ExpectedLint(rule.code, 441, 15)]);
     });
 
     test('missing method cascade', () async {
