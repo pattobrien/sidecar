@@ -5,16 +5,18 @@ import 'package:test/scaffolding.dart';
 
 void main() {
   final rule = MissingVisitMethodRegistration();
-  group('${rule.code.id}:', () {
-    ruleTest('missing method', rule, contentMissingBasic, [
+  group('missing_visit_method_registration:', () {
+    setUpRules([rule]);
+
+    ruleTest('missing method', contentMissingBasic, [
       ExpectedText('visitAnnotation'),
     ]);
 
-    ruleTest('missing method cascade', rule, contentMissingMethodCascade, [
+    ruleTest('missing method cascade', contentMissingMethodCascade, [
       ExpectedText('visitArgumentList'),
     ]);
 
-    ruleTest('no missing methods', rule, contentNoMissingMethod, []);
+    ruleTest('no missing methods', contentNoMissingMethod, []);
   });
 }
 
