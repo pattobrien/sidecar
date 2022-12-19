@@ -8,13 +8,7 @@ void main() {
     //
     test('First Test', () async {
       final rule = MissingVisitMethodRegistration();
-      await testFile(
-        rule,
-        content,
-        [
-          ExpectedLint(rule.code, 1, 12),
-        ],
-      );
+      await testFile(rule, content, [ExpectedLint(rule.code, 469, 15)]);
     });
   });
 }
