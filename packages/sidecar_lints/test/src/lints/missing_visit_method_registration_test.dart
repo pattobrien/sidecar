@@ -1,25 +1,20 @@
 import 'package:sidecar/src/test/utilities/expected_lint.dart';
 import 'package:sidecar/src/test/utilities/utilities.dart';
 import 'package:sidecar_lints/sidecar_lints.dart';
-import 'package:test/test.dart';
+import 'package:test/scaffolding.dart';
 
 void main() {
-  group('missing_visit_method_registration:', () {
-    final rule = MissingVisitMethodRegistration();
-    test('missing method', () async {
-      await testLint(
-          rule, contentMissingBasic, [ExpectedLint(rule.code, 441, 15)]);
-    });
+  final rule = MissingVisitMethodRegistration();
+  group('${rule.code.id}:', () {
+    ruleTest('missing method', rule, contentMissingBasic, [
+      ExpectedText('visitAnnotation'),
+    ]);
 
-    test('missing method cascade', () async {
-      await testLint(rule, contentMissingMethodCascade, [
-        ExpectedLint(rule.code, 571, 17),
-      ]);
-    });
+    ruleTest('missing method cascade', rule, contentMissingMethodCascade, [
+      ExpectedText('visitArgumentList'),
+    ]);
 
-    test('no missing methods', () async {
-      await testLint(rule, contentNoMissingMethod, []);
-    });
+    ruleTest('no missing methods', rule, contentNoMissingMethod, []);
   });
 }
 

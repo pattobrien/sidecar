@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_asserts_with_message
+
 import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
@@ -5,8 +7,10 @@ import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
-import 'package:test/test.dart';
+import 'package:test/scaffolding.dart';
+import 'package:test/test.dart' as test;
 
 import '../../../rules/rules.dart';
 import '../../analyzer/ast/registered_rule_visitor.dart';
@@ -15,47 +19,78 @@ import '../../protocol/models/models.dart';
 import '../../utils/get_sdk.dart';
 import 'expected_lint.dart';
 
-Future<void> testLint(
+@isTest
+Future<void> ruleTest(
+  String description,
   Rule rule,
   String content,
-  List<ExpectedLint> expectedResults, {
+  List<ExpectedText> expectedResults, {
   String relativePath = '.dart_tool/sidecar_test/lib/main.dart',
 }) async {
-  final resourceProvider = PhysicalResourceProvider.INSTANCE;
-  final sidecarSpec = SidecarSpec.fromRuleCodes([rule.code]);
+  assert(expectedResults.every((e) => e.length == null) ||
+      expectedResults.every((e) => e.length != null));
+  assert(expectedResults.every((e) => e.offset == null) ||
+      expectedResults.every((e) => e.offset != null));
 
-  final registry = NodeRegistry({rule});
-  final visitor = RegisteredRuleVisitor(registry);
+  test.test(description, () async {
+    final resourceProvider = PhysicalResourceProvider.INSTANCE;
+    final sidecarSpec = SidecarSpec.fromRuleCodes([rule.code]);
 
-  final path = p.absolute(relativePath);
-  final file = resourceProvider.getFile(path);
-  if (!file.exists) file.parent.create();
+    final registry = NodeRegistry({rule});
+    final visitor = RegisteredRuleVisitor(registry);
 
-  file.writeAsStringSync(content);
-  // tearDown(file.delete);
-  // tearDown(file.parent.delete);
-  final f = await resolveFile2(
-      path: path,
-      resourceProvider: resourceProvider,
-      packageRoot: Directory.current.uri);
-  final resolvedUnit = f as ResolvedUnitResult;
+    final path = p.absolute(relativePath);
+    final file = resourceProvider.getFile(path);
+    if (!file.exists) file.parent.create();
 
-  rule.setUnitContext(resolvedUnit);
-  rule.setConfig(sidecarSpec: sidecarSpec);
+    file.writeAsStringSync(content);
+    final f = await resolveFile2(
+        path: path,
+        resourceProvider: resourceProvider,
+        packageRoot: Directory.current.uri);
+    final resolvedUnit = f as ResolvedUnitResult;
 
-  resolvedUnit.unit.accept(visitor);
+    rule.setUnitContext(resolvedUnit);
+    rule.setConfig(sidecarSpec: sidecarSpec);
 
-  final results = visitor.lintResults.map((e) => e.toExpectedLint()).toList();
+    resolvedUnit.unit.accept(visitor);
 
-  // for (final expectedResult in expectedResults) {
-  // use anyElement or unorderedEquals from package:matcher
-  expect(results, unorderedEquals(expectedResults));
-  // }
+    final results = visitor.lintResults.map((e) => e.toExpectedText()).toList();
+    test.expect(results, test.unorderedEquals(expectedResults));
+  });
 }
+
+@isTestGroup
+void ruleTestGroup(Rule rule, dynamic Function() body) {
+  return test.group('${rule.code.id}:', () {
+    // setUpAll(() {});
+    // tearDown(() {});
+    body();
+  });
+}
+
+// test.Matcher expectedResult({
+//   String? expectedText,
+//   String? offset,
+// }) {
+
+//     test.expect(results, test.unorderedEquals(expectedResults));
+// }
 
 extension _ on LintResult {
   ExpectedLint toExpectedLint() =>
       ExpectedLint(rule, span.start.offset, span.length);
+
+  ExpectedText toExpectedText({
+    bool withText = true,
+    bool withOffset = false,
+    bool withLength = false,
+  }) =>
+      ExpectedText(
+        span.text,
+        offset: withOffset ? span.start.offset : null,
+        length: withLength ? span.length : null,
+      );
 }
 
 /// Return the result of resolving the file at the given [path].

@@ -13,11 +13,22 @@ class ExpectedLint with _$ExpectedLint {
     RuleCode code,
     int offset,
     int length,
-    //   {  LintSeverity? severity,
-    // }
   ) = _ExpectedLint;
 
   const ExpectedLint._();
+}
+
+@freezed
+class ExpectedText with _$ExpectedText {
+  factory ExpectedText(
+    String text, {
+    int? offset,
+    int? length,
+    int? startLine,
+    int? startColumn,
+  }) = _ExpectedText;
+
+  const ExpectedText._();
 }
 
 void expectLints(
