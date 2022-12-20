@@ -1,6 +1,16 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
+
+import CodeBlock from '@theme/CodeBlock';
+import main from "!!raw-loader!./snippets/configuration-simple.yaml";
+import analysisOptions from "!!raw-loader!./snippets/analysis_options.yaml";
+import pubspec from "!!raw-loader!./snippets/pubspec.yaml";
+import {
+  trimSnippet,
+  CodeSnippet,
+} from "../../src/components/CodeSnippet";
+
 
 # Initial Setup
 
@@ -10,8 +20,8 @@ There are 2 modes which Sidecar packages can be run within a Dart or Flutter Pro
 
 ### Requirements
 
+- Dart SDK v2.17.0+
 - Supported IDE with Extension for Dart Language Server
-- Dart SDK vX.X.X
 
 ### Setup Instructions
 
@@ -19,33 +29,15 @@ To enable Sidecar to display lints and assist recommendations within your IDE, p
 
 1. Depend on any ```sidecar``` lint packages (e.g. [design_system_lints](https://pub.dev/packages/design_system_lints))
 
+<CodeBlock title="pubspec.yaml" language="yaml">{trimSnippet(pubspec)}</CodeBlock>
+
 2. Create a ```sidecar.yaml``` file at the project's root directory and declare any rules from the package
 
-```yaml
-# sidecar.yaml
-includes:
-  - "bin/**.dart"
-  - "lib/**.dart"
-lints:
-  design_system_lints:
-    rules: 
-      avoid_sized_box_height_width_literals:
-      avoid_text_style_literal:
-      avoid_border_radius_literal:
-      avoid_box_shadow_literal:
-      avoid_edge_insets_literal:
-```
+<CodeBlock title="sidecar.yaml" language="yaml">{trimSnippet(main)}</CodeBlock>
 
 3. Enable the plugin to run by adding ```sidecar``` to the list of plugins in ```analysis_options.yaml```
 
-
-```yaml
-# analysis_options.yaml
-
-analyzer:
-  plugins:
-    - sidecar
-```
+<CodeBlock title="analysis_options.yaml" language="yaml">{trimSnippet(analysisOptions)}</CodeBlock>
 
 After several seconds of start-up (and potentially a restart of your IDE), the lints should begin appearing in your editor.
 

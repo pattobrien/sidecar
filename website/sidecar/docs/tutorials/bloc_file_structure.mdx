@@ -1,0 +1,22 @@
+---
+title: Bloc File Structure
+sidebar_position: 2
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import ruleDefintion from "!!raw-loader!../../../../examples/hello_world_rules/lib/hello_world_rules.dart";
+import example from "!!raw-loader!../../../../examples/hello_world_rules/example/lib/example.dart";
+import pubspec from "!!raw-loader!../../../../examples/hello_world_rules/pubspec.yaml";
+import {
+  trimSnippet,
+  CodeSnippet,
+} from "../../src/components/CodeSnippet";
+
+## Overview
+
+Prevent developers from putting bloc code in UI files.
+
+### Learning Objectives
+
+- Conditional lint rule
+- Inspects path of ResolvedUnitResult

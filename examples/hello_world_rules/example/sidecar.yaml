@@ -1,0 +1,6 @@
+includes:
+  - "lib/**.dart"
+lints:
+  hello_world_rules:
+    rules:
+      hello_world:
