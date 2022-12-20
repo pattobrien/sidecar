@@ -1,0 +1,14 @@
+---
+title: Creating a Rule
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import main from "!!raw-loader!./main.dart";
+import {
+  trimSnippet,
+  CodeSnippet,
+} from "../../src/components/CodeSnippet";
+
+Some imported code:
+
+<CodeBlock language="dart">{trimSnippet(main)}</CodeBlock>
