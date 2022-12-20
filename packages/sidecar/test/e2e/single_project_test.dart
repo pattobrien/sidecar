@@ -4,12 +4,12 @@ import 'package:mockito/mockito.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec.dart';
 import 'package:sidecar/src/test/resources/package_resource.dart';
 import 'package:sidecar/src/test/resources/workspace_resource.dart';
+import 'package:sidecar/src/test/utilities/expected_lint.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
 import '../helpers/example_file_contents.dart';
 import '../helpers/example_lints.dart';
-import '../helpers/expected_lint.dart';
 import '../helpers/test_helpers.mocks.dart';
 import '../helpers/test_starter.dart';
 
