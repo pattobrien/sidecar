@@ -67,6 +67,10 @@ class PackageResource with ResourceMixin {
     print('current directory: ${io.Directory.current.uri.toFilePath()}');
     final thisPackageConfigUri =
         io.Directory.current.uri.resolve(p.join(kDartTool, kPackageConfigJson));
+    print('thisPackageConfigUri: ${thisPackageConfigUri.toFilePath()}');
+    final newFilePath = p.join(
+        io.Directory.current.uri.toFilePath(), kDartTool, kPackageConfigJson);
+    print('new thisPackageConfigUri: $newFilePath');
     final contents = resourceProvider
         .getFile(thisPackageConfigUri.toFilePath())
         .readAsStringSync();
