@@ -10,12 +10,6 @@ export '../src/rules/lint_severity.dart';
 
 /// Base for all Sidecar Rules.
 abstract class Rule extends SimpleAstVisitor<void> with BaseRule {
-  // @override
-  // @mustCallSuper
-  // void visitNode(AstNode node) {
-  //   super.visitNode(node);
-  // }
-
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
@@ -29,6 +23,12 @@ abstract class Rule extends SimpleAstVisitor<void> with BaseRule {
         const DeepCollectionEquality().hash(code),
       );
 }
+
+/// Create a lint.
+abstract class LintRule = Rule with Lint;
+
+/// Create an assist.
+abstract class AssistRule = Rule with QuickAssist;
 
 
 // mixin Configuration on BaseRule {
