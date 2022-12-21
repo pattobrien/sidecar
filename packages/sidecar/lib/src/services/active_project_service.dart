@@ -74,11 +74,10 @@ class ActiveProjectService {
     final packageConfigJson = getPackageConfig(root);
 
     if (pluginUri == null || !isSidecarEnabled || projectSidecarSpec == null) {
-      logger.info(
-          'context at ${root.toFilePath()} is not an active sidecar context.');
+      logger.info('context at ${root.path} is not an active sidecar context.');
       if (!isSidecarEnabled) {
         logger.info(
-            '${root.toFilePath()} does not have sidecar enabled in analysis_options.yaml');
+            '${root.path} does not have sidecar enabled in analysis_options.yaml');
       }
       return null;
     }
@@ -87,8 +86,8 @@ class ActiveProjectService {
 
   Future<bool> createDefaultSidecarYaml(Uri root) async {
     const contents = templateSidecarContent;
-    final uri = Uri.file(p.join(root.toFilePath(), kSidecarYaml));
-    final file = resourceProvider.getFile(uri.path);
+    final uri = Uri.file(p.join(root.path, kSidecarYaml));
+    final file = resourceProvider.getFile(uri.toFilePath());
     if (file.exists) {
       return false;
     } else {
@@ -98,8 +97,7 @@ class ActiveProjectService {
   }
 
   PackageConfig getPackageConfig(Uri root) {
-    final uri =
-        Uri.file(p.join(root.toFilePath(), kDartTool, kPackageConfigJson));
+    final uri = Uri.file(p.join(root.path, kDartTool, kPackageConfigJson));
     final file = resourceProvider.getFile(uri.toFilePath());
     assert(file.exists, 'config file does not exist at path $uri');
     final contents = file.readAsStringSync();
@@ -122,8 +120,9 @@ class ActiveProjectService {
   }
 
   String? _getSidecarFile(Uri root) {
-    final sidecarYamlUri = Uri.file(p.join(root.toFilePath(), kSidecarYaml));
-    final sidecarYamlFile = resourceProvider.getFile(sidecarYamlUri.path);
+    final sidecarYamlUri = Uri.file(p.join(root.path, kSidecarYaml));
+    final sidecarYamlFile =
+        resourceProvider.getFile(sidecarYamlUri.toFilePath());
     if (!sidecarYamlFile.exists) return null;
     return sidecarYamlFile.readAsStringSync();
   }
