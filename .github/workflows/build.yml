@@ -22,12 +22,12 @@ jobs:
     strategy:
       matrix:
         runners:
-          - self-hosted
+          # - self-hosted
           # - ubuntu-latest
           - windows-latest
         flutter-version:
           - "3.0.5"
-          - "3.3.9"
+          # - "3.3.9"
         package_path:
           - packages/sidecar
         # channel:

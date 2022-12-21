@@ -64,6 +64,7 @@ class PackageResource with ResourceMixin {
       newSidecarOptionsFile(rootPath, sidecarYamlContents);
     }
     // _createMainFile();
+    print('current directory: ${io.Directory.current.uri.toFilePath()}');
     final thisPackageConfigUri =
         io.Directory.current.uri.resolve(p.join(kDartTool, kPackageConfigJson));
     final contents = resourceProvider
