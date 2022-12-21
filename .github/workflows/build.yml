@@ -24,13 +24,11 @@ jobs:
         runners:
           - self-hosted
           - ubuntu-latest
+          - windows-latest
         flutter-version:
-          # - "3.0.0"
           - "3.0.5"
-          - "3.3.0"
           - "3.3.9"
         package_path:
-          # - examples/my_analyzed_codebase
           - packages/sidecar
         # channel:
         #   - stable
@@ -39,17 +37,23 @@ jobs:
       - uses: actions/checkout@v3.1.0
         with:
           fetch-depth: 2
+
       - uses: subosito/flutter-action@v2.7.1
         with:
           # channel: ${{ matrix.channel }}
           channel: stable
           flutter-version: ${{ matrix.flutter-version }}
+          cache: true
+
       - name: Add pub cache bin to PATH
         run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+
       - name: Add pub cache to PATH
         run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: flutter pub get
+
       - name: install coverage
         run: dart pub global activate coverage
 
