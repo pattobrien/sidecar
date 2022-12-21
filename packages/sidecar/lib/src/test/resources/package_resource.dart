@@ -65,17 +65,15 @@ class PackageResource with ResourceMixin {
     }
     // _createMainFile();
     print('current directory: ${io.Directory.current.uri.toFilePath()}');
-    final thisPackageConfigUri =
-        io.Directory.current.uri.resolve(p.join(kDartTool, kPackageConfigJson));
-    print('thisPackageConfigUri: ${thisPackageConfigUri.toFilePath()}');
+    // final thisPackageConfigUri =
+    //     io.Directory.current.uri.resolve(p.join(kDartTool, kPackageConfigJson));
+    // print('thisPackageConfigUri: ${thisPackageConfigUri.toFilePath()}');
     final newFilePath = p.join(
         io.Directory.current.uri.toFilePath(), kDartTool, kPackageConfigJson);
     print('new thisPackageConfigUri: $newFilePath');
-    final contents = resourceProvider
-        .getFile(thisPackageConfigUri.toFilePath())
-        .readAsStringSync();
-    final newPackageConfig =
-        PackageConfig.parseString(contents, thisPackageConfigUri);
+    final contents = resourceProvider.getFile(newFilePath).readAsStringSync();
+    final newPackageConfig = PackageConfig.parseString(
+        contents, Uri(scheme: 'file', path: newFilePath));
     // final packageConfig = PackageConfig.empty.addPackage(sidecarPackage);
     // addPackageConfig(packageConfig);
     addPackageConfig(newPackageConfig);
