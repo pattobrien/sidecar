@@ -66,8 +66,9 @@ class PackageResource with ResourceMixin {
     // _createMainFile();
     final thisPackageConfigUri =
         io.Directory.current.uri.resolve(p.join(kDartTool, kPackageConfigJson));
-    final contents =
-        resourceProvider.getFile(thisPackageConfigUri.path).readAsStringSync();
+    final contents = resourceProvider
+        .getFile(thisPackageConfigUri.toFilePath())
+        .readAsStringSync();
     final newPackageConfig =
         PackageConfig.parseString(contents, thisPackageConfigUri);
     // final packageConfig = PackageConfig.empty.addPackage(sidecarPackage);
