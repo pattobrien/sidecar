@@ -39,7 +39,7 @@ Future<WorkspaceResource> createWorkspace({
   final workspace = WorkspaceResource(
       resourceProvider: provider,
       fileSystem: fileSystem,
-      rootPath: rootPath ?? root.path);
+      rootPath: rootPath ?? root.toFilePath());
 
   // addTearDown(() => workspace.delete());
   await workspace.init();

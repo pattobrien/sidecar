@@ -1,11 +1,13 @@
 import 'package:source_span/source_span.dart';
 
 Map<String, dynamic> sourceLocationToJson(SourceLocation location) {
+  // assert(location.sourceUrl?.path.endsWith('/') ?? true,
+  //     'SourceLocation url should not end with backwards slash');
   return <String, dynamic>{
     'offset': location.offset,
     'line': location.line,
     'column': location.column,
-    'sourceUrl': location.sourceUrl?.path,
+    'sourceUrl': location.sourceUrl?.toFilePath(),
   };
 }
 

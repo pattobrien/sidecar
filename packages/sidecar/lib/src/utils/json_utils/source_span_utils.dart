@@ -7,7 +7,7 @@ Map<String, dynamic> sourceSpanToJson(SourceSpan sourceSpan) {
     'start': sourceLocationToJson(sourceSpan.start),
     'end': sourceLocationToJson(sourceSpan.end),
     'text': sourceSpan.text,
-    'sourceUrl': sourceSpan.sourceUrl?.path,
+    'sourceUrl': sourceSpan.sourceUrl?.toFilePath(),
   };
 }
 

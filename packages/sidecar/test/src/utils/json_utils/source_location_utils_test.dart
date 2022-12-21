@@ -9,11 +9,11 @@ void main() {
   group('sourceLocationToJson:', () {
     test('output json', () {
       final location = SourceLocation(10,
-          sourceUrl: Directory.current.path, line: 1, column: 10);
+          sourceUrl: Directory.current.uri, line: 1, column: 10);
       final json = sourceLocationToJson(location);
       expect(json, <String, dynamic>{
         'offset': 10,
-        'sourceUrl': Directory.current.path,
+        'sourceUrl': Directory.current.uri.toFilePath(),
         'line': 1,
         'column': 10,
       });
