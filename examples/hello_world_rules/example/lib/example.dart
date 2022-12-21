@@ -1,3 +1,3 @@
 /* SNIPPET START */
 
-const question = 'Is anyone out there?';
+const question = 'Is there anybody there?';
