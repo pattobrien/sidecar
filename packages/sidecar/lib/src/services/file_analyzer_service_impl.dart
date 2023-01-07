@@ -2,7 +2,6 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/ast/ast.dart';
-import '../protocol/models/data_result.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 
@@ -24,6 +23,7 @@ class FileAnalyzerServiceImpl {
     final mainVisitor = RegisteredRuleVisitor(registry);
     unitResult.unit.accept(mainVisitor);
     final results = mainVisitor.lintResults;
+    mainVisitor.clearResults();
     return results;
   }
 
@@ -40,6 +40,7 @@ class FileAnalyzerServiceImpl {
     final mainVisitor = RegisteredRuleVisitor(registry);
     unitResult.unit.accept(mainVisitor);
     final results = mainVisitor;
+    mainVisitor.clearResults();
     return results.dataResults;
   }
 
@@ -56,6 +57,7 @@ class FileAnalyzerServiceImpl {
     final mainVisitor = RegisteredRuleVisitor(registry);
     unitResult.unit.accept(mainVisitor);
     final results = mainVisitor.assistResults;
+    mainVisitor.clearResults();
     return results;
   }
 

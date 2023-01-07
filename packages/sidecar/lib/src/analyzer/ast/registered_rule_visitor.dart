@@ -22,6 +22,12 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
   Set<LintResult> get lintResults =>
       registry.rules.map((e) => e.lintResults).expand((e) => e).toSet();
 
+  void clearResults() {
+    for (final rule in registry.rules) {
+      rule.clearResults();
+    }
+  }
+
   Set<SingleDataResult<Object>> get dataResults => registry.rules
       .whereType<Data<Object>>()
       .map((e) => e.dataResults)

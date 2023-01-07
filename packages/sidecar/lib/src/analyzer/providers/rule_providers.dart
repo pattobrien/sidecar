@@ -1,7 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../../context/context.dart';
-import '../../../test.dart';
 import '../../protocol/analyzed_file.dart';
 import '../../rules/base_rule.dart';
 import '../../services/rule_initialization_service.dart';
@@ -35,6 +34,13 @@ final _scopedRulesForFileProvider =
       .constructRulesForFile(file, sidecarSpec, constructors)
       .intersection(activeProjectRules);
 
+  // for (final rule in rulesForFile) {
+  //   //TODO: restrict updates to changes with rule/package config changes
+  //   final ruleFile = RuleAnalyzedFile(rule: rule, file: file);
+  //   final context = ref.watch(scopeForRuleProvider(ruleFile));
+  //   rule.setConfig(context: context);
+  // }
+
   logger.fine('_scopedRulesForFileProvider ${rulesForFile.map((e) => e.code)}');
   return rulesForFile;
 });
@@ -45,7 +51,7 @@ final scopeForRuleProvider =
   // TODO: use RuleScope to restrict updates
   // final scope = ruleFile.rule.scope;
   final scopedData = ref.watch(totalDataResultsProvider);
-  return baseContext.copyWith(data: scopedData.value);
+  return baseContext.copyWith(data: scopedData);
 });
 
 final ProviderFamily<Set<Lint>, AnalyzedFile> scopedLintRulesForFileProvider =

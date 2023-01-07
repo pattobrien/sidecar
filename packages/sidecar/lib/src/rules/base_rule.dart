@@ -96,6 +96,12 @@ mixin BaseRule {
   }
 
   @internal
+  void clearResults() {
+    lintResults.clear();
+    assistFilterResults.clear();
+  }
+
+  @internal
   void setUnitContext(
     ResolvedUnitResult unit,
   ) {
@@ -237,6 +243,13 @@ mixin Data<T> on BaseRule {
   DataCode get code;
 
   final dataResults = <SingleDataResult<T>>{};
+
+  @override
+  @internal
+  void clearResults() {
+    dataResults.clear();
+    super.clearResults();
+  }
 
   void reportData(T object) {
     final result = SingleDataResult(code: code, data: object);
