@@ -66,7 +66,11 @@ final lintResultsProvider =
 
   return timedLog('visitLintResults', () {
     return runZonedGuarded<Set<LintResult>>(
-          () => analyzerService.visitLintResults(unit, rulesForFile, registry),
+          () {
+            final results =
+                analyzerService.visitLintResults(unit, rulesForFile, registry);
+            return results;
+          },
           (err, stk) {
             assert(false, '${err.toString()} ${stk.toString()}');
             log('lintResultsProvider', error: err, stackTrace: stk);
@@ -159,7 +163,8 @@ final lintListener = Provider((ref) {
   final channel = ref.watch(communicationChannelProvider);
   for (final file in files) {
     ref.listen<Set<LintResult>?>(
-        lintResultsProvider(file).select((v) => v.value ?? {}), (_, lints) {
+        lintResultsProvider(file).select((data) => data.valueOrNull),
+        (_, lints) {
       channel.sendNotification(LintNotification(file, lints ?? {}));
     });
   }

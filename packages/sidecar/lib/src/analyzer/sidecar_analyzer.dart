@@ -16,6 +16,7 @@ import '../server/communication_channel.dart';
 import '../utils/duration_ext.dart';
 import '../utils/file_paths.dart';
 import 'providers/providers.dart';
+import 'providers/status_providers.dart';
 
 final logger = Logger('sidecar-plugin');
 
@@ -89,7 +90,10 @@ class SidecarAnalyzer {
       onError: (Object error, StackTrace stackTrace) =>
           channel.handleError(package, error, stackTrace),
     );
-    _ref.read(lintListener);
+    _ref.listen<Null>(
+      lintListener,
+      (previous, next) {},
+    );
     _listenForConfigChanges();
     setupCompleter.complete();
   }
@@ -189,6 +193,7 @@ class SidecarAnalyzer {
             .toSet();
 
         await analyzeFiles(files: affectedFiles.difference(changedFiles));
+
         logger.info(
             'handleContexts in ${watch.elapsed.prettified()} - ${contextUri.path}');
       }
@@ -198,6 +203,7 @@ class SidecarAnalyzer {
     await handleContexts(_getPriorityContexts());
 
     await handleContexts(_getLowPriorityContexts());
+
     _ref.read(eventQueueProvider.notifier).update((s) => [...s]..remove(stamp));
   }
 
@@ -249,6 +255,9 @@ class SidecarAnalyzer {
       _ref.invalidate(resolvedUnitForFileProvider(file));
       await _ref.read(resolvedUnitForFileProvider(file).future);
     }
+    for (final file in dartFiles) {
+      await _ref.read(lintResultsProvider(file).future);
+    }
     logger.info('analyzeFiles in ${watch.elapsed.prettified()} - $files');
     watch.stop();
   }
@@ -260,17 +269,12 @@ class SidecarAnalyzer {
     final watch = Stopwatch()..start();
     final file = request.file;
 
-    // await _ref.watch(resolvedUnitForFileProvider(file).future);
     await _ref.read(eventQueueStreamProvider.stream).firstWhere((stamps) {
       return stamps.every((stamp) => stamp > requestStamp);
     });
     // this listener is needed for some reason, in order to complete the Future
-    _ref.listen<AsyncValue<List<LintResultWithEdits>>>(
-        quickFixResultsProvider(file), (previous, next) {
-      // print('quick fix rece');
-    });
+    _ref.listen(quickFixResultsProvider(file), (_, __) {});
     final fixes = await _ref.read(quickFixResultsProvider(file).future);
-    // print('got fixes');
     final withinOffset =
         fixes.where((f) => f.isWithinOffset(file.path, request.offset));
     logger.info(
@@ -357,15 +361,3 @@ class SidecarAnalyzer {
     return const UpdateFilesResponse();
   }
 }
-
-final eventQueueProvider = StateProvider<List<int>>((ref) {
-  return [];
-});
-final eventQueueStreamProvider = StreamProvider<List<int>>((ref) {
-  final controller = StreamController<List<int>>()..add([]);
-  ref.onDispose(controller.close);
-  ref.listen<List<int>>(eventQueueProvider, (_, next) => controller.add(next));
-  return controller.stream;
-});
-
-enum AnalyzerStatus { analyzing, completed }
