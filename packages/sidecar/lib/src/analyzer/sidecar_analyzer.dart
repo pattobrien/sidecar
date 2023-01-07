@@ -89,6 +89,7 @@ class SidecarAnalyzer {
       onError: (Object error, StackTrace stackTrace) =>
           channel.handleError(package, error, stackTrace),
     );
+    _ref.read(lintListener);
     _listenForConfigChanges();
     setupCompleter.complete();
   }
@@ -170,6 +171,9 @@ class SidecarAnalyzer {
         logger.info(
             'applyPendingFileChanges in ${watch.elapsed.prettified()} - ${contextUri.path}');
 
+        //TODO: is this the right place to calculate data?
+        // await _ref.refresh(totalDataResultsProvider.future);
+
         // for a better user experience:
         // first we handle the changed files, then we handle all affected files.
         // this also allows us to include any changed non-dart files in our analysis
@@ -209,39 +213,38 @@ class SidecarAnalyzer {
 
   Set<AnalyzedFile> priorityFiles = {};
 
+  /// Calculate lints and assists for files.
+  ///
+  /// This is where we contain the logic for the ordering of which each rule should be analyzed.
+  ///
+  /// 1. SidecarSpec(s) should be analyzed first (?)
+  /// 2. LintResults
+  /// 2. DataResults
+  /// 3. AssistFilters
+  /// 4. Assist Edits
+  /// 4. QuickFix Edits
   Future<void> analyzeFiles({
     required Set<AnalyzedFile> files,
   }) async {
-    // TODO: remove only analyzing dart files
     final watch = Stopwatch()..start();
+
+    // First, we handle any changes to sidecar.yaml files
     final specYaml = files.firstWhereOrNull((file) => file.isSidecarYamlFile);
     if (specYaml != null) {
       // handle sidecar.yaml parse
-      final contents =
-          resourceProvider.getFile(specYaml.path).readAsStringSync();
-      final spec = parseSidecarSpec(contents, fileUri: specYaml.fileUri);
-      final exceptions = spec.errors;
-      final errors = exceptions.map((e) => e.toLintResult());
-      channel.sendNotification(LintNotification(specYaml, errors.toSet()));
+      final cntent = resourceProvider.getFile(specYaml.path).readAsStringSync();
+      final sidecarSpec = parseSidecarSpec(cntent, fileUri: specYaml.fileUri);
+      final errors = sidecarSpec.errors.map((e) => e.toLintResult()).toSet();
+      channel.sendNotification(LintNotification(specYaml, errors));
     }
 
+    // TODO: remove only analyzing dart files
     final dartFiles = files.where((file) => file.isDartFile);
 
     for (final file in dartFiles) {
-      _ref.invalidate(nodeRegistryForFileLintsProvider(file));
-
-      await timedLogAsync('unit refresh',
-          () => _ref.refresh(resolvedUnitForFileProvider(file).future));
-
-      final lints = await timedLogAsync(
-          'lint refresh', () => _ref.read(lintResultsProvider(file).future));
-
-      channel.sendNotification(LintNotification(file, lints));
+      _ref.invalidate(resolvedUnitForFileProvider(file));
     }
-    for (final file in dartFiles) {
-      _ref.refresh(quickFixResultsProvider(file));
-      _ref.refresh(assistFiltersProvider(file));
-    }
+
     logger.info('analyzeFiles in ${watch.elapsed.prettified()} - $files');
     watch.stop();
   }

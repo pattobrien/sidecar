@@ -1,10 +1,14 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../../context/context.dart';
+import '../../../test.dart';
 import '../../protocol/analyzed_file.dart';
 import '../../rules/base_rule.dart';
 import '../../services/rule_initialization_service.dart';
 import '../ast/ast.dart';
+import '../context/rule_analyzed_file.dart';
 import '../sidecar_analyzer.dart';
+import 'results_providers.dart';
 import 'sidecar_spec_providers.dart';
 
 /// Provides list of rules enabled for the context
@@ -35,15 +39,25 @@ final _scopedRulesForFileProvider =
   return rulesForFile;
 });
 
-final scopedLintRulesForFileProvider =
+final scopeForRuleProvider =
+    Provider.family<SidecarContext, RuleAnalyzedFile>((ref, ruleFile) {
+  final baseContext = ref.watch(sidecarContextProvider(ruleFile.file))!;
+  // TODO: use RuleScope to restrict updates
+  // final scope = ruleFile.rule.scope;
+  final scopedData = ref.watch(totalDataResultsProvider);
+  return baseContext.copyWith(data: scopedData.value);
+});
+
+final ProviderFamily<Set<Lint>, AnalyzedFile> scopedLintRulesForFileProvider =
     Provider.family<Set<Lint>, AnalyzedFile>((ref, file) {
   final lints = ref.watch(_scopedRulesForFileProvider(file)
       .select((value) => value.whereType<Lint>().toSet()));
 
   for (final lint in lints) {
     //TODO: restrict updates to changes with rule/package config changes
-    final sidecarSpec = ref.watch(projectSidecarSpecProvider);
-    lint.setConfig(sidecarSpec: sidecarSpec);
+    final ruleFile = RuleAnalyzedFile(rule: lint, file: file);
+    final context = ref.watch(scopeForRuleProvider(ruleFile));
+    lint.setConfig(context: context);
   }
   return lints;
 });
@@ -55,10 +69,23 @@ final scopedAssistRulesForFileProvider =
 
   for (final assist in assists) {
     //TODO: restrict updates to changes with rule/package config changes
-    final sidecarSpec = ref.watch(projectSidecarSpecProvider);
-    assist.setConfig(sidecarSpec: sidecarSpec);
+    final context = ref.watch(sidecarContextProvider(file))!;
+    assist.setConfig(context: context);
   }
   return assists;
+});
+
+final ProviderFamily<Set<Data>, AnalyzedFile> scopedDataRulesForFileProvider =
+    Provider.family<Set<Data>, AnalyzedFile>((ref, file) {
+  final dataResults = ref.watch(_scopedRulesForFileProvider(file)
+      .select((value) => value.whereType<Data>().toSet()));
+
+  for (final data in dataResults) {
+    //TODO: restrict updates to changes with rule/package config changes
+    final context = ref.watch(sidecarContextProvider(file))!;
+    data.setConfig(context: context);
+  }
+  return dataResults;
 });
 
 final nodeRegistryForFileLintsProvider =
@@ -70,5 +97,11 @@ final nodeRegistryForFileLintsProvider =
 final nodeRegistryForFileAssistsProvider =
     Provider.family<NodeRegistry, AnalyzedFile>((ref, file) {
   final rules = ref.watch(scopedAssistRulesForFileProvider(file));
+  return NodeRegistry(rules);
+});
+
+final nodeRegistryForFileDataProvider =
+    Provider.family<NodeRegistry, AnalyzedFile>((ref, file) {
+  final rules = ref.watch(scopedDataRulesForFileProvider(file));
   return NodeRegistry(rules);
 });

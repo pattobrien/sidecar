@@ -110,7 +110,7 @@ class PackageResource with ResourceMixin {
 name: $projectName
 
 environment:
-  sdk: ">=2.17.5 <3.0.0"
+  sdk: ">=2.17.5 <2.18.0"
 
 dependencies:
   path: ^1.8.0

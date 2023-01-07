@@ -7,8 +7,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
 import 'package:source_span/source_span.dart';
 
+import '../../context/context.dart';
 import '../analyzer/ast/ast.dart';
 import '../analyzer/ast/registered_rule_visitor.dart';
+import '../analyzer/context/rule_scope.dart';
 import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/protocol.dart';
 import '../utils/utils.dart';
@@ -31,26 +33,30 @@ mixin BaseRule {
   /// Can be overridden in a SidecarSpec file.
   List<Glob>? get excludes => null;
 
-  /// Sidecar configuration for the active project
-  SidecarSpec get sidecarSpec => _sidecarSpec;
-
   /// SidecarSpec rule configuration for the active project
-  RuleOptions? get ruleOptions => _ruleOptions;
+  RuleOptions? get ruleOptions =>
+      _context.sidecarSpec.getConfigurationForCode(code);
 
   /// SidecarSpec rule package configuration for the active project
-  PackageOptions? get packageOptions => _packageOptions;
+  PackageOptions? get packageOptions =>
+      _context.sidecarSpec.getPackageConfigurationForCode(code);
+
+  SidecarContext get context => _context;
 
   /// ResolvedUnitResult for a particular file.
   ResolvedUnitResult get unit => _unit;
+
+  /// Define which workspace changes this rule should rebuild for.
+  RuleScope get scope => _defaultScope;
 
   final Set<LintResult> lintResults = {};
   final Set<AssistFilterResult> assistFilterResults = {};
 
   late ResolvedUnitResult _unit;
 
-  late SidecarSpec _sidecarSpec;
-  late RuleOptions? _ruleOptions;
-  late PackageOptions? _packageOptions;
+  static const _defaultScope = RuleScope();
+
+  late SidecarContext _context;
 
   /// Register all of the visit methods of a Sidecar Rule.
   ///
@@ -84,11 +90,9 @@ mixin BaseRule {
 
   @internal
   void setConfig({
-    required SidecarSpec sidecarSpec,
+    required SidecarContext context,
   }) {
-    _sidecarSpec = sidecarSpec;
-    _ruleOptions = sidecarSpec.getConfigurationForCode(code);
-    _packageOptions = sidecarSpec.getPackageConfigurationForCode(code);
+    _context = context;
   }
 
   @internal
@@ -126,11 +130,13 @@ mixin Lint on BaseRule {
   LintSeverity get defaultSeverity => LintSeverity.info;
 
   @override
-  LintOptions? get ruleOptions => _ruleOptions as LintOptions?;
+  LintOptions? get ruleOptions =>
+      _context.sidecarSpec.getConfigurationForCode(code) as LintOptions?;
 
   @override
   LintPackageOptions? get packageOptions =>
-      _packageOptions as LintPackageOptions?;
+      _context.sidecarSpec.getPackageConfigurationForCode(code)
+          as LintPackageOptions?;
 
   void _reportSpan(
     SourceSpan span,
@@ -193,6 +199,9 @@ mixin QuickFix on Lint {
 ///
 /// For multi-file edits, prefer using Refactorings (TBD).
 mixin QuickAssist on BaseRule {
+  @override
+  AssistCode get code;
+
   void _reportAssistSourceSpan(
     SourceSpan span, {
     EditsComputer? editsComputer,
@@ -222,21 +231,15 @@ mixin QuickAssist on BaseRule {
           editsComputer: editsComputer);
 }
 
-// /// Capture metrics for a particular file.
-// ///
-// ///
-// mixin Metric on BaseRule {
-//   void captureMetricForNode(
-//     AstNode node, {
-//     EditsComputer? editsComputer,
-//   }) =>
-//       _reportAssistSourceSpan(node.toSourceSpan(_unit),
-//           editsComputer: editsComputer);
+/// Utilities to record a piece of data in a codebase.
+mixin Data<T> on BaseRule {
+  @override
+  DataCode get code;
 
-//   void captureMetricForToken(
-//     Token token, {
-//     EditsComputer? editsComputer,
-//   }) =>
-//       _reportAssistSourceSpan(token.toSourceSpan(_unit),
-//           editsComputer: editsComputer);
-// }
+  final dataResults = <SingleDataResult<T>>{};
+
+  void reportData(T object) {
+    final result = SingleDataResult(code: code, data: object);
+    dataResults.add(result);
+  }
+}

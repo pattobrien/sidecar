@@ -6,11 +6,13 @@ import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../protocol/protocol.dart';
+import '../../server/communication_channel.dart';
 import '../../services/active_project_service.dart';
 import '../../services/glob_service.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/uri_ext.dart';
 import 'resource_providers.dart';
+import 'results_providers.dart';
 import 'sidecar_spec_providers.dart';
 
 /// The target of a particular Analyzer instance.
@@ -81,10 +83,10 @@ final activeProjectScopedFilesProvider = Provider<Set<AnalyzedFile>>((ref) {
   final contexts = ref.watch(contextCollectionProvider);
   final fileSystem = ref.watch(fileSystemProvider);
   final globService = ref.watch(globServiceProvider);
+  final channel = ref.watch(communicationChannelProvider);
 
-  return contexts
+  final allFiles = contexts
       .map((context) {
-        //TODO: what to do with 'lib' folder
         final filesInScope = globService.extractDartFilesFromFolders(
             context.contextRoot.root.path,
             fileSystem: fileSystem,
@@ -99,4 +101,5 @@ final activeProjectScopedFilesProvider = Provider<Set<AnalyzedFile>>((ref) {
       })
       .expand((e) => e)
       .toSet();
+  return allFiles;
 });

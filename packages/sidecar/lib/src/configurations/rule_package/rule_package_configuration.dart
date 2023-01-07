@@ -7,7 +7,7 @@ import 'package:yaml/yaml.dart';
 import '../../utils/file_paths.dart';
 import 'rule_yaml_nodes.dart';
 
-// @JsonSerializable(anyMap: true)
+// @JsonSerializable(anyMap: true)a
 class RulePackageConfiguration {
   RulePackageConfiguration(
     this.yamlLints,

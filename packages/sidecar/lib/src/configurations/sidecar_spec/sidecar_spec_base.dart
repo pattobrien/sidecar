@@ -17,6 +17,7 @@ class SidecarSpec {
     this.excludes,
     this.lints,
     this.assists,
+    this.data,
   });
 
   factory SidecarSpec.fromJson(Map json) => _$SidecarSpecFromJson(json);
@@ -25,6 +26,7 @@ class SidecarSpec {
     List<RuleCode> codes, {
     List<Glob>? includes,
   }) {
+    //TODO: assistPackages and dataPackages
     final lintPackages =
         codes.whereType<LintCode>().map((e) => e.package).toSet();
     final assistPackages =
@@ -60,6 +62,9 @@ class SidecarSpec {
 
   final Map<String, AssistPackageOptions>? assists;
 
+  //TODO: change to data
+  final Map<String, AssistPackageOptions>? data;
+
   RuleOptions? getConfigurationForCode(RuleCode code) {
     if (code is LintCode) {
       final package = lints?[code.package];
@@ -69,7 +74,11 @@ class SidecarSpec {
     if (code is AssistCode) {
       return assists?[code.package]?.rules?[code.id];
     }
-    throw UnimplementedError();
+
+    if (code is DataCode) {
+      return data?[code.package]?.rules?[code.id];
+    }
+    throw UnimplementedError('INVALID CODE');
   }
 
   PackageOptions? getPackageConfigurationForCode(RuleCode code) {
@@ -79,7 +88,10 @@ class SidecarSpec {
     if (code is AssistCode) {
       return assists?[code.package];
     }
-    throw UnimplementedError();
+    if (code is DataCode) {
+      return data?[code.package];
+    }
+    throw UnimplementedError('INVALID CODE');
   }
 
   String toYamlContent() {

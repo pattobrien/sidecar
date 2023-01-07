@@ -9,6 +9,7 @@ import 'rule_code.dart';
 part 'analysis_result.freezed.dart';
 part 'analysis_result.g.dart';
 
+@immutable
 @freezed
 class AnalysisResult with _$AnalysisResult {
   @Implements<Comparable<AnalysisResult>>()
@@ -39,6 +40,29 @@ class AnalysisResult with _$AnalysisResult {
 
   factory AnalysisResult.fromJson(Map<String, dynamic> json) =>
       _$AnalysisResultFromJson(json);
+
+  @override
+  bool operator ==(dynamic other) {
+    // TODO: missing List<EditResult> edits from equality
+    return identical(this, other) ||
+        (other is AnalysisResult &&
+            const DeepCollectionEquality().equals(other.rule, rule) &&
+            const DeepCollectionEquality().equals(other.span, span) &&
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.severity, severity) &&
+            const DeepCollectionEquality()
+                .equals(other.correction, correction));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        runtimeType,
+        const DeepCollectionEquality().hash(rule),
+        const DeepCollectionEquality().hash(span),
+        const DeepCollectionEquality().hash(message),
+        const DeepCollectionEquality().hash(severity),
+        const DeepCollectionEquality().hash(correction),
+      );
 
   /// Whether or not this lint has calculated edits yet.
   bool get hasCalculatedEdits => this is LintResultWithEdits;

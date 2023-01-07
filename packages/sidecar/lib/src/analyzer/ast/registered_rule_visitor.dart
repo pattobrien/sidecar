@@ -2,6 +2,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
 import '../../../rules/rules.dart';
+import '../../protocol/models/data_result.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
 import '../sidecar_analyzer.dart';
@@ -20,6 +21,12 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
   //TODO: can we combine lintResults and assistResults ?
   Set<LintResult> get lintResults =>
       registry.rules.map((e) => e.lintResults).expand((e) => e).toSet();
+
+  Set<SingleDataResult<Object>> get dataResults => registry.rules
+      .whereType<Data<Object>>()
+      .map((e) => e.dataResults)
+      .expand((e) => e)
+      .toSet();
 
   Set<AssistFilterResult> get assistResults =>
       registry.rules.map((e) => e.assistFilterResults).expand((e) => e).toSet();

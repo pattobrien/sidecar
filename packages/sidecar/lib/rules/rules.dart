@@ -30,6 +30,9 @@ abstract class LintRule = Rule with Lint;
 /// Create an assist.
 abstract class AssistRule = Rule with QuickAssist;
 
+/// Capture data.
+abstract class DataRule<T> = Rule with Data<T>;
+
 
 // mixin Configuration on BaseRule {
 //   Map<dynamic, dynamic>? get ruleConfiguration =>

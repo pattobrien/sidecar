@@ -17,7 +17,11 @@ class RuleInitializationService {
     List<SidecarBaseConstructor> constructors,
   ) {
     final rules = constructors.map((e) => e());
-    final packageOptions = [...?spec.assists?.entries, ...?spec.lints?.entries];
+    final packageOptions = [
+      ...?spec.assists?.entries,
+      ...?spec.lints?.entries,
+      ...?spec.data?.entries,
+    ];
     final rulesForFile = <BaseRule>{};
     for (final packageOption in packageOptions) {
       final packageId = packageOption.key;

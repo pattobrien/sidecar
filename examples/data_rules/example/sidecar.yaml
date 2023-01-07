@@ -1,0 +1,12 @@
+includes:
+  - "lib/**.dart"
+
+lints:
+  data_rules:
+    rules:
+      some_lint_rule:
+
+data:
+  data_rules:
+    rules:
+      some_data_rule:

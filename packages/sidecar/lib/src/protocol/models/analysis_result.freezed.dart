@@ -318,32 +318,6 @@ class _$LintResult extends LintResult {
     return 'AnalysisResult(rule: $rule, span: $span, message: $message, severity: $severity, correction: $correction, editsComputer: $editsComputer)';
   }
 
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LintResult &&
-            const DeepCollectionEquality().equals(other.rule, rule) &&
-            const DeepCollectionEquality().equals(other.span, span) &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality().equals(other.severity, severity) &&
-            const DeepCollectionEquality()
-                .equals(other.correction, correction) &&
-            (identical(other.editsComputer, editsComputer) ||
-                other.editsComputer == editsComputer));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(rule),
-      const DeepCollectionEquality().hash(span),
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(severity),
-      const DeepCollectionEquality().hash(correction),
-      editsComputer);
-
   @JsonKey(ignore: true)
   @override
   _$$LintResultCopyWith<_$LintResult> get copyWith =>
@@ -630,31 +604,6 @@ class _$LintResultWithEdits extends LintResultWithEdits {
   String toString() {
     return 'AnalysisResult.withEdits(rule: $rule, span: $span, message: $message, severity: $severity, correction: $correction, edits: $edits)';
   }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LintResultWithEdits &&
-            const DeepCollectionEquality().equals(other.rule, rule) &&
-            const DeepCollectionEquality().equals(other.span, span) &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality().equals(other.severity, severity) &&
-            const DeepCollectionEquality()
-                .equals(other.correction, correction) &&
-            const DeepCollectionEquality().equals(other._edits, _edits));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(rule),
-      const DeepCollectionEquality().hash(span),
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(severity),
-      const DeepCollectionEquality().hash(correction),
-      const DeepCollectionEquality().hash(_edits));
 
   @JsonKey(ignore: true)
   @override
