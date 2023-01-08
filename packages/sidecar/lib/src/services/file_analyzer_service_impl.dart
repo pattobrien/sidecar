@@ -39,9 +39,9 @@ class FileAnalyzerServiceImpl {
 
     final mainVisitor = RegisteredRuleVisitor(registry);
     unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor;
+    final results = mainVisitor.dataResults;
     mainVisitor.clearResults();
-    return results.dataResults;
+    return results;
   }
 
   Set<AssistFilterResult> visitAssistFilters(
