@@ -1,4 +1,4 @@
-import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/ast/ast.dart';
@@ -10,9 +10,9 @@ class FileAnalyzerServiceImpl {
   /// Service for generating Analysis Results for a particular file.
   const FileAnalyzerServiceImpl();
 
-  Set<LintResult> visitLintResults(
+  Set<AnalysisResult> visitResults(
     ResolvedUnitResult? unitResult,
-    Set<Lint> rules,
+    Set<BaseRule> rules,
     NodeRegistry registry,
   ) {
     if (unitResult == null) return {};
@@ -22,9 +22,19 @@ class FileAnalyzerServiceImpl {
 
     final mainVisitor = RegisteredRuleVisitor(registry);
     unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.lintResults;
+    final results = mainVisitor.results;
     mainVisitor.clearResults();
     return results;
+  }
+
+  Set<LintResult> visitLintResults(
+    ResolvedUnitResult? unitResult,
+    Set<Lint> rules,
+    NodeRegistry registry,
+  ) {
+    return visitResults(unitResult, rules, registry)
+        .whereType<LintResult>()
+        .toSet();
   }
 
   Set<SingleDataResult> visitDataResults(
@@ -32,16 +42,9 @@ class FileAnalyzerServiceImpl {
     Set<Data> rules,
     NodeRegistry registry,
   ) {
-    if (unitResult == null) return {};
-    for (final rule in rules) {
-      rule.setUnitContext(unitResult);
-    }
-
-    final mainVisitor = RegisteredRuleVisitor(registry);
-    unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.dataResults;
-    mainVisitor.clearResults();
-    return results;
+    return visitResults(unitResult, rules, registry)
+        .whereType<SingleDataResult>()
+        .toSet();
   }
 
   Set<AssistResult> visitAssistFilters(
@@ -49,16 +52,9 @@ class FileAnalyzerServiceImpl {
     Set<QuickAssist> rules,
     NodeRegistry registry,
   ) {
-    if (unitResult == null) return {};
-    for (final rule in rules) {
-      rule.setUnitContext(unitResult);
-    }
-
-    final mainVisitor = RegisteredRuleVisitor(registry);
-    unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.assistResults;
-    mainVisitor.clearResults();
-    return results;
+    return visitResults(unitResult, rules, registry)
+        .whereType<AssistResult>()
+        .toSet();
   }
 
   Iterable<LintResult> getAnalysisResultsAtOffset(

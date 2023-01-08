@@ -49,8 +49,9 @@ mixin BaseRule {
   /// Define which workspace changes this rule should rebuild for.
   RuleScope get scope => _defaultScope;
 
-  final Set<LintResult> lintResults = {};
-  final Set<AssistResult> assistFilterResults = {};
+  final Set<AnalysisResult> results = {};
+  // final Set<LintResult> lintResults = {};
+  // final Set<AssistResult> assistFilterResults = {};
 
   late ResolvedUnitResult _unit;
 
@@ -97,8 +98,8 @@ mixin BaseRule {
 
   @internal
   void clearResults() {
-    lintResults.clear();
-    assistFilterResults.clear();
+    results.clear();
+    // assistFilterResults.clear();
   }
 
   @internal
@@ -106,8 +107,8 @@ mixin BaseRule {
     ResolvedUnitResult unit,
   ) {
     _unit = unit;
-    lintResults.clear();
-    assistFilterResults.clear();
+    results.clear();
+    // assistFilterResults.clear();
   }
 
   @override
@@ -158,7 +159,7 @@ mixin Lint on BaseRule {
       severity: ruleOptions?.severity ?? defaultSeverity,
       editsComputer: editsComputer,
     );
-    lintResults.add(result);
+    results.add(result);
   }
 
   void reportAstNode(
@@ -217,7 +218,7 @@ mixin QuickAssist on BaseRule {
       span: span,
       editsComputer: editsComputer,
     );
-    assistFilterResults.add(result);
+    results.add(result);
   }
 
   void reportAssistForNode(
@@ -242,17 +243,8 @@ mixin Data<T> on BaseRule {
   @override
   DataCode get code;
 
-  final dataResults = <SingleDataResult>{};
-
-  @override
-  @internal
-  void clearResults() {
-    dataResults.clear();
-    super.clearResults();
-  }
-
   void reportData(T object) {
     final result = SingleDataResult(code: code, data: object);
-    dataResults.add(result);
+    results.add(result);
   }
 }

@@ -52,8 +52,10 @@ Future<void> ruleTest(
 
     resolvedUnit.unit.accept(_visitor);
 
-    final results =
-        _visitor.lintResults.map((e) => e.toExpectedText()).toList();
+    final results = _visitor.results
+        .whereType<LintResult>()
+        .map((e) => e.toExpectedText())
+        .toList();
     test.expect(results, test.unorderedEquals(expectedResults));
   });
 }
