@@ -83,15 +83,15 @@ final scopedAssistRulesForFileProvider =
 
 final ProviderFamily<Set<Data>, AnalyzedFile> scopedDataRulesForFileProvider =
     Provider.family<Set<Data>, AnalyzedFile>((ref, file) {
-  final dataResults = ref.watch(_scopedRulesForFileProvider(file)
+  final dataRules = ref.watch(_scopedRulesForFileProvider(file)
       .select((value) => value.whereType<Data>().toSet()));
 
-  for (final data in dataResults) {
+  for (final data in dataRules) {
     //TODO: restrict updates to changes with rule/package config changes
     final context = ref.watch(sidecarContextProvider(file))!;
     data.setConfig(context: context);
   }
-  return dataResults;
+  return dataRules;
 });
 
 final nodeRegistryForFileLintsProvider =

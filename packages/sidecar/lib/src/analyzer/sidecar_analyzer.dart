@@ -90,10 +90,8 @@ class SidecarAnalyzer {
       onError: (Object error, StackTrace stackTrace) =>
           channel.handleError(package, error, stackTrace),
     );
-    _ref.listen<Null>(
-      lintListener,
-      (previous, next) {},
-    );
+    // listener keeps lintListener alive
+    _ref.listen<void>(lintListener, (previous, next) {});
     _listenForConfigChanges();
     setupCompleter.complete();
   }
