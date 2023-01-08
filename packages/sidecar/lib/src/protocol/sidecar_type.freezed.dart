@@ -29,38 +29,42 @@ mixin _$SidecarType {
 abstract class $SidecarTypeCopyWith<$Res> {
   factory $SidecarTypeCopyWith(
           SidecarType value, $Res Function(SidecarType) then) =
-      _$SidecarTypeCopyWithImpl<$Res>;
+      _$SidecarTypeCopyWithImpl<$Res, SidecarType>;
+  @useResult
   $Res call({String typeName, String packageName, String packagePath});
 }
 
 /// @nodoc
-class _$SidecarTypeCopyWithImpl<$Res> implements $SidecarTypeCopyWith<$Res> {
+class _$SidecarTypeCopyWithImpl<$Res, $Val extends SidecarType>
+    implements $SidecarTypeCopyWith<$Res> {
   _$SidecarTypeCopyWithImpl(this._value, this._then);
 
-  final SidecarType _value;
   // ignore: unused_field
-  final $Res Function(SidecarType) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? typeName = freezed,
-    Object? packageName = freezed,
-    Object? packagePath = freezed,
+    Object? typeName = null,
+    Object? packageName = null,
+    Object? packagePath = null,
   }) {
     return _then(_value.copyWith(
-      typeName: typeName == freezed
+      typeName: null == typeName
           ? _value.typeName
           : typeName // ignore: cast_nullable_to_non_nullable
               as String,
-      packageName: packageName == freezed
+      packageName: null == packageName
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
               as String,
-      packagePath: packagePath == freezed
+      packagePath: null == packagePath
           ? _value.packagePath
           : packagePath // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -71,35 +75,35 @@ abstract class _$$_SidecarTypeCopyWith<$Res>
           _$_SidecarType value, $Res Function(_$_SidecarType) then) =
       __$$_SidecarTypeCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String typeName, String packageName, String packagePath});
 }
 
 /// @nodoc
-class __$$_SidecarTypeCopyWithImpl<$Res> extends _$SidecarTypeCopyWithImpl<$Res>
+class __$$_SidecarTypeCopyWithImpl<$Res>
+    extends _$SidecarTypeCopyWithImpl<$Res, _$_SidecarType>
     implements _$$_SidecarTypeCopyWith<$Res> {
   __$$_SidecarTypeCopyWithImpl(
       _$_SidecarType _value, $Res Function(_$_SidecarType) _then)
-      : super(_value, (v) => _then(v as _$_SidecarType));
+      : super(_value, _then);
 
-  @override
-  _$_SidecarType get _value => super._value as _$_SidecarType;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? typeName = freezed,
-    Object? packageName = freezed,
-    Object? packagePath = freezed,
+    Object? typeName = null,
+    Object? packageName = null,
+    Object? packagePath = null,
   }) {
     return _then(_$_SidecarType(
-      typeName: typeName == freezed
+      typeName: null == typeName
           ? _value.typeName
           : typeName // ignore: cast_nullable_to_non_nullable
               as String,
-      packageName: packageName == freezed
+      packageName: null == packageName
           ? _value.packageName
           : packageName // ignore: cast_nullable_to_non_nullable
               as String,
-      packagePath: packagePath == freezed
+      packagePath: null == packagePath
           ? _value.packagePath
           : packagePath // ignore: cast_nullable_to_non_nullable
               as String,
@@ -133,22 +137,21 @@ class _$_SidecarType extends _SidecarType {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SidecarType &&
-            const DeepCollectionEquality().equals(other.typeName, typeName) &&
-            const DeepCollectionEquality()
-                .equals(other.packageName, packageName) &&
-            const DeepCollectionEquality()
-                .equals(other.packagePath, packagePath));
+            (identical(other.typeName, typeName) ||
+                other.typeName == typeName) &&
+            (identical(other.packageName, packageName) ||
+                other.packageName == packageName) &&
+            (identical(other.packagePath, packagePath) ||
+                other.packagePath == packagePath));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(typeName),
-      const DeepCollectionEquality().hash(packageName),
-      const DeepCollectionEquality().hash(packagePath));
+  int get hashCode =>
+      Object.hash(runtimeType, typeName, packageName, packagePath);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SidecarTypeCopyWith<_$_SidecarType> get copyWith =>
       __$$_SidecarTypeCopyWithImpl<_$_SidecarType>(this, _$identity);
 }

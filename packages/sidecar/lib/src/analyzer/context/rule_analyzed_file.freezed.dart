@@ -28,42 +28,46 @@ mixin _$RuleAnalyzedFile {
 abstract class $RuleAnalyzedFileCopyWith<$Res> {
   factory $RuleAnalyzedFileCopyWith(
           RuleAnalyzedFile value, $Res Function(RuleAnalyzedFile) then) =
-      _$RuleAnalyzedFileCopyWithImpl<$Res>;
+      _$RuleAnalyzedFileCopyWithImpl<$Res, RuleAnalyzedFile>;
+  @useResult
   $Res call({BaseRule rule, AnalyzedFile file});
 
   $AnalyzedFileCopyWith<$Res> get file;
 }
 
 /// @nodoc
-class _$RuleAnalyzedFileCopyWithImpl<$Res>
+class _$RuleAnalyzedFileCopyWithImpl<$Res, $Val extends RuleAnalyzedFile>
     implements $RuleAnalyzedFileCopyWith<$Res> {
   _$RuleAnalyzedFileCopyWithImpl(this._value, this._then);
 
-  final RuleAnalyzedFile _value;
   // ignore: unused_field
-  final $Res Function(RuleAnalyzedFile) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rule = freezed,
-    Object? file = freezed,
+    Object? rule = null,
+    Object? file = null,
   }) {
     return _then(_value.copyWith(
-      rule: rule == freezed
+      rule: null == rule
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
               as BaseRule,
-      file: file == freezed
+      file: null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as AnalyzedFile,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $AnalyzedFileCopyWith<$Res> get file {
     return $AnalyzedFileCopyWith<$Res>(_value.file, (value) {
-      return _then(_value.copyWith(file: value));
+      return _then(_value.copyWith(file: value) as $Val);
     });
   }
 }
@@ -75,6 +79,7 @@ abstract class _$$_RuleAnalyzedFileCopyWith<$Res>
           _$_RuleAnalyzedFile value, $Res Function(_$_RuleAnalyzedFile) then) =
       __$$_RuleAnalyzedFileCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({BaseRule rule, AnalyzedFile file});
 
   @override
@@ -83,26 +88,24 @@ abstract class _$$_RuleAnalyzedFileCopyWith<$Res>
 
 /// @nodoc
 class __$$_RuleAnalyzedFileCopyWithImpl<$Res>
-    extends _$RuleAnalyzedFileCopyWithImpl<$Res>
+    extends _$RuleAnalyzedFileCopyWithImpl<$Res, _$_RuleAnalyzedFile>
     implements _$$_RuleAnalyzedFileCopyWith<$Res> {
   __$$_RuleAnalyzedFileCopyWithImpl(
       _$_RuleAnalyzedFile _value, $Res Function(_$_RuleAnalyzedFile) _then)
-      : super(_value, (v) => _then(v as _$_RuleAnalyzedFile));
+      : super(_value, _then);
 
-  @override
-  _$_RuleAnalyzedFile get _value => super._value as _$_RuleAnalyzedFile;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rule = freezed,
-    Object? file = freezed,
+    Object? rule = null,
+    Object? file = null,
   }) {
     return _then(_$_RuleAnalyzedFile(
-      rule: rule == freezed
+      rule: null == rule
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
               as BaseRule,
-      file: file == freezed
+      file: null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as AnalyzedFile,
@@ -131,18 +134,16 @@ class _$_RuleAnalyzedFile extends _RuleAnalyzedFile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_RuleAnalyzedFile &&
-            const DeepCollectionEquality().equals(other.rule, rule) &&
-            const DeepCollectionEquality().equals(other.file, file));
+            (identical(other.rule, rule) || other.rule == rule) &&
+            (identical(other.file, file) || other.file == file));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(rule),
-      const DeepCollectionEquality().hash(file));
+  int get hashCode => Object.hash(runtimeType, rule, file);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_RuleAnalyzedFileCopyWith<_$_RuleAnalyzedFile> get copyWith =>
       __$$_RuleAnalyzedFileCopyWithImpl<_$_RuleAnalyzedFile>(this, _$identity);
 }

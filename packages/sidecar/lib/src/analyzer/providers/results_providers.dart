@@ -27,12 +27,11 @@ final resolvedUnitForFileProvider =
   return result as ResolvedUnitResult;
 });
 
-final _contextForFileProvider = Provider.family<AnalysisContext?, AnalyzedFile>(
-  (ref, file) {
-    final contexts = ref.watch(contextCollectionProvider);
-    return contexts.contextForRoot(file.contextRoot);
-  },
-);
+final _contextForFileProvider =
+    Provider.family<AnalysisContext?, AnalyzedFile>((ref, file) {
+  final contexts = ref.watch(contextCollectionProvider);
+  return contexts.contextForRoot(file.contextRoot);
+});
 
 final sidecarContextProvider =
     Provider.family<SidecarContext?, AnalyzedFile>((ref, file) {
@@ -56,8 +55,6 @@ final sidecarContextProvider =
 /// Compute and cache lint results for a given file.
 final lintResultsProvider =
     FutureProvider.family<Set<LintResult>, AnalyzedFile>((ref, file) async {
-  // ref.onDispose(() => ref.invalidate(nodeRegistryForFileLintsProvider));
-
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
   final rulesForFile = ref.watch(scopedLintRulesForFileProvider(file));
   final registry = ref.watch(nodeRegistryForFileLintsProvider(file));
@@ -66,15 +63,8 @@ final lintResultsProvider =
 
   return timedLog('visitLintResults', () {
     return runZonedGuarded<Set<LintResult>>(
-          () {
-            final results =
-                analyzerService.visitLintResults(unit, rulesForFile, registry);
-            return results;
-          },
-          (err, stk) {
-            assert(false, '${err.toString()} ${stk.toString()}');
-            log('lintResultsProvider', error: err, stackTrace: stk);
-          },
+          () => analyzerService.visitLintResults(unit, rulesForFile, registry),
+          (err, stk) => log('lintResultsProvider', error: err, stackTrace: stk),
         ) ??
         {};
   });
@@ -86,17 +76,14 @@ final lintResultsProvider =
 /// an IDE client's cursor offset/length, AssistFilters are outputs of an
 /// ASTNode scan which is generated pro-actively.
 final assistFiltersProvider =
-    FutureProvider.family<Set<AssistFilterResult>, AnalyzedFile>(
-        (ref, file) async {
-  // ref.onDispose(() => ref.invalidate(nodeRegistryForFileAssistsProvider));
-
+    FutureProvider.family<Set<AssistResult>, AnalyzedFile>((ref, file) async {
   final rules = ref.watch(scopedAssistRulesForFileProvider(file));
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
   final registry = ref.watch(nodeRegistryForFileAssistsProvider(file));
 
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
 
-  return runZonedGuarded<Set<AssistFilterResult>>(
+  return runZonedGuarded<Set<AssistResult>>(
         () => analyzerService.visitAssistFilters(unit, rules, registry),
         (err, stk) => log('assistFiltersProvider', error: err, stackTrace: stk),
       ) ??
@@ -105,13 +92,13 @@ final assistFiltersProvider =
 
 /// Compute all quick fixes from applicable Lint results.
 final quickFixResultsProvider =
-    FutureProvider.family<List<LintResultWithEdits>, AnalyzedFile>(
+    FutureProvider.family<List<LintWithEditsResult>, AnalyzedFile>(
         (ref, file) async {
   final lints = ref.watch(lintResultsProvider(file).select((v) => v.value));
   final resultsWithFixes = lints?.where((e) => e.editsComputer != null);
 
   final computedResults =
-      await Future.wait<LintResultWithEdits>(resultsWithFixes?.map((e) async {
+      await Future.wait<LintWithEditsResult>(resultsWithFixes?.map((e) async {
             final edits = await e.editsComputer!();
             return e.copyWithEdits(edits: edits);
           }) ??
@@ -121,39 +108,35 @@ final quickFixResultsProvider =
 
 /// Compute all data results from applicable results.
 final dataResultsProvider =
-    Provider.family<Set<SingleDataResult<Object>>, AnalyzedFile>((ref, file) {
+    Provider.family<Set<SingleDataResult>, AnalyzedFile>((ref, file) {
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
   final registry = ref.watch(nodeRegistryForFileDataProvider(file));
   final rulesForFile = ref.watch(scopedDataRulesForFileProvider(file));
 
-  final unit = ref.watch(resolvedUnitForFileProvider(file));
+  final unit = ref.watch(resolvedUnitForFileProvider(file)).valueOrNull;
   return timedLog('visitDataResults', () {
-    return runZonedGuarded<Set<SingleDataResult<Object>>>(
-          () => analyzerService.visitDataResults(
-              unit.valueOrNull, rulesForFile, registry),
-          (err, stk) {
-            assert(false, '${err.toString()} ${stk.toString()}');
-            log('dataResultsProvider', error: err, stackTrace: stk);
-          },
+    return runZonedGuarded<Set<SingleDataResult>>(
+          () => analyzerService.visitDataResults(unit, rulesForFile, registry),
+          (err, stk) => log('dataResultsProvider', error: err, stackTrace: stk),
         ) ??
         {};
   });
 });
 
-final totalDataResultsProvider = Provider<Set<TotalData<dynamic>>>((ref) {
+final totalDataResultsProvider = Provider<Set<TotalDataResult>>((ref) {
   final files = ref.watch(activeProjectScopedFilesProvider);
-  final allDataResults = <SingleDataResult<Object>>[];
+  final allDataResults = <SingleDataResult>[];
 
   for (final file in files) {
     final data = ref.watch(dataResultsProvider(file));
     allDataResults.addAll(data);
   }
-  final totalDataResults = <TotalData<Object>>{};
+  final totalDataResults = <TotalDataResult>{};
 
   for (final dataRule in allDataResults.map((e) => e.code).toSet()) {
     final totalData = allDataResults.where((r) => r.code == dataRule);
-    totalDataResults
-        .add(TotalData<Object>(code: dataRule, data: totalData.toSet()));
+    totalDataResults.add(TotalDataResult(
+        code: dataRule, data: totalData.map<dynamic>((e) => e.data).toList()));
   }
   return totalDataResults;
 });

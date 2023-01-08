@@ -43,9 +43,9 @@ mixin _$RuleCode {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String id, String package, String? url)? lint,
-    TResult Function(String id, String package, String? url)? assist,
-    TResult Function(String id, String package, String? url)? data,
+    TResult? Function(String id, String package, String? url)? lint,
+    TResult? Function(String id, String package, String? url)? assist,
+    TResult? Function(String id, String package, String? url)? data,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -65,9 +65,9 @@ mixin _$RuleCode {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintCode value)? lint,
-    TResult Function(AssistCode value)? assist,
-    TResult Function(DataCode value)? data,
+    TResult? Function(LintCode value)? lint,
+    TResult? Function(AssistCode value)? assist,
+    TResult? Function(DataCode value)? data,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -87,38 +87,42 @@ mixin _$RuleCode {
 /// @nodoc
 abstract class $RuleCodeCopyWith<$Res> {
   factory $RuleCodeCopyWith(RuleCode value, $Res Function(RuleCode) then) =
-      _$RuleCodeCopyWithImpl<$Res>;
+      _$RuleCodeCopyWithImpl<$Res, RuleCode>;
+  @useResult
   $Res call({String id, String package, String? url});
 }
 
 /// @nodoc
-class _$RuleCodeCopyWithImpl<$Res> implements $RuleCodeCopyWith<$Res> {
+class _$RuleCodeCopyWithImpl<$Res, $Val extends RuleCode>
+    implements $RuleCodeCopyWith<$Res> {
   _$RuleCodeCopyWithImpl(this._value, this._then);
 
-  final RuleCode _value;
   // ignore: unused_field
-  final $Res Function(RuleCode) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? package = freezed,
+    Object? id = null,
+    Object? package = null,
     Object? url = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      package: package == freezed
+      package: null == package
           ? _value.package
           : package // ignore: cast_nullable_to_non_nullable
               as String,
-      url: url == freezed
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -128,34 +132,34 @@ abstract class _$$LintCodeCopyWith<$Res> implements $RuleCodeCopyWith<$Res> {
           _$LintCode value, $Res Function(_$LintCode) then) =
       __$$LintCodeCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String id, String package, String? url});
 }
 
 /// @nodoc
-class __$$LintCodeCopyWithImpl<$Res> extends _$RuleCodeCopyWithImpl<$Res>
+class __$$LintCodeCopyWithImpl<$Res>
+    extends _$RuleCodeCopyWithImpl<$Res, _$LintCode>
     implements _$$LintCodeCopyWith<$Res> {
   __$$LintCodeCopyWithImpl(_$LintCode _value, $Res Function(_$LintCode) _then)
-      : super(_value, (v) => _then(v as _$LintCode));
+      : super(_value, _then);
 
-  @override
-  _$LintCode get _value => super._value as _$LintCode;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? package = freezed,
+    Object? id = null,
+    Object? package = null,
     Object? url = freezed,
   }) {
     return _then(_$LintCode(
-      id == freezed
+      null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      package: package == freezed
+      package: null == package
           ? _value.package
           : package // ignore: cast_nullable_to_non_nullable
               as String,
-      url: url == freezed
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -194,21 +198,18 @@ class _$LintCode extends LintCode {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LintCode &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.package, package) &&
-            const DeepCollectionEquality().equals(other.url, url));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.package, package) || other.package == package) &&
+            (identical(other.url, url) || other.url == url));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(package),
-      const DeepCollectionEquality().hash(url));
+  int get hashCode => Object.hash(runtimeType, id, package, url);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LintCodeCopyWith<_$LintCode> get copyWith =>
       __$$LintCodeCopyWithImpl<_$LintCode>(this, _$identity);
 
@@ -225,9 +226,9 @@ class _$LintCode extends LintCode {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String id, String package, String? url)? lint,
-    TResult Function(String id, String package, String? url)? assist,
-    TResult Function(String id, String package, String? url)? data,
+    TResult? Function(String id, String package, String? url)? lint,
+    TResult? Function(String id, String package, String? url)? assist,
+    TResult? Function(String id, String package, String? url)? data,
   }) {
     return lint?.call(id, package, url);
   }
@@ -259,9 +260,9 @@ class _$LintCode extends LintCode {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintCode value)? lint,
-    TResult Function(AssistCode value)? assist,
-    TResult Function(DataCode value)? data,
+    TResult? Function(LintCode value)? lint,
+    TResult? Function(AssistCode value)? assist,
+    TResult? Function(DataCode value)? data,
   }) {
     return lint?.call(this);
   }
@@ -313,35 +314,35 @@ abstract class _$$AssistCodeCopyWith<$Res> implements $RuleCodeCopyWith<$Res> {
           _$AssistCode value, $Res Function(_$AssistCode) then) =
       __$$AssistCodeCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String id, String package, String? url});
 }
 
 /// @nodoc
-class __$$AssistCodeCopyWithImpl<$Res> extends _$RuleCodeCopyWithImpl<$Res>
+class __$$AssistCodeCopyWithImpl<$Res>
+    extends _$RuleCodeCopyWithImpl<$Res, _$AssistCode>
     implements _$$AssistCodeCopyWith<$Res> {
   __$$AssistCodeCopyWithImpl(
       _$AssistCode _value, $Res Function(_$AssistCode) _then)
-      : super(_value, (v) => _then(v as _$AssistCode));
+      : super(_value, _then);
 
-  @override
-  _$AssistCode get _value => super._value as _$AssistCode;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? package = freezed,
+    Object? id = null,
+    Object? package = null,
     Object? url = freezed,
   }) {
     return _then(_$AssistCode(
-      id == freezed
+      null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      package: package == freezed
+      package: null == package
           ? _value.package
           : package // ignore: cast_nullable_to_non_nullable
               as String,
-      url: url == freezed
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -380,21 +381,18 @@ class _$AssistCode extends AssistCode {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AssistCode &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.package, package) &&
-            const DeepCollectionEquality().equals(other.url, url));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.package, package) || other.package == package) &&
+            (identical(other.url, url) || other.url == url));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(package),
-      const DeepCollectionEquality().hash(url));
+  int get hashCode => Object.hash(runtimeType, id, package, url);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$AssistCodeCopyWith<_$AssistCode> get copyWith =>
       __$$AssistCodeCopyWithImpl<_$AssistCode>(this, _$identity);
 
@@ -411,9 +409,9 @@ class _$AssistCode extends AssistCode {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String id, String package, String? url)? lint,
-    TResult Function(String id, String package, String? url)? assist,
-    TResult Function(String id, String package, String? url)? data,
+    TResult? Function(String id, String package, String? url)? lint,
+    TResult? Function(String id, String package, String? url)? assist,
+    TResult? Function(String id, String package, String? url)? data,
   }) {
     return assist?.call(id, package, url);
   }
@@ -445,9 +443,9 @@ class _$AssistCode extends AssistCode {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintCode value)? lint,
-    TResult Function(AssistCode value)? assist,
-    TResult Function(DataCode value)? data,
+    TResult? Function(LintCode value)? lint,
+    TResult? Function(AssistCode value)? assist,
+    TResult? Function(DataCode value)? data,
   }) {
     return assist?.call(this);
   }
@@ -500,34 +498,34 @@ abstract class _$$DataCodeCopyWith<$Res> implements $RuleCodeCopyWith<$Res> {
           _$DataCode value, $Res Function(_$DataCode) then) =
       __$$DataCodeCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String id, String package, String? url});
 }
 
 /// @nodoc
-class __$$DataCodeCopyWithImpl<$Res> extends _$RuleCodeCopyWithImpl<$Res>
+class __$$DataCodeCopyWithImpl<$Res>
+    extends _$RuleCodeCopyWithImpl<$Res, _$DataCode>
     implements _$$DataCodeCopyWith<$Res> {
   __$$DataCodeCopyWithImpl(_$DataCode _value, $Res Function(_$DataCode) _then)
-      : super(_value, (v) => _then(v as _$DataCode));
+      : super(_value, _then);
 
-  @override
-  _$DataCode get _value => super._value as _$DataCode;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? package = freezed,
+    Object? id = null,
+    Object? package = null,
     Object? url = freezed,
   }) {
     return _then(_$DataCode(
-      id == freezed
+      null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      package: package == freezed
+      package: null == package
           ? _value.package
           : package // ignore: cast_nullable_to_non_nullable
               as String,
-      url: url == freezed
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -566,21 +564,18 @@ class _$DataCode extends DataCode {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DataCode &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.package, package) &&
-            const DeepCollectionEquality().equals(other.url, url));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.package, package) || other.package == package) &&
+            (identical(other.url, url) || other.url == url));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(package),
-      const DeepCollectionEquality().hash(url));
+  int get hashCode => Object.hash(runtimeType, id, package, url);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$DataCodeCopyWith<_$DataCode> get copyWith =>
       __$$DataCodeCopyWithImpl<_$DataCode>(this, _$identity);
 
@@ -597,9 +592,9 @@ class _$DataCode extends DataCode {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String id, String package, String? url)? lint,
-    TResult Function(String id, String package, String? url)? assist,
-    TResult Function(String id, String package, String? url)? data,
+    TResult? Function(String id, String package, String? url)? lint,
+    TResult? Function(String id, String package, String? url)? assist,
+    TResult? Function(String id, String package, String? url)? data,
   }) {
     return data?.call(id, package, url);
   }
@@ -631,9 +626,9 @@ class _$DataCode extends DataCode {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintCode value)? lint,
-    TResult Function(AssistCode value)? assist,
-    TResult Function(DataCode value)? data,
+    TResult? Function(LintCode value)? lint,
+    TResult? Function(AssistCode value)? assist,
+    TResult? Function(DataCode value)? data,
   }) {
     return data?.call(this);
   }

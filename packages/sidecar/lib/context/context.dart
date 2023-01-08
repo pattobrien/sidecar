@@ -5,6 +5,7 @@ import 'package:analyzer/file_system/file_system.dart';
 import 'package:package_config/package_config_types.dart';
 
 import '../src/configurations/configurations.dart';
+import '../src/protocol/models/analysis_result.dart';
 import '../src/protocol/models/data_result.dart';
 
 /// A snapshot of states from the current Sidecar analysis context.
@@ -13,7 +14,7 @@ abstract class SidecarContext {
   SidecarSpec get sidecarSpec;
 
   ///
-  Set<TotalData> get data;
+  Set<TotalDataResult> get data;
 
   /// Current file.
   // ResolvedUnitResult get currentUnit;
@@ -64,6 +65,6 @@ abstract class SidecarContext {
   void changeFile(String path);
 
   SidecarContext copyWith({
-    Set<TotalData>? data,
+    Set<TotalDataResult>? data,
   });
 }

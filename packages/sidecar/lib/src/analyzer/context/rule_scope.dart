@@ -2,10 +2,10 @@ import '../../protocol/models/models.dart';
 
 class RuleScope {
   const RuleScope({
-    Selector<Iterable<TotalData>>? dataSelector,
+    Selector<Iterable<TotalDataResult>>? dataSelector,
   }) : dataSelector = dataSelector ?? _defaultDataSelector;
 
-  final Selector<Iterable<TotalData>> dataSelector;
+  final Selector<Iterable<TotalDataResult>> dataSelector;
 
   // void x() {
   //   final x = ProviderContainer();
@@ -15,7 +15,8 @@ class RuleScope {
 
 typedef Selector<T> = T Function(T results);
 
-Iterable<TotalData> _defaultDataSelector(Iterable<TotalData> val) => val;
+Iterable<TotalDataResult> _defaultDataSelector(Iterable<TotalDataResult> val) =>
+    val;
 
 // final dataProvider = Provider<Set<TotalData>>((ref) => {});
 

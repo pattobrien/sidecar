@@ -43,10 +43,10 @@ mixin _$SidecarMessage {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, String id)? request,
-    TResult Function(SidecarResponse response, String id)? response,
-    TResult Function(SidecarNotification notification)? notification,
-    TResult Function(LogRecord record)? log,
+    TResult? Function(SidecarRequest request, String id)? request,
+    TResult? Function(SidecarResponse response, String id)? response,
+    TResult? Function(SidecarNotification notification)? notification,
+    TResult? Function(LogRecord record)? log,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -68,10 +68,10 @@ mixin _$SidecarMessage {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(RequestMessage value)? request,
-    TResult Function(ResponseMessage value)? response,
-    TResult Function(NotificationMessage value)? notification,
-    TResult Function(LogMessage value)? log,
+    TResult? Function(RequestMessage value)? request,
+    TResult? Function(ResponseMessage value)? response,
+    TResult? Function(NotificationMessage value)? notification,
+    TResult? Function(LogMessage value)? log,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -90,17 +90,18 @@ mixin _$SidecarMessage {
 abstract class $SidecarMessageCopyWith<$Res> {
   factory $SidecarMessageCopyWith(
           SidecarMessage value, $Res Function(SidecarMessage) then) =
-      _$SidecarMessageCopyWithImpl<$Res>;
+      _$SidecarMessageCopyWithImpl<$Res, SidecarMessage>;
 }
 
 /// @nodoc
-class _$SidecarMessageCopyWithImpl<$Res>
+class _$SidecarMessageCopyWithImpl<$Res, $Val extends SidecarMessage>
     implements $SidecarMessageCopyWith<$Res> {
   _$SidecarMessageCopyWithImpl(this._value, this._then);
 
-  final SidecarMessage _value;
   // ignore: unused_field
-  final $Res Function(SidecarMessage) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -108,6 +109,7 @@ abstract class _$$RequestMessageCopyWith<$Res> {
   factory _$$RequestMessageCopyWith(
           _$RequestMessage value, $Res Function(_$RequestMessage) then) =
       __$$RequestMessageCopyWithImpl<$Res>;
+  @useResult
   $Res call({SidecarRequest request, String id});
 
   $SidecarRequestCopyWith<$Res> get request;
@@ -115,26 +117,24 @@ abstract class _$$RequestMessageCopyWith<$Res> {
 
 /// @nodoc
 class __$$RequestMessageCopyWithImpl<$Res>
-    extends _$SidecarMessageCopyWithImpl<$Res>
+    extends _$SidecarMessageCopyWithImpl<$Res, _$RequestMessage>
     implements _$$RequestMessageCopyWith<$Res> {
   __$$RequestMessageCopyWithImpl(
       _$RequestMessage _value, $Res Function(_$RequestMessage) _then)
-      : super(_value, (v) => _then(v as _$RequestMessage));
+      : super(_value, _then);
 
-  @override
-  _$RequestMessage get _value => super._value as _$RequestMessage;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? request = freezed,
-    Object? id = freezed,
+    Object? request = null,
+    Object? id = null,
   }) {
     return _then(_$RequestMessage(
-      request: request == freezed
+      request: null == request
           ? _value.request
           : request // ignore: cast_nullable_to_non_nullable
               as SidecarRequest,
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
@@ -142,6 +142,7 @@ class __$$RequestMessageCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $SidecarRequestCopyWith<$Res> get request {
     return $SidecarRequestCopyWith<$Res>(_value.request, (value) {
       return _then(_value.copyWith(request: value));
@@ -178,19 +179,17 @@ class _$RequestMessage extends RequestMessage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RequestMessage &&
-            const DeepCollectionEquality().equals(other.request, request) &&
-            const DeepCollectionEquality().equals(other.id, id));
+            (identical(other.request, request) || other.request == request) &&
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(request),
-      const DeepCollectionEquality().hash(id));
+  int get hashCode => Object.hash(runtimeType, request, id);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$RequestMessageCopyWith<_$RequestMessage> get copyWith =>
       __$$RequestMessageCopyWithImpl<_$RequestMessage>(this, _$identity);
 
@@ -208,10 +207,10 @@ class _$RequestMessage extends RequestMessage {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, String id)? request,
-    TResult Function(SidecarResponse response, String id)? response,
-    TResult Function(SidecarNotification notification)? notification,
-    TResult Function(LogRecord record)? log,
+    TResult? Function(SidecarRequest request, String id)? request,
+    TResult? Function(SidecarResponse response, String id)? response,
+    TResult? Function(SidecarNotification notification)? notification,
+    TResult? Function(LogRecord record)? log,
   }) {
     return request?.call(this.request, id);
   }
@@ -245,10 +244,10 @@ class _$RequestMessage extends RequestMessage {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(RequestMessage value)? request,
-    TResult Function(ResponseMessage value)? response,
-    TResult Function(NotificationMessage value)? notification,
-    TResult Function(LogMessage value)? log,
+    TResult? Function(RequestMessage value)? request,
+    TResult? Function(ResponseMessage value)? response,
+    TResult? Function(NotificationMessage value)? notification,
+    TResult? Function(LogMessage value)? log,
   }) {
     return request?.call(this);
   }
@@ -297,6 +296,7 @@ abstract class _$$ResponseMessageCopyWith<$Res> {
   factory _$$ResponseMessageCopyWith(
           _$ResponseMessage value, $Res Function(_$ResponseMessage) then) =
       __$$ResponseMessageCopyWithImpl<$Res>;
+  @useResult
   $Res call({SidecarResponse response, String id});
 
   $SidecarResponseCopyWith<$Res> get response;
@@ -304,26 +304,24 @@ abstract class _$$ResponseMessageCopyWith<$Res> {
 
 /// @nodoc
 class __$$ResponseMessageCopyWithImpl<$Res>
-    extends _$SidecarMessageCopyWithImpl<$Res>
+    extends _$SidecarMessageCopyWithImpl<$Res, _$ResponseMessage>
     implements _$$ResponseMessageCopyWith<$Res> {
   __$$ResponseMessageCopyWithImpl(
       _$ResponseMessage _value, $Res Function(_$ResponseMessage) _then)
-      : super(_value, (v) => _then(v as _$ResponseMessage));
+      : super(_value, _then);
 
-  @override
-  _$ResponseMessage get _value => super._value as _$ResponseMessage;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? response = freezed,
-    Object? id = freezed,
+    Object? response = null,
+    Object? id = null,
   }) {
     return _then(_$ResponseMessage(
-      response == freezed
+      null == response
           ? _value.response
           : response // ignore: cast_nullable_to_non_nullable
               as SidecarResponse,
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
@@ -331,6 +329,7 @@ class __$$ResponseMessageCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $SidecarResponseCopyWith<$Res> get response {
     return $SidecarResponseCopyWith<$Res>(_value.response, (value) {
       return _then(_value.copyWith(response: value));
@@ -367,19 +366,18 @@ class _$ResponseMessage extends ResponseMessage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ResponseMessage &&
-            const DeepCollectionEquality().equals(other.response, response) &&
-            const DeepCollectionEquality().equals(other.id, id));
+            (identical(other.response, response) ||
+                other.response == response) &&
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(response),
-      const DeepCollectionEquality().hash(id));
+  int get hashCode => Object.hash(runtimeType, response, id);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$ResponseMessageCopyWith<_$ResponseMessage> get copyWith =>
       __$$ResponseMessageCopyWithImpl<_$ResponseMessage>(this, _$identity);
 
@@ -397,10 +395,10 @@ class _$ResponseMessage extends ResponseMessage {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, String id)? request,
-    TResult Function(SidecarResponse response, String id)? response,
-    TResult Function(SidecarNotification notification)? notification,
-    TResult Function(LogRecord record)? log,
+    TResult? Function(SidecarRequest request, String id)? request,
+    TResult? Function(SidecarResponse response, String id)? response,
+    TResult? Function(SidecarNotification notification)? notification,
+    TResult? Function(LogRecord record)? log,
   }) {
     return response?.call(this.response, id);
   }
@@ -434,10 +432,10 @@ class _$ResponseMessage extends ResponseMessage {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(RequestMessage value)? request,
-    TResult Function(ResponseMessage value)? response,
-    TResult Function(NotificationMessage value)? notification,
-    TResult Function(LogMessage value)? log,
+    TResult? Function(RequestMessage value)? request,
+    TResult? Function(ResponseMessage value)? response,
+    TResult? Function(NotificationMessage value)? notification,
+    TResult? Function(LogMessage value)? log,
   }) {
     return response?.call(this);
   }
@@ -485,6 +483,7 @@ abstract class _$$NotificationMessageCopyWith<$Res> {
   factory _$$NotificationMessageCopyWith(_$NotificationMessage value,
           $Res Function(_$NotificationMessage) then) =
       __$$NotificationMessageCopyWithImpl<$Res>;
+  @useResult
   $Res call({SidecarNotification notification});
 
   $SidecarNotificationCopyWith<$Res> get notification;
@@ -492,21 +491,19 @@ abstract class _$$NotificationMessageCopyWith<$Res> {
 
 /// @nodoc
 class __$$NotificationMessageCopyWithImpl<$Res>
-    extends _$SidecarMessageCopyWithImpl<$Res>
+    extends _$SidecarMessageCopyWithImpl<$Res, _$NotificationMessage>
     implements _$$NotificationMessageCopyWith<$Res> {
   __$$NotificationMessageCopyWithImpl(
       _$NotificationMessage _value, $Res Function(_$NotificationMessage) _then)
-      : super(_value, (v) => _then(v as _$NotificationMessage));
+      : super(_value, _then);
 
-  @override
-  _$NotificationMessage get _value => super._value as _$NotificationMessage;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? notification = freezed,
+    Object? notification = null,
   }) {
     return _then(_$NotificationMessage(
-      notification: notification == freezed
+      notification: null == notification
           ? _value.notification
           : notification // ignore: cast_nullable_to_non_nullable
               as SidecarNotification,
@@ -514,6 +511,7 @@ class __$$NotificationMessageCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $SidecarNotificationCopyWith<$Res> get notification {
     return $SidecarNotificationCopyWith<$Res>(_value.notification, (value) {
       return _then(_value.copyWith(notification: value));
@@ -547,17 +545,17 @@ class _$NotificationMessage extends NotificationMessage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NotificationMessage &&
-            const DeepCollectionEquality()
-                .equals(other.notification, notification));
+            (identical(other.notification, notification) ||
+                other.notification == notification));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(notification));
+  int get hashCode => Object.hash(runtimeType, notification);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$NotificationMessageCopyWith<_$NotificationMessage> get copyWith =>
       __$$NotificationMessageCopyWithImpl<_$NotificationMessage>(
           this, _$identity);
@@ -576,10 +574,10 @@ class _$NotificationMessage extends NotificationMessage {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, String id)? request,
-    TResult Function(SidecarResponse response, String id)? response,
-    TResult Function(SidecarNotification notification)? notification,
-    TResult Function(LogRecord record)? log,
+    TResult? Function(SidecarRequest request, String id)? request,
+    TResult? Function(SidecarResponse response, String id)? response,
+    TResult? Function(SidecarNotification notification)? notification,
+    TResult? Function(LogRecord record)? log,
   }) {
     return notification?.call(this.notification);
   }
@@ -613,10 +611,10 @@ class _$NotificationMessage extends NotificationMessage {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(RequestMessage value)? request,
-    TResult Function(ResponseMessage value)? response,
-    TResult Function(NotificationMessage value)? notification,
-    TResult Function(LogMessage value)? log,
+    TResult? Function(RequestMessage value)? request,
+    TResult? Function(ResponseMessage value)? response,
+    TResult? Function(NotificationMessage value)? notification,
+    TResult? Function(LogMessage value)? log,
   }) {
     return notification?.call(this);
   }
@@ -664,6 +662,7 @@ abstract class _$$LogMessageCopyWith<$Res> {
   factory _$$LogMessageCopyWith(
           _$LogMessage value, $Res Function(_$LogMessage) then) =
       __$$LogMessageCopyWithImpl<$Res>;
+  @useResult
   $Res call({LogRecord record});
 
   $LogRecordCopyWith<$Res> get record;
@@ -671,21 +670,19 @@ abstract class _$$LogMessageCopyWith<$Res> {
 
 /// @nodoc
 class __$$LogMessageCopyWithImpl<$Res>
-    extends _$SidecarMessageCopyWithImpl<$Res>
+    extends _$SidecarMessageCopyWithImpl<$Res, _$LogMessage>
     implements _$$LogMessageCopyWith<$Res> {
   __$$LogMessageCopyWithImpl(
       _$LogMessage _value, $Res Function(_$LogMessage) _then)
-      : super(_value, (v) => _then(v as _$LogMessage));
+      : super(_value, _then);
 
-  @override
-  _$LogMessage get _value => super._value as _$LogMessage;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? record = freezed,
+    Object? record = null,
   }) {
     return _then(_$LogMessage(
-      record == freezed
+      null == record
           ? _value.record
           : record // ignore: cast_nullable_to_non_nullable
               as LogRecord,
@@ -693,6 +690,7 @@ class __$$LogMessageCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $LogRecordCopyWith<$Res> get record {
     return $LogRecordCopyWith<$Res>(_value.record, (value) {
       return _then(_value.copyWith(record: value));
@@ -726,16 +724,16 @@ class _$LogMessage extends LogMessage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LogMessage &&
-            const DeepCollectionEquality().equals(other.record, record));
+            (identical(other.record, record) || other.record == record));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(record));
+  int get hashCode => Object.hash(runtimeType, record);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LogMessageCopyWith<_$LogMessage> get copyWith =>
       __$$LogMessageCopyWithImpl<_$LogMessage>(this, _$identity);
 
@@ -753,10 +751,10 @@ class _$LogMessage extends LogMessage {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(SidecarRequest request, String id)? request,
-    TResult Function(SidecarResponse response, String id)? response,
-    TResult Function(SidecarNotification notification)? notification,
-    TResult Function(LogRecord record)? log,
+    TResult? Function(SidecarRequest request, String id)? request,
+    TResult? Function(SidecarResponse response, String id)? response,
+    TResult? Function(SidecarNotification notification)? notification,
+    TResult? Function(LogRecord record)? log,
   }) {
     return log?.call(record);
   }
@@ -790,10 +788,10 @@ class _$LogMessage extends LogMessage {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(RequestMessage value)? request,
-    TResult Function(ResponseMessage value)? response,
-    TResult Function(NotificationMessage value)? notification,
-    TResult Function(LogMessage value)? log,
+    TResult? Function(RequestMessage value)? request,
+    TResult? Function(ResponseMessage value)? response,
+    TResult? Function(NotificationMessage value)? notification,
+    TResult? Function(LogMessage value)? log,
   }) {
     return log?.call(this);
   }

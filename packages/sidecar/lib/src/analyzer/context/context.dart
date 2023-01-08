@@ -7,6 +7,7 @@ import 'package:package_config/package_config.dart';
 
 import '../../../context/context.dart';
 import '../../configurations/sidecar_spec/sidecar_spec_base.dart';
+import '../../protocol/models/analysis_result.dart';
 import '../../protocol/models/data_result.dart';
 
 class SidecarContextImpl implements SidecarContext {
@@ -14,7 +15,7 @@ class SidecarContextImpl implements SidecarContext {
     AnalysisContext context, {
     // required PackageConfig packageConfig,
     required SidecarSpec sidecarSpec,
-    required Set<TotalData> data,
+    required Set<TotalDataResult> data,
     required Uri targetUri,
   })  : _context = context,
         // _packageConfig = packageConfig,
@@ -24,7 +25,7 @@ class SidecarContextImpl implements SidecarContext {
 
   final AnalysisContext _context;
   // final PackageConfig _packageConfig;
-  final Set<TotalData> _data;
+  final Set<TotalDataResult> _data;
   final SidecarSpec _sidecarSpec;
   final Uri _targetUri;
 
@@ -45,7 +46,7 @@ class SidecarContextImpl implements SidecarContext {
   // ResolvedUnitResult get currentUnit => throw UnimplementedError();
 
   @override
-  Set<TotalData> get data => _data;
+  Set<TotalDataResult> get data => _data;
 
   // @override
   // PackageConfig get packageConfig => _packageConfig;
@@ -61,7 +62,7 @@ class SidecarContextImpl implements SidecarContext {
 
   @override
   SidecarContext copyWith({
-    Set<TotalData>? data,
+    Set<TotalDataResult>? data,
   }) =>
       SidecarContextImpl(_context,
           sidecarSpec: _sidecarSpec,

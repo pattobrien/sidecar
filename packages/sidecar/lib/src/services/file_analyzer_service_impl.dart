@@ -27,7 +27,7 @@ class FileAnalyzerServiceImpl {
     return results;
   }
 
-  Set<SingleDataResult<Object>> visitDataResults(
+  Set<SingleDataResult> visitDataResults(
     ResolvedUnitResult? unitResult,
     Set<Data> rules,
     NodeRegistry registry,
@@ -44,7 +44,7 @@ class FileAnalyzerServiceImpl {
     return results;
   }
 
-  Set<AssistFilterResult> visitAssistFilters(
+  Set<AssistResult> visitAssistFilters(
     ResolvedUnitResult? unitResult,
     Set<QuickAssist> rules,
     NodeRegistry registry,

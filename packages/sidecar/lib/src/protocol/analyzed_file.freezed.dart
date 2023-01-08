@@ -33,33 +33,37 @@ mixin _$AnalyzedFile {
 abstract class $AnalyzedFileCopyWith<$Res> {
   factory $AnalyzedFileCopyWith(
           AnalyzedFile value, $Res Function(AnalyzedFile) then) =
-      _$AnalyzedFileCopyWithImpl<$Res>;
+      _$AnalyzedFileCopyWithImpl<$Res, AnalyzedFile>;
+  @useResult
   $Res call({Uri fileUri, Uri contextRoot});
 }
 
 /// @nodoc
-class _$AnalyzedFileCopyWithImpl<$Res> implements $AnalyzedFileCopyWith<$Res> {
+class _$AnalyzedFileCopyWithImpl<$Res, $Val extends AnalyzedFile>
+    implements $AnalyzedFileCopyWith<$Res> {
   _$AnalyzedFileCopyWithImpl(this._value, this._then);
 
-  final AnalyzedFile _value;
   // ignore: unused_field
-  final $Res Function(AnalyzedFile) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? fileUri = freezed,
-    Object? contextRoot = freezed,
+    Object? fileUri = null,
+    Object? contextRoot = null,
   }) {
     return _then(_value.copyWith(
-      fileUri: fileUri == freezed
+      fileUri: null == fileUri
           ? _value.fileUri
           : fileUri // ignore: cast_nullable_to_non_nullable
               as Uri,
-      contextRoot: contextRoot == freezed
+      contextRoot: null == contextRoot
           ? _value.contextRoot
           : contextRoot // ignore: cast_nullable_to_non_nullable
               as Uri,
-    ));
+    ) as $Val);
   }
 }
 
@@ -70,31 +74,30 @@ abstract class _$$_AnalyzedFileCopyWith<$Res>
           _$_AnalyzedFile value, $Res Function(_$_AnalyzedFile) then) =
       __$$_AnalyzedFileCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({Uri fileUri, Uri contextRoot});
 }
 
 /// @nodoc
 class __$$_AnalyzedFileCopyWithImpl<$Res>
-    extends _$AnalyzedFileCopyWithImpl<$Res>
+    extends _$AnalyzedFileCopyWithImpl<$Res, _$_AnalyzedFile>
     implements _$$_AnalyzedFileCopyWith<$Res> {
   __$$_AnalyzedFileCopyWithImpl(
       _$_AnalyzedFile _value, $Res Function(_$_AnalyzedFile) _then)
-      : super(_value, (v) => _then(v as _$_AnalyzedFile));
+      : super(_value, _then);
 
-  @override
-  _$_AnalyzedFile get _value => super._value as _$_AnalyzedFile;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? fileUri = freezed,
-    Object? contextRoot = freezed,
+    Object? fileUri = null,
+    Object? contextRoot = null,
   }) {
     return _then(_$_AnalyzedFile(
-      fileUri == freezed
+      null == fileUri
           ? _value.fileUri
           : fileUri // ignore: cast_nullable_to_non_nullable
               as Uri,
-      contextRoot: contextRoot == freezed
+      contextRoot: null == contextRoot
           ? _value.contextRoot
           : contextRoot // ignore: cast_nullable_to_non_nullable
               as Uri,
@@ -125,20 +128,18 @@ class _$_AnalyzedFile extends _AnalyzedFile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AnalyzedFile &&
-            const DeepCollectionEquality().equals(other.fileUri, fileUri) &&
-            const DeepCollectionEquality()
-                .equals(other.contextRoot, contextRoot));
+            (identical(other.fileUri, fileUri) || other.fileUri == fileUri) &&
+            (identical(other.contextRoot, contextRoot) ||
+                other.contextRoot == contextRoot));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(fileUri),
-      const DeepCollectionEquality().hash(contextRoot));
+  int get hashCode => Object.hash(runtimeType, fileUri, contextRoot);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_AnalyzedFileCopyWith<_$_AnalyzedFile> get copyWith =>
       __$$_AnalyzedFileCopyWithImpl<_$_AnalyzedFile>(this, _$identity);
 

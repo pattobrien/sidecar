@@ -19,8 +19,8 @@ class PluginChannelDelegate implements LogDelegateBase {
 
   @override
   void analysisResultError(LintResult result, Object err, StackTrace stack) {
-    channel.sendError('analysisResultEr: ${result.rule.id} $err', stack);
-    _log('analysisResultEr: ${result.rule.id} $err $stack');
+    channel.sendError('analysisResultEr: ${result.code.id} $err', stack);
+    _log('analysisResultEr: ${result.code.id} $err $stack');
   }
 
   @override

@@ -299,7 +299,7 @@ class SidecarAnalyzer {
           resultsInOffest.where((element) => element.editsComputer != null);
       final results = await Future.wait(resultsWithFixes.map((e) async {
         final edits = await e.editsComputer!();
-        return AssistResultWithEdits(code: e.rule, span: e.span, edits: edits);
+        return AssistWithEditsResult(code: e.code, span: e.span, edits: edits);
       }));
       logger.info(
           'handleEditGetAssists in ${watch.elapsed.prettified()} - ${request.file.relativePath}');

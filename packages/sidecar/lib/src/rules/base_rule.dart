@@ -50,7 +50,7 @@ mixin BaseRule {
   RuleScope get scope => _defaultScope;
 
   final Set<LintResult> lintResults = {};
-  final Set<AssistFilterResult> assistFilterResults = {};
+  final Set<AssistResult> assistFilterResults = {};
 
   late ResolvedUnitResult _unit;
 
@@ -151,7 +151,7 @@ mixin Lint on BaseRule {
     EditsComputer? editsComputer,
   }) {
     final result = LintResult(
-      rule: code,
+      code: code,
       span: span,
       message: message,
       correction: correction,
@@ -212,8 +212,8 @@ mixin QuickAssist on BaseRule {
     SourceSpan span, {
     EditsComputer? editsComputer,
   }) {
-    final result = AssistFilterResult(
-      rule: code,
+    final result = AssistResult(
+      code: code,
       span: span,
       editsComputer: editsComputer,
     );
@@ -242,7 +242,7 @@ mixin Data<T> on BaseRule {
   @override
   DataCode get code;
 
-  final dataResults = <SingleDataResult<T>>{};
+  final dataResults = <SingleDataResult>{};
 
   @override
   @internal

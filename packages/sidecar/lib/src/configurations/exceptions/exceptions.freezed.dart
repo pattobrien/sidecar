@@ -36,7 +36,8 @@ mixin _$SidecarNewException {
 abstract class $SidecarNewExceptionCopyWith<$Res> {
   factory $SidecarNewExceptionCopyWith(
           SidecarNewException value, $Res Function(SidecarNewException) then) =
-      _$SidecarNewExceptionCopyWithImpl<$Res>;
+      _$SidecarNewExceptionCopyWithImpl<$Res, SidecarNewException>;
+  @useResult
   $Res call(
       {RuleCode code,
       String message,
@@ -48,45 +49,48 @@ abstract class $SidecarNewExceptionCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$SidecarNewExceptionCopyWithImpl<$Res>
+class _$SidecarNewExceptionCopyWithImpl<$Res, $Val extends SidecarNewException>
     implements $SidecarNewExceptionCopyWith<$Res> {
   _$SidecarNewExceptionCopyWithImpl(this._value, this._then);
 
-  final SidecarNewException _value;
   // ignore: unused_field
-  final $Res Function(SidecarNewException) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? code = freezed,
-    Object? message = freezed,
+    Object? code = null,
+    Object? message = null,
     Object? correction = freezed,
-    Object? sourceSpan = freezed,
+    Object? sourceSpan = null,
   }) {
     return _then(_value.copyWith(
-      code: code == freezed
+      code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      correction: correction == freezed
+      correction: freezed == correction
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
               as String?,
-      sourceSpan: sourceSpan == freezed
+      sourceSpan: null == sourceSpan
           ? _value.sourceSpan
           : sourceSpan // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $RuleCodeCopyWith<$Res> get code {
     return $RuleCodeCopyWith<$Res>(_value.code, (value) {
-      return _then(_value.copyWith(code: value));
+      return _then(_value.copyWith(code: value) as $Val);
     });
   }
 }
@@ -98,6 +102,7 @@ abstract class _$$_SidecarExceptionCopyWith<$Res>
           _$_SidecarException value, $Res Function(_$_SidecarException) then) =
       __$$_SidecarExceptionCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {RuleCode code,
       String message,
@@ -111,36 +116,34 @@ abstract class _$$_SidecarExceptionCopyWith<$Res>
 
 /// @nodoc
 class __$$_SidecarExceptionCopyWithImpl<$Res>
-    extends _$SidecarNewExceptionCopyWithImpl<$Res>
+    extends _$SidecarNewExceptionCopyWithImpl<$Res, _$_SidecarException>
     implements _$$_SidecarExceptionCopyWith<$Res> {
   __$$_SidecarExceptionCopyWithImpl(
       _$_SidecarException _value, $Res Function(_$_SidecarException) _then)
-      : super(_value, (v) => _then(v as _$_SidecarException));
+      : super(_value, _then);
 
-  @override
-  _$_SidecarException get _value => super._value as _$_SidecarException;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? code = freezed,
-    Object? message = freezed,
+    Object? code = null,
+    Object? message = null,
     Object? correction = freezed,
-    Object? sourceSpan = freezed,
+    Object? sourceSpan = null,
   }) {
     return _then(_$_SidecarException(
-      code: code == freezed
+      code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      correction: correction == freezed
+      correction: freezed == correction
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
               as String?,
-      sourceSpan: sourceSpan == freezed
+      sourceSpan: null == sourceSpan
           ? _value.sourceSpan
           : sourceSpan // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
@@ -182,25 +185,22 @@ class _$_SidecarException extends _SidecarException {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SidecarException &&
-            const DeepCollectionEquality().equals(other.code, code) &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality()
-                .equals(other.correction, correction) &&
-            const DeepCollectionEquality()
-                .equals(other.sourceSpan, sourceSpan));
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.correction, correction) ||
+                other.correction == correction) &&
+            (identical(other.sourceSpan, sourceSpan) ||
+                other.sourceSpan == sourceSpan));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(code),
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(correction),
-      const DeepCollectionEquality().hash(sourceSpan));
+  int get hashCode =>
+      Object.hash(runtimeType, code, message, correction, sourceSpan);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SidecarExceptionCopyWith<_$_SidecarException> get copyWith =>
       __$$_SidecarExceptionCopyWithImpl<_$_SidecarException>(this, _$identity);
 

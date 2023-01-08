@@ -120,7 +120,7 @@ Future<void> modifyFile(String relativePath, {required String content}) async {
 
 extension _ on LintResult {
   ExpectedLint toExpectedLint() =>
-      ExpectedLint(rule, span.start.offset, span.length);
+      ExpectedLint(code, span.start.offset, span.length);
 
   ExpectedText toExpectedText({
     bool withText = true,

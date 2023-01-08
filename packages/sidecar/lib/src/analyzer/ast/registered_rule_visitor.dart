@@ -28,13 +28,13 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
     }
   }
 
-  Set<SingleDataResult<Object>> get dataResults => registry.rules
+  Set<SingleDataResult> get dataResults => registry.rules
       .whereType<Data<Object>>()
       .map((e) => e.dataResults)
       .expand((e) => e)
       .toSet();
 
-  Set<AssistFilterResult> get assistResults =>
+  Set<AssistResult> get assistResults =>
       registry.rules.map((e) => e.assistFilterResults).expand((e) => e).toSet();
 
   @override
