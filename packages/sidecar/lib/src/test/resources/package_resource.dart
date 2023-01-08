@@ -114,7 +114,9 @@ environment:
 
 dependencies:
   path: ^1.8.0
-  intl_lints: ^0.1.0-dev.7
+  # intl_lints: ^0.1.0-dev.7
+  intl_lints:
+    path: $sidecarPackagePath/test/packages/intl_lints/
 
 dependency_overrides:
   sidecar:
