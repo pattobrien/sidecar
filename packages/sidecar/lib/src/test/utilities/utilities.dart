@@ -18,6 +18,7 @@ import '../../analyzer/ast/registered_rule_visitor.dart';
 import '../../analyzer/context/context.dart';
 import '../../configurations/configurations.dart';
 import '../../protocol/models/models.dart';
+import '../../rules/base_rule.dart';
 import '../../utils/file_paths.dart';
 import '../../utils/get_sdk.dart';
 import '../../utils/uri_ext.dart';

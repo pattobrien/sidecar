@@ -4,7 +4,7 @@ import 'package:sidecar/sidecar.dart';
 
 import '../constants.dart';
 
-class OutputSourceSpan extends Rule with QuickAssist {
+class OutputSourceSpan extends AssistRule {
   @override
   AssistCode get code =>
       const AssistCode('output_source_span', package: kPackageName);

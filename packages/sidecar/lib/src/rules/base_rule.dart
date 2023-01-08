@@ -3,6 +3,7 @@
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/token.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glob/glob.dart';
 import 'package:source_span/source_span.dart';
@@ -16,6 +17,22 @@ import '../protocol/protocol.dart';
 import '../utils/utils.dart';
 import 'lint_severity.dart';
 import 'rules.dart';
+
+/// Base for all Sidecar Rules.
+abstract class Rule extends SimpleAstVisitor<void> with BaseRule {
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is BaseRule &&
+            const DeepCollectionEquality().equals(other.code, code));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        runtimeType,
+        const DeepCollectionEquality().hash(code),
+      );
+}
 
 /// Base class for constructing any Sidecar rule.
 @internal
@@ -64,7 +81,7 @@ mixin BaseRule {
   /// For example, if you have a Lint rule that visits String Literals, then
   /// you must add the visitor to the NodeRegistry's StringLiteral register:
   /// ```dart
-  /// class StringLiterals extends SidecarAstVisitor with Lint {
+  /// class StringLiterals extends LintRule {
   ///   ...
   ///
   ///   @override

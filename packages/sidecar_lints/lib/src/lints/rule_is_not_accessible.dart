@@ -8,7 +8,7 @@ import 'package:sidecar/sidecar.dart';
 import '../constants.dart';
 import '../utils.dart';
 
-class RuleIsNotAccessible extends Rule with Lint {
+class RuleIsNotAccessible extends LintRule {
   static const _id = 'rule_is_not_accessible';
 
   @override

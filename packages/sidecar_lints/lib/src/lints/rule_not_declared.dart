@@ -9,7 +9,7 @@ import 'package:yaml/yaml.dart';
 import '../constants.dart';
 import '../utils.dart';
 
-class RuleNotDeclared extends Rule with Lint, QuickFix {
+class RuleNotDeclared extends LintRule with QuickFix {
   static const _id = 'rule_not_declared';
 
   static const _message = 'Rule is not declared in Pubspec';
