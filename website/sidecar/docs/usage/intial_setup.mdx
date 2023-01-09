@@ -25,13 +25,13 @@ There are 2 modes which Sidecar packages can be run within a Dart or Flutter Pro
 
 ### Setup Instructions
 
-To enable Sidecar to display lints and assist recommendations within your IDE, perform the following setup steps:
+To enable any Sidecar-based package (like [design_system_lints](https://pub.dev/packages/design_system_lints)) to display lints and assist recommendations within your IDE, perform the following setup steps:
 
-1. Depend on any ```sidecar``` lint packages (e.g. [design_system_lints](https://pub.dev/packages/design_system_lints))
+1. Depend on the lint package:
 
 <CodeBlock title="pubspec.yaml" language="yaml">{trimSnippet(pubspec)}</CodeBlock>
 
-2. Create a ```sidecar.yaml``` file at the project's root directory and declare any rules from the package
+2. Create a ```sidecar.yaml``` file at the Target Project's root directory and declare any rules from the package:
 
 <CodeBlock title="sidecar.yaml" language="yaml">{trimSnippet(main)}</CodeBlock>
 
