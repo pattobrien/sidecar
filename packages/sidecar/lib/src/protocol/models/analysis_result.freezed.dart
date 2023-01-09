@@ -61,8 +61,8 @@ mixin _$AnalysisResult {
             String? correction,
             List<EditResult> edits)
         lintWithEdits,
-    required TResult Function(RuleCode code, List<dynamic> data) totalData,
-    required TResult Function(RuleCode code, dynamic data) singleData,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
     required TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -102,8 +102,8 @@ mixin _$AnalysisResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult? Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult? Function(RuleCode code, dynamic data)? singleData,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
     TResult? Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -143,8 +143,8 @@ mixin _$AnalysisResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult Function(RuleCode code, dynamic data)? singleData,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
     TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -386,8 +386,8 @@ class _$LintResult extends LintResult {
             String? correction,
             List<EditResult> edits)
         lintWithEdits,
-    required TResult Function(RuleCode code, List<dynamic> data) totalData,
-    required TResult Function(RuleCode code, dynamic data) singleData,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
     required TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -430,8 +430,8 @@ class _$LintResult extends LintResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult? Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult? Function(RuleCode code, dynamic data)? singleData,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
     TResult? Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -474,8 +474,8 @@ class _$LintResult extends LintResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult Function(RuleCode code, dynamic data)? singleData,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
     TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -729,8 +729,8 @@ class _$LintWithEditsResult extends LintWithEditsResult {
             String? correction,
             List<EditResult> edits)
         lintWithEdits,
-    required TResult Function(RuleCode code, List<dynamic> data) totalData,
-    required TResult Function(RuleCode code, dynamic data) singleData,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
     required TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -773,8 +773,8 @@ class _$LintWithEditsResult extends LintWithEditsResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult? Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult? Function(RuleCode code, dynamic data)? singleData,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
     TResult? Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -818,8 +818,8 @@ class _$LintWithEditsResult extends LintWithEditsResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult Function(RuleCode code, dynamic data)? singleData,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
     TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -932,7 +932,7 @@ abstract class _$$TotalDataResultCopyWith<$Res>
       __$$TotalDataResultCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({RuleCode code, List<dynamic> data});
+  $Res call({RuleCode code, List<Object> data});
 
   @override
   $RuleCodeCopyWith<$Res> get code;
@@ -960,7 +960,7 @@ class __$$TotalDataResultCopyWithImpl<$Res>
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List<Object>,
     ));
   }
 }
@@ -970,7 +970,7 @@ class __$$TotalDataResultCopyWithImpl<$Res>
 class _$TotalDataResult extends TotalDataResult {
   const _$TotalDataResult(
       {required this.code,
-      required final List<dynamic> data,
+      required final List<Object> data,
       final String? $type})
       : _data = data,
         $type = $type ?? 'totalData',
@@ -981,9 +981,9 @@ class _$TotalDataResult extends TotalDataResult {
 
   @override
   final RuleCode code;
-  final List<dynamic> _data;
+  final List<Object> _data;
   @override
-  List<dynamic> get data {
+  List<Object> get data {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_data);
   }
@@ -1026,8 +1026,8 @@ class _$TotalDataResult extends TotalDataResult {
             String? correction,
             List<EditResult> edits)
         lintWithEdits,
-    required TResult Function(RuleCode code, List<dynamic> data) totalData,
-    required TResult Function(RuleCode code, dynamic data) singleData,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
     required TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1070,8 +1070,8 @@ class _$TotalDataResult extends TotalDataResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult? Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult? Function(RuleCode code, dynamic data)? singleData,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
     TResult? Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1114,8 +1114,8 @@ class _$TotalDataResult extends TotalDataResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult Function(RuleCode code, dynamic data)? singleData,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
     TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1192,7 +1192,7 @@ class _$TotalDataResult extends TotalDataResult {
 abstract class TotalDataResult extends AnalysisResult {
   const factory TotalDataResult(
       {required final RuleCode code,
-      required final List<dynamic> data}) = _$TotalDataResult;
+      required final List<Object> data}) = _$TotalDataResult;
   const TotalDataResult._() : super._();
 
   factory TotalDataResult.fromJson(Map<String, dynamic> json) =
@@ -1200,7 +1200,7 @@ abstract class TotalDataResult extends AnalysisResult {
 
   @override
   RuleCode get code;
-  List<dynamic> get data;
+  List<Object> get data;
   @override
   @JsonKey(ignore: true)
   _$$TotalDataResultCopyWith<_$TotalDataResult> get copyWith =>
@@ -1215,7 +1215,7 @@ abstract class _$$SingleDataResultCopyWith<$Res>
       __$$SingleDataResultCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({RuleCode code, dynamic data});
+  $Res call({RuleCode code, Object data});
 
   @override
   $RuleCodeCopyWith<$Res> get code;
@@ -1240,10 +1240,7 @@ class __$$SingleDataResultCopyWithImpl<$Res>
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+      data: null == data ? _value.data : data,
     ));
   }
 }
@@ -1262,7 +1259,7 @@ class _$SingleDataResult extends SingleDataResult {
   @override
   final RuleCode code;
   @override
-  final dynamic data;
+  final Object data;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -1302,8 +1299,8 @@ class _$SingleDataResult extends SingleDataResult {
             String? correction,
             List<EditResult> edits)
         lintWithEdits,
-    required TResult Function(RuleCode code, List<dynamic> data) totalData,
-    required TResult Function(RuleCode code, dynamic data) singleData,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
     required TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1346,8 +1343,8 @@ class _$SingleDataResult extends SingleDataResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult? Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult? Function(RuleCode code, dynamic data)? singleData,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
     TResult? Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1390,8 +1387,8 @@ class _$SingleDataResult extends SingleDataResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult Function(RuleCode code, dynamic data)? singleData,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
     TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1468,7 +1465,7 @@ class _$SingleDataResult extends SingleDataResult {
 abstract class SingleDataResult extends AnalysisResult {
   const factory SingleDataResult(
       {required final RuleCode code,
-      required final dynamic data}) = _$SingleDataResult;
+      required final Object data}) = _$SingleDataResult;
   const SingleDataResult._() : super._();
 
   factory SingleDataResult.fromJson(Map<String, dynamic> json) =
@@ -1476,7 +1473,7 @@ abstract class SingleDataResult extends AnalysisResult {
 
   @override
   RuleCode get code;
-  dynamic get data;
+  Object get data;
   @override
   @JsonKey(ignore: true)
   _$$SingleDataResultCopyWith<_$SingleDataResult> get copyWith =>
@@ -1600,8 +1597,8 @@ class _$AssistResult extends AssistResult {
             String? correction,
             List<EditResult> edits)
         lintWithEdits,
-    required TResult Function(RuleCode code, List<dynamic> data) totalData,
-    required TResult Function(RuleCode code, dynamic data) singleData,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
     required TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1644,8 +1641,8 @@ class _$AssistResult extends AssistResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult? Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult? Function(RuleCode code, dynamic data)? singleData,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
     TResult? Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1688,8 +1685,8 @@ class _$AssistResult extends AssistResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult Function(RuleCode code, dynamic data)? singleData,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
     TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1907,8 +1904,8 @@ class _$AssistWithEditsResult extends AssistWithEditsResult {
             String? correction,
             List<EditResult> edits)
         lintWithEdits,
-    required TResult Function(RuleCode code, List<dynamic> data) totalData,
-    required TResult Function(RuleCode code, dynamic data) singleData,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
     required TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1951,8 +1948,8 @@ class _$AssistWithEditsResult extends AssistWithEditsResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult? Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult? Function(RuleCode code, dynamic data)? singleData,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
     TResult? Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')
@@ -1995,8 +1992,8 @@ class _$AssistWithEditsResult extends AssistWithEditsResult {
             String? correction,
             List<EditResult> edits)?
         lintWithEdits,
-    TResult Function(RuleCode code, List<dynamic> data)? totalData,
-    TResult Function(RuleCode code, dynamic data)? singleData,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
     TResult Function(
             RuleCode code,
             @Assert('span.sourceUrl != null')

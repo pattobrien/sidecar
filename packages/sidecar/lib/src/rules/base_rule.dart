@@ -256,11 +256,11 @@ mixin QuickAssist on BaseRule {
 }
 
 /// Utilities to record a piece of data in a codebase.
-mixin Data<T> on BaseRule {
+mixin Data on BaseRule {
   @override
   DataCode get code;
 
-  void reportData(T object) {
+  void reportData(Object object) {
     final result = SingleDataResult(code: code, data: object);
     results.add(result);
   }

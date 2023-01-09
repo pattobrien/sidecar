@@ -1,7 +1,7 @@
 import 'package:sidecar/sidecar.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 
-class SomeDataRule extends DataRule<MyData> {
+class SomeDataRule extends DataRule {
   @override
   DataCode get code => const DataCode('some_data_rule', package: 'data_rules');
 

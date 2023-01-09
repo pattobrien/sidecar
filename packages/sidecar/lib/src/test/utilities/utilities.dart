@@ -13,7 +13,6 @@ import 'package:test/scaffolding.dart';
 import 'package:test/test.dart' as test;
 
 import '../../../context/context.dart';
-import '../../../rules/rules.dart';
 import '../../analyzer/ast/registered_rule_visitor.dart';
 import '../../analyzer/context/context.dart';
 import '../../configurations/configurations.dart';
@@ -69,21 +68,6 @@ void setUpRules(List<Rule> rules) {
     _registry = NodeRegistry(rules.toSet());
     _visitor = RegisteredRuleVisitor(_registry);
 
-    _sidecarContext = SidecarContextImpl(_context,
-        // packageConfig: _packageConfig,
-        sidecarSpec: _sidecarSpec,
-        data: {},
-        targetUri: _rootUri);
-
-    for (final data in rules.whereType<Data>()) {
-      // final context = ref.watch(sidecarContextProvider(file))!;
-      data.setConfig(context: _sidecarContext);
-    }
-
-    for (final lint in rules.where((rule) => rule is! Data)) {
-      lint.setConfig(context: _sidecarContext);
-    }
-
     _rootUri = io.Directory.current.uri;
     final testRoot = p.join(_rootUri.path, kDartTool, 'sidecar_tests');
     final file =
@@ -98,6 +82,21 @@ void setUpRules(List<Rule> rules) {
 
     // used to warm up the analyzer
     await _context.currentSession.getResolvedUnit(file.path);
+
+    _sidecarContext = SidecarContextImpl(_context,
+        // packageConfig: _packageConfig,
+        sidecarSpec: _sidecarSpec,
+        data: {},
+        targetUri: _rootUri);
+
+    for (final data in rules.whereType<Data>()) {
+      // final context = ref.watch(sidecarContextProvider(file))!;
+      data.setConfig(context: _sidecarContext);
+    }
+
+    for (final lint in rules.where((rule) => rule is! Data)) {
+      lint.setConfig(context: _sidecarContext);
+    }
   });
 }
 

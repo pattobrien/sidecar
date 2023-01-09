@@ -76,7 +76,7 @@ Map<String, dynamic> _$$LintWithEditsResultToJson(
 
 _$TotalDataResult _$$TotalDataResultFromJson(Map json) => _$TotalDataResult(
       code: RuleCode.fromJson(Map<String, dynamic>.from(json['code'] as Map)),
-      data: json['data'] as List<dynamic>,
+      data: (json['data'] as List<dynamic>).map((e) => e as Object).toList(),
       $type: json['runtimeType'] as String?,
     );
 
@@ -89,25 +89,16 @@ Map<String, dynamic> _$$TotalDataResultToJson(_$TotalDataResult instance) =>
 
 _$SingleDataResult _$$SingleDataResultFromJson(Map json) => _$SingleDataResult(
       code: RuleCode.fromJson(Map<String, dynamic>.from(json['code'] as Map)),
-      data: json['data'],
+      data: json['data'] as Object,
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$SingleDataResultToJson(_$SingleDataResult instance) {
-  final val = <String, dynamic>{
-    'code': instance.code.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('data', instance.data);
-  val['runtimeType'] = instance.$type;
-  return val;
-}
+Map<String, dynamic> _$$SingleDataResultToJson(_$SingleDataResult instance) =>
+    <String, dynamic>{
+      'code': instance.code.toJson(),
+      'data': instance.data,
+      'runtimeType': instance.$type,
+    };
 
 _$AssistResult _$$AssistResultFromJson(Map json) => _$AssistResult(
       code: RuleCode.fromJson(Map<String, dynamic>.from(json['code'] as Map)),

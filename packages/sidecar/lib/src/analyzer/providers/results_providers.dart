@@ -134,9 +134,9 @@ final totalDataResultsProvider = Provider<Set<TotalDataResult>>((ref) {
   final totalDataResults = <TotalDataResult>{};
 
   for (final dataRule in allDataResults.map((e) => e.code).toSet()) {
-    final totalData = allDataResults.where((r) => r.code == dataRule);
+    final results = allDataResults.where((r) => r.code == dataRule);
     totalDataResults.add(TotalDataResult(
-        code: dataRule, data: totalData.map<dynamic>((e) => e.data).toList()));
+        code: dataRule, data: results.map<Object>((e) => e.data).toList()));
   }
   return totalDataResults;
 });

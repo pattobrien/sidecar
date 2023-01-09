@@ -2,7 +2,7 @@
 
 import '../src/rules/rules.dart';
 
-export '../src/rules/base_rule.dart' show QuickFix;
+export '../src/rules/base_rule.dart' show QuickFix, SidecarBaseConstructor;
 export '../src/rules/lint_severity.dart';
 
 /// Create a lint.
@@ -12,7 +12,7 @@ abstract class LintRule = Rule with Lint;
 abstract class AssistRule = Rule with QuickAssist;
 
 /// Capture data.
-abstract class DataRule<T> = Rule with Data<T>;
+abstract class DataRule = Rule with Data;
 
 
 // mixin Configuration on BaseRule {

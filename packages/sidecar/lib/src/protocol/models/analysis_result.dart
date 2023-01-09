@@ -38,12 +38,12 @@ class AnalysisResult with _$AnalysisResult {
 
   const factory AnalysisResult.totalData({
     required RuleCode code,
-    required List<dynamic> data,
+    required List<Object> data,
   }) = TotalDataResult;
 
   const factory AnalysisResult.singleData({
     required RuleCode code,
-    required dynamic data,
+    required Object data,
   }) = SingleDataResult;
 
   const factory AnalysisResult.assist({
