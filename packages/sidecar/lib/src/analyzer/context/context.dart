@@ -8,7 +8,6 @@ import 'package:package_config/package_config.dart';
 import '../../../context/context.dart';
 import '../../configurations/sidecar_spec/sidecar_spec_base.dart';
 import '../../protocol/models/analysis_result.dart';
-import '../../protocol/models/data_result.dart';
 
 class SidecarContextImpl implements SidecarContext {
   const SidecarContextImpl(

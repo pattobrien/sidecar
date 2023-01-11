@@ -25,9 +25,7 @@ dev_dependencies:
   intl_lints: ^0.1.0-dev.7
   json_annotation: 4.6.0
   lints: ^2.0.0
-  # sidecar: 0.1.0-dev.16
-  sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+  sidecar: 0.1.0-dev.16
   # sidecar_lints:
   #   path: ../../packages/sidecar_lints/
   test: ^1.16.0

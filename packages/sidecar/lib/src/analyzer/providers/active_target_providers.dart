@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 // ignore: implementation_imports
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../protocol/analyzed_files.dart';
 import '../../protocol/protocol.dart';
 import '../../server/communication_channel.dart';
 import '../../services/active_project_service.dart';
@@ -77,13 +79,12 @@ final contextCollectionProvider = Provider<List<AnalysisContext>>((ref) {
 });
 
 /// Generates in-scope files based on sidecar.yaml top-level includes/excludes globs.
-final activeProjectScopedFilesProvider = Provider<Set<AnalyzedFile>>((ref) {
+final activeProjectScopedFilesProvider = Provider<AnalyzedFiles>((ref) {
   final activeProjectIncludes = ref.watch(activeProjectIncludeGlobsProvider);
   final activeProjectExcludes = ref.watch(activeProjectExcludeGlobsProvider);
   final contexts = ref.watch(contextCollectionProvider);
   final fileSystem = ref.watch(fileSystemProvider);
   final globService = ref.watch(globServiceProvider);
-  final channel = ref.watch(communicationChannelProvider);
 
   final allFiles = contexts
       .map((context) {
@@ -92,14 +93,16 @@ final activeProjectScopedFilesProvider = Provider<Set<AnalyzedFile>>((ref) {
             fileSystem: fileSystem,
             globalIncludes: activeProjectIncludes,
             globalExcludes: activeProjectExcludes);
-
+        // final hash = filesInScope.hashCode;
         final files = filesInScope
             .map((e) => AnalyzedFile(Uri.parse(e),
                 contextRoot: context.contextRoot.root.toUri()))
             .toList();
+        // final analyzedFiles = AnalyzedFiles.from(files);
         return files;
       })
       .expand((e) => e)
       .toSet();
-  return allFiles;
+  // final hashCode = allFiles.hashCode;
+  return AnalyzedFiles(allFiles);
 });

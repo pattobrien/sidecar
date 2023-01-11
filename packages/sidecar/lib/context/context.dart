@@ -6,7 +6,6 @@ import 'package:package_config/package_config_types.dart';
 
 import '../src/configurations/configurations.dart';
 import '../src/protocol/models/analysis_result.dart';
-import '../src/protocol/models/data_result.dart';
 
 /// A snapshot of states from the current Sidecar analysis context.
 abstract class SidecarContext {

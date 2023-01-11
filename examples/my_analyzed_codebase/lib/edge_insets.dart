@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 class MyWidget extends StatelessWidget {
@@ -5,6 +7,7 @@ class MyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final setView = UnmodifiableSetView(source);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: GlobalInsets.extraLarge,

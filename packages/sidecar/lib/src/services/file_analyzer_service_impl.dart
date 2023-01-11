@@ -2,6 +2,7 @@ import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/ast/ast.dart';
+import '../protocol/models/analysis_results.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 
@@ -27,14 +28,14 @@ class FileAnalyzerServiceImpl {
     return results;
   }
 
-  Set<LintResult> visitLintResults(
+  LintResults visitLintResults(
     ResolvedUnitResult? unitResult,
     Set<Lint> rules,
     NodeRegistry registry,
   ) {
-    return visitResults(unitResult, rules, registry)
+    return LintResults(visitResults(unitResult, rules, registry)
         .whereType<LintResult>()
-        .toSet();
+        .toSet());
   }
 
   Set<SingleDataResult> visitDataResults(

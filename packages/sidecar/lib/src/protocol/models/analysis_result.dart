@@ -121,16 +121,51 @@ class AnalysisResult with _$AnalysisResult {
       },
     );
   }
+
   //TODO: reimplement hashCode override
   // @override
-  // int get hashCode => Object.hash(
-  //       runtimeType,
-  //       const DeepCollectionEquality().hash(rule),
-  //       const DeepCollectionEquality().hash(span),
-  //       const DeepCollectionEquality().hash(message),
-  //       const DeepCollectionEquality().hash(severity),
-  //       const DeepCollectionEquality().hash(correction),
-  //     );
+  int get hashCode => Object.hash(
+        runtimeType,
+        map(lint: (value) {
+          return Object.hash(
+            const DeepCollectionEquality().hash(value.code),
+            const DeepCollectionEquality().hash(value.span),
+            const DeepCollectionEquality().hash(value.message),
+            const DeepCollectionEquality().hash(value.severity),
+            const DeepCollectionEquality().hash(value.correction),
+          );
+        }, lintWithEdits: (value) {
+          // TODO: missing List<EditResult> edits from equality
+          return Object.hash(
+            const DeepCollectionEquality().hash(value.code),
+            const DeepCollectionEquality().hash(value.span),
+            const DeepCollectionEquality().hash(value.message),
+            const DeepCollectionEquality().hash(value.severity),
+            const DeepCollectionEquality().hash(value.correction),
+          );
+        }, totalData: (value) {
+          return Object.hash(
+            const DeepCollectionEquality().hash(value.code),
+            const DeepCollectionEquality().hash(value.data),
+          );
+        }, singleData: (value) {
+          return Object.hash(
+            const DeepCollectionEquality().hash(value.code),
+            const DeepCollectionEquality().hash(value.data),
+          );
+        }, assist: (value) {
+          return Object.hash(
+            const DeepCollectionEquality().hash(value.code),
+            const DeepCollectionEquality().hash(value.span),
+          );
+        }, assistWithEdits: (value) {
+          // TODO: missing List<EditResult> edits from equality
+          return Object.hash(
+            const DeepCollectionEquality().hash(value.code),
+            const DeepCollectionEquality().hash(value.span),
+          );
+        }),
+      );
 
   /// Whether or not this lint has calculated edits yet.
   // bool get hasCalculatedEdits => this is LintWithEditsResult;
@@ -168,20 +203,6 @@ class AnalysisResult with _$AnalysisResult {
         other as AssistWithEditsResult;
         return value.span.start.offset.compareTo(other.span.start.offset);
       });
-
-  // LintWithEditsResult copyWithNoEdits() => copyWithEdits(edits: []);
-
-  // LintWithEditsResult copyWithEdits({
-  //   required List<EditResult> edits,
-  // }) {
-  //   return LintWithEditsResult(
-  //     code: code,
-  //     span: span,
-  //     message: message,
-  //     severity: severity,
-  //     edits: edits,
-  //   );
-  // }
 }
 
 typedef EditsComputer = Future<List<EditResult>> Function();

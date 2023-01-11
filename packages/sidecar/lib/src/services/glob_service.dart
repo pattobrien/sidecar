@@ -67,6 +67,7 @@ class GlobServiceImpl extends GlobService {
                 p.relative(entity.path, from: rootFolder),
                 globalIncludes,
               ))
-          .map((entity) => p.normalize(entity.path))
-          .toSet();
+          .map((entity) {
+        return p.normalize(entity.path);
+      }).toSet();
 }

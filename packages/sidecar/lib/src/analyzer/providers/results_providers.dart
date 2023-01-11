@@ -3,9 +3,11 @@ import 'dart:developer';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
+import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../../context/context.dart';
+import '../../protocol/models/analysis_results.dart';
 import '../../protocol/protocol.dart';
 import '../../server/communication_channel.dart';
 import '../../services/file_analyzer_service_impl.dart';
@@ -54,7 +56,7 @@ final sidecarContextProvider =
 
 /// Compute and cache lint results for a given file.
 final lintResultsProvider =
-    FutureProvider.family<Set<LintResult>, AnalyzedFile>((ref, file) async {
+    FutureProvider.family<LintResults, AnalyzedFile>((ref, file) async {
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
   final rulesForFile = ref.watch(scopedLintRulesForFileProvider(file));
   final registry = ref.watch(nodeRegistryForFileLintsProvider(file));
@@ -62,11 +64,11 @@ final lintResultsProvider =
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
 
   return timedLog('visitLintResults', () {
-    return runZonedGuarded<Set<LintResult>>(
+    return runZonedGuarded<LintResults>(
           () => analyzerService.visitLintResults(unit, rulesForFile, registry),
           (err, stk) => log('lintResultsProvider', error: err, stackTrace: stk),
         ) ??
-        {};
+        LintResults(const {});
   });
 });
 
@@ -145,8 +147,7 @@ final lintListener = Provider((ref) {
   final files = ref.watch(activeProjectScopedFilesProvider);
   final channel = ref.watch(communicationChannelProvider);
   for (final file in files) {
-    ref.listen<Set<LintResult>?>(
-        lintResultsProvider(file).select((data) => data.valueOrNull),
+    ref.listen<LintResults?>(lintResultsProvider(file).select((d) => d.value),
         (_, lints) {
       channel.sendNotification(LintNotification(file, lints ?? {}));
     });
