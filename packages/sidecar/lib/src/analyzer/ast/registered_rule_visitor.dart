@@ -1,13 +1,14 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
-import '../../../rules/rules.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
 import '../sidecar_analyzer.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';
+
+// coverage:ignore-file
 
 /// Visitor that executes all visit methods of a given NodeRegistry.
 class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
