@@ -1,6 +1,7 @@
 import 'package:glob/glob.dart';
 import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
+import 'package:path/path.dart' as p;
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec.dart';
 import 'package:sidecar/src/test/resources/package_resource.dart';
 import 'package:sidecar/src/test/resources/workspace_resource.dart';
@@ -114,6 +115,18 @@ void main() {
       await client.handleFileChange(mainFile.toUri(), '\n$kContentWithString');
       final results2 = verify(reporter.handleLintNotification(captureAny));
       expectLints(results2.captured.first, [lint(exampleRuleCode, 29, 14)]);
+    });
+
+    test('new file is added', () async {
+      // start with a basic file with no lintable string
+      // final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
+      final client = await analyzeTestResources(app.root, reporter);
+      // update file with a lintable string
+      final mainFile =
+          app.modifyFile(p.join('lib', 'random.dart'), kContentWithString);
+      await client.handleFileChange(mainFile.toUri(), kContentWithString);
+      final results2 = verify(reporter.handleLintNotification(captureAny));
+      expectLints(results2.captured.first, [lint(exampleRuleCode, 28, 14)]);
     });
   });
 }
