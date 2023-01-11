@@ -110,11 +110,13 @@ class PackageResource with ResourceMixin {
 name: $projectName
 
 environment:
-  sdk: ">=2.17.5 <3.0.0"
+  sdk: ">=2.17.5 <2.18.0"
 
 dependencies:
   path: ^1.8.0
-  intl_lints: ^0.1.0-dev.7
+  # intl_lints: ^0.1.0-dev.7
+  intl_lints:
+    path: $sidecarPackagePath/test/packages/intl_lints/
 
 dependency_overrides:
   sidecar:

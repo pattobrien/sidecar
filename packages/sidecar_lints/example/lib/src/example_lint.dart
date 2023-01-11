@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:sidecar/sidecar.dart';
 
-class ExampleLint extends Rule with Lint {
+class ExampleLint extends LintRule {
   static const _id = 'example_lint';
 
   @override
@@ -22,7 +22,7 @@ class ExampleLint extends Rule with Lint {
   }
 }
 
-class ExampleLintWithCascade extends Rule with Lint {
+class ExampleLintWithCascade extends LintRule {
   static const _id = 'example_lint_with_cascade';
 
   @override
@@ -44,7 +44,7 @@ class ExampleLintWithCascade extends Rule with Lint {
   }
 }
 
-class ExampleLintWithFunctionBlock extends Rule with Lint {
+class ExampleLintWithFunctionBlock extends LintRule {
   static const _id = 'example_lint_with_cascade';
 
   @override
@@ -73,7 +73,7 @@ class ExampleLintWithFunctionBlock extends Rule with Lint {
   }
 }
 
-class ExampleLintWithFunctionBlockWithReturn extends Rule with Lint {
+class ExampleLintWithFunctionBlockWithReturn extends LintRule {
   static const _id = 'example_lint_with_function_block_with_return';
 
   @override

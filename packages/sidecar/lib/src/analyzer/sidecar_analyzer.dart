@@ -16,6 +16,7 @@ import '../server/communication_channel.dart';
 import '../utils/duration_ext.dart';
 import '../utils/file_paths.dart';
 import 'providers/providers.dart';
+import 'providers/status_providers.dart';
 
 final logger = Logger('sidecar-plugin');
 
@@ -89,6 +90,8 @@ class SidecarAnalyzer {
       onError: (Object error, StackTrace stackTrace) =>
           channel.handleError(package, error, stackTrace),
     );
+    // listener keeps lintListener alive
+    _ref.listen<void>(lintListener, (previous, next) {});
     _listenForConfigChanges();
     setupCompleter.complete();
   }
@@ -127,7 +130,7 @@ class SidecarAnalyzer {
       _ref.read(workspaceScopeProvider.notifier).update((_) => roots);
     }
     final files = _ref.refresh(activeProjectScopedFilesProvider);
-    await analyzeFiles(files: files);
+    await contentChanged(files);
     return const SetWorkspaceResponse();
   }
 
@@ -155,6 +158,9 @@ class SidecarAnalyzer {
   }
 
   Future<void> contentChanged(Set<AnalyzedFile> files) async {
+    final stamp = DateTime.now().millisecondsSinceEpoch;
+
+    _ref.read(eventQueueProvider.notifier).update((s) => [...s, stamp]);
     Future<void> handleContexts(List<AnalysisContext> contexts) async {
       for (final context in contexts) {
         final watch = Stopwatch()..start();
@@ -170,6 +176,9 @@ class SidecarAnalyzer {
         logger.info(
             'applyPendingFileChanges in ${watch.elapsed.prettified()} - ${contextUri.path}');
 
+        //TODO: is this the right place to calculate data?
+        // await _ref.refresh(totalDataResultsProvider.future);
+
         // for a better user experience:
         // first we handle the changed files, then we handle all affected files.
         // this also allows us to include any changed non-dart files in our analysis
@@ -182,6 +191,7 @@ class SidecarAnalyzer {
             .toSet();
 
         await analyzeFiles(files: affectedFiles.difference(changedFiles));
+
         logger.info(
             'handleContexts in ${watch.elapsed.prettified()} - ${contextUri.path}');
       }
@@ -191,6 +201,8 @@ class SidecarAnalyzer {
     await handleContexts(_getPriorityContexts());
 
     await handleContexts(_getLowPriorityContexts());
+
+    _ref.read(eventQueueProvider.notifier).update((s) => [...s]..remove(stamp));
   }
 
   List<AnalysisContext> _getLowPriorityContexts() {
@@ -209,38 +221,40 @@ class SidecarAnalyzer {
 
   Set<AnalyzedFile> priorityFiles = {};
 
+  /// Calculate lints and assists for files.
+  ///
+  /// This is where we contain the logic for the ordering of which each rule should be analyzed.
+  ///
+  /// 1. SidecarSpec(s) should be analyzed first (?)
+  /// 2. LintResults
+  /// 2. DataResults
+  /// 3. AssistFilters
+  /// 4. Assist Edits
+  /// 4. QuickFix Edits
   Future<void> analyzeFiles({
     required Set<AnalyzedFile> files,
   }) async {
-    // TODO: remove only analyzing dart files
     final watch = Stopwatch()..start();
+
+    // First, we handle any changes to sidecar.yaml files
     final specYaml = files.firstWhereOrNull((file) => file.isSidecarYamlFile);
     if (specYaml != null) {
       // handle sidecar.yaml parse
-      final contents =
-          resourceProvider.getFile(specYaml.path).readAsStringSync();
-      final spec = parseSidecarSpec(contents, fileUri: specYaml.fileUri);
-      final exceptions = spec.errors;
-      final errors = exceptions.map((e) => e.toLintResult());
-      channel.sendNotification(LintNotification(specYaml, errors.toSet()));
+      final cntent = resourceProvider.getFile(specYaml.path).readAsStringSync();
+      final sidecarSpec = parseSidecarSpec(cntent, fileUri: specYaml.fileUri);
+      final errors = sidecarSpec.errors.map((e) => e.toLintResult()).toSet();
+      channel.sendNotification(LintNotification(specYaml, errors));
     }
 
+    // TODO: remove only analyzing dart files
     final dartFiles = files.where((file) => file.isDartFile);
 
     for (final file in dartFiles) {
-      _ref.invalidate(nodeRegistryForFileLintsProvider(file));
-
-      await timedLogAsync('unit refresh',
-          () => _ref.refresh(resolvedUnitForFileProvider(file).future));
-
-      final lints = await timedLogAsync(
-          'lint refresh', () => _ref.read(lintResultsProvider(file).future));
-
-      channel.sendNotification(LintNotification(file, lints));
+      _ref.invalidate(resolvedUnitForFileProvider(file));
+      await _ref.read(resolvedUnitForFileProvider(file).future);
     }
     for (final file in dartFiles) {
-      _ref.refresh(quickFixResultsProvider(file));
-      _ref.refresh(assistFiltersProvider(file));
+      await _ref.read(lintResultsProvider(file).future);
     }
     logger.info('analyzeFiles in ${watch.elapsed.prettified()} - $files');
     watch.stop();
@@ -249,8 +263,15 @@ class SidecarAnalyzer {
   Future<QuickFixResponse> handleEditGetFixes(
     QuickFixRequest request,
   ) async {
+    final requestStamp = DateTime.now().millisecondsSinceEpoch;
     final watch = Stopwatch()..start();
     final file = request.file;
+
+    await _ref.read(eventQueueStreamProvider.stream).firstWhere((stamps) {
+      return stamps.every((stamp) => stamp > requestStamp);
+    });
+    // this listener is needed for some reason, in order to complete the Future
+    _ref.listen(quickFixResultsProvider(file), (_, __) {});
     final fixes = await _ref.read(quickFixResultsProvider(file).future);
     final withinOffset =
         fixes.where((f) => f.isWithinOffset(file.path, request.offset));
@@ -278,7 +299,7 @@ class SidecarAnalyzer {
           resultsInOffest.where((element) => element.editsComputer != null);
       final results = await Future.wait(resultsWithFixes.map((e) async {
         final edits = await e.editsComputer!();
-        return AssistResultWithEdits(code: e.rule, span: e.span, edits: edits);
+        return AssistWithEditsResult(code: e.code, span: e.span, edits: edits);
       }));
       logger.info(
           'handleEditGetAssists in ${watch.elapsed.prettified()} - ${request.file.relativePath}');

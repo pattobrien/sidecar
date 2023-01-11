@@ -1,34 +1,18 @@
 // ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
 
-import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import '../src/rules/rules.dart';
 
-export '../src/rules/base_rule.dart' hide BaseRule;
+export '../src/rules/base_rule.dart' show QuickFix, SidecarBaseConstructor;
 export '../src/rules/lint_severity.dart';
 
-/// Base for all Sidecar Rules.
-abstract class Rule extends SimpleAstVisitor<void> with BaseRule {
-  // @override
-  // @mustCallSuper
-  // void visitNode(AstNode node) {
-  //   super.visitNode(node);
-  // }
+/// Create a lint.
+abstract class LintRule = Rule with Lint;
 
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is BaseRule &&
-            const DeepCollectionEquality().equals(other.code, code));
-  }
+/// Create an assist.
+abstract class AssistRule = Rule with QuickAssist;
 
-  @override
-  int get hashCode => Object.hash(
-        runtimeType,
-        const DeepCollectionEquality().hash(code),
-      );
-}
+/// Capture data.
+abstract class DataRule = Rule with Data;
 
 
 // mixin Configuration on BaseRule {

@@ -42,9 +42,9 @@ mixin _$FileUpdateEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(AnalyzedFile file, String contents)? add,
-    TResult Function(AnalyzedFile file, SourceFileEdit fileEdit)? modify,
-    TResult Function(AnalyzedFile file)? delete,
+    TResult? Function(AnalyzedFile file, String contents)? add,
+    TResult? Function(AnalyzedFile file, SourceFileEdit fileEdit)? modify,
+    TResult? Function(AnalyzedFile file)? delete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -64,9 +64,9 @@ mixin _$FileUpdateEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(AddEvent value)? add,
-    TResult Function(ModifyEvent value)? modify,
-    TResult Function(DeleteEvent value)? delete,
+    TResult? Function(AddEvent value)? add,
+    TResult? Function(ModifyEvent value)? modify,
+    TResult? Function(DeleteEvent value)? delete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -87,37 +87,41 @@ mixin _$FileUpdateEvent {
 abstract class $FileUpdateEventCopyWith<$Res> {
   factory $FileUpdateEventCopyWith(
           FileUpdateEvent value, $Res Function(FileUpdateEvent) then) =
-      _$FileUpdateEventCopyWithImpl<$Res>;
+      _$FileUpdateEventCopyWithImpl<$Res, FileUpdateEvent>;
+  @useResult
   $Res call({AnalyzedFile file});
 
   $AnalyzedFileCopyWith<$Res> get file;
 }
 
 /// @nodoc
-class _$FileUpdateEventCopyWithImpl<$Res>
+class _$FileUpdateEventCopyWithImpl<$Res, $Val extends FileUpdateEvent>
     implements $FileUpdateEventCopyWith<$Res> {
   _$FileUpdateEventCopyWithImpl(this._value, this._then);
 
-  final FileUpdateEvent _value;
   // ignore: unused_field
-  final $Res Function(FileUpdateEvent) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? file = freezed,
+    Object? file = null,
   }) {
     return _then(_value.copyWith(
-      file: file == freezed
+      file: null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as AnalyzedFile,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $AnalyzedFileCopyWith<$Res> get file {
     return $AnalyzedFileCopyWith<$Res>(_value.file, (value) {
-      return _then(_value.copyWith(file: value));
+      return _then(_value.copyWith(file: value) as $Val);
     });
   }
 }
@@ -129,6 +133,7 @@ abstract class _$$AddEventCopyWith<$Res>
           _$AddEvent value, $Res Function(_$AddEvent) then) =
       __$$AddEventCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({AnalyzedFile file, String contents});
 
   @override
@@ -136,25 +141,24 @@ abstract class _$$AddEventCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$AddEventCopyWithImpl<$Res> extends _$FileUpdateEventCopyWithImpl<$Res>
+class __$$AddEventCopyWithImpl<$Res>
+    extends _$FileUpdateEventCopyWithImpl<$Res, _$AddEvent>
     implements _$$AddEventCopyWith<$Res> {
   __$$AddEventCopyWithImpl(_$AddEvent _value, $Res Function(_$AddEvent) _then)
-      : super(_value, (v) => _then(v as _$AddEvent));
+      : super(_value, _then);
 
-  @override
-  _$AddEvent get _value => super._value as _$AddEvent;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? file = freezed,
-    Object? contents = freezed,
+    Object? file = null,
+    Object? contents = null,
   }) {
     return _then(_$AddEvent(
-      file == freezed
+      null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as AnalyzedFile,
-      contents == freezed
+      null == contents
           ? _value.contents
           : contents // ignore: cast_nullable_to_non_nullable
               as String,
@@ -190,19 +194,18 @@ class _$AddEvent extends AddEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddEvent &&
-            const DeepCollectionEquality().equals(other.file, file) &&
-            const DeepCollectionEquality().equals(other.contents, contents));
+            (identical(other.file, file) || other.file == file) &&
+            (identical(other.contents, contents) ||
+                other.contents == contents));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(file),
-      const DeepCollectionEquality().hash(contents));
+  int get hashCode => Object.hash(runtimeType, file, contents);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$AddEventCopyWith<_$AddEvent> get copyWith =>
       __$$AddEventCopyWithImpl<_$AddEvent>(this, _$identity);
 
@@ -220,9 +223,9 @@ class _$AddEvent extends AddEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(AnalyzedFile file, String contents)? add,
-    TResult Function(AnalyzedFile file, SourceFileEdit fileEdit)? modify,
-    TResult Function(AnalyzedFile file)? delete,
+    TResult? Function(AnalyzedFile file, String contents)? add,
+    TResult? Function(AnalyzedFile file, SourceFileEdit fileEdit)? modify,
+    TResult? Function(AnalyzedFile file)? delete,
   }) {
     return add?.call(file, contents);
   }
@@ -254,9 +257,9 @@ class _$AddEvent extends AddEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(AddEvent value)? add,
-    TResult Function(ModifyEvent value)? modify,
-    TResult Function(DeleteEvent value)? delete,
+    TResult? Function(AddEvent value)? add,
+    TResult? Function(ModifyEvent value)? modify,
+    TResult? Function(DeleteEvent value)? delete,
   }) {
     return add?.call(this);
   }
@@ -306,6 +309,7 @@ abstract class _$$ModifyEventCopyWith<$Res>
           _$ModifyEvent value, $Res Function(_$ModifyEvent) then) =
       __$$ModifyEventCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({AnalyzedFile file, SourceFileEdit fileEdit});
 
   @override
@@ -315,26 +319,24 @@ abstract class _$$ModifyEventCopyWith<$Res>
 
 /// @nodoc
 class __$$ModifyEventCopyWithImpl<$Res>
-    extends _$FileUpdateEventCopyWithImpl<$Res>
+    extends _$FileUpdateEventCopyWithImpl<$Res, _$ModifyEvent>
     implements _$$ModifyEventCopyWith<$Res> {
   __$$ModifyEventCopyWithImpl(
       _$ModifyEvent _value, $Res Function(_$ModifyEvent) _then)
-      : super(_value, (v) => _then(v as _$ModifyEvent));
+      : super(_value, _then);
 
-  @override
-  _$ModifyEvent get _value => super._value as _$ModifyEvent;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? file = freezed,
-    Object? fileEdit = freezed,
+    Object? file = null,
+    Object? fileEdit = null,
   }) {
     return _then(_$ModifyEvent(
-      file == freezed
+      null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as AnalyzedFile,
-      fileEdit == freezed
+      null == fileEdit
           ? _value.fileEdit
           : fileEdit // ignore: cast_nullable_to_non_nullable
               as SourceFileEdit,
@@ -342,6 +344,7 @@ class __$$ModifyEventCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $SourceFileEditCopyWith<$Res> get fileEdit {
     return $SourceFileEditCopyWith<$Res>(_value.fileEdit, (value) {
       return _then(_value.copyWith(fileEdit: value));
@@ -377,19 +380,18 @@ class _$ModifyEvent extends ModifyEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ModifyEvent &&
-            const DeepCollectionEquality().equals(other.file, file) &&
-            const DeepCollectionEquality().equals(other.fileEdit, fileEdit));
+            (identical(other.file, file) || other.file == file) &&
+            (identical(other.fileEdit, fileEdit) ||
+                other.fileEdit == fileEdit));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(file),
-      const DeepCollectionEquality().hash(fileEdit));
+  int get hashCode => Object.hash(runtimeType, file, fileEdit);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$ModifyEventCopyWith<_$ModifyEvent> get copyWith =>
       __$$ModifyEventCopyWithImpl<_$ModifyEvent>(this, _$identity);
 
@@ -407,9 +409,9 @@ class _$ModifyEvent extends ModifyEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(AnalyzedFile file, String contents)? add,
-    TResult Function(AnalyzedFile file, SourceFileEdit fileEdit)? modify,
-    TResult Function(AnalyzedFile file)? delete,
+    TResult? Function(AnalyzedFile file, String contents)? add,
+    TResult? Function(AnalyzedFile file, SourceFileEdit fileEdit)? modify,
+    TResult? Function(AnalyzedFile file)? delete,
   }) {
     return modify?.call(file, fileEdit);
   }
@@ -441,9 +443,9 @@ class _$ModifyEvent extends ModifyEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(AddEvent value)? add,
-    TResult Function(ModifyEvent value)? modify,
-    TResult Function(DeleteEvent value)? delete,
+    TResult? Function(AddEvent value)? add,
+    TResult? Function(ModifyEvent value)? modify,
+    TResult? Function(DeleteEvent value)? delete,
   }) {
     return modify?.call(this);
   }
@@ -494,6 +496,7 @@ abstract class _$$DeleteEventCopyWith<$Res>
           _$DeleteEvent value, $Res Function(_$DeleteEvent) then) =
       __$$DeleteEventCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({AnalyzedFile file});
 
   @override
@@ -502,21 +505,19 @@ abstract class _$$DeleteEventCopyWith<$Res>
 
 /// @nodoc
 class __$$DeleteEventCopyWithImpl<$Res>
-    extends _$FileUpdateEventCopyWithImpl<$Res>
+    extends _$FileUpdateEventCopyWithImpl<$Res, _$DeleteEvent>
     implements _$$DeleteEventCopyWith<$Res> {
   __$$DeleteEventCopyWithImpl(
       _$DeleteEvent _value, $Res Function(_$DeleteEvent) _then)
-      : super(_value, (v) => _then(v as _$DeleteEvent));
+      : super(_value, _then);
 
-  @override
-  _$DeleteEvent get _value => super._value as _$DeleteEvent;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? file = freezed,
+    Object? file = null,
   }) {
     return _then(_$DeleteEvent(
-      file == freezed
+      null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as AnalyzedFile,
@@ -550,16 +551,16 @@ class _$DeleteEvent extends DeleteEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DeleteEvent &&
-            const DeepCollectionEquality().equals(other.file, file));
+            (identical(other.file, file) || other.file == file));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(file));
+  int get hashCode => Object.hash(runtimeType, file);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$DeleteEventCopyWith<_$DeleteEvent> get copyWith =>
       __$$DeleteEventCopyWithImpl<_$DeleteEvent>(this, _$identity);
 
@@ -577,9 +578,9 @@ class _$DeleteEvent extends DeleteEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(AnalyzedFile file, String contents)? add,
-    TResult Function(AnalyzedFile file, SourceFileEdit fileEdit)? modify,
-    TResult Function(AnalyzedFile file)? delete,
+    TResult? Function(AnalyzedFile file, String contents)? add,
+    TResult? Function(AnalyzedFile file, SourceFileEdit fileEdit)? modify,
+    TResult? Function(AnalyzedFile file)? delete,
   }) {
     return delete?.call(file);
   }
@@ -611,9 +612,9 @@ class _$DeleteEvent extends DeleteEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(AddEvent value)? add,
-    TResult Function(ModifyEvent value)? modify,
-    TResult Function(DeleteEvent value)? delete,
+    TResult? Function(AddEvent value)? add,
+    TResult? Function(ModifyEvent value)? modify,
+    TResult? Function(DeleteEvent value)? delete,
   }) {
     return delete?.call(this);
   }

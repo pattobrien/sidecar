@@ -49,12 +49,12 @@ mixin _$SidecarRequest {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Uri>? roots)? setWorkspaceScope,
-    TResult Function(List<String> files)? lint,
-    TResult Function(AnalyzedFile file, int offset, int length)? assist,
-    TResult Function(AnalyzedFile file, int offset)? quickFix,
-    TResult Function(List<FileUpdateEvent> updates)? updateFiles,
-    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
+    TResult? Function(List<Uri>? roots)? setWorkspaceScope,
+    TResult? Function(List<String> files)? lint,
+    TResult? Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult? Function(AnalyzedFile file, int offset)? quickFix,
+    TResult? Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult? Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -81,12 +81,12 @@ mixin _$SidecarRequest {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetContextCollectionRequest value)? setWorkspaceScope,
-    TResult Function(LintRequest value)? lint,
-    TResult Function(AssistRequest value)? assist,
-    TResult Function(QuickFixRequest value)? quickFix,
-    TResult Function(FileUpdateRequest value)? updateFiles,
-    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
+    TResult? Function(SetContextCollectionRequest value)? setWorkspaceScope,
+    TResult? Function(LintRequest value)? lint,
+    TResult? Function(AssistRequest value)? assist,
+    TResult? Function(QuickFixRequest value)? quickFix,
+    TResult? Function(FileUpdateRequest value)? updateFiles,
+    TResult? Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -107,17 +107,18 @@ mixin _$SidecarRequest {
 abstract class $SidecarRequestCopyWith<$Res> {
   factory $SidecarRequestCopyWith(
           SidecarRequest value, $Res Function(SidecarRequest) then) =
-      _$SidecarRequestCopyWithImpl<$Res>;
+      _$SidecarRequestCopyWithImpl<$Res, SidecarRequest>;
 }
 
 /// @nodoc
-class _$SidecarRequestCopyWithImpl<$Res>
+class _$SidecarRequestCopyWithImpl<$Res, $Val extends SidecarRequest>
     implements $SidecarRequestCopyWith<$Res> {
   _$SidecarRequestCopyWithImpl(this._value, this._then);
 
-  final SidecarRequest _value;
   // ignore: unused_field
-  final $Res Function(SidecarRequest) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -126,28 +127,26 @@ abstract class _$$SetContextCollectionRequestCopyWith<$Res> {
           _$SetContextCollectionRequest value,
           $Res Function(_$SetContextCollectionRequest) then) =
       __$$SetContextCollectionRequestCopyWithImpl<$Res>;
+  @useResult
   $Res call({List<Uri>? roots});
 }
 
 /// @nodoc
 class __$$SetContextCollectionRequestCopyWithImpl<$Res>
-    extends _$SidecarRequestCopyWithImpl<$Res>
+    extends _$SidecarRequestCopyWithImpl<$Res, _$SetContextCollectionRequest>
     implements _$$SetContextCollectionRequestCopyWith<$Res> {
   __$$SetContextCollectionRequestCopyWithImpl(
       _$SetContextCollectionRequest _value,
       $Res Function(_$SetContextCollectionRequest) _then)
-      : super(_value, (v) => _then(v as _$SetContextCollectionRequest));
+      : super(_value, _then);
 
-  @override
-  _$SetContextCollectionRequest get _value =>
-      super._value as _$SetContextCollectionRequest;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? roots = freezed,
   }) {
     return _then(_$SetContextCollectionRequest(
-      roots == freezed
+      freezed == roots
           ? _value._roots
           : roots // ignore: cast_nullable_to_non_nullable
               as List<Uri>?,
@@ -199,6 +198,7 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$SetContextCollectionRequestCopyWith<_$SetContextCollectionRequest>
       get copyWith => __$$SetContextCollectionRequestCopyWithImpl<
           _$SetContextCollectionRequest>(this, _$identity);
@@ -219,12 +219,12 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Uri>? roots)? setWorkspaceScope,
-    TResult Function(List<String> files)? lint,
-    TResult Function(AnalyzedFile file, int offset, int length)? assist,
-    TResult Function(AnalyzedFile file, int offset)? quickFix,
-    TResult Function(List<FileUpdateEvent> updates)? updateFiles,
-    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
+    TResult? Function(List<Uri>? roots)? setWorkspaceScope,
+    TResult? Function(List<String> files)? lint,
+    TResult? Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult? Function(AnalyzedFile file, int offset)? quickFix,
+    TResult? Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult? Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return setWorkspaceScope?.call(roots);
   }
@@ -263,12 +263,12 @@ class _$SetContextCollectionRequest extends SetContextCollectionRequest {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetContextCollectionRequest value)? setWorkspaceScope,
-    TResult Function(LintRequest value)? lint,
-    TResult Function(AssistRequest value)? assist,
-    TResult Function(QuickFixRequest value)? quickFix,
-    TResult Function(FileUpdateRequest value)? updateFiles,
-    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
+    TResult? Function(SetContextCollectionRequest value)? setWorkspaceScope,
+    TResult? Function(LintRequest value)? lint,
+    TResult? Function(AssistRequest value)? assist,
+    TResult? Function(QuickFixRequest value)? quickFix,
+    TResult? Function(FileUpdateRequest value)? updateFiles,
+    TResult? Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return setWorkspaceScope?.call(this);
   }
@@ -317,26 +317,25 @@ abstract class _$$LintRequestCopyWith<$Res> {
   factory _$$LintRequestCopyWith(
           _$LintRequest value, $Res Function(_$LintRequest) then) =
       __$$LintRequestCopyWithImpl<$Res>;
+  @useResult
   $Res call({List<String> files});
 }
 
 /// @nodoc
 class __$$LintRequestCopyWithImpl<$Res>
-    extends _$SidecarRequestCopyWithImpl<$Res>
+    extends _$SidecarRequestCopyWithImpl<$Res, _$LintRequest>
     implements _$$LintRequestCopyWith<$Res> {
   __$$LintRequestCopyWithImpl(
       _$LintRequest _value, $Res Function(_$LintRequest) _then)
-      : super(_value, (v) => _then(v as _$LintRequest));
+      : super(_value, _then);
 
-  @override
-  _$LintRequest get _value => super._value as _$LintRequest;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? files = freezed,
+    Object? files = null,
   }) {
     return _then(_$LintRequest(
-      files == freezed
+      null == files
           ? _value._files
           : files // ignore: cast_nullable_to_non_nullable
               as List<String>,
@@ -385,6 +384,7 @@ class _$LintRequest extends LintRequest {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LintRequestCopyWith<_$LintRequest> get copyWith =>
       __$$LintRequestCopyWithImpl<_$LintRequest>(this, _$identity);
 
@@ -404,12 +404,12 @@ class _$LintRequest extends LintRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Uri>? roots)? setWorkspaceScope,
-    TResult Function(List<String> files)? lint,
-    TResult Function(AnalyzedFile file, int offset, int length)? assist,
-    TResult Function(AnalyzedFile file, int offset)? quickFix,
-    TResult Function(List<FileUpdateEvent> updates)? updateFiles,
-    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
+    TResult? Function(List<Uri>? roots)? setWorkspaceScope,
+    TResult? Function(List<String> files)? lint,
+    TResult? Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult? Function(AnalyzedFile file, int offset)? quickFix,
+    TResult? Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult? Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return lint?.call(files);
   }
@@ -448,12 +448,12 @@ class _$LintRequest extends LintRequest {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetContextCollectionRequest value)? setWorkspaceScope,
-    TResult Function(LintRequest value)? lint,
-    TResult Function(AssistRequest value)? assist,
-    TResult Function(QuickFixRequest value)? quickFix,
-    TResult Function(FileUpdateRequest value)? updateFiles,
-    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
+    TResult? Function(SetContextCollectionRequest value)? setWorkspaceScope,
+    TResult? Function(LintRequest value)? lint,
+    TResult? Function(AssistRequest value)? assist,
+    TResult? Function(QuickFixRequest value)? quickFix,
+    TResult? Function(FileUpdateRequest value)? updateFiles,
+    TResult? Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return lint?.call(this);
   }
@@ -501,6 +501,7 @@ abstract class _$$AssistRequestCopyWith<$Res> {
   factory _$$AssistRequestCopyWith(
           _$AssistRequest value, $Res Function(_$AssistRequest) then) =
       __$$AssistRequestCopyWithImpl<$Res>;
+  @useResult
   $Res call({AnalyzedFile file, int offset, int length});
 
   $AnalyzedFileCopyWith<$Res> get file;
@@ -508,31 +509,29 @@ abstract class _$$AssistRequestCopyWith<$Res> {
 
 /// @nodoc
 class __$$AssistRequestCopyWithImpl<$Res>
-    extends _$SidecarRequestCopyWithImpl<$Res>
+    extends _$SidecarRequestCopyWithImpl<$Res, _$AssistRequest>
     implements _$$AssistRequestCopyWith<$Res> {
   __$$AssistRequestCopyWithImpl(
       _$AssistRequest _value, $Res Function(_$AssistRequest) _then)
-      : super(_value, (v) => _then(v as _$AssistRequest));
+      : super(_value, _then);
 
-  @override
-  _$AssistRequest get _value => super._value as _$AssistRequest;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? file = freezed,
-    Object? offset = freezed,
-    Object? length = freezed,
+    Object? file = null,
+    Object? offset = null,
+    Object? length = null,
   }) {
     return _then(_$AssistRequest(
-      file: file == freezed
+      file: null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as AnalyzedFile,
-      offset: offset == freezed
+      offset: null == offset
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
               as int,
-      length: length == freezed
+      length: null == length
           ? _value.length
           : length // ignore: cast_nullable_to_non_nullable
               as int,
@@ -540,6 +539,7 @@ class __$$AssistRequestCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $AnalyzedFileCopyWith<$Res> get file {
     return $AnalyzedFileCopyWith<$Res>(_value.file, (value) {
       return _then(_value.copyWith(file: value));
@@ -581,21 +581,18 @@ class _$AssistRequest extends AssistRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AssistRequest &&
-            const DeepCollectionEquality().equals(other.file, file) &&
-            const DeepCollectionEquality().equals(other.offset, offset) &&
-            const DeepCollectionEquality().equals(other.length, length));
+            (identical(other.file, file) || other.file == file) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.length, length) || other.length == length));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(file),
-      const DeepCollectionEquality().hash(offset),
-      const DeepCollectionEquality().hash(length));
+  int get hashCode => Object.hash(runtimeType, file, offset, length);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$AssistRequestCopyWith<_$AssistRequest> get copyWith =>
       __$$AssistRequestCopyWithImpl<_$AssistRequest>(this, _$identity);
 
@@ -615,12 +612,12 @@ class _$AssistRequest extends AssistRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Uri>? roots)? setWorkspaceScope,
-    TResult Function(List<String> files)? lint,
-    TResult Function(AnalyzedFile file, int offset, int length)? assist,
-    TResult Function(AnalyzedFile file, int offset)? quickFix,
-    TResult Function(List<FileUpdateEvent> updates)? updateFiles,
-    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
+    TResult? Function(List<Uri>? roots)? setWorkspaceScope,
+    TResult? Function(List<String> files)? lint,
+    TResult? Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult? Function(AnalyzedFile file, int offset)? quickFix,
+    TResult? Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult? Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return assist?.call(file, offset, length);
   }
@@ -659,12 +656,12 @@ class _$AssistRequest extends AssistRequest {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetContextCollectionRequest value)? setWorkspaceScope,
-    TResult Function(LintRequest value)? lint,
-    TResult Function(AssistRequest value)? assist,
-    TResult Function(QuickFixRequest value)? quickFix,
-    TResult Function(FileUpdateRequest value)? updateFiles,
-    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
+    TResult? Function(SetContextCollectionRequest value)? setWorkspaceScope,
+    TResult? Function(LintRequest value)? lint,
+    TResult? Function(AssistRequest value)? assist,
+    TResult? Function(QuickFixRequest value)? quickFix,
+    TResult? Function(FileUpdateRequest value)? updateFiles,
+    TResult? Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return assist?.call(this);
   }
@@ -717,6 +714,7 @@ abstract class _$$QuickFixRequestCopyWith<$Res> {
   factory _$$QuickFixRequestCopyWith(
           _$QuickFixRequest value, $Res Function(_$QuickFixRequest) then) =
       __$$QuickFixRequestCopyWithImpl<$Res>;
+  @useResult
   $Res call({AnalyzedFile file, int offset});
 
   $AnalyzedFileCopyWith<$Res> get file;
@@ -724,26 +722,24 @@ abstract class _$$QuickFixRequestCopyWith<$Res> {
 
 /// @nodoc
 class __$$QuickFixRequestCopyWithImpl<$Res>
-    extends _$SidecarRequestCopyWithImpl<$Res>
+    extends _$SidecarRequestCopyWithImpl<$Res, _$QuickFixRequest>
     implements _$$QuickFixRequestCopyWith<$Res> {
   __$$QuickFixRequestCopyWithImpl(
       _$QuickFixRequest _value, $Res Function(_$QuickFixRequest) _then)
-      : super(_value, (v) => _then(v as _$QuickFixRequest));
+      : super(_value, _then);
 
-  @override
-  _$QuickFixRequest get _value => super._value as _$QuickFixRequest;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? file = freezed,
-    Object? offset = freezed,
+    Object? file = null,
+    Object? offset = null,
   }) {
     return _then(_$QuickFixRequest(
-      file: file == freezed
+      file: null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as AnalyzedFile,
-      offset: offset == freezed
+      offset: null == offset
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
               as int,
@@ -751,6 +747,7 @@ class __$$QuickFixRequestCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $AnalyzedFileCopyWith<$Res> get file {
     return $AnalyzedFileCopyWith<$Res>(_value.file, (value) {
       return _then(_value.copyWith(file: value));
@@ -787,19 +784,17 @@ class _$QuickFixRequest extends QuickFixRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$QuickFixRequest &&
-            const DeepCollectionEquality().equals(other.file, file) &&
-            const DeepCollectionEquality().equals(other.offset, offset));
+            (identical(other.file, file) || other.file == file) &&
+            (identical(other.offset, offset) || other.offset == offset));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(file),
-      const DeepCollectionEquality().hash(offset));
+  int get hashCode => Object.hash(runtimeType, file, offset);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$QuickFixRequestCopyWith<_$QuickFixRequest> get copyWith =>
       __$$QuickFixRequestCopyWithImpl<_$QuickFixRequest>(this, _$identity);
 
@@ -819,12 +814,12 @@ class _$QuickFixRequest extends QuickFixRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Uri>? roots)? setWorkspaceScope,
-    TResult Function(List<String> files)? lint,
-    TResult Function(AnalyzedFile file, int offset, int length)? assist,
-    TResult Function(AnalyzedFile file, int offset)? quickFix,
-    TResult Function(List<FileUpdateEvent> updates)? updateFiles,
-    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
+    TResult? Function(List<Uri>? roots)? setWorkspaceScope,
+    TResult? Function(List<String> files)? lint,
+    TResult? Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult? Function(AnalyzedFile file, int offset)? quickFix,
+    TResult? Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult? Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return quickFix?.call(file, offset);
   }
@@ -863,12 +858,12 @@ class _$QuickFixRequest extends QuickFixRequest {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetContextCollectionRequest value)? setWorkspaceScope,
-    TResult Function(LintRequest value)? lint,
-    TResult Function(AssistRequest value)? assist,
-    TResult Function(QuickFixRequest value)? quickFix,
-    TResult Function(FileUpdateRequest value)? updateFiles,
-    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
+    TResult? Function(SetContextCollectionRequest value)? setWorkspaceScope,
+    TResult? Function(LintRequest value)? lint,
+    TResult? Function(AssistRequest value)? assist,
+    TResult? Function(QuickFixRequest value)? quickFix,
+    TResult? Function(FileUpdateRequest value)? updateFiles,
+    TResult? Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return quickFix?.call(this);
   }
@@ -919,26 +914,25 @@ abstract class _$$FileUpdateRequestCopyWith<$Res> {
   factory _$$FileUpdateRequestCopyWith(
           _$FileUpdateRequest value, $Res Function(_$FileUpdateRequest) then) =
       __$$FileUpdateRequestCopyWithImpl<$Res>;
+  @useResult
   $Res call({List<FileUpdateEvent> updates});
 }
 
 /// @nodoc
 class __$$FileUpdateRequestCopyWithImpl<$Res>
-    extends _$SidecarRequestCopyWithImpl<$Res>
+    extends _$SidecarRequestCopyWithImpl<$Res, _$FileUpdateRequest>
     implements _$$FileUpdateRequestCopyWith<$Res> {
   __$$FileUpdateRequestCopyWithImpl(
       _$FileUpdateRequest _value, $Res Function(_$FileUpdateRequest) _then)
-      : super(_value, (v) => _then(v as _$FileUpdateRequest));
+      : super(_value, _then);
 
-  @override
-  _$FileUpdateRequest get _value => super._value as _$FileUpdateRequest;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? updates = freezed,
+    Object? updates = null,
   }) {
     return _then(_$FileUpdateRequest(
-      updates == freezed
+      null == updates
           ? _value._updates
           : updates // ignore: cast_nullable_to_non_nullable
               as List<FileUpdateEvent>,
@@ -988,6 +982,7 @@ class _$FileUpdateRequest extends FileUpdateRequest {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$FileUpdateRequestCopyWith<_$FileUpdateRequest> get copyWith =>
       __$$FileUpdateRequestCopyWithImpl<_$FileUpdateRequest>(this, _$identity);
 
@@ -1007,12 +1002,12 @@ class _$FileUpdateRequest extends FileUpdateRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Uri>? roots)? setWorkspaceScope,
-    TResult Function(List<String> files)? lint,
-    TResult Function(AnalyzedFile file, int offset, int length)? assist,
-    TResult Function(AnalyzedFile file, int offset)? quickFix,
-    TResult Function(List<FileUpdateEvent> updates)? updateFiles,
-    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
+    TResult? Function(List<Uri>? roots)? setWorkspaceScope,
+    TResult? Function(List<String> files)? lint,
+    TResult? Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult? Function(AnalyzedFile file, int offset)? quickFix,
+    TResult? Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult? Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return updateFiles?.call(updates);
   }
@@ -1051,12 +1046,12 @@ class _$FileUpdateRequest extends FileUpdateRequest {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetContextCollectionRequest value)? setWorkspaceScope,
-    TResult Function(LintRequest value)? lint,
-    TResult Function(AssistRequest value)? assist,
-    TResult Function(QuickFixRequest value)? quickFix,
-    TResult Function(FileUpdateRequest value)? updateFiles,
-    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
+    TResult? Function(SetContextCollectionRequest value)? setWorkspaceScope,
+    TResult? Function(LintRequest value)? lint,
+    TResult? Function(AssistRequest value)? assist,
+    TResult? Function(QuickFixRequest value)? quickFix,
+    TResult? Function(FileUpdateRequest value)? updateFiles,
+    TResult? Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return updateFiles?.call(this);
   }
@@ -1105,27 +1100,25 @@ abstract class _$$SetPriorityFilesRequestCopyWith<$Res> {
   factory _$$SetPriorityFilesRequestCopyWith(_$SetPriorityFilesRequest value,
           $Res Function(_$SetPriorityFilesRequest) then) =
       __$$SetPriorityFilesRequestCopyWithImpl<$Res>;
+  @useResult
   $Res call({Set<AnalyzedFile> files});
 }
 
 /// @nodoc
 class __$$SetPriorityFilesRequestCopyWithImpl<$Res>
-    extends _$SidecarRequestCopyWithImpl<$Res>
+    extends _$SidecarRequestCopyWithImpl<$Res, _$SetPriorityFilesRequest>
     implements _$$SetPriorityFilesRequestCopyWith<$Res> {
   __$$SetPriorityFilesRequestCopyWithImpl(_$SetPriorityFilesRequest _value,
       $Res Function(_$SetPriorityFilesRequest) _then)
-      : super(_value, (v) => _then(v as _$SetPriorityFilesRequest));
+      : super(_value, _then);
 
-  @override
-  _$SetPriorityFilesRequest get _value =>
-      super._value as _$SetPriorityFilesRequest;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? files = freezed,
+    Object? files = null,
   }) {
     return _then(_$SetPriorityFilesRequest(
-      files == freezed
+      null == files
           ? _value._files
           : files // ignore: cast_nullable_to_non_nullable
               as Set<AnalyzedFile>,
@@ -1175,6 +1168,7 @@ class _$SetPriorityFilesRequest extends SetPriorityFilesRequest {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$SetPriorityFilesRequestCopyWith<_$SetPriorityFilesRequest> get copyWith =>
       __$$SetPriorityFilesRequestCopyWithImpl<_$SetPriorityFilesRequest>(
           this, _$identity);
@@ -1195,12 +1189,12 @@ class _$SetPriorityFilesRequest extends SetPriorityFilesRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<Uri>? roots)? setWorkspaceScope,
-    TResult Function(List<String> files)? lint,
-    TResult Function(AnalyzedFile file, int offset, int length)? assist,
-    TResult Function(AnalyzedFile file, int offset)? quickFix,
-    TResult Function(List<FileUpdateEvent> updates)? updateFiles,
-    TResult Function(Set<AnalyzedFile> files)? setPriorityFiles,
+    TResult? Function(List<Uri>? roots)? setWorkspaceScope,
+    TResult? Function(List<String> files)? lint,
+    TResult? Function(AnalyzedFile file, int offset, int length)? assist,
+    TResult? Function(AnalyzedFile file, int offset)? quickFix,
+    TResult? Function(List<FileUpdateEvent> updates)? updateFiles,
+    TResult? Function(Set<AnalyzedFile> files)? setPriorityFiles,
   }) {
     return setPriorityFiles?.call(files);
   }
@@ -1239,12 +1233,12 @@ class _$SetPriorityFilesRequest extends SetPriorityFilesRequest {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetContextCollectionRequest value)? setWorkspaceScope,
-    TResult Function(LintRequest value)? lint,
-    TResult Function(AssistRequest value)? assist,
-    TResult Function(QuickFixRequest value)? quickFix,
-    TResult Function(FileUpdateRequest value)? updateFiles,
-    TResult Function(SetPriorityFilesRequest value)? setPriorityFiles,
+    TResult? Function(SetContextCollectionRequest value)? setWorkspaceScope,
+    TResult? Function(LintRequest value)? lint,
+    TResult? Function(AssistRequest value)? assist,
+    TResult? Function(QuickFixRequest value)? quickFix,
+    TResult? Function(FileUpdateRequest value)? updateFiles,
+    TResult? Function(SetPriorityFilesRequest value)? setPriorityFiles,
   }) {
     return setPriorityFiles?.call(this);
   }

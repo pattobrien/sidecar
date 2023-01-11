@@ -5,7 +5,7 @@ import 'package:sidecar/sidecar.dart';
 import '../constants.dart';
 import '../utils.dart';
 
-class MissingVisitMethodRegistration extends Rule with Lint {
+class MissingVisitMethodRegistration extends LintRule {
   static const _id = 'missing_visit_method_registration';
   static const _message = 'Visit method is not added to registry';
   static const _correction =

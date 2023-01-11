@@ -27,4 +27,16 @@ mixin ResourceMixin {
     fileSystem.file(file.path).createSync(recursive: true);
     return file;
   }
+
+  void deleteFile(String relativePath) {
+    final filePath = p.join(rootPath, relativePath);
+    final file = resourceProvider.getFile(filePath);
+    file.delete();
+  }
+
+  void deleteLibFolder() {
+    final path = p.join(rootPath, 'lib');
+    final folder = resourceProvider.getFolder(path);
+    if (folder.exists) folder.delete();
+  }
 }

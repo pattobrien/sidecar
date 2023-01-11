@@ -12,10 +12,12 @@ import 'package:path/path.dart' as p;
 import 'package:test/scaffolding.dart';
 import 'package:test/test.dart' as test;
 
-import '../../../rules/rules.dart';
+import '../../../context/context.dart';
 import '../../analyzer/ast/registered_rule_visitor.dart';
+import '../../analyzer/context/context.dart';
 import '../../configurations/configurations.dart';
 import '../../protocol/models/models.dart';
+import '../../rules/base_rule.dart';
 import '../../utils/file_paths.dart';
 import '../../utils/get_sdk.dart';
 import '../../utils/uri_ext.dart';
@@ -41,69 +43,86 @@ Future<void> ruleTest(
     final path = p.absolute(relativePath);
     await modifyFile(relativePath, content: content);
 
-    final resolvedUnit = await context.currentSession.getResolvedUnit(path)
+    final resolvedUnit = await _context.currentSession.getResolvedUnit(path)
         as ResolvedUnitResult;
 
-    for (final rule in registry.rules) {
+    for (final rule in _registry.rules) {
       rule.setUnitContext(resolvedUnit);
     }
 
-    resolvedUnit.unit.accept(visitor);
+    resolvedUnit.unit.accept(_visitor);
 
-    final results = visitor.lintResults.map((e) => e.toExpectedText()).toList();
+    final results = _visitor.results
+        .whereType<LintResult>()
+        .map((e) => e.toExpectedText())
+        .toList();
     test.expect(results, test.unorderedEquals(expectedResults));
   });
 }
 
 void setUpRules(List<Rule> rules) {
   setUpAll(() async {
-    resourceProvider = PhysicalResourceProvider.INSTANCE;
-    sidecarSpec = SidecarSpec.fromRuleCodes(rules.map((r) => r.code).toList());
+    _resourceProvider = PhysicalResourceProvider.INSTANCE;
+    _sidecarSpec = SidecarSpec.fromRuleCodes(rules.map((r) => r.code).toList());
 
-    registry = NodeRegistry(rules.toSet());
-    visitor = RegisteredRuleVisitor(registry);
+    _registry = NodeRegistry(rules.toSet());
+    _visitor = RegisteredRuleVisitor(_registry);
 
-    for (final rule in rules) {
-      rule.setConfig(sidecarSpec: sidecarSpec);
-    }
-
-    final rootUri = io.Directory.current.uri;
-    final testRoot = p.join(rootUri.path, kDartTool, 'sidecar_tests');
-    final file = resourceProvider.getFile(p.join(testRoot, 'lib', 'main.dart'));
+    _rootUri = io.Directory.current.uri;
+    final testRoot = p.join(_rootUri.path, kDartTool, 'sidecar_tests');
+    final file =
+        _resourceProvider.getFile(p.join(testRoot, 'lib', 'main.dart'));
     file.parent.create();
     file.writeAsStringSync('');
-    context = _createAnalysisContext(file.toUri(),
-        resourceProvider: resourceProvider, root: rootUri);
+    _context = _createAnalysisContext(file.toUri(),
+        resourceProvider: _resourceProvider, root: _rootUri);
 
-    context.currentSession.analysisContext.changeFile(file.path);
-    await context.currentSession.analysisContext.applyPendingFileChanges();
+    _context.currentSession.analysisContext.changeFile(file.path);
+    await _context.currentSession.analysisContext.applyPendingFileChanges();
 
     // used to warm up the analyzer
-    await context.currentSession.getResolvedUnit(file.path);
+    await _context.currentSession.getResolvedUnit(file.path);
+
+    _sidecarContext = SidecarContextImpl(_context,
+        // packageConfig: _packageConfig,
+        sidecarSpec: _sidecarSpec,
+        data: {},
+        targetUri: _rootUri);
+
+    for (final data in rules.whereType<Data>()) {
+      // final context = ref.watch(sidecarContextProvider(file))!;
+      data.setConfig(context: _sidecarContext);
+    }
+
+    for (final lint in rules.where((rule) => rule is! Data)) {
+      lint.setConfig(context: _sidecarContext);
+    }
   });
 }
 
-late ResourceProvider resourceProvider;
-late SidecarSpec sidecarSpec;
-late NodeRegistry registry;
-late RegisteredRuleVisitor visitor;
-late AnalysisContext context;
+late SidecarContext _sidecarContext;
+late Uri _rootUri;
+late ResourceProvider _resourceProvider;
+late SidecarSpec _sidecarSpec;
+late NodeRegistry _registry;
+late RegisteredRuleVisitor _visitor;
+late AnalysisContext _context;
 
 Future<void> modifyFile(String relativePath, {required String content}) async {
   final path = p.absolute(relativePath);
-  final file = resourceProvider.getFile(path);
+  final file = _resourceProvider.getFile(path);
   if (!file.exists) file.parent.create();
   file.writeAsStringSync(content);
 
-  context.currentSession.analysisContext.changeFile(path);
-  await context.currentSession.analysisContext.applyPendingFileChanges();
+  _context.currentSession.analysisContext.changeFile(path);
+  await _context.currentSession.analysisContext.applyPendingFileChanges();
 }
 
 // void ruleTearDown() => tearDownAll(() {});
 
 extension _ on LintResult {
   ExpectedLint toExpectedLint() =>
-      ExpectedLint(rule, span.start.offset, span.length);
+      ExpectedLint(code, span.start.offset, span.length);
 
   ExpectedText toExpectedText({
     bool withText = true,
@@ -131,7 +150,7 @@ Future<SomeResolvedUnitResult> resolveFile2({
 }) async {
 //   context = _createAnalysisContext(
 //       path: path, resourceProvider: resourceProvider, packageRoot: packageRoot);
-  return context.currentSession.getResolvedUnit(path);
+  return _context.currentSession.getResolvedUnit(path);
 }
 
 /// Return a newly create analysis context in which the file at the given [path]

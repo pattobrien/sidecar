@@ -1,13 +1,14 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
-import '../../../rules/rules.dart';
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
 import '../sidecar_analyzer.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';
+
+// coverage:ignore-file
 
 /// Visitor that executes all visit methods of a given NodeRegistry.
 class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
@@ -17,12 +18,15 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
   /// Contains aggregated lists of Sidecar Rule visitor methods for a given file.
   final NodeRegistry registry;
 
-  //TODO: can we combine lintResults and assistResults ?
-  Set<LintResult> get lintResults =>
-      registry.rules.map((e) => e.lintResults).expand((e) => e).toSet();
+  // Access AnalysisResults from all registered rules.
+  Set<AnalysisResult> get results =>
+      registry.rules.map((e) => e.results).expand((e) => e).toSet();
 
-  Set<AssistFilterResult> get assistResults =>
-      registry.rules.map((e) => e.assistFilterResults).expand((e) => e).toSet();
+  void clearResults() {
+    for (final rule in registry.rules) {
+      rule.clearResults();
+    }
+  }
 
   @override
   void visitNode(AstNode node) {

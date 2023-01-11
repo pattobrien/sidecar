@@ -28,34 +28,38 @@ mixin _$SidecarAnnotatedNode {
 abstract class $SidecarAnnotatedNodeCopyWith<$Res> {
   factory $SidecarAnnotatedNodeCopyWith(SidecarAnnotatedNode value,
           $Res Function(SidecarAnnotatedNode) then) =
-      _$SidecarAnnotatedNodeCopyWithImpl<$Res>;
+      _$SidecarAnnotatedNodeCopyWithImpl<$Res, SidecarAnnotatedNode>;
+  @useResult
   $Res call({AnnotatedNode annotatedNode, SidecarInput input});
 }
 
 /// @nodoc
-class _$SidecarAnnotatedNodeCopyWithImpl<$Res>
+class _$SidecarAnnotatedNodeCopyWithImpl<$Res,
+        $Val extends SidecarAnnotatedNode>
     implements $SidecarAnnotatedNodeCopyWith<$Res> {
   _$SidecarAnnotatedNodeCopyWithImpl(this._value, this._then);
 
-  final SidecarAnnotatedNode _value;
   // ignore: unused_field
-  final $Res Function(SidecarAnnotatedNode) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? annotatedNode = freezed,
-    Object? input = freezed,
+    Object? annotatedNode = null,
+    Object? input = null,
   }) {
     return _then(_value.copyWith(
-      annotatedNode: annotatedNode == freezed
+      annotatedNode: null == annotatedNode
           ? _value.annotatedNode
           : annotatedNode // ignore: cast_nullable_to_non_nullable
               as AnnotatedNode,
-      input: input == freezed
+      input: null == input
           ? _value.input
           : input // ignore: cast_nullable_to_non_nullable
               as SidecarInput,
-    ));
+    ) as $Val);
   }
 }
 
@@ -66,31 +70,30 @@ abstract class _$$_SidecarAnnotatedNodeCopyWith<$Res>
           $Res Function(_$_SidecarAnnotatedNode) then) =
       __$$_SidecarAnnotatedNodeCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({AnnotatedNode annotatedNode, SidecarInput input});
 }
 
 /// @nodoc
 class __$$_SidecarAnnotatedNodeCopyWithImpl<$Res>
-    extends _$SidecarAnnotatedNodeCopyWithImpl<$Res>
+    extends _$SidecarAnnotatedNodeCopyWithImpl<$Res, _$_SidecarAnnotatedNode>
     implements _$$_SidecarAnnotatedNodeCopyWith<$Res> {
   __$$_SidecarAnnotatedNodeCopyWithImpl(_$_SidecarAnnotatedNode _value,
       $Res Function(_$_SidecarAnnotatedNode) _then)
-      : super(_value, (v) => _then(v as _$_SidecarAnnotatedNode));
+      : super(_value, _then);
 
-  @override
-  _$_SidecarAnnotatedNode get _value => super._value as _$_SidecarAnnotatedNode;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? annotatedNode = freezed,
-    Object? input = freezed,
+    Object? annotatedNode = null,
+    Object? input = null,
   }) {
     return _then(_$_SidecarAnnotatedNode(
-      annotatedNode: annotatedNode == freezed
+      annotatedNode: null == annotatedNode
           ? _value.annotatedNode
           : annotatedNode // ignore: cast_nullable_to_non_nullable
               as AnnotatedNode,
-      input: input == freezed
+      input: null == input
           ? _value.input
           : input // ignore: cast_nullable_to_non_nullable
               as SidecarInput,
@@ -120,19 +123,17 @@ class _$_SidecarAnnotatedNode extends _SidecarAnnotatedNode {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SidecarAnnotatedNode &&
-            const DeepCollectionEquality()
-                .equals(other.annotatedNode, annotatedNode) &&
-            const DeepCollectionEquality().equals(other.input, input));
+            (identical(other.annotatedNode, annotatedNode) ||
+                other.annotatedNode == annotatedNode) &&
+            (identical(other.input, input) || other.input == input));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(annotatedNode),
-      const DeepCollectionEquality().hash(input));
+  int get hashCode => Object.hash(runtimeType, annotatedNode, input);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SidecarAnnotatedNodeCopyWith<_$_SidecarAnnotatedNode> get copyWith =>
       __$$_SidecarAnnotatedNodeCopyWithImpl<_$_SidecarAnnotatedNode>(
           this, _$identity);

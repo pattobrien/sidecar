@@ -13,3 +13,8 @@ assists:
     rules:
       output_ast_node_tree:
       output_source_span:
+
+data:
+  sidecar_lints:
+    rules:
+      public_rules:

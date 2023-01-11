@@ -42,39 +42,42 @@ mixin _$SourceFileEdit {
 abstract class $SourceFileEditCopyWith<$Res> {
   factory $SourceFileEditCopyWith(
           SourceFileEdit value, $Res Function(SourceFileEdit) then) =
-      _$SourceFileEditCopyWithImpl<$Res>;
+      _$SourceFileEditCopyWithImpl<$Res, SourceFileEdit>;
+  @useResult
   $Res call({Uri file, List<SourceEdit> edits, DateTime fileStamp});
 }
 
 /// @nodoc
-class _$SourceFileEditCopyWithImpl<$Res>
+class _$SourceFileEditCopyWithImpl<$Res, $Val extends SourceFileEdit>
     implements $SourceFileEditCopyWith<$Res> {
   _$SourceFileEditCopyWithImpl(this._value, this._then);
 
-  final SourceFileEdit _value;
   // ignore: unused_field
-  final $Res Function(SourceFileEdit) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? file = freezed,
-    Object? edits = freezed,
-    Object? fileStamp = freezed,
+    Object? file = null,
+    Object? edits = null,
+    Object? fileStamp = null,
   }) {
     return _then(_value.copyWith(
-      file: file == freezed
+      file: null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as Uri,
-      edits: edits == freezed
+      edits: null == edits
           ? _value.edits
           : edits // ignore: cast_nullable_to_non_nullable
               as List<SourceEdit>,
-      fileStamp: fileStamp == freezed
+      fileStamp: null == fileStamp
           ? _value.fileStamp
           : fileStamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
-    ));
+    ) as $Val);
   }
 }
 
@@ -85,36 +88,35 @@ abstract class _$$_SourceFileEditCopyWith<$Res>
           _$_SourceFileEdit value, $Res Function(_$_SourceFileEdit) then) =
       __$$_SourceFileEditCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({Uri file, List<SourceEdit> edits, DateTime fileStamp});
 }
 
 /// @nodoc
 class __$$_SourceFileEditCopyWithImpl<$Res>
-    extends _$SourceFileEditCopyWithImpl<$Res>
+    extends _$SourceFileEditCopyWithImpl<$Res, _$_SourceFileEdit>
     implements _$$_SourceFileEditCopyWith<$Res> {
   __$$_SourceFileEditCopyWithImpl(
       _$_SourceFileEdit _value, $Res Function(_$_SourceFileEdit) _then)
-      : super(_value, (v) => _then(v as _$_SourceFileEdit));
+      : super(_value, _then);
 
-  @override
-  _$_SourceFileEdit get _value => super._value as _$_SourceFileEdit;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? file = freezed,
-    Object? edits = freezed,
-    Object? fileStamp = freezed,
+    Object? file = null,
+    Object? edits = null,
+    Object? fileStamp = null,
   }) {
     return _then(_$_SourceFileEdit(
-      file: file == freezed
+      file: null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as Uri,
-      edits: edits == freezed
+      edits: null == edits
           ? _value._edits
           : edits // ignore: cast_nullable_to_non_nullable
               as List<SourceEdit>,
-      fileStamp: fileStamp == freezed
+      fileStamp: null == fileStamp
           ? _value.fileStamp
           : fileStamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
@@ -165,21 +167,20 @@ class _$_SourceFileEdit implements _SourceFileEdit {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SourceFileEdit &&
-            const DeepCollectionEquality().equals(other.file, file) &&
+            (identical(other.file, file) || other.file == file) &&
             const DeepCollectionEquality().equals(other._edits, _edits) &&
-            const DeepCollectionEquality().equals(other.fileStamp, fileStamp));
+            (identical(other.fileStamp, fileStamp) ||
+                other.fileStamp == fileStamp));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(file),
-      const DeepCollectionEquality().hash(_edits),
-      const DeepCollectionEquality().hash(fileStamp));
+  int get hashCode => Object.hash(runtimeType, file,
+      const DeepCollectionEquality().hash(_edits), fileStamp);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SourceFileEditCopyWith<_$_SourceFileEdit> get copyWith =>
       __$$_SourceFileEditCopyWithImpl<_$_SourceFileEdit>(this, _$identity);
 

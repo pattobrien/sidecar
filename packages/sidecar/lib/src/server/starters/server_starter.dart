@@ -1,5 +1,4 @@
 import 'dart:isolate';
-import 'dart:io' as io;
 
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:path/path.dart';
@@ -18,23 +17,16 @@ Future<Isolate> analyzerIsolateStarter({
   final config = root.resolve(join(kDartTool, kPackageConfigJson));
   final exec = root.resolve(join(kDartTool, 'sidecar', kExecutableFile));
 
-  assert(
-      resourceProvider.getFile(exec.path).exists, 'executable doesnt exist.');
+  assert(resourceProvider.getFile(exec.path).exists, "exec doesn't exist.");
   assert(resourceProvider.getFile(config.path).exists, 'config doesnt exist.');
 
   // add the root path of the package as an arg so that the isolate knows the root
   // uri at startup
   final argsWithRoot = <String>[root.path, ...args];
 
-  // final process = await io.Process.start(
-  //   'flutter',
-  //   [...argsWithRoot],
-  // );
   return Isolate.spawnUri(
     exec,
-    [
-      ...argsWithRoot,
-    ],
+    argsWithRoot,
     sendPort,
     onError: sendPort,
     onExit: sendPort,

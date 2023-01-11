@@ -4,9 +4,9 @@ import 'package:sidecar/sidecar.dart';
 
 import '../constants.dart';
 
-class OutputSourceSpan extends Rule with QuickAssist {
+class OutputSourceSpan extends AssistRule {
   @override
-  RuleCode get code =>
+  AssistCode get code =>
       const AssistCode('output_source_span', package: kPackageName);
 
   @override
@@ -18,7 +18,6 @@ class OutputSourceSpan extends Rule with QuickAssist {
   void visitNode(AstNode node) {
     reportAssistForNode(
       node,
-      message: 'message',
       editsComputer: () async {
         final changeBuilder = ChangeBuilder(session: unit.session);
 

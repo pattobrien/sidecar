@@ -1,1 +1,1 @@
-enum RuleType { assist, lint }
+enum RuleType { assist, lint, data }

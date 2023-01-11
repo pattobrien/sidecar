@@ -1,0 +1,23 @@
+name: intl_lints
+description: A series of lints to help developing with l10n and l11n strings.
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  analyzer: ^4.2.0
+  flutter_analyzer_utils: ^0.2.0-dev.4
+  glob: ^2.1.1
+  sidecar:
+    path: ../../../
+  source_span: ^1.8.2
+
+dev_dependencies:
+  build_runner: ^2.3.0
+  lints: ^2.0.0
+  test: ^1.16.0
+
+sidecar:
+  lints:
+    - hardcoded_text_string
+    - avoid_string_literal

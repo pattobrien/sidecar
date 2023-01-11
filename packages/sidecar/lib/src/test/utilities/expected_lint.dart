@@ -53,7 +53,7 @@ void expectLintResult(
   LintResult actual,
   ExpectedLint expectedLint,
 ) {
-  expect(actual.rule, expectedLint.code, reason: 'code does not match');
+  expect(actual.code, expectedLint.code, reason: 'code does not match');
   expect(actual.span.start.offset, expectedLint.offset,
       reason: 'offset doesnt match');
   expect(actual.span.length, expectedLint.length, reason: 'invalid length');

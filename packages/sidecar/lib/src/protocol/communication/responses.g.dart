@@ -19,7 +19,7 @@ Map<String, dynamic> _$$SetWorkspaceResponseToJson(
 
 _$AssistResponse _$$AssistResponseFromJson(Map json) => _$AssistResponse(
       (json['results'] as List<dynamic>)
-          .map((e) => AssistResultWithEdits.fromJson(
+          .map((e) => AssistWithEditsResult.fromJson(
               Map<String, dynamic>.from(e as Map)))
           .toSet(),
       $type: json['runtimeType'] as String?,
@@ -34,7 +34,7 @@ Map<String, dynamic> _$$AssistResponseToJson(_$AssistResponse instance) =>
 _$QuickFixResponse _$$QuickFixResponseFromJson(Map json) => _$QuickFixResponse(
       (json['results'] as List<dynamic>)
           .map((e) =>
-              LintResultWithEdits.fromJson(Map<String, dynamic>.from(e as Map)))
+              LintWithEditsResult.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       $type: json['runtimeType'] as String?,
     );

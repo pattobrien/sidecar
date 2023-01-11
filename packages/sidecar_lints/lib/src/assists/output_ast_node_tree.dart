@@ -4,7 +4,7 @@ import 'package:sidecar/sidecar.dart';
 
 import '../constants.dart';
 
-class OutputAstNodeTree extends Rule with QuickAssist {
+class OutputAstNodeTree extends AssistRule {
   @override
   AssistCode get code =>
       const AssistCode('output_ast_node_tree', package: kPackageName);

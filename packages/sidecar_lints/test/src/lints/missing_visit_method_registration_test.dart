@@ -24,7 +24,7 @@ const contentMissingBasic = '''
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:sidecar/sidecar.dart';
 
-class ExampleLint extends Rule with Lint {
+class ExampleLint extends LintRule {
   @override
   LintCode get code => LintCode('example_lint', package: 'example');
 
@@ -48,7 +48,7 @@ const contentMissingMethodCascade = '''
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:sidecar/sidecar.dart';
 
-class ExampleLint extends Rule with Lint {
+class ExampleLint extends LintRule {
   @override
   LintCode get code => LintCode('example_lint', package: 'example');
 
@@ -81,7 +81,7 @@ const contentNoMissingMethod = '''
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:sidecar/sidecar.dart';
 
-class ExampleLint extends Rule with Lint {
+class ExampleLint extends LintRule {
   @override
   LintCode get code => LintCode('example_lint', package: 'example');
 

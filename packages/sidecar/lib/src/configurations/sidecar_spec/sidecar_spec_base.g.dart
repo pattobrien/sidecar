@@ -17,6 +17,10 @@ SidecarSpec _$SidecarSpecFromJson(Map json) => SidecarSpec(
         (k, e) => MapEntry(k as String,
             AssistPackageOptions.fromJson(Map<String, dynamic>.from(e as Map))),
       ),
+      data: (json['data'] as Map?)?.map(
+        (k, e) => MapEntry(k as String,
+            AssistPackageOptions.fromJson(Map<String, dynamic>.from(e as Map))),
+      ),
     );
 
 Map<String, dynamic> _$SidecarSpecToJson(SidecarSpec instance) {
@@ -33,5 +37,6 @@ Map<String, dynamic> _$SidecarSpecToJson(SidecarSpec instance) {
   writeNotNull('lints', instance.lints?.map((k, e) => MapEntry(k, e.toJson())));
   writeNotNull(
       'assists', instance.assists?.map((k, e) => MapEntry(k, e.toJson())));
+  writeNotNull('data', instance.data?.map((k, e) => MapEntry(k, e.toJson())));
   return val;
 }

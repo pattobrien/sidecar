@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../../../rules/rules.dart';
+import '../../rules/base_rule.dart';
 
 /// A single subscription for a node type, by the specified [rule].
 @internal
