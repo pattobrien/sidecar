@@ -37,6 +37,6 @@ mixin ResourceMixin {
   void deleteLibFolder() {
     final path = p.join(rootPath, 'lib');
     final folder = resourceProvider.getFolder(path);
-    folder.delete();
+    if (folder.exists) folder.delete();
   }
 }
