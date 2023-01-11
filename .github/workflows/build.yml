@@ -67,5 +67,12 @@ jobs:
       # - name: Remove ignored files
       #   run: lcov --remove coverage/lcov.info '**/*.g.dart' '**/*.freezed.dart' -o coverage/lcov.info
 
+      - name: Check Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2.1.0
+        with:
+          path: ${{ matrix.package_path }}/coverage/lcov.info
+          min_coverage: 15
+          exclude: "**/*.g.dart **/*.freezed.dart"
+
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3.1.1
