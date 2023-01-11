@@ -37,6 +37,7 @@ void main() {
     setUpAll(() async {
       workspace = await createWorkspace(constructors: constructors);
       app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      app.deleteLibFolder();
     });
 
     tearDown(() {
