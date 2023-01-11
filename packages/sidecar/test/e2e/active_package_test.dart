@@ -39,6 +39,10 @@ void main() {
       app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
     });
 
+    tearDown(() {
+      app.deleteLibFolder();
+    });
+
     setUp(() {
       reporter = MockStdoutReporter();
     });
@@ -51,7 +55,7 @@ void main() {
       await client.handleFileChange(mainFile.toUri(), kContentWithString);
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
-      expectLints(results[1], [lint(exampleRuleCode, 28, 14)]);
+      expectLints(results.single, [lint(exampleRuleCode, 28, 14)]);
     });
 
     test('sidecar plugin is not enabled', () async {
