@@ -6,12 +6,11 @@ import '../utils/utils.dart';
 part 'analyzed_file.freezed.dart';
 part 'analyzed_file.g.dart';
 
-@freezed
-@immutable
-
 /// Represents a file that is within some context currently under analysis.
 ///
 /// This was created to be type-safe.
+@freezed
+@immutable
 class AnalyzedFile with _$AnalyzedFile {
   const factory AnalyzedFile(
     Uri fileUri, {

@@ -1,7 +1,8 @@
-import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/ast/ast.dart';
+import '../protocol/models/analysis_results.dart';
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 
@@ -10,11 +11,11 @@ class FileAnalyzerServiceImpl {
   /// Service for generating Analysis Results for a particular file.
   const FileAnalyzerServiceImpl();
 
-  Set<LintResult> visitLintResults({
-    required ResolvedUnitResult? unitResult,
-    required Set<Lint> rules,
-    required NodeRegistry registry,
-  }) {
+  Set<AnalysisResult> visitResults(
+    ResolvedUnitResult? unitResult,
+    Set<BaseRule> rules,
+    NodeRegistry registry,
+  ) {
     if (unitResult == null) return {};
     for (final rule in rules) {
       rule.setUnitContext(unitResult);
@@ -22,24 +23,39 @@ class FileAnalyzerServiceImpl {
 
     final mainVisitor = RegisteredRuleVisitor(registry);
     unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.lintResults;
+    final results = mainVisitor.results;
+    mainVisitor.clearResults();
     return results;
   }
 
-  Set<AssistFilterResult> visitAssistFilters({
-    required ResolvedUnitResult? unitResult,
-    required Set<QuickAssist> rules,
-    required NodeRegistry registry,
-  }) {
-    if (unitResult == null) return {};
-    for (final rule in rules) {
-      rule.setUnitContext(unitResult);
-    }
+  LintResults visitLintResults(
+    ResolvedUnitResult? unitResult,
+    Set<Lint> rules,
+    NodeRegistry registry,
+  ) {
+    return LintResults(visitResults(unitResult, rules, registry)
+        .whereType<LintResult>()
+        .toSet());
+  }
 
-    final mainVisitor = RegisteredRuleVisitor(registry);
-    unitResult.unit.accept(mainVisitor);
-    final results = mainVisitor.assistResults;
-    return results;
+  Set<SingleDataResult> visitDataResults(
+    ResolvedUnitResult? unitResult,
+    Set<Data> rules,
+    NodeRegistry registry,
+  ) {
+    return visitResults(unitResult, rules, registry)
+        .whereType<SingleDataResult>()
+        .toSet();
+  }
+
+  Set<AssistResult> visitAssistFilters(
+    ResolvedUnitResult? unitResult,
+    Set<QuickAssist> rules,
+    NodeRegistry registry,
+  ) {
+    return visitResults(unitResult, rules, registry)
+        .whereType<AssistResult>()
+        .toSet();
   }
 
   Iterable<LintResult> getAnalysisResultsAtOffset(

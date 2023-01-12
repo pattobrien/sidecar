@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
-import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
+// ignore: implementation_imports
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
-import 'package:cli_util/cli_util.dart';
-import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -52,21 +49,22 @@ class SidecarServer {
               includedPaths: packagePaths, sdkPath: dartSdk)
           .contexts
           .where((context) => activePackage.packageConfig.packages.any(
-                (dep) => dep.root == context.contextRoot.root.toUri(),
+                (pkg) => pkg.root == context.contextRoot.root.toUri(),
               ))
           .toList();
       _runnerContainer.read(_runnerContextsProvider.notifier).state = contexts;
-      // allContexts.addAll(contexts);
     } else {
       final contexts = AnalysisContextCollectionImpl(
-              includedPaths: roots.map((e) => e.pathNoTrailingSlash).toList(),
-              sdkPath: dartSdk)
-          .contexts
-          .where((context) => activePackage.packageConfig.packages
-              .any((dep) => dep.root == context.contextRoot.root.toUri()))
-          .toList();
-      _runnerContainer.read(_runnerContextsProvider.notifier).state = contexts;
-      // allContexts.addAll(contexts);
+          includedPaths: roots.map((e) => e.pathNoTrailingSlash).toList(),
+          sdkPath: dartSdk);
+      // final filteredContexts = contexts.contexts
+      //     .where((context) => activePackage.packageConfig.packages.any((dep) {
+      //           final isMatch = dep.root == context.contextRoot.root.toUri();
+      //           return isMatch;
+      //         }))
+      //     .toList();
+      _runnerContainer.read(_runnerContextsProvider.notifier).state =
+          contexts.contexts;
     }
   }
 
@@ -92,7 +90,9 @@ class SidecarServer {
       .map((e) => e as LintNotification);
 
   /// Starts the server isolate and sends the necessary requests for initializing it.
-  Future<void> initialize([List<Uri>? roots]) async {
+  Future<void> initialize([
+    List<Uri>? roots,
+  ]) async {
     _setContexts(roots);
     _initStream();
     final isolateBuilder = _ref.read(isolateBuilderServiceProvider);

@@ -16,10 +16,18 @@ final _privateConstructorUsedError = UnsupportedError(
 
 AnalysisResult _$AnalysisResultFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType']) {
-    case 'default':
+    case 'lint':
       return LintResult.fromJson(json);
-    case 'withEdits':
-      return LintResultWithEdits.fromJson(json);
+    case 'lintWithEdits':
+      return LintWithEditsResult.fromJson(json);
+    case 'totalData':
+      return TotalDataResult.fromJson(json);
+    case 'singleData':
+      return SingleDataResult.fromJson(json);
+    case 'assist':
+      return AssistResult.fromJson(json);
+    case 'assistWithEdits':
+      return AssistWithEditsResult.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'AnalysisResult',
@@ -29,17 +37,11 @@ AnalysisResult _$AnalysisResultFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AnalysisResult {
-  RuleCode get rule => throw _privateConstructorUsedError;
-  @Assert('span.sourceUrl != null')
-  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
-  SourceSpan get span => throw _privateConstructorUsedError;
-  String get message => throw _privateConstructorUsedError;
-  LintSeverity get severity => throw _privateConstructorUsedError;
-  String? get correction => throw _privateConstructorUsedError;
+  RuleCode get code => throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            RuleCode rule,
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -48,9 +50,9 @@ mixin _$AnalysisResult {
             String? correction,
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)
-        $default, {
+        lint,
     required TResult Function(
-            RuleCode rule,
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -58,7 +60,23 @@ mixin _$AnalysisResult {
             LintSeverity severity,
             String? correction,
             List<EditResult> edits)
-        withEdits,
+        lintWithEdits,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        assist,
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        assistWithEdits,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -83,13 +101,29 @@ mixin _$AnalysisResult {
             LintSeverity severity,
             String? correction,
             List<EditResult> edits)?
-        withEdits,
+        lintWithEdits,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult? Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
+  TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            RuleCode rule,
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -98,9 +132,9 @@ mixin _$AnalysisResult {
             String? correction,
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)?
-        $default, {
+        lint,
     TResult Function(
-            RuleCode rule,
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -108,14 +142,34 @@ mixin _$AnalysisResult {
             LintSeverity severity,
             String? correction,
             List<EditResult> edits)?
-        withEdits,
+        lintWithEdits,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(LintResult value) $default, {
-    required TResult Function(LintResultWithEdits value) withEdits,
+  TResult map<TResult extends Object?>({
+    required TResult Function(LintResult value) lint,
+    required TResult Function(LintWithEditsResult value) lintWithEdits,
+    required TResult Function(TotalDataResult value) totalData,
+    required TResult Function(SingleDataResult value) singleData,
+    required TResult Function(AssistResult value) assist,
+    required TResult Function(AssistWithEditsResult value) assistWithEdits,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -125,9 +179,13 @@ mixin _$AnalysisResult {
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(LintResult value)? $default, {
-    TResult Function(LintResultWithEdits value)? withEdits,
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LintResult value)? lint,
+    TResult Function(LintWithEditsResult value)? lintWithEdits,
+    TResult Function(TotalDataResult value)? totalData,
+    TResult Function(SingleDataResult value)? singleData,
+    TResult Function(AssistResult value)? assist,
+    TResult Function(AssistWithEditsResult value)? assistWithEdits,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -152,7 +210,7 @@ abstract class $AnalysisResultCopyWith<$Res> {
       LintSeverity severity,
       String? correction});
 
-  $RuleCodeCopyWith<$Res> get rule;
+  $RuleCodeCopyWith<$Res> get code;
 }
 
 /// @nodoc
@@ -216,7 +274,7 @@ abstract class _$$LintResultCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {RuleCode rule,
+      {RuleCode code,
       @Assert('span.sourceUrl != null')
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           SourceSpan span,
@@ -227,7 +285,7 @@ abstract class _$$LintResultCopyWith<$Res>
           EditsComputer? editsComputer});
 
   @override
-  $RuleCodeCopyWith<$Res> get rule;
+  $RuleCodeCopyWith<$Res> get code;
 }
 
 /// @nodoc
@@ -281,7 +339,7 @@ class __$$LintResultCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LintResult extends LintResult {
   const _$LintResult(
-      {required this.rule,
+      {required this.code,
       @Assert('span.sourceUrl != null')
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           required this.span,
@@ -291,14 +349,14 @@ class _$LintResult extends LintResult {
       @JsonKey(ignore: true)
           this.editsComputer,
       final String? $type})
-      : $type = $type ?? 'default',
+      : $type = $type ?? 'lint',
         super._();
 
   factory _$LintResult.fromJson(Map<String, dynamic> json) =>
       _$$LintResultFromJson(json);
 
   @override
-  final RuleCode rule;
+  final RuleCode code;
   @override
   @Assert('span.sourceUrl != null')
   @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -350,9 +408,9 @@ class _$LintResult extends LintResult {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            RuleCode rule,
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -361,9 +419,9 @@ class _$LintResult extends LintResult {
             String? correction,
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)
-        $default, {
+        lint,
     required TResult Function(
-            RuleCode rule,
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -371,9 +429,25 @@ class _$LintResult extends LintResult {
             LintSeverity severity,
             String? correction,
             List<EditResult> edits)
-        withEdits,
+        lintWithEdits,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        assist,
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        assistWithEdits,
   }) {
-    return $default(rule, span, message, severity, correction, editsComputer);
+    return lint(code, span, message, severity, correction, editsComputer);
   }
 
   @override
@@ -399,17 +473,32 @@ class _$LintResult extends LintResult {
             LintSeverity severity,
             String? correction,
             List<EditResult> edits)?
-        withEdits,
+        lintWithEdits,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult? Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
   }) {
-    return $default?.call(
-        rule, span, message, severity, correction, editsComputer);
+    return lint?.call(code, span, message, severity, correction, editsComputer);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
+  TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            RuleCode rule,
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -418,9 +507,9 @@ class _$LintResult extends LintResult {
             String? correction,
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)?
-        $default, {
+        lint,
     TResult Function(
-            RuleCode rule,
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -428,22 +517,42 @@ class _$LintResult extends LintResult {
             LintSeverity severity,
             String? correction,
             List<EditResult> edits)?
-        withEdits,
+        lintWithEdits,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
     required TResult orElse(),
   }) {
-    if ($default != null) {
-      return $default(rule, span, message, severity, correction, editsComputer);
+    if (lint != null) {
+      return lint(code, span, message, severity, correction, editsComputer);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(LintResult value) $default, {
-    required TResult Function(LintResultWithEdits value) withEdits,
+  TResult map<TResult extends Object?>({
+    required TResult Function(LintResult value) lint,
+    required TResult Function(LintWithEditsResult value) lintWithEdits,
+    required TResult Function(TotalDataResult value) totalData,
+    required TResult Function(SingleDataResult value) singleData,
+    required TResult Function(AssistResult value) assist,
+    required TResult Function(AssistWithEditsResult value) assistWithEdits,
   }) {
-    return $default(this);
+    return lint(this);
   }
 
   @override
@@ -452,18 +561,22 @@ class _$LintResult extends LintResult {
     TResult? Function(LintResult value)? $default, {
     TResult? Function(LintResultWithEdits value)? withEdits,
   }) {
-    return $default?.call(this);
+    return lint?.call(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(LintResult value)? $default, {
-    TResult Function(LintResultWithEdits value)? withEdits,
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LintResult value)? lint,
+    TResult Function(LintWithEditsResult value)? lintWithEdits,
+    TResult Function(TotalDataResult value)? totalData,
+    TResult Function(SingleDataResult value)? singleData,
+    TResult Function(AssistResult value)? assist,
+    TResult Function(AssistWithEditsResult value)? assistWithEdits,
     required TResult orElse(),
   }) {
-    if ($default != null) {
-      return $default(this);
+    if (lint != null) {
+      return lint(this);
     }
     return orElse();
   }
@@ -479,7 +592,7 @@ class _$LintResult extends LintResult {
 abstract class LintResult extends AnalysisResult
     implements Comparable<AnalysisResult> {
   const factory LintResult(
-      {required final RuleCode rule,
+      {required final RuleCode code,
       @Assert('span.sourceUrl != null')
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           required final SourceSpan span,
@@ -494,16 +607,12 @@ abstract class LintResult extends AnalysisResult
       _$LintResult.fromJson;
 
   @override
-  RuleCode get rule;
-  @override
+  RuleCode get code;
   @Assert('span.sourceUrl != null')
   @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
   SourceSpan get span;
-  @override
   String get message;
-  @override
   LintSeverity get severity;
-  @override
   String? get correction;
   @JsonKey(ignore: true)
   EditsComputer? get editsComputer;
@@ -514,15 +623,15 @@ abstract class LintResult extends AnalysisResult
 }
 
 /// @nodoc
-abstract class _$$LintResultWithEditsCopyWith<$Res>
+abstract class _$$LintWithEditsResultCopyWith<$Res>
     implements $AnalysisResultCopyWith<$Res> {
-  factory _$$LintResultWithEditsCopyWith(_$LintResultWithEdits value,
-          $Res Function(_$LintResultWithEdits) then) =
-      __$$LintResultWithEditsCopyWithImpl<$Res>;
+  factory _$$LintWithEditsResultCopyWith(_$LintWithEditsResult value,
+          $Res Function(_$LintWithEditsResult) then) =
+      __$$LintWithEditsResultCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {RuleCode rule,
+      {RuleCode code,
       @Assert('span.sourceUrl != null')
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           SourceSpan span,
@@ -532,7 +641,7 @@ abstract class _$$LintResultWithEditsCopyWith<$Res>
       List<EditResult> edits});
 
   @override
-  $RuleCodeCopyWith<$Res> get rule;
+  $RuleCodeCopyWith<$Res> get code;
 }
 
 /// @nodoc
@@ -584,9 +693,9 @@ class __$$LintResultWithEditsCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$LintResultWithEdits extends LintResultWithEdits {
-  const _$LintResultWithEdits(
-      {required this.rule,
+class _$LintWithEditsResult extends LintWithEditsResult {
+  const _$LintWithEditsResult(
+      {required this.code,
       @Assert('span.sourceUrl != null')
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           required this.span,
@@ -596,14 +705,14 @@ class _$LintResultWithEdits extends LintResultWithEdits {
       required final List<EditResult> edits,
       final String? $type})
       : _edits = edits,
-        $type = $type ?? 'withEdits',
+        $type = $type ?? 'lintWithEdits',
         super._();
 
-  factory _$LintResultWithEdits.fromJson(Map<String, dynamic> json) =>
-      _$$LintResultWithEditsFromJson(json);
+  factory _$LintWithEditsResult.fromJson(Map<String, dynamic> json) =>
+      _$$LintWithEditsResultFromJson(json);
 
   @override
-  final RuleCode rule;
+  final RuleCode code;
   @override
   @Assert('span.sourceUrl != null')
   @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -658,9 +767,9 @@ class _$LintResultWithEdits extends LintResultWithEdits {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            RuleCode rule,
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -669,9 +778,9 @@ class _$LintResultWithEdits extends LintResultWithEdits {
             String? correction,
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)
-        $default, {
+        lint,
     required TResult Function(
-            RuleCode rule,
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -679,9 +788,25 @@ class _$LintResultWithEdits extends LintResultWithEdits {
             LintSeverity severity,
             String? correction,
             List<EditResult> edits)
-        withEdits,
+        lintWithEdits,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        assist,
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        assistWithEdits,
   }) {
-    return withEdits(rule, span, message, severity, correction, edits);
+    return lintWithEdits(code, span, message, severity, correction, edits);
   }
 
   @override
@@ -707,16 +832,33 @@ class _$LintResultWithEdits extends LintResultWithEdits {
             LintSeverity severity,
             String? correction,
             List<EditResult> edits)?
-        withEdits,
+        lintWithEdits,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult? Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
   }) {
-    return withEdits?.call(rule, span, message, severity, correction, edits);
+    return lintWithEdits?.call(
+        code, span, message, severity, correction, edits);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
+  TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            RuleCode rule,
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -725,9 +867,9 @@ class _$LintResultWithEdits extends LintResultWithEdits {
             String? correction,
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)?
-        $default, {
+        lint,
     TResult Function(
-            RuleCode rule,
+            RuleCode code,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -735,22 +877,42 @@ class _$LintResultWithEdits extends LintResultWithEdits {
             LintSeverity severity,
             String? correction,
             List<EditResult> edits)?
-        withEdits,
+        lintWithEdits,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
     required TResult orElse(),
   }) {
-    if (withEdits != null) {
-      return withEdits(rule, span, message, severity, correction, edits);
+    if (lintWithEdits != null) {
+      return lintWithEdits(code, span, message, severity, correction, edits);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(LintResult value) $default, {
-    required TResult Function(LintResultWithEdits value) withEdits,
+  TResult map<TResult extends Object?>({
+    required TResult Function(LintResult value) lint,
+    required TResult Function(LintWithEditsResult value) lintWithEdits,
+    required TResult Function(TotalDataResult value) totalData,
+    required TResult Function(SingleDataResult value) singleData,
+    required TResult Function(AssistResult value) assist,
+    required TResult Function(AssistWithEditsResult value) assistWithEdits,
   }) {
-    return withEdits(this);
+    return lintWithEdits(this);
   }
 
   @override
@@ -759,61 +921,1226 @@ class _$LintResultWithEdits extends LintResultWithEdits {
     TResult? Function(LintResult value)? $default, {
     TResult? Function(LintResultWithEdits value)? withEdits,
   }) {
-    return withEdits?.call(this);
+    return lintWithEdits?.call(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(LintResult value)? $default, {
-    TResult Function(LintResultWithEdits value)? withEdits,
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LintResult value)? lint,
+    TResult Function(LintWithEditsResult value)? lintWithEdits,
+    TResult Function(TotalDataResult value)? totalData,
+    TResult Function(SingleDataResult value)? singleData,
+    TResult Function(AssistResult value)? assist,
+    TResult Function(AssistWithEditsResult value)? assistWithEdits,
     required TResult orElse(),
   }) {
-    if (withEdits != null) {
-      return withEdits(this);
+    if (lintWithEdits != null) {
+      return lintWithEdits(this);
     }
     return orElse();
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LintResultWithEditsToJson(
+    return _$$LintWithEditsResultToJson(
       this,
     );
   }
 }
 
-abstract class LintResultWithEdits extends AnalysisResult
+abstract class LintWithEditsResult extends AnalysisResult
     implements Comparable<AnalysisResult> {
-  const factory LintResultWithEdits(
-      {required final RuleCode rule,
+  const factory LintWithEditsResult(
+      {required final RuleCode code,
       @Assert('span.sourceUrl != null')
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           required final SourceSpan span,
       required final String message,
       required final LintSeverity severity,
       final String? correction,
-      required final List<EditResult> edits}) = _$LintResultWithEdits;
-  const LintResultWithEdits._() : super._();
+      required final List<EditResult> edits}) = _$LintWithEditsResult;
+  const LintWithEditsResult._() : super._();
 
-  factory LintResultWithEdits.fromJson(Map<String, dynamic> json) =
-      _$LintResultWithEdits.fromJson;
+  factory LintWithEditsResult.fromJson(Map<String, dynamic> json) =
+      _$LintWithEditsResult.fromJson;
 
   @override
-  RuleCode get rule;
-  @override
+  RuleCode get code;
   @Assert('span.sourceUrl != null')
   @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
   SourceSpan get span;
-  @override
   String get message;
-  @override
   LintSeverity get severity;
-  @override
   String? get correction;
   List<EditResult> get edits;
   @override
   @JsonKey(ignore: true)
-  _$$LintResultWithEditsCopyWith<_$LintResultWithEdits> get copyWith =>
+  _$$LintWithEditsResultCopyWith<_$LintWithEditsResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$TotalDataResultCopyWith<$Res>
+    implements $AnalysisResultCopyWith<$Res> {
+  factory _$$TotalDataResultCopyWith(
+          _$TotalDataResult value, $Res Function(_$TotalDataResult) then) =
+      __$$TotalDataResultCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({RuleCode code, List<Object> data});
+
+  @override
+  $RuleCodeCopyWith<$Res> get code;
+}
+
+/// @nodoc
+class __$$TotalDataResultCopyWithImpl<$Res>
+    extends _$AnalysisResultCopyWithImpl<$Res, _$TotalDataResult>
+    implements _$$TotalDataResultCopyWith<$Res> {
+  __$$TotalDataResultCopyWithImpl(
+      _$TotalDataResult _value, $Res Function(_$TotalDataResult) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? code = null,
+    Object? data = null,
+  }) {
+    return _then(_$TotalDataResult(
+      code: null == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as RuleCode,
+      data: null == data
+          ? _value._data
+          : data // ignore: cast_nullable_to_non_nullable
+              as List<Object>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TotalDataResult extends TotalDataResult {
+  const _$TotalDataResult(
+      {required this.code,
+      required final List<Object> data,
+      final String? $type})
+      : _data = data,
+        $type = $type ?? 'totalData',
+        super._();
+
+  factory _$TotalDataResult.fromJson(Map<String, dynamic> json) =>
+      _$$TotalDataResultFromJson(json);
+
+  @override
+  final RuleCode code;
+  final List<Object> _data;
+  @override
+  List<Object> get data {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_data);
+  }
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'AnalysisResult.totalData(code: $code, data: $data)';
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TotalDataResultCopyWith<_$TotalDataResult> get copyWith =>
+      __$$TotalDataResultCopyWithImpl<_$TotalDataResult>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        lint,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)
+        lintWithEdits,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        assist,
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        assistWithEdits,
+  }) {
+    return totalData(code, data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        lint,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)?
+        lintWithEdits,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult? Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
+  }) {
+    return totalData?.call(code, data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        lint,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)?
+        lintWithEdits,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
+    required TResult orElse(),
+  }) {
+    if (totalData != null) {
+      return totalData(code, data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LintResult value) lint,
+    required TResult Function(LintWithEditsResult value) lintWithEdits,
+    required TResult Function(TotalDataResult value) totalData,
+    required TResult Function(SingleDataResult value) singleData,
+    required TResult Function(AssistResult value) assist,
+    required TResult Function(AssistWithEditsResult value) assistWithEdits,
+  }) {
+    return totalData(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LintResult value)? lint,
+    TResult? Function(LintWithEditsResult value)? lintWithEdits,
+    TResult? Function(TotalDataResult value)? totalData,
+    TResult? Function(SingleDataResult value)? singleData,
+    TResult? Function(AssistResult value)? assist,
+    TResult? Function(AssistWithEditsResult value)? assistWithEdits,
+  }) {
+    return totalData?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LintResult value)? lint,
+    TResult Function(LintWithEditsResult value)? lintWithEdits,
+    TResult Function(TotalDataResult value)? totalData,
+    TResult Function(SingleDataResult value)? singleData,
+    TResult Function(AssistResult value)? assist,
+    TResult Function(AssistWithEditsResult value)? assistWithEdits,
+    required TResult orElse(),
+  }) {
+    if (totalData != null) {
+      return totalData(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TotalDataResultToJson(
+      this,
+    );
+  }
+}
+
+abstract class TotalDataResult extends AnalysisResult {
+  const factory TotalDataResult(
+      {required final RuleCode code,
+      required final List<Object> data}) = _$TotalDataResult;
+  const TotalDataResult._() : super._();
+
+  factory TotalDataResult.fromJson(Map<String, dynamic> json) =
+      _$TotalDataResult.fromJson;
+
+  @override
+  RuleCode get code;
+  List<Object> get data;
+  @override
+  @JsonKey(ignore: true)
+  _$$TotalDataResultCopyWith<_$TotalDataResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SingleDataResultCopyWith<$Res>
+    implements $AnalysisResultCopyWith<$Res> {
+  factory _$$SingleDataResultCopyWith(
+          _$SingleDataResult value, $Res Function(_$SingleDataResult) then) =
+      __$$SingleDataResultCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({RuleCode code, Object data});
+
+  @override
+  $RuleCodeCopyWith<$Res> get code;
+}
+
+/// @nodoc
+class __$$SingleDataResultCopyWithImpl<$Res>
+    extends _$AnalysisResultCopyWithImpl<$Res, _$SingleDataResult>
+    implements _$$SingleDataResultCopyWith<$Res> {
+  __$$SingleDataResultCopyWithImpl(
+      _$SingleDataResult _value, $Res Function(_$SingleDataResult) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? code = null,
+    Object? data = null,
+  }) {
+    return _then(_$SingleDataResult(
+      code: null == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as RuleCode,
+      data: null == data ? _value.data : data,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SingleDataResult extends SingleDataResult {
+  const _$SingleDataResult(
+      {required this.code, required this.data, final String? $type})
+      : $type = $type ?? 'singleData',
+        super._();
+
+  factory _$SingleDataResult.fromJson(Map<String, dynamic> json) =>
+      _$$SingleDataResultFromJson(json);
+
+  @override
+  final RuleCode code;
+  @override
+  final Object data;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'AnalysisResult.singleData(code: $code, data: $data)';
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SingleDataResultCopyWith<_$SingleDataResult> get copyWith =>
+      __$$SingleDataResultCopyWithImpl<_$SingleDataResult>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        lint,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)
+        lintWithEdits,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        assist,
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        assistWithEdits,
+  }) {
+    return singleData(code, data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        lint,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)?
+        lintWithEdits,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult? Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
+  }) {
+    return singleData?.call(code, data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        lint,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)?
+        lintWithEdits,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
+    required TResult orElse(),
+  }) {
+    if (singleData != null) {
+      return singleData(code, data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LintResult value) lint,
+    required TResult Function(LintWithEditsResult value) lintWithEdits,
+    required TResult Function(TotalDataResult value) totalData,
+    required TResult Function(SingleDataResult value) singleData,
+    required TResult Function(AssistResult value) assist,
+    required TResult Function(AssistWithEditsResult value) assistWithEdits,
+  }) {
+    return singleData(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LintResult value)? lint,
+    TResult? Function(LintWithEditsResult value)? lintWithEdits,
+    TResult? Function(TotalDataResult value)? totalData,
+    TResult? Function(SingleDataResult value)? singleData,
+    TResult? Function(AssistResult value)? assist,
+    TResult? Function(AssistWithEditsResult value)? assistWithEdits,
+  }) {
+    return singleData?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LintResult value)? lint,
+    TResult Function(LintWithEditsResult value)? lintWithEdits,
+    TResult Function(TotalDataResult value)? totalData,
+    TResult Function(SingleDataResult value)? singleData,
+    TResult Function(AssistResult value)? assist,
+    TResult Function(AssistWithEditsResult value)? assistWithEdits,
+    required TResult orElse(),
+  }) {
+    if (singleData != null) {
+      return singleData(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SingleDataResultToJson(
+      this,
+    );
+  }
+}
+
+abstract class SingleDataResult extends AnalysisResult {
+  const factory SingleDataResult(
+      {required final RuleCode code,
+      required final Object data}) = _$SingleDataResult;
+  const SingleDataResult._() : super._();
+
+  factory SingleDataResult.fromJson(Map<String, dynamic> json) =
+      _$SingleDataResult.fromJson;
+
+  @override
+  RuleCode get code;
+  Object get data;
+  @override
+  @JsonKey(ignore: true)
+  _$$SingleDataResultCopyWith<_$SingleDataResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AssistResultCopyWith<$Res>
+    implements $AnalysisResultCopyWith<$Res> {
+  factory _$$AssistResultCopyWith(
+          _$AssistResult value, $Res Function(_$AssistResult) then) =
+      __$$AssistResultCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {RuleCode code,
+      @Assert('span.sourceUrl != null')
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          SourceSpan span,
+      @JsonKey(ignore: true)
+          EditsComputer? editsComputer});
+
+  @override
+  $RuleCodeCopyWith<$Res> get code;
+}
+
+/// @nodoc
+class __$$AssistResultCopyWithImpl<$Res>
+    extends _$AnalysisResultCopyWithImpl<$Res, _$AssistResult>
+    implements _$$AssistResultCopyWith<$Res> {
+  __$$AssistResultCopyWithImpl(
+      _$AssistResult _value, $Res Function(_$AssistResult) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? code = null,
+    Object? span = null,
+    Object? editsComputer = freezed,
+  }) {
+    return _then(_$AssistResult(
+      code: null == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as RuleCode,
+      span: null == span
+          ? _value.span
+          : span // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
+      editsComputer: freezed == editsComputer
+          ? _value.editsComputer
+          : editsComputer // ignore: cast_nullable_to_non_nullable
+              as EditsComputer?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AssistResult extends AssistResult {
+  const _$AssistResult(
+      {required this.code,
+      @Assert('span.sourceUrl != null')
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          required this.span,
+      @JsonKey(ignore: true)
+          this.editsComputer,
+      final String? $type})
+      : $type = $type ?? 'assist',
+        super._();
+
+  factory _$AssistResult.fromJson(Map<String, dynamic> json) =>
+      _$$AssistResultFromJson(json);
+
+  @override
+  final RuleCode code;
+  @override
+  @Assert('span.sourceUrl != null')
+  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+  final SourceSpan span;
+  @override
+  @JsonKey(ignore: true)
+  final EditsComputer? editsComputer;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'AnalysisResult.assist(code: $code, span: $span, editsComputer: $editsComputer)';
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AssistResultCopyWith<_$AssistResult> get copyWith =>
+      __$$AssistResultCopyWithImpl<_$AssistResult>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        lint,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)
+        lintWithEdits,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        assist,
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        assistWithEdits,
+  }) {
+    return assist(code, span, editsComputer);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        lint,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)?
+        lintWithEdits,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult? Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
+  }) {
+    return assist?.call(code, span, editsComputer);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        lint,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)?
+        lintWithEdits,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
+    required TResult orElse(),
+  }) {
+    if (assist != null) {
+      return assist(code, span, editsComputer);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LintResult value) lint,
+    required TResult Function(LintWithEditsResult value) lintWithEdits,
+    required TResult Function(TotalDataResult value) totalData,
+    required TResult Function(SingleDataResult value) singleData,
+    required TResult Function(AssistResult value) assist,
+    required TResult Function(AssistWithEditsResult value) assistWithEdits,
+  }) {
+    return assist(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LintResult value)? lint,
+    TResult? Function(LintWithEditsResult value)? lintWithEdits,
+    TResult? Function(TotalDataResult value)? totalData,
+    TResult? Function(SingleDataResult value)? singleData,
+    TResult? Function(AssistResult value)? assist,
+    TResult? Function(AssistWithEditsResult value)? assistWithEdits,
+  }) {
+    return assist?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LintResult value)? lint,
+    TResult Function(LintWithEditsResult value)? lintWithEdits,
+    TResult Function(TotalDataResult value)? totalData,
+    TResult Function(SingleDataResult value)? singleData,
+    TResult Function(AssistResult value)? assist,
+    TResult Function(AssistWithEditsResult value)? assistWithEdits,
+    required TResult orElse(),
+  }) {
+    if (assist != null) {
+      return assist(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AssistResultToJson(
+      this,
+    );
+  }
+}
+
+abstract class AssistResult extends AnalysisResult {
+  const factory AssistResult(
+      {required final RuleCode code,
+      @Assert('span.sourceUrl != null')
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          required final SourceSpan span,
+      @JsonKey(ignore: true)
+          final EditsComputer? editsComputer}) = _$AssistResult;
+  const AssistResult._() : super._();
+
+  factory AssistResult.fromJson(Map<String, dynamic> json) =
+      _$AssistResult.fromJson;
+
+  @override
+  RuleCode get code;
+  @Assert('span.sourceUrl != null')
+  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+  SourceSpan get span;
+  @JsonKey(ignore: true)
+  EditsComputer? get editsComputer;
+  @override
+  @JsonKey(ignore: true)
+  _$$AssistResultCopyWith<_$AssistResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AssistWithEditsResultCopyWith<$Res>
+    implements $AnalysisResultCopyWith<$Res> {
+  factory _$$AssistWithEditsResultCopyWith(_$AssistWithEditsResult value,
+          $Res Function(_$AssistWithEditsResult) then) =
+      __$$AssistWithEditsResultCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {RuleCode code,
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          SourceSpan span,
+      List<EditResult> edits});
+
+  @override
+  $RuleCodeCopyWith<$Res> get code;
+}
+
+/// @nodoc
+class __$$AssistWithEditsResultCopyWithImpl<$Res>
+    extends _$AnalysisResultCopyWithImpl<$Res, _$AssistWithEditsResult>
+    implements _$$AssistWithEditsResultCopyWith<$Res> {
+  __$$AssistWithEditsResultCopyWithImpl(_$AssistWithEditsResult _value,
+      $Res Function(_$AssistWithEditsResult) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? code = null,
+    Object? span = null,
+    Object? edits = null,
+  }) {
+    return _then(_$AssistWithEditsResult(
+      code: null == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as RuleCode,
+      span: null == span
+          ? _value.span
+          : span // ignore: cast_nullable_to_non_nullable
+              as SourceSpan,
+      edits: null == edits
+          ? _value._edits
+          : edits // ignore: cast_nullable_to_non_nullable
+              as List<EditResult>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AssistWithEditsResult extends AssistWithEditsResult {
+  const _$AssistWithEditsResult(
+      {required this.code,
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          required this.span,
+      final List<EditResult> edits = const <EditResult>[],
+      final String? $type})
+      : _edits = edits,
+        $type = $type ?? 'assistWithEdits',
+        super._();
+
+  factory _$AssistWithEditsResult.fromJson(Map<String, dynamic> json) =>
+      _$$AssistWithEditsResultFromJson(json);
+
+  @override
+  final RuleCode code;
+  @override
+  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+  final SourceSpan span;
+  final List<EditResult> _edits;
+  @override
+  @JsonKey()
+  List<EditResult> get edits {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_edits);
+  }
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'AnalysisResult.assistWithEdits(code: $code, span: $span, edits: $edits)';
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AssistWithEditsResultCopyWith<_$AssistWithEditsResult> get copyWith =>
+      __$$AssistWithEditsResultCopyWithImpl<_$AssistWithEditsResult>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        lint,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)
+        lintWithEdits,
+    required TResult Function(RuleCode code, List<Object> data) totalData,
+    required TResult Function(RuleCode code, Object data) singleData,
+    required TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)
+        assist,
+    required TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)
+        assistWithEdits,
+  }) {
+    return assistWithEdits(code, span, edits);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        lint,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)?
+        lintWithEdits,
+    TResult? Function(RuleCode code, List<Object> data)? totalData,
+    TResult? Function(RuleCode code, Object data)? singleData,
+    TResult? Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult? Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
+  }) {
+    return assistWithEdits?.call(code, span, edits);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        lint,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            String message,
+            LintSeverity severity,
+            String? correction,
+            List<EditResult> edits)?
+        lintWithEdits,
+    TResult Function(RuleCode code, List<Object> data)? totalData,
+    TResult Function(RuleCode code, Object data)? singleData,
+    TResult Function(
+            RuleCode code,
+            @Assert('span.sourceUrl != null')
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            @JsonKey(ignore: true)
+                EditsComputer? editsComputer)?
+        assist,
+    TResult Function(
+            RuleCode code,
+            @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+                SourceSpan span,
+            List<EditResult> edits)?
+        assistWithEdits,
+    required TResult orElse(),
+  }) {
+    if (assistWithEdits != null) {
+      return assistWithEdits(code, span, edits);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LintResult value) lint,
+    required TResult Function(LintWithEditsResult value) lintWithEdits,
+    required TResult Function(TotalDataResult value) totalData,
+    required TResult Function(SingleDataResult value) singleData,
+    required TResult Function(AssistResult value) assist,
+    required TResult Function(AssistWithEditsResult value) assistWithEdits,
+  }) {
+    return assistWithEdits(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LintResult value)? lint,
+    TResult? Function(LintWithEditsResult value)? lintWithEdits,
+    TResult? Function(TotalDataResult value)? totalData,
+    TResult? Function(SingleDataResult value)? singleData,
+    TResult? Function(AssistResult value)? assist,
+    TResult? Function(AssistWithEditsResult value)? assistWithEdits,
+  }) {
+    return assistWithEdits?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LintResult value)? lint,
+    TResult Function(LintWithEditsResult value)? lintWithEdits,
+    TResult Function(TotalDataResult value)? totalData,
+    TResult Function(SingleDataResult value)? singleData,
+    TResult Function(AssistResult value)? assist,
+    TResult Function(AssistWithEditsResult value)? assistWithEdits,
+    required TResult orElse(),
+  }) {
+    if (assistWithEdits != null) {
+      return assistWithEdits(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AssistWithEditsResultToJson(
+      this,
+    );
+  }
+}
+
+abstract class AssistWithEditsResult extends AnalysisResult {
+  const factory AssistWithEditsResult(
+      {required final RuleCode code,
+      @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+          required final SourceSpan span,
+      final List<EditResult> edits}) = _$AssistWithEditsResult;
+  const AssistWithEditsResult._() : super._();
+
+  factory AssistWithEditsResult.fromJson(Map<String, dynamic> json) =
+      _$AssistWithEditsResult.fromJson;
+
+  @override
+  RuleCode get code;
+  @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
+  SourceSpan get span;
+  List<EditResult> get edits;
+  @override
+  @JsonKey(ignore: true)
+  _$$AssistWithEditsResultCopyWith<_$AssistWithEditsResult> get copyWith =>
       throw _privateConstructorUsedError;
 }

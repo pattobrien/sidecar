@@ -22,11 +22,11 @@ class EntrypointBuilderService {
   void setupEntrypointFiles(
     Uri packageRoot,
     Uri pluginRoot,
-    List<RulePackageConfiguration> lintPackageConfigurations,
+    List<RulePackageConfiguration> rulePackageConfigurations,
   ) {
     if (_doesFileNeedUpdates(packageRoot)) {
       setupPluginSourceFiles(packageRoot, pluginRoot);
-      setupBootstrapper(packageRoot, lintPackageConfigurations);
+      setupBootstrapper(packageRoot, rulePackageConfigurations);
     }
   }
 

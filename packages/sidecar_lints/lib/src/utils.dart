@@ -22,5 +22,8 @@ bool isSidecarRule(ClassDeclaration node) {
   final superclassUri =
       node.extendsClause?.superclass.type?.element?.librarySource?.uri;
   final isFromSidecarPackage = superclassUri?.path.contains('sidecar') ?? false;
-  return superclassName == 'Rule' && isFromSidecarPackage;
+  return (superclassName == 'LintRule' ||
+          superclassName == 'DataRule' ||
+          superclassName == 'AssistRule') &&
+      isFromSidecarPackage;
 }

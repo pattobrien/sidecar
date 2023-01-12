@@ -53,7 +53,7 @@ class SidecarNewException with _$SidecarNewException {
   LintResult toLintResult() {
     return LintResult(
       span: sourceSpan,
-      rule: code,
+      code: code,
       message: message,
       correction: correction,
       severity: LintSeverity.warning,

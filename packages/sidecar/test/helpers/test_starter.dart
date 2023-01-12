@@ -24,7 +24,6 @@ Future<AnalyzerClient> analyzeTestResources(
       await runPubGet(root);
       final client = container.read(cliClientProvider);
       await client.openWorkspace();
-      // client.closeWorkspace();
       addTearDown(client.closeWorkspace);
       return client;
     },

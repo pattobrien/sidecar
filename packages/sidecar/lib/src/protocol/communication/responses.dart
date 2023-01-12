@@ -10,10 +10,10 @@ class SidecarResponse with _$SidecarResponse {
   const SidecarResponse._();
   const factory SidecarResponse.contextCollection() = SetWorkspaceResponse;
 
-  const factory SidecarResponse.assist(Set<AssistResultWithEdits> results) =
+  const factory SidecarResponse.assist(Set<AssistWithEditsResult> results) =
       AssistResponse;
 
-  const factory SidecarResponse.quickFix(List<LintResultWithEdits> results) =
+  const factory SidecarResponse.quickFix(List<LintWithEditsResult> results) =
       QuickFixResponse;
 
   const factory SidecarResponse.lint(List<LintResult> lints) = LintResponse;

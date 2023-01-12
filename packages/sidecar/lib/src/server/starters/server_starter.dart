@@ -1,5 +1,4 @@
 import 'dart:isolate';
-import 'dart:io' as io;
 
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:path/path.dart';
@@ -27,15 +26,9 @@ Future<Isolate> analyzerIsolateStarter({
   // uri at startup
   final argsWithRoot = <String>[root.toFilePath(), ...args];
 
-  // final process = await io.Process.start(
-  //   'flutter',
-  //   [...argsWithRoot],
-  // );
   return Isolate.spawnUri(
     exec,
-    [
-      ...argsWithRoot,
-    ],
+    argsWithRoot,
     sendPort,
     onError: sendPort,
     onExit: sendPort,

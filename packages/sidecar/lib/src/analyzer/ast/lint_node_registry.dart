@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs
+// coverage:ignore-file
 
 part of 'registered_rule_visitor.dart';
 

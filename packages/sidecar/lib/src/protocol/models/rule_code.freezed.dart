@@ -20,6 +20,8 @@ RuleCode _$RuleCodeFromJson(Map<String, dynamic> json) {
       return LintCode.fromJson(json);
     case 'assist':
       return AssistCode.fromJson(json);
+    case 'data':
+      return DataCode.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'RuleCode',
@@ -36,6 +38,7 @@ mixin _$RuleCode {
   TResult when<TResult extends Object?>({
     required TResult Function(String id, String package, String? url) lint,
     required TResult Function(String id, String package, String? url) assist,
+    required TResult Function(String id, String package, String? url) data,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -48,6 +51,7 @@ mixin _$RuleCode {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String id, String package, String? url)? lint,
     TResult Function(String id, String package, String? url)? assist,
+    TResult Function(String id, String package, String? url)? data,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -55,6 +59,7 @@ mixin _$RuleCode {
   TResult map<TResult extends Object?>({
     required TResult Function(LintCode value) lint,
     required TResult Function(AssistCode value) assist,
+    required TResult Function(DataCode value) data,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -67,6 +72,7 @@ mixin _$RuleCode {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LintCode value)? lint,
     TResult Function(AssistCode value)? assist,
+    TResult Function(DataCode value)? data,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -210,6 +216,7 @@ class _$LintCode extends LintCode {
   TResult when<TResult extends Object?>({
     required TResult Function(String id, String package, String? url) lint,
     required TResult Function(String id, String package, String? url) assist,
+    required TResult Function(String id, String package, String? url) data,
   }) {
     return lint(id, package, url);
   }
@@ -228,6 +235,7 @@ class _$LintCode extends LintCode {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String id, String package, String? url)? lint,
     TResult Function(String id, String package, String? url)? assist,
+    TResult Function(String id, String package, String? url)? data,
     required TResult orElse(),
   }) {
     if (lint != null) {
@@ -241,6 +249,7 @@ class _$LintCode extends LintCode {
   TResult map<TResult extends Object?>({
     required TResult Function(LintCode value) lint,
     required TResult Function(AssistCode value) assist,
+    required TResult Function(DataCode value) data,
   }) {
     return lint(this);
   }
@@ -259,6 +268,7 @@ class _$LintCode extends LintCode {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LintCode value)? lint,
     TResult Function(AssistCode value)? assist,
+    TResult Function(DataCode value)? data,
     required TResult orElse(),
   }) {
     if (lint != null) {
@@ -387,6 +397,7 @@ class _$AssistCode extends AssistCode {
   TResult when<TResult extends Object?>({
     required TResult Function(String id, String package, String? url) lint,
     required TResult Function(String id, String package, String? url) assist,
+    required TResult Function(String id, String package, String? url) data,
   }) {
     return assist(id, package, url);
   }
@@ -405,6 +416,7 @@ class _$AssistCode extends AssistCode {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String id, String package, String? url)? lint,
     TResult Function(String id, String package, String? url)? assist,
+    TResult Function(String id, String package, String? url)? data,
     required TResult orElse(),
   }) {
     if (assist != null) {
@@ -418,6 +430,7 @@ class _$AssistCode extends AssistCode {
   TResult map<TResult extends Object?>({
     required TResult Function(LintCode value) lint,
     required TResult Function(AssistCode value) assist,
+    required TResult Function(DataCode value) data,
   }) {
     return assist(this);
   }
@@ -436,6 +449,7 @@ class _$AssistCode extends AssistCode {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LintCode value)? lint,
     TResult Function(AssistCode value)? assist,
+    TResult Function(DataCode value)? data,
     required TResult orElse(),
   }) {
     if (assist != null) {
@@ -469,5 +483,187 @@ abstract class AssistCode extends RuleCode {
   @override
   @JsonKey(ignore: true)
   _$$AssistCodeCopyWith<_$AssistCode> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DataCodeCopyWith<$Res> implements $RuleCodeCopyWith<$Res> {
+  factory _$$DataCodeCopyWith(
+          _$DataCode value, $Res Function(_$DataCode) then) =
+      __$$DataCodeCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id, String package, String? url});
+}
+
+/// @nodoc
+class __$$DataCodeCopyWithImpl<$Res>
+    extends _$RuleCodeCopyWithImpl<$Res, _$DataCode>
+    implements _$$DataCodeCopyWith<$Res> {
+  __$$DataCodeCopyWithImpl(_$DataCode _value, $Res Function(_$DataCode) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? package = null,
+    Object? url = freezed,
+  }) {
+    return _then(_$DataCode(
+      null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      package: null == package
+          ? _value.package
+          : package // ignore: cast_nullable_to_non_nullable
+              as String,
+      url: freezed == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$DataCode extends DataCode {
+  const _$DataCode(this.id,
+      {required this.package, this.url, final String? $type})
+      : $type = $type ?? 'data',
+        super._();
+
+  factory _$DataCode.fromJson(Map<String, dynamic> json) =>
+      _$$DataCodeFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String package;
+  @override
+  final String? url;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'RuleCode.data(id: $id, package: $package, url: $url)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DataCode &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.package, package) || other.package == package) &&
+            (identical(other.url, url) || other.url == url));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, package, url);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DataCodeCopyWith<_$DataCode> get copyWith =>
+      __$$DataCodeCopyWithImpl<_$DataCode>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String id, String package, String? url) lint,
+    required TResult Function(String id, String package, String? url) assist,
+    required TResult Function(String id, String package, String? url) data,
+  }) {
+    return data(id, package, url);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String id, String package, String? url)? lint,
+    TResult? Function(String id, String package, String? url)? assist,
+    TResult? Function(String id, String package, String? url)? data,
+  }) {
+    return data?.call(id, package, url);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String id, String package, String? url)? lint,
+    TResult Function(String id, String package, String? url)? assist,
+    TResult Function(String id, String package, String? url)? data,
+    required TResult orElse(),
+  }) {
+    if (data != null) {
+      return data(id, package, url);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LintCode value) lint,
+    required TResult Function(AssistCode value) assist,
+    required TResult Function(DataCode value) data,
+  }) {
+    return data(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LintCode value)? lint,
+    TResult? Function(AssistCode value)? assist,
+    TResult? Function(DataCode value)? data,
+  }) {
+    return data?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LintCode value)? lint,
+    TResult Function(AssistCode value)? assist,
+    TResult Function(DataCode value)? data,
+    required TResult orElse(),
+  }) {
+    if (data != null) {
+      return data(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$DataCodeToJson(
+      this,
+    );
+  }
+}
+
+abstract class DataCode extends RuleCode {
+  const factory DataCode(final String id,
+      {required final String package, final String? url}) = _$DataCode;
+  const DataCode._() : super._();
+
+  factory DataCode.fromJson(Map<String, dynamic> json) = _$DataCode.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get package;
+  @override
+  String? get url;
+  @override
+  @JsonKey(ignore: true)
+  _$$DataCodeCopyWith<_$DataCode> get copyWith =>
       throw _privateConstructorUsedError;
 }

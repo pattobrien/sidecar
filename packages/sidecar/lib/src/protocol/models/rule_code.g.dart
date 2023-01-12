@@ -53,3 +53,27 @@ Map<String, dynamic> _$$AssistCodeToJson(_$AssistCode instance) {
   val['runtimeType'] = instance.$type;
   return val;
 }
+
+_$DataCode _$$DataCodeFromJson(Map json) => _$DataCode(
+      json['id'] as String,
+      package: json['package'] as String,
+      url: json['url'] as String?,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$DataCodeToJson(_$DataCode instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'package': instance.package,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('url', instance.url);
+  val['runtimeType'] = instance.$type;
+  return val;
+}

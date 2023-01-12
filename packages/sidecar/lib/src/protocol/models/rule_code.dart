@@ -21,6 +21,13 @@ class RuleCode with _$RuleCode {
     String? url,
   }) = AssistCode;
 
+  /// Identifier for a Sidecar Data rule
+  const factory RuleCode.data(
+    String id, {
+    required String package,
+    String? url,
+  }) = DataCode;
+
   const RuleCode._();
 
   factory RuleCode.fromJson(Map<String, dynamic> json) =>

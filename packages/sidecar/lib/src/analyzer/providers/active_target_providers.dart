@@ -1,16 +1,20 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 // ignore: implementation_imports
 import 'package:analyzer/src/dart/analysis/analysis_context_collection.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../protocol/analyzed_files.dart';
 import '../../protocol/protocol.dart';
+import '../../server/communication_channel.dart';
 import '../../services/active_project_service.dart';
 import '../../services/glob_service.dart';
 import '../../utils/logger/logger.dart';
 import '../../utils/uri_ext.dart';
 import 'resource_providers.dart';
+import 'results_providers.dart';
 import 'sidecar_spec_providers.dart';
 
 /// The target of a particular Analyzer instance.
@@ -75,28 +79,30 @@ final contextCollectionProvider = Provider<List<AnalysisContext>>((ref) {
 });
 
 /// Generates in-scope files based on sidecar.yaml top-level includes/excludes globs.
-final activeProjectScopedFilesProvider = Provider<Set<AnalyzedFile>>((ref) {
+final activeProjectScopedFilesProvider = Provider<AnalyzedFiles>((ref) {
   final activeProjectIncludes = ref.watch(activeProjectIncludeGlobsProvider);
   final activeProjectExcludes = ref.watch(activeProjectExcludeGlobsProvider);
   final contexts = ref.watch(contextCollectionProvider);
   final fileSystem = ref.watch(fileSystemProvider);
   final globService = ref.watch(globServiceProvider);
 
-  return contexts
+  final allFiles = contexts
       .map((context) {
-        //TODO: what to do with 'lib' folder
         final filesInScope = globService.extractDartFilesFromFolders(
             context.contextRoot.root.path,
             fileSystem: fileSystem,
             globalIncludes: activeProjectIncludes,
             globalExcludes: activeProjectExcludes);
-
+        // final hash = filesInScope.hashCode;
         final files = filesInScope
             .map((e) => AnalyzedFile(Uri.file(e),
                 contextRoot: context.contextRoot.root.toUri()))
             .toList();
+        // final analyzedFiles = AnalyzedFiles.from(files);
         return files;
       })
       .expand((e) => e)
       .toSet();
+  // final hashCode = allFiles.hashCode;
+  return AnalyzedFiles(allFiles);
 });
