@@ -43,8 +43,8 @@ jobs:
           # channel: ${{ matrix.channel }}
           channel: stable
           flutter-version: ${{ matrix.flutter-version }}
-          cache: true
-          cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
+          # cache: true
+          # cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
 
       - name: Add pub cache bin to PATH
         run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
