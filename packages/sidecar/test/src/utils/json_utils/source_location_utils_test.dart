@@ -23,7 +23,7 @@ void main() {
     test('take json as input', () {
       final json = <String, dynamic>{
         'offset': 10,
-        'sourceUrl': Directory.current.path,
+        'sourceUrl': Directory.current.uri.toFilePath(),
         'line': 1,
         'column': 10,
       };
@@ -31,7 +31,7 @@ void main() {
       expect(
         location,
         SourceLocation(10,
-            sourceUrl: Directory.current.path, line: 1, column: 10),
+            sourceUrl: Directory.current.uri, line: 1, column: 10),
       );
     });
   });

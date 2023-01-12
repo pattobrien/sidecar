@@ -50,8 +50,8 @@ mixin _$SidecarResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? contextCollection,
-    TResult? Function(Set<AssistResultWithEdits> results)? assist,
-    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(Set<AssistWithEditsResult> results)? assist,
+    TResult? Function(List<LintWithEditsResult> results)? quickFix,
     TResult? Function(List<LintResult> lints)? lint,
     TResult? Function()? updateFiles,
     TResult? Function()? setPriorityFiles,
@@ -181,8 +181,8 @@ class _$SetWorkspaceResponse extends SetWorkspaceResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? contextCollection,
-    TResult? Function(Set<AssistResultWithEdits> results)? assist,
-    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(Set<AssistWithEditsResult> results)? assist,
+    TResult? Function(List<LintWithEditsResult> results)? quickFix,
     TResult? Function(List<LintResult> lints)? lint,
     TResult? Function()? updateFiles,
     TResult? Function()? setPriorityFiles,
@@ -272,7 +272,7 @@ abstract class _$$AssistResponseCopyWith<$Res> {
           _$AssistResponse value, $Res Function(_$AssistResponse) then) =
       __$$AssistResponseCopyWithImpl<$Res>;
   @useResult
-  $Res call({Set<AssistResultWithEdits> results});
+  $Res call({Set<AssistWithEditsResult> results});
 }
 
 /// @nodoc
@@ -360,8 +360,8 @@ class _$AssistResponse extends AssistResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? contextCollection,
-    TResult? Function(Set<AssistResultWithEdits> results)? assist,
-    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(Set<AssistWithEditsResult> results)? assist,
+    TResult? Function(List<LintWithEditsResult> results)? quickFix,
     TResult? Function(List<LintResult> lints)? lint,
     TResult? Function()? updateFiles,
     TResult? Function()? setPriorityFiles,
@@ -457,7 +457,7 @@ abstract class _$$QuickFixResponseCopyWith<$Res> {
           _$QuickFixResponse value, $Res Function(_$QuickFixResponse) then) =
       __$$QuickFixResponseCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<LintResultWithEdits> results});
+  $Res call({List<LintWithEditsResult> results});
 }
 
 /// @nodoc
@@ -545,8 +545,8 @@ class _$QuickFixResponse extends QuickFixResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? contextCollection,
-    TResult? Function(Set<AssistResultWithEdits> results)? assist,
-    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(Set<AssistWithEditsResult> results)? assist,
+    TResult? Function(List<LintWithEditsResult> results)? quickFix,
     TResult? Function(List<LintResult> lints)? lint,
     TResult? Function()? updateFiles,
     TResult? Function()? setPriorityFiles,
@@ -729,8 +729,8 @@ class _$LintResponse extends LintResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? contextCollection,
-    TResult? Function(Set<AssistResultWithEdits> results)? assist,
-    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(Set<AssistWithEditsResult> results)? assist,
+    TResult? Function(List<LintWithEditsResult> results)? quickFix,
     TResult? Function(List<LintResult> lints)? lint,
     TResult? Function()? updateFiles,
     TResult? Function()? setPriorityFiles,
@@ -880,8 +880,8 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? contextCollection,
-    TResult? Function(Set<AssistResultWithEdits> results)? assist,
-    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(Set<AssistWithEditsResult> results)? assist,
+    TResult? Function(List<LintWithEditsResult> results)? quickFix,
     TResult? Function(List<LintResult> lints)? lint,
     TResult? Function()? updateFiles,
     TResult? Function()? setPriorityFiles,
@@ -1027,8 +1027,8 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? contextCollection,
-    TResult? Function(Set<AssistResultWithEdits> results)? assist,
-    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(Set<AssistWithEditsResult> results)? assist,
+    TResult? Function(List<LintWithEditsResult> results)? quickFix,
     TResult? Function(List<LintResult> lints)? lint,
     TResult? Function()? updateFiles,
     TResult? Function()? setPriorityFiles,

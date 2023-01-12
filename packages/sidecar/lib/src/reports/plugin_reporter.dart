@@ -1,7 +1,9 @@
 import 'dart:io' as io;
 
+import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../protocol/communication/communication.dart';
 import '../protocol/models/log_record.dart';
@@ -27,11 +29,31 @@ class PluginReporter extends Reporter {
 
   void _createLogFileAndSink() {
     const currentSession = 'latest.log';
-    logFile = io.File.fromUri(
-        workspaceRoot.resolve(join(kDartTool, kLogsFolder, currentSession)));
+    final workspacePath = workspaceRoot.toFilePath();
+    final latestLogPath =
+        join(workspacePath, kDartTool, kLogsFolder, currentSession);
+
+    logFile = io.File(latestLogPath);
+    //TODO: reinstate below
     if (logFile.existsSync()) {
       final firstLine = logFile.readAsLinesSync().first;
-      logFile.renameSync(join(logFile.parent.path, 'log-$firstLine.log'));
+      final tryDate = DateTime.tryParse(firstLine);
+      final resourceProvider = PhysicalResourceProvider.INSTANCE;
+      // final parentPath = logFile.parent.uri.toFilePath();
+      // logFile.renameSync(join(parentPath, 'log-$firstLine.log'));
+      final latestLogFile = resourceProvider.getFile(latestLogPath);
+      final previousLogContent = latestLogFile.readAsStringSync();
+      // final newFile = resourceProvider.getFile(
+      //     join(workspacePath, kDartTool, kLogsFolder, 'log-$firstLine.log'));
+      final parentFolder = resourceProvider
+          .getFolder(join(workspacePath, kDartTool, kLogsFolder));
+      final oldLogFile = parentFolder.getChildAssumingFile(
+          'log-${tryDate?.millisecondsSinceEpoch ?? const Uuid().v1()}.log');
+      oldLogFile.writeAsStringSync(previousLogContent);
+      latestLogFile.delete();
+      // logFile.copySync(
+      //     join(workspacePath, kDartTool, kLogsFolder, 'log-$firstLine.log'));
+      // logFile.delete();
     }
     logFile.createSync(recursive: true);
     sink = logFile.openWrite(mode: io.FileMode.append);

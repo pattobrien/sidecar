@@ -211,7 +211,7 @@ extension LintResultX on LintResult {
   Uri get sourceUrl => span.sourceUrl!;
 
   bool isWithinOffset(String filePath, int offset) =>
-      sourceUrl.path == filePath &&
+      sourceUrl.toFilePath() == filePath &&
       span.start.offset <= offset &&
       offset <= span.start.offset + span.length;
 
@@ -238,7 +238,7 @@ extension LintWithEditsResultX on LintWithEditsResult {
   Uri get sourceUrl => span.sourceUrl!;
 
   bool isWithinOffset(String filePath, int offset) =>
-      sourceUrl.path == filePath &&
+      sourceUrl.toFilePath() == filePath &&
       span.start.offset <= offset &&
       offset <= span.start.offset + span.length;
 
@@ -253,7 +253,7 @@ extension AssistFilterResultX on AssistResult {
   Uri get sourceUrl => span.sourceUrl!;
 
   bool isWithinOffset(String filePath, int offset) =>
-      sourceUrl.path == filePath &&
+      sourceUrl.toFilePath() == filePath &&
       span.start.offset <= offset &&
       offset <= span.start.offset + span.length;
 
