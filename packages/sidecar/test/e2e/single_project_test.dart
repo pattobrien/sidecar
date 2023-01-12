@@ -32,10 +32,12 @@ void main() {
     setUpAll(() async {
       workspace = await createWorkspace(constructors: constructors);
       app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      app.deleteLibFolder();
     });
 
     setUp(() async {
       reporter = MockStdoutReporter();
+      app.deleteLibFolder();
     });
 
     test('1 lint result', () async {
