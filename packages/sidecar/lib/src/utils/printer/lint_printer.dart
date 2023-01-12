@@ -9,7 +9,7 @@ import '../../rules/lint_severity.dart';
 extension LintResultPrinter on LintResult {
   String prettyPrint() {
     final stringBuffer = StringBuffer();
-    final path = sourceUrl.path;
+    final path = sourceUrl.toFilePath();
 
     final relativePath = p.relative(path, from: Directory.current.path);
 

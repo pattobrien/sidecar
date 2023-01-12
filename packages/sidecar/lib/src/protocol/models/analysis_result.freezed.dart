@@ -63,7 +63,7 @@ mixin _$AnalysisResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(
+    TResult? Function(
             RuleCode rule,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -74,7 +74,7 @@ mixin _$AnalysisResult {
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)?
         $default, {
-    TResult Function(
+    TResult? Function(
             RuleCode rule,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -120,8 +120,8 @@ mixin _$AnalysisResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(LintResult value)? $default, {
-    TResult Function(LintResultWithEdits value)? withEdits,
+    TResult? Function(LintResult value)? $default, {
+    TResult? Function(LintResultWithEdits value)? withEdits,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -141,7 +141,8 @@ mixin _$AnalysisResult {
 abstract class $AnalysisResultCopyWith<$Res> {
   factory $AnalysisResultCopyWith(
           AnalysisResult value, $Res Function(AnalysisResult) then) =
-      _$AnalysisResultCopyWithImpl<$Res>;
+      _$AnalysisResultCopyWithImpl<$Res, AnalysisResult>;
+  @useResult
   $Res call(
       {RuleCode rule,
       @Assert('span.sourceUrl != null')
@@ -155,50 +156,53 @@ abstract class $AnalysisResultCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AnalysisResultCopyWithImpl<$Res>
+class _$AnalysisResultCopyWithImpl<$Res, $Val extends AnalysisResult>
     implements $AnalysisResultCopyWith<$Res> {
   _$AnalysisResultCopyWithImpl(this._value, this._then);
 
-  final AnalysisResult _value;
   // ignore: unused_field
-  final $Res Function(AnalysisResult) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rule = freezed,
-    Object? span = freezed,
-    Object? message = freezed,
-    Object? severity = freezed,
+    Object? rule = null,
+    Object? span = null,
+    Object? message = null,
+    Object? severity = null,
     Object? correction = freezed,
   }) {
     return _then(_value.copyWith(
-      rule: rule == freezed
+      rule: null == rule
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      span: span == freezed
+      span: null == span
           ? _value.span
           : span // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      severity: severity == freezed
+      severity: null == severity
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
               as LintSeverity,
-      correction: correction == freezed
+      correction: freezed == correction
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
               as String?,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $RuleCodeCopyWith<$Res> get rule {
     return $RuleCodeCopyWith<$Res>(_value.rule, (value) {
-      return _then(_value.copyWith(rule: value));
+      return _then(_value.copyWith(rule: value) as $Val);
     });
   }
 }
@@ -210,6 +214,7 @@ abstract class _$$LintResultCopyWith<$Res>
           _$LintResult value, $Res Function(_$LintResult) then) =
       __$$LintResultCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {RuleCode rule,
       @Assert('span.sourceUrl != null')
@@ -227,46 +232,44 @@ abstract class _$$LintResultCopyWith<$Res>
 
 /// @nodoc
 class __$$LintResultCopyWithImpl<$Res>
-    extends _$AnalysisResultCopyWithImpl<$Res>
+    extends _$AnalysisResultCopyWithImpl<$Res, _$LintResult>
     implements _$$LintResultCopyWith<$Res> {
   __$$LintResultCopyWithImpl(
       _$LintResult _value, $Res Function(_$LintResult) _then)
-      : super(_value, (v) => _then(v as _$LintResult));
+      : super(_value, _then);
 
-  @override
-  _$LintResult get _value => super._value as _$LintResult;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rule = freezed,
-    Object? span = freezed,
-    Object? message = freezed,
-    Object? severity = freezed,
+    Object? rule = null,
+    Object? span = null,
+    Object? message = null,
+    Object? severity = null,
     Object? correction = freezed,
     Object? editsComputer = freezed,
   }) {
     return _then(_$LintResult(
-      rule: rule == freezed
+      rule: null == rule
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      span: span == freezed
+      span: null == span
           ? _value.span
           : span // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      severity: severity == freezed
+      severity: null == severity
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
               as LintSeverity,
-      correction: correction == freezed
+      correction: freezed == correction
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
               as String?,
-      editsComputer: editsComputer == freezed
+      editsComputer: freezed == editsComputer
           ? _value.editsComputer
           : editsComputer // ignore: cast_nullable_to_non_nullable
               as EditsComputer?,
@@ -323,12 +326,13 @@ class _$LintResult extends LintResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LintResult &&
-            const DeepCollectionEquality().equals(other.rule, rule) &&
-            const DeepCollectionEquality().equals(other.span, span) &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality().equals(other.severity, severity) &&
-            const DeepCollectionEquality()
-                .equals(other.correction, correction) &&
+            (identical(other.rule, rule) || other.rule == rule) &&
+            (identical(other.span, span) || other.span == span) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.severity, severity) ||
+                other.severity == severity) &&
+            (identical(other.correction, correction) ||
+                other.correction == correction) &&
             (identical(other.editsComputer, editsComputer) ||
                 other.editsComputer == editsComputer));
   }
@@ -336,16 +340,11 @@ class _$LintResult extends LintResult {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(rule),
-      const DeepCollectionEquality().hash(span),
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(severity),
-      const DeepCollectionEquality().hash(correction),
-      editsComputer);
+      runtimeType, rule, span, message, severity, correction, editsComputer);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LintResultCopyWith<_$LintResult> get copyWith =>
       __$$LintResultCopyWithImpl<_$LintResult>(this, _$identity);
 
@@ -380,7 +379,7 @@ class _$LintResult extends LintResult {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(
+    TResult? Function(
             RuleCode rule,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -391,7 +390,7 @@ class _$LintResult extends LintResult {
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)?
         $default, {
-    TResult Function(
+    TResult? Function(
             RuleCode rule,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -450,8 +449,8 @@ class _$LintResult extends LintResult {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(LintResult value)? $default, {
-    TResult Function(LintResultWithEdits value)? withEdits,
+    TResult? Function(LintResult value)? $default, {
+    TResult? Function(LintResultWithEdits value)? withEdits,
   }) {
     return $default?.call(this);
   }
@@ -521,6 +520,7 @@ abstract class _$$LintResultWithEditsCopyWith<$Res>
           $Res Function(_$LintResultWithEdits) then) =
       __$$LintResultWithEditsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {RuleCode rule,
       @Assert('span.sourceUrl != null')
@@ -537,46 +537,44 @@ abstract class _$$LintResultWithEditsCopyWith<$Res>
 
 /// @nodoc
 class __$$LintResultWithEditsCopyWithImpl<$Res>
-    extends _$AnalysisResultCopyWithImpl<$Res>
+    extends _$AnalysisResultCopyWithImpl<$Res, _$LintResultWithEdits>
     implements _$$LintResultWithEditsCopyWith<$Res> {
   __$$LintResultWithEditsCopyWithImpl(
       _$LintResultWithEdits _value, $Res Function(_$LintResultWithEdits) _then)
-      : super(_value, (v) => _then(v as _$LintResultWithEdits));
+      : super(_value, _then);
 
-  @override
-  _$LintResultWithEdits get _value => super._value as _$LintResultWithEdits;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rule = freezed,
-    Object? span = freezed,
-    Object? message = freezed,
-    Object? severity = freezed,
+    Object? rule = null,
+    Object? span = null,
+    Object? message = null,
+    Object? severity = null,
     Object? correction = freezed,
-    Object? edits = freezed,
+    Object? edits = null,
   }) {
     return _then(_$LintResultWithEdits(
-      rule: rule == freezed
+      rule: null == rule
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      span: span == freezed
+      span: null == span
           ? _value.span
           : span // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      severity: severity == freezed
+      severity: null == severity
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
               as LintSeverity,
-      correction: correction == freezed
+      correction: freezed == correction
           ? _value.correction
           : correction // ignore: cast_nullable_to_non_nullable
               as String?,
-      edits: edits == freezed
+      edits: null == edits
           ? _value._edits
           : edits // ignore: cast_nullable_to_non_nullable
               as List<EditResult>,
@@ -636,28 +634,24 @@ class _$LintResultWithEdits extends LintResultWithEdits {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LintResultWithEdits &&
-            const DeepCollectionEquality().equals(other.rule, rule) &&
-            const DeepCollectionEquality().equals(other.span, span) &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality().equals(other.severity, severity) &&
-            const DeepCollectionEquality()
-                .equals(other.correction, correction) &&
+            (identical(other.rule, rule) || other.rule == rule) &&
+            (identical(other.span, span) || other.span == span) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.severity, severity) ||
+                other.severity == severity) &&
+            (identical(other.correction, correction) ||
+                other.correction == correction) &&
             const DeepCollectionEquality().equals(other._edits, _edits));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(rule),
-      const DeepCollectionEquality().hash(span),
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(severity),
-      const DeepCollectionEquality().hash(correction),
-      const DeepCollectionEquality().hash(_edits));
+  int get hashCode => Object.hash(runtimeType, rule, span, message, severity,
+      correction, const DeepCollectionEquality().hash(_edits));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LintResultWithEditsCopyWith<_$LintResultWithEdits> get copyWith =>
       __$$LintResultWithEditsCopyWithImpl<_$LintResultWithEdits>(
           this, _$identity);
@@ -693,7 +687,7 @@ class _$LintResultWithEdits extends LintResultWithEdits {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(
+    TResult? Function(
             RuleCode rule,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -704,7 +698,7 @@ class _$LintResultWithEdits extends LintResultWithEdits {
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)?
         $default, {
-    TResult Function(
+    TResult? Function(
             RuleCode rule,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -762,8 +756,8 @@ class _$LintResultWithEdits extends LintResultWithEdits {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(LintResult value)? $default, {
-    TResult Function(LintResultWithEdits value)? withEdits,
+    TResult? Function(LintResult value)? $default, {
+    TResult? Function(LintResultWithEdits value)? withEdits,
   }) {
     return withEdits?.call(this);
   }

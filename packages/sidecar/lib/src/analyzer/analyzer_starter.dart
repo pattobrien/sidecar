@@ -18,7 +18,7 @@ Future<void> startAnalyzer(
   SendPort sendPort, {
   List<SidecarBaseConstructor> constructors = const [],
 }) async {
-  final root = Uri.parse(args.first);
+  final root = Uri.file(args.first);
   final channel = CommunicationChannel(sendPort);
   final container = ProviderContainer(overrides: [
     activeTargetRootProvider.overrideWithValue(root),

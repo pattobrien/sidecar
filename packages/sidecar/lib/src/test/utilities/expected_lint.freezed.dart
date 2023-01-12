@@ -29,46 +29,51 @@ mixin _$ExpectedLint {
 abstract class $ExpectedLintCopyWith<$Res> {
   factory $ExpectedLintCopyWith(
           ExpectedLint value, $Res Function(ExpectedLint) then) =
-      _$ExpectedLintCopyWithImpl<$Res>;
+      _$ExpectedLintCopyWithImpl<$Res, ExpectedLint>;
+  @useResult
   $Res call({RuleCode code, int offset, int length});
 
   $RuleCodeCopyWith<$Res> get code;
 }
 
 /// @nodoc
-class _$ExpectedLintCopyWithImpl<$Res> implements $ExpectedLintCopyWith<$Res> {
+class _$ExpectedLintCopyWithImpl<$Res, $Val extends ExpectedLint>
+    implements $ExpectedLintCopyWith<$Res> {
   _$ExpectedLintCopyWithImpl(this._value, this._then);
 
-  final ExpectedLint _value;
   // ignore: unused_field
-  final $Res Function(ExpectedLint) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? code = freezed,
-    Object? offset = freezed,
-    Object? length = freezed,
+    Object? code = null,
+    Object? offset = null,
+    Object? length = null,
   }) {
     return _then(_value.copyWith(
-      code: code == freezed
+      code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      offset: offset == freezed
+      offset: null == offset
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
               as int,
-      length: length == freezed
+      length: null == length
           ? _value.length
           : length // ignore: cast_nullable_to_non_nullable
               as int,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $RuleCodeCopyWith<$Res> get code {
     return $RuleCodeCopyWith<$Res>(_value.code, (value) {
-      return _then(_value.copyWith(code: value));
+      return _then(_value.copyWith(code: value) as $Val);
     });
   }
 }
@@ -80,6 +85,7 @@ abstract class _$$_ExpectedLintCopyWith<$Res>
           _$_ExpectedLint value, $Res Function(_$_ExpectedLint) then) =
       __$$_ExpectedLintCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({RuleCode code, int offset, int length});
 
   @override
@@ -88,31 +94,29 @@ abstract class _$$_ExpectedLintCopyWith<$Res>
 
 /// @nodoc
 class __$$_ExpectedLintCopyWithImpl<$Res>
-    extends _$ExpectedLintCopyWithImpl<$Res>
+    extends _$ExpectedLintCopyWithImpl<$Res, _$_ExpectedLint>
     implements _$$_ExpectedLintCopyWith<$Res> {
   __$$_ExpectedLintCopyWithImpl(
       _$_ExpectedLint _value, $Res Function(_$_ExpectedLint) _then)
-      : super(_value, (v) => _then(v as _$_ExpectedLint));
+      : super(_value, _then);
 
-  @override
-  _$_ExpectedLint get _value => super._value as _$_ExpectedLint;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? code = freezed,
-    Object? offset = freezed,
-    Object? length = freezed,
+    Object? code = null,
+    Object? offset = null,
+    Object? length = null,
   }) {
     return _then(_$_ExpectedLint(
-      code == freezed
+      null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      offset == freezed
+      null == offset
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
               as int,
-      length == freezed
+      null == length
           ? _value.length
           : length // ignore: cast_nullable_to_non_nullable
               as int,
@@ -142,20 +146,17 @@ class _$_ExpectedLint extends _ExpectedLint {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ExpectedLint &&
-            const DeepCollectionEquality().equals(other.code, code) &&
-            const DeepCollectionEquality().equals(other.offset, offset) &&
-            const DeepCollectionEquality().equals(other.length, length));
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.length, length) || other.length == length));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(code),
-      const DeepCollectionEquality().hash(offset),
-      const DeepCollectionEquality().hash(length));
+  int get hashCode => Object.hash(runtimeType, code, offset, length);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ExpectedLintCopyWith<_$_ExpectedLint> get copyWith =>
       __$$_ExpectedLintCopyWithImpl<_$_ExpectedLint>(this, _$identity);
 }
@@ -195,7 +196,8 @@ mixin _$ExpectedText {
 abstract class $ExpectedTextCopyWith<$Res> {
   factory $ExpectedTextCopyWith(
           ExpectedText value, $Res Function(ExpectedText) then) =
-      _$ExpectedTextCopyWithImpl<$Res>;
+      _$ExpectedTextCopyWithImpl<$Res, ExpectedText>;
+  @useResult
   $Res call(
       {String text,
       int? offset,
@@ -205,43 +207,46 @@ abstract class $ExpectedTextCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ExpectedTextCopyWithImpl<$Res> implements $ExpectedTextCopyWith<$Res> {
+class _$ExpectedTextCopyWithImpl<$Res, $Val extends ExpectedText>
+    implements $ExpectedTextCopyWith<$Res> {
   _$ExpectedTextCopyWithImpl(this._value, this._then);
 
-  final ExpectedText _value;
   // ignore: unused_field
-  final $Res Function(ExpectedText) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? text = freezed,
+    Object? text = null,
     Object? offset = freezed,
     Object? length = freezed,
     Object? startLine = freezed,
     Object? startColumn = freezed,
   }) {
     return _then(_value.copyWith(
-      text: text == freezed
+      text: null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
-      offset: offset == freezed
+      offset: freezed == offset
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
               as int?,
-      length: length == freezed
+      length: freezed == length
           ? _value.length
           : length // ignore: cast_nullable_to_non_nullable
               as int?,
-      startLine: startLine == freezed
+      startLine: freezed == startLine
           ? _value.startLine
           : startLine // ignore: cast_nullable_to_non_nullable
               as int?,
-      startColumn: startColumn == freezed
+      startColumn: freezed == startColumn
           ? _value.startColumn
           : startColumn // ignore: cast_nullable_to_non_nullable
               as int?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -252,6 +257,7 @@ abstract class _$$_ExpectedTextCopyWith<$Res>
           _$_ExpectedText value, $Res Function(_$_ExpectedText) then) =
       __$$_ExpectedTextCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String text,
       int? offset,
@@ -262,41 +268,39 @@ abstract class _$$_ExpectedTextCopyWith<$Res>
 
 /// @nodoc
 class __$$_ExpectedTextCopyWithImpl<$Res>
-    extends _$ExpectedTextCopyWithImpl<$Res>
+    extends _$ExpectedTextCopyWithImpl<$Res, _$_ExpectedText>
     implements _$$_ExpectedTextCopyWith<$Res> {
   __$$_ExpectedTextCopyWithImpl(
       _$_ExpectedText _value, $Res Function(_$_ExpectedText) _then)
-      : super(_value, (v) => _then(v as _$_ExpectedText));
+      : super(_value, _then);
 
-  @override
-  _$_ExpectedText get _value => super._value as _$_ExpectedText;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? text = freezed,
+    Object? text = null,
     Object? offset = freezed,
     Object? length = freezed,
     Object? startLine = freezed,
     Object? startColumn = freezed,
   }) {
     return _then(_$_ExpectedText(
-      text == freezed
+      null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
-      offset: offset == freezed
+      offset: freezed == offset
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
               as int?,
-      length: length == freezed
+      length: freezed == length
           ? _value.length
           : length // ignore: cast_nullable_to_non_nullable
               as int?,
-      startLine: startLine == freezed
+      startLine: freezed == startLine
           ? _value.startLine
           : startLine // ignore: cast_nullable_to_non_nullable
               as int?,
-      startColumn: startColumn == freezed
+      startColumn: freezed == startColumn
           ? _value.startColumn
           : startColumn // ignore: cast_nullable_to_non_nullable
               as int?,
@@ -332,25 +336,22 @@ class _$_ExpectedText extends _ExpectedText {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ExpectedText &&
-            const DeepCollectionEquality().equals(other.text, text) &&
-            const DeepCollectionEquality().equals(other.offset, offset) &&
-            const DeepCollectionEquality().equals(other.length, length) &&
-            const DeepCollectionEquality().equals(other.startLine, startLine) &&
-            const DeepCollectionEquality()
-                .equals(other.startColumn, startColumn));
+            (identical(other.text, text) || other.text == text) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.length, length) || other.length == length) &&
+            (identical(other.startLine, startLine) ||
+                other.startLine == startLine) &&
+            (identical(other.startColumn, startColumn) ||
+                other.startColumn == startColumn));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(text),
-      const DeepCollectionEquality().hash(offset),
-      const DeepCollectionEquality().hash(length),
-      const DeepCollectionEquality().hash(startLine),
-      const DeepCollectionEquality().hash(startColumn));
+  int get hashCode =>
+      Object.hash(runtimeType, text, offset, length, startLine, startColumn);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ExpectedTextCopyWith<_$_ExpectedText> get copyWith =>
       __$$_ExpectedTextCopyWithImpl<_$_ExpectedText>(this, _$identity);
 }

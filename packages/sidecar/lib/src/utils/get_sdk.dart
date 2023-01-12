@@ -10,7 +10,7 @@ import '../services/active_project_service.dart';
 String getDartSdkPathForPackage(Uri root, ResourceProvider resourceProvider) {
   final flutterSdk = getFlutterSdkForPackage(root, resourceProvider);
   if (flutterSdk == null) return util.getSdkPath();
-  return flutterSdk.resolve(p.join('bin', 'cache', 'dart-sdk')).path;
+  return flutterSdk.resolve(p.join('bin', 'cache', 'dart-sdk')).toFilePath();
 }
 
 Uri? getFlutterSdkForPackage(Uri root, ResourceProvider resourceProvider) {

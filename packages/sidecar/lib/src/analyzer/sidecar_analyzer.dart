@@ -134,8 +134,8 @@ class SidecarAnalyzer {
   void _listenForConfigChanges() {
     final resourceProvider = _ref.watch(analyzerResourceProvider);
     final activePackage = _ref.read(activePackageProvider).root;
-    final sidecarYamlFile =
-        resourceProvider.getFile(p.join(activePackage.path, kSidecarYaml));
+    final sidecarYamlFile = resourceProvider
+        .getFile(p.join(activePackage.toFilePath(), kSidecarYaml));
     sidecarYamlFile.watch().changes.listen((_) {
       _ref.invalidate(projectSidecarSpecProvider);
       final files = _ref.refresh(activeProjectScopedFilesProvider);
@@ -163,12 +163,13 @@ class SidecarAnalyzer {
             files.where((f) => f.contextRoot == contextUri).toSet();
 
         for (final file in changedFiles) {
-          logger.info('changeFile for ${contextUri.path} - ${file.path}');
+          logger
+              .info('changeFile for ${contextUri.toFilePath()} - ${file.path}');
           context.changeFile(file.path);
         }
         final affected = await context.applyPendingFileChanges();
         logger.info(
-            'applyPendingFileChanges in ${watch.elapsed.prettified()} - ${contextUri.path}');
+            'applyPendingFileChanges in ${watch.elapsed.prettified()} - ${contextUri.toFilePath()}');
 
         // for a better user experience:
         // first we handle the changed files, then we handle all affected files.
@@ -177,13 +178,13 @@ class SidecarAnalyzer {
 
         // analyze files that may have been affected by the files that explicitly changed
         final affectedFiles = affected
-            .map((e) => AnalyzedFile(Uri.parse(e),
+            .map((e) => AnalyzedFile(Uri.file(e),
                 contextRoot: context.contextRoot.root.toUri()))
             .toSet();
 
         await analyzeFiles(files: affectedFiles.difference(changedFiles));
         logger.info(
-            'handleContexts in ${watch.elapsed.prettified()} - ${contextUri.path}');
+            'handleContexts in ${watch.elapsed.prettified()} - ${contextUri.toFilePath()}');
       }
     }
 
@@ -196,14 +197,16 @@ class SidecarAnalyzer {
   List<AnalysisContext> _getLowPriorityContexts() {
     final contexts = _ref.read(contextCollectionProvider);
     final lowPriorityContexts = contexts.where((context) => priorityFiles.every(
-        (file) => file.contextRoot.path != context.contextRoot.root.path));
+        (file) =>
+            file.contextRoot.toFilePath() != context.contextRoot.root.path));
     return lowPriorityContexts.toList();
   }
 
   List<AnalysisContext> _getPriorityContexts() {
     final contexts = _ref.read(contextCollectionProvider);
-    final priorityContexts = contexts.where((context) => priorityFiles
-        .any((file) => file.contextRoot.path == context.contextRoot.root.path));
+    final priorityContexts = contexts.where((context) => priorityFiles.any(
+        (file) =>
+            file.contextRoot.toFilePath() == context.contextRoot.root.path));
     return priorityContexts.toList();
   }
 

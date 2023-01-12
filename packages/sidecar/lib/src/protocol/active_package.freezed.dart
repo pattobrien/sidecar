@@ -29,39 +29,42 @@ mixin _$ActivePackage {
 abstract class $ActivePackageCopyWith<$Res> {
   factory $ActivePackageCopyWith(
           ActivePackage value, $Res Function(ActivePackage) then) =
-      _$ActivePackageCopyWithImpl<$Res>;
+      _$ActivePackageCopyWithImpl<$Res, ActivePackage>;
+  @useResult
   $Res call({Uri root, PackageConfig packageConfig, List<Uri>? workspaceScope});
 }
 
 /// @nodoc
-class _$ActivePackageCopyWithImpl<$Res>
+class _$ActivePackageCopyWithImpl<$Res, $Val extends ActivePackage>
     implements $ActivePackageCopyWith<$Res> {
   _$ActivePackageCopyWithImpl(this._value, this._then);
 
-  final ActivePackage _value;
   // ignore: unused_field
-  final $Res Function(ActivePackage) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? root = freezed,
-    Object? packageConfig = freezed,
+    Object? root = null,
+    Object? packageConfig = null,
     Object? workspaceScope = freezed,
   }) {
     return _then(_value.copyWith(
-      root: root == freezed
+      root: null == root
           ? _value.root
           : root // ignore: cast_nullable_to_non_nullable
               as Uri,
-      packageConfig: packageConfig == freezed
+      packageConfig: null == packageConfig
           ? _value.packageConfig
           : packageConfig // ignore: cast_nullable_to_non_nullable
               as PackageConfig,
-      workspaceScope: workspaceScope == freezed
+      workspaceScope: freezed == workspaceScope
           ? _value.workspaceScope
           : workspaceScope // ignore: cast_nullable_to_non_nullable
               as List<Uri>?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -72,36 +75,35 @@ abstract class _$$_ActivePackageCopyWith<$Res>
           _$_ActivePackage value, $Res Function(_$_ActivePackage) then) =
       __$$_ActivePackageCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({Uri root, PackageConfig packageConfig, List<Uri>? workspaceScope});
 }
 
 /// @nodoc
 class __$$_ActivePackageCopyWithImpl<$Res>
-    extends _$ActivePackageCopyWithImpl<$Res>
+    extends _$ActivePackageCopyWithImpl<$Res, _$_ActivePackage>
     implements _$$_ActivePackageCopyWith<$Res> {
   __$$_ActivePackageCopyWithImpl(
       _$_ActivePackage _value, $Res Function(_$_ActivePackage) _then)
-      : super(_value, (v) => _then(v as _$_ActivePackage));
+      : super(_value, _then);
 
-  @override
-  _$_ActivePackage get _value => super._value as _$_ActivePackage;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? root = freezed,
-    Object? packageConfig = freezed,
+    Object? root = null,
+    Object? packageConfig = null,
     Object? workspaceScope = freezed,
   }) {
     return _then(_$_ActivePackage(
-      root: root == freezed
+      root: null == root
           ? _value.root
           : root // ignore: cast_nullable_to_non_nullable
               as Uri,
-      packageConfig: packageConfig == freezed
+      packageConfig: null == packageConfig
           ? _value.packageConfig
           : packageConfig // ignore: cast_nullable_to_non_nullable
               as PackageConfig,
-      workspaceScope: workspaceScope == freezed
+      workspaceScope: freezed == workspaceScope
           ? _value._workspaceScope
           : workspaceScope // ignore: cast_nullable_to_non_nullable
               as List<Uri>?,
@@ -142,22 +144,20 @@ class _$_ActivePackage extends _ActivePackage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ActivePackage &&
-            const DeepCollectionEquality().equals(other.root, root) &&
-            const DeepCollectionEquality()
-                .equals(other.packageConfig, packageConfig) &&
+            (identical(other.root, root) || other.root == root) &&
+            (identical(other.packageConfig, packageConfig) ||
+                other.packageConfig == packageConfig) &&
             const DeepCollectionEquality()
                 .equals(other._workspaceScope, _workspaceScope));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(root),
-      const DeepCollectionEquality().hash(packageConfig),
+  int get hashCode => Object.hash(runtimeType, root, packageConfig,
       const DeepCollectionEquality().hash(_workspaceScope));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ActivePackageCopyWith<_$_ActivePackage> get copyWith =>
       __$$_ActivePackageCopyWithImpl<_$_ActivePackage>(this, _$identity);
 }

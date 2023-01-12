@@ -52,7 +52,7 @@ mixin _$AssistResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(
+    TResult? Function(
             RuleCode rule,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -60,7 +60,7 @@ mixin _$AssistResult {
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)?
         $default, {
-    TResult Function(
+    TResult? Function(
             RuleCode code,
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -95,8 +95,8 @@ mixin _$AssistResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(AssistFilterResult value)? $default, {
-    TResult Function(AssistResultWithEdits value)? withEdits,
+    TResult? Function(AssistFilterResult value)? $default, {
+    TResult? Function(AssistResultWithEdits value)? withEdits,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -116,7 +116,8 @@ mixin _$AssistResult {
 abstract class $AssistResultCopyWith<$Res> {
   factory $AssistResultCopyWith(
           AssistResult value, $Res Function(AssistResult) then) =
-      _$AssistResultCopyWithImpl<$Res>;
+      _$AssistResultCopyWithImpl<$Res, AssistResult>;
+  @useResult
   $Res call(
       {@Assert('span.sourceUrl != null')
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -124,23 +125,26 @@ abstract class $AssistResultCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AssistResultCopyWithImpl<$Res> implements $AssistResultCopyWith<$Res> {
+class _$AssistResultCopyWithImpl<$Res, $Val extends AssistResult>
+    implements $AssistResultCopyWith<$Res> {
   _$AssistResultCopyWithImpl(this._value, this._then);
 
-  final AssistResult _value;
   // ignore: unused_field
-  final $Res Function(AssistResult) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? span = freezed,
+    Object? span = null,
   }) {
     return _then(_value.copyWith(
-      span: span == freezed
+      span: null == span
           ? _value.span
           : span // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-    ));
+    ) as $Val);
   }
 }
 
@@ -151,6 +155,7 @@ abstract class _$$AssistFilterResultCopyWith<$Res>
           $Res Function(_$AssistFilterResult) then) =
       __$$AssistFilterResultCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {RuleCode rule,
       @Assert('span.sourceUrl != null')
@@ -164,31 +169,29 @@ abstract class _$$AssistFilterResultCopyWith<$Res>
 
 /// @nodoc
 class __$$AssistFilterResultCopyWithImpl<$Res>
-    extends _$AssistResultCopyWithImpl<$Res>
+    extends _$AssistResultCopyWithImpl<$Res, _$AssistFilterResult>
     implements _$$AssistFilterResultCopyWith<$Res> {
   __$$AssistFilterResultCopyWithImpl(
       _$AssistFilterResult _value, $Res Function(_$AssistFilterResult) _then)
-      : super(_value, (v) => _then(v as _$AssistFilterResult));
+      : super(_value, _then);
 
-  @override
-  _$AssistFilterResult get _value => super._value as _$AssistFilterResult;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rule = freezed,
-    Object? span = freezed,
+    Object? rule = null,
+    Object? span = null,
     Object? editsComputer = freezed,
   }) {
     return _then(_$AssistFilterResult(
-      rule: rule == freezed
+      rule: null == rule
           ? _value.rule
           : rule // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      span: span == freezed
+      span: null == span
           ? _value.span
           : span // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-      editsComputer: editsComputer == freezed
+      editsComputer: freezed == editsComputer
           ? _value.editsComputer
           : editsComputer // ignore: cast_nullable_to_non_nullable
               as EditsComputer?,
@@ -196,6 +199,7 @@ class __$$AssistFilterResultCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $RuleCodeCopyWith<$Res> get rule {
     return $RuleCodeCopyWith<$Res>(_value.rule, (value) {
       return _then(_value.copyWith(rule: value));
@@ -243,22 +247,19 @@ class _$AssistFilterResult extends AssistFilterResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AssistFilterResult &&
-            const DeepCollectionEquality().equals(other.rule, rule) &&
-            const DeepCollectionEquality().equals(other.span, span) &&
+            (identical(other.rule, rule) || other.rule == rule) &&
+            (identical(other.span, span) || other.span == span) &&
             (identical(other.editsComputer, editsComputer) ||
                 other.editsComputer == editsComputer));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(rule),
-      const DeepCollectionEquality().hash(span),
-      editsComputer);
+  int get hashCode => Object.hash(runtimeType, rule, span, editsComputer);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$AssistFilterResultCopyWith<_$AssistFilterResult> get copyWith =>
       __$$AssistFilterResultCopyWithImpl<_$AssistFilterResult>(
           this, _$identity);
@@ -287,7 +288,7 @@ class _$AssistFilterResult extends AssistFilterResult {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(
+    TResult? Function(
             RuleCode rule,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -295,7 +296,7 @@ class _$AssistFilterResult extends AssistFilterResult {
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)?
         $default, {
-    TResult Function(
+    TResult? Function(
             RuleCode code,
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -342,8 +343,8 @@ class _$AssistFilterResult extends AssistFilterResult {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(AssistFilterResult value)? $default, {
-    TResult Function(AssistResultWithEdits value)? withEdits,
+    TResult? Function(AssistFilterResult value)? $default, {
+    TResult? Function(AssistResultWithEdits value)? withEdits,
   }) {
     return $default?.call(this);
   }
@@ -402,6 +403,7 @@ abstract class _$$AssistResultWithEditsCopyWith<$Res>
           $Res Function(_$AssistResultWithEdits) then) =
       __$$AssistResultWithEditsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {RuleCode code,
       @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -413,31 +415,29 @@ abstract class _$$AssistResultWithEditsCopyWith<$Res>
 
 /// @nodoc
 class __$$AssistResultWithEditsCopyWithImpl<$Res>
-    extends _$AssistResultCopyWithImpl<$Res>
+    extends _$AssistResultCopyWithImpl<$Res, _$AssistResultWithEdits>
     implements _$$AssistResultWithEditsCopyWith<$Res> {
   __$$AssistResultWithEditsCopyWithImpl(_$AssistResultWithEdits _value,
       $Res Function(_$AssistResultWithEdits) _then)
-      : super(_value, (v) => _then(v as _$AssistResultWithEdits));
+      : super(_value, _then);
 
-  @override
-  _$AssistResultWithEdits get _value => super._value as _$AssistResultWithEdits;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? code = freezed,
-    Object? span = freezed,
-    Object? edits = freezed,
+    Object? code = null,
+    Object? span = null,
+    Object? edits = null,
   }) {
     return _then(_$AssistResultWithEdits(
-      code: code == freezed
+      code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      span: span == freezed
+      span: null == span
           ? _value.span
           : span // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-      edits: edits == freezed
+      edits: null == edits
           ? _value._edits
           : edits // ignore: cast_nullable_to_non_nullable
               as List<EditResult>,
@@ -445,6 +445,7 @@ class __$$AssistResultWithEditsCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $RuleCodeCopyWith<$Res> get code {
     return $RuleCodeCopyWith<$Res>(_value.code, (value) {
       return _then(_value.copyWith(code: value));
@@ -494,21 +495,19 @@ class _$AssistResultWithEdits extends AssistResultWithEdits {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AssistResultWithEdits &&
-            const DeepCollectionEquality().equals(other.code, code) &&
-            const DeepCollectionEquality().equals(other.span, span) &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.span, span) || other.span == span) &&
             const DeepCollectionEquality().equals(other._edits, _edits));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(code),
-      const DeepCollectionEquality().hash(span),
-      const DeepCollectionEquality().hash(_edits));
+      runtimeType, code, span, const DeepCollectionEquality().hash(_edits));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$AssistResultWithEditsCopyWith<_$AssistResultWithEdits> get copyWith =>
       __$$AssistResultWithEditsCopyWithImpl<_$AssistResultWithEdits>(
           this, _$identity);
@@ -537,7 +536,7 @@ class _$AssistResultWithEdits extends AssistResultWithEdits {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(
+    TResult? Function(
             RuleCode rule,
             @Assert('span.sourceUrl != null')
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
@@ -545,7 +544,7 @@ class _$AssistResultWithEdits extends AssistResultWithEdits {
             @JsonKey(ignore: true)
                 EditsComputer? editsComputer)?
         $default, {
-    TResult Function(
+    TResult? Function(
             RuleCode code,
             @JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
                 SourceSpan span,
@@ -592,8 +591,8 @@ class _$AssistResultWithEdits extends AssistResultWithEdits {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(AssistFilterResult value)? $default, {
-    TResult Function(AssistResultWithEdits value)? withEdits,
+    TResult? Function(AssistFilterResult value)? $default, {
+    TResult? Function(AssistResultWithEdits value)? withEdits,
   }) {
     return withEdits?.call(this);
   }

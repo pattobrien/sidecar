@@ -16,6 +16,6 @@ SourceLocation sourceLocationFromJson(Map<String, dynamic> json) {
     json['offset'] as int,
     line: json['line'] as int,
     column: json['column'] as int,
-    sourceUrl: json['sourceUrl'] as String?,
+    sourceUrl: Uri.file(json['sourceUrl'] as String),
   );
 }

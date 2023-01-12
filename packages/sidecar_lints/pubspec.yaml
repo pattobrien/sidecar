@@ -31,6 +31,7 @@ sidecar:
     - missing_visit_method_registration
     - rule_not_declared
     - rule_is_not_accessible
+    - avoid_string_literal
   assists:
     - output_ast_node_tree
     - output_source_span

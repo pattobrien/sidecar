@@ -92,7 +92,7 @@ final activeProjectScopedFilesProvider = Provider<Set<AnalyzedFile>>((ref) {
             globalExcludes: activeProjectExcludes);
 
         final files = filesInScope
-            .map((e) => AnalyzedFile(Uri.parse(e),
+            .map((e) => AnalyzedFile(Uri.file(e),
                 contextRoot: context.contextRoot.root.toUri()))
             .toList();
         return files;

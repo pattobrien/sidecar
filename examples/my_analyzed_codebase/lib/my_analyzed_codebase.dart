@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/theme.dart';
@@ -56,7 +56,7 @@ class SomePage extends ConsumerWidget {
           TextFormField(
             controller: ref.watch(myTextControllerProvider),
           ),
-          Text(AppLocalizations.of(context).string123),
+          // Text(AppLocalizations.of(context).string123),
           Text(someString),
           Text(someString2),
         ],

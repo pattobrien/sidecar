@@ -86,7 +86,7 @@ class ActiveProjectService {
 
   Future<bool> createDefaultSidecarYaml(Uri root) async {
     const contents = templateSidecarContent;
-    final uri = Uri.file(p.join(root.path, kSidecarYaml));
+    final uri = Uri.file(p.join(root.toFilePath(), kSidecarYaml));
     final file = resourceProvider.getFile(uri.toFilePath());
     if (file.exists) {
       return false;
@@ -97,8 +97,10 @@ class ActiveProjectService {
   }
 
   PackageConfig getPackageConfig(Uri root) {
-    final uri = Uri.file(p.join(root.path, kDartTool, kPackageConfigJson));
-    final file = resourceProvider.getFile(uri.toFilePath());
+    final uri =
+        Uri.file(p.join(root.toFilePath(), kDartTool, kPackageConfigJson));
+    final path = uri.toFilePath();
+    final file = resourceProvider.getFile(path);
     assert(file.exists, 'config file does not exist at path $uri');
     final contents = file.readAsStringSync();
     final json = jsonDecode(contents) as Map<String, dynamic>;
@@ -120,7 +122,7 @@ class ActiveProjectService {
   }
 
   String? _getSidecarFile(Uri root) {
-    final sidecarYamlUri = Uri.file(p.join(root.path, kSidecarYaml));
+    final sidecarYamlUri = Uri.file(p.join(root.toFilePath(), kSidecarYaml));
     final sidecarYamlFile =
         resourceProvider.getFile(sidecarYamlUri.toFilePath());
     if (!sidecarYamlFile.exists) return null;
@@ -134,7 +136,8 @@ class ActiveProjectService {
       if (contents == null) return null;
       return parseSidecarSpec(
         contents,
-        fileUri: Uri.file(p.canonicalize(p.join(root.path, kSidecarYaml))),
+        fileUri:
+            Uri.file(p.canonicalize(p.join(root.toFilePath(), kSidecarYaml))),
       ).data;
     } catch (e, stackTrace) {
       logger.shout('ISOLATE NON-FATAL: ', e, stackTrace);

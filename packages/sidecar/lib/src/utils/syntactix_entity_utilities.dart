@@ -23,21 +23,22 @@ extension SyntacticEntityX on SyntacticEntity {
     final startLocation = unit.lineInfo.getLocation(startOffset);
     final endLocation = unit.lineInfo.getLocation(endOffset);
 
-    return SourceSpan(
+    final sourceSpan = SourceSpan(
       SourceLocation(
         startOffset,
-        sourceUrl: unit.path,
+        sourceUrl: Uri.file(unit.path),
         column: startLocation.columnNumber,
         line: startLocation.lineNumber,
       ),
       SourceLocation(
         endOffset,
-        sourceUrl: unit.path,
+        sourceUrl: Uri.file(unit.path),
         column: endLocation.columnNumber,
         line: endLocation.lineNumber,
       ),
       unit.content.substring(startOffset, endOffset),
     );
+    return sourceSpan;
   }
 
   SourceSpan toSourceSpanFromPath(String path, String source) {

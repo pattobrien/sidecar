@@ -25,10 +25,10 @@ class AnalyzedFile with _$AnalyzedFile {
       _$AnalyzedFileFromJson(json);
 
   /// Absolute file path
-  String get path => fileUri.path;
+  String get path => fileUri.toFilePath();
 
   /// File path relative to contextRoot
-  String get relativePath => p.relative(path, from: contextRoot.path);
+  String get relativePath => p.relative(path, from: contextRoot.toFilePath());
 
   /// Check if file ends in ```.dart```
   bool get isDartFile => p.extension(path) == '.dart';

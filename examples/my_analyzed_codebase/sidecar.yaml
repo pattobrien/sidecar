@@ -3,29 +3,32 @@ includes:
   - "lib/**.dart"
 
 lints:
-  intl_lints:
+  sidecar_lints:
     rules:
-      hardcoded_text_string:
-      # avoid_string_literal:
+      avoid_string_literal:
+  # intl_lints:
+  #   rules:
+  #     hardcoded_text_string:
+  #     # avoid_string_literal:
 
-  dart_lints:
-    rules:
-      always_declare_return_types:
-      always_put_control_body_on_new_line:
-      always_put_required_named_parameters_first:
-      # always_specify_types:
+  # dart_lints:
+  #   rules:
+  #     always_declare_return_types:
+  #     always_put_control_body_on_new_line:
+  #     always_put_required_named_parameters_first:
+  #     # always_specify_types:
 
-  design_system_lints:
-    # excludes:
-    # - "lib/core/theme/**.dart"
-    rules:
-      avoid_icon_literal:
-      avoid_sized_box_height_width_literals:
-      avoid_text_style_literal:
-        severity: warning
-      avoid_border_radius_literal:
-      avoid_box_shadow_literal:
-      avoid_edge_insets_literal:
+  # design_system_lints:
+  #   # excludes:
+  #   # - "lib/core/theme/**.dart"
+  #   rules:
+  #     avoid_icon_literal:
+  #     avoid_sized_box_height_width_literals:
+  #     avoid_text_style_literal:
+  #       severity: warning
+  #     avoid_border_radius_literal:
+  #     avoid_box_shadow_literal:
+  #     avoid_edge_insets_literal:
 
 assists:
   sidecar_lints:

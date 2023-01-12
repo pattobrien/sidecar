@@ -37,13 +37,13 @@ class EntrypointBuilderService {
     final pluginSourceFolder =
         pluginRoot.resolve(p.join('tools', 'analyzer_plugin', 'bin'));
     final sourceExecutableFolder =
-        _resourceProvider.getFolder(pluginSourceFolder.path);
+        _resourceProvider.getFolder(pluginSourceFolder.toFilePath());
 
     final pluginFileResources = sourceExecutableFolder.getChildren();
 
     String _pluginPath(String path, {required Uri newDirectory}) {
-      return p.join(
-          newDirectory.path, p.relative(path, from: pluginSourceFolder.path));
+      return p.join(newDirectory.toFilePath(),
+          p.relative(path, from: pluginSourceFolder.toFilePath()));
     }
 
     pluginFileResources.whereType<File>().forEach((sourceFileEntity) {
@@ -57,12 +57,14 @@ class EntrypointBuilderService {
   }
 
   bool _doesFileNeedUpdates(Uri packageRoot) {
-    final config = p.join(packageRoot.path, kDartTool, kPackageConfigJson);
+    final config =
+        p.join(packageRoot.toFilePath(), kDartTool, kPackageConfigJson);
     final configFile = _resourceProvider.getFile(config);
 
     final constructorUri = packageRoot
         .resolve(p.join(kDartTool, kSidecarPluginName, 'constructors.dart'));
-    final constructorFile = _resourceProvider.getFile(constructorUri.path);
+    final constructorFile =
+        _resourceProvider.getFile(constructorUri.toFilePath());
 
     if (configFile.exists && constructorFile.exists) {
       final configStamp = configFile.modificationStamp;
@@ -85,7 +87,7 @@ class EntrypointBuilderService {
     logger.finer(
         'setupBootstrapper || adding ${sidecarPackages.length} packages');
     final content = generateEntrypointContent(sidecarPackages);
-    final file = _resourceProvider.getFile(constructorUri.path);
+    final file = _resourceProvider.getFile(constructorUri.toFilePath());
     file.writeAsStringSync(content);
   }
 

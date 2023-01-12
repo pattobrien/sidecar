@@ -53,14 +53,14 @@ mixin _$PackageOptions {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? excludes,
             Map<String, LintOptions>? rules)?
         lint,
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -96,8 +96,8 @@ mixin _$PackageOptions {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintPackageOptions value)? lint,
-    TResult Function(AssistPackageOptions value)? assist,
+    TResult? Function(LintPackageOptions value)? lint,
+    TResult? Function(AssistPackageOptions value)? assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -117,7 +117,8 @@ mixin _$PackageOptions {
 abstract class $PackageOptionsCopyWith<$Res> {
   factory $PackageOptionsCopyWith(
           PackageOptions value, $Res Function(PackageOptions) then) =
-      _$PackageOptionsCopyWithImpl<$Res>;
+      _$PackageOptionsCopyWithImpl<$Res, PackageOptions>;
+  @useResult
   $Res call(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
           List<Glob>? includes,
@@ -126,29 +127,31 @@ abstract class $PackageOptionsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PackageOptionsCopyWithImpl<$Res>
+class _$PackageOptionsCopyWithImpl<$Res, $Val extends PackageOptions>
     implements $PackageOptionsCopyWith<$Res> {
   _$PackageOptionsCopyWithImpl(this._value, this._then);
 
-  final PackageOptions _value;
   // ignore: unused_field
-  final $Res Function(PackageOptions) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? includes = freezed,
     Object? excludes = freezed,
   }) {
     return _then(_value.copyWith(
-      includes: includes == freezed
+      includes: freezed == includes
           ? _value.includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      excludes: excludes == freezed
+      excludes: freezed == excludes
           ? _value.excludes
           : excludes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -159,6 +162,7 @@ abstract class _$$LintPackageOptionsCopyWith<$Res>
           $Res Function(_$LintPackageOptions) then) =
       __$$LintPackageOptionsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
           List<Glob>? includes,
@@ -169,15 +173,13 @@ abstract class _$$LintPackageOptionsCopyWith<$Res>
 
 /// @nodoc
 class __$$LintPackageOptionsCopyWithImpl<$Res>
-    extends _$PackageOptionsCopyWithImpl<$Res>
+    extends _$PackageOptionsCopyWithImpl<$Res, _$LintPackageOptions>
     implements _$$LintPackageOptionsCopyWith<$Res> {
   __$$LintPackageOptionsCopyWithImpl(
       _$LintPackageOptions _value, $Res Function(_$LintPackageOptions) _then)
-      : super(_value, (v) => _then(v as _$LintPackageOptions));
+      : super(_value, _then);
 
-  @override
-  _$LintPackageOptions get _value => super._value as _$LintPackageOptions;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? includes = freezed,
@@ -185,15 +187,15 @@ class __$$LintPackageOptionsCopyWithImpl<$Res>
     Object? rules = freezed,
   }) {
     return _then(_$LintPackageOptions(
-      includes: includes == freezed
+      includes: freezed == includes
           ? _value._includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      excludes: excludes == freezed
+      excludes: freezed == excludes
           ? _value._excludes
           : excludes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      rules: rules == freezed
+      rules: freezed == rules
           ? _value._rules
           : rules // ignore: cast_nullable_to_non_nullable
               as Map<String, LintOptions>?,
@@ -277,6 +279,7 @@ class _$LintPackageOptions extends LintPackageOptions {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LintPackageOptionsCopyWith<_$LintPackageOptions> get copyWith =>
       __$$LintPackageOptionsCopyWithImpl<_$LintPackageOptions>(
           this, _$identity);
@@ -305,14 +308,14 @@ class _$LintPackageOptions extends LintPackageOptions {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? excludes,
             Map<String, LintOptions>? rules)?
         lint,
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -360,8 +363,8 @@ class _$LintPackageOptions extends LintPackageOptions {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintPackageOptions value)? lint,
-    TResult Function(AssistPackageOptions value)? assist,
+    TResult? Function(LintPackageOptions value)? lint,
+    TResult? Function(AssistPackageOptions value)? assist,
   }) {
     return lint?.call(this);
   }
@@ -419,6 +422,7 @@ abstract class _$$AssistPackageOptionsCopyWith<$Res>
           $Res Function(_$AssistPackageOptions) then) =
       __$$AssistPackageOptionsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
           List<Glob>? includes,
@@ -429,15 +433,13 @@ abstract class _$$AssistPackageOptionsCopyWith<$Res>
 
 /// @nodoc
 class __$$AssistPackageOptionsCopyWithImpl<$Res>
-    extends _$PackageOptionsCopyWithImpl<$Res>
+    extends _$PackageOptionsCopyWithImpl<$Res, _$AssistPackageOptions>
     implements _$$AssistPackageOptionsCopyWith<$Res> {
   __$$AssistPackageOptionsCopyWithImpl(_$AssistPackageOptions _value,
       $Res Function(_$AssistPackageOptions) _then)
-      : super(_value, (v) => _then(v as _$AssistPackageOptions));
+      : super(_value, _then);
 
-  @override
-  _$AssistPackageOptions get _value => super._value as _$AssistPackageOptions;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? includes = freezed,
@@ -445,15 +447,15 @@ class __$$AssistPackageOptionsCopyWithImpl<$Res>
     Object? rules = freezed,
   }) {
     return _then(_$AssistPackageOptions(
-      includes: includes == freezed
+      includes: freezed == includes
           ? _value._includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      excludes: excludes == freezed
+      excludes: freezed == excludes
           ? _value._excludes
           : excludes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      rules: rules == freezed
+      rules: freezed == rules
           ? _value._rules
           : rules // ignore: cast_nullable_to_non_nullable
               as Map<String, AssistOptions>?,
@@ -537,6 +539,7 @@ class _$AssistPackageOptions extends AssistPackageOptions {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$AssistPackageOptionsCopyWith<_$AssistPackageOptions> get copyWith =>
       __$$AssistPackageOptionsCopyWithImpl<_$AssistPackageOptions>(
           this, _$identity);
@@ -565,14 +568,14 @@ class _$AssistPackageOptions extends AssistPackageOptions {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? excludes,
             Map<String, LintOptions>? rules)?
         lint,
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -620,8 +623,8 @@ class _$AssistPackageOptions extends AssistPackageOptions {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintPackageOptions value)? lint,
-    TResult Function(AssistPackageOptions value)? assist,
+    TResult? Function(LintPackageOptions value)? lint,
+    TResult? Function(AssistPackageOptions value)? assist,
   }) {
     return assist?.call(this);
   }

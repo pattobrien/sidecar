@@ -37,8 +37,8 @@ mixin _$SidecarNotification {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initComplete,
-    TResult Function(AnalyzedFile file, Set<LintResult> lints)? lint,
+    TResult? Function()? initComplete,
+    TResult? Function(AnalyzedFile file, Set<LintResult> lints)? lint,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -56,8 +56,8 @@ mixin _$SidecarNotification {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(InitCompleteNotification value)? initComplete,
-    TResult Function(LintNotification value)? lint,
+    TResult? Function(InitCompleteNotification value)? initComplete,
+    TResult? Function(LintNotification value)? lint,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -74,17 +74,18 @@ mixin _$SidecarNotification {
 abstract class $SidecarNotificationCopyWith<$Res> {
   factory $SidecarNotificationCopyWith(
           SidecarNotification value, $Res Function(SidecarNotification) then) =
-      _$SidecarNotificationCopyWithImpl<$Res>;
+      _$SidecarNotificationCopyWithImpl<$Res, SidecarNotification>;
 }
 
 /// @nodoc
-class _$SidecarNotificationCopyWithImpl<$Res>
+class _$SidecarNotificationCopyWithImpl<$Res, $Val extends SidecarNotification>
     implements $SidecarNotificationCopyWith<$Res> {
   _$SidecarNotificationCopyWithImpl(this._value, this._then);
 
-  final SidecarNotification _value;
   // ignore: unused_field
-  final $Res Function(SidecarNotification) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -96,15 +97,11 @@ abstract class _$$InitCompleteNotificationCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitCompleteNotificationCopyWithImpl<$Res>
-    extends _$SidecarNotificationCopyWithImpl<$Res>
+    extends _$SidecarNotificationCopyWithImpl<$Res, _$InitCompleteNotification>
     implements _$$InitCompleteNotificationCopyWith<$Res> {
   __$$InitCompleteNotificationCopyWithImpl(_$InitCompleteNotification _value,
       $Res Function(_$InitCompleteNotification) _then)
-      : super(_value, (v) => _then(v as _$InitCompleteNotification));
-
-  @override
-  _$InitCompleteNotification get _value =>
-      super._value as _$InitCompleteNotification;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -148,8 +145,8 @@ class _$InitCompleteNotification extends InitCompleteNotification {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initComplete,
-    TResult Function(AnalyzedFile file, Set<LintResult> lints)? lint,
+    TResult? Function()? initComplete,
+    TResult? Function(AnalyzedFile file, Set<LintResult> lints)? lint,
   }) {
     return initComplete?.call();
   }
@@ -179,8 +176,8 @@ class _$InitCompleteNotification extends InitCompleteNotification {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(InitCompleteNotification value)? initComplete,
-    TResult Function(LintNotification value)? lint,
+    TResult? Function(InitCompleteNotification value)? initComplete,
+    TResult? Function(LintNotification value)? lint,
   }) {
     return initComplete?.call(this);
   }
@@ -219,6 +216,7 @@ abstract class _$$LintNotificationCopyWith<$Res> {
   factory _$$LintNotificationCopyWith(
           _$LintNotification value, $Res Function(_$LintNotification) then) =
       __$$LintNotificationCopyWithImpl<$Res>;
+  @useResult
   $Res call({AnalyzedFile file, Set<LintResult> lints});
 
   $AnalyzedFileCopyWith<$Res> get file;
@@ -226,26 +224,24 @@ abstract class _$$LintNotificationCopyWith<$Res> {
 
 /// @nodoc
 class __$$LintNotificationCopyWithImpl<$Res>
-    extends _$SidecarNotificationCopyWithImpl<$Res>
+    extends _$SidecarNotificationCopyWithImpl<$Res, _$LintNotification>
     implements _$$LintNotificationCopyWith<$Res> {
   __$$LintNotificationCopyWithImpl(
       _$LintNotification _value, $Res Function(_$LintNotification) _then)
-      : super(_value, (v) => _then(v as _$LintNotification));
+      : super(_value, _then);
 
-  @override
-  _$LintNotification get _value => super._value as _$LintNotification;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? file = freezed,
-    Object? lints = freezed,
+    Object? file = null,
+    Object? lints = null,
   }) {
     return _then(_$LintNotification(
-      file == freezed
+      null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as AnalyzedFile,
-      lints == freezed
+      null == lints
           ? _value._lints
           : lints // ignore: cast_nullable_to_non_nullable
               as Set<LintResult>,
@@ -253,6 +249,7 @@ class __$$LintNotificationCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $AnalyzedFileCopyWith<$Res> get file {
     return $AnalyzedFileCopyWith<$Res>(_value.file, (value) {
       return _then(_value.copyWith(file: value));
@@ -294,19 +291,18 @@ class _$LintNotification extends LintNotification {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LintNotification &&
-            const DeepCollectionEquality().equals(other.file, file) &&
+            (identical(other.file, file) || other.file == file) &&
             const DeepCollectionEquality().equals(other._lints, _lints));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(file),
-      const DeepCollectionEquality().hash(_lints));
+      runtimeType, file, const DeepCollectionEquality().hash(_lints));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LintNotificationCopyWith<_$LintNotification> get copyWith =>
       __$$LintNotificationCopyWithImpl<_$LintNotification>(this, _$identity);
 
@@ -322,8 +318,8 @@ class _$LintNotification extends LintNotification {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initComplete,
-    TResult Function(AnalyzedFile file, Set<LintResult> lints)? lint,
+    TResult? Function()? initComplete,
+    TResult? Function(AnalyzedFile file, Set<LintResult> lints)? lint,
   }) {
     return lint?.call(file, lints);
   }
@@ -353,8 +349,8 @@ class _$LintNotification extends LintNotification {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(InitCompleteNotification value)? initComplete,
-    TResult Function(LintNotification value)? lint,
+    TResult? Function(InitCompleteNotification value)? initComplete,
+    TResult? Function(LintNotification value)? lint,
   }) {
     return lint?.call(this);
   }

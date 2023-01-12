@@ -56,8 +56,8 @@ mixin _$LogRecord {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message, DateTime timestamp)? simple,
-    TResult Function(
+    TResult? Function(String message, DateTime timestamp)? simple,
+    TResult? Function(
             String message,
             DateTime timestamp,
             Uri targetRoot,
@@ -65,7 +65,7 @@ mixin _$LogRecord {
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
         fromAnalyzer,
-    TResult Function(
+    TResult? Function(
             RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
@@ -106,9 +106,9 @@ mixin _$LogRecord {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LogRecord value)? simple,
-    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
-    TResult Function(RuleLogRecord value)? fromRule,
+    TResult? Function(_LogRecord value)? simple,
+    TResult? Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult? Function(RuleLogRecord value)? fromRule,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -128,33 +128,37 @@ mixin _$LogRecord {
 /// @nodoc
 abstract class $LogRecordCopyWith<$Res> {
   factory $LogRecordCopyWith(LogRecord value, $Res Function(LogRecord) then) =
-      _$LogRecordCopyWithImpl<$Res>;
+      _$LogRecordCopyWithImpl<$Res, LogRecord>;
+  @useResult
   $Res call({String message, DateTime timestamp});
 }
 
 /// @nodoc
-class _$LogRecordCopyWithImpl<$Res> implements $LogRecordCopyWith<$Res> {
+class _$LogRecordCopyWithImpl<$Res, $Val extends LogRecord>
+    implements $LogRecordCopyWith<$Res> {
   _$LogRecordCopyWithImpl(this._value, this._then);
 
-  final LogRecord _value;
   // ignore: unused_field
-  final $Res Function(LogRecord) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
-    Object? timestamp = freezed,
+    Object? message = null,
+    Object? timestamp = null,
   }) {
     return _then(_value.copyWith(
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      timestamp: timestamp == freezed
+      timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
-    ));
+    ) as $Val);
   }
 }
 
@@ -164,30 +168,30 @@ abstract class _$$_LogRecordCopyWith<$Res> implements $LogRecordCopyWith<$Res> {
           _$_LogRecord value, $Res Function(_$_LogRecord) then) =
       __$$_LogRecordCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String message, DateTime timestamp});
 }
 
 /// @nodoc
-class __$$_LogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
+class __$$_LogRecordCopyWithImpl<$Res>
+    extends _$LogRecordCopyWithImpl<$Res, _$_LogRecord>
     implements _$$_LogRecordCopyWith<$Res> {
   __$$_LogRecordCopyWithImpl(
       _$_LogRecord _value, $Res Function(_$_LogRecord) _then)
-      : super(_value, (v) => _then(v as _$_LogRecord));
+      : super(_value, _then);
 
-  @override
-  _$_LogRecord get _value => super._value as _$_LogRecord;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
-    Object? timestamp = freezed,
+    Object? message = null,
+    Object? timestamp = null,
   }) {
     return _then(_$_LogRecord(
-      message == freezed
+      null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      timestamp == freezed
+      null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
@@ -223,19 +227,18 @@ class _$_LogRecord extends _LogRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_LogRecord &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality().equals(other.timestamp, timestamp));
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(timestamp));
+  int get hashCode => Object.hash(runtimeType, message, timestamp);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_LogRecordCopyWith<_$_LogRecord> get copyWith =>
       __$$_LogRecordCopyWithImpl<_$_LogRecord>(this, _$identity);
 
@@ -266,8 +269,8 @@ class _$_LogRecord extends _LogRecord {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message, DateTime timestamp)? simple,
-    TResult Function(
+    TResult? Function(String message, DateTime timestamp)? simple,
+    TResult? Function(
             String message,
             DateTime timestamp,
             Uri targetRoot,
@@ -275,7 +278,7 @@ class _$_LogRecord extends _LogRecord {
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
         fromAnalyzer,
-    TResult Function(
+    TResult? Function(
             RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
@@ -328,9 +331,9 @@ class _$_LogRecord extends _LogRecord {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LogRecord value)? simple,
-    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
-    TResult Function(RuleLogRecord value)? fromRule,
+    TResult? Function(_LogRecord value)? simple,
+    TResult? Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult? Function(RuleLogRecord value)? fromRule,
   }) {
     return simple?.call(this);
   }
@@ -382,6 +385,7 @@ abstract class _$$AnalyzerLogRecordCopyWith<$Res>
           _$AnalyzerLogRecord value, $Res Function(_$AnalyzerLogRecord) then) =
       __$$AnalyzerLogRecordCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String message,
       DateTime timestamp,
@@ -393,41 +397,39 @@ abstract class _$$AnalyzerLogRecordCopyWith<$Res>
 
 /// @nodoc
 class __$$AnalyzerLogRecordCopyWithImpl<$Res>
-    extends _$LogRecordCopyWithImpl<$Res>
+    extends _$LogRecordCopyWithImpl<$Res, _$AnalyzerLogRecord>
     implements _$$AnalyzerLogRecordCopyWith<$Res> {
   __$$AnalyzerLogRecordCopyWithImpl(
       _$AnalyzerLogRecord _value, $Res Function(_$AnalyzerLogRecord) _then)
-      : super(_value, (v) => _then(v as _$AnalyzerLogRecord));
+      : super(_value, _then);
 
-  @override
-  _$AnalyzerLogRecord get _value => super._value as _$AnalyzerLogRecord;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
-    Object? timestamp = freezed,
-    Object? targetRoot = freezed,
-    Object? severity = freezed,
+    Object? message = null,
+    Object? timestamp = null,
+    Object? targetRoot = null,
+    Object? severity = null,
     Object? stackTrace = freezed,
   }) {
     return _then(_$AnalyzerLogRecord(
-      message == freezed
+      null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      timestamp == freezed
+      null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      targetRoot: targetRoot == freezed
+      targetRoot: null == targetRoot
           ? _value.targetRoot
           : targetRoot // ignore: cast_nullable_to_non_nullable
               as Uri,
-      severity: severity == freezed
+      severity: null == severity
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
               as LogSeverity,
-      stackTrace: stackTrace == freezed
+      stackTrace: freezed == stackTrace
           ? _value.stackTrace
           : stackTrace // ignore: cast_nullable_to_non_nullable
               as StackTrace?,
@@ -480,27 +482,25 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AnalyzerLogRecord &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
-            const DeepCollectionEquality()
-                .equals(other.targetRoot, targetRoot) &&
-            const DeepCollectionEquality().equals(other.severity, severity) &&
-            const DeepCollectionEquality()
-                .equals(other.stackTrace, stackTrace));
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            (identical(other.targetRoot, targetRoot) ||
+                other.targetRoot == targetRoot) &&
+            (identical(other.severity, severity) ||
+                other.severity == severity) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(timestamp),
-      const DeepCollectionEquality().hash(targetRoot),
-      const DeepCollectionEquality().hash(severity),
-      const DeepCollectionEquality().hash(stackTrace));
+      runtimeType, message, timestamp, targetRoot, severity, stackTrace);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$AnalyzerLogRecordCopyWith<_$AnalyzerLogRecord> get copyWith =>
       __$$AnalyzerLogRecordCopyWithImpl<_$AnalyzerLogRecord>(this, _$identity);
 
@@ -531,8 +531,8 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message, DateTime timestamp)? simple,
-    TResult Function(
+    TResult? Function(String message, DateTime timestamp)? simple,
+    TResult? Function(
             String message,
             DateTime timestamp,
             Uri targetRoot,
@@ -540,7 +540,7 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
         fromAnalyzer,
-    TResult Function(
+    TResult? Function(
             RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
@@ -594,9 +594,9 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LogRecord value)? simple,
-    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
-    TResult Function(RuleLogRecord value)? fromRule,
+    TResult? Function(_LogRecord value)? simple,
+    TResult? Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult? Function(RuleLogRecord value)? fromRule,
   }) {
     return fromAnalyzer?.call(this);
   }
@@ -660,6 +660,7 @@ abstract class _$$RuleLogRecordCopyWith<$Res>
           _$RuleLogRecord value, $Res Function(_$RuleLogRecord) then) =
       __$$RuleLogRecordCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {RuleCode lintCode,
       DateTime timestamp,
@@ -672,41 +673,40 @@ abstract class _$$RuleLogRecordCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$RuleLogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
+class __$$RuleLogRecordCopyWithImpl<$Res>
+    extends _$LogRecordCopyWithImpl<$Res, _$RuleLogRecord>
     implements _$$RuleLogRecordCopyWith<$Res> {
   __$$RuleLogRecordCopyWithImpl(
       _$RuleLogRecord _value, $Res Function(_$RuleLogRecord) _then)
-      : super(_value, (v) => _then(v as _$RuleLogRecord));
+      : super(_value, _then);
 
-  @override
-  _$RuleLogRecord get _value => super._value as _$RuleLogRecord;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? lintCode = freezed,
-    Object? timestamp = freezed,
-    Object? severity = freezed,
-    Object? message = freezed,
+    Object? lintCode = null,
+    Object? timestamp = null,
+    Object? severity = null,
+    Object? message = null,
     Object? stackTrace = freezed,
   }) {
     return _then(_$RuleLogRecord(
-      lintCode == freezed
+      null == lintCode
           ? _value.lintCode
           : lintCode // ignore: cast_nullable_to_non_nullable
               as RuleCode,
-      timestamp == freezed
+      null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      severity == freezed
+      null == severity
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
               as LogSeverity,
-      message == freezed
+      null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      stackTrace == freezed
+      freezed == stackTrace
           ? _value.stackTrace
           : stackTrace // ignore: cast_nullable_to_non_nullable
               as StackTrace?,
@@ -714,6 +714,7 @@ class __$$RuleLogRecordCopyWithImpl<$Res> extends _$LogRecordCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $RuleCodeCopyWith<$Res> get lintCode {
     return $RuleCodeCopyWith<$Res>(_value.lintCode, (value) {
       return _then(_value.copyWith(lintCode: value));
@@ -766,26 +767,25 @@ class _$RuleLogRecord extends RuleLogRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RuleLogRecord &&
-            const DeepCollectionEquality().equals(other.lintCode, lintCode) &&
-            const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
-            const DeepCollectionEquality().equals(other.severity, severity) &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality()
-                .equals(other.stackTrace, stackTrace));
+            (identical(other.lintCode, lintCode) ||
+                other.lintCode == lintCode) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            (identical(other.severity, severity) ||
+                other.severity == severity) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(lintCode),
-      const DeepCollectionEquality().hash(timestamp),
-      const DeepCollectionEquality().hash(severity),
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(stackTrace));
+      runtimeType, lintCode, timestamp, severity, message, stackTrace);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$RuleLogRecordCopyWith<_$RuleLogRecord> get copyWith =>
       __$$RuleLogRecordCopyWithImpl<_$RuleLogRecord>(this, _$identity);
 
@@ -816,8 +816,8 @@ class _$RuleLogRecord extends RuleLogRecord {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message, DateTime timestamp)? simple,
-    TResult Function(
+    TResult? Function(String message, DateTime timestamp)? simple,
+    TResult? Function(
             String message,
             DateTime timestamp,
             Uri targetRoot,
@@ -825,7 +825,7 @@ class _$RuleLogRecord extends RuleLogRecord {
             @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
                 StackTrace? stackTrace)?
         fromAnalyzer,
-    TResult Function(
+    TResult? Function(
             RuleCode lintCode,
             DateTime timestamp,
             LogSeverity severity,
@@ -878,9 +878,9 @@ class _$RuleLogRecord extends RuleLogRecord {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LogRecord value)? simple,
-    TResult Function(AnalyzerLogRecord value)? fromAnalyzer,
-    TResult Function(RuleLogRecord value)? fromRule,
+    TResult? Function(_LogRecord value)? simple,
+    TResult? Function(AnalyzerLogRecord value)? fromAnalyzer,
+    TResult? Function(RuleLogRecord value)? fromRule,
   }) {
     return fromRule?.call(this);
   }

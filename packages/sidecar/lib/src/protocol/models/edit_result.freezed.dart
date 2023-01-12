@@ -34,33 +34,37 @@ mixin _$EditResult {
 abstract class $EditResultCopyWith<$Res> {
   factory $EditResultCopyWith(
           EditResult value, $Res Function(EditResult) then) =
-      _$EditResultCopyWithImpl<$Res>;
+      _$EditResultCopyWithImpl<$Res, EditResult>;
+  @useResult
   $Res call({String message, List<SourceFileEdit> sourceChanges});
 }
 
 /// @nodoc
-class _$EditResultCopyWithImpl<$Res> implements $EditResultCopyWith<$Res> {
+class _$EditResultCopyWithImpl<$Res, $Val extends EditResult>
+    implements $EditResultCopyWith<$Res> {
   _$EditResultCopyWithImpl(this._value, this._then);
 
-  final EditResult _value;
   // ignore: unused_field
-  final $Res Function(EditResult) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
-    Object? sourceChanges = freezed,
+    Object? message = null,
+    Object? sourceChanges = null,
   }) {
     return _then(_value.copyWith(
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      sourceChanges: sourceChanges == freezed
+      sourceChanges: null == sourceChanges
           ? _value.sourceChanges
           : sourceChanges // ignore: cast_nullable_to_non_nullable
               as List<SourceFileEdit>,
-    ));
+    ) as $Val);
   }
 }
 
@@ -71,30 +75,30 @@ abstract class _$$_EditResultCopyWith<$Res>
           _$_EditResult value, $Res Function(_$_EditResult) then) =
       __$$_EditResultCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String message, List<SourceFileEdit> sourceChanges});
 }
 
 /// @nodoc
-class __$$_EditResultCopyWithImpl<$Res> extends _$EditResultCopyWithImpl<$Res>
+class __$$_EditResultCopyWithImpl<$Res>
+    extends _$EditResultCopyWithImpl<$Res, _$_EditResult>
     implements _$$_EditResultCopyWith<$Res> {
   __$$_EditResultCopyWithImpl(
       _$_EditResult _value, $Res Function(_$_EditResult) _then)
-      : super(_value, (v) => _then(v as _$_EditResult));
+      : super(_value, _then);
 
-  @override
-  _$_EditResult get _value => super._value as _$_EditResult;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
-    Object? sourceChanges = freezed,
+    Object? message = null,
+    Object? sourceChanges = null,
   }) {
     return _then(_$_EditResult(
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      sourceChanges: sourceChanges == freezed
+      sourceChanges: null == sourceChanges
           ? _value._sourceChanges
           : sourceChanges // ignore: cast_nullable_to_non_nullable
               as List<SourceFileEdit>,
@@ -134,20 +138,19 @@ class _$_EditResult extends _EditResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_EditResult &&
-            const DeepCollectionEquality().equals(other.message, message) &&
+            (identical(other.message, message) || other.message == message) &&
             const DeepCollectionEquality()
                 .equals(other._sourceChanges, _sourceChanges));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(message),
+  int get hashCode => Object.hash(runtimeType, message,
       const DeepCollectionEquality().hash(_sourceChanges));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_EditResultCopyWith<_$_EditResult> get copyWith =>
       __$$_EditResultCopyWithImpl<_$_EditResult>(this, _$identity);
 

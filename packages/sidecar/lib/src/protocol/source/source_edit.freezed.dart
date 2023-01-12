@@ -34,7 +34,8 @@ mixin _$SourceEdit {
 abstract class $SourceEditCopyWith<$Res> {
   factory $SourceEditCopyWith(
           SourceEdit value, $Res Function(SourceEdit) then) =
-      _$SourceEditCopyWithImpl<$Res>;
+      _$SourceEditCopyWithImpl<$Res, SourceEdit>;
+  @useResult
   $Res call(
       {@JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           SourceSpan originalSourceSpan,
@@ -42,28 +43,31 @@ abstract class $SourceEditCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$SourceEditCopyWithImpl<$Res> implements $SourceEditCopyWith<$Res> {
+class _$SourceEditCopyWithImpl<$Res, $Val extends SourceEdit>
+    implements $SourceEditCopyWith<$Res> {
   _$SourceEditCopyWithImpl(this._value, this._then);
 
-  final SourceEdit _value;
   // ignore: unused_field
-  final $Res Function(SourceEdit) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? originalSourceSpan = freezed,
-    Object? replacement = freezed,
+    Object? originalSourceSpan = null,
+    Object? replacement = null,
   }) {
     return _then(_value.copyWith(
-      originalSourceSpan: originalSourceSpan == freezed
+      originalSourceSpan: null == originalSourceSpan
           ? _value.originalSourceSpan
           : originalSourceSpan // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-      replacement: replacement == freezed
+      replacement: null == replacement
           ? _value.replacement
           : replacement // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -74,6 +78,7 @@ abstract class _$$_SourceEditCopyWith<$Res>
           _$_SourceEdit value, $Res Function(_$_SourceEdit) then) =
       __$$_SourceEditCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@JsonKey(toJson: sourceSpanToJson, fromJson: sourceSpanFromJson)
           SourceSpan originalSourceSpan,
@@ -81,26 +86,25 @@ abstract class _$$_SourceEditCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SourceEditCopyWithImpl<$Res> extends _$SourceEditCopyWithImpl<$Res>
+class __$$_SourceEditCopyWithImpl<$Res>
+    extends _$SourceEditCopyWithImpl<$Res, _$_SourceEdit>
     implements _$$_SourceEditCopyWith<$Res> {
   __$$_SourceEditCopyWithImpl(
       _$_SourceEdit _value, $Res Function(_$_SourceEdit) _then)
-      : super(_value, (v) => _then(v as _$_SourceEdit));
+      : super(_value, _then);
 
-  @override
-  _$_SourceEdit get _value => super._value as _$_SourceEdit;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? originalSourceSpan = freezed,
-    Object? replacement = freezed,
+    Object? originalSourceSpan = null,
+    Object? replacement = null,
   }) {
     return _then(_$_SourceEdit(
-      originalSourceSpan: originalSourceSpan == freezed
+      originalSourceSpan: null == originalSourceSpan
           ? _value.originalSourceSpan
           : originalSourceSpan // ignore: cast_nullable_to_non_nullable
               as SourceSpan,
-      replacement: replacement == freezed
+      replacement: null == replacement
           ? _value.replacement
           : replacement // ignore: cast_nullable_to_non_nullable
               as String,
@@ -136,21 +140,19 @@ class _$_SourceEdit extends _SourceEdit {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SourceEdit &&
-            const DeepCollectionEquality()
-                .equals(other.originalSourceSpan, originalSourceSpan) &&
-            const DeepCollectionEquality()
-                .equals(other.replacement, replacement));
+            (identical(other.originalSourceSpan, originalSourceSpan) ||
+                other.originalSourceSpan == originalSourceSpan) &&
+            (identical(other.replacement, replacement) ||
+                other.replacement == replacement));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(originalSourceSpan),
-      const DeepCollectionEquality().hash(replacement));
+  int get hashCode => Object.hash(runtimeType, originalSourceSpan, replacement);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SourceEditCopyWith<_$_SourceEdit> get copyWith =>
       __$$_SourceEditCopyWithImpl<_$_SourceEdit>(this, _$identity);
 

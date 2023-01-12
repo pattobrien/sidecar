@@ -49,12 +49,12 @@ mixin _$SidecarResponse {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? contextCollection,
-    TResult Function(Set<AssistResultWithEdits> results)? assist,
-    TResult Function(List<LintResultWithEdits> results)? quickFix,
-    TResult Function(List<LintResult> lints)? lint,
-    TResult Function()? updateFiles,
-    TResult Function()? setPriorityFiles,
+    TResult? Function()? contextCollection,
+    TResult? Function(Set<AssistResultWithEdits> results)? assist,
+    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(List<LintResult> lints)? lint,
+    TResult? Function()? updateFiles,
+    TResult? Function()? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -80,12 +80,12 @@ mixin _$SidecarResponse {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetWorkspaceResponse value)? contextCollection,
-    TResult Function(AssistResponse value)? assist,
-    TResult Function(QuickFixResponse value)? quickFix,
-    TResult Function(LintResponse value)? lint,
-    TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+    TResult? Function(SetWorkspaceResponse value)? contextCollection,
+    TResult? Function(AssistResponse value)? assist,
+    TResult? Function(QuickFixResponse value)? quickFix,
+    TResult? Function(LintResponse value)? lint,
+    TResult? Function(UpdateFilesResponse value)? updateFiles,
+    TResult? Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -106,17 +106,18 @@ mixin _$SidecarResponse {
 abstract class $SidecarResponseCopyWith<$Res> {
   factory $SidecarResponseCopyWith(
           SidecarResponse value, $Res Function(SidecarResponse) then) =
-      _$SidecarResponseCopyWithImpl<$Res>;
+      _$SidecarResponseCopyWithImpl<$Res, SidecarResponse>;
 }
 
 /// @nodoc
-class _$SidecarResponseCopyWithImpl<$Res>
+class _$SidecarResponseCopyWithImpl<$Res, $Val extends SidecarResponse>
     implements $SidecarResponseCopyWith<$Res> {
   _$SidecarResponseCopyWithImpl(this._value, this._then);
 
-  final SidecarResponse _value;
   // ignore: unused_field
-  final $Res Function(SidecarResponse) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -128,14 +129,11 @@ abstract class _$$SetWorkspaceResponseCopyWith<$Res> {
 
 /// @nodoc
 class __$$SetWorkspaceResponseCopyWithImpl<$Res>
-    extends _$SidecarResponseCopyWithImpl<$Res>
+    extends _$SidecarResponseCopyWithImpl<$Res, _$SetWorkspaceResponse>
     implements _$$SetWorkspaceResponseCopyWith<$Res> {
   __$$SetWorkspaceResponseCopyWithImpl(_$SetWorkspaceResponse _value,
       $Res Function(_$SetWorkspaceResponse) _then)
-      : super(_value, (v) => _then(v as _$SetWorkspaceResponse));
-
-  @override
-  _$SetWorkspaceResponse get _value => super._value as _$SetWorkspaceResponse;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -182,12 +180,12 @@ class _$SetWorkspaceResponse extends SetWorkspaceResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? contextCollection,
-    TResult Function(Set<AssistResultWithEdits> results)? assist,
-    TResult Function(List<LintResultWithEdits> results)? quickFix,
-    TResult Function(List<LintResult> lints)? lint,
-    TResult Function()? updateFiles,
-    TResult Function()? setPriorityFiles,
+    TResult? Function()? contextCollection,
+    TResult? Function(Set<AssistResultWithEdits> results)? assist,
+    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(List<LintResult> lints)? lint,
+    TResult? Function()? updateFiles,
+    TResult? Function()? setPriorityFiles,
   }) {
     return contextCollection?.call();
   }
@@ -225,12 +223,12 @@ class _$SetWorkspaceResponse extends SetWorkspaceResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetWorkspaceResponse value)? contextCollection,
-    TResult Function(AssistResponse value)? assist,
-    TResult Function(QuickFixResponse value)? quickFix,
-    TResult Function(LintResponse value)? lint,
-    TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+    TResult? Function(SetWorkspaceResponse value)? contextCollection,
+    TResult? Function(AssistResponse value)? assist,
+    TResult? Function(QuickFixResponse value)? quickFix,
+    TResult? Function(LintResponse value)? lint,
+    TResult? Function(UpdateFilesResponse value)? updateFiles,
+    TResult? Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return contextCollection?.call(this);
   }
@@ -273,26 +271,25 @@ abstract class _$$AssistResponseCopyWith<$Res> {
   factory _$$AssistResponseCopyWith(
           _$AssistResponse value, $Res Function(_$AssistResponse) then) =
       __$$AssistResponseCopyWithImpl<$Res>;
+  @useResult
   $Res call({Set<AssistResultWithEdits> results});
 }
 
 /// @nodoc
 class __$$AssistResponseCopyWithImpl<$Res>
-    extends _$SidecarResponseCopyWithImpl<$Res>
+    extends _$SidecarResponseCopyWithImpl<$Res, _$AssistResponse>
     implements _$$AssistResponseCopyWith<$Res> {
   __$$AssistResponseCopyWithImpl(
       _$AssistResponse _value, $Res Function(_$AssistResponse) _then)
-      : super(_value, (v) => _then(v as _$AssistResponse));
+      : super(_value, _then);
 
-  @override
-  _$AssistResponse get _value => super._value as _$AssistResponse;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? results = freezed,
+    Object? results = null,
   }) {
     return _then(_$AssistResponse(
-      results == freezed
+      null == results
           ? _value._results
           : results // ignore: cast_nullable_to_non_nullable
               as Set<AssistResultWithEdits>,
@@ -342,6 +339,7 @@ class _$AssistResponse extends AssistResponse {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$AssistResponseCopyWith<_$AssistResponse> get copyWith =>
       __$$AssistResponseCopyWithImpl<_$AssistResponse>(this, _$identity);
 
@@ -361,12 +359,12 @@ class _$AssistResponse extends AssistResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? contextCollection,
-    TResult Function(Set<AssistResultWithEdits> results)? assist,
-    TResult Function(List<LintResultWithEdits> results)? quickFix,
-    TResult Function(List<LintResult> lints)? lint,
-    TResult Function()? updateFiles,
-    TResult Function()? setPriorityFiles,
+    TResult? Function()? contextCollection,
+    TResult? Function(Set<AssistResultWithEdits> results)? assist,
+    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(List<LintResult> lints)? lint,
+    TResult? Function()? updateFiles,
+    TResult? Function()? setPriorityFiles,
   }) {
     return assist?.call(results);
   }
@@ -404,12 +402,12 @@ class _$AssistResponse extends AssistResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetWorkspaceResponse value)? contextCollection,
-    TResult Function(AssistResponse value)? assist,
-    TResult Function(QuickFixResponse value)? quickFix,
-    TResult Function(LintResponse value)? lint,
-    TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+    TResult? Function(SetWorkspaceResponse value)? contextCollection,
+    TResult? Function(AssistResponse value)? assist,
+    TResult? Function(QuickFixResponse value)? quickFix,
+    TResult? Function(LintResponse value)? lint,
+    TResult? Function(UpdateFilesResponse value)? updateFiles,
+    TResult? Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return assist?.call(this);
   }
@@ -458,26 +456,25 @@ abstract class _$$QuickFixResponseCopyWith<$Res> {
   factory _$$QuickFixResponseCopyWith(
           _$QuickFixResponse value, $Res Function(_$QuickFixResponse) then) =
       __$$QuickFixResponseCopyWithImpl<$Res>;
+  @useResult
   $Res call({List<LintResultWithEdits> results});
 }
 
 /// @nodoc
 class __$$QuickFixResponseCopyWithImpl<$Res>
-    extends _$SidecarResponseCopyWithImpl<$Res>
+    extends _$SidecarResponseCopyWithImpl<$Res, _$QuickFixResponse>
     implements _$$QuickFixResponseCopyWith<$Res> {
   __$$QuickFixResponseCopyWithImpl(
       _$QuickFixResponse _value, $Res Function(_$QuickFixResponse) _then)
-      : super(_value, (v) => _then(v as _$QuickFixResponse));
+      : super(_value, _then);
 
-  @override
-  _$QuickFixResponse get _value => super._value as _$QuickFixResponse;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? results = freezed,
+    Object? results = null,
   }) {
     return _then(_$QuickFixResponse(
-      results == freezed
+      null == results
           ? _value._results
           : results // ignore: cast_nullable_to_non_nullable
               as List<LintResultWithEdits>,
@@ -527,6 +524,7 @@ class _$QuickFixResponse extends QuickFixResponse {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$QuickFixResponseCopyWith<_$QuickFixResponse> get copyWith =>
       __$$QuickFixResponseCopyWithImpl<_$QuickFixResponse>(this, _$identity);
 
@@ -546,12 +544,12 @@ class _$QuickFixResponse extends QuickFixResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? contextCollection,
-    TResult Function(Set<AssistResultWithEdits> results)? assist,
-    TResult Function(List<LintResultWithEdits> results)? quickFix,
-    TResult Function(List<LintResult> lints)? lint,
-    TResult Function()? updateFiles,
-    TResult Function()? setPriorityFiles,
+    TResult? Function()? contextCollection,
+    TResult? Function(Set<AssistResultWithEdits> results)? assist,
+    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(List<LintResult> lints)? lint,
+    TResult? Function()? updateFiles,
+    TResult? Function()? setPriorityFiles,
   }) {
     return quickFix?.call(results);
   }
@@ -589,12 +587,12 @@ class _$QuickFixResponse extends QuickFixResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetWorkspaceResponse value)? contextCollection,
-    TResult Function(AssistResponse value)? assist,
-    TResult Function(QuickFixResponse value)? quickFix,
-    TResult Function(LintResponse value)? lint,
-    TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+    TResult? Function(SetWorkspaceResponse value)? contextCollection,
+    TResult? Function(AssistResponse value)? assist,
+    TResult? Function(QuickFixResponse value)? quickFix,
+    TResult? Function(LintResponse value)? lint,
+    TResult? Function(UpdateFilesResponse value)? updateFiles,
+    TResult? Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return quickFix?.call(this);
   }
@@ -643,26 +641,25 @@ abstract class _$$LintResponseCopyWith<$Res> {
   factory _$$LintResponseCopyWith(
           _$LintResponse value, $Res Function(_$LintResponse) then) =
       __$$LintResponseCopyWithImpl<$Res>;
+  @useResult
   $Res call({List<LintResult> lints});
 }
 
 /// @nodoc
 class __$$LintResponseCopyWithImpl<$Res>
-    extends _$SidecarResponseCopyWithImpl<$Res>
+    extends _$SidecarResponseCopyWithImpl<$Res, _$LintResponse>
     implements _$$LintResponseCopyWith<$Res> {
   __$$LintResponseCopyWithImpl(
       _$LintResponse _value, $Res Function(_$LintResponse) _then)
-      : super(_value, (v) => _then(v as _$LintResponse));
+      : super(_value, _then);
 
-  @override
-  _$LintResponse get _value => super._value as _$LintResponse;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? lints = freezed,
+    Object? lints = null,
   }) {
     return _then(_$LintResponse(
-      lints == freezed
+      null == lints
           ? _value._lints
           : lints // ignore: cast_nullable_to_non_nullable
               as List<LintResult>,
@@ -711,6 +708,7 @@ class _$LintResponse extends LintResponse {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LintResponseCopyWith<_$LintResponse> get copyWith =>
       __$$LintResponseCopyWithImpl<_$LintResponse>(this, _$identity);
 
@@ -730,12 +728,12 @@ class _$LintResponse extends LintResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? contextCollection,
-    TResult Function(Set<AssistResultWithEdits> results)? assist,
-    TResult Function(List<LintResultWithEdits> results)? quickFix,
-    TResult Function(List<LintResult> lints)? lint,
-    TResult Function()? updateFiles,
-    TResult Function()? setPriorityFiles,
+    TResult? Function()? contextCollection,
+    TResult? Function(Set<AssistResultWithEdits> results)? assist,
+    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(List<LintResult> lints)? lint,
+    TResult? Function()? updateFiles,
+    TResult? Function()? setPriorityFiles,
   }) {
     return lint?.call(lints);
   }
@@ -773,12 +771,12 @@ class _$LintResponse extends LintResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetWorkspaceResponse value)? contextCollection,
-    TResult Function(AssistResponse value)? assist,
-    TResult Function(QuickFixResponse value)? quickFix,
-    TResult Function(LintResponse value)? lint,
-    TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+    TResult? Function(SetWorkspaceResponse value)? contextCollection,
+    TResult? Function(AssistResponse value)? assist,
+    TResult? Function(QuickFixResponse value)? quickFix,
+    TResult? Function(LintResponse value)? lint,
+    TResult? Function(UpdateFilesResponse value)? updateFiles,
+    TResult? Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return lint?.call(this);
   }
@@ -830,14 +828,11 @@ abstract class _$$UpdateFilesResponseCopyWith<$Res> {
 
 /// @nodoc
 class __$$UpdateFilesResponseCopyWithImpl<$Res>
-    extends _$SidecarResponseCopyWithImpl<$Res>
+    extends _$SidecarResponseCopyWithImpl<$Res, _$UpdateFilesResponse>
     implements _$$UpdateFilesResponseCopyWith<$Res> {
   __$$UpdateFilesResponseCopyWithImpl(
       _$UpdateFilesResponse _value, $Res Function(_$UpdateFilesResponse) _then)
-      : super(_value, (v) => _then(v as _$UpdateFilesResponse));
-
-  @override
-  _$UpdateFilesResponse get _value => super._value as _$UpdateFilesResponse;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -884,12 +879,12 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? contextCollection,
-    TResult Function(Set<AssistResultWithEdits> results)? assist,
-    TResult Function(List<LintResultWithEdits> results)? quickFix,
-    TResult Function(List<LintResult> lints)? lint,
-    TResult Function()? updateFiles,
-    TResult Function()? setPriorityFiles,
+    TResult? Function()? contextCollection,
+    TResult? Function(Set<AssistResultWithEdits> results)? assist,
+    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(List<LintResult> lints)? lint,
+    TResult? Function()? updateFiles,
+    TResult? Function()? setPriorityFiles,
   }) {
     return updateFiles?.call();
   }
@@ -927,12 +922,12 @@ class _$UpdateFilesResponse extends UpdateFilesResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetWorkspaceResponse value)? contextCollection,
-    TResult Function(AssistResponse value)? assist,
-    TResult Function(QuickFixResponse value)? quickFix,
-    TResult Function(LintResponse value)? lint,
-    TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+    TResult? Function(SetWorkspaceResponse value)? contextCollection,
+    TResult? Function(AssistResponse value)? assist,
+    TResult? Function(QuickFixResponse value)? quickFix,
+    TResult? Function(LintResponse value)? lint,
+    TResult? Function(UpdateFilesResponse value)? updateFiles,
+    TResult? Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return updateFiles?.call(this);
   }
@@ -979,15 +974,11 @@ abstract class _$$SetPriorityFilesResponseCopyWith<$Res> {
 
 /// @nodoc
 class __$$SetPriorityFilesResponseCopyWithImpl<$Res>
-    extends _$SidecarResponseCopyWithImpl<$Res>
+    extends _$SidecarResponseCopyWithImpl<$Res, _$SetPriorityFilesResponse>
     implements _$$SetPriorityFilesResponseCopyWith<$Res> {
   __$$SetPriorityFilesResponseCopyWithImpl(_$SetPriorityFilesResponse _value,
       $Res Function(_$SetPriorityFilesResponse) _then)
-      : super(_value, (v) => _then(v as _$SetPriorityFilesResponse));
-
-  @override
-  _$SetPriorityFilesResponse get _value =>
-      super._value as _$SetPriorityFilesResponse;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -1035,12 +1026,12 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? contextCollection,
-    TResult Function(Set<AssistResultWithEdits> results)? assist,
-    TResult Function(List<LintResultWithEdits> results)? quickFix,
-    TResult Function(List<LintResult> lints)? lint,
-    TResult Function()? updateFiles,
-    TResult Function()? setPriorityFiles,
+    TResult? Function()? contextCollection,
+    TResult? Function(Set<AssistResultWithEdits> results)? assist,
+    TResult? Function(List<LintResultWithEdits> results)? quickFix,
+    TResult? Function(List<LintResult> lints)? lint,
+    TResult? Function()? updateFiles,
+    TResult? Function()? setPriorityFiles,
   }) {
     return setPriorityFiles?.call();
   }
@@ -1078,12 +1069,12 @@ class _$SetPriorityFilesResponse extends SetPriorityFilesResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(SetWorkspaceResponse value)? contextCollection,
-    TResult Function(AssistResponse value)? assist,
-    TResult Function(QuickFixResponse value)? quickFix,
-    TResult Function(LintResponse value)? lint,
-    TResult Function(UpdateFilesResponse value)? updateFiles,
-    TResult Function(SetPriorityFilesResponse value)? setPriorityFiles,
+    TResult? Function(SetWorkspaceResponse value)? contextCollection,
+    TResult? Function(AssistResponse value)? assist,
+    TResult? Function(QuickFixResponse value)? quickFix,
+    TResult? Function(LintResponse value)? lint,
+    TResult? Function(UpdateFilesResponse value)? updateFiles,
+    TResult? Function(SetPriorityFilesResponse value)? setPriorityFiles,
   }) {
     return setPriorityFiles?.call(this);
   }

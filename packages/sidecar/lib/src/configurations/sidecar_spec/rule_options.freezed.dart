@@ -59,7 +59,7 @@ mixin _$RuleOptions {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -68,7 +68,7 @@ mixin _$RuleOptions {
             Map<dynamic, dynamic>? configuration,
             LintSeverity? severity)?
         lint,
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -108,8 +108,8 @@ mixin _$RuleOptions {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintOptions value)? lint,
-    TResult Function(AssistOptions value)? assist,
+    TResult? Function(LintOptions value)? lint,
+    TResult? Function(AssistOptions value)? assist,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -129,7 +129,8 @@ mixin _$RuleOptions {
 abstract class $RuleOptionsCopyWith<$Res> {
   factory $RuleOptionsCopyWith(
           RuleOptions value, $Res Function(RuleOptions) then) =
-      _$RuleOptionsCopyWithImpl<$Res>;
+      _$RuleOptionsCopyWithImpl<$Res, RuleOptions>;
+  @useResult
   $Res call(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
           List<Glob>? includes,
@@ -140,13 +141,16 @@ abstract class $RuleOptionsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$RuleOptionsCopyWithImpl<$Res> implements $RuleOptionsCopyWith<$Res> {
+class _$RuleOptionsCopyWithImpl<$Res, $Val extends RuleOptions>
+    implements $RuleOptionsCopyWith<$Res> {
   _$RuleOptionsCopyWithImpl(this._value, this._then);
 
-  final RuleOptions _value;
   // ignore: unused_field
-  final $Res Function(RuleOptions) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? includes = freezed,
@@ -155,23 +159,23 @@ class _$RuleOptionsCopyWithImpl<$Res> implements $RuleOptionsCopyWith<$Res> {
     Object? configuration = freezed,
   }) {
     return _then(_value.copyWith(
-      includes: includes == freezed
+      includes: freezed == includes
           ? _value.includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      excludes: excludes == freezed
+      excludes: freezed == excludes
           ? _value.excludes
           : excludes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      enabled: enabled == freezed
+      enabled: freezed == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool?,
-      configuration: configuration == freezed
+      configuration: freezed == configuration
           ? _value.configuration
           : configuration // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -182,6 +186,7 @@ abstract class _$$LintOptionsCopyWith<$Res>
           _$LintOptions value, $Res Function(_$LintOptions) then) =
       __$$LintOptionsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
           List<Glob>? includes,
@@ -193,15 +198,14 @@ abstract class _$$LintOptionsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$LintOptionsCopyWithImpl<$Res> extends _$RuleOptionsCopyWithImpl<$Res>
+class __$$LintOptionsCopyWithImpl<$Res>
+    extends _$RuleOptionsCopyWithImpl<$Res, _$LintOptions>
     implements _$$LintOptionsCopyWith<$Res> {
   __$$LintOptionsCopyWithImpl(
       _$LintOptions _value, $Res Function(_$LintOptions) _then)
-      : super(_value, (v) => _then(v as _$LintOptions));
+      : super(_value, _then);
 
-  @override
-  _$LintOptions get _value => super._value as _$LintOptions;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? includes = freezed,
@@ -211,23 +215,23 @@ class __$$LintOptionsCopyWithImpl<$Res> extends _$RuleOptionsCopyWithImpl<$Res>
     Object? severity = freezed,
   }) {
     return _then(_$LintOptions(
-      includes: includes == freezed
+      includes: freezed == includes
           ? _value._includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      excludes: excludes == freezed
+      excludes: freezed == excludes
           ? _value._excludes
           : excludes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      enabled: enabled == freezed
+      enabled: freezed == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool?,
-      configuration: configuration == freezed
+      configuration: freezed == configuration
           ? _value._configuration
           : configuration // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>?,
-      severity: severity == freezed
+      severity: freezed == severity
           ? _value.severity
           : severity // ignore: cast_nullable_to_non_nullable
               as LintSeverity?,
@@ -305,10 +309,11 @@ class _$LintOptions extends LintOptions {
             other is _$LintOptions &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality().equals(other._excludes, _excludes) &&
-            const DeepCollectionEquality().equals(other.enabled, enabled) &&
+            (identical(other.enabled, enabled) || other.enabled == enabled) &&
             const DeepCollectionEquality()
                 .equals(other._configuration, _configuration) &&
-            const DeepCollectionEquality().equals(other.severity, severity));
+            (identical(other.severity, severity) ||
+                other.severity == severity));
   }
 
   @JsonKey(ignore: true)
@@ -317,12 +322,13 @@ class _$LintOptions extends LintOptions {
       runtimeType,
       const DeepCollectionEquality().hash(_includes),
       const DeepCollectionEquality().hash(_excludes),
-      const DeepCollectionEquality().hash(enabled),
+      enabled,
       const DeepCollectionEquality().hash(_configuration),
-      const DeepCollectionEquality().hash(severity));
+      severity);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$LintOptionsCopyWith<_$LintOptions> get copyWith =>
       __$$LintOptionsCopyWithImpl<_$LintOptions>(this, _$identity);
 
@@ -353,7 +359,7 @@ class _$LintOptions extends LintOptions {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -362,7 +368,7 @@ class _$LintOptions extends LintOptions {
             Map<dynamic, dynamic>? configuration,
             LintSeverity? severity)?
         lint,
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -414,8 +420,8 @@ class _$LintOptions extends LintOptions {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintOptions value)? lint,
-    TResult Function(AssistOptions value)? assist,
+    TResult? Function(LintOptions value)? lint,
+    TResult? Function(AssistOptions value)? assist,
   }) {
     return lint?.call(this);
   }
@@ -479,6 +485,7 @@ abstract class _$$AssistOptionsCopyWith<$Res>
           _$AssistOptions value, $Res Function(_$AssistOptions) then) =
       __$$AssistOptionsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
           List<Glob>? includes,
@@ -490,15 +497,13 @@ abstract class _$$AssistOptionsCopyWith<$Res>
 
 /// @nodoc
 class __$$AssistOptionsCopyWithImpl<$Res>
-    extends _$RuleOptionsCopyWithImpl<$Res>
+    extends _$RuleOptionsCopyWithImpl<$Res, _$AssistOptions>
     implements _$$AssistOptionsCopyWith<$Res> {
   __$$AssistOptionsCopyWithImpl(
       _$AssistOptions _value, $Res Function(_$AssistOptions) _then)
-      : super(_value, (v) => _then(v as _$AssistOptions));
+      : super(_value, _then);
 
-  @override
-  _$AssistOptions get _value => super._value as _$AssistOptions;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? includes = freezed,
@@ -507,19 +512,19 @@ class __$$AssistOptionsCopyWithImpl<$Res>
     Object? configuration = freezed,
   }) {
     return _then(_$AssistOptions(
-      includes: includes == freezed
+      includes: freezed == includes
           ? _value._includes
           : includes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      excludes: excludes == freezed
+      excludes: freezed == excludes
           ? _value._excludes
           : excludes // ignore: cast_nullable_to_non_nullable
               as List<Glob>?,
-      enabled: enabled == freezed
+      enabled: freezed == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool?,
-      configuration: configuration == freezed
+      configuration: freezed == configuration
           ? _value._configuration
           : configuration // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>?,
@@ -593,7 +598,7 @@ class _$AssistOptions extends AssistOptions {
             other is _$AssistOptions &&
             const DeepCollectionEquality().equals(other._includes, _includes) &&
             const DeepCollectionEquality().equals(other._excludes, _excludes) &&
-            const DeepCollectionEquality().equals(other.enabled, enabled) &&
+            (identical(other.enabled, enabled) || other.enabled == enabled) &&
             const DeepCollectionEquality()
                 .equals(other._configuration, _configuration));
   }
@@ -604,11 +609,12 @@ class _$AssistOptions extends AssistOptions {
       runtimeType,
       const DeepCollectionEquality().hash(_includes),
       const DeepCollectionEquality().hash(_excludes),
-      const DeepCollectionEquality().hash(enabled),
+      enabled,
       const DeepCollectionEquality().hash(_configuration));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$AssistOptionsCopyWith<_$AssistOptions> get copyWith =>
       __$$AssistOptionsCopyWithImpl<_$AssistOptions>(this, _$identity);
 
@@ -639,7 +645,7 @@ class _$AssistOptions extends AssistOptions {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -648,7 +654,7 @@ class _$AssistOptions extends AssistOptions {
             Map<dynamic, dynamic>? configuration,
             LintSeverity? severity)?
         lint,
-    TResult Function(
+    TResult? Function(
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
                 List<Glob>? includes,
             @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -700,8 +706,8 @@ class _$AssistOptions extends AssistOptions {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LintOptions value)? lint,
-    TResult Function(AssistOptions value)? assist,
+    TResult? Function(LintOptions value)? lint,
+    TResult? Function(AssistOptions value)? assist,
   }) {
     return assist?.call(this);
   }
