@@ -20,7 +20,7 @@ extension PluginSourceFileEditX on plugin.SourceFileEdit {
   SourceFileEdit fromPluginFileEdit() {
     final sourceEdits = edits.map((e) {
       final sourceSpan = SourceEdit.fromOffset(e.offset, e.length,
-          replacement: e.replacement, sourceUri: Uri.parse(file));
+          replacement: e.replacement, sourceUri: Uri.file(file));
       return sourceSpan;
     }).toList();
     return SourceFileEdit(filePath: file, edits: sourceEdits);

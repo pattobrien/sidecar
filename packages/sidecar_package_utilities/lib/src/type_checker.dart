@@ -431,7 +431,7 @@ class _UriTypeChecker extends TypeChecker {
   int get hashCode => _url.hashCode;
 
   /// Url as a [Uri] object, lazily constructed.
-  Uri get uri => _cache[this] ??= normalizeUrl(Uri.parse(_url));
+  Uri get uri => _cache[this] ??= normalizeUrl(Uri.file(_url));
 
   /// Returns whether this type represents the same as [url].
   bool hasSameUrl(dynamic url) =>

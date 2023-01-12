@@ -39,15 +39,15 @@ class HotReloadNotifier extends StateNotifier<AsyncValue<void>> {
     final timestamp = DateTime.now().toIso8601String();
     print('\u001b[31m\n$timestamp RELOADING...\n\u001b[0m');
 
-    final rootPaths = client.roots.map((e) => e.path).toList();
+    final rootPaths = client.roots.map((e) => e.toFilePath()).toList();
     for (final event in fileContents.entries) {
       final filePath = event.key;
       final fileContents = event.value;
       if (rootPaths.any((root) => p.isWithin(root, filePath))) {
         if (fileContents == null) {
-          client.handleDeletedFile(Uri.parse(filePath));
+          client.handleDeletedFile(Uri.file(filePath));
         } else {
-          await client.handleFileChange(Uri.parse(filePath), fileContents);
+          await client.handleFileChange(Uri.file(filePath), fileContents);
         }
         //   final pluginUri = runner.activePackage.sidecarPluginPackage;
         // } else if (p.isWithin(pluginUri.root.path, filePath)) {

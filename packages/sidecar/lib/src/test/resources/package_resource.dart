@@ -41,7 +41,7 @@ class PackageResource with ResourceMixin {
   @override
   String get rootPath => p.join(parentDirectoryPath, projectName);
 
-  Uri get root => Uri.parse(rootPath);
+  Uri get root => Uri.file(rootPath);
 
   final String parentDirectoryPath;
   final String projectName;

@@ -164,7 +164,7 @@ final _fileForPathProvider =
     Provider.family<AnalyzedFile?, String>((ref, path) {
   final context = ref.watch(_runnerContextsProvider).contextForPath(path);
   if (context == null) return null;
-  return AnalyzedFile(Uri.parse(path),
+  return AnalyzedFile(Uri.file(path),
       contextRoot: context.contextRoot.root.toUri());
 });
 

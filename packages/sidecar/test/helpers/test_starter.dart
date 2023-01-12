@@ -41,7 +41,7 @@ Future<int> runPubGet(Uri root) async {
     process = await Process.start(
       'dart',
       ['pub', 'get'],
-      workingDirectory: root.path,
+      workingDirectory: root.toFilePath(),
     );
   } catch (e, stack) {
     //

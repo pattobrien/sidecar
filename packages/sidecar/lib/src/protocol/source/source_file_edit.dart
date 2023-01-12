@@ -12,7 +12,7 @@ class SourceFileEdit with _$SourceFileEdit {
     required List<SourceEdit> edits,
   }) {
     return SourceFileEdit._(
-      file: Uri.parse(filePath),
+      file: Uri.file(filePath),
       edits: edits,
       fileStamp: DateTime.now(),
     );

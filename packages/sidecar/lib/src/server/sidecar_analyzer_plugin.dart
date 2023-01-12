@@ -234,7 +234,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         .expand((element) => element)
         .map((e) => e.span.length);
     print(
-        'ASSIST URIS ${paths.length} ${paths.every((element) => element == Uri.parse(parameters.file))} $paths');
+        'ASSIST URIS ${paths.length} ${paths.every((element) => element == Uri.file(parameters.file))} $paths');
     print('ASSIST OFFSETS $offsets');
     print('ASSIST LENGTHS $lengths');
 
