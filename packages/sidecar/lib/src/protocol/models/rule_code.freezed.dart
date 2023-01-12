@@ -45,6 +45,7 @@ mixin _$RuleCode {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String id, String package, String? url)? lint,
     TResult? Function(String id, String package, String? url)? assist,
+    TResult? Function(String id, String package, String? url)? data,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -66,6 +67,7 @@ mixin _$RuleCode {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LintCode value)? lint,
     TResult? Function(AssistCode value)? assist,
+    TResult? Function(DataCode value)? data,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -226,6 +228,7 @@ class _$LintCode extends LintCode {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String id, String package, String? url)? lint,
     TResult? Function(String id, String package, String? url)? assist,
+    TResult? Function(String id, String package, String? url)? data,
   }) {
     return lint?.call(id, package, url);
   }
@@ -259,6 +262,7 @@ class _$LintCode extends LintCode {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LintCode value)? lint,
     TResult? Function(AssistCode value)? assist,
+    TResult? Function(DataCode value)? data,
   }) {
     return lint?.call(this);
   }
@@ -407,6 +411,7 @@ class _$AssistCode extends AssistCode {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String id, String package, String? url)? lint,
     TResult? Function(String id, String package, String? url)? assist,
+    TResult? Function(String id, String package, String? url)? data,
   }) {
     return assist?.call(id, package, url);
   }
@@ -440,6 +445,7 @@ class _$AssistCode extends AssistCode {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LintCode value)? lint,
     TResult? Function(AssistCode value)? assist,
+    TResult? Function(DataCode value)? data,
   }) {
     return assist?.call(this);
   }
