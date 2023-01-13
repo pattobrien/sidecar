@@ -11,20 +11,20 @@ import '../../protocol/models/analysis_result.dart';
 
 class SidecarContextImpl implements SidecarContext {
   const SidecarContextImpl(
-    AnalysisContext context, {
+    AnalysisContext context,
+    SidecarSpec sidecarSpec, {
     // required PackageConfig packageConfig,
-    required SidecarSpec sidecarSpec,
-    required Set<TotalDataResult> data,
+    // required Set<TotalDataResult> data,
     required Uri targetUri,
   })  : _context = context,
         // _packageConfig = packageConfig,
-        _data = data,
+        // _data = data,
         _sidecarSpec = sidecarSpec,
         _targetUri = targetUri;
 
   final AnalysisContext _context;
   // final PackageConfig _packageConfig;
-  final Set<TotalDataResult> _data;
+  // final Set<TotalDataResult> _data;
   final SidecarSpec _sidecarSpec;
   final Uri _targetUri;
 
@@ -44,8 +44,8 @@ class SidecarContextImpl implements SidecarContext {
   // @override
   // ResolvedUnitResult get currentUnit => throw UnimplementedError();
 
-  @override
-  Set<TotalDataResult> get data => _data;
+  // @override
+  // Set<TotalDataResult> get data => _data;
 
   // @override
   // PackageConfig get packageConfig => _packageConfig;
@@ -59,12 +59,12 @@ class SidecarContextImpl implements SidecarContext {
   @override
   Uri get targetRoot => _targetUri;
 
-  @override
-  SidecarContext copyWith({
-    Set<TotalDataResult>? data,
-  }) =>
-      SidecarContextImpl(_context,
-          sidecarSpec: _sidecarSpec,
-          data: data ?? _data,
-          targetUri: _targetUri);
+  // @override
+  // SidecarContext copyWith({
+  //   Set<TotalDataResult>? data,
+  // }) =>
+  //     SidecarContextImpl(_context,
+  //         sidecarSpec: _sidecarSpec,
+  //         data: data ?? _data,
+  //         targetUri: _targetUri);
 }

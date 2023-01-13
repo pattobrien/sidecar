@@ -83,11 +83,8 @@ void setUpRules(List<Rule> rules) {
     // used to warm up the analyzer
     await _context.currentSession.getResolvedUnit(file.path);
 
-    _sidecarContext = SidecarContextImpl(_context,
-        // packageConfig: _packageConfig,
-        sidecarSpec: _sidecarSpec,
-        data: {},
-        targetUri: _rootUri);
+    _sidecarContext =
+        SidecarContextImpl(_context, _sidecarSpec, targetUri: _rootUri);
 
     for (final data in rules.whereType<Data>()) {
       // final context = ref.watch(sidecarContextProvider(file))!;

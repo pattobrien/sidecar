@@ -63,20 +63,12 @@ class PackageResource with ResourceMixin {
       final sidecarYamlContents = sidecarProjectConfiguration!.toYamlContent();
       newSidecarOptionsFile(rootPath, sidecarYamlContents);
     }
-    // _createMainFile();
-    // print('current directory: ${io.Directory.current.uri.toFilePath()}');
-    // final thisPackageConfigUri =
-    //     io.Directory.current.uri.resolve(p.join(kDartTool, kPackageConfigJson));
-    // print('thisPackageConfigUri: ${thisPackageConfigUri.toFilePath()}');
     final newFilePath = Uri.file(p.join(
         io.Directory.current.uri.toFilePath(), kDartTool, kPackageConfigJson));
-    // print('thisPackageConfigUri: ${newFilePath.toFilePath()}');
     final contents =
         resourceProvider.getFile(newFilePath.toFilePath()).readAsStringSync();
     final newPackageConfig = PackageConfig.parseString(
         contents, Uri(scheme: 'file', path: newFilePath.toFilePath()));
-    // final packageConfig = PackageConfig.empty.addPackage(sidecarPackage);
-    // addPackageConfig(packageConfig);
     addPackageConfig(newPackageConfig);
     newPubspecYamlFile(Pubspec(projectName));
     createRunner();

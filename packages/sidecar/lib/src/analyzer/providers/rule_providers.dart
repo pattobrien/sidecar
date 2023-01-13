@@ -47,11 +47,14 @@ final _scopedRulesForFileProvider =
 
 final scopeForRuleProvider =
     Provider.family<SidecarContext, RuleAnalyzedFile>((ref, ruleFile) {
+  final rule = ruleFile.rule;
   final baseContext = ref.watch(sidecarContextProvider(ruleFile.file))!;
   // TODO: use RuleScope to restrict updates
   // final scope = ruleFile.rule.scope;
-  final scopedData = ref.watch(totalDataResultsProvider);
-  return baseContext.copyWith(data: scopedData);
+  // final scopedData = ref.watch(totalDataResultsProvider
+  //     .select((value) => rule.scope.dataSelector(value)));
+  // return baseContext.copyWith(data: scopedData.toSet());
+  return baseContext;
 });
 
 final ProviderFamily<Set<Lint>, AnalyzedFile> scopedLintRulesForFileProvider =
