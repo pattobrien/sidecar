@@ -7,6 +7,8 @@ class RuleScope {
 
   final Selector<Iterable<TotalDataResult>> dataSelector;
 
+  static const empty = RuleScope();
+
   // void x() {
   //   final x = ProviderContainer();
   //   final data = x.read(dataProvider.select(dataSelector));
@@ -16,7 +18,7 @@ class RuleScope {
 typedef Selector<T> = T Function(T results);
 
 Iterable<TotalDataResult> _defaultDataSelector(Iterable<TotalDataResult> val) =>
-    val;
+    [];
 
 // final dataProvider = Provider<Set<TotalData>>((ref) => {});
 
