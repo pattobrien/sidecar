@@ -1,0 +1,51 @@
+---
+title: Design System Insets
+sidebar_position: 5
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import ruleDefintion from "!!raw-loader!../../../../examples/hello_world_rules/lib/hello_world_rules.dart";
+import example from "!!raw-loader!../../../../examples/hello_world_rules/example/lib/example.dart";
+import pubspec from "!!raw-loader!../../../../examples/hello_world_rules/pubspec.yaml";
+import {
+  trimSnippet,
+  CodeSnippet,
+} from "../../src/components/CodeSnippet";
+
+### Learning Objectives
+
+- Multiple similar use cases (EdgeInsets.all, .only, .symmetric)
+- How can we scale the logic without duplicating logic for each use case?
+- Using annotations to mark our designSystem
+- Using Sidecar test suite to account for all use cases
+- Using debugger ?
+
+### Planning
+
+As part of our design system lint package, we want to enforce strict sizes for a number of various Widgets, including:
+
+- SizedBox height and width
+- Container height and width
+- EdgeInsets of any Margin or Padding
+- others ?
+
+Unfortunately, there are no common themes between the fields we want to enforce, besides the fact that they take doubles. Therefore, we will need to handle each of these cases separately.
+
+> It's important to consider if each case should be handled within its own rule, or if all cases should be handled in one rule.
+
+If we focus on EdgeInsets, we can see that there are variety of different fields that we will want to prevent integer assignment to:
+
+BAD:
+
+- EdgeInsets.all(10.0)
+- EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0)
+- EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0, bottom: 10.0)
+- EdgeInsets.only(top: someRandomVariable)
+
+GOOD:
+
+- EdgeInsets.only(top: someDesignSystemVariable)
+
+In this case, it would be very beneficial to create unit tests that will help us think of all the use cases in which we want to display a lint error.
+
+

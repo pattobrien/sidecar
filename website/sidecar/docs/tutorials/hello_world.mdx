@@ -1,0 +1,50 @@
+---
+title: Hello World
+sidebar_position: 1
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import ruleDefintion from "!!raw-loader!../../../../examples/hello_world_rules/lib/hello_world_rules.dart";
+import example from "!!raw-loader!../../../../examples/hello_world_rules/example/lib/example.dart";
+import pubspec from "!!raw-loader!../../../../examples/hello_world_rules/pubspec.yaml";
+import {
+  trimSnippet,
+  CodeSnippet,
+} from "../../src/components/CodeSnippet";
+
+## Overview
+
+This tutorial will give you a brief introduction to creating rules. 
+
+At the conclusion of the tutorial, we will have the following code showing a lint message.
+
+<CodeBlock title="example/main.dart" language="dart">{trimSnippet(example)}</CodeBlock>
+
+### Learning Objectives
+
+After completion, we will know how to do the following:
+
+- Explore the base ```Rule``` class which every rule must extend
+- Declaring the rule in a way that allows it to be discovered by Sidecar
+- Create a Lint Rule that appears in our IDE
+
+Let's get started.
+
+## Creating a Rule Package
+
+- rule packages can contain 1 or more rules
+- ```dart create hello_world_rules```
+- import Sidecar and analyzer packages
+
+## Defining our Rule
+
+- explain the thought-process behind what we want the lint to do
+- extend Rule base class and Lint
+- use Simple String literal visitor
+- LintCode explanation
+- adding lint code to package's pubspec.yaml file
+
+## Validating our LintRule in IDE
+
+- Create an example app (dart command)
+- add string
