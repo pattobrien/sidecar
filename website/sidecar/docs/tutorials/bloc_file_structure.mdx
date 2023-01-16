@@ -14,14 +14,55 @@ import {
 
 ## Overview
 
-Prevent developers from putting bloc code in UI files.
+Let's say we want to enforce all developers on our Flutter app to use a feature-first project structure.
+
+A typical feature-first folder structure for a Flutter app may look something like the following:
+
+```
+├── core
+├── features
+│   ├── cart
+│   │   ├── data
+│   │   │   ├── models
+│   │   │   ├── repositories
+│   │   │   ├── services
+│   │   ├── domain
+│   │   │   ├── entities
+│   │   │   ├── repositories
+│   │   ├── presentation
+│   │   │   ├── controller 
+│   │   │   ├── view
+```
+
+Since each layer category will have its own definition of what code should be allowed in it,
+this tutorial will focus on disallowing the creation of BLoC classes in any folder besides
+the presentation > controller layer.
 
 ### Learning Objectives
 
 - Why would we want to create a Lint Rule ? Ans: to enforce some rules on our codebase
-
-Let's say we want to enforce all developers on our Flutter app to use a feature-first project structure.
-
 - Conditional lint rule
 - Inspects path of ResolvedUnitResult
 - Using context variables (like ```unit```)
+
+
+## Define Requirements
+
+Determining the logic of a Lint rule can be tricky. For this feature-first BLoC rule, we want to prevent a developer from
+creating a bloc class outside of presentation > controller, but this can possibly be done in different ways.
+Additionally, we want to be mindful that the performance of all of our lints could be negatively affected if
+one lint rule is written in an inefficient way, so we need to write our lint in an efficient way.
+
+Therefore, the logic of our rule will be:
+
+1. Use the `includes` getter of LintRule to restrict our rule from executing on anything besides `/presentation/controller/` folders.
+2. Check if a given unit imports package:bloc; if not, we exit.
+3. Check if any particular class declaration extends `BlocBase`.
+
+With requirements defined, we can move onto the build phase.
+
+
+## Notes
+
+- Mention packages that try to solve folder structure (but dont do so)
+- Include steps to set up `sidecar_lints` to assist with rule creation

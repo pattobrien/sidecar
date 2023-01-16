@@ -1,0 +1,49 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "sidecar",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "snippets",
+            "cwd": "docs/usage/snippets",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "snippets (profile mode)",
+            "cwd": "docs/usage/snippets",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "snippets (release mode)",
+            "cwd": "docs/usage/snippets",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "bloc_feature_structure",
+            "program": "lib/src/tutorials/bloc_feature_structure/example/.dart_tool/sidecar/debug.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--enable-vm-service",
+                "--debug",
+            ]
+        },
+        {
+            "name": "hello_world",
+            "cwd": "lib/src/tutorials/hello_world",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

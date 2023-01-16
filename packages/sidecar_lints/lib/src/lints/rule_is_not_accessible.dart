@@ -26,16 +26,24 @@ class RuleIsNotAccessible extends LintRule {
   @override
   void visitClassDeclaration(ClassDeclaration node) {
     if (!isSidecarRule(node)) return;
-
-    final data = context.data
-        .firstWhereOrNull((element) => element.code == kPublicRulesCode)
-        ?.data;
-
-    if (data == null) return;
-    final classes = data.first as List<ClassElement>;
-
-    if (classes.any((clazz) => clazz == node.declaredElement2)) return;
+    // final libPath = '';
+    // final libUnit = await context.currentSession.getResolvedUnit(libPath);
 
     reportAstNode(node.name, message: _message);
   }
+  // @override
+  // void visitClassDeclaration(ClassDeclaration node) {
+  //   if (!isSidecarRule(node)) return;
+
+  //   final data = context.data
+  //       .firstWhereOrNull((element) => element.code == kPublicRulesCode)
+  //       ?.data;
+
+  //   if (data == null) return;
+  //   final classes = data.first as List<ClassElement>;
+
+  //   if (classes.any((clazz) => clazz == node.declaredElement2)) return;
+
+  //   reportAstNode(node.name, message: _message);
+  // }
 }
