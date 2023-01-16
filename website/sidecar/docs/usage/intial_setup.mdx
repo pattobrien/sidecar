@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+description: Setup rules for use within an IDE or CLI.
 ---
 
 import CodeBlock from '@theme/CodeBlock';
@@ -14,18 +15,21 @@ import {
 
 # Initial Setup
 
-There are 2 modes which Sidecar packages can be run within a Dart or Flutter Project: IDE Server or Cli mode.
+Sidecar is used via Sidecar-based rule packages like [design_system_lints](https://pub.dev/packages/design_system_lints).
+
+There are 2 modes which these packages can be run within a Dart or Flutter Project: IDE Server or Cli mode.
 
 ## IDE Server Mode <a name="server-usage"></a>
 
 ### Requirements
 
-- Dart SDK v2.17.0+
 - Supported IDE with Extension for Dart Language Server
+- Dart SDK v2.17.0+
 
 ### Setup Instructions
 
-To enable any Sidecar-based package (like [design_system_lints](https://pub.dev/packages/design_system_lints)) to display lints and assist recommendations within your IDE, perform the following setup steps:
+To enable any Sidecar-based package like [design_system_lints](https://pub.dev/packages/design_system_lints)
+to display lints and assist recommendations within your IDE, perform the following setup steps:
 
 1. Depend on the lint package:
 
@@ -35,7 +39,7 @@ To enable any Sidecar-based package (like [design_system_lints](https://pub.dev/
 
 <CodeBlock title="sidecar.yaml" language="yaml">{trimSnippet(main)}</CodeBlock>
 
-3. Enable the plugin to run by adding ```sidecar``` to the list of plugins in ```analysis_options.yaml```
+3. Enable the Sidecar plugin to run by adding ```sidecar``` to the list of plugins in ```analysis_options.yaml```
 
 <CodeBlock title="analysis_options.yaml" language="yaml">{trimSnippet(analysisOptions)}</CodeBlock>
 

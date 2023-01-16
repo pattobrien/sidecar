@@ -6,6 +6,10 @@ sidebar_position: 1
 import CodeBlock from '@theme/CodeBlock';
 import ruleDefintion from "!!raw-loader!../../../../examples/hello_world_rules/lib/hello_world_rules.dart";
 import example from "!!raw-loader!../../../../examples/hello_world_rules/example/lib/example.dart";
+import step0 from "!!raw-loader!../../lib/src/tutorials/hello_world/lib/step0.dart";
+import step1 from "!!raw-loader!../../lib/src/tutorials/hello_world/lib/step1.dart";
+import step2 from "!!raw-loader!../../lib/src/tutorials/hello_world/lib/step2.dart";
+import step3 from "!!raw-loader!../../lib/src/tutorials/hello_world/lib/step3.dart";
 import pubspec from "!!raw-loader!../../../../examples/hello_world_rules/pubspec.yaml";
 import {
   trimSnippet,
@@ -52,17 +56,7 @@ dart pub add analyzer
 
 Though a rule package can contain one or more rules, for this example we'll create a single Lint Rule.
 
-```
-import 'package:sidecar/sidecar.dart';
-
-class HelloWorld extends LintRule {
-  @override
-  LintCode get code => const LintCode('hello_world', package: 'hello_world_rules');
-
-  ...
-
-}
-```
+<CodeBlock  language="dart">{trimSnippet(step0)}</CodeBlock>
 
 The summary of all Sidecar Rule requirements are:
 
@@ -83,68 +77,21 @@ Our requirements are therefore:
 In order to analyze all Strings in a particular file, we must override the `visitSimpleStringLiteral` method.
  In later tutorials, we will cover how to determine which visit method(s) to use for a given use case.
 
- ```
-import 'package:analyzer/dart/ast/ast.dart';
-import 'package:sidecar/sidecar.dart';
 
-class HelloWorld extends LintRule {
-  ...
-  @override
-  void visitSimpleStringLiteral(SimpleStringLiteral node) {
-    // TODO: implement visitSimpleStringLiteral
-    super.visitSimpleStringLiteral(node);
-  }
-}
-```
+<CodeBlock title="lib/hello_world.dart" language="dart">{trimSnippet(step1)}</CodeBlock>
 
 The takeaway here is that the logic we write within this method will be executed for every String literal that appears in our codebase, 
 and the information of this code will be delivered via the `node` parameter of all visit methods. 
 
 For our use case, we want to check if the particular String contains the code 'Is there anybody there?'. We do so easily by writing the following logic:
 
-```
-import 'package:analyzer/dart/ast/ast.dart';
-import 'package:sidecar/sidecar.dart';
-
-class HelloWorld extends LintRule {
-  ...
-  @override
-  void visitSimpleStringLiteral(SimpleStringLiteral node) {
-    final stringValue = node.value;
-    if (stringValue == 'Is there anybody there?') {
-      reportAstNode(node, message: 'Hello world!');
-    }
-  }
-}
-```
+<CodeBlock language="dart">{trimSnippet(step2)}</CodeBlock>
 
 The last thing we must do for our newly created Rule class is add our rule's `visitSimpleStringLiteral` method to Sidecar's NodeRegistry; 
 without this step, our visitor method will never be executed.
 
-```
-import 'package:analyzer/dart/ast/ast.dart';
-import 'package:sidecar/sidecar.dart';
 
-class HelloWorld extends LintRule {
- 
-  @override
-  LintCode get code => const LintCode('hello_world', package: 'hello_world_rules'); 
-
-  @override
-  void initializeVisitor(NodeRegistry registry) {
-    registry.addSimpleStringLiteral(this);
-  }
-
-  @override
-  void visitSimpleStringLiteral(SimpleStringLiteral node) {
-    final stringValue = node.value;
-    if (stringValue == 'Is there anybody there?') {
-      reportAstNode(node, message: 'Hello world!');
-    }
-    super.visitSimpleStringLiteral(node);
-  }
-}
-```
+<CodeBlock language="dart">{trimSnippet(step3)}</CodeBlock>
 
 We've now fully defined our `HelloWorld` rule class!
 
