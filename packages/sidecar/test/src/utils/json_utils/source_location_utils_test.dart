@@ -30,8 +30,12 @@ void main() {
       final location = sourceLocationFromJson(json);
       expect(
         location,
-        SourceLocation(10,
-            sourceUrl: Directory.current.path, line: 1, column: 10),
+        SourceLocation(
+          10,
+          sourceUrl: Uri.file(Directory.current.path),
+          line: 1,
+          column: 10,
+        ),
       );
     });
   });
