@@ -9,13 +9,19 @@ import example from "!!raw-loader!../../../../examples/hello_world_rules/example
 import pubspec from "!!raw-loader!../../../../examples/hello_world_rules/pubspec.yaml";
 import {
   trimSnippet,
+  generateSnippet,
   CodeSnippet,
 } from "../../src/components/CodeSnippet";
 
+## Introduction
+
+In the previous tutorial, we learned the basics of creating a LintRule and how to
+enable rules in an example app. Now we'll take what we learned to come up with a
+more real use case: finding any string that doesn't come from a translation library.
 
 ## Objective
 
-Find all string literals used in 'Text' widgets
+Find all string literals used in 'Text' widgets.
 
 ### Learning Objectives
 

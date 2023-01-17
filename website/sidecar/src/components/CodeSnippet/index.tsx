@@ -6,6 +6,29 @@ const SKIP_END = "/* SKIP END */";
 const START_AT = "/* SNIPPET START */";
 const END_AT = "/* SNIPPET END */";
 
+const SNIPPET_START = "/* SNIPPET START */";
+const SNIPPET_END = "/* SNIPPET END */";
+
+export function generateSnippet(contents: string, snippets: Array<string>): string {
+  // find all snippet comments in code
+  //    extract the snippet name
+  //    if snippet name doesnt match any value from snippets array => remove that code
+  const startAtIndex = contents.indexOf(START_AT);
+  if (startAtIndex < 0) return contents;
+
+  let endAtIndex = contents.indexOf(END_AT);
+  if (endAtIndex < 0) endAtIndex = undefined;
+
+  contents = contents
+    .substring(startAtIndex + START_AT.length, endAtIndex)
+    .trim();
+
+  return contents.replace(
+    /\n?(?:\/\* SNIP \*\/)(?:\n|.)+(?:\/\* SKIP END \*\/)/,
+    ""
+  );
+}
+
 export function trimSnippet(snippet: string): string {
   const startAtIndex = snippet.indexOf(START_AT);
   if (startAtIndex < 0) return snippet;

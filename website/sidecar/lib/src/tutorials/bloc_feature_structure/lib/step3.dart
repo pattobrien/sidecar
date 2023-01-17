@@ -1,10 +1,10 @@
 /* SNIPPET START */
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/dart/element/element.dart';
 import 'package:glob/glob.dart';
 import 'package:sidecar/sidecar.dart';
 
 class BlocOutsideControllerLayer extends LintRule {
+  /* SKIP */
   // we can use variables for better code legibility
   static const _id = 'bloc_outside_controller_layer';
   static const _package = 'bloc_feature_structure';
@@ -15,31 +15,23 @@ class BlocOutsideControllerLayer extends LintRule {
 
   @override
   void visitCompilationUnit(CompilationUnit node) {
-    if (applicationFolderGlob.matches(unit.path)) return;
-
-    unitHasBlocImport = doesHaveBlocImport(node);
+    final applicationFolderGlob = Glob('**/features/**/application/**');
+    isApplicationFile = applicationFolderGlob.matches(unit.path);
   }
 
-  bool doesHaveBlocImport(CompilationUnit node) {
-    final blocImports = node.directives
-        .whereType<ImportDirective>()
-        .map((i) => i.element2?.uri)
-        .whereType<DirectiveUriWithSource>()
-        .where((e) => e.relativeUri.pathSegments.first == 'bloc');
-    if (blocImports.isNotEmpty) unitHasBlocImport = true;
-    return false;
-  }
-
-  late bool unitHasBlocImport;
+  late final bool isApplicationFile;
 
   @override
   void initializeVisitor(NodeRegistry registry) =>
       registry.addCompilationUnit(this);
 
+  /* SKIP END */
   @override
   void visitClassDeclaration(ClassDeclaration node) {
-    if (!unitHasBlocImport) return;
+    // skip any files within an `application` folder
+    if (isApplicationFile) return;
 
+    final blocBase = TypeChecker.fromName('BlocBase', packageName: 'bloc');
     final classType = node.declaredElement2?.thisType;
     if (!blocBase.isAssignableFromType(classType)) return;
 
@@ -47,7 +39,4 @@ class BlocOutsideControllerLayer extends LintRule {
   }
 }
 
-final applicationFolderGlob = Glob('**/features/**/application/**');
-final blocBase =
-    TypeChecker.fromName('BlocBase', packageName: 'bloc');
 /* SNIPPET END */

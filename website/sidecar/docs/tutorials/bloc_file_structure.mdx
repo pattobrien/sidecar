@@ -5,11 +5,16 @@ sidebar_position: 3
 
 import CodeBlock from '@theme/CodeBlock';
 import ruleDefintion from "!!raw-loader!../../../../examples/hello_world_rules/lib/hello_world_rules.dart";
-import example from "!!raw-loader!../../../../examples/hello_world_rules/example/lib/example.dart";
+import step0 from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step0.dart";
+import step1 from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step1.dart";
+import step1a from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step1a.yaml";
+import step2 from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step2.dart";
+import step3 from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step3.dart";
 import pubspec from "!!raw-loader!../../../../examples/hello_world_rules/pubspec.yaml";
 import {
   trimSnippet,
   CodeSnippet,
+  generateSnippet,
 } from "../../src/components/CodeSnippet";
 
 ## Overview
@@ -30,9 +35,18 @@ A typical feature-first folder structure for a Flutter app may look something li
 │   │   │   ├── entities
 │   │   │   ├── repositories
 │   │   ├── presentation
-│   │   │   ├── controller 
-│   │   │   ├── view
+│   │   │   ├── controllers
+│   │   │   ├── states
+│   │   │   ├── widgets
 ```
+> *The above structure is roughly based on [this great article series](https://codewithandrea.com/articles/flutter-app-architecture-riverpod-introduction/)
+> on Riverpod architecture by Andrea Bizzotto.*
+
+In order to enforce the use of such a structure programmatically, we could implement any of the following cases:
+
+- only permit the declaration of widgets in the appropriate `widgets` folders
+- only permit the declaration of business logic in `controllers` folder (such as `BlocBase` or `Notifier` classes)
+- prevent json serialization/deserialization from anywhere besides `data` layer
 
 Since each layer category will have its own definition of what code should be allowed in it,
 this tutorial will focus on disallowing the creation of BLoC classes in any folder besides
@@ -41,8 +55,7 @@ the presentation > controller layer.
 ### Learning Objectives
 
 - Why would we want to create a Lint Rule ? Ans: to enforce some rules on our codebase
-- Conditional lint rule
-- Inspects path of ResolvedUnitResult
+- Two-part LintRule that checks unit file path before proceeding 
 - Using context variables (like ```unit```)
 
 
@@ -51,18 +64,46 @@ the presentation > controller layer.
 Determining the logic of a Lint rule can be tricky. For this feature-first BLoC rule, we want to prevent a developer from
 creating a bloc class outside of presentation > controller, but this can possibly be done in different ways.
 Additionally, we want to be mindful that the performance of all of our lints could be negatively affected if
-one lint rule is written in an inefficient way, so we need to write our lint in an efficient way.
+just one lint rule is written in an inefficient way, so we need to write our lint in an efficient way.
 
 Therefore, the logic of our rule will be:
 
-1. Use the `includes` getter of LintRule to restrict our rule from executing on anything besides `/presentation/controller/` folders.
-2. Check if a given unit imports package:bloc; if not, we exit.
-3. Check if any particular class declaration extends `BlocBase`.
+1. Restrict our rule from executing on anything besides files contained in `**/presentation/controller/**` folders
+2. Check if any particular class declaration extends `BlocBase`
+3. OPTIONAL: Check if the particular file imports package:bloc before checking all class declarations for a BlocBase extension
 
 With requirements defined, we can move onto the build phase.
 
+## Creating our Rule
+
+Lets start by creating a rule package `bloc_feature_structure` and adding `sidecar`
+and `analyzer` to `pubspec.yaml`.
+
+
+```bash
+dart create bloc_feature_structure
+```
+
+<CodeBlock title="pubspec.yaml" language="dart">{generateSnippet(step1a, [''])}</CodeBlock>
+
+Our first course of action is to create our LintRule class and its respective LintCode.
+
+
+<CodeBlock title="lib/src/bloc_outside_controller_layer.dart" language="dart">{generateSnippet(step1, [''])}</CodeBlock>
+
+Just as we did in the previous tutorial, we ensure that the class name is the PascalCase representation of the LintCode.id
+that we assign.
+
+From here we can build out the first of our requirements: to only analyze files outside of the application folder.
+If you remember back to our feature-first project structure,
+
+<CodeBlock language="dart">{trimSnippet(step2, [''])}</CodeBlock>
+
+Finally, if 
+<CodeBlock language="dart">{trimSnippet(step3, [''])}</CodeBlock>
 
 ## Notes
 
 - Mention packages that try to solve folder structure (but dont do so)
 - Include steps to set up `sidecar_lints` to assist with rule creation
+- Mention future benchmarking objective to help optimize rules
