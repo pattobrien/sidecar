@@ -65,6 +65,8 @@ class EntrypointBuilderService {
     final relPath = p.join(kDartTool, kSidecarPluginName, 'constructors.dart');
     print('relPath: $relPath');
     final constructorUri = packageRoot.resolve(relPath);
+    print('packageRoot: ${packageRoot.path}');
+    print('packageRoot toFilePath: ${packageRoot.toFilePath()}');
     print('constructorUri: ${constructorUri.path}');
     print('constructorUri: ${constructorUri.pathSegments}');
     final constructorFile =
