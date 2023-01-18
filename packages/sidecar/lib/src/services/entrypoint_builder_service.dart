@@ -59,18 +59,13 @@ class EntrypointBuilderService {
   }
 
   bool _doesFileNeedUpdates(Uri packageRoot) {
-    final config =
+    final configPath =
         p.join(packageRoot.toFilePath(), kDartTool, kPackageConfigJson);
-    final configFile = _resourceProvider.getFile(config);
-    final relPath = p.join(kDartTool, kSidecarPluginName, 'constructors.dart');
-    print('relPath: $relPath');
-    final constructorUri = packageRoot.resolve(relPath);
-    print('packageRoot: ${packageRoot.path}');
-    print('packageRoot toFilePath: ${packageRoot.toFilePath()}');
-    print('constructorUri: ${constructorUri.path}');
-    print('constructorUri: ${constructorUri.pathSegments}');
-    final constructorFile =
-        _resourceProvider.getFile(constructorUri.normalizePath().toFilePath());
+    final configFile = _resourceProvider.getFile(configPath);
+
+    final constructorPath = p.join(packageRoot.toFilePath(), kDartTool,
+        kSidecarPluginName, 'constructors.dart');
+    final constructorFile = _resourceProvider.getFile(constructorPath);
 
     if (configFile.exists && constructorFile.exists) {
       final configStamp = configFile.modificationStamp;
