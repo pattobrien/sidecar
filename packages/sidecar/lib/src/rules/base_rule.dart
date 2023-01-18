@@ -207,9 +207,9 @@ mixin QuickFix on Lint {
     String? correction,
     EditsComputer? editsComputer,
   }) =>
-      reportLint(
-        entity,
-        message: message,
+      _reportSpan(
+        entity.toSourceSpan(unit),
+        message,
         correction: correction,
         editsComputer: editsComputer,
       );
