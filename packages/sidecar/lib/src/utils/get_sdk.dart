@@ -11,8 +11,9 @@ String getDartSdkPathForPackage(Uri root, ResourceProvider resourceProvider) {
   final flutterSdk = getFlutterSdkForPackage(root, resourceProvider);
   if (flutterSdk == null) return util.getSdkPath();
   print('flutter sdk toFilePath: ${flutterSdk.toFilePath()}');
-  final resolvedUri = flutterSdk.resolve(p.join('bin', 'cache', 'dart-sdk'));
-  return resolvedUri.toFilePath();
+  final dartSdkUri = flutterSdk.resolve(p.join('bin', 'cache', 'dart-sdk'));
+  print('dart sdk path: ${dartSdkUri.path}');
+  return dartSdkUri.toFilePath();
 }
 
 Uri? getFlutterSdkForPackage(Uri root, ResourceProvider resourceProvider) {
