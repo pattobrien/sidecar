@@ -62,9 +62,9 @@ class EntrypointBuilderService {
     final config =
         p.join(packageRoot.toFilePath(), kDartTool, kPackageConfigJson);
     final configFile = _resourceProvider.getFile(config);
-
-    final constructorUri = packageRoot
-        .resolve(p.join(kDartTool, kSidecarPluginName, 'constructors.dart'));
+    final relPath = p.join(kDartTool, kSidecarPluginName, 'constructors.dart');
+    print('relPath: $relPath');
+    final constructorUri = packageRoot.resolve(relPath);
     print('constructorUri: ${constructorUri.path}');
     final constructorFile =
         _resourceProvider.getFile(constructorUri.normalizePath().toFilePath());
