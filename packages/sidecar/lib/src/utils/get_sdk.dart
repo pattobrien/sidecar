@@ -10,7 +10,9 @@ import '../services/active_project_service.dart';
 String getDartSdkPathForPackage(Uri root, ResourceProvider resourceProvider) {
   final flutterSdk = getFlutterSdkForPackage(root, resourceProvider);
   if (flutterSdk == null) return util.getSdkPath();
-  return flutterSdk.resolve(p.join('bin', 'cache', 'dart-sdk')).toFilePath();
+  print('flutter sdk toFilePath: ${flutterSdk.toFilePath()}');
+  final resolvedUri = flutterSdk.resolve(p.join('bin', 'cache', 'dart-sdk'));
+  return resolvedUri.toFilePath();
 }
 
 Uri? getFlutterSdkForPackage(Uri root, ResourceProvider resourceProvider) {
@@ -20,7 +22,11 @@ Uri? getFlutterSdkForPackage(Uri root, ResourceProvider resourceProvider) {
       .firstWhereOrNull((package) => package.name == 'flutter')
       ?.root;
   if (flutterPackage == null) return null;
+  print('flutter package file path:  ${flutterPackage.toFilePath()}');
   final flutterPackageDirectory = io.Directory.fromUri(flutterPackage);
+
+  print('flutter package directory:  ${flutterPackageDirectory.path}');
   final sdkDirectory = flutterPackageDirectory.parent.parent;
+  print('flutter sdk Directory:  ${sdkDirectory.path}');
   return sdkDirectory.uri;
 }
