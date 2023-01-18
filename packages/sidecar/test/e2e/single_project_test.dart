@@ -29,15 +29,15 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUpAll(() async {
-      workspace = await createWorkspace(constructors: constructors);
-      app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
+    setUpAll(() {
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
       app.deleteLibFolder();
     });
 
-    setUp(() async {
+    setUp(() {
       reporter = MockStdoutReporter();
-      app.deleteLibFolder();
+      // app.deleteLibFolder();
     });
 
     test('1 lint result', () async {

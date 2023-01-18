@@ -1,10 +1,10 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/source/line_info.dart';
-import 'package:intl_lints/src/constants.dart';
-import 'package:sidecar/sidecar.dart';
 import 'package:flutter_analyzer_utils/foundation.dart';
 
-const packageId = 'intl_lints';
+import 'package:sidecar/sidecar.dart';
+
+import 'constants.dart';
 
 class HardcodedTextString extends LintRule {
   static const _id = 'hardcoded_text_string';

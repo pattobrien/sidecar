@@ -19,13 +19,13 @@ const _defaultWorkspacePath = 'workspace';
 
 late ProviderContainer workspaceContainer;
 
-Future<WorkspaceResource> createWorkspace({
+WorkspaceResource createWorkspace({
   required List<SidecarBaseConstructor> constructors,
   ResourceProvider? resourceProvider,
   FileSystem? fileSystem,
   ProviderContainer? container,
   String? rootPath,
-}) async {
+}) {
   workspaceContainer = ProviderContainer(overrides: [
     ruleConstructorProvider.overrideWithValue(constructors),
   ]);
@@ -33,16 +33,16 @@ Future<WorkspaceResource> createWorkspace({
   final defaultProvider = workspaceContainer.read(serverResourceProvider);
   final provider = resourceProvider ?? defaultProvider;
   final root =
-      io.Directory.systemTemp.uri.resolve(p.join(_defaultWorkspacePath));
+      p.join(io.Directory.systemTemp.uri.toFilePath(), _defaultWorkspacePath);
   // print('workspace root: ${root.path}');
   // final uuidPath = const Uuid().v4();
   final workspace = WorkspaceResource(
       resourceProvider: provider,
       fileSystem: fileSystem,
-      rootPath: rootPath ?? root.toFilePath());
+      rootPath: rootPath ?? root);
 
   // addTearDown(() => workspace.delete());
-  await workspace.init();
+  workspace.init();
   return workspace;
 }
 
@@ -70,7 +70,7 @@ class WorkspaceResource with ResourceMixin {
 
   Folder get folder => resourceProvider.getFolder(rootPath);
 
-  Future<void> init() async {
+  void init() {
     folder.create();
   }
 
@@ -91,12 +91,12 @@ class WorkspaceResource with ResourceMixin {
 
   Stream<LintNotification> get lintStream => _controller.stream;
 
-  Future<PackageResource> createDartPackage({
+  PackageResource createDartPackage({
     String? name,
     String? parentDirectoryPath,
     bool isSidecarEnabled = true,
     SidecarSpec? sidecarYaml,
-  }) async {
+  }) {
     final package = PackageResource(
         parentDirectoryPath: parentDirectoryPath ?? rootPath,
         resourceProvider: resourceProvider,

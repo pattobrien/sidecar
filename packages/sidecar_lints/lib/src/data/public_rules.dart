@@ -21,7 +21,7 @@ class PublicRules extends DataRule {
     final packageRoot = context.currentSession.analysisContext.contextRoot.root;
     final packageName = packageRoot.shortName;
     final importLibrary =
-        packageRoot.toUri().resolve(p.join('lib', '$packageName.dart'));
+        packageRoot.getChildAssumingFile(p.join('lib', '$packageName.dart'));
 
     // only analyze lib/<package_name>.dart file; otherwise, exit
     if (unit.path != importLibrary.path) return;

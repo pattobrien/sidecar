@@ -19,7 +19,7 @@ import '../helpers/test_starter.dart';
 
 void main() {
   group('active package test - analysis_options.yaml', () {
-    final constructors = [HardcodedTextString.new];
+    final constructors = [AvoidStringLiteral.new];
     final sidecarYaml = SidecarSpec(includes: [
       Glob('lib/**')
     ], lints: {
@@ -35,13 +35,13 @@ void main() {
     late MockStdoutReporter reporter;
 
     setUpAll(() async {
-      workspace = await createWorkspace(constructors: constructors);
-      app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
       app.deleteLibFolder();
     });
 
     tearDown(() {
-      app.deleteLibFolder();
+      // app.deleteLibFolder();
     });
 
     setUp(() {
@@ -69,7 +69,7 @@ void main() {
   });
 
   group('active package - sidecar.yaml:', () {
-    final constructors = [HardcodedTextString.new];
+    final constructors = [AvoidStringLiteral.new];
     final sidecarYaml = SidecarSpec(includes: [
       Glob('lib/**')
     ], lints: {
@@ -83,8 +83,9 @@ void main() {
     late MockStdoutReporter reporter;
 
     setUpAll(() async {
-      workspace = await createWorkspace(constructors: constructors);
-      app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      app.deleteLibFolder();
     });
 
     setUp(() {

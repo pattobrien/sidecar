@@ -21,12 +21,12 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUpAll(() async {
-      workspace = await createWorkspace(constructors: constructors);
-      app = await workspace.createDartPackage();
+    setUpAll(() {
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage();
     });
 
-    setUp(() async {
+    setUp(() {
       reporter = MockStdoutReporter();
     });
 

@@ -35,24 +35,21 @@ class EntrypointBuilderService {
     Uri pluginRoot,
   ) {
     final pluginSourceFolder =
-        pluginRoot.resolve(p.join('tools', 'analyzer_plugin', 'bin'));
-    final sourceExecutableFolder = _resourceProvider
-        .getFolder(pluginSourceFolder.normalizePath().toFilePath());
+        p.join(pluginRoot.toFilePath(), 'tools', 'analyzer_plugin', 'bin');
+    final sourceExecutableFolder =
+        _resourceProvider.getFolder(pluginSourceFolder);
 
     final pluginFileResources = sourceExecutableFolder.getChildren();
 
-    String _pluginPath(String path, {required Uri newDirectory}) {
-      return p.join(
-          newDirectory.normalizePath().toFilePath(),
-          p.relative(path,
-              from: pluginSourceFolder.normalizePath().toFilePath()));
+    String _pluginPath(String path, {required String newDirectory}) {
+      return p.join(newDirectory, p.relative(path, from: pluginSourceFolder));
     }
 
     pluginFileResources.whereType<File>().forEach((sourceFileEntity) {
-      final newDirectory =
-          packageRoot.resolve(p.join(kDartTool, kSidecarPluginName));
+      final newDirectoryPath =
+          p.join(packageRoot.toFilePath(), kDartTool, kSidecarPluginName);
       final newPath =
-          _pluginPath(sourceFileEntity.path, newDirectory: newDirectory);
+          _pluginPath(sourceFileEntity.path, newDirectory: newDirectoryPath);
       final newFile = _resourceProvider.getFile(newPath);
       sourceFileEntity.copyTo(newFile.parent);
     });
@@ -80,16 +77,15 @@ class EntrypointBuilderService {
     Uri packageRoot,
     List<RulePackageConfiguration> lintPackageConfigurations,
   ) {
-    final constructorUri = packageRoot
-        .resolve(p.join(kDartTool, kSidecarPluginName, 'constructors.dart'));
+    final constructorPath = p.join(packageRoot.toFilePath(), kDartTool,
+        kSidecarPluginName, 'constructors.dart');
     final service = ActiveProjectService(resourceProvider: _resourceProvider);
     final config = service.getPackageConfig(packageRoot);
     final sidecarPackages = service.getSidecarDependencies(config);
     logger.finer(
         'setupBootstrapper || adding ${sidecarPackages.length} packages');
     final content = generateEntrypointContent(sidecarPackages);
-    final file =
-        _resourceProvider.getFile(constructorUri.normalizePath().toFilePath());
+    final file = _resourceProvider.getFile(constructorPath);
     file.writeAsStringSync(content);
   }
 
