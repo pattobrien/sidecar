@@ -38,7 +38,7 @@ class CliClient extends AnalyzerClient {
       Uri file, String content) async {
     // if file = package_config.json file of any runners, then rebuild runner
     // else, send file change to all applicable runners
-    final analyzedFile = runner.getAnalyzedFile(file.path);
+    final analyzedFile = runner.getAnalyzedFile(file.toFilePath());
     if (analyzedFile == null) return null;
     final changedFileRequest = FileUpdateEvent.add(analyzedFile, content);
     final request = SidecarRequest.updateFiles([changedFileRequest]);
