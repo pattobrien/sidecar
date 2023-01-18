@@ -38,19 +38,18 @@ jobs:
         with:
           fetch-depth: 2
 
-      - uses: subosito/flutter-action@v2.7.1
+      - uses: subosito/flutter-action@v2.8.0
         with:
-          # channel: ${{ matrix.channel }}
           channel: stable
           flutter-version: ${{ matrix.flutter-version }}
           # cache: true
           # cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
 
-      - name: Add pub cache bin to PATH
-        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      # - name: Add pub cache bin to PATH
+      #   run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
 
-      - name: Add pub cache to PATH
-        run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
+      # - name: Add pub cache to PATH
+      #   run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: flutter pub get
