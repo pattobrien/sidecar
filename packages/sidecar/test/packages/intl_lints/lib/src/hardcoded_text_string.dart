@@ -1,6 +1,5 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/source/line_info.dart';
-import 'package:flutter_analyzer_utils/foundation.dart';
 
 import 'package:sidecar/sidecar.dart';
 
