@@ -34,14 +34,10 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUpAll(() async {
+    setUpAll(() {
       workspace = createWorkspace(constructors: constructors);
       app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
       app.deleteLibFolder();
-    });
-
-    tearDown(() {
-      // app.deleteLibFolder();
     });
 
     setUp(() {
@@ -82,7 +78,7 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUpAll(() async {
+    setUpAll(() {
       workspace = createWorkspace(constructors: constructors);
       app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
       app.deleteLibFolder();
