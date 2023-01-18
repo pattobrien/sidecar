@@ -66,6 +66,7 @@ class EntrypointBuilderService {
     print('relPath: $relPath');
     final constructorUri = packageRoot.resolve(relPath);
     print('constructorUri: ${constructorUri.path}');
+    print('constructorUri: ${constructorUri.pathSegments}');
     final constructorFile =
         _resourceProvider.getFile(constructorUri.normalizePath().toFilePath());
 
