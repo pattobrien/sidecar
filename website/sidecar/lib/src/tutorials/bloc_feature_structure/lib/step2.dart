@@ -4,14 +4,14 @@ import 'package:glob/glob.dart';
 import 'package:sidecar/sidecar.dart';
 
 class BlocOutsideControllerLayer extends LintRule {
-  /* SKIP */
-  // we can use variables for better code legibility
-  static const _id = 'bloc_outside_controller_layer';
+  // {@snippet: lint_code}
+  static const id = 'bloc_outside_controller_layer';
   static const _package = 'bloc_feature_structure';
   static const _message = 'Logic should be created in application folders.';
 
   @override
-  LintCode get code => const LintCode(_id, package: _package);
+  LintCode get code => const LintCode(id, package: _package);
+  // {@snippet_end: lint_code}
 
   /* SKIP END */
   @override
@@ -33,6 +33,4 @@ class BlocOutsideControllerLayer extends LintRule {
 
     // TODO: check if declaration is a bloc class
   }
-}
-
-/* SNIPPET END */
+} /* SNIPPET END */
