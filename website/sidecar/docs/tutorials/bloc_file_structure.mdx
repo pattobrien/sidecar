@@ -96,17 +96,25 @@ Our first course of action is to create our LintRule class and its respective Li
 
 Just as we did in the previous tutorial, we ensure that the class name is the PascalCase representation of the LintCode.id
 that we assign.
-
+<!--
 From here we can build out the first of our requirements: to only analyze files outside of the application folder.
 If you remember back to our feature-first project structure,
-
+-->
 <CodeBlock language="dart">{trimSnippet(step2, [''])}</CodeBlock>
 
-Finally, if 
+
 <CodeBlock language="dart">{trimSnippet(step3, [''])}</CodeBlock>
+
+Completed code:
+
+<CodeBlock language="dart">{trimSnippet(step0, [''])}</CodeBlock>
+
+<!--
 
 ## Notes
 
 - Mention packages that try to solve folder structure (but dont do so)
 - Include steps to set up `sidecar_lints` to assist with rule creation
 - Mention future benchmarking objective to help optimize rules
+
+-->
