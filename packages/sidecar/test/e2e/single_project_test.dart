@@ -28,15 +28,14 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUpAll(() {
+    setUp(() {
       workspace = createWorkspace(constructors: constructors);
       app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
-      app.deleteLibFolder();
+      reporter = MockStdoutReporter();
     });
 
-    setUp(() {
-      reporter = MockStdoutReporter();
-      // app.deleteLibFolder();
+    tearDown(() {
+      workspace.delete();
     });
 
     test('1 lint result', () async {
@@ -67,6 +66,31 @@ void main() {
       // expect(results.length, 1);
       expectLints(results.first, []);
     });
+  });
+
+  group('single project quick fix results:', () {
+    final constructors = [AvoidStringLiteral.new];
+    final sidecarYaml = SidecarSpec(includes: [
+      Glob('lib/**')
+    ], lints: {
+      exampleRuleCode.package: LintPackageOptions(rules: {
+        exampleRuleCode.id: const LintOptions(),
+      }),
+    });
+
+    late PackageResource app;
+    late WorkspaceResource workspace;
+    late MockStdoutReporter reporter;
+
+    setUp(() {
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      reporter = MockStdoutReporter();
+    });
+
+    tearDown(() {
+      workspace.delete();
+    });
 
     test('1 quick fix results', () async {
       final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
@@ -81,6 +105,31 @@ void main() {
       final client = await analyzeTestResources(app.root, reporter);
       final results = await client.getQuickFixes(mainFile.path, 20);
       expect(results.length, 0);
+    });
+  });
+
+  group('single project updates:', () {
+    final constructors = [AvoidStringLiteral.new];
+    final sidecarYaml = SidecarSpec(includes: [
+      Glob('lib/**')
+    ], lints: {
+      exampleRuleCode.package: LintPackageOptions(rules: {
+        exampleRuleCode.id: const LintOptions(),
+      }),
+    });
+
+    late PackageResource app;
+    late WorkspaceResource workspace;
+    late MockStdoutReporter reporter;
+
+    setUp(() {
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      reporter = MockStdoutReporter();
+    });
+
+    tearDown(() {
+      workspace.delete();
     });
 
     test('file is updated with error', () async {

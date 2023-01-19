@@ -31,14 +31,17 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUpAll(() {
-      workspace = createWorkspace(constructors: constructors);
-      app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
-      app.deleteLibFolder();
-    });
+    // setUpAll(() {
+    // });
 
     setUp(() {
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
       reporter = MockStdoutReporter();
+    });
+
+    tearDown(() {
+      workspace.delete();
     });
 
     test('sidecar plugin is enabled', () async {
@@ -75,14 +78,14 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUpAll(() {
+    setUp(() {
       workspace = createWorkspace(constructors: constructors);
       app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
-      app.deleteLibFolder();
+      reporter = MockStdoutReporter();
     });
 
-    setUp(() {
-      reporter = MockStdoutReporter();
+    tearDown(() {
+      workspace.delete();
     });
 
     test('sidecar plugin is enabled', () async {

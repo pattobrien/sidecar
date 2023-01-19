@@ -116,6 +116,10 @@ class WorkspaceResource with ResourceMixin {
   void delete() {
     folder.delete();
     _controller.close();
+    for (final package in _packages) {
+      randomNames.add(package.projectName);
+    }
+    _packages.clear();
   }
 }
 
