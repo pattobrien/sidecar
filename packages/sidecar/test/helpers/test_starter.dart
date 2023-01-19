@@ -14,7 +14,7 @@ Future<AnalyzerClient> analyzeTestResources(
   Uri root,
   StdoutReporter reporter,
 ) async {
-  final testPath = root.toFilePath();
+  // final testPath = root.toFilePath();
   container = ProviderContainer(overrides: [
     analyzerClientProvider.overrideWithProvider(cliClientProvider),
     cliDirectoryProvider.overrideWithValue(root),
@@ -41,6 +41,6 @@ Future<int> runPubGet(Uri root) async {
     ['pub', 'get', '--offline'],
     workingDirectory: root.toFilePath(),
   );
-  // process.stdout.listen((event) => stdout.add(event));
+  process.stdout.listen((event) => stdout.add(event));
   return process.exitCode;
 }
