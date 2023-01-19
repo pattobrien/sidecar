@@ -11,7 +11,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('@site/static/img/undraw_mobile_development.svg').default,
     description: (
       <>
         Use custom lints and quick fixes just as easily as those included in the official Dart linter package.
@@ -20,7 +20,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Customize Your DevX',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('@site/static/img/undraw_development.svg').default,
     description: (
       <>
         Enforce rules that are perfectly tailored to your package or application.
@@ -29,7 +29,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Powered by Dart',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('@site/static/img/undraw_computer_dart_flutter.svg').default,
     description: (
       <>
         Sidecar was built around Dart and Flutter, so you can expect the same level of performance
