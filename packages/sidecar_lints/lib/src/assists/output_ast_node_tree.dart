@@ -5,9 +5,10 @@ import 'package:sidecar/sidecar.dart';
 import '../constants.dart';
 
 class OutputAstNodeTree extends AssistRule {
+  static const id = 'output_ast_node_tree';
+
   @override
-  AssistCode get code =>
-      const AssistCode('output_ast_node_tree', package: kPackageName);
+  AssistCode get code => const AssistCode(id, package: kPackageName);
 
   @override
   void initializeVisitor(NodeRegistry registry) {

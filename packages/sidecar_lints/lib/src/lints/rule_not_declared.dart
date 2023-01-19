@@ -10,7 +10,7 @@ import '../constants.dart';
 import '../utils.dart';
 
 class RuleNotDeclared extends LintRule with QuickFix {
-  static const _id = 'rule_not_declared';
+  static const id = 'rule_not_declared';
 
   static const _message = 'Rule is not declared in Pubspec';
   static const _idMessage = 'Rule id does not match Rule class name.';
@@ -21,7 +21,7 @@ class RuleNotDeclared extends LintRule with QuickFix {
   LintSeverity get defaultSeverity => LintSeverity.warning;
 
   @override
-  LintCode get code => const LintCode(_id, package: kPackageName, url: kUri);
+  LintCode get code => const LintCode(id, package: kPackageName, url: kUri);
 
   @override
   void initializeVisitor(NodeRegistry registry) {

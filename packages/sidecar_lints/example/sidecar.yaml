@@ -4,8 +4,10 @@ includes:
 lints:
   sidecar_lints:
     rules:
-      missing_visit_method_registration:
-      rule_not_declared:
+      # missing_visit_method_registration:
+      #   severity: info
+      # rule_not_declared:
+      #   severity: info
       rule_is_not_accessible:
 
 assists:
