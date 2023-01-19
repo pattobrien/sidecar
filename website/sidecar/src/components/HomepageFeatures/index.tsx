@@ -14,28 +14,26 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Use custom lints and quick fixes just as easily as those included in the official Dart linter package.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Customize Your DevX',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Enforce rules that are perfectly tailored to your package or application.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Powered by Dart',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Sidecar was built around Dart and Flutter, so you can expect the same level of performance
+        as the native Dart SDK toolchain.
       </>
     ),
   },

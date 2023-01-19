@@ -6,9 +6,9 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Sidecar',
-  tagline: 'Dinosaurs are cool',
-  url: 'https://your-docusaurus-test-site.com',
+  title: 'Sidecar Analyzer',
+  tagline: 'Enable a more personalized developer experience within your IDE.',
+  url: 'https://sidecaranalyzer.dev',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -16,7 +16,7 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
+  organizationName: 'pattobrien', // Usually your GitHub org/user name.
   projectName: 'sidecar', // Usually your repo name.
 
   // Even if you don't use internalization, you can use this field to set useful
