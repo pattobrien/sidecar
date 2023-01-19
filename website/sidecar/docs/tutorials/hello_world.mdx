@@ -98,9 +98,10 @@ We've now fully defined our `HelloWorld` rule class!
 
 ### Making our Rule Visible to Sidecar
 
+There are two other requirements that make our newly created rule visible to sidecar:
 
-- adding lint code to package's pubspec.yaml file
-- ensuring the rule is available from lib/hello_world_rules.dart
+- adding lint code to package's pubspec.yaml file (see: [sidecar_lints pubspec](https://github.com/pattobrien/sidecar/blob/master/packages/sidecar_lints/pubspec.yaml#L28))
+- ensuring the rule is available from lib/hello_world_rules.dart (see: [lib/sidecar_lints.dart](https://github.com/pattobrien/sidecar/blob/master/packages/sidecar_lints/lib/sidecar_lints.dart))
 
 ## Validating our LintRule in an IDE
 
@@ -142,10 +143,12 @@ only taking a few lines of code to write:
 ```
 On the otherhand, there are many individual requirements to abide by, and forgetting any
 of them results in no lint appearing at all.
-
+<!--
 - Rule Checklist (core concepts?)
-
+-->
 In the next tutorials, we will cover ways to help remember all of the rule requirements by using the package `sidecar_lints`.
+
+<!--
 
 - Link to next tutorial
 - Link to hello_world rule in github
@@ -155,3 +158,4 @@ In the next tutorials, we will cover ways to help remember all of the rule requi
 - When creating a rule that is meant to inspect some code, it's important for us to think about AstNode and Tokens. 
 - Rules are run for each CompilationUnit (Core Concept)
 - How can we determine which visitor method to use?
+-->

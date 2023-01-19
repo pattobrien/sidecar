@@ -1,0 +1,21 @@
+---
+title: Rule Creation Checklist
+sidebar_position: 1
+description: ""
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import {
+  trimSnippet,
+  CodeSnippet,
+} from "../../src/components/CodeSnippet";
+
+If you're creating a new lint rule and lints are not appearing in the IDE of an example project,
+ you can follow this checklist for requirements:
+
+- [ ] Rule has a unique RuleCode ID (in snake_case)
+- [ ] The Rule's ClassName is the PascalCase equivalent of the RuleCode ID
+- [ ] The `code.package` value matches the name given to the rule package
+- [ ] Lint Rule is exported from `lib/<package_name>.dart`
+- [ ] 
+
