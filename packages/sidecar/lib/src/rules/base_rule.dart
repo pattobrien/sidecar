@@ -2,6 +2,7 @@
 
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/syntactic_entity.dart';
 import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -64,15 +65,15 @@ mixin BaseRule {
   ResolvedUnitResult get unit => _unit;
 
   /// Define which workspace changes this rule should rebuild for.
-  RuleScope get scope => _defaultScope;
+  RuleScope get scope => RuleScope.empty;
 
+  /// Results generated from this Rule instance for a particular file.
+  ///
+  /// Not to be used in Rule definitions.
+  @internal
   final Set<AnalysisResult> results = {};
-  // final Set<LintResult> lintResults = {};
-  // final Set<AssistResult> assistFilterResults = {};
 
   late ResolvedUnitResult _unit;
-
-  static const _defaultScope = RuleScope();
 
   late SidecarContext _context;
 
@@ -107,17 +108,10 @@ mixin BaseRule {
   // 3. Annotation Phase:
 
   @internal
-  void setConfig({
-    required SidecarContext context,
-  }) {
-    _context = context;
-  }
+  void setConfig({required SidecarContext context}) => _context = context;
 
   @internal
-  void clearResults() {
-    results.clear();
-    // assistFilterResults.clear();
-  }
+  void clearResults() => results.clear();
 
   @internal
   void setUnitContext(
@@ -125,15 +119,13 @@ mixin BaseRule {
   ) {
     _unit = unit;
     results.clear();
-    // assistFilterResults.clear();
   }
 
   @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is BaseRule &&
-            const DeepCollectionEquality().equals(other.code, code));
-  }
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is BaseRule &&
+          const DeepCollectionEquality().equals(other.code, code));
 
   @override
   int get hashCode => Object.hash(
@@ -151,6 +143,7 @@ typedef SidecarBaseConstructor = BaseRule Function();
 mixin Lint on BaseRule {
   @override
   LintCode get code;
+
   LintSeverity get defaultSeverity => LintSeverity.info;
 
   @override
@@ -179,19 +172,28 @@ mixin Lint on BaseRule {
     results.add(result);
   }
 
+  void reportLint(
+    SyntacticEntity entity, {
+    required String message,
+    String? correction,
+  }) =>
+      _reportSpan(entity.toSourceSpan(_unit), message, correction: correction);
+
+  @Deprecated('Use reportLint instead.')
   void reportAstNode(
     AstNode node, {
     required String message,
     String? correction,
   }) =>
-      _reportSpan(node.toSourceSpan(_unit), message, correction: correction);
+      reportLint(node, message: message, correction: correction);
 
+  @Deprecated('Use reportLint instead.')
   void reportToken(
     Token token, {
     required String message,
     String? correction,
   }) =>
-      _reportSpan(token.toSourceSpan(_unit), message, correction: correction);
+      reportLint(token, message: message, correction: correction);
 }
 
 /// Suggested code edits for a particular Lint
@@ -199,15 +201,35 @@ mixin Lint on BaseRule {
 /// To provide code edits without lints, use the Assist mixin.
 mixin QuickFix on Lint {
   @override
+  void reportLint(
+    SyntacticEntity entity, {
+    required String message,
+    String? correction,
+    EditsComputer? editsComputer,
+  }) =>
+      _reportSpan(
+        entity.toSourceSpan(unit),
+        message,
+        correction: correction,
+        editsComputer: editsComputer,
+      );
+
+  @override
+  @Deprecated('Use reportLint instead.')
   void reportAstNode(
     AstNode node, {
     required String message,
     String? correction,
     EditsComputer? editsComputer,
   }) =>
-      _reportSpan(node.toSourceSpan(_unit), message,
-          correction: correction, editsComputer: editsComputer);
+      reportLint(
+        node,
+        message: message,
+        correction: correction,
+        editsComputer: editsComputer,
+      );
 
+  @Deprecated('Use reportLint instead.')
   @override
   void reportToken(
     Token token, {
@@ -215,8 +237,12 @@ mixin QuickFix on Lint {
     String? correction,
     EditsComputer? editsComputer,
   }) =>
-      _reportSpan(token.toSourceSpan(_unit), message,
-          correction: correction, editsComputer: editsComputer);
+      reportLint(
+        token,
+        message: message,
+        correction: correction,
+        editsComputer: editsComputer,
+      );
 }
 
 /// Suggested code edits within a single file.
@@ -226,33 +252,33 @@ mixin QuickAssist on BaseRule {
   @override
   AssistCode get code;
 
-  void _reportAssistSourceSpan(
-    SourceSpan span, {
+  void reportAssist(
+    SyntacticEntity entity, {
     EditsComputer? editsComputer,
   }) {
     final result = AssistResult(
       code: code,
-      span: span,
+      span: entity.toSourceSpan(unit),
       editsComputer: editsComputer,
     );
     results.add(result);
   }
 
+  @Deprecated('Use reportAssist instead.')
   void reportAssistForNode(
     AstNode node, {
     @Deprecated('only use EditResult message') String? message,
     EditsComputer? editsComputer,
   }) =>
-      _reportAssistSourceSpan(node.toSourceSpan(_unit),
-          editsComputer: editsComputer);
+      reportAssist(node, editsComputer: editsComputer);
 
+  @Deprecated('Use reportAssist instead.')
   void reportAssistForToken(
     Token token, {
     @Deprecated('only use EditResult message') String? message,
     EditsComputer? editsComputer,
   }) =>
-      _reportAssistSourceSpan(token.toSourceSpan(_unit),
-          editsComputer: editsComputer);
+      reportAssist(token, editsComputer: editsComputer);
 }
 
 /// Utilities to record a piece of data in a codebase.
@@ -260,8 +286,8 @@ mixin Data on BaseRule {
   @override
   DataCode get code;
 
-  void reportData(Object object) {
-    final result = SingleDataResult(code: code, data: object);
+  void reportData(Object data) {
+    final result = SingleDataResult(code: code, data: data);
     results.add(result);
   }
 }

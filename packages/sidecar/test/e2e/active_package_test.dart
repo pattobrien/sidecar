@@ -1,7 +1,6 @@
 import 'package:glob/glob.dart';
 import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sidecar/sidecar.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/package_options.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/rule_options.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec_base.dart';
@@ -19,14 +18,12 @@ import '../helpers/test_starter.dart';
 
 void main() {
   group('active package test - analysis_options.yaml', () {
-    final constructors = [HardcodedTextString.new];
+    final constructors = [AvoidStringLiteral.new];
     final sidecarYaml = SidecarSpec(includes: [
       Glob('lib/**')
     ], lints: {
       exampleRuleCode.package: LintPackageOptions(rules: {
-        exampleRuleCode.id: const LintOptions(
-          enabled: true,
-        ),
+        exampleRuleCode.id: const LintOptions(),
       }),
     });
 
@@ -35,17 +32,17 @@ void main() {
     late MockStdoutReporter reporter;
 
     setUpAll(() async {
-      workspace = await createWorkspace(constructors: constructors);
-      app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
-      app.deleteLibFolder();
-    });
-
-    tearDown(() {
-      app.deleteLibFolder();
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      await runPubGet(app.projectFolder.toUri());
     });
 
     setUp(() {
       reporter = MockStdoutReporter();
+    });
+
+    tearDown(() {
+      app.deleteLibFolder();
     });
 
     test('sidecar plugin is enabled', () async {
@@ -69,7 +66,7 @@ void main() {
   });
 
   group('active package - sidecar.yaml:', () {
-    final constructors = [HardcodedTextString.new];
+    final constructors = [AvoidStringLiteral.new];
     final sidecarYaml = SidecarSpec(includes: [
       Glob('lib/**')
     ], lints: {
@@ -83,12 +80,17 @@ void main() {
     late MockStdoutReporter reporter;
 
     setUpAll(() async {
-      workspace = await createWorkspace(constructors: constructors);
-      app = await workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      await runPubGet(app.projectFolder.toUri());
     });
 
     setUp(() {
       reporter = MockStdoutReporter();
+    });
+
+    tearDown(() {
+      app.deleteLibFolder();
     });
 
     test('sidecar plugin is enabled', () async {

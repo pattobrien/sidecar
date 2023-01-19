@@ -14,6 +14,7 @@ Future<AnalyzerClient> analyzeTestResources(
   Uri root,
   StdoutReporter reporter,
 ) async {
+  // final testPath = root.toFilePath();
   container = ProviderContainer(overrides: [
     analyzerClientProvider.overrideWithProvider(cliClientProvider),
     cliDirectoryProvider.overrideWithValue(root),
@@ -35,17 +36,11 @@ Future<AnalyzerClient> analyzeTestResources(
 }
 
 Future<int> runPubGet(Uri root) async {
-  Process? process;
-  try {
-    process = await Process.start(
-      'dart',
-      ['pub', 'get'],
-      workingDirectory: root.toFilePath(),
-    );
-  } catch (e, stack) {
-    //
-    print('pub get failed: $e $stack');
-  }
-  return process?.exitCode ?? Future.value(1);
-  // process.stdout.listen((event) => stdout.add(event));
+  final process = await Process.start(
+    'dart',
+    ['pub', 'get', '--offline'],
+    workingDirectory: root.toFilePath(),
+  );
+  process.stdout.listen((event) => stdout.add(event));
+  return process.exitCode;
 }

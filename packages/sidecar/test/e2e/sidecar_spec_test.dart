@@ -22,12 +22,17 @@ void main() {
     late MockStdoutReporter reporter;
 
     setUpAll(() async {
-      workspace = await createWorkspace(constructors: constructors);
-      app = await workspace.createDartPackage();
+      workspace = createWorkspace(constructors: constructors);
+      app = workspace.createDartPackage();
+      await runPubGet(app.projectFolder.toUri());
     });
 
-    setUp(() async {
+    setUp(() {
       reporter = MockStdoutReporter();
+    });
+
+    tearDown(() {
+      app.deleteLibFolder();
     });
 
     test('default severity', () async {

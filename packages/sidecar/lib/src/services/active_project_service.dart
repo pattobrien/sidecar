@@ -41,8 +41,10 @@ class ActiveProjectService {
         .map((e) => e.copyWith(
             workspaceScope: collection.contexts
                 .map((e) => e.contextRoot.root.toUri())
-                .where((contextUri) => e.packageConfig.packages
-                    .any((dependency) => dependency.root == contextUri))
+                .where((contextUri) => e.packageConfig.packages.any(
+                    (dependency) =>
+                        dependency.root.toFilePath() ==
+                        contextUri.toFilePath()))
                 .toList()))
         .toList();
   }

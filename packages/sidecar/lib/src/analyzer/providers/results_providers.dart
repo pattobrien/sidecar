@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
-import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../../context/context.dart';
@@ -43,16 +42,8 @@ final sidecarContextProvider =
   final sidecarSpec = ref.watch(projectSidecarSpecProvider);
   final targetUri = ref.watch(activeTargetRootProvider);
 
-  return SidecarContextImpl(context,
-      sidecarSpec: sidecarSpec, data: {}, targetUri: targetUri);
+  return SidecarContextImpl(context, sidecarSpec, targetUri: targetUri);
 });
-
-// final sidecarContextWithDataProvider =
-//     Provider.family<SidecarContext?, AnalyzedFile>((ref, file) {
-//   final data = ref.watch(totalDataResultsProvider).value;
-//   final context = ref.watch(sidecarContextProvider(file));
-//   return context?.copyWith(data: data);
-// });
 
 /// Compute and cache lint results for a given file.
 final lintResultsProvider =
@@ -133,6 +124,7 @@ final totalDataResultsProvider = Provider<Set<TotalDataResult>>((ref) {
     final data = ref.watch(dataResultsProvider(file));
     allDataResults.addAll(data);
   }
+
   final totalDataResults = <TotalDataResult>{};
 
   for (final dataRule in allDataResults.map((e) => e.code).toSet()) {
