@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+title: IDE and CLI Setup
 description: Setup rules for use within an IDE or CLI.
 ---
 
@@ -7,6 +8,8 @@ import CodeBlock from '@theme/CodeBlock';
 import main from "!!raw-loader!./snippets/configuration-simple.yaml";
 import analysisOptions from "!!raw-loader!./snippets/analysis_options.yaml";
 import pubspec from "!!raw-loader!./snippets/pubspec.yaml";
+import cliOutputImage from '../../static/img/cli_output.png';
+
 import {
   trimSnippet,
   CodeSnippet,
@@ -58,4 +61,11 @@ dart pub global activate sidecar
 sidecar analyze
 ```
 
-> NOTE: If you have a particular CLI use case in mind and would like to give feedback, feel free to reach out on Github.
+After several seconds of analysis, you should see results appear for each rule that is enabled in your project.
+
+<img src={cliOutputImage} alt="CLI Output example" />
+
+
+### Contributing CLI Use Cases
+
+If you have a particular CLI use case in mind, your feedback would be greatly appreciated in the [Discord channel](https://discord.gg/YhFS6V26Vg)
