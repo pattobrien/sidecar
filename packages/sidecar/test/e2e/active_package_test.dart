@@ -1,7 +1,6 @@
 import 'package:glob/glob.dart';
 import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sidecar/sidecar.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/package_options.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/rule_options.dart';
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec_base.dart';
@@ -24,9 +23,7 @@ void main() {
       Glob('lib/**')
     ], lints: {
       exampleRuleCode.package: LintPackageOptions(rules: {
-        exampleRuleCode.id: const LintOptions(
-          enabled: true,
-        ),
+        exampleRuleCode.id: const LintOptions(),
       }),
     });
 
