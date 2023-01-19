@@ -12,10 +12,10 @@ Enable a more personalized developer experience within the IDE.
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 [![pub package](https://img.shields.io/pub/v/sidecar.svg)](https://pub.dev/packages/sidecar)
 
+> Visit the [official documentation site](https://sidecaranalyzer.dev) for work-in-progress tutorials and explanations of core concepts
 
-> This is an experimental package which is expected to change slightly until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the Dart-official ```package:analyzer``` APIs, and therefore any rule packages you may want to experiment with will be easy to port over to any future APIs.
+> This is an experimental package which is expected to change slightly until an official 0.1.0 release. However, the core architecture of Sidecar has been designed around the Dart-official ```package:analyzer``` APIs, and therefore any rule packages you may want to experiment with will be easy to port over to any future APIs
 
-> Functionality is confirmed to be working within MacOS and Linux environments (Windows is unconfirmed)
 
 ## Overview
 
@@ -69,7 +69,7 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 
 |             | MacOS | Linux | Windows |
 | ----------  | ----- | ----- | ------- |
-| Environment Support  | ✅ | ✅ | 🚧 |
+| Environment Support  | ✅ | ✅ | ✅ |
 
 
 ## Usage <a name="usage"></a>

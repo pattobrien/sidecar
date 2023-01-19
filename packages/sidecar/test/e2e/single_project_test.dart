@@ -1,6 +1,7 @@
 import 'package:glob/glob.dart';
 import 'package:intl_lints/intl_lints.dart';
 import 'package:mockito/mockito.dart';
+import 'package:path/path.dart' as p;
 import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec.dart';
 import 'package:sidecar/src/test/resources/package_resource.dart';
 import 'package:sidecar/src/test/resources/workspace_resource.dart';
