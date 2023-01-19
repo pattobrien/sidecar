@@ -23,7 +23,7 @@ jobs:
       matrix:
         runners:
           # - self-hosted
-          # - ubuntu-latest
+          - ubuntu-latest
           - windows-latest
         flutter-version:
           - "3.0.5"
@@ -43,13 +43,7 @@ jobs:
           channel: stable
           flutter-version: ${{ matrix.flutter-version }}
           # cache: true
-          # cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
-
-      # - name: Add pub cache bin to PATH
-      #   run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
-
-      # - name: Add pub cache to PATH
-      #   run: echo "PUB_CACHE="$HOME/.pub-cache"" >> $GITHUB_ENV
+          # cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }
 
       - name: Install dependencies
         run: flutter pub get

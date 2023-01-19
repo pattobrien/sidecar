@@ -36,17 +36,11 @@ Future<AnalyzerClient> analyzeTestResources(
 }
 
 Future<int> runPubGet(Uri root) async {
-  Process? process;
-  // try {
-  process = await Process.start(
+  final process = await Process.start(
     'dart',
     ['pub', 'get', '--offline'],
     workingDirectory: root.toFilePath(),
   );
-  // } catch (e, stack) {
-  //   //
-  //   print('pub get failed: $e $stack');
-  // }
-  process.stdout.listen((event) => stdout.add(event));
+  // process.stdout.listen((event) => stdout.add(event));
   return process.exitCode;
 }
