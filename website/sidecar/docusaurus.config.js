@@ -109,12 +109,12 @@ const config = {
               // },
               {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/sidecar',
+                href: 'https://discord.gg/YhFS6V26Vg',
               },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
+              // {
+              //   label: 'Twitter',
+              //   href: 'https://twitter.com/pattobrien',
+              // },
             ],
           },
           {
