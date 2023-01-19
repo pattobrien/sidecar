@@ -28,14 +28,18 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUp(() {
+    setUpAll(() async {
       workspace = createWorkspace(constructors: constructors);
       app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      await runPubGet(app.projectFolder.toUri());
+    });
+
+    setUp(() {
       reporter = MockStdoutReporter();
     });
 
     tearDown(() {
-      workspace.delete();
+      app.deleteLibFolder();
     });
 
     test('1 lint result', () async {
@@ -82,16 +86,19 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUp(() {
+    setUpAll(() async {
       workspace = createWorkspace(constructors: constructors);
       app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      await runPubGet(app.projectFolder.toUri());
+    });
+
+    setUp(() {
       reporter = MockStdoutReporter();
     });
 
     tearDown(() {
-      workspace.delete();
+      app.deleteLibFolder();
     });
-
     test('1 quick fix results', () async {
       final mainFile = app.modifyFile(kMainFilePath, kContentWithString);
       final client = await analyzeTestResources(app.root, reporter);
@@ -122,16 +129,19 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUp(() {
+    setUpAll(() async {
       workspace = createWorkspace(constructors: constructors);
       app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      await runPubGet(app.projectFolder.toUri());
+    });
+
+    setUp(() {
       reporter = MockStdoutReporter();
     });
 
     tearDown(() {
-      workspace.delete();
+      app.deleteLibFolder();
     });
-
     test('file is updated with error', () async {
       // start with a basic file with no lintable string
       final mainFile = app.modifyFile(kMainFilePath, kContentWithoutString);

@@ -29,15 +29,20 @@ void main() {
     late WorkspaceResource workspace;
     late MockStdoutReporter reporter;
 
-    setUp(() {
+    setUpAll(() async {
       workspace = createWorkspace(constructors: constructors);
       app = workspace.createDartPackage(sidecarYaml: sidecarYaml);
+      await runPubGet(app.projectFolder.toUri());
+    });
+
+    setUp(() {
       reporter = MockStdoutReporter();
     });
 
     tearDown(() {
-      workspace.delete();
+      app.deleteLibFolder();
     });
+
     test('1 lint result', () async {
       app.modifyFile(kMainFilePath, kContentWithString);
       await analyzeTestResources(app.root, reporter);
