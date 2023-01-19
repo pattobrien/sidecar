@@ -14,6 +14,7 @@ Future<AnalyzerClient> analyzeTestResources(
   Uri root,
   StdoutReporter reporter,
 ) async {
+  final testPath = root.toFilePath();
   container = ProviderContainer(overrides: [
     analyzerClientProvider.overrideWithProvider(cliClientProvider),
     cliDirectoryProvider.overrideWithValue(root),
