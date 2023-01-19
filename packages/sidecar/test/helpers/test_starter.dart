@@ -47,6 +47,6 @@ Future<int> runPubGet(Uri root) async {
   //   //
   //   print('pub get failed: $e $stack');
   // }
+  process.stdout.listen((event) => stdout.add(event));
   return process.exitCode;
-  // process.stdout.listen((event) => stdout.add(event));
 }
