@@ -23,8 +23,9 @@ jobs:
       matrix:
         runners:
           # - self-hosted
-          - ubuntu-latest
-          - windows-latest
+          - macos-latest
+          # - ubuntu-latest
+          # - windows-latest
         flutter-version:
           - "3.0.5"
           # - "3.3.9"
