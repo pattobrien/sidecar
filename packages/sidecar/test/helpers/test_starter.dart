@@ -39,7 +39,7 @@ Future<int> runPubGet(Uri root) async {
   // try {
   process = await Process.start(
     'dart',
-    ['pub', 'get'],
+    ['pub', 'get', '--offline'],
     workingDirectory: root.toFilePath(),
   );
   // } catch (e, stack) {
