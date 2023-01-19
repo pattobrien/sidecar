@@ -1,4 +1,8 @@
 {
   "label": "Tutorials",
-  "position": 4
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Learn the process of creating your own lint rules. It's highly recommended that you start from Hello World and follow the rest in order, as each lesson builds upon concepts introduced in previous tutorials."
+  }
 }
