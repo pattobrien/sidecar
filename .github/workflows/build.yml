@@ -43,8 +43,7 @@ jobs:
         with:
           channel: stable
           flutter-version: ${{ matrix.flutter-version }}
-          # cache: true
-          # cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
