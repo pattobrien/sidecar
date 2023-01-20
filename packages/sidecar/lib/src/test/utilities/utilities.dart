@@ -28,7 +28,7 @@ Future<void> ruleTest(
   String description,
   String content,
   List<ExpectedText> expectedResults, {
-  String relativePath = '.dart_tool/sidecar_tests/lib/main.dart',
+  String? relativePath,
 }) async {
   assert(expectedResults.every((e) => e.length == null) ||
       expectedResults.every((e) => e.length != null));
@@ -40,8 +40,10 @@ Future<void> ruleTest(
       expectedResults.every((e) => e.startLine != null));
 
   test.test(description, () async {
-    final path = p.absolute(relativePath);
-    await modifyFile(relativePath, content: content);
+    final relative =
+        relativePath ?? p.join(kDartTool, 'sidecar_tests', 'lib', 'main.dart');
+    final path = p.absolute(relative);
+    await modifyFile(relative, content: content);
 
     final resolvedUnit = await _context.currentSession.getResolvedUnit(path)
         as ResolvedUnitResult;
@@ -69,7 +71,7 @@ void setUpRules(List<Rule> rules) {
     _visitor = RegisteredRuleVisitor(_registry);
 
     _rootUri = io.Directory.current.uri;
-    final testRoot = p.join(_rootUri.path, kDartTool, 'sidecar_tests');
+    final testRoot = p.join(_rootUri.toFilePath(), kDartTool, 'sidecar_tests');
     final file =
         _resourceProvider.getFile(p.join(testRoot, 'lib', 'main.dart'));
     file.parent.create();
