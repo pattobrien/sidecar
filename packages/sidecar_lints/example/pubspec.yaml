@@ -21,6 +21,6 @@ sidecar:
 
 dependency_overrides:
   sidecar_lints:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar_lints/
+    path: ../
   sidecar:
-    path: /Users/pattobrien/Development/sidecar/packages/sidecar/
+    path: ../../sidecar/
