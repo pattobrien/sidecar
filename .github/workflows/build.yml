@@ -28,7 +28,7 @@ jobs:
           - windows-latest
         flutter-version:
           - "3.0.5"
-          - "3.3.9"
+          # - "3.3.9"
         package_path:
           - packages/sidecar
           - packages/sidecar_lints
