@@ -1,3 +1,7 @@
+## 0.1.0-dev.3
+
+- fix: Remove old test lint from pubspec 
+
 ## 0.1.0-dev.2
 
 - chore: Upgrade dependencies to Sidecar v0.1.0-dev.19

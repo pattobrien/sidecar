@@ -1,7 +1,7 @@
 name: sidecar_lints
 description: >
   Lints that enforce Sidecar guidelines when creating custom rules and rule packages.
-version: 0.1.0-dev.2
+version: 0.1.0-dev.3
 repository: https://github.com/pattobrien/sidecar/
 homepage: https://github.com/pattobrien/sidecar/
 issue_tracker: https://github.com/pattobrien/sidecar/issues
@@ -29,7 +29,6 @@ sidecar:
   lints:
     - missing_visit_method_registration
     - rule_not_declared
-    - avoid_string_literal
   assists:
     - output_ast_node_tree
     - output_source_span
