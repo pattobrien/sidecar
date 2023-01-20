@@ -22,15 +22,16 @@ jobs:
     strategy:
       matrix:
         runners:
-          - self-hosted
-          - macos-latest
-          - ubuntu-latest
+          # - self-hosted
+          # - macos-latest
+          # - ubuntu-latest
           - windows-latest
         flutter-version:
           - "3.0.5"
           # - "3.3.9"
         package_path:
-          - packages/sidecar
+          # - packages/sidecar
+          - packages/sidecar_lints
         # channel:
         #   - stable
 
@@ -43,8 +44,7 @@ jobs:
         with:
           channel: stable
           flutter-version: ${{ matrix.flutter-version }}
-          # cache: true
-          # cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
