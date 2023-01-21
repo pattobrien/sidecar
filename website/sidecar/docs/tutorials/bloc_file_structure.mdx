@@ -6,12 +6,9 @@ description: ""
 
 import CodeBlock from '@theme/CodeBlock';
 import ruleDefintion from "!!raw-loader!../../../../examples/hello_world_rules/lib/hello_world_rules.dart";
-import step0 from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step0.dart";
-import step1 from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step1.dart";
-import step1a from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step1a.yaml";
-import step2 from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step2.dart";
-import step3 from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step3.dart";
-import pubspec from "!!raw-loader!../../../../examples/hello_world_rules/pubspec.yaml";
+import rule from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/bloc_outside_controller_layer.dart";
+import pubspec from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step1a.yaml";
+
 import {
   trimSnippet,
   CodeSnippet,
@@ -87,12 +84,12 @@ and `analyzer` to `pubspec.yaml`.
 dart create bloc_feature_structure
 ```
 
-<CodeBlock title="pubspec.yaml" language="dart">{generateSnippet(step1a, [''])}</CodeBlock>
+<CodeBlock title="pubspec.yaml" language="yaml">{trimSnippet(pubspec, [''])}</CodeBlock>
 
 Our first course of action is to create our LintRule class and its respective LintCode.
 
 
-<CodeBlock title="lib/src/bloc_outside_controller_layer.dart" language="dart">{generateSnippet(step1, [''])}</CodeBlock>
+<CodeBlock title="lib/src/bloc_outside_controller_layer.dart"  language="dart">{generateSnippet(rule, ['LINTCODE', 'ClassStart', 'CLASSEND', 'RuleImports'])}</CodeBlock>
 
 Just as we did in the previous tutorial, we ensure that the class name is the PascalCase representation of the LintCode.id
 that we assign.
@@ -100,14 +97,13 @@ that we assign.
 From here we can build out the first of our requirements: to only analyze files outside of the application folder.
 If you remember back to our feature-first project structure,
 -->
-<CodeBlock language="dart">{trimSnippet(step2, [''])}</CodeBlock>
 
 
-<CodeBlock language="dart">{trimSnippet(step3, [''])}</CodeBlock>
+<CodeBlock language="dart">{generateSnippet(rule, ['ClassStart', 'CLASSEND', 'VisitCompilationUnit', 'isApplicationFile'])}</CodeBlock>
 
 Completed code:
 
-<CodeBlock language="dart">{trimSnippet(step0, [''])}</CodeBlock>
+<CodeBlock language="dart">{generateSnippet(rule, [''])}</CodeBlock>
 
 <!--
 
