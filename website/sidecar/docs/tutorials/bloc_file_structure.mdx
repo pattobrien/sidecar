@@ -101,9 +101,9 @@ If you remember back to our feature-first project structure,
 
 <CodeBlock language="dart">{generateSnippet(rule, ['ClassStart', 'CLASSEND', 'VisitCompilationUnit', 'isApplicationFile'])}</CodeBlock>
 
-Completed code:
+Finally, we create our logic that checks if the class declaration extends `BlocBase` and if so, we report the lint.
 
-<CodeBlock language="dart">{generateSnippet(rule, [''])}</CodeBlock>
+<CodeBlock language="dart">{generateSnippet(rule, ['ClassStart', 'CLASSEND', 'isApplicationFile', 'visitClassDeclaration'])}</CodeBlock>
 
 <!--
 

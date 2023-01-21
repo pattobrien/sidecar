@@ -1,0 +1,32 @@
+---
+title: Type Checking
+sidebar_position: 2
+description: ""
+---
+
+import CodeBlock from '@theme/CodeBlock';
+
+import dartTypeChecker from "!!raw-loader!./snippets/type_checking.dart";
+import {
+    generateSnippet,
+  CodeSnippet,
+} from "../../src/components/CodeSnippet";
+
+When creating a lint rule, you will often need to check if a node is of a certain type. 
+For example, you may want to find all class declarations which extend
+`StatelessWidget` in order to perform some analysis on them.
+
+The easiest way to do so would be to use the TypeChecker class, which provides an easy
+method for checking if an AstNode is of a certain type:
+
+<CodeBlock language="dart">{generateSnippet(dartTypeChecker, ['TypeChecker', 'ClassStart', 'ClassEnd', 'VisitMethod'])}</CodeBlock>
+
+The two most important types of TypeChecker are:
+
+- `TypeChecker.fromName` - Takes the name of a Type and the name of the package the Type's from
+
+
+- `TypeChecker.fromDart` - Used for `dart` packages like `dart:core` or `dart:async`:
+
+
+<CodeBlock language="dart">{generateSnippet(dartTypeChecker, ['DartType'])}</CodeBlock>
