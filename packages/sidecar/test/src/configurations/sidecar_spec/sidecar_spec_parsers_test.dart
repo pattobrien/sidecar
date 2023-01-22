@@ -14,7 +14,7 @@ void main() {
       // tuple should return an empty SidecarSpec() as well as an exception
       const blankContents = 'a';
       final result = parseSidecarSpec(blankContents);
-      expect(result.errors.length, 1);
+      expect(result.errors, <SidecarNewException>[]);
     });
   });
 
