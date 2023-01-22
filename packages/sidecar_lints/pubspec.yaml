@@ -1,7 +1,7 @@
 name: sidecar_lints
 description: >
-  Lint rules that enforce Sidecar guidelines when developing rule packages.
-version: 0.1.0-dev.1
+  Lints that enforce Sidecar guidelines when creating custom rules and rule packages.
+version: 0.1.0-dev.3
 repository: https://github.com/pattobrien/sidecar/
 homepage: https://github.com/pattobrien/sidecar/
 issue_tracker: https://github.com/pattobrien/sidecar/issues
@@ -10,31 +10,29 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  analyzer: ^4.7.0
+  analyzer: ^4.2.0
   analyzer_plugin: ^0.11.1
   collection: ^1.16.0
   glob: ^2.1.1
   path: ^1.8.0
   pubspec: ^2.3.0
   recase: ^4.1.0
-  sidecar: ^0.1.0-dev.18
+  sidecar: ^0.1.0-dev.19
   source_span: ^1.8.2
   yaml: ^3.1.1
 
 dev_dependencies:
-  bloc_test: ^9.1.0
   lints: ^2.0.0
   test: ^1.16.0
+
+dependency_overrides:
+  sidecar:
+    path: ../sidecar
 
 sidecar:
   lints:
     - missing_visit_method_registration
     - rule_not_declared
-    - rule_is_not_accessible
-    # - avoid_string_literal
-    - public_rules
   assists:
     - output_ast_node_tree
     - output_source_span
-  # data:
-  #   -

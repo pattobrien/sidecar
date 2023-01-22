@@ -5,9 +5,10 @@ import 'package:sidecar/sidecar.dart';
 import '../constants.dart';
 
 class OutputSourceSpan extends AssistRule {
+  static const id = 'output_source_span';
+
   @override
-  AssistCode get code =>
-      const AssistCode('output_source_span', package: kPackageName);
+  AssistCode get code => const AssistCode(id, package: kPackageName);
 
   @override
   void initializeVisitor(NodeRegistry registry) {

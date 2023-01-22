@@ -5,16 +5,13 @@ lints:
   sidecar_lints:
     rules:
       missing_visit_method_registration:
+        # severity: info
       rule_not_declared:
-      rule_is_not_accessible:
+        # severity: info
+      # rule_is_not_accessible:
 
 assists:
   sidecar_lints:
     rules:
       output_ast_node_tree:
       output_source_span:
-
-data:
-  sidecar_lints:
-    rules:
-      public_rules:

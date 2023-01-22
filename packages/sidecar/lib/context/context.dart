@@ -12,8 +12,8 @@ abstract class SidecarContext {
   // should we allow access to all configurations?
   SidecarSpec get sidecarSpec;
 
-  ///
-  Set<TotalDataResult> get data;
+  // ///
+  // Set<TotalDataResult> get data;
 
   /// Current file.
   // ResolvedUnitResult get currentUnit;
@@ -63,7 +63,7 @@ abstract class SidecarContext {
   /// ```
   void changeFile(String path);
 
-  SidecarContext copyWith({
-    Set<TotalDataResult>? data,
-  });
+  // SidecarContext copyWith({
+  //   Set<TotalDataResult>? data,
+  // });
 }

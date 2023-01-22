@@ -1,3 +1,20 @@
+## 0.1.0-dev.21
+
+- fix: Misconfigured SidecarSpec file no longer crashes analyzer
+- feat: `TypeChecker` API for Dart and Third-Party packages
+- chore: Removed `sidecar_package_utilities` dependency
+
+## 0.1.0-dev.20
+
+- fix: Test suite path fix for Windows
+
+## 0.1.0-dev.19
+
+- feat: Windows support
+- feat: Test utilities for rule integration tests
+- feat: LintRule and AssistRule types 
+- docs: Work-in-progress documentation and tutorials at sidecaranalyzer.dev
+
 ## 0.1.0-dev.18
 
 - feat: TypeChecker API removed

@@ -13,7 +13,7 @@ mixin ResourceMixin {
 
   Folder newFolder(String path) {
     final folderPath = p.join(rootPath, path);
-    fileSystem.directory(folderPath).createSync(recursive: true);
+    // fileSystem.directory(folderPath).createSync(recursive: true);
     return resourceProvider.getFolder(folderPath)..create();
   }
 
@@ -24,7 +24,7 @@ mixin ResourceMixin {
       file.parent.create();
     }
     file.writeAsStringSync(content);
-    fileSystem.file(file.path).createSync(recursive: true);
+    // final fileSystemFile = fileSystem.file(file.path).createSync(recursive: true);
     return file;
   }
 

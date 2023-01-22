@@ -6,6 +6,8 @@ lints:
   sidecar_lints:
     rules:
       avoid_string_literal:
+        severity: warning
+
   # intl_lints:
   #   rules:
   #     hardcoded_text_string:
