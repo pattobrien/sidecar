@@ -16,17 +16,21 @@ When creating a lint rule, you will often need to check if a node is of a certai
 For example, you may want to find all class declarations which extend
 `StatelessWidget` in order to perform some analysis on them.
 
-The easiest way to do so would be to use the TypeChecker class, which provides an easy
-method for checking if an AstNode is of a certain type:
+Unfortunately, we cannot just use the `is` keyword to check if a node is of a certain type,
+because the analyzer can only provide us with `DartType` objects, which are not the same as
+the `Type` objects we'd typically use when checking types in Dart programs.
+
+Fortunately, Sidecar ships with its own `TypeChecker` utility, which provides an easy
+way for checking if an AstNode is of a certain type:
 
 <CodeBlock language="dart">{generateSnippet(dartTypeChecker, ['TypeChecker', 'ClassStart', 'ClassEnd', 'VisitMethod'])}</CodeBlock>
 
-The two most important types of TypeChecker are:
+There are two notable ways to create a TypeChecker:
 
-- `TypeChecker.fromName` - Takes the name of a Type and the name of the package the Type's from
-
-
-- `TypeChecker.fromDart` - Used for `dart` packages like `dart:core` or `dart:async`:
+- `TypeChecker.fromName` - Used for non-Dart packages
+- `TypeChecker.fromDartType` - Used for `dart` packages like `dart:core` or `dart:async`
 
 
 <CodeBlock language="dart">{generateSnippet(dartTypeChecker, ['DartType'])}</CodeBlock>
+
+In both cases, the utility takes the name of the Type and the name of the Type's package.
