@@ -28,8 +28,8 @@ dev_dependencies:
   # sidecar: 0.1.0-dev.16
   sidecar:
     path: ../../packages/sidecar
-  sidecar_lints:
-    path: ../../packages/sidecar_lints/
+  # sidecar_lints:
+  #   path: ../../packages/sidecar_lints/
   test: ^1.16.0
 
 flutter:

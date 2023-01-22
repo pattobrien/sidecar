@@ -71,13 +71,7 @@ SidecarExceptionTuple<SidecarSpec> parseSidecarSpec(
           ]);
     });
   } catch (e) {
-    return SidecarExceptionTuple(SidecarSpec.empty(), [
-      SidecarNewException(
-          code: const LintCode('parse_error', package: 'sidecar'),
-          message: e.toString(),
-          sourceSpan: SourceSpan(SourceLocation(0, sourceUrl: fileUri),
-              SourceLocation(contents.length, sourceUrl: fileUri), contents))
-    ]);
+    return SidecarExceptionTuple(SidecarSpec.empty(), []);
   }
 }
 
