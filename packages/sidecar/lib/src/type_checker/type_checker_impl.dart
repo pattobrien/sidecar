@@ -191,10 +191,19 @@ abstract class TypeCheckerImpl implements TypeChecker {
       isExactly(element) ||
       (element is ClassElement && element.allSupertypes.any(isExactlyType));
 
+  /// Returns `true` if the type of [element] can NOT be assigned to this type.
+  @override
+  bool isNotAssignableFrom(Element? element) => !isAssignableFrom(element);
+
   /// Returns `true` if [staticType] can be assigned to this type.
   @override
   bool isAssignableFromType(DartType? staticType) =>
       isAssignableFrom(staticType?.element);
+
+  /// Returns `true` if [staticType] can NOT be assigned to this type.
+  @override
+  bool isNotAssignableFromType(DartType? staticType) =>
+      !isAssignableFromType(staticType);
 
   /// Returns `true` if representing the exact same class as [element].
   @override
