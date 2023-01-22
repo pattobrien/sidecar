@@ -1,3 +1,7 @@
+## 0.1.0-dev.21
+
+- fix: Misconfigured SidecarSpec file no longer crashes process
+
 ## 0.1.0-dev.20
 
 - fix: Test suite path fix for Windows
