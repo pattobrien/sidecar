@@ -27,20 +27,16 @@ At the conclusion of the tutorial, we will have the following code showing a lin
 
 ### Learning Objectives
 
-After completion, we will know how to do the following:
-
-- Explore the base ```LintRule``` class which every lint rule must extend
-- Create Analyzer Logic for our particular use case
-- Declaring the rule in a way that allows it to be discovered by Sidecar
-- Validating a Lint Rule within our IDE
-
-Let's get started.
+- Explore the basics of the ```LintRule``` class
+- Create analyzer logic for our particular use case
+- Requirements for declaring the rule so that it can be discovered by Sidecar
+- Validating a LintRule within our IDE
 
 ## Defining a Rule
 
-### Creating a Rule Package
+### Creating a new Rule Package
 
-First, we must create a package for our lints to reside in as well as add the necessary dependencies to it.
+Our first step is to create a package for our lints to reside in, and add the necessary dependencies to our pubspec.yaml file.
 
 ```bash
 # create our package and open the directory
@@ -100,7 +96,7 @@ We've now fully defined our `HelloWorld` rule class!
 
 There are two other requirements that make our newly created rule visible to sidecar:
 
-- adding lint code to package's pubspec.yaml file (see: [sidecar_lints pubspec](https://github.com/pattobrien/sidecar/blob/master/packages/sidecar_lints/pubspec.yaml#L28))
+- adding lint code to package's pubspec.yaml file (see: [sidecar_lints pubspec](https://github.com/pattobrien/sidecar/blob/master/packages/sidecar_lints/pubspec.yaml#L32))
 - ensuring the rule is available from lib/hello_world_rules.dart (see: [lib/sidecar_lints.dart](https://github.com/pattobrien/sidecar/blob/master/packages/sidecar_lints/lib/sidecar_lints.dart))
 
 ## Validating our LintRule in an IDE
@@ -108,28 +104,33 @@ There are two other requirements that make our newly created rule visible to sid
 The best way to visually test if our lint is working is by creating an example package:
 
 ```bash
-# within directory hello_world_rules
-dart create example && cd hello_world_rules
+# create new project within the root hello_world_rules directory
+dart create example && cd example
 
-# add your rule package from path
+# add our new rules package from path
 dart pub add hello_world_rules --path ../
 ```
+We can now add our rule to our sidecar.yaml file:
 
 
-- Add lint rule to sidecar.yaml
-- Enable sidecar in our analysis_options.yaml
+And finally, we can enable sidecar in our analysis_options.yaml file:
 
-Lastly, add our 'Is there anybody there?' string into a dart file.
+```yaml
+analyzer:
+  plugins:
+    - sidecar
+```
+
+With our example app set up, all that's left to do is add our 'Is there anybody there?' string into a dart file, 
+and you should see a lint appear over the string.
 
 <CodeBlock title="example/main.dart" language="dart">{trimSnippet(example)}</CodeBlock>
-
-After waiting a couple seconds for the Sidecar plugin to boot up, you should see a lint appear over the string.
 
 Congrats! You've created your first lint rule. 🎉
 
 ## Conclusion
 
-This is a simple example of what it takes to create a Lint Rule using Sidecar. 
+This is a simple example of what it takes to create a custom lint rule using Sidecar. 
 On one hand, creating the logic to analyze code can be relatively straightforward,
 only taking a few lines of code to write:
 
@@ -146,7 +147,9 @@ of them results in no lint appearing at all.
 <!--
 - Rule Checklist (core concepts?)
 -->
-In the next tutorials, we will cover ways to help remember all of the rule requirements by using the package `sidecar_lints`.
+
+The [rule creation checklist](../concepts/rule_creation_checklist.mdx) makes it easy to ensure you've covered all the bases.
+Additionally, it's highly recommended to use package:sidecar_lints to help ensure all of your rules are properly defined for Sidecar.
 
 <!--
 
