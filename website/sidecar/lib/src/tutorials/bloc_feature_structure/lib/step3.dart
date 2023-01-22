@@ -31,7 +31,7 @@ class BlocOutsideControllerLayer extends LintRule {
     // skip any files within an `application` folder
     if (isApplicationFile) return;
 
-    final blocBase = TypeChecker.fromName('BlocBase', packageName: 'bloc');
+    final blocBase = TypeChecker.fromPackage('BlocBase', package: 'bloc');
     final classType = node.declaredElement2?.thisType;
     if (!blocBase.isAssignableFromType(classType)) return;
 

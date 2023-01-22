@@ -4,7 +4,7 @@ import 'package:sidecar/sidecar.dart';
 /* SNIP TypeChecker */
 // 1. Create the TypeChecker
 const statelessWidget =
-    TypeChecker.fromName('StatelessWidget', packageName: 'flutter');
+    TypeChecker.fromPackage('StatelessWidget', package: 'flutter');
 
 /* SNIP TypeChecker END */
 /* SNIP ClassStart */
@@ -35,7 +35,7 @@ class MyLint extends LintRule {
 @override
 void visitInstanceCreationExpression(InstanceCreationExpression node) {
   // 2. Use the TypeChecker to check the type of a particular AstNode
-  const colorTypeChecker = TypeChecker.fromDartType('Color', package: 'ui');
+  const colorTypeChecker = TypeChecker.fromDart('Color', package: 'ui');
   final returnType = node.constructorName.staticElement?.returnType;
   if (colorTypeChecker.isAssignableFromType(returnType)) {
     // do something

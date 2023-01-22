@@ -44,7 +44,7 @@ class BlocOutsideControllerLayer extends LintRule {
 
     // type check against the type of the declared class
     final classType = node.declaredElement2?.thisType;
-    final blocBase = TypeChecker.fromName('BlocBase', packageName: 'bloc');
+    final blocBase = TypeChecker.fromPackage('BlocBase', package: 'bloc');
     if (!blocBase.isAssignableFromType(classType)) return;
 
     reportAstNode(node.name, message: message);
