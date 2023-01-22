@@ -21,13 +21,13 @@ class BlocOutsideControllerLayer extends LintRule {
   /* SNIP VisitCompilationUnit */
   @override
   void visitCompilationUnit(CompilationUnit node) {
-    final applicationFolderGlob = Glob('**/features/**/application/**');
-    isApplicationFile = applicationFolderGlob.matches(unit.path);
+    final controllersFolderGlob = Glob('**/features/**/controllers/**');
+    isControllerFile = controllersFolderGlob.matches(unit.path);
   }
 
   /* SNIP VisitCompilationUnit END */
   /* SNIP isApplicationFile */
-  late final bool isApplicationFile;
+  late final bool isControllerFile;
   /* SNIP isApplicationFile END */
 
   /* SNIP initializeVisitor */
@@ -39,6 +39,10 @@ class BlocOutsideControllerLayer extends LintRule {
   /* SNIP visitClassDeclaration */
   @override
   void visitClassDeclaration(ClassDeclaration node) {
+    // dont perform type analysis on files inside of controller folders
+    if (isControllerFile) return;
+
+    // type check against the type of the declared class
     final classType = node.declaredElement2?.thisType;
     final blocBase = TypeChecker.fromName('BlocBase', packageName: 'bloc');
     if (!blocBase.isAssignableFromType(classType)) return;
