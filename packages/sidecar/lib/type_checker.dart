@@ -34,8 +34,14 @@ abstract class TypeChecker {
   const factory TypeChecker.fromPackage(String type,
       {required String package}) = TypeCheckerImpl.fromPackage;
 
-  /// Create a new [TypeChecker] for a ```dart``` package type.
-  const factory TypeChecker.fromDart(String name, {required String package}) =
+  /// Create a new [TypeChecker] for a dart package [type].
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// const colorType = TypeChecker.fromDart('Color', package: 'ui');
+  /// ```
+  const factory TypeChecker.fromDart(String type, {required String package}) =
       TypeCheckerImpl.fromDartType;
 
   /// Returns the first constant annotating [element] assignable to this type.
