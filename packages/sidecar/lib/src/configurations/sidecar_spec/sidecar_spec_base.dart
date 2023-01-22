@@ -22,6 +22,8 @@ class SidecarSpec {
 
   factory SidecarSpec.fromJson(Map json) => _$SidecarSpecFromJson(json);
 
+  factory SidecarSpec.empty() => const SidecarSpec();
+
   factory SidecarSpec.fromRuleCodes(
     List<RuleCode> codes, {
     List<Glob>? includes,

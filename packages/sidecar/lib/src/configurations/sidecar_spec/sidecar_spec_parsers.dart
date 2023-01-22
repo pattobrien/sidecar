@@ -1,6 +1,9 @@
 import 'package:checked_yaml/checked_yaml.dart';
+import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../protocol/constants/constants.dart';
+import '../../protocol/models/rule_code.dart';
 import '../../utils/logger/logger.dart';
 import '../exceptions/exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
@@ -15,66 +18,61 @@ SidecarExceptionTuple<SidecarSpec> parseSidecarSpec(
   String contents, {
   Uri? fileUri,
 }) {
-  return checkedYamlDecode(
-    contents,
-    (m) {
-      try {
-        final contentMap = m as YamlMap?;
-        final includes = contentMap?.parseGlobIncludes();
-        final excludes = contentMap?.parseGlobExcludes();
-        final parsedErrors = <SidecarNewException>[];
+  try {
+    return checkedYamlDecode(contents, sourceUrl: fileUri, allowNull: true,
+        (m) {
+      final contentMap = m as YamlMap?;
+      final includes = contentMap?.parseGlobIncludes();
+      final excludes = contentMap?.parseGlobExcludes();
+      final parsedErrors = <SidecarNewException>[];
 
-        final assistPackages = (contentMap?['assists'] as YamlMap?)
-            ?.nodes
-            .map((dynamic key, value) {
-          final parsedPackage =
-              _parsePackageOptions(value, fileUri, RuleType.assist);
-          parsedErrors.addAll(parsedPackage.errors);
-          return MapEntry((key as YamlScalar).value as String,
-              parsedPackage.data as AssistPackageOptions);
-        });
+      final assistPackages =
+          (contentMap?['assists'] as YamlMap?)?.nodes.map((dynamic key, value) {
+        final parsedPackage =
+            _parsePackageOptions(value, fileUri, RuleType.assist);
+        parsedErrors.addAll(parsedPackage.errors);
+        return MapEntry((key as YamlScalar).value as String,
+            parsedPackage.data as AssistPackageOptions);
+      });
 
-        final lintPackages =
-            (contentMap?['lints'] as YamlMap?)?.nodes.map((dynamic key, value) {
-          final parsedPackage =
-              _parsePackageOptions(value, fileUri, RuleType.lint);
-          parsedErrors.addAll(parsedPackage.errors);
-          final entry = MapEntry((key as YamlScalar).value as String,
-              parsedPackage.data as LintPackageOptions);
-          return entry;
-        });
+      final lintPackages =
+          (contentMap?['lints'] as YamlMap?)?.nodes.map((dynamic key, value) {
+        final parsedPackage =
+            _parsePackageOptions(value, fileUri, RuleType.lint);
+        parsedErrors.addAll(parsedPackage.errors);
+        final entry = MapEntry((key as YamlScalar).value as String,
+            parsedPackage.data as LintPackageOptions);
+        return entry;
+      });
 
-        //TODO: DATAPACKAGES should have their own type of PackageOptions
-        final dataPackages =
-            (contentMap?['data'] as YamlMap?)?.nodes.map((dynamic key, value) {
-          final parsedPackage =
-              _parsePackageOptions(value, fileUri, RuleType.data);
-          parsedErrors.addAll(parsedPackage.errors);
-          final entry = MapEntry((key as YamlScalar).value as String,
-              parsedPackage.data as AssistPackageOptions);
-          return entry;
-        });
+      //TODO: DATAPACKAGES should have their own type of PackageOptions
+      final dataPackages =
+          (contentMap?['data'] as YamlMap?)?.nodes.map((dynamic key, value) {
+        final parsedPackage =
+            _parsePackageOptions(value, fileUri, RuleType.data);
+        parsedErrors.addAll(parsedPackage.errors);
+        final entry = MapEntry((key as YamlScalar).value as String,
+            parsedPackage.data as AssistPackageOptions);
+        return entry;
+      });
 
-        return SidecarExceptionTuple(
-            SidecarSpec(
-              includes: includes?.data,
-              excludes: excludes?.data,
-              assists: assistPackages,
-              lints: lintPackages,
-              data: dataPackages,
-            ),
-            [
-              ...parsedErrors,
-              ...?includes?.errors,
-              ...?excludes?.errors,
-            ]);
-      } catch (e, stackTrace) {
-        logger.severe('PROJCONFIG', e, stackTrace);
-        throw const MissingSidecarYamlConfiguration();
-      }
-    },
-    sourceUrl: fileUri,
-  );
+      return SidecarExceptionTuple(
+          SidecarSpec(
+            includes: includes?.data,
+            excludes: excludes?.data,
+            assists: assistPackages,
+            lints: lintPackages,
+            data: dataPackages,
+          ),
+          [
+            ...parsedErrors,
+            ...?includes?.errors,
+            ...?excludes?.errors,
+          ]);
+    });
+  } catch (e) {
+    return SidecarExceptionTuple(SidecarSpec.empty(), []);
+  }
 }
 
 SidecarExceptionTuple<PackageOptions> _parsePackageOptions(
@@ -100,7 +98,11 @@ SidecarExceptionTuple<PackageOptions> _parseAssistPackageOptions(
   final includes = yamlMap?.parseGlobIncludes();
   final excludes = yamlMap?.parseGlobExcludes();
 
-  final rulesNode = yamlMap?.nodes['rules'] as YamlMap?;
+  final rulesNode = yamlMap?.nodes['rules'];
+
+  if (rulesNode is! YamlMap?) {
+    return const SidecarExceptionTuple(AssistPackageOptions(), []);
+  }
 
   final assistPackages = rulesNode?.nodes.map((dynamic key, value) {
     final options = _parseRuleOptions(value, fileUri, RuleType.assist);
@@ -127,9 +129,13 @@ SidecarExceptionTuple<PackageOptions> _parseLintPackageOptions(
   final includes = yamlMap?.parseGlobIncludes();
   final excludes = yamlMap?.parseGlobExcludes();
 
-  final rulesNode = yamlMap?.nodes['rules'] as YamlMap?;
+  final rulesNode = yamlMap?.nodes['rules'];
 
-  final lintMap = rulesNode?.nodes.map((dynamic key, value) {
+  if (rulesNode is! YamlMap?) {
+    return const SidecarExceptionTuple(LintPackageOptions(), []);
+  }
+
+  final rulesMap = rulesNode?.nodes.map((dynamic key, value) {
     final options = _parseRuleOptions(value, fileUri, RuleType.lint);
     errors.addAll(options.errors);
     return MapEntry(
@@ -139,7 +145,7 @@ SidecarExceptionTuple<PackageOptions> _parseLintPackageOptions(
   final packageOptions = LintPackageOptions(
     includes: includes?.data,
     excludes: excludes?.data,
-    rules: lintMap,
+    rules: rulesMap,
   );
 
   return SidecarExceptionTuple(packageOptions, errors);
