@@ -1,6 +1,8 @@
 ## 0.1.0-dev.21
 
-- fix: Misconfigured SidecarSpec file no longer crashes process
+- fix: Misconfigured SidecarSpec file no longer crashes analyzer
+- feat: `TypeChecker` API for Dart and Third-Party packages
+- chore: Removed `sidecar_package_utilities` dependency
 
 ## 0.1.0-dev.20
 
