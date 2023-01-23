@@ -41,7 +41,7 @@ class RuleNotDeclared extends LintRule with QuickFix {
     final lints = getDeclaredLints(pubspecContents);
     final snakeCaseName = ReCase(node.name.name).snakeCase;
     if (!lints.contains(snakeCaseName)) {
-      reportAstNode(node.name, message: _message);
+      reportLint(node.name, message: _message);
     }
 
     final code = node.members
@@ -62,12 +62,12 @@ class RuleNotDeclared extends LintRule with QuickFix {
 
     final idValueFromNode = getStringValue(id);
     if (snakeCaseName != idValueFromNode && id != null) {
-      reportAstNode(id, message: _idMessage);
+      reportLint(id, message: _idMessage);
     }
 
     final packageNodeValue = getStringValue(package);
     if (packageNodeValue != packageName && package != null) {
-      reportAstNode(package, message: _packageMessage);
+      reportLint(package, message: _packageMessage);
     }
   }
 }
