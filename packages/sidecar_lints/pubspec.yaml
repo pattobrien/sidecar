@@ -17,7 +17,7 @@ dependencies:
   path: ^1.8.0
   pubspec: ^2.3.0
   recase: ^4.1.0
-  sidecar: ^0.1.0-dev.19
+  sidecar: ^0.1.0-dev.21
   source_span: ^1.8.2
   yaml: ^3.1.1
 
