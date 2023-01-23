@@ -1,0 +1,45 @@
+---
+title: Integration Testing
+sidebar_position: 3
+description: ""
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import testing from "!!raw-loader!./snippets/testing.dart";
+import { 
+    trimSnippet,
+    generateSnippet,
+    CodeSnippet,
+} from "../../src/components/CodeSnippet";
+
+Sidecar ships with a series of test utilities that make it easy to write integration tests for Sidecar rules.
+
+When writing rule tests, we must create a string containing example code that we expect to trigger or not trigger a lint.
+
+The below snippet shows code that we would expect to show a lint for the `avoid_edge_insets_literal` rule from design_system_lints. The rule
+is expected to find values used in an `EdgeInsets` constructor, and show a lint if that value is not annotated
+with `@designSystem` (see [design_system_lints](https://pub.dev/packages/design_system_lints) for
+a full explanation of these rules).
+
+<CodeBlock language="dart">{generateSnippet(testing, ['Content2'])}</CodeBlock>
+
+In this example, we would expect a lint to be reported underneath the `2.0` value. We can easily test for this,
+by writing the following rule in the `test` directory of our rule package:
+
+<CodeBlock title="test/src/avoid_edge_insets_literal_test.dart"  language="dart">{generateSnippet(testing, ['StartTest', 'TestEnd', 'RuleTest2' ])}</CodeBlock>
+
+Before we can run any rule test, we must first use the `setUpRules` function with the particular rule we're looking to test (here, `AvoidEdgeInsetsLiteral`). 
+We can then use the `ExpectedText` test utility to check if a lint is found over the particular code `2.0`. We also make
+the test description `EdgeInsets.all`, as that's exactly the use case we're testing for.
+
+If we want to test that a lint is found when using a different instantiation of `EdgeInsets` (e.g. `EdgeInsets.only`),
+we can create another test that checks each of the parameters given to `EdgeInsets.only` (i.e. `left`, `right`, `top`, `bottom`) 
+by writing 4 different `ExpectedText` values and providing them to our `ruleTest`:
+
+<CodeBlock language="dart">{generateSnippet(testing, ['Imports', 'StartTest', 'TestEnd', 'RuleTest3', 'Content3'])}</CodeBlock>
+
+Finally, if we write a test where we expect no lints (such as when our `EdgeInset` values are annotated with `@designSystem`), 
+we simply simply leave the `ExpectedText` array empty for our `ruleTest`:
+
+<CodeBlock language="dart">{generateSnippet(testing, ['Imports', 'StartTest', 'TestEnd', 'RuleTest1', 'Content1'])}</CodeBlock>
+

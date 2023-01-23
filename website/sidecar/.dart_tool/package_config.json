@@ -140,6 +140,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "design_system_lints",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/design_system_lints-0.1.0-dev.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "file",
       "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/file-6.1.4",
       "packageUri": "lib/",
@@ -321,7 +327,7 @@
     },
     {
       "name": "sidecar",
-      "rootUri": "../../../packages/sidecar",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/sidecar-0.1.0-dev.21",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -470,7 +476,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-01-22T21:44:56.466912Z",
+  "generated": "2023-01-23T16:33:20.511367Z",
   "generator": "pub",
   "generatorVersion": "2.17.6"
 }
