@@ -62,7 +62,7 @@ class MissingVisitMethodRegistration extends LintRule {
     for (final methodName in visitMethods) {
       final method =
           properties.firstWhere((element) => element.name.name == methodName);
-      reportAstNode(method.name, message: _message, correction: _correction);
+      reportLint(method.name, message: _message, correction: _correction);
     }
   }
 }

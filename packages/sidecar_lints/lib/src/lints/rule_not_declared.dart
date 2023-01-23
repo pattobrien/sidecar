@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:collection/collection.dart';
 import 'package:pubspec/pubspec.dart';
 import 'package:recase/recase.dart';
@@ -14,8 +15,7 @@ class RuleNotDeclared extends LintRule with QuickFix {
 
   static const _message = 'Rule is not declared in Pubspec';
   static const _idMessage = 'Rule id does not match Rule class name.';
-  static const _packageMessage =
-      'Package id does not match package name from pubspec.yaml.';
+  static const _packageMessage = 'Package id does not match package name.';
 
   @override
   LintSeverity get defaultSeverity => LintSeverity.warning;
@@ -35,17 +35,19 @@ class RuleNotDeclared extends LintRule with QuickFix {
     final pubspecContents = context.contextRoot.root
         .getChildAssumingFile('pubspec.yaml')
         .readAsStringSync();
+
     final pubspec = PubSpec.fromYamlString(pubspecContents);
     final packageName = pubspec.name;
     final lints = getDeclaredLints(pubspecContents);
     final snakeCaseName = ReCase(node.name.name).snakeCase;
     if (!lints.contains(snakeCaseName)) {
-      reportAstNode(node.name, message: _message);
+      reportLint(node.name, message: _message);
     }
 
     final code = node.members
         .whereType<MethodDeclaration>()
         .firstWhere((element) => element.name.name == 'code');
+
     final lintCode = code.body.childEntities.firstWhereOrNull((element) {
       if (element is! InstanceCreationExpression) return false;
       return element.staticType?.name == 'LintCode';
@@ -59,23 +61,25 @@ class RuleNotDeclared extends LintRule with QuickFix {
         ?.expression;
 
     final idValueFromNode = getStringValue(id);
-    if (snakeCaseName != idValueFromNode) {
-      reportAstNode(id!, message: _idMessage);
+    if (snakeCaseName != idValueFromNode && id != null) {
+      reportLint(id, message: _idMessage);
     }
 
     final packageNodeValue = getStringValue(package);
-    if (packageNodeValue != packageName) {
-      reportAstNode(package!, message: _packageMessage);
+    if (packageNodeValue != packageName && package != null) {
+      reportLint(package, message: _packageMessage);
     }
   }
 }
 
-String? getStringValue(AstNode? node) {
+String? getStringValue(Expression? node) {
   if (node is SimpleIdentifier) {
-    final dec = node.staticElement as PropertyAccessorElement?;
-    final field = dec?.variable as FieldElement?;
-    final val = field?.computeConstantValue();
-    return val?.toStringValue();
+    final element = node.staticElement;
+    if (element is PropertyAccessorElement) {
+      final variable = element.variable;
+      final object = variable.computeConstantValue();
+      return object?.toStringValue();
+    }
   }
   if (node is StringLiteral) {
     return node.stringValue;
@@ -86,13 +90,15 @@ String? getStringValue(AstNode? node) {
 Set<String> getDeclaredLints(String pubspecContents) {
   final pubspec = PubSpec.fromYamlString(pubspecContents);
   final unparsedYaml = pubspec.unParsedYaml;
-  final lints = unparsedYaml?['sidecar']['lints'] as YamlList?;
+  final dynamic lints = unparsedYaml?['sidecar']['lints'];
+  if (lints is! YamlList?) return {};
   return lints?.value.map((dynamic e) => e.toString()).toSet() ?? {};
 }
 
 Set<String> getDeclaredAssists(String pubspecContents) {
   final pubspec = PubSpec.fromYamlString(pubspecContents);
   final unparsedYaml = pubspec.unParsedYaml;
-  final assists = unparsedYaml?['sidecar']['assists'] as YamlList?;
+  final dynamic assists = unparsedYaml?['sidecar']['assists'];
+  if (assists is! YamlList?) return {};
   return assists?.value.map((dynamic e) => e.toString()).toSet() ?? {};
 }
