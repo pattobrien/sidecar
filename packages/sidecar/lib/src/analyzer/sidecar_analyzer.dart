@@ -91,7 +91,6 @@ class SidecarAnalyzer {
           channel.handleError(package, error, stackTrace),
     );
     // listener keeps lintListener alive
-    _ref.listen<void>(lintListener, (previous, next) {});
     _listenForConfigChanges();
     setupCompleter.complete();
   }
