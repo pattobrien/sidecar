@@ -1,3 +1,8 @@
+## 0.1.0-dev.22
+
+- fix: Lints appear after adding a new file to workspace
+
+
 ## 0.1.0-dev.21
 
 - fix: Misconfigured SidecarSpec file no longer crashes analyzer

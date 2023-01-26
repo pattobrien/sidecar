@@ -54,13 +54,19 @@ final lintResultsProvider =
 
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
 
-  return timedLog('visitLintResults', () {
+  final results = timedLog('visitLintResults', () {
     return runZonedGuarded<LintResults>(
           () => analyzerService.visitLintResults(unit, rulesForFile, registry),
           (err, stk) => log('lintResultsProvider', error: err, stackTrace: stk),
         ) ??
         LintResults(const {});
   });
+
+  final channel = ref.watch(communicationChannelProvider);
+  if (ref.state.value != results) {
+    channel.sendNotification(LintNotification(file, results));
+  }
+  return results;
 });
 
 /// Locate all QuickAssist nodes for which code edits can be calculated from.
@@ -133,15 +139,4 @@ final totalDataResultsProvider = Provider<Set<TotalDataResult>>((ref) {
         code: dataRule, data: results.map<Object>((e) => e.data).toList()));
   }
   return totalDataResults;
-});
-
-final lintListener = Provider((ref) {
-  final files = ref.watch(activeProjectScopedFilesProvider);
-  final channel = ref.watch(communicationChannelProvider);
-  for (final file in files) {
-    ref.listen<LintResults?>(lintResultsProvider(file).select((d) => d.value),
-        (_, lints) {
-      channel.sendNotification(LintNotification(file, lints ?? {}));
-    });
-  }
 });
