@@ -1,23 +1,152 @@
 ---
 title: Bloc File Structure
-sidebar_position: 2
+sidebar_position: 3
+description: ""
 ---
 
 import CodeBlock from '@theme/CodeBlock';
 import ruleDefintion from "!!raw-loader!../../../../examples/hello_world_rules/lib/hello_world_rules.dart";
-import example from "!!raw-loader!../../../../examples/hello_world_rules/example/lib/example.dart";
-import pubspec from "!!raw-loader!../../../../examples/hello_world_rules/pubspec.yaml";
+import rule from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/bloc_outside_controller_layer.dart";
+import pubspec from "!!raw-loader!../../lib/src/tutorials/bloc_feature_structure/lib/step1a.yaml";
+
 import {
   trimSnippet,
   CodeSnippet,
+  generateSnippet,
 } from "../../src/components/CodeSnippet";
+
+> NOTE: This guide is a work in progress.
 
 ## Overview
 
-Prevent developers from putting bloc code in UI files.
+Let's say we want to enforce all developers on our Flutter app to use a feature-first project structure.
+
+A typical feature-first folder structure for a Flutter app may look something like the following:
+
+```
+├── core
+├── features
+│   ├── cart
+│   │   ├── data
+│   │   │   ├── models
+│   │   │   ├── repositories
+│   │   │   ├── services
+│   │   ├── domain
+│   │   │   ├── entities
+│   │   │   ├── repositories
+│   │   ├── presentation
+│   │   │   ├── controllers
+│   │   │   ├── states
+│   │   │   ├── widgets
+```
+> *The above structure is roughly based on [this great architecture series](https://codewithandrea.com/articles/flutter-app-architecture-riverpod-introduction/)
+> by Andrea Bizzotto.*
+
+In order to enforce the use of such a structure programmatically, we could implement any of the following cases:
+
+- only permit the declaration of widgets in the appropriate `widgets` folders
+- prevent json serialization/deserialization from anywhere besides `data` layer
+- enforce the use of dependency injection between layers
+- only permit the declaration of business logic in `controllers` folder (such as `BlocBase` or `Notifier` classes)
+
+In this tutorial, we will focus on the latter case, specifically by disallowing the creation of BLoC classes in any folder besides
+the presentation > controller layer.
 
 ### Learning Objectives
 
-- Conditional lint rule
-- Inspects path of ResolvedUnitResult
-- Using context variables (like ```unit```)
+- Using `visitCompilationUnit` and `unit` to check if a file is in the correct folder
+- Performance Considerations when writing LintRules
+- Using `TypeChecker` to check if a class declaration extends a particular type
+
+
+## Define Requirements
+
+Determining the logic of a Lint rule can be tricky. For this feature-first BLoC rule, we want to prevent a developer from
+creating a bloc class outside of presentation > controller, but this can possibly be done in different ways.
+Additionally, we want to be mindful that the performance of all of our lints could be negatively affected if
+just one lint rule is written in an inefficient way, so we need to write our lint in an efficient way.
+
+Therefore, the logic of our rule will be:
+
+1. Restrict our rule from executing on anything besides files contained in `**/presentation/controller/**` folders
+2. Check if any particular class declaration extends `BlocBase`
+3. OPTIONAL: Check if the particular file imports package:bloc before checking all class declarations for a BlocBase extension
+
+With requirements defined, we can move onto the build phase.
+
+## Declaring our Rule
+
+Lets start by creating a rule package `bloc_feature_structure` and adding `sidecar`
+and `analyzer` to `pubspec.yaml`.
+
+
+```bash
+dart create bloc_feature_structure
+```
+
+<CodeBlock title="pubspec.yaml" language="yaml">{trimSnippet(pubspec, [''])}</CodeBlock>
+
+Our first course of action is to create our LintRule class and its respective LintCode.
+
+
+<CodeBlock title="lib/src/bloc_outside_controller_layer.dart"  language="dart">{generateSnippet(rule, ['LINTCODE', 'ClassStart', 'CLASSEND', 'RuleImports'])}</CodeBlock>
+
+Just as we did in the previous tutorial, we ensure that the class name is the PascalCase representation of the LintCode.id
+that we assign, and we also ensure that the LintCode.id is the snake_case representation of the class name. We also make sure
+that the package name is the same as the package name in `pubspec.yaml`.
+
+> NOTE: These requirements can be referenced in the [rule creation checklist](/docs/concepts/rule_creation_checklist)
+
+## Implementing our Rule Logic
+
+### Using `visitCompilationUnit` to check a file path
+
+From here we can build out the first of our requirements: to only analyze files outside of the application folder.
+
+If you remember back to our feature-first project structure, we only want our rule to analyze files that are outside of the `presentation/controllers`
+folder, since we should not be creating BLoC classes in any other folder.
+
+In Sidecar, rule execution is scoped to a single file, and we can use the `unit` context variable to see exactly what file
+is being analyzed. We can use the package `glob` to check if the file path matches the particular `presentation/controllers`
+folder we're filtering for.
+
+
+<CodeBlock language="dart">{generateSnippet(rule, ['ClassStart', 'CLASSEND', 'VisitCompilationUnit', 'isApplicationFile'])}</CodeBlock>
+
+In this example, we create a `isControllerFile` variable that will store the result of our glob check. We can then use this variable
+in our `visitClassDeclaration` method before proceeding with the rest of our logic. 
+
+### Type-checking a class declaration
+
+Finally, we create our logic that checks if the class declaration extends `BlocBase` and if so, we report the lint.
+Unfortunately, we cannot simply import `BlocBase` from `package:bloc` and use it to type check our class declaration,
+as the analyzer does not provide us with a `Type` object to compare against.
+
+Instead, we must use the `TypeChecker` utility shipped in Sidecar, which gives us a simple way to check if an analyzed type
+matches a particular type that we're looking for.
+
+> NOTE: If you're interested in learning more about the `TypeChecker` utility, you can read more about it [here](/docs/concepts/type_checking)
+
+<CodeBlock language="dart">{generateSnippet(rule, ['ClassStart', 'CLASSEND', 'isApplicationFile', 'visitClassDeclaration'])}</CodeBlock>
+
+### Performance Considerations
+
+The reason we don't handle the file-check logic directly in `visitClassDeclaration` is because we always want to avoid unnecessary computation
+in the case that a particular file has multiple class declarations. If we were to instead check the file path in `visitClassDeclaration`,
+we would be redundantly checking the file path every time, and this could be a performance bottleneck. 
+
+When writing a lint rule, we want to make sure that we are only performing the necessary computation to ensure that our lint is as performant as possible.
+This is necessary when developers expect lints to appear after every file change within fractions of a second in the code editor.
+
+
+## Conclusion
+
+TODO
+
+<!--
+
+## Notes
+
+- Mention future benchmarking objective to help optimize rules
+
+-->

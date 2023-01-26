@@ -1,11 +1,16 @@
 ---
 title: Hello World
 sidebar_position: 1
+description: ""
 ---
 
 import CodeBlock from '@theme/CodeBlock';
 import ruleDefintion from "!!raw-loader!../../../../examples/hello_world_rules/lib/hello_world_rules.dart";
 import example from "!!raw-loader!../../../../examples/hello_world_rules/example/lib/example.dart";
+import step0 from "!!raw-loader!../../lib/src/tutorials/hello_world/lib/step0.dart";
+import step1 from "!!raw-loader!../../lib/src/tutorials/hello_world/lib/step1.dart";
+import step2 from "!!raw-loader!../../lib/src/tutorials/hello_world/lib/step2.dart";
+import step3 from "!!raw-loader!../../lib/src/tutorials/hello_world/lib/step3.dart";
 import pubspec from "!!raw-loader!../../../../examples/hello_world_rules/pubspec.yaml";
 import {
   trimSnippet,
@@ -14,7 +19,7 @@ import {
 
 ## Overview
 
-This tutorial will give you a brief introduction to creating rules. 
+This tutorial will give you an in-depth introduction to creating a basic rule. 
 
 At the conclusion of the tutorial, we will have the following code showing a lint message.
 
@@ -22,29 +27,138 @@ At the conclusion of the tutorial, we will have the following code showing a lin
 
 ### Learning Objectives
 
-After completion, we will know how to do the following:
+- Explore the basics of the ```LintRule``` class
+- Create analyzer logic for our particular use case
+- Requirements for declaring the rule so that it can be discovered by Sidecar
+- Validating a LintRule within our IDE
 
-- Explore the base ```Rule``` class which every rule must extend
-- Declaring the rule in a way that allows it to be discovered by Sidecar
-- Create a Lint Rule that appears in our IDE
+## Defining a Rule
 
-Let's get started.
+### Creating a new Rule Package
 
-## Creating a Rule Package
+Our first step is to create a package for our lints to reside in, and add the necessary dependencies to our pubspec.yaml file.
 
-- rule packages can contain 1 or more rules
-- ```dart create hello_world_rules```
-- import Sidecar and analyzer packages
+```bash
+# create our package and open the directory
+dart create hello_world_rules && cd hello_world_rules
 
-## Defining our Rule
+# add sidecar dependency
+dart pub add sidecar
 
-- explain the thought-process behind what we want the lint to do
-- extend Rule base class and Lint
-- use Simple String literal visitor
-- LintCode explanation
-- adding lint code to package's pubspec.yaml file
+# add official package:analyzer
+dart pub add analyzer
+```
 
-## Validating our LintRule in IDE
+> NOTE: version conflicts will arise if using a Dart SDK version thats not v2.17.0
 
-- Create an example app (dart command)
-- add string
+Though a rule package can contain one or more rules, for this example we'll create a single Lint Rule.
+
+<CodeBlock  language="dart">{trimSnippet(step0)}</CodeBlock>
+
+The summary of all Sidecar Rule requirements are:
+
+- [ ] every rule must have a unique rule ID (in snake_case)
+- [ ] the class name of the Rule must match the rule ID (in PascalCase)
+- [ ] the `code.package` parameter must match the name given to our rule package
+
+
+### Defining the Logic for our use case
+
+For our paricular rule, we want to create a lint that simply outputs 'Hello world!'
+any time we create code that has a string containing 'Is there anybody there?'.
+Our requirements are therefore:
+
+- Analyze all Strings
+- If the String value is equal to the text 'Is there anybody there?' then report a lint with the message 'Hello world!'
+
+In order to analyze all Strings in a particular file, we must override the `visitSimpleStringLiteral` method.
+ In later tutorials, we will cover how to determine which visit method(s) to use for a given use case.
+
+
+<CodeBlock title="lib/hello_world.dart" language="dart">{trimSnippet(step1)}</CodeBlock>
+
+The takeaway here is that the logic we write within this method will be executed for every String literal that appears in our codebase, 
+and the information of this code will be delivered via the `node` parameter of all visit methods. 
+
+For our use case, we want to check if the particular String contains the code 'Is there anybody there?'. We do so easily by writing the following logic:
+
+<CodeBlock language="dart">{trimSnippet(step2)}</CodeBlock>
+
+The last thing we must do for our newly created Rule class is add our rule's `visitSimpleStringLiteral` method to Sidecar's NodeRegistry; 
+without this step, our visitor method will never be executed.
+
+
+<CodeBlock language="dart">{trimSnippet(step3)}</CodeBlock>
+
+We've now fully defined our `HelloWorld` rule class!
+
+### Making our Rule Visible to Sidecar
+
+There are two other requirements that make our newly created rule visible to sidecar:
+
+- adding lint code to package's pubspec.yaml file (see: [sidecar_lints pubspec](https://github.com/pattobrien/sidecar/blob/master/packages/sidecar_lints/pubspec.yaml#L32))
+- ensuring the rule is available from lib/hello_world_rules.dart (see: [lib/sidecar_lints.dart](https://github.com/pattobrien/sidecar/blob/master/packages/sidecar_lints/lib/sidecar_lints.dart))
+
+## Validating our LintRule in an IDE
+
+The best way to visually test if our lint is working is by creating an example package:
+
+```bash
+# create new project within the root hello_world_rules directory
+dart create example && cd example
+
+# add our new rules package from path
+dart pub add hello_world_rules --path ../
+```
+We can now add our rule to our sidecar.yaml file:
+
+
+And finally, we can enable sidecar in our analysis_options.yaml file:
+
+```yaml
+analyzer:
+  plugins:
+    - sidecar
+```
+
+With our example app set up, all that's left to do is add our 'Is there anybody there?' string into a dart file, 
+and you should see a lint appear over the string.
+
+<CodeBlock title="example/main.dart" language="dart">{trimSnippet(example)}</CodeBlock>
+
+Congrats! You've created your first lint rule. 🎉
+
+## Conclusion
+
+This is a simple example of what it takes to create a custom lint rule using Sidecar. 
+On one hand, creating the logic to analyze code can be relatively straightforward,
+only taking a few lines of code to write:
+
+```
+  void visitSimpleStringLiteral(SimpleStringLiteral node) {
+    final stringValue = node.value;
+    if (stringValue == 'Is there anybody there?') {
+      reportAstNode(node, message: 'Hello world!');
+    }
+  }
+```
+On the otherhand, there are many individual requirements to abide by, and forgetting any
+of them results in no lint appearing at all.
+<!--
+- Rule Checklist (core concepts?)
+-->
+
+The [rule creation checklist](../concepts/rule_creation_checklist.mdx) makes it easy to ensure you've covered all the bases.
+Additionally, it's highly recommended to use package:sidecar_lints to help ensure all of your rules are properly defined for Sidecar.
+
+<!--
+
+- Link to next tutorial
+- Link to hello_world rule in github
+
+## Save for next tutorials:
+
+- When creating a rule that is meant to inspect some code, it's important for us to think about AstNode and Tokens. 
+- Rules are run for each CompilationUnit (Core Concept)
+- How can we determine which visitor method to use?
+-->

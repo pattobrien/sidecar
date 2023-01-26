@@ -11,18 +11,20 @@ environment:
 
 dependencies:
   analyzer: ^4.2.0
+  design_system_lints: ^0.1.0-dev.11
   freezed_annotation: ^2.1.0 # non-dart official package
   glob: ^2.1.0
   json_annotation: ^4.6.0
   meta: ^1.7.0
   path: ^1.8.1
   pub_semver: ^2.1.1
-  sidecar:
-    path: ../../packages/sidecar/
+  # sidecar:
+  #   path: ../../packages/sidecar/
   # sidecar_annotations:
   #   path: ../../packages/sidecar_annotations/
   # sidecar_package_utilities:
   #   path: ../../packages/sidecar_package_utilities/
+  sidecar: ^0.1.0-dev.21
   source_span: ^1.8.0
   test: ^1.16.0
 

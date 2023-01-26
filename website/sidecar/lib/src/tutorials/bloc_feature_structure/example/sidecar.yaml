@@ -1,0 +1,7 @@
+includes:
+  - "lib/**/*.dart"
+
+lints:
+  bloc_feature_structure:
+    rules:
+      bloc_outside_controller_layer:
