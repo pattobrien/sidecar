@@ -1,3 +1,7 @@
+## 0.1.1
+
+- chore: Upgrade analyzer dependency to v5.0.0
+
 ## 0.1.0
 
 - feat: Publish official beta release

@@ -419,11 +419,11 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
     node.visitChildren(this);
   }
 
-  @override
-  void visitHideClause(HideClause node) {
-    _runSubscriptions(node, registry._forHideClause);
-    node.visitChildren(this);
-  }
+  // @override
+  // void visitHideClause(HideClause node) {
+  //   _runSubscriptions(node, registry._forHideClause);
+  //   node.visitChildren(this);
+  // }
 
   @override
   void visitHideCombinator(HideCombinator node) {
@@ -672,11 +672,11 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
     node.visitChildren(this);
   }
 
-  @override
-  void visitShowClause(ShowClause node) {
-    _runSubscriptions(node, registry._forShowClause);
-    node.visitChildren(this);
-  }
+  // @override
+  // void visitShowClause(ShowClause node) {
+  //   _runSubscriptions(node, registry._forShowClause);
+  //   node.visitChildren(this);
+  // }
 
   @override
   void visitShowCombinator(ShowCombinator node) {
@@ -684,11 +684,11 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
     node.visitChildren(this);
   }
 
-  @override
-  void visitShowHideElement(ShowHideElement node) {
-    _runSubscriptions(node, registry._forShowHideElement);
-    node.visitChildren(this);
-  }
+  // @override
+  // void visitShowHideElement(ShowHideElement node) {
+  //   _runSubscriptions(node, registry._forShowHideElement);
+  //   node.visitChildren(this);
+  // }
 
   @override
   void visitSimpleFormalParameter(SimpleFormalParameter node) {

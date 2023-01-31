@@ -106,7 +106,7 @@ class NodeRegistry {
   final List<VisitorSubscription<GenericFunctionType>> _forGenericFunctionType =
       [];
   final List<VisitorSubscription<GenericTypeAlias>> _forGenericTypeAlias = [];
-  final List<VisitorSubscription<HideClause>> _forHideClause = [];
+  // final List<VisitorSubscription<HideClause>> _forHideClause = [];
   final List<VisitorSubscription<HideCombinator>> _forHideCombinator = [];
   final List<VisitorSubscription<IfElement>> _forIfElement = [];
   final List<VisitorSubscription<IfStatement>> _forIfStatement = [];
@@ -157,9 +157,9 @@ class NodeRegistry {
   final List<VisitorSubscription<ReturnStatement>> _forReturnStatement = [];
   final List<VisitorSubscription<ScriptTag>> _forScriptTag = [];
   final List<VisitorSubscription<SetOrMapLiteral>> _forSetOrMapLiteral = [];
-  final List<VisitorSubscription<ShowClause>> _forShowClause = [];
+  // final List<VisitorSubscription<ShowClause>> _forShowClause = [];
   final List<VisitorSubscription<ShowCombinator>> _forShowCombinator = [];
-  final List<VisitorSubscription<ShowHideElement>> _forShowHideElement = [];
+  // final List<VisitorSubscription<ShowHideElement>> _forShowHideElement = [];
   final List<VisitorSubscription<SimpleFormalParameter>>
       _forSimpleFormalParameter = [];
   final List<VisitorSubscription<SimpleIdentifier>> _forSimpleIdentifier = [];
@@ -540,9 +540,9 @@ class NodeRegistry {
   }
 
   /// Register a rule for visitHideClause method.
-  void addHideClause(Rule rule) {
-    _forHideClause.add(VisitorSubscription(rule, _getTimer(rule)));
-  }
+  // void addHideClause(Rule rule) {
+  //   _forHideClause.add(VisitorSubscription(rule, _getTimer(rule)));
+  // }
 
   /// Register a rule for visitHideCombinator method.
   void addHideCombinator(Rule rule) {
@@ -752,9 +752,9 @@ class NodeRegistry {
   }
 
   /// Register a rule for visitShowClause method.
-  void addShowClause(Rule rule) {
-    _forShowClause.add(VisitorSubscription(rule, _getTimer(rule)));
-  }
+  // void addShowClause(Rule rule) {
+  //   _forShowClause.add(VisitorSubscription(rule, _getTimer(rule)));
+  // }
 
   /// Register a rule for visitShowCombinator method.
   void addShowCombinator(Rule rule) {
@@ -762,9 +762,9 @@ class NodeRegistry {
   }
 
   /// Register a rule for visitShowHideElement method.
-  void addShowHideElement(Rule rule) {
-    _forShowHideElement.add(VisitorSubscription(rule, _getTimer(rule)));
-  }
+  // void addShowHideElement(Rule rule) {
+  //   _forShowHideElement.add(VisitorSubscription(rule, _getTimer(rule)));
+  // }
 
   /// Register a rule for visitSimpleFormalParameter method.
   void addSimpleFormalParameter(Rule rule) {
