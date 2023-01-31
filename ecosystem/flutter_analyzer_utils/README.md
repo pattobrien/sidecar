@@ -1,1 +1,0 @@
-A utility package for analyzing the Flutter SDK.

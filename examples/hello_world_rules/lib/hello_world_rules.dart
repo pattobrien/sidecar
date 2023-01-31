@@ -1,7 +1,7 @@
 import 'package:sidecar/sidecar.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 
-class HelloWorld extends Rule with Lint {
+class HelloWorld extends LintRule {
   @override
   LintCode get code => LintCode('hello_world', package: 'hello_world_rules');
 
