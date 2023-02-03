@@ -21,15 +21,15 @@
     },
     {
       "name": "args",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/args-2.3.1",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/args-2.3.2",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "async",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/async-2.9.0",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/async-2.10.0",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.18"
     },
     {
       "name": "boolean_selector",
@@ -63,7 +63,7 @@
     },
     {
       "name": "build_runner",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/build_runner-2.3.0",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/build_runner-2.3.3",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -81,7 +81,7 @@
     },
     {
       "name": "built_value",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/built_value-8.4.2",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/built_value-8.4.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -93,9 +93,9 @@
     },
     {
       "name": "checked_yaml",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/checked_yaml-2.0.1",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/checked_yaml-2.0.2",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "cli_util",
@@ -111,19 +111,19 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/collection-1.17.0",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/collection-1.17.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "convert",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/convert-3.1.0",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/convert-3.1.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "coverage",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/coverage-1.6.1",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/coverage-1.6.2",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -165,7 +165,7 @@
     },
     {
       "name": "frontend_server_client",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/frontend_server_client-2.1.3",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/frontend_server_client-3.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -201,7 +201,7 @@
     },
     {
       "name": "io",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/io-1.0.3",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/io-1.0.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -225,27 +225,27 @@
     },
     {
       "name": "logging",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/logging-1.1.0",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/logging-1.1.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "matcher",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.12",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.14",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/meta-1.8.0",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/meta-1.9.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "mime",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/mime-1.0.3",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/mime-1.0.4",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "node_preamble",
@@ -323,19 +323,7 @@
       "name": "sidecar",
       "rootUri": "../../../packages/sidecar",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
-    },
-    {
-      "name": "sidecar_annotations",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/sidecar_annotations-0.1.0-dev.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "sidecar_package_utilities",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/sidecar_package_utilities-0.1.0-dev.7",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "source_gen",
@@ -357,9 +345,9 @@
     },
     {
       "name": "source_maps",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/source_maps-0.10.10",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/source_maps-0.10.11",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "source_span",
@@ -369,9 +357,9 @@
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.11.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "state_notifier",
@@ -393,9 +381,9 @@
     },
     {
       "name": "string_scanner",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.1",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.2.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "term_glyph",
@@ -405,27 +393,27 @@
     },
     {
       "name": "test",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/test-1.21.4",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/test-1.22.2",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.18"
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.12",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.18",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "test_core",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/test_core-0.4.16",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/test_core-0.4.22",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.18"
     },
     {
       "name": "timing",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/timing-1.0.0",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/timing-1.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.14"
     },
     {
       "name": "typed_data",
@@ -453,7 +441,7 @@
     },
     {
       "name": "web_socket_channel",
-      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.2.0",
+      "rootUri": "file:///Users/pattobrien/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -476,7 +464,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-01-09T06:26:19.624577Z",
+  "generated": "2023-01-31T10:37:40.237572Z",
   "generator": "pub",
-  "generatorVersion": "2.17.6"
+  "generatorVersion": "2.18.2"
 }

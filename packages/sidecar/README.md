@@ -76,8 +76,8 @@ The goal of Sidecar is to enable a more personalized developer experience by all
 
 See the below guides for information on how to create and use Sidecar packages.
 
-- [Creating a Rule](https://github.com/pattobrien/sidecar/blob/master/docs/usage_guides/creating_a_rule.md) <a name="create-a-rule"></a>
-- [Using Sidecar rules to analyze a Codebase](https://github.com/pattobrien/sidecar/blob/master/docs/usage_guides/using_rules_in_project.md) <a name="using-a-rule"></a>
+- [Core Concepts](https://sidecaranalyzer.dev/docs/category/core-concepts) <a name="create-a-rule"></a>
+- [Using Sidecar rules to analyze a Codebase](https://sidecaranalyzer.dev/docs/category/usage-guides) <a name="using-a-rule"></a>
 
 ## Example Sidecar Rule Packages <a name="example-packages"></a>
 
@@ -97,9 +97,7 @@ dart pub global activate sidecar
 
 ## Troubleshooting <a name="troubleshooting"></a>
 
-- if Lints stop updating in the IDE, try reloading the IDE window or restarting the Dart Analysis Server (can be done via VSCode Dart-Code extension)
-
-
+- [Troubleshooting Tips](https://sidecaranalyzer.dev/docs/usage/troubleshooting)
 
 ## Contributing <a name="contributing"></a>
 

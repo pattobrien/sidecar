@@ -26,11 +26,11 @@ class MissingVisitMethodRegistration extends LintRule {
     final properties = node.members.whereType<MethodDeclaration>();
 
     final initializerMethod = properties.firstWhereOrNull(
-        (element) => element.name.name == 'initializeVisitor');
+        (element) => element.name.lexeme == 'initializeVisitor');
 
     final visitMethods = properties
-        .where((element) => element.name.name.contains('visit'))
-        .map((e) => e.name.name)
+        .where((element) => element.name.lexeme.contains('visit'))
+        .map((e) => e.name.lexeme)
         .toSet();
 
     final initializerBody = initializerMethod?.body;
@@ -60,8 +60,7 @@ class MissingVisitMethodRegistration extends LintRule {
     if (visitMethods.isEmpty) return;
 
     for (final methodName in visitMethods) {
-      final method =
-          properties.firstWhere((element) => element.name.name == methodName);
+      final method = properties.firstWhere((e) => e.name.lexeme == methodName);
       reportLint(method.name, message: _message, correction: _correction);
     }
   }

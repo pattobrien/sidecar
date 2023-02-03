@@ -1,7 +1,11 @@
-## 0.1.0-dev.22
+## 0.1.1
 
+- chore: Upgrade analyzer dependency to v5.0.0
+
+## 0.1.0
+
+- feat: Publish official beta release
 - fix: Lints appear after adding a new file to workspace
-
 
 ## 0.1.0-dev.21
 

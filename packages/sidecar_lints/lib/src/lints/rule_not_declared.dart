@@ -39,14 +39,14 @@ class RuleNotDeclared extends LintRule with QuickFix {
     final pubspec = PubSpec.fromYamlString(pubspecContents);
     final packageName = pubspec.name;
     final lints = getDeclaredLints(pubspecContents);
-    final snakeCaseName = ReCase(node.name.name).snakeCase;
+    final snakeCaseName = ReCase(node.name.lexeme).snakeCase;
     if (!lints.contains(snakeCaseName)) {
       reportLint(node.name, message: _message);
     }
 
     final code = node.members
         .whereType<MethodDeclaration>()
-        .firstWhere((element) => element.name.name == 'code');
+        .firstWhere((element) => element.name.lexeme == 'code');
 
     final lintCode = code.body.childEntities.firstWhereOrNull((element) {
       if (element is! InstanceCreationExpression) return false;
