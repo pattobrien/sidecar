@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:logging/logging.dart' hide LogRecord;
 import 'package:riverpod/riverpod.dart';
 
 import '../protocol/protocol.dart';
 import '../rules/rules.dart';
 import '../server/communication_channel.dart';
 import '../server/starters/server_starter.dart';
+import 'analyzer_logger.dart';
 import 'providers/providers.dart';
 import 'sidecar_analyzer.dart';
 
@@ -24,6 +26,8 @@ Future<void> startAnalyzer(
     activeTargetRootProvider.overrideWithValue(root),
     communicationChannelProvider.overrideWithValue(channel),
     ruleConstructorProvider.overrideWithValue(constructors),
+    loggerProvider.overrideWith(
+        (ref) => Logger('sidecar-analyzer')..initialize(root, constructors)),
   ]);
 
   await runZonedGuarded<Future>(() async {

@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
+import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../analyzer/ast/ast.dart';
@@ -15,13 +16,14 @@ class FileAnalyzerServiceImpl {
     ResolvedUnitResult? unitResult,
     Set<BaseRule> rules,
     NodeRegistry registry,
+    Logger logger,
   ) {
     if (unitResult == null) return {};
     for (final rule in rules) {
       rule.setUnitContext(unitResult);
     }
 
-    final mainVisitor = RegisteredRuleVisitor(registry);
+    final mainVisitor = RegisteredRuleVisitor(registry, logger);
     unitResult.unit.accept(mainVisitor);
     final results = mainVisitor.results;
     mainVisitor.clearResults();
@@ -32,8 +34,9 @@ class FileAnalyzerServiceImpl {
     ResolvedUnitResult? unitResult,
     Set<Lint> rules,
     NodeRegistry registry,
+    Logger logger,
   ) {
-    return LintResults(visitResults(unitResult, rules, registry)
+    return LintResults(visitResults(unitResult, rules, registry, logger)
         .whereType<LintResult>()
         .toSet());
   }
@@ -42,8 +45,9 @@ class FileAnalyzerServiceImpl {
     ResolvedUnitResult? unitResult,
     Set<Data> rules,
     NodeRegistry registry,
+    Logger logger,
   ) {
-    return visitResults(unitResult, rules, registry)
+    return visitResults(unitResult, rules, registry, logger)
         .whereType<SingleDataResult>()
         .toSet();
   }
@@ -52,8 +56,9 @@ class FileAnalyzerServiceImpl {
     ResolvedUnitResult? unitResult,
     Set<QuickAssist> rules,
     NodeRegistry registry,
+    Logger logger,
   ) {
-    return visitResults(unitResult, rules, registry)
+    return visitResults(unitResult, rules, registry, logger)
         .whereType<AssistResult>()
         .toSet();
   }

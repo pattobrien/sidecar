@@ -15,15 +15,17 @@ import '../protocol/protocol.dart';
 import '../server/communication_channel.dart';
 import '../utils/duration_ext.dart';
 import '../utils/file_paths.dart';
+import '../utils/logger/log_printer.dart';
+import 'analyzer_logger.dart';
 import 'providers/providers.dart';
 import 'providers/status_providers.dart';
 
-final logger = Logger('sidecar-plugin');
+// final logger = Logger('sidecar-plugin');
 
 T timedLog<T>(String message, T Function() function) {
   final watch = Stopwatch()..start();
   final result = function();
-  logger.info('${watch.elapsed.prettified()} $message');
+  // logger.info('${watch.elapsed.prettified()} $message');
   return result;
 }
 
@@ -31,7 +33,7 @@ Future<T> timedLogAsync<T>(
     String message, Future<T> Function() function) async {
   final watch = Stopwatch()..start();
   final result = await function();
-  logger.info('${watch.elapsed.prettified()} $message');
+  // logger.info('${watch.elapsed.prettified()} $message');
   return result;
 }
 
@@ -50,22 +52,11 @@ class SidecarAnalyzer {
   OverlayResourceProvider get resourceProvider =>
       _ref.read(analyzerResourceProvider);
 
+  Logger get logger => _ref.read(loggerProvider);
+
   Future<void> setup() async {
-    _initLogger();
     _setupListeners();
     channel.sendNotification(const InitCompleteNotification());
-  }
-
-  void _initLogger() {
-    logger.onRecord.listen((log) {
-      final severity = LogSeverity.fromLogLevel(log.level);
-      final record = LogRecord.fromAnalyzer(log.message, log.time,
-          targetRoot: package.root,
-          severity: severity,
-          stackTrace: log.stackTrace);
-      final message = SidecarMessage.log(record);
-      _sendToRunner(message);
-    });
   }
 
   void _sendToRunner(SidecarMessage message) => channel.sendMessage(message);
@@ -96,8 +87,8 @@ class SidecarAnalyzer {
   }
 
   Future<void> _handleRequest(RequestMessage msg) async {
-    logger.info('_handleRequest - ${msg.id}');
-    final watch = Stopwatch()..start();
+    // logger.info('_handleRequest - ${msg.id}');
+    // final watch = Stopwatch()..start();
     final response = await msg.request.map<FutureOr<SidecarResponse?>>(
       setWorkspaceScope: handleSetCollectionRequest,
       setPriorityFiles: handleSetPriorityFiles,
@@ -111,7 +102,7 @@ class SidecarAnalyzer {
       final responseMessage = SidecarMessage.response(response, id: msg.id);
       _sendToRunner(responseMessage);
     }
-    logger.info('_handleRequest in ${watch.elapsed.prettified()} - ${msg.id}');
+    // logger.info('_handleRequest in ${watch.elapsed.prettified()} - ${msg.id}');
   }
 
   FutureOr<SetWorkspaceResponse> handleSetCollectionRequest(
@@ -125,7 +116,7 @@ class SidecarAnalyzer {
       _ref.read(workspaceScopeProvider.notifier).update((_) => [activePackage]);
     } else {
       // scope = roots
-      print('SET ROOTS: $roots');
+      // print('SET ROOTS: $roots');
       _ref.read(workspaceScopeProvider.notifier).update((_) => roots);
     }
     final files = _ref.refresh(activeProjectScopedFilesProvider);
@@ -168,13 +159,13 @@ class SidecarAnalyzer {
             files.where((f) => f.contextRoot == contextUri).toSet();
 
         for (final file in changedFiles) {
-          logger
-              .info('changeFile for ${contextUri.toFilePath()} - ${file.path}');
+          // logger
+          //     .info('changeFile for ${contextUri.toFilePath()} - ${file.path}');
           context.changeFile(file.path);
         }
         final affected = await context.applyPendingFileChanges();
-        logger.info(
-            'applyPendingFileChanges in ${watch.elapsed.prettified()} - ${contextUri.toFilePath()}');
+        // logger.info(
+        //     'applyPendingFileChanges in ${watch.elapsed.prettified()} - ${contextUri.toFilePath()}');
 
         //TODO: is this the right place to calculate data?
         // await _ref.refresh(totalDataResultsProvider.future);
@@ -192,8 +183,8 @@ class SidecarAnalyzer {
 
         await analyzeFiles(files: affectedFiles.difference(changedFiles));
 
-        logger.info(
-            'handleContexts in ${watch.elapsed.prettified()} - ${contextUri.toFilePath()}');
+        // logger.info(
+        //     'handleContexts in ${watch.elapsed.prettified()} - ${contextUri.toFilePath()}');
       }
     }
 
@@ -258,7 +249,7 @@ class SidecarAnalyzer {
     for (final file in dartFiles) {
       await _ref.read(lintResultsProvider(file).future);
     }
-    logger.info('analyzeFiles in ${watch.elapsed.prettified()} - $files');
+    // logger.info('analyzeFiles in ${watch.elapsed.prettified()} - $files');
     watch.stop();
   }
 

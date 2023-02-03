@@ -4,6 +4,7 @@ import '../../../context/context.dart';
 import '../../protocol/analyzed_file.dart';
 import '../../rules/base_rule.dart';
 import '../../services/rule_initialization_service.dart';
+import '../analyzer_logger.dart';
 import '../ast/ast.dart';
 import '../context/rule_analyzed_file.dart';
 import '../sidecar_analyzer.dart';
@@ -41,7 +42,7 @@ final _scopedRulesForFileProvider =
   //   rule.setConfig(context: context);
   // }
 
-  logger.fine('_scopedRulesForFileProvider ${rulesForFile.map((e) => e.code)}');
+  // logger.fine('_scopedRulesForFileProvider ${rulesForFile.map((e) => e.code)}');
   return rulesForFile;
 });
 

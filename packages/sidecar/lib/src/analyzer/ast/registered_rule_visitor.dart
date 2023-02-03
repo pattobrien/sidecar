@@ -1,9 +1,15 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
+import 'package:logging/logging.dart';
+import 'package:path/path.dart' as p;
+import 'package:source_span/source_span.dart';
 
 import '../../protocol/protocol.dart';
 import '../../rules/rules.dart';
-import '../sidecar_analyzer.dart';
+import '../../utils/syntactix_entity_utilities.dart';
 import 'visitor_subscription.dart';
 
 part 'lint_node_registry.dart';
@@ -13,10 +19,12 @@ part 'lint_node_registry.dart';
 /// Visitor that executes all visit methods of a given NodeRegistry.
 class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
   /// Visitor that executes all visit methods of a given NodeRegistry.
-  RegisteredRuleVisitor(this.registry);
+  RegisteredRuleVisitor(this.registry, this.logger);
 
   /// Contains aggregated lists of Sidecar Rule visitor methods for a given file.
   final NodeRegistry registry;
+
+  final Logger logger;
 
   // Access AnalysisResults from all registered rules.
   Set<AnalysisResult> get results =>
@@ -887,19 +895,45 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
       final subscription = subscriptions[i];
       final timer = subscription.timer;
       timer?.start();
-      try {
-        final rule = subscription.rule;
-        timedLog<dynamic>(
-            'runSubscriptions ${rule.code.id} ${node.beginToken.lexeme}', () {
-          node.accept<dynamic>(rule);
-        });
-      } catch (e) {
-        // if (!exceptionHandler(
-        //     node, subscription.linter, exception, stackTrace)) {
-        rethrow;
-        // }
-      }
+
+      final rule = subscription.rule;
+
+      runZonedGuarded(() {
+        node.accept<dynamic>(rule);
+      }, (error, stack) {
+        final nodeSource = node.toSourceSpan(rule.unit);
+        logger.severe(
+            ShortRuleLog(
+                rule.code, '${nodeSource.prettifiedSourceSpan()} $error'),
+            error,
+            stack);
+      }, zoneSpecification: ZoneSpecification(
+        print: (self, parent, zone, line) {
+          logger.info(ShortRuleLog(rule.code, line));
+        },
+      ));
+
       timer?.stop();
     }
   }
+}
+
+extension _ on SourceSpan {
+  String prettifiedSourceSpan() {
+    final path = sourceUrl!.toFilePath();
+
+    // final relativePath = p.relative(path, from: Directory.current.path);
+
+    final location = '$path:${start.line}:${start.column}';
+    return location;
+  }
+}
+
+class ShortRuleLog {
+  const ShortRuleLog(
+    this.code,
+    this.message,
+  );
+  final RuleCode code;
+  final String message;
 }

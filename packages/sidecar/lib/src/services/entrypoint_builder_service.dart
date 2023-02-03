@@ -82,8 +82,8 @@ class EntrypointBuilderService {
     final service = ActiveProjectService(resourceProvider: _resourceProvider);
     final config = service.getPackageConfig(packageRoot);
     final sidecarPackages = service.getSidecarDependencies(config);
-    logger.finer(
-        'setupBootstrapper || adding ${sidecarPackages.length} packages');
+    // logger.finer(
+    //     'setupBootstrapper || adding ${sidecarPackages.length} packages');
     final content = generateEntrypointContent(sidecarPackages);
     final file = _resourceProvider.getFile(constructorPath);
     file.writeAsStringSync(content);

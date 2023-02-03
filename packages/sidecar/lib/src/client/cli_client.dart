@@ -65,7 +65,7 @@ class CliClient extends AnalyzerClient {
     final activeContext = activeProjectService.getActivePackageFromUri(root);
 
     if (activeContext == null) {
-      logger.severe('invalid Sidecar directory.');
+      // logger.severe('invalid Sidecar directory.');
       // print('invalid sidecar directory');
       // throw StateError('invalid Sidecar directory');
       return;

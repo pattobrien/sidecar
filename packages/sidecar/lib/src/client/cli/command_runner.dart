@@ -17,7 +17,7 @@ class CliCommandRunner extends CommandRunner<int> {
     try {
       return await runCommand(parse(args)) ?? ExitCode.success;
     } catch (e, stackTrace) {
-      logger.severe('COMMAND RUNNER ERROR', e, stackTrace);
+      // logger.severe('COMMAND RUNNER ERROR', e, stackTrace);
       rethrow;
     }
   }

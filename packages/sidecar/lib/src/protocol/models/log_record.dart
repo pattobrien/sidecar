@@ -1,6 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logging/logging.dart';
+import 'package:logging/logging.dart' as logging;
 
+import '../../../sidecar.dart';
+import '../../analyzer/ast/registered_rule_visitor.dart';
+import '../../analyzer/sidecar_analyzer.dart';
 import '../../utils/json_utils/json_utils.dart';
 import 'models.dart';
 
@@ -11,8 +14,11 @@ part 'log_record.g.dart';
 class LogRecord with _$LogRecord {
   const factory LogRecord.simple(
     String message,
-    DateTime timestamp,
-  ) = _LogRecord;
+    DateTime timestamp, {
+    required LogSeverity severity,
+    @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+        StackTrace? stackTrace,
+  }) = _LogRecord;
 
   const factory LogRecord.fromAnalyzer(
     String message,
@@ -40,41 +46,62 @@ class LogRecord with _$LogRecord {
 
 extension LogRecordX on LogRecord {
   String prettified() => when(
-        simple: (message, timestamp) {
+        simple: (message, timestamp, severity, stackTrace) {
           return '[SIMPLE-LOG] ${timestamp.toIso8601String()} $message';
         },
         fromAnalyzer: (message, timestamp, root, severity, stackTrace) {
           return '[${root.pathSegments.reversed.toList()[1]}] ${timestamp.toIso8601String()} $message ${stackTrace ?? ''}';
         },
         fromRule: (lintCode, timestamp, severity, message, stackTrace) {
-          return '[${lintCode.package}.${lintCode.id}] ${timestamp.toIso8601String()} $message ${stackTrace ?? ''}';
+          return '[${severity.prettified}] ${timestamp.toIso8601String()} ${lintCode.prettyPrint()} $message ${stackTrace ?? ''}';
         },
       );
 }
 
 enum LogSeverity {
-  error([Level.SEVERE, Level.SHOUT]),
-  warning([Level.WARNING]),
-  info([Level.FINE, Level.FINER, Level.FINEST]),
+  error([logging.Level.SEVERE, logging.Level.SHOUT]),
+  warning([logging.Level.WARNING]),
+  info([logging.Level.FINE, logging.Level.FINER, logging.Level.FINEST]),
   verbose([]),
   unknown([]);
 
   const LogSeverity(this.levels);
 
-  final List<Level> levels;
+  final List<logging.Level> levels;
 
-  static LogSeverity fromLogLevel(Level level) {
-    if (level == Level.FINE ||
-        level == Level.FINER ||
-        level == Level.FINEST ||
-        level == Level.INFO) {
+  static LogSeverity fromLogLevel(logging.Level level) {
+    if (level == logging.Level.FINE ||
+        level == logging.Level.FINER ||
+        level == logging.Level.FINEST ||
+        level == logging.Level.INFO) {
       return LogSeverity.info;
-    } else if (level == Level.SEVERE || level == Level.SHOUT) {
+    } else if (level == logging.Level.SEVERE || level == logging.Level.SHOUT) {
       return LogSeverity.error;
-    } else if (level == Level.WARNING) {
+    } else if (level == logging.Level.WARNING) {
       return LogSeverity.warning;
     } else {
       return LogSeverity.unknown;
     }
+  }
+
+  String get prettified => name.toUpperCase().padLeft(7);
+}
+
+extension LoggingLogRecordX on logging.LogRecord {
+  LogRecord toAnalyzerLog(Uri root) {
+    final obj = object;
+    if (obj is ShortRuleLog) {
+      return RuleLogRecord(obj.code, time, LogSeverity.fromLogLevel(level),
+          obj.message, stackTrace);
+    } else {
+      return AnalyzerLogRecord(message, time,
+          targetRoot: root,
+          severity: LogSeverity.fromLogLevel(level),
+          stackTrace: stackTrace);
+    }
+  }
+
+  SidecarMessage toSidecarMessage(Uri root) {
+    return SidecarMessage.log(toAnalyzerLog(root));
   }
 }

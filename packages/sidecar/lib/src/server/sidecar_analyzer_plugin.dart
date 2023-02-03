@@ -51,14 +51,14 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
 
   @override
   void start(plugin.PluginCommunicationChannel channel) {
-    logger.info('STARTING PLUGIN.... ');
+    // logger.info('STARTING PLUGIN.... ');
     ref.read(analyzerPluginChannelProvider).listen(handleAllRequests);
   }
 
   Future<void> handleAllRequests(
     plugin.Request request,
   ) async {
-    logger.info('handleAllRequests ${request.id}');
+    // logger.info('handleAllRequests ${request.id}');
     final watch = Stopwatch()..start();
     final isIntialized =
         isRunnerInitialized.entries.every((entry) => entry.value == true);
@@ -143,8 +143,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     } else {
       queuedRequests.add(request);
     }
-    logger.info(
-        'handleAllRequests in ${watch.elapsed.prettified()} ${request.id}');
+    // logger.info(
+    //     'handleAllRequests in ${watch.elapsed.prettified()} ${request.id}');
   }
 
   /// Handle an 'edit.getFixes' request.
@@ -154,7 +154,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   Future<plugin.EditGetFixesResult> handleEditGetFixes(
     plugin.EditGetFixesParams parameters,
   ) async {
-    logger.info('handleEditGetFixes');
+    // logger.info('handleEditGetFixes');
     final runnersForFile = getRunnersForPath(parameters.file);
     final responses =
         await Future.wait(runnersForFile.entries.map((entry) async {
@@ -163,7 +163,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       final request = QuickFixRequest(file: file, offset: parameters.offset);
       return runner.asyncRequest<QuickFixResponse>(request);
     })).then((value) => value.whereNotNull());
-    logger.info('handleEditGetFixes = responses: $responses');
+    // logger.info('handleEditGetFixes = responses: $responses');
 
     // we need to aggregate responses from all runners into one server response
     final fixes = responses
@@ -171,7 +171,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         .map((response) => response.toPluginResponse())
         .expand((result) => result.fixes)
         .toList();
-    logger.info('handleEditGetFixes = fixes: $fixes');
+    // logger.info('handleEditGetFixes = fixes: $fixes');
     return plugin.EditGetFixesResult(fixes);
   }
 
@@ -313,11 +313,13 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
                           unawaited(runner.lints
                               .firstWhere(
                                   (element) => element.file.path == path)
-                              .then((value) => logger.info(
-                                  'lint received in ${sWatch.elapsed.prettified()} - ${value.file.relativePath}')));
+                              .then((value) {
+                            // return logger.info(
+                            //   'lint received in ${sWatch.elapsed.prettified()} - ${value.file.relativePath}');
+                          }));
                         }
-                        logger.info(
-                            'updateFilesRequest: ${runnerEvents.map((e) => e.filePath).toList()}');
+                        // logger.info(
+                        //     'updateFilesRequest: ${runnerEvents.map((e) => e.filePath).toList()}');
                         final sidecarRequest =
                             SidecarRequest.updateFiles(runnerEvents);
 
@@ -334,7 +336,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
   final isRunnerInitialized = <SidecarServer, bool>{};
 
   void dumpRequests() {
-    logger.info('dumpRequests = ${queuedRequests.length}');
+    // logger.info('dumpRequests = ${queuedRequests.length}');
     final orderedRequests = queuedRequests
       ..sort((a, b) => a.id.compareTo(b.id));
     orderedRequests.forEach(handleAllRequests);
@@ -348,8 +350,8 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       final uri = contextCollection.contexts.first.contextRoot.root.toUri();
       reporter = PluginReporter(uri);
     }
-    logger.info(
-        'MIDDLEMAN afterNewContextCollection || ${contextCollection.contexts.length} contexts');
+    // logger.info(
+    //     'MIDDLEMAN afterNewContextCollection || ${contextCollection.contexts.length} contexts');
     final service = ref.read(activeProjectServiceProvider);
     final activeContexts =
         service.getActivePackagesFromCollection(contextCollection);
@@ -366,8 +368,10 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
         );
       });
       runner.logs.listen((event) => _log(runner, event));
-      logger.onRecord.listen((event) =>
-          _log(runner, LogRecord.simple(event.toString(), DateTime.now())));
+      // logger.onRecord.listen((event) => _log(
+      //     runner,
+      //     LogRecord.simple(event.toString(), DateTime.now(),
+      //         severity: LogSeverity.fromLogLevel(event.level))));
 
       final roots = contextCollection.contexts
           .map((e) => e.contextRoot.root.toUri())
@@ -377,7 +381,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
       await runner.asyncRequest<SetWorkspaceResponse>(request);
       isRunnerInitialized[runner] = true;
     }));
-    logger.info('afterNewContextCollection COMPLETE');
+    // logger.info('afterNewContextCollection COMPLETE');
     dumpRequests();
     // ref
     //     .read(allContextsProvider.notifier)

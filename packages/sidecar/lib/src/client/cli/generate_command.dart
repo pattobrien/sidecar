@@ -25,7 +25,7 @@ class GenerateCommand extends Command<int> {
       await packageGenerator.generate(Directory.current);
       return ExitCode.success;
     } catch (e, stackTrace) {
-      logger.severe('CLI ERROR', e, stackTrace);
+      // logger.severe('CLI ERROR', e, stackTrace);
       rethrow;
     }
   }

@@ -11,6 +11,7 @@ import '../../protocol/protocol.dart';
 import '../../server/communication_channel.dart';
 import '../../services/file_analyzer_service_impl.dart';
 import '../../utils/utils.dart';
+import '../analyzer_logger.dart';
 import '../context/context.dart';
 import '../sidecar_analyzer.dart';
 import 'providers.dart';
@@ -51,12 +52,14 @@ final lintResultsProvider =
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
   final rulesForFile = ref.watch(scopedLintRulesForFileProvider(file));
   final registry = ref.watch(nodeRegistryForFileLintsProvider(file));
+  final logger = ref.watch(loggerProvider);
 
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
 
   final results = timedLog('visitLintResults', () {
     return runZonedGuarded<LintResults>(
-          () => analyzerService.visitLintResults(unit, rulesForFile, registry),
+          () => analyzerService.visitLintResults(
+              unit, rulesForFile, registry, logger),
           (err, stk) => log('lintResultsProvider', error: err, stackTrace: stk),
         ) ??
         LintResults(const {});
@@ -79,11 +82,12 @@ final assistFiltersProvider =
   final rules = ref.watch(scopedAssistRulesForFileProvider(file));
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
   final registry = ref.watch(nodeRegistryForFileAssistsProvider(file));
+  final logger = ref.watch(loggerProvider);
 
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
 
   return runZonedGuarded<Set<AssistResult>>(
-        () => analyzerService.visitAssistFilters(unit, rules, registry),
+        () => analyzerService.visitAssistFilters(unit, rules, registry, logger),
         (err, stk) => log('assistFiltersProvider', error: err, stackTrace: stk),
       ) ??
       {};
@@ -110,12 +114,14 @@ final dataResultsProvider =
     Provider.family<Set<SingleDataResult>, AnalyzedFile>((ref, file) {
   final analyzerService = ref.watch(fileAnalyzerServiceProvider);
   final registry = ref.watch(nodeRegistryForFileDataProvider(file));
+  final logger = ref.watch(loggerProvider);
   final rulesForFile = ref.watch(scopedDataRulesForFileProvider(file));
 
   final unit = ref.watch(resolvedUnitForFileProvider(file)).valueOrNull;
   return timedLog('visitDataResults', () {
     return runZonedGuarded<Set<SingleDataResult>>(
-          () => analyzerService.visitDataResults(unit, rulesForFile, registry),
+          () => analyzerService.visitDataResults(
+              unit, rulesForFile, registry, logger),
           (err, stk) => log('dataResultsProvider', error: err, stackTrace: stk),
         ) ??
         {};
