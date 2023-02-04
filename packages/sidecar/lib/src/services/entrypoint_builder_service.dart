@@ -7,7 +7,6 @@ import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
 import '../server/server_providers.dart';
 import '../utils/file_paths.dart';
-import '../utils/logger/logger.dart';
 import 'active_project_service.dart';
 
 /// Service for creating entrypoint files for Sidecar Analyzer.

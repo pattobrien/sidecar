@@ -1,10 +1,6 @@
 import 'package:checked_yaml/checked_yaml.dart';
-import 'package:source_span/source_span.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../protocol/constants/constants.dart';
-import '../../protocol/models/rule_code.dart';
-import '../../utils/logger/logger.dart';
 import '../exceptions/exceptions.dart';
 import '../yaml_parsers/yaml_parsers.dart';
 import 'enums.dart';

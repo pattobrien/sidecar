@@ -30,8 +30,8 @@ class RuleCode with _$RuleCode {
 
   const RuleCode._();
 
-  String prettyPrint() => '$package.$id';
-
   factory RuleCode.fromJson(Map<String, dynamic> json) =>
       _$RuleCodeFromJson(json);
+
+  String prettyPrint() => '$package.$id';
 }

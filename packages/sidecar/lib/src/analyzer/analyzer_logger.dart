@@ -5,8 +5,6 @@ import '../protocol/models/models.dart';
 import '../rules/rules.dart';
 import '../utils/logger/log_printer.dart';
 
-// final logger =
-
 final loggerProvider = Provider<Logger>((ref) {
   return Logger('unknown');
 });

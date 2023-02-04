@@ -59,7 +59,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
     plugin.Request request,
   ) async {
     // logger.info('handleAllRequests ${request.id}');
-    final watch = Stopwatch()..start();
+    // final watch = Stopwatch()..start();
     final isIntialized =
         isRunnerInitialized.entries.every((entry) => entry.value == true);
     final requestTime = DateTime.now().microsecondsSinceEpoch;
@@ -308,7 +308,7 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
                                 .toList());
 
                         for (final event in runnerEvents) {
-                          final sWatch = Stopwatch()..start();
+                          // final sWatch = Stopwatch()..start();
                           final path = event.filePath;
                           unawaited(runner.lints
                               .firstWhere(

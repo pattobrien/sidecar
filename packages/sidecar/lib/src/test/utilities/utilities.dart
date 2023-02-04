@@ -121,12 +121,12 @@ Future<void> modifyFile(String relativePath, {required String content}) async {
 
 // void ruleTearDown() => tearDownAll(() {});
 
-extension _ on LintResult {
-  ExpectedLint toExpectedLint() =>
-      ExpectedLint(code, span.start.offset, span.length);
+extension on LintResult {
+  // ExpectedLint toExpectedLint() =>
+  //     ExpectedLint(code, span.start.offset, span.length);
 
   ExpectedText toExpectedText({
-    bool withText = true,
+    // bool withText = true,
     bool withOffset = false,
     bool withLength = false,
   }) =>

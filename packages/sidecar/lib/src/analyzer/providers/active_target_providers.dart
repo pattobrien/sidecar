@@ -31,8 +31,6 @@ final activePackageProvider = Provider<ActivePackage>((ref) {
       : activePackage!;
 });
 
-// TODO: define docs for workspaceScope
-
 /// Roots of packages to be analyzed in this context.
 ///
 /// Different implementations are made for:

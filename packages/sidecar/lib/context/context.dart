@@ -1,11 +1,8 @@
 import 'package:analyzer/dart/analysis/analysis_options.dart';
-import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/session.dart';
 import 'package:analyzer/file_system/file_system.dart';
-import 'package:package_config/package_config_types.dart';
 
 import '../src/configurations/configurations.dart';
-import '../src/protocol/models/analysis_result.dart';
 
 /// A snapshot of states from the current Sidecar analysis context.
 abstract class SidecarContext {

@@ -9,7 +9,6 @@ import '../server/server_providers.dart';
 import '../server/sidecar_server.dart';
 import '../server/starters/cli_starter.dart';
 import '../services/active_project_service.dart';
-import '../utils/logger/logger.dart';
 import 'client.dart';
 
 class CliClient extends AnalyzerClient {

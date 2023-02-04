@@ -5,7 +5,6 @@ import '../analyzer/ast/ast.dart';
 import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/analyzed_file.dart';
 import '../rules/rules.dart';
-import '../utils/logger/logger.dart';
 import 'glob_service.dart';
 
 /// Service for initializing Sidecar Rules based on SidecarSpec configuration.

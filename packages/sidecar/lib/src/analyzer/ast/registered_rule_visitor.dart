@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:logging/logging.dart';
-import 'package:path/path.dart' as p;
 import 'package:source_span/source_span.dart';
 
 import '../../protocol/protocol.dart';
@@ -918,7 +916,7 @@ class RegisteredRuleVisitor extends GeneralizingAstVisitor<void> {
   }
 }
 
-extension _ on SourceSpan {
+extension on SourceSpan {
   String prettifiedSourceSpan() {
     final path = sourceUrl!.toFilePath();
 

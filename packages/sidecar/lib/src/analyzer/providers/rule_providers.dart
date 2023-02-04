@@ -33,26 +33,13 @@ final _scopedRulesForFileProvider =
       .constructRulesForFile(file, sidecarSpec, constructors)
       .intersection(activeProjectRules);
 
-  // for (final rule in rulesForFile) {
-  //   //TODO: restrict updates to changes with rule/package config changes
-  //   final ruleFile = RuleAnalyzedFile(rule: rule, file: file);
-  //   final context = ref.watch(scopeForRuleProvider(ruleFile));
-  //   rule.setConfig(context: context);
-  // }
-
-  // logger.fine('_scopedRulesForFileProvider ${rulesForFile.map((e) => e.code)}');
   return rulesForFile;
 });
 
 final scopeForRuleProvider =
     Provider.family<SidecarContext, RuleAnalyzedFile>((ref, ruleFile) {
-  final rule = ruleFile.rule;
+  // final rule = ruleFile.rule;
   final baseContext = ref.watch(sidecarContextProvider(ruleFile.file))!;
-  // TODO: use RuleScope to restrict updates
-  // final scope = ruleFile.rule.scope;
-  // final scopedData = ref.watch(totalDataResultsProvider
-  //     .select((value) => rule.scope.dataSelector(value)));
-  // return baseContext.copyWith(data: scopedData.toSet());
   return baseContext;
 });
 

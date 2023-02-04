@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -140,7 +139,7 @@ class ActiveProjectService {
         fileUri:
             Uri.file(p.canonicalize(p.join(root.toFilePath(), kSidecarYaml))),
       ).data;
-    } catch (e, stackTrace) {
+    } catch (e) {
       // logger.shout('ISOLATE NON-FATAL: ', e, stackTrace);
       return null;
     }
