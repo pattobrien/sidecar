@@ -72,6 +72,8 @@ class LogPrinter {
 
     sink.writeln(msg);
   }
+
+  Future<void> onDispose() => sink.close();
 }
 
 int longestId(List<SidecarBaseConstructor> constructors) {

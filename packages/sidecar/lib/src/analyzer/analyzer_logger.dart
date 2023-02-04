@@ -10,10 +10,14 @@ final loggerProvider = Provider<Logger>((ref) {
 });
 
 extension LoggerInit on Logger {
-  void initialize(Uri root, List<SidecarBaseConstructor> constructors) {
+  AsyncCallback initialize(
+      Uri root, List<SidecarBaseConstructor> constructors) {
     hierarchicalLoggingEnabled = true;
     level = Level.FINEST;
     final printer = LogPrinter(constructors, root);
     onRecord.listen((log) => printer.handleLog(log.toAnalyzerLog(root)));
+    return printer.onDispose;
   }
 }
+
+typedef AsyncCallback = Future<void> Function();

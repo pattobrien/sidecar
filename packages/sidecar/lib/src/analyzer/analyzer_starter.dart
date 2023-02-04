@@ -25,8 +25,12 @@ Future<void> startAnalyzer(
     activeTargetRootProvider.overrideWithValue(root),
     communicationChannelProvider.overrideWithValue(channel),
     ruleConstructorProvider.overrideWithValue(constructors),
-    loggerProvider.overrideWith(
-        (ref) => Logger('sidecar-analyzer')..initialize(root, constructors)),
+    loggerProvider.overrideWith((ref) {
+      final logger = Logger('sidecar-analyzer');
+      final callback = logger.initialize(root, constructors);
+      ref.onCancel(callback);
+      return logger;
+    }),
   ]);
   final logger = container.read(loggerProvider);
 
