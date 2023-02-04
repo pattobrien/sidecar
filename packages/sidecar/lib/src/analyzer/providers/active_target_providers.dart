@@ -9,7 +9,6 @@ import '../../protocol/analyzed_files.dart';
 import '../../protocol/protocol.dart';
 import '../../services/active_project_service.dart';
 import '../../services/glob_service.dart';
-import '../../utils/logger/logger.dart';
 import '../../utils/uri_ext.dart';
 import 'resource_providers.dart';
 import 'sidecar_spec_providers.dart';

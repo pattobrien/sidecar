@@ -1,3 +1,8 @@
+## 0.1.2
+
+- fix: Quick Fix no longer crashing from InconsistenAnalysis exception
+- refactor: Cleaner logging output for debugging
+
 ## 0.1.1
 
 - chore: Upgrade analyzer dependency to v5.0.0

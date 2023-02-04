@@ -8,7 +8,7 @@ import '../utils/logger/log_printer.dart';
 // final logger =
 
 final loggerProvider = Provider<Logger>((ref) {
-  return throw UnimplementedError();
+  return Logger('unknown');
 });
 
 extension LoggerInit on Logger {

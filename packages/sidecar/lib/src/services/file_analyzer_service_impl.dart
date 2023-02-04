@@ -78,5 +78,4 @@ final fileAnalyzerServiceProvider = Provider(
     return FileAnalyzerServiceImpl(logger);
   },
   name: 'fileAnalyzerServiceProvider',
-  dependencies: const [],
 );

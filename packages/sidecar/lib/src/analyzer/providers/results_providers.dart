@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/results.dart';
@@ -15,7 +14,6 @@ import '../../utils/utils.dart';
 import '../analyzer_logger.dart';
 import '../ast/registered_rule_visitor.dart';
 import '../context/context.dart';
-import '../sidecar_analyzer.dart';
 import 'providers.dart';
 
 /// Analyze a Dart file and generate the Element/ASTNode/Type structures.
@@ -107,8 +105,11 @@ final quickFixResultsProvider =
 
   final results =
       await Future.wait<LintWithEditsResult>(lintResults?.map((e) async {
-            final edits = await e.editsComputer!();
-            return e.copyWithEdits(edits: edits);
+            return runZonedGuarded(() async {
+                  final edits = await e.editsComputer!();
+                  return e.copyWithEdits(edits: edits);
+                }, (error, stack) {}) ??
+                e.copyWithEdits(edits: []);
           }) ??
           []);
 
