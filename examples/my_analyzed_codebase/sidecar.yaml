@@ -1,3 +1,11 @@
+export:
+  configurations:
+    - sidecar.yaml
+    - ./packages/sidecar.yaml
+  rules:
+    - this_rule
+    - this_other_rule
+
 includes:
   - "bin/**.dart"
   - "lib/**.dart"

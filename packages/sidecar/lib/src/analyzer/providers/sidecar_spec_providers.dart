@@ -4,15 +4,17 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../configurations/sidecar_spec/sidecar_spec.dart';
 import '../../utils/file_paths.dart';
+import '../analyzer_logger.dart';
 import 'providers.dart';
 
 final projectSidecarSpecProvider = Provider<SidecarSpec>((ref) {
   //TODO: listen to sidecar.yaml config file for changes via resourceProvider
+  final logger = ref.watch(loggerProvider);
   final activePackage = ref.watch(activePackageProvider);
   final sidecarYamlPath = p.join(activePackage.root.toFilePath(), kSidecarYaml);
   final resource = ref.watch(analyzerResourceProvider).getFile(sidecarYamlPath);
   final sidecarSpec = parseSidecarSpec(resource.readAsStringSync());
-  // print('SIDECAR.YAML REFRESHING ${code.code} config');
+  logger.info('SIDECAR SPEC: ${sidecarSpec.data.toJson()}');
   return sidecarSpec.data;
 });
 

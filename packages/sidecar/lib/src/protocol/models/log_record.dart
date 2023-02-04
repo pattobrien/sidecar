@@ -1,10 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart' as logging;
 
-import '../../../sidecar.dart';
 import '../../analyzer/ast/registered_rule_visitor.dart';
-import '../../analyzer/sidecar_analyzer.dart';
 import '../../utils/json_utils/json_utils.dart';
+import '../communication/communication.dart';
 import 'models.dart';
 
 part 'log_record.freezed.dart';
@@ -72,8 +71,9 @@ enum LogSeverity {
   static LogSeverity fromLogLevel(logging.Level level) {
     if (level == logging.Level.FINE ||
         level == logging.Level.FINER ||
-        level == logging.Level.FINEST ||
-        level == logging.Level.INFO) {
+        level == logging.Level.FINEST) {
+      return LogSeverity.verbose;
+    } else if (level == logging.Level.INFO) {
       return LogSeverity.info;
     } else if (level == logging.Level.SEVERE || level == logging.Level.SHOUT) {
       return LogSeverity.error;

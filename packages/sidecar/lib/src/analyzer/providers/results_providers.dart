@@ -8,10 +8,12 @@ import 'package:riverpod/riverpod.dart';
 import '../../../context/context.dart';
 import '../../protocol/models/analysis_results.dart';
 import '../../protocol/protocol.dart';
+import '../../rules/rules.dart';
 import '../../server/communication_channel.dart';
 import '../../services/file_analyzer_service_impl.dart';
 import '../../utils/utils.dart';
 import '../analyzer_logger.dart';
+import '../ast/registered_rule_visitor.dart';
 import '../context/context.dart';
 import '../sidecar_analyzer.dart';
 import 'providers.dart';
@@ -24,8 +26,7 @@ final resolvedUnitForFileProvider =
   final context = ref.watch(_contextForFileProvider(file));
   if (context == null) return null;
 
-  final result = await timedLogAsync('getResolvedUnit',
-      () async => context.currentSession.getResolvedUnit(file.path));
+  final result = await context.currentSession.getResolvedUnit(file.path);
   return result as ResolvedUnitResult;
 });
 
@@ -49,21 +50,20 @@ final sidecarContextProvider =
 /// Compute and cache lint results for a given file.
 final lintResultsProvider =
     FutureProvider.family<LintResults, AnalyzedFile>((ref, file) async {
-  final analyzerService = ref.watch(fileAnalyzerServiceProvider);
+  final fileService = ref.watch(fileAnalyzerServiceProvider);
   final rulesForFile = ref.watch(scopedLintRulesForFileProvider(file));
   final registry = ref.watch(nodeRegistryForFileLintsProvider(file));
   final logger = ref.watch(loggerProvider);
 
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
 
-  final results = timedLog('visitLintResults', () {
-    return runZonedGuarded<LintResults>(
-          () => analyzerService.visitLintResults(
-              unit, rulesForFile, registry, logger),
-          (err, stk) => log('lintResultsProvider', error: err, stackTrace: stk),
-        ) ??
-        LintResults(const {});
-  });
+  final results = fileService.visitLintResults(unit, rulesForFile, registry);
+
+  for (final rule in rulesForFile) {
+    logger.finest(ShortRuleLog(rule.code,
+        '${results.where((e) => e.code == rule.code).length} lint results ${file.relativePath}'));
+  }
+  logger.finer('${results.length} lint results ${file.relativePath}');
 
   final channel = ref.watch(communicationChannelProvider);
   if (ref.state.value != results) {
@@ -80,17 +80,21 @@ final lintResultsProvider =
 final assistFiltersProvider =
     FutureProvider.family<Set<AssistResult>, AnalyzedFile>((ref, file) async {
   final rules = ref.watch(scopedAssistRulesForFileProvider(file));
-  final analyzerService = ref.watch(fileAnalyzerServiceProvider);
+  final fileService = ref.watch(fileAnalyzerServiceProvider);
   final registry = ref.watch(nodeRegistryForFileAssistsProvider(file));
   final logger = ref.watch(loggerProvider);
 
   final unit = await ref.watch(resolvedUnitForFileProvider(file).future);
 
-  return runZonedGuarded<Set<AssistResult>>(
-        () => analyzerService.visitAssistFilters(unit, rules, registry, logger),
-        (err, stk) => log('assistFiltersProvider', error: err, stackTrace: stk),
-      ) ??
-      {};
+  final results = fileService.visitAssistFilters(unit, rules, registry);
+
+  for (final rule in rules) {
+    logger.finest(ShortRuleLog(rule.code,
+        '${results.where((e) => e.code == rule.code).length} assist results ${file.relativePath}'));
+  }
+  logger.finer('${results.length} assist results ${file.relativePath}');
+
+  return results;
 });
 
 /// Compute all quick fixes from applicable Lint results.
@@ -98,34 +102,36 @@ final quickFixResultsProvider =
     FutureProvider.family<List<LintWithEditsResult>, AnalyzedFile>(
         (ref, file) async {
   final lints = ref.watch(lintResultsProvider(file).select((v) => v.value));
-  final resultsWithFixes = lints?.where((e) => e.editsComputer != null);
+  final lintResults = lints?.where((e) => e.editsComputer != null);
+  final logger = ref.watch(loggerProvider);
 
-  final computedResults =
-      await Future.wait<LintWithEditsResult>(resultsWithFixes?.map((e) async {
+  final results =
+      await Future.wait<LintWithEditsResult>(lintResults?.map((e) async {
             final edits = await e.editsComputer!();
             return e.copyWithEdits(edits: edits);
           }) ??
           []);
-  return computedResults;
+
+  final rules =
+      ref.watch(scopedLintRulesForFileProvider(file)).whereType<QuickFix>();
+  for (final rule in rules) {
+    logger.finest(ShortRuleLog(rule.code,
+        '${results.where((e) => e.code == rule.code).length} quickfix results ${file.relativePath}'));
+  }
+  logger.finer('${results.length} quickfix results ${file.relativePath}');
+
+  return results;
 });
 
 /// Compute all data results from applicable results.
 final dataResultsProvider =
     Provider.family<Set<SingleDataResult>, AnalyzedFile>((ref, file) {
-  final analyzerService = ref.watch(fileAnalyzerServiceProvider);
+  final fileService = ref.watch(fileAnalyzerServiceProvider);
   final registry = ref.watch(nodeRegistryForFileDataProvider(file));
-  final logger = ref.watch(loggerProvider);
   final rulesForFile = ref.watch(scopedDataRulesForFileProvider(file));
 
   final unit = ref.watch(resolvedUnitForFileProvider(file)).valueOrNull;
-  return timedLog('visitDataResults', () {
-    return runZonedGuarded<Set<SingleDataResult>>(
-          () => analyzerService.visitDataResults(
-              unit, rulesForFile, registry, logger),
-          (err, stk) => log('dataResultsProvider', error: err, stackTrace: stk),
-        ) ??
-        {};
-  });
+  return fileService.visitDataResults(unit, rulesForFile, registry);
 });
 
 final totalDataResultsProvider = Provider<Set<TotalDataResult>>((ref) {

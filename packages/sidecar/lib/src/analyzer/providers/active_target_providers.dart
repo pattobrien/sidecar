@@ -60,15 +60,10 @@ final contextCollectionProvider = Provider<List<AnalysisContext>>((ref) {
       byteStore: byteStore,
       resourceProvider: resourceProvider,
       fileContentCache: contentCache,
-      // sdkPath: sdkPath,
     ),
-    (e, s) {
-      // logger.severe('collection error: $e $s');
-    },
+    (e, s) {},
     zoneSpecification: ZoneSpecification(print: (_, __, ___, line) {}),
   );
-
-  // print('collection: ${collection?.contexts.map((e) => e.contextRoot.root)}');
 
   if (collection == null) throw UnimplementedError();
 

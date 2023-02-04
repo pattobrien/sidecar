@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io' as io;
 import 'dart:math' hide log;
 
@@ -35,7 +34,6 @@ class LogPrinter {
         join(workspacePath, kDartTool, kLogsFolder, currentSession);
 
     logFile = io.File(latestLogPath);
-    //TODO: reinstate below
     if (logFile.existsSync()) {
       final firstLine = logFile.readAsLinesSync().first;
       final tryDate = DateTime.tryParse(firstLine);
@@ -45,7 +43,9 @@ class LogPrinter {
       final previousLogContent = latestLogFile.readAsStringSync();
 
       final parentFolder = resourceProvider
-          .getFolder(join(workspacePath, kDartTool, kLogsFolder));
+          .getFolder(join(workspacePath, kDartTool, kLogsFolder, 'archive'));
+      parentFolder.create();
+
       final oldLogFile = parentFolder.getChildAssumingFile(
           'log-${tryDate?.millisecondsSinceEpoch ?? const Uuid().v1()}.log');
       oldLogFile.writeAsStringSync(previousLogContent);
@@ -67,7 +67,7 @@ class LogPrinter {
     final msg = '${record.severity.prettified} | '
         '${record.timestamp.toIso8601String().padRight(26)} | '
         '${id.padRight(_longestId)} | '
-        '${record.message} '
+        '${record.message}'
         '${record.stackTrace != null ? '\n${record.stackTrace}' : ''}';
 
     sink.writeln(msg);
