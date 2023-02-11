@@ -14,19 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-PackageOptions _$PackageOptionsFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType']) {
-    case 'lint':
-      return LintPackageOptions.fromJson(json);
-    case 'assist':
-      return AssistPackageOptions.fromJson(json);
-
-    default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'PackageOptions',
-          'Invalid union type "${json['runtimeType']}"!');
-  }
-}
-
 /// @nodoc
 mixin _$PackageOptions {
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -204,7 +191,7 @@ class __$$LintPackageOptionsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class _$LintPackageOptions extends LintPackageOptions {
   const _$LintPackageOptions(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -218,9 +205,6 @@ class _$LintPackageOptions extends LintPackageOptions {
         _rules = rules,
         $type = $type ?? 'lint',
         super._();
-
-  factory _$LintPackageOptions.fromJson(Map<String, dynamic> json) =>
-      _$$LintPackageOptionsFromJson(json);
 
   final List<Glob>? _includes;
   @override
@@ -399,9 +383,6 @@ abstract class LintPackageOptions extends PackageOptions {
       final Map<String, LintOptions>? rules}) = _$LintPackageOptions;
   const LintPackageOptions._() : super._();
 
-  factory LintPackageOptions.fromJson(Map<String, dynamic> json) =
-      _$LintPackageOptions.fromJson;
-
   @override
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   List<Glob>? get includes;
@@ -464,7 +445,7 @@ class __$$AssistPackageOptionsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class _$AssistPackageOptions extends AssistPackageOptions {
   const _$AssistPackageOptions(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -478,9 +459,6 @@ class _$AssistPackageOptions extends AssistPackageOptions {
         _rules = rules,
         $type = $type ?? 'assist',
         super._();
-
-  factory _$AssistPackageOptions.fromJson(Map<String, dynamic> json) =>
-      _$$AssistPackageOptionsFromJson(json);
 
   final List<Glob>? _includes;
   @override
@@ -658,9 +636,6 @@ abstract class AssistPackageOptions extends PackageOptions {
           final List<Glob>? excludes,
       final Map<String, AssistOptions>? rules}) = _$AssistPackageOptions;
   const AssistPackageOptions._() : super._();
-
-  factory AssistPackageOptions.fromJson(Map<String, dynamic> json) =
-      _$AssistPackageOptions.fromJson;
 
   @override
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)

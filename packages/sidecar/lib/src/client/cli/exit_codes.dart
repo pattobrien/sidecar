@@ -2,4 +2,5 @@
 
 class ExitCode {
   static int get success => 0;
+  static int get failure => 1;
 }

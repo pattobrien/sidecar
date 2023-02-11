@@ -6,6 +6,6 @@ const kPluginVersion = '1.0.0-alpha.0';
 
 const kPluginGlobs = <String>['**/*.dart', '**/*.yaml'];
 
-const kSidecarCliName = 'Sidecar CLI';
+const kSidecarCliName = 'sidecar';
 
-const kSidecarCliDescription = '\n\n';
+const kSidecarCliDescription = '';

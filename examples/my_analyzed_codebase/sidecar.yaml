@@ -20,17 +20,24 @@ lints:
   #     always_put_required_named_parameters_first:
   #     # always_specify_types:
 
-  # design_system_lints:
-  #   # excludes:
-  #   # - "lib/core/theme/**.dart"
-  #   rules:
-  #     avoid_icon_literal:
-  #     avoid_sized_box_height_width_literals:
-  #     avoid_text_style_literal:
-  #       severity: warning
-  #     avoid_border_radius_literal:
-  #     avoid_box_shadow_literal:
-  #     avoid_edge_insets_literal:
+  design_system_lints:
+    # excludes:
+    # - "lib/core/theme/**.dart"
+    rules:
+      icon:
+      # severity: warning
+      box_constraints:
+        # severity: warning
+      text_style:
+        # severity: warning
+      border_radius:
+        # severity: warning
+      box_shadow:
+        # severity: warning
+      edge_insets:
+        # severity: warning
+      color:
+        # severity: warning
 
 assists:
   sidecar_lints:
