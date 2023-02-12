@@ -18,8 +18,8 @@ String addRules(
     if (packageConfig.lints?.isEmpty ?? true) continue;
     final lints = topLevel.value['lints'] as YamlNode?;
     if (lints is! YamlMap) continue;
-
-    if (lints.nodes[packageConfig.packageName] == null) {
+    final packageOptions = lints.nodes[packageConfig.packageName];
+    if (packageOptions == null) {
       // insert the package and all nodes at the end of the spec
       final offset = lints.span.end.offset;
       final lintNames = packageConfig.lints ?? [];
@@ -28,9 +28,28 @@ String addRules(
           for (final rule in lintNames) rule.name: true,
         }
       });
+
       return originalContent.substring(0, offset) +
           packageOptionsContent +
           originalContent.substring(offset);
+    } else {
+      // check if rules exist and if not, append them to the end
+      final offset = packageOptions.span.end.offset;
+      final dynamic rules = packageOptions.value;
+      if (rules is YamlMap) {
+        final ruleConfigs = packageConfig.lints ?? [];
+        final missingRules = ruleConfigs.where((ruleConfig) {
+          final name = ruleConfig.name;
+          return rules.nodes[name] == null;
+        });
+        final packageOptionsContent = const YamlWriter().write(indent: 2, {
+          for (final rule in missingRules) rule.name: true,
+        });
+
+        return originalContent.substring(0, offset) +
+            packageOptionsContent +
+            originalContent.substring(offset);
+      }
     }
   }
 
