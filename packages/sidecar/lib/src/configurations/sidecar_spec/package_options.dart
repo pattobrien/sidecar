@@ -7,7 +7,12 @@ import 'rule_options.dart';
 part 'package_options.g.dart';
 part 'package_options.freezed.dart';
 
-@freezed
+@Freezed(
+  unionKey: null,
+  fromJson: false,
+  toJson: true,
+  unionValueCase: FreezedUnionCase.none,
+)
 
 /// Base class for Rule Package configurations within sidecar.yaml files.
 class PackageOptions with _$PackageOptions {
@@ -30,8 +35,8 @@ class PackageOptions with _$PackageOptions {
   }) = AssistPackageOptions;
 
   /// Create [PackageOptions] from a json object.
-  factory PackageOptions.fromJson(Map<String, dynamic> json) =>
-      _$PackageOptionsFromJson(json);
+  // factory PackageOptions.fromJson(Map<String, dynamic> json) =>
+  //     _$PackageOptionsFromJson(json);
 
   const PackageOptions._();
 

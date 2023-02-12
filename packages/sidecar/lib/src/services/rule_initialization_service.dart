@@ -19,7 +19,6 @@ class RuleInitializationService {
     final packageOptions = [
       ...?spec.assists?.entries,
       ...?spec.lints?.entries,
-      ...?spec.data?.entries,
     ];
     final rulesForFile = <BaseRule>{};
     for (final packageOption in packageOptions) {

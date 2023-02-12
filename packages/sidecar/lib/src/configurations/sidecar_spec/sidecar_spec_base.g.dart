@@ -6,24 +6,7 @@ part of 'sidecar_spec_base.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SidecarSpec _$SidecarSpecFromJson(Map json) => SidecarSpec(
-      includes: globsFromStrings(json['includes'] as List<String>?),
-      excludes: globsFromStrings(json['excludes'] as List<String>?),
-      lints: (json['lints'] as Map?)?.map(
-        (k, e) => MapEntry(k as String,
-            LintPackageOptions.fromJson(Map<String, dynamic>.from(e as Map))),
-      ),
-      assists: (json['assists'] as Map?)?.map(
-        (k, e) => MapEntry(k as String,
-            AssistPackageOptions.fromJson(Map<String, dynamic>.from(e as Map))),
-      ),
-      data: (json['data'] as Map?)?.map(
-        (k, e) => MapEntry(k as String,
-            AssistPackageOptions.fromJson(Map<String, dynamic>.from(e as Map))),
-      ),
-    );
-
-Map<String, dynamic> _$SidecarSpecToJson(SidecarSpec instance) {
+Map<String, dynamic> _$$_SidecarSpecToJson(_$_SidecarSpec instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -37,6 +20,5 @@ Map<String, dynamic> _$SidecarSpecToJson(SidecarSpec instance) {
   writeNotNull('lints', instance.lints?.map((k, e) => MapEntry(k, e.toJson())));
   writeNotNull(
       'assists', instance.assists?.map((k, e) => MapEntry(k, e.toJson())));
-  writeNotNull('data', instance.data?.map((k, e) => MapEntry(k, e.toJson())));
   return val;
 }

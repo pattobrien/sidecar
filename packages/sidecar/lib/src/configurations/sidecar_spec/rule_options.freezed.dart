@@ -14,19 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-RuleOptions _$RuleOptionsFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType']) {
-    case 'lint':
-      return LintOptions.fromJson(json);
-    case 'assist':
-      return AssistOptions.fromJson(json);
-
-    default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'RuleOptions',
-          'Invalid union type "${json['runtimeType']}"!');
-  }
-}
-
 /// @nodoc
 mixin _$RuleOptions {
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -240,7 +227,7 @@ class __$$LintOptionsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class _$LintOptions extends LintOptions {
   const _$LintOptions(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -256,9 +243,6 @@ class _$LintOptions extends LintOptions {
         _configuration = configuration,
         $type = $type ?? 'lint',
         super._();
-
-  factory _$LintOptions.fromJson(Map<String, dynamic> json) =>
-      _$$LintOptionsFromJson(json);
 
   final List<Glob>? _includes;
   @override
@@ -294,7 +278,7 @@ class _$LintOptions extends LintOptions {
   @override
   final LintSeverity? severity;
 
-  @JsonKey(name: 'runtimeType')
+  @JsonKey(name: '')
   final String $type;
 
   @override
@@ -458,9 +442,6 @@ abstract class LintOptions extends RuleOptions {
       final LintSeverity? severity}) = _$LintOptions;
   const LintOptions._() : super._();
 
-  factory LintOptions.fromJson(Map<String, dynamic> json) =
-      _$LintOptions.fromJson;
-
   @override
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
   List<Glob>? get includes;
@@ -533,7 +514,7 @@ class __$$AssistOptionsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class _$AssistOptions extends AssistOptions {
   const _$AssistOptions(
       {@JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)
@@ -548,9 +529,6 @@ class _$AssistOptions extends AssistOptions {
         _configuration = configuration,
         $type = $type ?? 'assist',
         super._();
-
-  factory _$AssistOptions.fromJson(Map<String, dynamic> json) =>
-      _$$AssistOptionsFromJson(json);
 
   final List<Glob>? _includes;
   @override
@@ -583,7 +561,7 @@ class _$AssistOptions extends AssistOptions {
     return EqualUnmodifiableMapView(value);
   }
 
-  @JsonKey(name: 'runtimeType')
+  @JsonKey(name: '')
   final String $type;
 
   @override
@@ -742,9 +720,6 @@ abstract class AssistOptions extends RuleOptions {
       final bool? enabled,
       final Map<dynamic, dynamic>? configuration}) = _$AssistOptions;
   const AssistOptions._() : super._();
-
-  factory AssistOptions.fromJson(Map<String, dynamic> json) =
-      _$AssistOptions.fromJson;
 
   @override
   @JsonKey(toJson: globsToStrings, fromJson: globsFromStrings)

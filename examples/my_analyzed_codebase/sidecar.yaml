@@ -29,8 +29,6 @@ lints:
   #     # always_specify_types:
 
   design_system_lints:
-    # excludes:
-    # - "lib/core/theme/**.dart"
     rules:
       icon:
       box_constraints:

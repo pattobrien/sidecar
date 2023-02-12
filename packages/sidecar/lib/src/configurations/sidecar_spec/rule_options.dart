@@ -8,7 +8,12 @@ part 'rule_options.g.dart';
 part 'rule_options.freezed.dart';
 
 /// Base class for Lint and Assist configurations within sidecar.yaml files.
-@freezed
+@Freezed(
+  unionKey: '',
+  fromJson: false,
+  toJson: true,
+  // unionValueCase: FreezedUnionCase.none,
+)
 class RuleOptions with _$RuleOptions {
   /// Lint rule configurations that are set within sidecar.yaml files.
   const factory RuleOptions.lint({
@@ -32,8 +37,8 @@ class RuleOptions with _$RuleOptions {
   }) = AssistOptions;
 
   /// Parse Lint and Assist rules from Json.
-  factory RuleOptions.fromJson(Map<String, dynamic> json) =>
-      _$RuleOptionsFromJson(json);
+  // factory RuleOptions.fromJson(Map<String, dynamic> json) =>
+  //     _$RuleOptionsFromJson(json);
 
   const RuleOptions._();
 }

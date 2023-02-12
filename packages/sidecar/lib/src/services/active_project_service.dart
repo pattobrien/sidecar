@@ -11,6 +11,7 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import '../configurations/rule_package/rule_package_configuration.dart';
+import '../configurations/sidecar_spec/add_rules.dart';
 import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/active_package.dart';
 import '../protocol/constants/constants.dart';
@@ -84,16 +85,14 @@ class ActiveProjectService {
     return ActivePackage(root: root, packageConfig: packageConfigJson);
   }
 
-  Future<bool> createDefaultSidecarYaml(Uri root) async {
-    const contents = templateSidecarContent;
+  Future<void> createDefaultSidecarYaml(Uri root) async {
     final uri = Uri.file(p.join(root.toFilePath(), kSidecarYaml));
     final file = resourceProvider.getFile(uri.toFilePath());
-    if (file.exists) {
-      return false;
-    } else {
-      file.writeAsStringSync(contents);
-      return true;
-    }
+    final config = getPackageConfig(root);
+    final dependencies = getSidecarDependencies(config);
+    final content = addRulesToSidecarSpecContents(
+        file.readAsStringSync(), file.toUri(), dependencies);
+    file.writeAsStringSync(content);
   }
 
   PackageConfig getPackageConfig(Uri root) {

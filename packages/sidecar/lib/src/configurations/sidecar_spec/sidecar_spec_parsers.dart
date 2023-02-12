@@ -58,7 +58,6 @@ SidecarExceptionTuple<SidecarSpec> parseSidecarSpec(
             excludes: excludes?.data,
             assists: assistPackages,
             lints: lintPackages,
-            data: dataPackages,
           ),
           [
             ...parsedErrors,

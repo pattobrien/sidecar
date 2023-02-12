@@ -6,15 +6,6 @@ part of 'rule_options.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$LintOptions _$$LintOptionsFromJson(Map json) => _$LintOptions(
-      includes: globsFromStrings(json['includes'] as List<String>?),
-      excludes: globsFromStrings(json['excludes'] as List<String>?),
-      enabled: json['enabled'] as bool?,
-      configuration: json['configuration'] as Map?,
-      severity: $enumDecodeNullable(_$LintSeverityEnumMap, json['severity']),
-      $type: json['runtimeType'] as String?,
-    );
-
 Map<String, dynamic> _$$LintOptionsToJson(_$LintOptions instance) {
   final val = <String, dynamic>{};
 
@@ -29,7 +20,7 @@ Map<String, dynamic> _$$LintOptionsToJson(_$LintOptions instance) {
   writeNotNull('enabled', instance.enabled);
   writeNotNull('configuration', instance.configuration);
   writeNotNull('severity', _$LintSeverityEnumMap[instance.severity]);
-  val['runtimeType'] = instance.$type;
+  val[''] = instance.$type;
   return val;
 }
 
@@ -38,14 +29,6 @@ const _$LintSeverityEnumMap = {
   LintSeverity.warning: 'warning',
   LintSeverity.error: 'error',
 };
-
-_$AssistOptions _$$AssistOptionsFromJson(Map json) => _$AssistOptions(
-      includes: globsFromStrings(json['includes'] as List<String>?),
-      excludes: globsFromStrings(json['excludes'] as List<String>?),
-      enabled: json['enabled'] as bool?,
-      configuration: json['configuration'] as Map?,
-      $type: json['runtimeType'] as String?,
-    );
 
 Map<String, dynamic> _$$AssistOptionsToJson(_$AssistOptions instance) {
   final val = <String, dynamic>{};
@@ -60,6 +43,6 @@ Map<String, dynamic> _$$AssistOptionsToJson(_$AssistOptions instance) {
   writeNotNull('excludes', globsToStrings(instance.excludes));
   writeNotNull('enabled', instance.enabled);
   writeNotNull('configuration', instance.configuration);
-  val['runtimeType'] = instance.$type;
+  val[''] = instance.$type;
   return val;
 }
