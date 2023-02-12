@@ -9,8 +9,7 @@ class YamlWriter {
 
   /// Write a dart structure to a YAML string. [yaml] should be a [Map] or [List].
   String write(dynamic yaml, {int? indent}) {
-    return _indent(indent ?? 0) +
-        _writeInternal(yaml, indent: indent ?? 0).trim();
+    return '${_indent(indent ?? 0)}${_writeInternal(yaml, indent: indent ?? 0).trim()}\n';
   }
 
   /// Write a dart structure to a YAML string. [yaml] should be a [Map] or [List].
