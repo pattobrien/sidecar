@@ -46,7 +46,8 @@ class PluginReporter extends Reporter {
       // final newFile = resourceProvider.getFile(
       //     join(workspacePath, kDartTool, kLogsFolder, 'log-$firstLine.log'));
       final parentFolder = resourceProvider
-          .getFolder(join(workspacePath, kDartTool, kLogsFolder));
+          .getFolder(join(workspacePath, kDartTool, kLogsFolder, 'archive'));
+      parentFolder.create();
       final oldLogFile = parentFolder.getChildAssumingFile(
           'log-${tryDate?.millisecondsSinceEpoch ?? const Uuid().v1()}.log');
       oldLogFile.writeAsStringSync(previousLogContent);
@@ -72,7 +73,7 @@ class PluginReporter extends Reporter {
 
   @override
   void handleLog(LogRecord log) {
-    sink.writeln(log.prettified());
+    // sink.writeln(log.prettified());
   }
 
   void close() => sink.close();

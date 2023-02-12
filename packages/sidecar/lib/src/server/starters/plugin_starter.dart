@@ -26,7 +26,7 @@ Future<void> startSidecarPlugin(
           analyzerPluginChannelProvider.overrideWithValue(channel),
         ],
       );
-      logger.info('sidecar - plugin initialization....');
+      // logger.info('sidecar - plugin initialization....');
       final analyzerPlugin = container.read(analyzerPluginProvider);
       analyzerPlugin.start(channel);
     },

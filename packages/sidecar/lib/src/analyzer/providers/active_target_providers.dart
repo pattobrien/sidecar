@@ -9,7 +9,6 @@ import '../../protocol/analyzed_files.dart';
 import '../../protocol/protocol.dart';
 import '../../services/active_project_service.dart';
 import '../../services/glob_service.dart';
-import '../../utils/logger/logger.dart';
 import '../../utils/uri_ext.dart';
 import 'resource_providers.dart';
 import 'sidecar_spec_providers.dart';
@@ -31,8 +30,6 @@ final activePackageProvider = Provider<ActivePackage>((ref) {
       ? activePackage!.copyWith(workspaceScope: scope)
       : activePackage!;
 });
-
-// TODO: define docs for workspaceScope
 
 /// Roots of packages to be analyzed in this context.
 ///
@@ -60,13 +57,10 @@ final contextCollectionProvider = Provider<List<AnalysisContext>>((ref) {
       byteStore: byteStore,
       resourceProvider: resourceProvider,
       fileContentCache: contentCache,
-      // sdkPath: sdkPath,
     ),
-    (e, s) => logger.severe('collection error: $e $s'),
+    (e, s) {},
     zoneSpecification: ZoneSpecification(print: (_, __, ___, line) {}),
   );
-
-  print('collection: ${collection?.contexts.map((e) => e.contextRoot.root)}');
 
   if (collection == null) throw UnimplementedError();
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -19,7 +18,6 @@ import '../protocol/constants/default_sidecar_yaml.dart';
 import '../protocol/protocol.dart';
 import '../server/server_providers.dart';
 import '../utils/get_sdk.dart';
-import '../utils/logger/logger.dart';
 import '../utils/uri_ext.dart';
 import '../utils/utils.dart';
 
@@ -76,10 +74,10 @@ class ActiveProjectService {
     final packageConfigJson = getPackageConfig(root);
 
     if (pluginUri == null || !isSidecarEnabled || projectSidecarSpec == null) {
-      logger.info('context at ${root.path} is not an active sidecar context.');
+      // logger.info('context at ${root.path} is not an active sidecar context.');
       if (!isSidecarEnabled) {
-        logger.info(
-            '${root.path} does not have sidecar enabled in analysis_options.yaml');
+        // logger.info(
+        //     '${root.path} does not have sidecar enabled in analysis_options.yaml');
       }
       return null;
     }
@@ -132,7 +130,7 @@ class ActiveProjectService {
   }
 
   SidecarSpec? getSidecarOptions(Uri root) {
-    logger.finer('getSidecarOptions started');
+    // logger.finer('getSidecarOptions started');
     try {
       final contents = _getSidecarFile(root);
       if (contents == null) return null;
@@ -141,8 +139,8 @@ class ActiveProjectService {
         fileUri:
             Uri.file(p.canonicalize(p.join(root.toFilePath(), kSidecarYaml))),
       ).data;
-    } catch (e, stackTrace) {
-      logger.shout('ISOLATE NON-FATAL: ', e, stackTrace);
+    } catch (e) {
+      // logger.shout('ISOLATE NON-FATAL: ', e, stackTrace);
       return null;
     }
   }

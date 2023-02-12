@@ -1,5 +1,3 @@
-// ignore_for_file: unused_result
-
 import 'dart:async';
 import 'dart:convert';
 
@@ -13,27 +11,10 @@ import 'package:riverpod/riverpod.dart';
 import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/protocol.dart';
 import '../server/communication_channel.dart';
-import '../utils/duration_ext.dart';
 import '../utils/file_paths.dart';
+import 'analyzer_logger.dart';
 import 'providers/providers.dart';
 import 'providers/status_providers.dart';
-
-final logger = Logger('sidecar-plugin');
-
-T timedLog<T>(String message, T Function() function) {
-  final watch = Stopwatch()..start();
-  final result = function();
-  logger.info('${watch.elapsed.prettified()} $message');
-  return result;
-}
-
-Future<T> timedLogAsync<T>(
-    String message, Future<T> Function() function) async {
-  final watch = Stopwatch()..start();
-  final result = await function();
-  logger.info('${watch.elapsed.prettified()} $message');
-  return result;
-}
 
 final sidecarAnalyzerProvider = Provider(SidecarAnalyzer.new);
 
@@ -50,22 +31,11 @@ class SidecarAnalyzer {
   OverlayResourceProvider get resourceProvider =>
       _ref.read(analyzerResourceProvider);
 
+  Logger get logger => _ref.read(loggerProvider);
+
   Future<void> setup() async {
-    _initLogger();
     _setupListeners();
     channel.sendNotification(const InitCompleteNotification());
-  }
-
-  void _initLogger() {
-    logger.onRecord.listen((log) {
-      final severity = LogSeverity.fromLogLevel(log.level);
-      final record = LogRecord.fromAnalyzer(log.message, log.time,
-          targetRoot: package.root,
-          severity: severity,
-          stackTrace: log.stackTrace);
-      final message = SidecarMessage.log(record);
-      _sendToRunner(message);
-    });
   }
 
   void _sendToRunner(SidecarMessage message) => channel.sendMessage(message);
@@ -96,8 +66,8 @@ class SidecarAnalyzer {
   }
 
   Future<void> _handleRequest(RequestMessage msg) async {
-    logger.info('_handleRequest - ${msg.id}');
-    final watch = Stopwatch()..start();
+    // logger.info('_handleRequest - ${msg.id}');
+    // final watch = Stopwatch()..start();
     final response = await msg.request.map<FutureOr<SidecarResponse?>>(
       setWorkspaceScope: handleSetCollectionRequest,
       setPriorityFiles: handleSetPriorityFiles,
@@ -111,7 +81,7 @@ class SidecarAnalyzer {
       final responseMessage = SidecarMessage.response(response, id: msg.id);
       _sendToRunner(responseMessage);
     }
-    logger.info('_handleRequest in ${watch.elapsed.prettified()} - ${msg.id}');
+    // logger.info('_handleRequest in ${watch.elapsed.prettified()} - ${msg.id}');
   }
 
   FutureOr<SetWorkspaceResponse> handleSetCollectionRequest(
@@ -124,8 +94,6 @@ class SidecarAnalyzer {
       final activePackage = _ref.read(activePackageProvider).root;
       _ref.read(workspaceScopeProvider.notifier).update((_) => [activePackage]);
     } else {
-      // scope = roots
-      print('SET ROOTS: $roots');
       _ref.read(workspaceScopeProvider.notifier).update((_) => roots);
     }
     final files = _ref.refresh(activeProjectScopedFilesProvider);
@@ -162,19 +130,14 @@ class SidecarAnalyzer {
     _ref.read(eventQueueProvider.notifier).update((s) => [...s, stamp]);
     Future<void> handleContexts(List<AnalysisContext> contexts) async {
       for (final context in contexts) {
-        final watch = Stopwatch()..start();
         final contextUri = context.contextRoot.root.toUri();
         final changedFiles =
             files.where((f) => f.contextRoot == contextUri).toSet();
 
         for (final file in changedFiles) {
-          logger
-              .info('changeFile for ${contextUri.toFilePath()} - ${file.path}');
           context.changeFile(file.path);
         }
         final affected = await context.applyPendingFileChanges();
-        logger.info(
-            'applyPendingFileChanges in ${watch.elapsed.prettified()} - ${contextUri.toFilePath()}');
 
         //TODO: is this the right place to calculate data?
         // await _ref.refresh(totalDataResultsProvider.future);
@@ -191,9 +154,6 @@ class SidecarAnalyzer {
             .toSet();
 
         await analyzeFiles(files: affectedFiles.difference(changedFiles));
-
-        logger.info(
-            'handleContexts in ${watch.elapsed.prettified()} - ${contextUri.toFilePath()}');
       }
     }
 
@@ -223,21 +183,9 @@ class SidecarAnalyzer {
 
   Set<AnalyzedFile> priorityFiles = {};
 
-  /// Calculate lints and assists for files.
-  ///
-  /// This is where we contain the logic for the ordering of which each rule should be analyzed.
-  ///
-  /// 1. SidecarSpec(s) should be analyzed first (?)
-  /// 2. LintResults
-  /// 2. DataResults
-  /// 3. AssistFilters
-  /// 4. Assist Edits
-  /// 4. QuickFix Edits
   Future<void> analyzeFiles({
     required Set<AnalyzedFile> files,
   }) async {
-    final watch = Stopwatch()..start();
-
     // First, we handle any changes to sidecar.yaml files
     final specYaml = files.firstWhereOrNull((file) => file.isSidecarYamlFile);
     if (specYaml != null) {
@@ -258,34 +206,25 @@ class SidecarAnalyzer {
     for (final file in dartFiles) {
       await _ref.read(lintResultsProvider(file).future);
     }
-    logger.info('analyzeFiles in ${watch.elapsed.prettified()} - $files');
-    watch.stop();
   }
 
   Future<QuickFixResponse> handleEditGetFixes(
     QuickFixRequest request,
   ) async {
-    final requestStamp = DateTime.now().millisecondsSinceEpoch;
-    final watch = Stopwatch()..start();
     final file = request.file;
 
-    await _ref.read(eventQueueStreamProvider.stream).firstWhere((stamps) {
-      return stamps.every((stamp) => stamp > requestStamp);
-    });
     // this listener is needed for some reason, in order to complete the Future
     _ref.listen(quickFixResultsProvider(file), (_, __) {});
     final fixes = await _ref.read(quickFixResultsProvider(file).future);
     final withinOffset =
         fixes.where((f) => f.isWithinOffset(file.path, request.offset));
-    logger.info(
-        'handleEditGetFixes in ${watch.elapsed.prettified()} - ${request.file.relativePath}');
+
     return QuickFixResponse(withinOffset.toList());
   }
 
   Future<AssistResponse> handleEditGetAssists(
     AssistRequest request,
   ) async {
-    final watch = Stopwatch()..start();
     final file = _ref
         .read(activeProjectScopedFilesProvider)
         .firstWhereOrNull((file) => file.path == request.file.path);
@@ -303,8 +242,6 @@ class SidecarAnalyzer {
         final edits = await e.editsComputer!();
         return AssistWithEditsResult(code: e.code, span: e.span, edits: edits);
       }));
-      logger.info(
-          'handleEditGetAssists in ${watch.elapsed.prettified()} - ${request.file.relativePath}');
       return AssistResponse(results.toSet());
     } catch (e, stack) {
       logger.severe('handleEditGetAssists ${file.relativePath}', e, stack);
@@ -319,10 +256,8 @@ class SidecarAnalyzer {
   ) async {
     final changedPaths = <AnalyzedFile>{};
 
-    final watch = Stopwatch()..start();
     for (final update in request.updates) {
       final filePath = update.filePath;
-      // print('handleUpdateFiles $filePath $update');
       final oldContents = resourceProvider.hasOverlay(filePath)
           ? resourceProvider.getFile(filePath).readAsStringSync()
           : null;
@@ -356,8 +291,6 @@ class SidecarAnalyzer {
       changedPaths.add(update.file);
     }
     await contentChanged(changedPaths);
-    logger.info(
-        'handleUpdateFiles $changedPaths - completed in ${watch.elapsed.prettified()}');
     return const UpdateFilesResponse();
   }
 }

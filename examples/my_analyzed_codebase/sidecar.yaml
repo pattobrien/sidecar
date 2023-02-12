@@ -1,12 +1,20 @@
+export:
+  configurations:
+    - sidecar.yaml
+    - ./packages/sidecar.yaml
+  rules:
+    - this_rule
+    - this_other_rule
+
 includes:
   - "bin/**.dart"
   - "lib/**.dart"
 
 lints:
-  sidecar_lints:
-    rules:
-      avoid_string_literal:
-        severity: warning
+  # sidecar_lints:
+  #   rules:
+  #     avoid_string_literal:
+  #       severity: warning
 
   # intl_lints:
   #   rules:
@@ -20,20 +28,19 @@ lints:
   #     always_put_required_named_parameters_first:
   #     # always_specify_types:
 
-  # design_system_lints:
-  #   # excludes:
-  #   # - "lib/core/theme/**.dart"
-  #   rules:
-  #     avoid_icon_literal:
-  #     avoid_sized_box_height_width_literals:
-  #     avoid_text_style_literal:
-  #       severity: warning
-  #     avoid_border_radius_literal:
-  #     avoid_box_shadow_literal:
-  #     avoid_edge_insets_literal:
-
-assists:
-  sidecar_lints:
+  design_system_lints:
+    # excludes:
+    # - "lib/core/theme/**.dart"
     rules:
-      output_ast_node_tree:
-      output_source_span:
+      icon:
+      box_constraints:
+      text_style:
+        severity: warning
+      radius:
+      box_shadow:
+      edge_insets:
+# assists:
+#   sidecar_lints:
+#     rules:
+#       output_ast_node_tree:
+#       output_source_span:

@@ -123,7 +123,7 @@ class AnalysisResult with _$AnalysisResult {
   }
 
   //TODO: reimplement hashCode override
-  // @override
+  @override
   int get hashCode => Object.hash(
         runtimeType,
         map(lint: (value) {

@@ -32,4 +32,6 @@ class RuleCode with _$RuleCode {
 
   factory RuleCode.fromJson(Map<String, dynamic> json) =>
       _$RuleCodeFromJson(json);
+
+  String prettyPrint() => '$package.$id';
 }

@@ -5,7 +5,6 @@ import '../analyzer/ast/ast.dart';
 import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/analyzed_file.dart';
 import '../rules/rules.dart';
-import '../utils/logger/logger.dart';
 import 'glob_service.dart';
 
 /// Service for initializing Sidecar Rules based on SidecarSpec configuration.
@@ -34,7 +33,7 @@ class RuleInitializationService {
         });
 
         if (thisRule == null) {
-          logger.info('getRulesForFile $ruleId is null');
+          // logger.info('getRulesForFile $ruleId is null');
           continue; // this should throw an error on sidecar.yaml
         }
 
@@ -50,14 +49,14 @@ class RuleInitializationService {
         final isFileIncluded = globService.isIncluded(file.relativePath,
             [...rootIncludes, ...?packageIncludes, ...?ruleIncludes]);
         if (!isFileIncluded) {
-          logger.info('getRulesForFile $ruleId is not included');
+          // logger.info('getRulesForFile $ruleId is not included');
           continue;
         }
 
         final isFileExcluded = globService.isExcluded(file.relativePath,
             [...rootExcludes, ...?packageExcludes, ...?ruleExcludes]);
         if (isFileExcluded) {
-          logger.info('getRulesForFile $ruleId is excluded');
+          // logger.info('getRulesForFile $ruleId is excluded');
           continue;
         }
 
@@ -65,8 +64,8 @@ class RuleInitializationService {
       }
     }
 
-    logger.info(
-        'getRulesForFile $file ${rulesForFile.length} ${rulesForFile.map((e) => e.code)}');
+    // logger.info(
+    //     'getRulesForFile $file ${rulesForFile.length} ${rulesForFile.map((e) => e.code)}');
     return rulesForFile;
   }
 
@@ -87,7 +86,7 @@ class RuleInitializationService {
           // TODO: catch configuration errors
           // if (rule is Configuration) {  }
 
-          logger.finer('activating ${rule.code}');
+          // logger.finer('activating ${rule.code}');
 
           return rule;
         })
