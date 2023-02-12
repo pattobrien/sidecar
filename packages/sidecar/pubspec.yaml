@@ -1,6 +1,6 @@
 name: sidecar
 description: An analyzer tool that provides more control over your IDE and developer experience.
-version: 0.1.3
+version: 0.1.4-dev.1
 repository: https://github.com/pattobrien/sidecar/
 homepage: https://github.com/pattobrien/sidecar/
 issue_tracker: https://github.com/pattobrien/sidecar/issues
@@ -12,7 +12,6 @@ dependencies:
   analyzer: ^5.0.0
   analyzer_plugin: ^0.11.1
   args: ^2.3.1
-  characters: ^1.2.0
   checked_yaml: ^2.0.1
   cli_completion: ^0.2.0
   cli_util: ^0.3.5
@@ -34,7 +33,6 @@ dependencies:
   sidecar_test: ^0.1.0-dev.1
   source_span: ^1.8.0
   uuid: ^3.0.6 # non-dart official package
-  watcher: ^1.0.2
   yaml: ^3.1.1
 
 dev_dependencies:
