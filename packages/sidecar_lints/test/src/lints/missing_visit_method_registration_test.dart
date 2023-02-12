@@ -1,5 +1,5 @@
-import 'package:sidecar/test.dart';
 import 'package:sidecar_lints/sidecar_lints.dart';
+import 'package:sidecar_test/sidecar_test.dart';
 import 'package:test/test.dart';
 
 void main() {

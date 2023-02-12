@@ -5,10 +5,10 @@ lints:
   sidecar_lints:
     rules:
       missing_visit_method_registration:
-        # severity: info
+        severity: info
       rule_not_declared:
-        # severity: info
-      # rule_is_not_accessible:
+        severity: info
+      rule_is_not_accessible:
 
 assists:
   sidecar_lints:
