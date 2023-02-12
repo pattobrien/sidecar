@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'dart:async';
 import 'dart:io' as io;
 
@@ -7,11 +9,11 @@ import 'package:file/file.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
-import '../../analyzer/providers/providers.dart';
-import '../../configurations/sidecar_spec/sidecar_spec.dart';
-import '../../protocol/protocol.dart';
-import '../../rules/rules.dart';
-import '../../server/server_providers.dart';
+import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec.dart';
+import 'package:sidecar/src/analyzer/providers/providers.dart';
+import 'package:sidecar/src/server/server_providers.dart';
+
 import 'package_resource.dart';
 import 'resource_mixin.dart';
 

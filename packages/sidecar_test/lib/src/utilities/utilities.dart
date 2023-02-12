@@ -1,10 +1,9 @@
-// ignore_for_file: prefer_asserts_with_message
+// ignore_for_file: prefer_asserts_with_message, implementation_imports
 
 import 'dart:io' as io;
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
-import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -13,15 +12,15 @@ import 'package:path/path.dart' as p;
 import 'package:test/scaffolding.dart';
 import 'package:test/test.dart' as test;
 
-import '../../../context/context.dart';
-import '../../analyzer/ast/registered_rule_visitor.dart';
-import '../../analyzer/context/context.dart';
-import '../../configurations/configurations.dart';
-import '../../protocol/models/models.dart';
-import '../../rules/base_rule.dart';
-import '../../utils/file_paths.dart';
-import '../../utils/get_sdk.dart';
-import '../../utils/uri_ext.dart';
+import 'package:sidecar/context/context.dart';
+import 'package:sidecar/sidecar.dart';
+import 'package:sidecar/src/analyzer/ast/ast.dart';
+import 'package:sidecar/src/analyzer/context/context.dart';
+import 'package:sidecar/src/configurations/sidecar_spec/sidecar_spec.dart';
+import 'package:sidecar/src/rules/rules.dart';
+import 'package:sidecar/src/utils/get_sdk.dart';
+import 'package:sidecar/src/utils/uri_ext.dart';
+
 import 'expected_lint.dart';
 
 @isTest
