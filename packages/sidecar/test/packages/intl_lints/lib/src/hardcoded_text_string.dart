@@ -24,7 +24,7 @@ class HardcodedTextString extends LintRule {
       final textBody = node.argumentList.arguments
           .firstWhere((arg) => arg is! NamedExpression);
       if (textBody is SimpleStringLiteral || textBody is SimpleIdentifier) {
-        reportAstNode(textBody, message: _message, correction: _correction);
+        reportLint(textBody, message: _message, correction: _correction);
       }
     }
   }

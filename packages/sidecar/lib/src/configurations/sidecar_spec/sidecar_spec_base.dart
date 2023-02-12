@@ -29,33 +29,35 @@ class SidecarSpec with _$SidecarSpec {
 
   const SidecarSpec._();
 
-  // factory SidecarSpec.fromJson(Map<String, dynamic> json) =>
-  //     _$SidecarSpecFromJson(json);
-
   factory SidecarSpec.empty() => const SidecarSpec();
 
   factory SidecarSpec.fromRuleCodes(
     List<RuleCode> codes, {
     List<Glob>? includes,
   }) {
-    //TODO: assistPackages and dataPackages
     final lintPackages =
         codes.whereType<LintCode>().map((e) => e.package).toSet();
     final assistPackages =
         codes.whereType<AssistCode>().map((e) => e.package).toSet();
-    return SidecarSpec(
-      includes: includes ?? [Glob('lib/**.dart')],
-      lints: {
-        for (final lintPackage in lintPackages)
-          lintPackage: LintPackageOptions(
-            rules: {
-              for (final lint
-                  in codes.where((code) => code.package == lintPackage))
-                lint.id: const LintOptions(),
-            },
-          ),
-      },
-    );
+    return SidecarSpec(includes: includes ?? [Glob('lib/**.dart')], lints: {
+      for (final lintPackage in lintPackages)
+        lintPackage: LintPackageOptions(
+          rules: {
+            for (final lint
+                in codes.where((code) => code.package == lintPackage))
+              lint.id: const LintOptions(),
+          },
+        ),
+    }, assists: {
+      for (final assistPackage in assistPackages)
+        assistPackage: AssistPackageOptions(
+          rules: {
+            for (final assist
+                in codes.where((code) => code.package == assistPackage))
+              assist.id: const AssistOptions(),
+          },
+        ),
+    });
   }
 
   static final defaultIncludes = {Glob('lib/**.dart'), Glob('bin/**.dart')};

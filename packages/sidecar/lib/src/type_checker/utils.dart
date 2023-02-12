@@ -2,14 +2,10 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:io';
-
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 // import 'package:build/build.dart';
-import 'package:path/path.dart' as p;
-import 'package:yaml/yaml.dart';
 
 /// Returns a non-null name for the provided [type].
 ///
@@ -68,7 +64,7 @@ bool hasExpectedPartDirective(CompilationUnit unit, String part) =>
 //   return '${source.package}.${parts.join('.')}';
 // }
 
-/// Returns what 'part "..."' URL is needed to import [output] from [input].
+// /// Returns what 'part "..."' URL is needed to import [output] from [input].
 ///
 /// For example, will return `test_lib.g.dart` for `test_lib.dart`.
 // String computePartUrl(AssetId input, AssetId output) => p.url.joinAll(

@@ -15,7 +15,6 @@ import '../configurations/sidecar_spec/add_rules.dart';
 import '../configurations/sidecar_spec/sidecar_spec.dart';
 import '../protocol/active_package.dart';
 import '../protocol/constants/constants.dart';
-import '../protocol/constants/default_sidecar_yaml.dart';
 import '../protocol/protocol.dart';
 import '../server/server_providers.dart';
 import '../utils/get_sdk.dart';

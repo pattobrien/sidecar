@@ -41,17 +41,6 @@ SidecarExceptionTuple<SidecarSpec> parseSidecarSpec(
         return entry;
       });
 
-      //TODO: DATAPACKAGES should have their own type of PackageOptions
-      final dataPackages =
-          (contentMap?['data'] as YamlMap?)?.nodes.map((dynamic key, value) {
-        final parsedPackage =
-            _parsePackageOptions(value, fileUri, RuleType.data);
-        parsedErrors.addAll(parsedPackage.errors);
-        final entry = MapEntry((key as YamlScalar).value as String,
-            parsedPackage.data as AssistPackageOptions);
-        return entry;
-      });
-
       return SidecarExceptionTuple(
           SidecarSpec(
             includes: includes?.data,

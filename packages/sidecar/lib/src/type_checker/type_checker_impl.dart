@@ -223,11 +223,11 @@ abstract class TypeCheckerImpl implements TypeChecker {
       var theSuper = element.supertype;
 
       do {
-        if (isExactlyType(theSuper!)) {
+        if (isExactlyType(theSuper)) {
           return true;
         }
 
-        theSuper = theSuper.superclass;
+        theSuper = theSuper?.superclass;
       } while (theSuper != null);
     }
 
