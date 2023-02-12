@@ -21,24 +21,16 @@ lints:
   #     # always_specify_types:
 
   design_system_lints:
-    # excludes:
-    # - "lib/core/theme/**.dart"
     rules:
-      icon:
-      # severity: warning
-      box_constraints:
-        # severity: warning
-      text_style:
-        # severity: warning
-      border_radius:
-        # severity: warning
-      box_shadow:
-        # severity: warning
-      edge_insets:
-        # severity: warning
-      color:
-        # severity: warning
-
+      box_constraints: true
+      box_shadow: true
+      color: true
+      edge_insets: true
+      icon: true
+      radius: true
+      text_style: true
+      theme_data:
+        severity: info
 assists:
   sidecar_lints:
     rules:

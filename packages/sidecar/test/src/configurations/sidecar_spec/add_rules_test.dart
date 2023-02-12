@@ -24,7 +24,7 @@ lints:
     rules:
       bar:
 ''';
-      final newSidecarSpecContents = addRules(
+      final newSidecarSpecContents = addRulesToSidecarSpecContents(
         currentSidecarSpecContents,
         sourceUri,
         [ruleConfig],
@@ -57,7 +57,7 @@ lints:
     rules:
       foo: true
 ''';
-      final newSidecarSpecContents = addRules(
+      final newSidecarSpecContents = addRulesToSidecarSpecContents(
         currentSidecarSpecContents,
         sourceUri,
         [ruleConfig],
@@ -98,7 +98,7 @@ assists:
     rules:
       baz:
 ''';
-      final newSidecarSpecContents = addRules(
+      final newSidecarSpecContents = addRulesToSidecarSpecContents(
         currentSidecarSpecContents,
         sourceUri,
         [ruleConfig],
@@ -131,7 +131,7 @@ assists:
     rules:
       foo: true
 ''';
-      final newSidecarSpecContents = addRules(
+      final newSidecarSpecContents = addRulesToSidecarSpecContents(
         currentSidecarSpecContents,
         sourceUri,
         [ruleConfig],
@@ -190,7 +190,7 @@ assists:
     rules:
       foo: true
 ''';
-      final newSidecarSpecContents = addRules(
+      final newSidecarSpecContents = addRulesToSidecarSpecContents(
         currentSidecarSpecContents,
         sourceUri,
         [ruleConfig],
@@ -232,7 +232,7 @@ assists:
     rules:
       foo: true
 ''';
-      final newSidecarSpecContents = addRules(
+      final newSidecarSpecContents = addRulesToSidecarSpecContents(
         currentSidecarSpecContents,
         sourceUri,
         [ruleConfig, ruleConfig2],
@@ -267,7 +267,7 @@ assists:
 
     test('add new lint and assist rule package to empty SidecarSpec', () async {
       const currentSidecarSpecContents = '';
-      final newSidecarSpecContents = addRules(
+      final newSidecarSpecContents = addRulesToSidecarSpecContents(
         currentSidecarSpecContents,
         sourceUri,
         [ruleConfig],

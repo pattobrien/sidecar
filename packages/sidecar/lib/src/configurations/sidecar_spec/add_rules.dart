@@ -4,7 +4,7 @@ import '../../utils/yaml_writer.dart';
 import '../rule_package/rule_package_configuration.dart';
 import '../rule_package/rule_yaml_nodes.dart';
 
-String addRules(
+String addRulesToSidecarSpecContents(
   String originalContent,
   Uri sourceUri,
   List<RulePackageConfiguration> configs,
@@ -15,7 +15,6 @@ String addRules(
   for (final packageConfig in configs) {
     if (packageConfig.lints?.isEmpty ?? true) continue;
     final lints = topLevel.nodes['lints'];
-    // if (lints is! YamlMap) continue;
     currentContent = generateNewContent(
         currentContent, lints, packageConfig.packageName, packageConfig.lints);
     topLevel = recalcDoc(currentContent, sourceUri);
@@ -24,7 +23,6 @@ String addRules(
   for (final packageConfig in configs) {
     if (packageConfig.assists?.isEmpty ?? true) continue;
     final assists = topLevel.nodes['assists'];
-    // if (assists is! YamlMap) continue;
     currentContent = generateNewContent(currentContent, assists,
         packageConfig.packageName, packageConfig.assists);
     topLevel = recalcDoc(currentContent, sourceUri);
