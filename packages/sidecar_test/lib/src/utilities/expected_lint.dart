@@ -1,9 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:sidecar/sidecar.dart';
 import 'package:test/test.dart';
-
-import '../../../rules/rules.dart';
-import '../../protocol/communication/communication.dart';
-import '../../protocol/models/models.dart';
 
 part 'expected_lint.freezed.dart';
 

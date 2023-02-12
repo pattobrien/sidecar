@@ -7,7 +7,6 @@ import 'exit_codes.dart';
 class CliCommandRunner extends CompletionCommandRunner<int> {
   CliCommandRunner() : super(kSidecarCliName, kSidecarCliDescription) {
     addCommand(AnalyzeCommand());
-    addCommand(GenerateCommand());
     addCommand(InitCommand());
   }
 

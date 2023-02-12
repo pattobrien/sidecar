@@ -1,0 +1,24 @@
+name: sidecar_test
+description: A suite of utilities to run automated tests on Sidecar rules.
+version: 0.1.0
+homepage: https://sidecaranalyzer.dev
+repository: https://github.com/pattobrien/sidecar
+issue_tracker: https://github.com/pattobrien/sidecar/issues
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+  analyzer: ^5.0.0
+  file: ^6.0.0
+  freezed_annotation: ^2.0.0
+  logging: ^1.0.1
+  package_config: ^2.0.0
+  path: ^1.8.0
+  pubspec_parse: ^1.0.0
+  riverpod: ^2.0.0
+  sidecar: ^0.1.0
+  test: ^1.21.5
+
+dev_dependencies:
+  lints: ^2.0.0

@@ -1,3 +1,9 @@
+## 0.1.4
+
+- refactor: Moved test utilities to separate package ([sidecar_test](https://pub.dev/packages/sidecar_test))
+- refactor: Removed unnecessary dependencies
+- refactor: Removed old `sidecar generate` utility from CLI
+
 ## 0.1.3
 
 - feat: `sidecar init` adds rules from dependencies to sidecar.yaml

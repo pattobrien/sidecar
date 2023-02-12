@@ -21,7 +21,7 @@ class AvoidStringLiteral extends LintRule with QuickFix {
 
   @override
   void visitSimpleStringLiteral(SimpleStringLiteral node) {
-    reportAstNode(
+    reportLint(
       node,
       message: _message,
       correction: _correction,
