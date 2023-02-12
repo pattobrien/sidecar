@@ -7,7 +7,6 @@ import '../protocol/constants/bootstrap_constants.dart';
 import '../protocol/constants/constants.dart';
 import '../server/server_providers.dart';
 import '../utils/file_paths.dart';
-import '../utils/logger/logger.dart';
 import 'active_project_service.dart';
 
 /// Service for creating entrypoint files for Sidecar Analyzer.
@@ -82,8 +81,8 @@ class EntrypointBuilderService {
     final service = ActiveProjectService(resourceProvider: _resourceProvider);
     final config = service.getPackageConfig(packageRoot);
     final sidecarPackages = service.getSidecarDependencies(config);
-    logger.finer(
-        'setupBootstrapper || adding ${sidecarPackages.length} packages');
+    // logger.finer(
+    //     'setupBootstrapper || adding ${sidecarPackages.length} packages');
     final content = generateEntrypointContent(sidecarPackages);
     final file = _resourceProvider.getFile(constructorPath);
     file.writeAsStringSync(content);

@@ -1,6 +1,8 @@
 import 'package:analyzer/dart/analysis/results.dart' hide AnalysisResult;
+import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../analyzer/analyzer_logger.dart';
 import '../analyzer/ast/ast.dart';
 import '../protocol/models/analysis_results.dart';
 import '../protocol/protocol.dart';
@@ -9,7 +11,9 @@ import '../rules/rules.dart';
 /// Service for generating Analysis Results for a particular file.
 class FileAnalyzerServiceImpl {
   /// Service for generating Analysis Results for a particular file.
-  const FileAnalyzerServiceImpl();
+  const FileAnalyzerServiceImpl(this.logger);
+
+  final Logger logger;
 
   Set<AnalysisResult> visitResults(
     ResolvedUnitResult? unitResult,
@@ -21,7 +25,7 @@ class FileAnalyzerServiceImpl {
       rule.setUnitContext(unitResult);
     }
 
-    final mainVisitor = RegisteredRuleVisitor(registry);
+    final mainVisitor = RegisteredRuleVisitor(registry, logger);
     unitResult.unit.accept(mainVisitor);
     final results = mainVisitor.results;
     mainVisitor.clearResults();
@@ -69,7 +73,9 @@ class FileAnalyzerServiceImpl {
 
 /// Service for generating Analysis Results for a particular file.
 final fileAnalyzerServiceProvider = Provider(
-  (ref) => const FileAnalyzerServiceImpl(),
+  (ref) {
+    final logger = ref.watch(loggerProvider);
+    return FileAnalyzerServiceImpl(logger);
+  },
   name: 'fileAnalyzerServiceProvider',
-  dependencies: const [],
 );

@@ -1,12 +1,20 @@
+export:
+  configurations:
+    - sidecar.yaml
+    - ./packages/sidecar.yaml
+  rules:
+    - this_rule
+    - this_other_rule
+
 includes:
   - "bin/**.dart"
   - "lib/**.dart"
 
 lints:
-  sidecar_lints:
-    rules:
-      avoid_string_literal:
-        severity: warning
+  # sidecar_lints:
+  #   rules:
+  #     avoid_string_literal:
+  #       severity: warning
 
   # intl_lints:
   #   rules:
@@ -22,17 +30,15 @@ lints:
 
   design_system_lints:
     rules:
-      box_constraints: true
-      box_shadow: true
-      color: true
-      edge_insets: true
-      icon: true
-      radius: true
-      text_style: true
-      theme_data:
-        severity: info
-assists:
-  sidecar_lints:
-    rules:
-      output_ast_node_tree:
-      output_source_span:
+      icon:
+      box_constraints:
+      text_style:
+        severity: warning
+      radius:
+      box_shadow:
+      edge_insets:
+# assists:
+#   sidecar_lints:
+#     rules:
+#       output_ast_node_tree:
+#       output_source_span:

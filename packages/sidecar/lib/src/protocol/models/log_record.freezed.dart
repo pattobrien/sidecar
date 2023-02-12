@@ -33,9 +33,21 @@ LogRecord _$LogRecordFromJson(Map<String, dynamic> json) {
 mixin _$LogRecord {
   String get message => throw _privateConstructorUsedError;
   DateTime get timestamp => throw _privateConstructorUsedError;
+  LogSeverity get severity => throw _privateConstructorUsedError;
+  @JsonKey(
+      toJson: stackToStringNullable,
+      fromJson: stringToStackNullable,
+      includeIfNull: false)
+  StackTrace? get stackTrace => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String message, DateTime timestamp) simple,
+    required TResult Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)
+        simple,
     required TResult Function(
             String message,
             DateTime timestamp,
@@ -56,7 +68,13 @@ mixin _$LogRecord {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, DateTime timestamp)? simple,
+    TResult? Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        simple,
     TResult? Function(
             String message,
             DateTime timestamp,
@@ -77,7 +95,13 @@ mixin _$LogRecord {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, DateTime timestamp)? simple,
+    TResult Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        simple,
     TResult Function(
             String message,
             DateTime timestamp,
@@ -130,7 +154,12 @@ abstract class $LogRecordCopyWith<$Res> {
   factory $LogRecordCopyWith(LogRecord value, $Res Function(LogRecord) then) =
       _$LogRecordCopyWithImpl<$Res, LogRecord>;
   @useResult
-  $Res call({String message, DateTime timestamp});
+  $Res call(
+      {String message,
+      DateTime timestamp,
+      LogSeverity severity,
+      @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+          StackTrace? stackTrace});
 }
 
 /// @nodoc
@@ -148,6 +177,8 @@ class _$LogRecordCopyWithImpl<$Res, $Val extends LogRecord>
   $Res call({
     Object? message = null,
     Object? timestamp = null,
+    Object? severity = null,
+    Object? stackTrace = freezed,
   }) {
     return _then(_value.copyWith(
       message: null == message
@@ -158,6 +189,14 @@ class _$LogRecordCopyWithImpl<$Res, $Val extends LogRecord>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      severity: null == severity
+          ? _value.severity
+          : severity // ignore: cast_nullable_to_non_nullable
+              as LogSeverity,
+      stackTrace: freezed == stackTrace
+          ? _value.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
     ) as $Val);
   }
 }
@@ -169,7 +208,12 @@ abstract class _$$_LogRecordCopyWith<$Res> implements $LogRecordCopyWith<$Res> {
       __$$_LogRecordCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, DateTime timestamp});
+  $Res call(
+      {String message,
+      DateTime timestamp,
+      LogSeverity severity,
+      @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+          StackTrace? stackTrace});
 }
 
 /// @nodoc
@@ -185,6 +229,8 @@ class __$$_LogRecordCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
     Object? timestamp = null,
+    Object? severity = null,
+    Object? stackTrace = freezed,
   }) {
     return _then(_$_LogRecord(
       null == message
@@ -195,6 +241,14 @@ class __$$_LogRecordCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      severity: null == severity
+          ? _value.severity
+          : severity // ignore: cast_nullable_to_non_nullable
+              as LogSeverity,
+      stackTrace: freezed == stackTrace
+          ? _value.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
     ));
   }
 }
@@ -202,7 +256,13 @@ class __$$_LogRecordCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_LogRecord extends _LogRecord {
-  const _$_LogRecord(this.message, this.timestamp, {final String? $type})
+  const _$_LogRecord(
+      this.message,
+      this.timestamp,
+      {required this.severity,
+      @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+          this.stackTrace,
+      final String? $type})
       : $type = $type ?? 'simple',
         super._();
 
@@ -213,13 +273,21 @@ class _$_LogRecord extends _LogRecord {
   final String message;
   @override
   final DateTime timestamp;
+  @override
+  final LogSeverity severity;
+  @override
+  @JsonKey(
+      toJson: stackToStringNullable,
+      fromJson: stringToStackNullable,
+      includeIfNull: false)
+  final StackTrace? stackTrace;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'LogRecord.simple(message: $message, timestamp: $timestamp)';
+    return 'LogRecord.simple(message: $message, timestamp: $timestamp, severity: $severity, stackTrace: $stackTrace)';
   }
 
   @override
@@ -229,12 +297,17 @@ class _$_LogRecord extends _LogRecord {
             other is _$_LogRecord &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp));
+                other.timestamp == timestamp) &&
+            (identical(other.severity, severity) ||
+                other.severity == severity) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message, timestamp);
+  int get hashCode =>
+      Object.hash(runtimeType, message, timestamp, severity, stackTrace);
 
   @JsonKey(ignore: true)
   @override
@@ -245,7 +318,13 @@ class _$_LogRecord extends _LogRecord {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String message, DateTime timestamp) simple,
+    required TResult Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)
+        simple,
     required TResult Function(
             String message,
             DateTime timestamp,
@@ -263,13 +342,19 @@ class _$_LogRecord extends _LogRecord {
                 StackTrace? stackTrace)
         fromRule,
   }) {
-    return simple(message, timestamp);
+    return simple(message, timestamp, severity, stackTrace);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, DateTime timestamp)? simple,
+    TResult? Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        simple,
     TResult? Function(
             String message,
             DateTime timestamp,
@@ -287,13 +372,19 @@ class _$_LogRecord extends _LogRecord {
                 StackTrace? stackTrace)?
         fromRule,
   }) {
-    return simple?.call(message, timestamp);
+    return simple?.call(message, timestamp, severity, stackTrace);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, DateTime timestamp)? simple,
+    TResult Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        simple,
     TResult Function(
             String message,
             DateTime timestamp,
@@ -313,7 +404,7 @@ class _$_LogRecord extends _LogRecord {
     required TResult orElse(),
   }) {
     if (simple != null) {
-      return simple(message, timestamp);
+      return simple(message, timestamp, severity, stackTrace);
     }
     return orElse();
   }
@@ -361,8 +452,12 @@ class _$_LogRecord extends _LogRecord {
 }
 
 abstract class _LogRecord extends LogRecord {
-  const factory _LogRecord(final String message, final DateTime timestamp) =
-      _$_LogRecord;
+  const factory _LogRecord(
+      final String message,
+      final DateTime timestamp,
+      {required final LogSeverity severity,
+      @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+          final StackTrace? stackTrace}) = _$_LogRecord;
   const _LogRecord._() : super._();
 
   factory _LogRecord.fromJson(Map<String, dynamic> json) =
@@ -372,6 +467,14 @@ abstract class _LogRecord extends LogRecord {
   String get message;
   @override
   DateTime get timestamp;
+  @override
+  LogSeverity get severity;
+  @override
+  @JsonKey(
+      toJson: stackToStringNullable,
+      fromJson: stringToStackNullable,
+      includeIfNull: false)
+  StackTrace? get stackTrace;
   @override
   @JsonKey(ignore: true)
   _$$_LogRecordCopyWith<_$_LogRecord> get copyWith =>
@@ -507,7 +610,13 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String message, DateTime timestamp) simple,
+    required TResult Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)
+        simple,
     required TResult Function(
             String message,
             DateTime timestamp,
@@ -531,7 +640,13 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, DateTime timestamp)? simple,
+    TResult? Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        simple,
     TResult? Function(
             String message,
             DateTime timestamp,
@@ -556,7 +671,13 @@ class _$AnalyzerLogRecord extends AnalyzerLogRecord {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, DateTime timestamp)? simple,
+    TResult Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        simple,
     TResult Function(
             String message,
             DateTime timestamp,
@@ -641,7 +762,9 @@ abstract class AnalyzerLogRecord extends LogRecord {
   @override
   DateTime get timestamp;
   Uri get targetRoot;
+  @override
   LogSeverity get severity;
+  @override
   @JsonKey(
       toJson: stackToStringNullable,
       fromJson: stringToStackNullable,
@@ -792,7 +915,13 @@ class _$RuleLogRecord extends RuleLogRecord {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String message, DateTime timestamp) simple,
+    required TResult Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)
+        simple,
     required TResult Function(
             String message,
             DateTime timestamp,
@@ -816,7 +945,13 @@ class _$RuleLogRecord extends RuleLogRecord {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, DateTime timestamp)? simple,
+    TResult? Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        simple,
     TResult? Function(
             String message,
             DateTime timestamp,
@@ -840,7 +975,13 @@ class _$RuleLogRecord extends RuleLogRecord {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, DateTime timestamp)? simple,
+    TResult Function(
+            String message,
+            DateTime timestamp,
+            LogSeverity severity,
+            @JsonKey(toJson: stackToStringNullable, fromJson: stringToStackNullable, includeIfNull: false)
+                StackTrace? stackTrace)?
+        simple,
     TResult Function(
             String message,
             DateTime timestamp,
@@ -923,9 +1064,11 @@ abstract class RuleLogRecord extends LogRecord {
   RuleCode get lintCode;
   @override
   DateTime get timestamp;
+  @override
   LogSeverity get severity;
   @override
   String get message;
+  @override
   @JsonKey(
       toJson: stackToStringNullable,
       fromJson: stringToStackNullable,

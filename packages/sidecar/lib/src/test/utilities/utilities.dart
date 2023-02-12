@@ -8,6 +8,7 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/scaffolding.dart';
 import 'package:test/test.dart' as test;
@@ -64,11 +65,12 @@ Future<void> ruleTest(
 
 void setUpRules(List<Rule> rules) {
   setUpAll(() async {
+    final logger = Logger('test logger');
     _resourceProvider = PhysicalResourceProvider.INSTANCE;
     _sidecarSpec = SidecarSpec.fromRuleCodes(rules.map((r) => r.code).toList());
 
     _registry = NodeRegistry(rules.toSet());
-    _visitor = RegisteredRuleVisitor(_registry);
+    _visitor = RegisteredRuleVisitor(_registry, logger);
 
     _rootUri = io.Directory.current.uri;
     final testRoot = p.join(_rootUri.toFilePath(), kDartTool, 'sidecar_tests');
@@ -119,12 +121,12 @@ Future<void> modifyFile(String relativePath, {required String content}) async {
 
 // void ruleTearDown() => tearDownAll(() {});
 
-extension _ on LintResult {
-  ExpectedLint toExpectedLint() =>
-      ExpectedLint(code, span.start.offset, span.length);
+extension on LintResult {
+  // ExpectedLint toExpectedLint() =>
+  //     ExpectedLint(code, span.start.offset, span.length);
 
   ExpectedText toExpectedText({
-    bool withText = true,
+    // bool withText = true,
     bool withOffset = false,
     bool withLength = false,
   }) =>
