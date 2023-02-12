@@ -1,3 +1,8 @@
+## 0.1.0
+
+- new rule: rule_is_not_accessible
+- chore: upgraded Sidecar dependency to v0.1.0
+
 ## 0.1.0-dev.4
 
 - fix: Crashing lints when packageId was an unexpected function
