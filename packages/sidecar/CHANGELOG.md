@@ -1,3 +1,8 @@
+## 0.1.3
+
+- feat: `sidecar init` adds rules from dependencies to sidecar.yaml
+- fix: Temporarily disabled logging on Windows to prevent crashing
+
 ## 0.1.2
 
 - fix: Quick Fix no longer crashing from InconsistenAnalysis exception
