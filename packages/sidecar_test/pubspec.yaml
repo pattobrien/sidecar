@@ -1,6 +1,6 @@
 name: sidecar_test
 description: A suite of utilities to run automated tests on Sidecar rules.
-version: 0.1.0-dev.1
+version: 0.1.0
 homepage: https://sidecaranalyzer.dev
 repository: https://github.com/pattobrien/sidecar
 issue_tracker: https://github.com/pattobrien/sidecar/issues
