@@ -28,6 +28,7 @@ class LogPrinter {
   late int _longestId;
 
   void initFile() {
+    if (io.Platform.isWindows) return;
     const currentSession = 'latest.log';
     final workspacePath = workspaceRoot.toFilePath();
     final latestLogPath =
@@ -58,6 +59,7 @@ class LogPrinter {
   }
 
   void handleLog(LogRecord record) {
+    if (io.Platform.isWindows) return;
     final id = record.map(
         simple: (simple) => 'SIMPLE',
         fromAnalyzer: (value) =>
