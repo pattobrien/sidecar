@@ -21,7 +21,8 @@ includes:
 
 lints:
   bar_lints:
-    bar:
+    rules:
+      bar:
 ''';
       final newSidecarSpecContents = addRules(
         currentSidecarSpecContents,
@@ -34,10 +35,12 @@ includes:
 
 lints:
   bar_lints:
-    bar:
+    rules:
+      bar:
   test_lints: 
-    foo: true
-    bar: true
+    rules: 
+      foo: true
+      bar: true
 ''');
     });
 
@@ -48,9 +51,11 @@ includes:
 
 lints:
   bar_lints:
-    bar:
+    rules:
+      bar:
   test_lints:
-    foo: true
+    rules:
+      foo: true
 ''';
       final newSidecarSpecContents = addRules(
         currentSidecarSpecContents,
@@ -63,10 +68,12 @@ includes:
 
 lints:
   bar_lints:
-    bar:
+    rules:
+      bar:
   test_lints:
-    foo: true
-    bar: true
+    rules:
+      foo: true
+      bar: true
 ''');
     });
   });
@@ -88,7 +95,8 @@ includes:
 
 assists:
   bar_lints:
-    baz:
+    rules:
+      baz:
 ''';
       final newSidecarSpecContents = addRules(
         currentSidecarSpecContents,
@@ -101,10 +109,12 @@ includes:
 
 assists:
   bar_lints:
-    baz:
+    rules:
+      baz:
   test_lints: 
-    foo: true
-    bar: true
+    rules: 
+      foo: true
+      bar: true
 ''');
     });
 
@@ -115,9 +125,11 @@ includes:
 
 assists:
   bar_lints:
-    bar:
+    rules:
+      bar:
   test_lints:
-    foo: true
+    rules:
+      foo: true
 ''';
       final newSidecarSpecContents = addRules(
         currentSidecarSpecContents,
@@ -130,10 +142,12 @@ includes:
 
 assists:
   bar_lints:
-    bar:
+    rules:
+      bar:
   test_lints:
-    foo: true
-    bar: true
+    rules:
+      foo: true
+      bar: true
 ''');
     });
   });
@@ -147,20 +161,34 @@ assists:
 lints:
   - baz
 ''', sourceUrl: sourceUri) as YamlMap;
+
+    final rulePackage2Map = loadYaml('''
+assists:
+  - foo
+  - bar
+lints:
+  - baz
+''', sourceUrl: sourceUri) as YamlMap;
     final ruleConfig = RulePackageConfiguration.fromYamlMap(rulePackageMap,
         packageName: packageName, uri: sourceUri);
+
+    final ruleConfig2 = RulePackageConfiguration.fromYamlMap(rulePackage2Map,
+        packageName: 'second_lints', uri: sourceUri);
     test('add new lint and assist rule package', () async {
       const currentSidecarSpecContents = '''
 includes:
   - "lib/**.dart"
 lints:
   bar_lints:
-    baz:
+    rules:
+      baz:
 assists:
   bar_lints:
-    bar:
+    rules:
+      bar:
   test_lints:
-    foo: true
+    rules:
+      foo: true
 ''';
       final newSidecarSpecContents = addRules(
         currentSidecarSpecContents,
@@ -172,24 +200,95 @@ includes:
   - "lib/**.dart"
 lints:
   bar_lints:
-    baz:
+    rules:
+      baz:
   test_lints: 
-    baz: true
+    rules: 
+      baz: true
 assists:
   bar_lints:
-    bar:
+    rules:
+      bar:
   test_lints:
-    foo: true
-    bar: true
+    rules:
+      foo: true
+      bar: true
 ''');
     });
 
     test('add multiple packages', () async {
-      //
+      const currentSidecarSpecContents = '''
+includes:
+  - "lib/**.dart"
+lints:
+  bar_lints:
+    rules:
+      baz:
+assists:
+  bar_lints:
+    rules:
+      bar:
+  test_lints:
+    rules:
+      foo: true
+''';
+      final newSidecarSpecContents = addRules(
+        currentSidecarSpecContents,
+        sourceUri,
+        [ruleConfig, ruleConfig2],
+      );
+      expect(newSidecarSpecContents, '''
+includes:
+  - "lib/**.dart"
+lints:
+  bar_lints:
+    rules:
+      baz:
+  test_lints: 
+    rules: 
+      baz: true
+  second_lints: 
+    rules: 
+      baz: true
+assists:
+  bar_lints:
+    rules:
+      bar:
+  test_lints:
+    rules:
+      foo: true
+      bar: true
+  second_lints: 
+    rules: 
+      foo: true
+      bar: true
+''');
     });
 
     test('add new lint and assist rule package to empty SidecarSpec', () async {
-      //
+      const currentSidecarSpecContents = '';
+      final newSidecarSpecContents = addRules(
+        currentSidecarSpecContents,
+        sourceUri,
+        [ruleConfig],
+      );
+      expect(newSidecarSpecContents, '''
+includes:
+  - "lib/**.dart"
+
+lints:
+  test_lints: 
+    rules: 
+      baz: true
+ 
+
+assists:
+  test_lints: 
+    rules: 
+      foo: true
+      bar: true
+ 
+''');
     });
   });
 }
