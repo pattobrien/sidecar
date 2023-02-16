@@ -105,10 +105,16 @@ abstract class TypeChecker {
   bool isNotAssignableFrom(Element? element);
 
   /// Returns `true` if [staticType] can be assigned to this type.
-  bool isAssignableFromType(DartType? staticType);
+  bool isAssignableFromType(
+    DartType? staticType, {
+    List<TypeChecker> args = const [],
+  });
 
   /// Returns `true` if [staticType] can NOT be assigned to this type.
-  bool isNotAssignableFromType(DartType? staticType);
+  bool isNotAssignableFromType(
+    DartType? staticType, {
+    List<TypeChecker> args = const [],
+  });
 
   /// Returns `true` if representing the exact same class as [element].
   bool isExactly(Element? element);

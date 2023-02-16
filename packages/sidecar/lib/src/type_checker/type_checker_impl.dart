@@ -50,6 +50,7 @@ abstract class TypeCheckerImpl implements TypeChecker {
     String type, {
     required String package,
     // bool isDartLib,
+    TypeChecker? typeArg,
   }) = _NamedChecker;
 
   /// Create a new [TypeChecker] for a ```dart``` package type.
@@ -197,13 +198,28 @@ abstract class TypeCheckerImpl implements TypeChecker {
 
   /// Returns `true` if [staticType] can be assigned to this type.
   @override
-  bool isAssignableFromType(DartType? staticType) =>
-      isAssignableFrom(staticType?.element);
+  bool isAssignableFromType(
+    DartType? staticType, {
+    List<TypeChecker> args = const <TypeChecker>[],
+  }) {
+    if (args.isNotEmpty) {
+      if (staticType is! InterfaceType) return false;
+      final isType = isAssignableFrom(staticType.element);
+      final isArgs = staticType.typeArguments.every(
+          (arg) => args.any((checker) => checker.isAssignableFromType(arg)));
+      return isType && isArgs;
+    }
+    if (staticType is InterfaceType) {}
+    return isAssignableFrom(staticType?.element);
+  }
 
   /// Returns `true` if [staticType] can NOT be assigned to this type.
   @override
-  bool isNotAssignableFromType(DartType? staticType) =>
-      !isAssignableFromType(staticType);
+  bool isNotAssignableFromType(
+    DartType? staticType, {
+    List<TypeChecker> args = const <TypeChecker>[],
+  }) =>
+      !isAssignableFromType(staticType, args: args);
 
   /// Returns `true` if representing the exact same class as [element].
   @override
@@ -262,12 +278,12 @@ class _NamedChecker extends TypeCheckerImpl {
   const _NamedChecker(
     this._name, {
     required this.package,
-    // this.isDartLib = false,
+    this.typeArg,
   });
 
   final String _name;
   final String package;
-  // final bool isDartLib;
+  final TypeChecker? typeArg;
 
   @override
   bool isExactly(Element? element) {
