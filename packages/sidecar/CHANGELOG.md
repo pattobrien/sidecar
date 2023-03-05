@@ -1,3 +1,8 @@
+## 0.1.5 (unreleased)
+
+- fix: quick fixes allow creation of files
+- refactor: TypeChecker args API for typechecking Generics
+
 ## 0.1.4
 
 - refactor: Moved test utilities to separate package ([sidecar_test](https://pub.dev/packages/sidecar_test))
