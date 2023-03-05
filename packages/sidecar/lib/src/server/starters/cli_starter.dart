@@ -12,8 +12,9 @@ import '../../reports/stdout_reporter.dart';
 /// Run Sidecar from CLI or Debugger.
 Future<void> startSidecarCli(
   SendPort sendPort,
-  List<String> args,
-) async {
+  List<String> args, {
+  bool isStrictMode = false,
+}) async {
   final isDebug = args.any((arg) => arg == 'debug' || arg == '--debug');
   final container = ProviderContainer(overrides: [
     analyzerClientProvider.overrideWithProvider(cliClientProvider),
@@ -23,12 +24,14 @@ Future<void> startSidecarCli(
       final client = container.read(analyzerClientProvider);
       final reporter = container.read(stdoutReportProvider);
       await client.openWorkspace();
-      final hasErrors = reporter.hasErrors;
+      final hasErrors = reporter.hasErrors(isStrictMode: isStrictMode);
       reporter.print();
 
       if (!isDebug) {
         client.closeWorkspace();
-        hasErrors ? stdout.writeln('exiting with 1') : stdout.writeln('0');
+        hasErrors
+            ? stdout.writeln('Lints found; exiting with 1')
+            : stdout.writeln('Exiting with 0');
         hasErrors ? exit(1) : exit(0);
       }
 

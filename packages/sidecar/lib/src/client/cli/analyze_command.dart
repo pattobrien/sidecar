@@ -11,6 +11,7 @@ class AnalyzeCommand extends Command<int> {
   AnalyzeCommand() {
     argParser.addFlag('verbose', abbr: 'v');
     argParser.addFlag('debug', abbr: 'd');
+    argParser.addFlag('strict');
   }
 
   @override
@@ -21,6 +22,7 @@ class AnalyzeCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
+    final isStrictMode = (argResults?['strict'] as bool?) ?? false;
     final args = [...?argResults?.arguments];
     final isDebug = args.any((flag) => flag == '--debug' || flag == 'debug');
 
@@ -30,7 +32,8 @@ class AnalyzeCommand extends Command<int> {
 
     final receivePort = ReceivePort();
     receivePort.listen((dynamic message) => stdout.write(message));
-    await startSidecarCli(receivePort.sendPort, ['--cli']);
+    await startSidecarCli(receivePort.sendPort, ['--cli'],
+        isStrictMode: isStrictMode);
     return ExitCode.success;
   }
 }

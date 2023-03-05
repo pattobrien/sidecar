@@ -79,7 +79,9 @@ class PluginReporter extends Reporter {
   void close() => sink.close();
 
   @override
-  bool get hasErrors => throw UnimplementedError();
+  bool hasErrors({bool isStrictMode = false}) {
+    throw UnimplementedError();
+  }
 }
 
 final pluginReporterProvider = Provider((ref) {

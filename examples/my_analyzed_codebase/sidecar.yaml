@@ -33,7 +33,7 @@ lints:
       icon:
       box_constraints:
       text_style:
-        severity: warning
+        # severity: warning
       radius:
       box_shadow:
       edge_insets:

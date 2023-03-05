@@ -4,5 +4,5 @@ abstract class Reporter {
   void handleLintNotification(LintNotification notification);
   void handleError(Object object, StackTrace stackTrace);
   void handleLog(LogRecord log);
-  bool get hasErrors;
+  bool hasErrors({bool isStrictMode = false});
 }
