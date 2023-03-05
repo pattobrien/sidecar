@@ -6,7 +6,7 @@ import '../source/source.dart';
 extension SourceFileEditX on SourceFileEdit {
   plugin.SourceFileEdit toPluginFileEdit() {
     return plugin.SourceFileEdit(
-        file.pathNoTrailingSlash, fileStamp.millisecondsSinceEpoch,
+        file.pathNoTrailingSlash, -1, // fileStamp.millisecondsSinceEpoch,
         edits: edits.toPluginEdits());
   }
 }

@@ -215,9 +215,10 @@ class SidecarAnalyzer {
 
     // this listener is needed for some reason, in order to complete the Future
     _ref.listen(quickFixResultsProvider(file), (_, __) {});
-    final fixes = await _ref.read(quickFixResultsProvider(file).future);
-    final withinOffset =
-        fixes.where((f) => f.isWithinOffset(file.path, request.offset));
+    final lintsWithEdits =
+        await _ref.read(quickFixResultsProvider(file).future);
+    final withinOffset = lintsWithEdits
+        .where((lint) => lint.isWithinOffset(file.path, request.offset));
 
     return QuickFixResponse(withinOffset.toList());
   }

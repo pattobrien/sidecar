@@ -108,7 +108,9 @@ final quickFixResultsProvider =
             return runZonedGuarded(() async {
                   final edits = await e.editsComputer!();
                   return e.copyWithEdits(edits: edits);
-                }, (error, stack) {}) ??
+                }, (error, stack) {
+                  logger.severe('edits error', error, stack);
+                }) ??
                 e.copyWithEdits(edits: []);
           }) ??
           []);
