@@ -21,11 +21,15 @@ Future<void> startSidecarCli(
   await runZonedGuarded<Future<void>>(
     () async {
       final client = container.read(analyzerClientProvider);
+      final reporter = container.read(stdoutReportProvider);
       await client.openWorkspace();
+      final hasErrors = reporter.hasErrors;
+      reporter.print();
 
       if (!isDebug) {
         client.closeWorkspace();
-        exit(0);
+        hasErrors ? stdout.writeln('exiting with 1') : stdout.writeln('0');
+        hasErrors ? exit(1) : exit(0);
       }
 
       await container.read(hotReloaderProvider.future);

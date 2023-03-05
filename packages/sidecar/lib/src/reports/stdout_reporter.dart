@@ -58,6 +58,9 @@ class StdoutReporter extends Reporter {
     stdout.write(buffer.toString());
     _notifications.clear();
   }
+
+  @override
+  bool get hasErrors => _notifications.isNotEmpty;
 }
 
 final stdoutReportProvider = Provider((ref) => StdoutReporter());
