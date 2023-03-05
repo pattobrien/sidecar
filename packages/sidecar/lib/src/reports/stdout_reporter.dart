@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cli_util/cli_logging.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../sidecar.dart';
 import '../protocol/communication/communication.dart';
 import '../protocol/models/log_record.dart';
 import '../utils/duration_ext.dart';
@@ -57,6 +58,20 @@ class StdoutReporter extends Reporter {
     buffer.writeln('analysis completed in: ${progress.elapsed.prettified()}\n');
     stdout.write(buffer.toString());
     _notifications.clear();
+  }
+
+  @override
+  bool hasErrors({
+    bool isStrictMode = false,
+  }) {
+    if (isStrictMode) {
+      return _notifications.isNotEmpty;
+    } else {
+      final warningsAndErrors = _notifications
+          .expand((element) => element.lints)
+          .where((element) => element.severity != LintSeverity.info);
+      return warningsAndErrors.isNotEmpty;
+    }
   }
 }
 

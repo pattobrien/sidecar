@@ -76,7 +76,6 @@ class CliClient extends AnalyzerClient {
     await runner.initialize([root]);
     const request = SetContextCollectionRequest(null);
     await runner.asyncRequest<SetWorkspaceResponse>(request);
-    reporter.print();
   }
 
   final List<StreamSubscription> _subscriptions = [];
@@ -84,7 +83,7 @@ class CliClient extends AnalyzerClient {
 
   @override
   void closeWorkspace() {
-    reporter.print();
+    // reporter.print();
     _logController.close();
     _lintController.close();
     for (final subscription in _subscriptions) {

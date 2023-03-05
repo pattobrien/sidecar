@@ -1,7 +1,9 @@
-## 0.1.5 (unreleased)
+## 0.1.5
 
 - fix: quick fixes allow creation of files
 - refactor: TypeChecker args API for typechecking Generics
+- feat: CLI exit codes
+- feat: CLI strict mode
 
 ## 0.1.4
 

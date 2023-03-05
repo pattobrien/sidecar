@@ -67,18 +67,15 @@ class ActiveProjectService {
     AnalysisContext context,
   ) {
     final root = context.contextRoot.root.toUri();
-    final isSidecarEnabled = context.isSidecarEnabled;
     final packageConfig = getPackageConfig(root);
     final pluginUri = getSidecarDependencyUri(packageConfig);
     final projectSidecarSpec = getSidecarOptions(root);
     final packageConfigJson = getPackageConfig(root);
 
-    if (pluginUri == null || !isSidecarEnabled || projectSidecarSpec == null) {
+    if (pluginUri == null || projectSidecarSpec == null) {
       // logger.info('context at ${root.path} is not an active sidecar context.');
-      if (!isSidecarEnabled) {
-        // logger.info(
-        //     '${root.path} does not have sidecar enabled in analysis_options.yaml');
-      }
+      // logger.info(
+      //     '${root.path} does not have sidecar enabled in analysis_options.yaml');
       return null;
     }
     return ActivePackage(root: root, packageConfig: packageConfigJson);
