@@ -53,16 +53,7 @@ void main() {
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.single, [lint(exampleRuleCode, 28, 14)]);
     });
-
-    test('sidecar plugin is not enabled', () async {
-      app.modifyFile(kMainFilePath, kContentWithString);
-      app.modifyFile(kAnalysisOptionsYaml, kAnalysisYamlContentWithoutSidecar);
-      await analyzeTestResources(app.root, reporter);
-
-      verifyNever(reporter.handleLintNotification(captureAny));
-    });
   });
-
   group('active package - sidecar.yaml:', () {
     final constructors = [AvoidStringLiteral.new];
     final sidecarYaml = SidecarSpec(includes: [
@@ -98,14 +89,6 @@ void main() {
       final results =
           verify(reporter.handleLintNotification(captureAny)).captured;
       expectLints(results.first, [lint(exampleRuleCode, 28, 14)]);
-    });
-
-    test('sidecar plugin is not enabled', () async {
-      app.modifyFile(kMainFilePath, kContentWithString);
-      app.modifyFile(kAnalysisOptionsYaml, kAnalysisYamlContentWithoutSidecar);
-      await analyzeTestResources(app.root, reporter);
-
-      verifyNever(reporter.handleLintNotification(captureAny));
     });
   });
 }

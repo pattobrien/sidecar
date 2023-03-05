@@ -54,10 +54,10 @@ final analysisContextUtilitiesProvider = Provider<AnalysisContextUtilities>(
 );
 
 extension AnalysisContextX on AnalysisContext {
-  bool get isSidecarEnabled => analysisOptions.enabledPluginNames
-      .where((pluginName) => pluginName == kSidecarPluginName)
-      .toList()
-      .isNotEmpty;
+  // bool get isSidecarEnabled => analysisOptions.enabledPluginNames
+  //     .where((pluginName) => pluginName == kSidecarPluginName)
+  //     .toList()
+  //     .isNotEmpty;
 }
 
 extension AnalysisContextsX on List<AnalysisContext> {
