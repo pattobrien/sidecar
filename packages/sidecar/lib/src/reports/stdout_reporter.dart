@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:cli_util/cli_logging.dart';
+import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../sidecar.dart';
@@ -42,8 +45,7 @@ class StdoutReporter extends Reporter {
     throw UnimplementedError();
   }
 
-  void print() {
-    // progress.finish();
+  void print({bool toDisk = true}) {
     final buffer = StringBuffer();
 
     for (final resultEntry in _notifications) {
@@ -57,6 +59,18 @@ class StdoutReporter extends Reporter {
     }
     buffer.writeln('analysis completed in: ${progress.elapsed.prettified()}\n');
     stdout.write(buffer.toString());
+
+    if (toDisk) {
+      final diagnostics = _notifications.map((e) => e.toJson()).toList();
+      final json = {'diagnostics': diagnostics};
+      final stringifiedJson = jsonEncode(json);
+      final resourceProvider = PhysicalResourceProvider.INSTANCE;
+      final sidecarFolder = resourceProvider
+          .getFolder(join(uri.toFilePath(), kDartTool, 'sidecar_gen'));
+      if (!sidecarFolder.exists) sidecarFolder.create();
+      final genFile = sidecarFolder.getChildAssumingFile('report.json');
+      genFile.writeAsStringSync(stringifiedJson);
+    }
     _notifications.clear();
   }
 
