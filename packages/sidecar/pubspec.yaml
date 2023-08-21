@@ -6,14 +6,13 @@ homepage: https://github.com/pattobrien/sidecar/
 issue_tracker: https://github.com/pattobrien/sidecar/issues
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  analyzer: ^5.0.0
-  analyzer_plugin: ^0.11.1
+  analyzer: ^6.0.0
+  analyzer_plugin: ^0.11.3
   args: ^2.3.1
   checked_yaml: ^2.0.1
-  # cli_completion: ^0.2.0
   cli_util: ^0.3.5
   collection: ^1.16.0
   file: ^6.1.4
@@ -29,7 +28,6 @@ dependencies:
   pubspec_parse: ^1.2.1
   recase: ^4.0.0 # non-dart official package
   riverpod: ^2.0.0 # non-dart official package
-  sidecar_test: ^0.1.0
   source_span: ^1.8.0
   uuid: ^3.0.6 # non-dart official package
   yaml: ^3.1.1
@@ -42,8 +40,10 @@ dev_dependencies:
   intl_lints:
     path: test/packages/intl_lints/
   json_serializable: ^6.3.1
-  mockito: ^5.3.2
-  riverpod_generator: ^1.0.0
+  mockito:
+    git:
+      url: https://github.com/dart-lang/mockito
+
   test: ^1.23.1
 
 executables:

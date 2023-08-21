@@ -118,10 +118,6 @@ class SidecarAnalyzerPlugin extends plugin.ServerPlugin {
           final params = plugin.EditGetRefactoringParams.fromRequest(request);
           result = await handleEditGetRefactoring(params);
           break;
-        case plugin.KYTHE_REQUEST_GET_KYTHE_ENTRIES:
-          final params = plugin.KytheGetKytheEntriesParams.fromRequest(request);
-          result = await handleKytheGetKytheEntries(params);
-          break;
         case plugin.PLUGIN_REQUEST_SHUTDOWN:
           final params = plugin.PluginShutdownParams();
           result = await handlePluginShutdown(params);
