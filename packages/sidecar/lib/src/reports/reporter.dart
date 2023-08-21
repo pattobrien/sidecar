@@ -3,6 +3,7 @@ import 'package:riverpod/riverpod.dart';
 import '../protocol/protocol.dart';
 
 abstract class Reporter {
+  void init(Uri? uri);
   void handleLintNotification(LintNotification notification);
   void handleError(Object object, StackTrace stackTrace);
   void handleLog(LogRecord log);

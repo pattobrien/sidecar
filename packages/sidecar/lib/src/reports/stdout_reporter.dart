@@ -16,8 +16,9 @@ class StdoutReporter extends Reporter {
   late Uri uri;
   late Progress progress;
 
-  void init(Uri uri) {
-    this.uri = uri;
+  @override
+  void init(Uri? uri) {
+    this.uri = uri!;
     progress = Logger.standard().progress('Analyzing');
   }
 

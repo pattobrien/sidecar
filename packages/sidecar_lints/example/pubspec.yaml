@@ -8,11 +8,12 @@ environment:
 
 dependencies:
   analyzer: ^6.0.0
-  sidecar: ^0.1.1
+  sidecar: ^0.1.7
+  watcher: ^1.1.0
 
 dev_dependencies:
   lints: ^2.0.0
-  sidecar_lints: ^0.1.0-dev.2
+  sidecar_lints: ^0.1.1
 
 sidecar:
   lints:

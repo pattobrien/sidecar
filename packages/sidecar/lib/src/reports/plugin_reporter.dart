@@ -14,7 +14,7 @@ class PluginReporter extends Reporter {
   PluginReporter(
     this.workspaceRoot,
   ) {
-    init();
+    init(null);
   }
 
   final Uri workspaceRoot;
@@ -22,7 +22,8 @@ class PluginReporter extends Reporter {
   late int timestamp;
   late io.File logFile;
 
-  void init() {
+  @override
+  void init(Uri? uri) {
     timestamp = DateTime.now().millisecondsSinceEpoch;
     _createLogFileAndSink();
   }
