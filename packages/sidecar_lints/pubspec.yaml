@@ -1,7 +1,7 @@
 name: sidecar_lints
 description: >
   Lints that enforce Sidecar guidelines when creating custom rules and rule packages.
-version: 0.1.2
+version: 0.1.1
 repository: https://github.com/pattobrien/sidecar/
 homepage: https://github.com/pattobrien/sidecar/
 issue_tracker: https://github.com/pattobrien/sidecar/issues
