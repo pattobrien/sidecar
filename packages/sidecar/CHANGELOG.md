@@ -1,3 +1,7 @@
+## 0.1.7
+
+- chore: Upgrade cli_utils, file packages to latest major
+
 ## 0.1.6
 
 - chore: Upgrade to Dart 3 SDK
