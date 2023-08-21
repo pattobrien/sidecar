@@ -9,7 +9,7 @@ class CustomDesignSystem {
 
 final myBrandTheme = ThemeData(
   primaryColor: CustomDesignSystem.primary,
-  accentColor: Colors.red,
+  // accentColor: Colors.red,
 );
 
 /// Design system values to use for EdgeInsets
