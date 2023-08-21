@@ -12,6 +12,7 @@ class AnalyzeCommand extends Command<int> {
     argParser.addFlag('verbose', abbr: 'v');
     argParser.addFlag('debug', abbr: 'd');
     argParser.addFlag('strict');
+    argParser.addOption('output', abbr: 'o', defaultsTo: 'stdout');
   }
 
   @override

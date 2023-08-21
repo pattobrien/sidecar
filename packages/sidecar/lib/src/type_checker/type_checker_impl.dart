@@ -10,11 +10,9 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:meta/meta.dart';
-
 import 'package:source_span/source_span.dart';
 
 import '../../type_checker.dart';
-
 import 'utils.dart';
 
 /// An abstraction around doing static type checking at compile/build time.
@@ -188,9 +186,11 @@ abstract class TypeCheckerImpl implements TypeChecker {
 
   /// Returns `true` if the type of [element] can be assigned to this type.
   @override
-  bool isAssignableFrom(Element? element) =>
-      isExactly(element) ||
-      (element is ClassElement && element.allSupertypes.any(isExactlyType));
+  bool isAssignableFrom(Element? element) {
+    return isExactly(element) ||
+        (element is InterfaceElement &&
+            element.allSupertypes.any(isExactlyType));
+  }
 
   /// Returns `true` if the type of [element] can NOT be assigned to this type.
   @override

@@ -4,26 +4,26 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.17.5 <3.0.0"
+  sdk: ">=2.17.5 <4.0.0"
 
 dependencies:
-  auto_route: ^5.0.1
+  auto_route: ^7.0.0
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^2.0.2
   path: ^1.8.0
-  intl: ^0.17.0
+  intl: ^0.18.0
   # my_backend_client:
   #   path: packages/my_backend_client/
 
 dev_dependencies:
-  auto_route_generator: ^5.0.2
+  auto_route_generator: ^7.0.0
   design_system_lints: ^0.1.0
   json_annotation: 4.6.0
   lints: ^2.0.0
-  sidecar: ^0.1.0
+  sidecar: ^0.1.7
   # sidecar:
   #   path: ../../packages/sidecar
 

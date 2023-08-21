@@ -1,3 +1,12 @@
+## 0.1.7
+
+- chore: Upgrade cli_utils, file packages to latest major
+
+## 0.1.6
+
+- chore: Upgrade to Dart 3 SDK
+- chore: Upgrade to Analyzer v6.0.0
+
 ## 0.1.5
 
 - fix: quick fixes allow creation of files
@@ -44,14 +53,13 @@
 
 - feat: Windows support
 - feat: Test utilities for rule integration tests
-- feat: LintRule and AssistRule types 
+- feat: LintRule and AssistRule types
 - docs: Work-in-progress documentation and tutorials at sidecaranalyzer.dev
 
 ## 0.1.0-dev.18
 
 - feat: TypeChecker API removed
 - feat: exporting sidecar_package_utilities
-
 
 ## 0.1.0-dev.17
 
@@ -87,7 +95,6 @@
 
 - fix: Lint performance improvements to reduce latency while editing code
 
-
 ## 0.1.0-dev.10
 
 - fix: Moved Riverpod dependency to 2.0.0.
@@ -103,20 +110,22 @@
 - refactor: Removed static analysis errors to improve pub score.
 
 ## 0.1.0-dev.7
+
 - feat: Assists, QuickFix
 - feat: sidecar.yaml configuration warnings appear in real-time
 - feat: sidecar.yaml changes affect visible lints on file save
 
 ## 0.1.0-dev.6
+
 - feat: New API with Visitor-based rules
 - tests: 15% test coverage
-- fix: Performance improvements, ~10s for ```sidecar analyze```
+- fix: Performance improvements, ~10s for `sidecar analyze`
 
 ## 0.1.0-dev.5
 
 - feat: quick fixes
 - feat: quick assists
-- fix: Memory leak due to duplicated isolates following ```pub get```
+- fix: Memory leak due to duplicated isolates following `pub get`
 - docs: added example.md to show how to enable plugin
 
 ## 0.1.0-dev.4
@@ -132,7 +141,7 @@
 
 - improved API: LintRule now accepts a LintVisitor mixin
 - fix: Issue where files were only being analyzed on save
-- fix: Lints are refreshed when ```sidecar.yaml``` is modified and saved
+- fix: Lints are refreshed when `sidecar.yaml` is modified and saved
 
 ## 0.1.0-dev.1
 

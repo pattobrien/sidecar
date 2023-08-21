@@ -18,7 +18,7 @@ Set<String> getVisitMethodNames(Expression expression) {
 }
 
 bool isSidecarRule(ClassDeclaration node) {
-  final superclassName = node.extendsClause?.superclass.name.name;
+  final superclassName = node.extendsClause?.superclass.name2.lexeme;
   final superclassUri =
       node.extendsClause?.superclass.type?.element?.librarySource?.uri;
   final isFromSidecarPackage = superclassUri?.path.contains('sidecar') ?? false;

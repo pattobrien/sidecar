@@ -1,12 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:cli_util/cli_logging.dart';
+import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../sidecar.dart';
-import '../protocol/communication/communication.dart';
-import '../protocol/models/log_record.dart';
-import '../utils/duration_ext.dart';
 import '../utils/printer/lint_printer.dart';
 import 'reporter.dart';
 
@@ -16,8 +16,9 @@ class StdoutReporter extends Reporter {
   late Uri uri;
   late Progress progress;
 
-  void init(Uri uri) {
-    this.uri = uri;
+  @override
+  void init(Uri? uri) {
+    this.uri = uri!;
     progress = Logger.standard().progress('Analyzing');
   }
 
@@ -42,8 +43,8 @@ class StdoutReporter extends Reporter {
     throw UnimplementedError();
   }
 
-  void print() {
-    // progress.finish();
+  @override
+  void print({bool toDisk = true}) {
     final buffer = StringBuffer();
 
     for (final resultEntry in _notifications) {
@@ -57,6 +58,18 @@ class StdoutReporter extends Reporter {
     }
     buffer.writeln('analysis completed in: ${progress.elapsed.prettified()}\n');
     stdout.write(buffer.toString());
+
+    if (toDisk) {
+      final diagnostics = _notifications.map((e) => e.toJson()).toList();
+      final json = {'diagnostics': diagnostics};
+      final stringifiedJson = jsonEncode(json);
+      final resourceProvider = PhysicalResourceProvider.INSTANCE;
+      final sidecarFolder = resourceProvider
+          .getFolder(join(uri.toFilePath(), kDartTool, 'sidecar_gen'));
+      if (!sidecarFolder.exists) sidecarFolder.create();
+      final genFile = sidecarFolder.getChildAssumingFile('report.json');
+      genFile.writeAsStringSync(stringifiedJson);
+    }
     _notifications.clear();
   }
 
