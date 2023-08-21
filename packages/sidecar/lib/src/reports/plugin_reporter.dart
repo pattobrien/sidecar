@@ -82,6 +82,11 @@ class PluginReporter extends Reporter {
   bool hasErrors({bool isStrictMode = false}) {
     throw UnimplementedError();
   }
+
+  @override
+  void print({bool toDisk = true}) {
+    throw UnimplementedError();
+  }
 }
 
 final pluginReporterProvider = Provider((ref) {

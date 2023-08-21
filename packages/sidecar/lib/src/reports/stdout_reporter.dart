@@ -7,9 +7,6 @@ import 'package:path/path.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../sidecar.dart';
-import '../protocol/communication/communication.dart';
-import '../protocol/models/log_record.dart';
-import '../utils/duration_ext.dart';
 import '../utils/printer/lint_printer.dart';
 import 'reporter.dart';
 
@@ -45,6 +42,7 @@ class StdoutReporter extends Reporter {
     throw UnimplementedError();
   }
 
+  @override
   void print({bool toDisk = true}) {
     final buffer = StringBuffer();
 
