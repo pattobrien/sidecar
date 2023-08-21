@@ -44,6 +44,7 @@ dev_dependencies:
     git:
       url: https://github.com/dart-lang/mockito
 
+  sidecar_test: ^0.1.0
   test: ^1.23.1
 
 executables:
