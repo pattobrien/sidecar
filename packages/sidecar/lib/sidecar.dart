@@ -1,6 +1,6 @@
 // Temporarily ignore ordering
 // ignore_for_file: directives_ordering
-
+//
 library sidecar;
 
 // is this needed any more?
